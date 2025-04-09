@@ -45,3 +45,18 @@ export const colors: Record<ColorName, CellColor> = {
   biege: ColorBiege,
   pastelgreen: ColorPastelGreen,
 };
+
+export type CellRollType = "auc" | "steam" | "voting";
+
+type Position = {
+  x: number;
+  y: number;
+};
+
+export type SectorData = {
+  type: "corner" | "property" | "community_chest" | "tax" | "railroad" | "chance" | "utility";
+  name: string;
+  position: Position;
+  color: CellColor;
+  rollType: CellRollType;
+};
