@@ -278,7 +278,7 @@ function App() {
     <SidebarProvider>
       <AppProvider>
         <div>
-          <div className="absolute top-10 left-0 z-10 flex items-center justify-center w-full h-16 bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="absolute top-10 left-1/2 -translate-x-1/2 z-10 flex items-center justify-center min-w-50 h-16 bg-black bg-opacity-50 backdrop-blur-sm  border-2 border-white rounded-lg">
             <h1 className="text-white">Event 3D</h1>
           </div>
           {selectedSector && selectedSectorId !== null && (
