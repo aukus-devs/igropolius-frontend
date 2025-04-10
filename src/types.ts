@@ -54,6 +54,7 @@ type Position = {
 };
 
 export type SectorData = {
+  id: string;
   type: "corner" | "property" | "community_chest" | "tax" | "railroad" | "chance" | "utility";
   name: string;
   position: Position;

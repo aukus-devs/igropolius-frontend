@@ -1,7 +1,10 @@
 export interface IEntity {
   id: string;
   color?: string;
-  position: [number, number, number];
+  position: {
+    x: number;
+    y: number;
+  };
 }
 
 export interface ISector extends IEntity {

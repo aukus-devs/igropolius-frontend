@@ -1,11 +1,20 @@
+import { FLOOR_SIZE, SECTOR_ELEVATION } from "@/lib/constants";
 import { ISector } from "@/lib/interfaces";
+import { ThreeEvent } from "@react-three/fiber";
 
-export function Sector(props: ISector & { onClick?: () => void }) {
-  const { color = "#fff", position, onClick } = props;
+interface Props extends ISector {
+  onClick?: (e: ThreeEvent<MouseEvent>) => void;
+  onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
+}
 
+export function Sector({ color = "#fff", position, onClick, onPointerOver }: Props) {
   return (
-    <group position={position}>
-      <mesh onClick={onClick} onPointerOver={onClick}>
+    <group position={[
+      position.x - FLOOR_SIZE / 4,
+      SECTOR_ELEVATION,
+      position.y - FLOOR_SIZE / 4,
+    ]}>
+      <mesh onClick={onClick} onPointerOver={onPointerOver}>
         <boxGeometry args={[1, 0.1, 1]} />
         <meshStandardMaterial color={color} />
       </mesh>
