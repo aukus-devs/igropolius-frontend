@@ -59,6 +59,7 @@ function App() {
                     key={sector.id}
                     onClick={() => setSelectedSectorId(idx)}
                     onPointerOver={() => setSelectedSectorId(idx)}
+                    isSelected={selectedSectorId === idx}
                   />
                 );
               })}

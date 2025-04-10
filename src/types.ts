@@ -8,6 +8,7 @@ const ColorGreen = "#008000";
 const ColorBlue = "#0000FF";
 const ColorBiege = "#F5F5DC";
 const ColorPastelGreen = "#AAD4A3";
+const ColorHighlight = "#9400D3";
 
 type ColorName =
   | "brown"
@@ -19,7 +20,8 @@ type ColorName =
   | "green"
   | "blue"
   | "biege"
-  | "pastelgreen";
+  | "pastelgreen"
+  | "highlight";
 
 type CellColor =
   | typeof ColorBrown
@@ -31,7 +33,8 @@ type CellColor =
   | typeof ColorGreen
   | typeof ColorBlue
   | typeof ColorBiege
-  | typeof ColorPastelGreen;
+  | typeof ColorPastelGreen
+  | typeof ColorHighlight;
 
 export const colors: Record<ColorName, CellColor> = {
   brown: ColorBrown,
@@ -44,6 +47,7 @@ export const colors: Record<ColorName, CellColor> = {
   blue: ColorBlue,
   biege: ColorBiege,
   pastelgreen: ColorPastelGreen,
+  highlight: ColorHighlight,
 };
 
 export type CellRollType = "auc" | "steam" | "voting";
