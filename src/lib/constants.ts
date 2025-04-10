@@ -1,8 +1,10 @@
 export enum Controls {
-  forward = 'forward',
-  backward = 'backward',
-  left = 'left',
-  right = 'right',
+  forward = "forward",
+  backward = "backward",
+  left = "left",
+  right = "right",
+  up = "up",
+  down = "down",
 }
 
 export const FLOOR_SIZE = 20;

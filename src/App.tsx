@@ -13,12 +13,17 @@ import { KeyboardControls, KeyboardControlsEntry } from "@react-three/drei";
 import { Controls } from "./lib/constants";
 
 function App() {
-  const map = useMemo<KeyboardControlsEntry<Controls>[]>(() => [
-    { name: Controls.forward, keys: ['ArrowUp', 'KeyW'] },
-    { name: Controls.backward, keys: ['ArrowDown', 'KeyS'] },
-    { name: Controls.left, keys: ['ArrowLeft', 'KeyA'] },
-    { name: Controls.right, keys: ['ArrowRight', 'KeyD'] },
-  ], []);
+  const map = useMemo<KeyboardControlsEntry<Controls>[]>(
+    () => [
+      { name: Controls.forward, keys: ["ArrowUp", "KeyW"] },
+      { name: Controls.backward, keys: ["ArrowDown", "KeyS"] },
+      { name: Controls.left, keys: ["ArrowLeft", "KeyA"] },
+      { name: Controls.right, keys: ["ArrowRight", "KeyD"] },
+      { name: Controls.up, keys: ["Space", "KeyQ"] },
+      { name: Controls.down, keys: ["KeyC", "KeyE", "Shift"] },
+    ],
+    [],
+  );
   const [selectedSectorId, setSelectedSectorId] = useState<number | null>(null);
   const selectedSector = selectedSectorId !== null ? sectorsData[selectedSectorId] : null;
 

@@ -102,6 +102,9 @@ importers:
       globals:
         specifier: ^15.15.0
         version: 15.15.0
+      hold-event:
+        specifier: ^1.1.0
+        version: 1.1.0
       typescript:
         specifier: ~5.7.2
         version: 5.7.3
@@ -1483,6 +1486,9 @@ packages:
 
   hls.js@1.6.1:
     resolution: {integrity: sha512-7GOkcqn0Y9EqU2OJZlzkwxj9Uynuln7URvr7dRjgqNJNZ5UbbjL/v1BjAvQogy57Psdd/ek1u2s6IDEFYlabrA==}
+
+  hold-event@1.1.0:
+    resolution: {integrity: sha512-dBziMRU5X/wT6Wc8mRnvqtrkCzUtzCYKK1l/lnhy1o1SIvhh2juuNL1pCgVq9JsL60LVyDNjQ8axI6UkWNI+Tw==}
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -3453,6 +3459,8 @@ snapshots:
   has-flag@4.0.0: {}
 
   hls.js@1.6.1: {}
+
+  hold-event@1.1.0: {}
 
   ieee754@1.2.1: {}
 
