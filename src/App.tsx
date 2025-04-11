@@ -1,16 +1,11 @@
 import "./index.css";
 import { Canvas } from "@react-three/fiber";
-import { Vector3 } from "three";
 import { AppProvider } from "./contexts/AppContext";
-import Floor from "./components/Floor";
-import Sector from "./components/Sector";
-import Player from "./components/Player";
-import { useMemo, useState } from "react";
-import { playersData, sectorsData } from "./lib/mockData";
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
-import CustomCameraControls from "./components/CustomCameraControls";
+import { useMemo } from "react";
 import { KeyboardControls, KeyboardControlsEntry } from "@react-three/drei";
 import { Controls } from "./lib/constants";
+import Scene from "./components/Scene";
+import UI from "./components/UI";
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -24,57 +19,14 @@ function App() {
     ],
     [],
   );
-  const [selectedSectorId, setSelectedSectorId] = useState<number | null>(null);
-  const selectedSector = selectedSectorId !== null ? sectorsData[selectedSectorId] : null;
 
   return (
     <KeyboardControls map={map}>
       <AppProvider>
         <div className="h-screen">
-          <div>
-            <Card className="absolute top-8 left-1/2 -translate-x-1/2 z-10">
-              <CardContent>Event 3D</CardContent>
-            </Card>
-            {selectedSector && selectedSectorId !== null && (
-              <Card className="absolute top-8 left-8 w-52 z-10">
-                <CardHeader>
-                  <CardTitle>{selectedSector.name}</CardTitle>
-                  <p className="text-xs text-muted-foreground">{selectedSector.id}</p>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm">Тип: {selectedSector.type}</p>
-                  <p className="text-sm">Ролл игры: {selectedSector.rollType}</p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-          <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: new Vector3(5, 10, 10) }}>
-            <CustomCameraControls />
-
-            <group>
-              {sectorsData.map((sector, idx) => {
-                return (
-                  <Sector
-                    {...sector}
-                    key={sector.id}
-                    onClick={() => setSelectedSectorId(idx)}
-                    onPointerOver={() => setSelectedSectorId(idx)}
-                    isSelected={selectedSectorId === idx}
-                  />
-                );
-              })}
-            </group>
-
-            <group>
-              {playersData.map((player) => (
-                <Player {...player} key={player.name} />
-              ))}
-            </group>
-
-            <Floor />
-
-            <ambientLight intensity={0.1} />
-            <directionalLight position={[10, 20, 10]} intensity={3} />
+          <UI />
+          <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [5, 10, 10] }}>
+            <Scene />
           </Canvas>
         </div>
       </AppProvider>

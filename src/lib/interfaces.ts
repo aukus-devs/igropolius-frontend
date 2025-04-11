@@ -6,7 +6,3 @@ export interface IEntity {
     y: number;
   };
 }
-
-export interface ISector extends IEntity {
-  type: string;
-}

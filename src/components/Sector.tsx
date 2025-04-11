@@ -1,10 +1,10 @@
 import { CELL_SIDE_SIZE_MULTIPLIER, SECTOR_ELEVATION } from "@/lib/constants";
-import { ISector } from "@/lib/interfaces";
-import { colors } from "@/types";
+import { IEntity } from "@/lib/interfaces";
+import { SectorData } from "@/types";
 import { Edges } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 
-interface Props extends ISector {
+interface Props extends IEntity {
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
   onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
@@ -14,13 +14,14 @@ interface Props extends ISector {
 type CellSize = [number, number, number];
 
 export function Sector({
-  color = "#fff",
+  id,
+  color,
   position,
   onClick,
   onPointerOver,
   onPointerLeave,
   isSelected,
-}: Props) {
+}: SectorData & Props) {
   const isBottomSector = position.y === 0;
   const isLeftSector = position.x === 0;
   const isRightSector = position.x === 10;
@@ -56,10 +57,9 @@ export function Sector({
   const sideSize = CELL_SIDE_SIZE_MULTIPLIER * 10;
   const sideDistanceToCenter = sideSize / 2;
 
-  const finalColor = isSelected ? colors.highlight : color;
-
   return (
     <group
+      name={id}
       position={[
         position.x * CELL_SIDE_SIZE_MULTIPLIER - sideDistanceToCenter,
         SECTOR_ELEVATION,
@@ -68,7 +68,7 @@ export function Sector({
     >
       <mesh onClick={onClick} onPointerOver={onPointerOver} onPointerLeave={onPointerLeave}>
         <boxGeometry args={size} />
-        <meshStandardMaterial color={finalColor} />
+        <meshStandardMaterial color={color} emissive={isSelected ? 'white' : 0} />
         <Edges scale={1.01} color="black" />
       </mesh>
     </group>

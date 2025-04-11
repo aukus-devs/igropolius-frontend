@@ -24,7 +24,7 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
     if (down) cameraControls.current?.truck(0, speed, false);
   });
 
-  return <CameraControls ref={cameraControls} />;
+  return <CameraControls ref={cameraControls} makeDefault />;
 }
 
 export default CustomCameraControls;
