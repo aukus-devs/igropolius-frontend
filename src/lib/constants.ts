@@ -5,6 +5,8 @@ export enum Controls {
   right = "right",
   up = "up",
   down = "down",
+  turnLeft = "turnLeft",
+  turnRight = "turnRight",
 }
 
 export const FLOOR_SIZE = 60;

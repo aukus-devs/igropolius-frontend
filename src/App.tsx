@@ -14,8 +14,10 @@ function App() {
       { name: Controls.backward, keys: ["ArrowDown", "KeyS"] },
       { name: Controls.left, keys: ["ArrowLeft", "KeyA"] },
       { name: Controls.right, keys: ["ArrowRight", "KeyD"] },
-      { name: Controls.up, keys: ["Space", "KeyQ"] },
-      { name: Controls.down, keys: ["KeyC", "KeyE"] },
+      { name: Controls.up, keys: ["Space"] },
+      { name: Controls.down, keys: ["KeyC"] },
+      { name: Controls.turnLeft, keys: ["KeyQ"] },
+      { name: Controls.turnRight, keys: ["KeyE"] },
     ],
     [],
   );
