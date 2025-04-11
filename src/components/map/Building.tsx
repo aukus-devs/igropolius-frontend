@@ -42,5 +42,13 @@ export default function Building({ position, type, scale }: Props) {
     modelUrl = biggestBuildingUrl;
   }
 
-  return <Gltf ref={gltfRef} src={modelUrl} position={position} scale={scale ?? 1} />;
+  return (
+    <Gltf
+      ref={gltfRef}
+      src={modelUrl}
+      position={position}
+      scale={scale ?? 1}
+      rotation={[0, THREE.MathUtils.degToRad(180), 0]}
+    />
+  );
 }

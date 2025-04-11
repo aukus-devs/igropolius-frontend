@@ -12,10 +12,10 @@ interface Props {
   scale?: number;
 }
 
-function GameBoard({ sectorWidth = 3, sectorHeight = 6, scale = 1 }: Props) {
+function GameBoard({ sectorWidth = 6, sectorHeight = 6, scale = 1 }: Props) {
   const { selectedSector, setSelectedSectorId } = useContext(AppContext);
   const sectorsPerSide = 12;
-  const centerPosition = FLOOR_SIZE / sectorsPerSide * sectorWidth;
+  const centerPosition = (FLOOR_SIZE / sectorsPerSide) * sectorWidth;
 
   return (
     <group
@@ -93,7 +93,7 @@ function GameBoard({ sectorWidth = 3, sectorHeight = 6, scale = 1 }: Props) {
         );
       })}
     </group>
-  )
+  );
 }
 
 export default GameBoard;

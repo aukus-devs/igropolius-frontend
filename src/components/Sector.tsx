@@ -1,6 +1,7 @@
 import { SectorData, Vector3Array } from "@/types";
 import { Edges } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
+import Building from "./map/Building";
 
 interface Props extends Omit<SectorData, "position"> {
   position: Vector3Array;
@@ -23,26 +24,25 @@ export function Sector({
   onPointerOver,
   onPointerLeave,
   isSelected,
-  children
+  children,
 }: Props) {
   return (
-    <group
-      name={id}
-      position={position}
-      rotation={rotation}
-    >
-      <group name="players">
-        {children}
-      </group>
+    <group name={id} position={position} rotation={rotation}>
+      <group name="players">{children}</group>
       <mesh
         onClick={(e) => (e.stopPropagation(), onClick?.(e))}
         onPointerOver={(e) => (e.stopPropagation(), onPointerOver?.(e))}
         onPointerLeave={onPointerLeave}
       >
         <boxGeometry args={shape} />
-        <meshStandardMaterial color={color} emissive={isSelected ? 'white' : 0} />
+        <meshStandardMaterial color={color} emissive={isSelected ? "white" : 0} />
         <Edges scale={1.01} color="black" />
       </mesh>
+      <group name="buildings">
+        <Building type="small" position={[2, 0, 1.5]} />
+        <Building type="large" position={[0.5, 0, 1.5]} />
+        <Building type="biggest" position={[-1, 0, 1.5]} />
+      </group>
     </group>
   );
 }
