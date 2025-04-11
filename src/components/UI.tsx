@@ -14,7 +14,7 @@ function UI() {
         <Card className="absolute top-8 left-8 w-52 z-10">
           <CardHeader>
             <CardTitle>{selectedSector.name}</CardTitle>
-            <p className="text-xs text-muted-foreground">{selectedSector.id}</p>
+            <p className="text-xs text-muted-foreground">#{selectedSector.id}</p>
           </CardHeader>
           <CardContent>
             <p className="text-sm">Тип: {selectedSector.type}</p>
@@ -23,7 +23,7 @@ function UI() {
         </Card>
       )}
     </div>
-  )
+  );
 }
 
 export default UI;

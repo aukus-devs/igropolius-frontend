@@ -27,7 +27,7 @@ export function Sector({
   children,
 }: Props) {
   return (
-    <group name={id} position={position} rotation={rotation}>
+    <group name={`${id}`} position={position} rotation={rotation}>
       <group name="players">{children}</group>
       <mesh
         onClick={(e) => (e.stopPropagation(), onClick?.(e))}

@@ -2,7 +2,7 @@ import { colors, PlayerData, SectorData } from "@/types";
 
 export const sectorsData: SectorData[] = [
   {
-    id: "go",
+    id: 1,
     name: "GO",
     players: [],
     position: { x: 0, y: 0 },
@@ -11,7 +11,7 @@ export const sectorsData: SectorData[] = [
     rollType: "voting",
   },
   {
-    id: "mediterranean_avenue",
+    id: 2,
     name: "Mediterranean Avenue",
     position: { x: 1, y: 0 },
     players: [],
@@ -20,7 +20,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "community_chest_1",
+    id: 3,
     name: "Community Chest 1",
     position: { x: 2, y: 0 },
     players: [],
@@ -29,7 +29,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "baltic_avenue",
+    id: 4,
     name: "Baltic Avenue",
     position: { x: 3, y: 0 },
     players: [],
@@ -38,7 +38,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "income_tax",
+    id: 5,
     name: "Income Tax",
     position: { x: 4, y: 0 },
     players: [],
@@ -47,7 +47,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "reading_railroad",
+    id: 6,
     name: "Reading Railroad",
     position: { x: 5, y: 0 },
     players: [],
@@ -56,7 +56,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "oriental_avenue",
+    id: 7,
     name: "Oriental Avenue",
     position: { x: 6, y: 0 },
     players: [],
@@ -65,7 +65,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "chance_1",
+    id: 8,
     name: "Chance 1",
     position: { x: 7, y: 0 },
     players: [],
@@ -74,7 +74,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "vermont_avenue",
+    id: 9,
     name: "Vermont Avenue",
     position: { x: 8, y: 0 },
     players: [],
@@ -83,7 +83,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "connecticut_avenue",
+    id: 10,
     name: "Connecticut Avenue",
     position: { x: 9, y: 0 },
     players: [],
@@ -92,7 +92,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "jail",
+    id: 11,
     name: "Jail / Just Visiting",
     position: { x: 10, y: 0 },
     players: [],
@@ -101,7 +101,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "st_charles_place",
+    id: 12,
     name: "St. Charles Place",
     position: { x: 10, y: 1 },
     players: [],
@@ -110,7 +110,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "electric_company",
+    id: 13,
     name: "Electric Company",
     position: { x: 10, y: 2 },
     players: [],
@@ -119,7 +119,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "states_avenue",
+    id: 14,
     name: "States Avenue",
     position: { x: 10, y: 3 },
     players: [],
@@ -128,7 +128,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "virginia_avenue",
+    id: 15,
     name: "Virginia Avenue",
     position: { x: 10, y: 4 },
     players: [],
@@ -137,7 +137,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "pennsylvania_railroad",
+    id: 16,
     name: "Pennsylvania Railroad",
     position: { x: 10, y: 5 },
     players: [],
@@ -146,7 +146,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "st_james_place",
+    id: 17,
     name: "St. James Place",
     position: { x: 10, y: 6 },
     players: [],
@@ -155,7 +155,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "community_chest_2",
+    id: 18,
     name: "Community Chest 2",
     position: { x: 10, y: 7 },
     players: [],
@@ -164,7 +164,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "tennessee_avenue",
+    id: 19,
     name: "Tennessee Avenue",
     position: { x: 10, y: 8 },
     players: [],
@@ -173,7 +173,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "new_york_avenue",
+    id: 20,
     name: "New York Avenue",
     position: { x: 10, y: 9 },
     players: [],
@@ -182,7 +182,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "free_parking",
+    id: 21,
     name: "Free Parking",
     position: { x: 10, y: 10 },
     players: [],
@@ -191,7 +191,7 @@ export const sectorsData: SectorData[] = [
     rollType: "voting",
   },
   {
-    id: "kentucky_avenue",
+    id: 22,
     name: "Kentucky Avenue",
     position: { x: 9, y: 10 },
     players: [],
@@ -200,7 +200,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "chance_2",
+    id: 23,
     name: "Chance 2",
     position: { x: 8, y: 10 },
     players: [],
@@ -209,7 +209,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "indiana_avenue",
+    id: 24,
     name: "Indiana Avenue",
     position: { x: 7, y: 10 },
     players: [],
@@ -218,7 +218,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "illinois_avenue",
+    id: 25,
     name: "Illinois Avenue",
     position: { x: 6, y: 10 },
     players: [],
@@ -227,7 +227,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "b&o_railroad",
+    id: 26,
     name: "B. & O. Railroad",
     position: { x: 5, y: 10 },
     players: [],
@@ -236,7 +236,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "atlantic_avenue",
+    id: 27,
     name: "Atlantic Avenue",
     position: { x: 4, y: 10 },
     players: [],
@@ -245,7 +245,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "ventnor_avenue",
+    id: 28,
     name: "Ventnor Avenue",
     position: { x: 3, y: 10 },
     players: [],
@@ -254,7 +254,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "water_works",
+    id: 29,
     name: "Water Works",
     position: { x: 2, y: 10 },
     players: [],
@@ -263,7 +263,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "marvin_gardens",
+    id: 30,
     name: "Marvin Gardens",
     position: { x: 1, y: 10 },
     players: ["2"],
@@ -272,7 +272,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "go_to_jail",
+    id: 31,
     name: "Go To Jail",
     position: { x: 0, y: 10 },
     players: [],
@@ -281,7 +281,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "pacific_avenue",
+    id: 32,
     name: "Pacific Avenue",
     position: { x: 0, y: 9 },
     players: [],
@@ -290,7 +290,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "north_carolina_avenue",
+    id: 33,
     name: "North Carolina Avenue",
     position: { x: 0, y: 8 },
     players: [],
@@ -299,7 +299,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "community_chest_3",
+    id: 34,
     name: "Community Chest 3",
     position: { x: 0, y: 7 },
     players: [],
@@ -308,7 +308,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "pennsylvania_avenue",
+    id: 35,
     name: "Pennsylvania Avenue",
     position: { x: 0, y: 6 },
     players: [],
@@ -317,7 +317,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "short_line",
+    id: 36,
     name: "Short Line",
     position: { x: 0, y: 5 },
     players: ["1"],
@@ -326,7 +326,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "chance_3",
+    id: 37,
     name: "Chance 3",
     position: { x: 0, y: 4 },
     players: [],
@@ -335,7 +335,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "park_place",
+    id: 38,
     name: "Park Place",
     position: { x: 0, y: 3 },
     players: [],
@@ -344,7 +344,7 @@ export const sectorsData: SectorData[] = [
     rollType: "auc",
   },
   {
-    id: "luxury_tax",
+    id: 39,
     name: "Luxury Tax",
     position: { x: 0, y: 2 },
     players: [],
@@ -353,7 +353,7 @@ export const sectorsData: SectorData[] = [
     rollType: "steam",
   },
   {
-    id: "boardwalk",
+    id: 40,
     name: "Boardwalk",
     position: { x: 0, y: 1 },
     players: [],

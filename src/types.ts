@@ -58,7 +58,7 @@ type Position = {
 };
 
 export type SectorData = {
-  id: string;
+  id: number;
   type: "corner" | "property" | "community_chest" | "tax" | "railroad" | "chance" | "utility";
   name: string;
   players: string[];
@@ -72,6 +72,6 @@ export type PlayerData = {
   name: string;
   color: string;
   sector: string;
-}
+};
 
 export type Vector3Array = [number, number, number];
