@@ -1,22 +1,15 @@
-import { CELL_SIDE_SIZE_MULTIPLIER, PLAYER_ELEVATION, PLAYER_HEIGHT } from "@/lib/constants";
-import { IEntity } from "@/lib/interfaces";
+import { PLAYER_ELEVATION, PLAYER_HEIGHT } from "@/lib/constants";
+import { PlayerData } from "@/types";
 
-export function Player(props: IEntity & { onClick?: () => void }) {
-  const { color = "#fff", position, onClick } = props;
+interface Props extends PlayerData {
+  onClick?: (e: MouseEvent) => void;
+}
 
-  const sideSize = CELL_SIDE_SIZE_MULTIPLIER * 10;
-  const sideDistanceToCenter = sideSize / 2;
-
+export function Player({ name, color = '#fff', onClick }: Props) {
   return (
-    <group
-      position={[
-        position.x * CELL_SIDE_SIZE_MULTIPLIER - sideDistanceToCenter,
-        PLAYER_ELEVATION,
-        position.y * CELL_SIDE_SIZE_MULTIPLIER - sideDistanceToCenter,
-      ]}
-    >
+    <group name={name} position={[0, PLAYER_ELEVATION, 0]}>
       <mesh onClick={onClick}>
-        <capsuleGeometry args={[PLAYER_HEIGHT, 0.75, 1]} />
+        <capsuleGeometry args={[PLAYER_HEIGHT, 1, 1]} />
         <meshStandardMaterial color={color} />
       </mesh>
     </group>

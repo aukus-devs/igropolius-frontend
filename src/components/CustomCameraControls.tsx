@@ -1,6 +1,5 @@
 import { CameraControls, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-// import * as holdEvent from 'hold-event';
 import { useRef } from "react";
 
 interface Props {
@@ -24,7 +23,7 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
     if (down) cameraControls.current?.truck(0, speed, false);
   });
 
-  return <CameraControls ref={cameraControls} makeDefault />;
+  return <CameraControls ref={cameraControls} makeDefault dollyToCursor />;
 }
 
 export default CustomCameraControls;

@@ -61,7 +61,17 @@ export type SectorData = {
   id: string;
   type: "corner" | "property" | "community_chest" | "tax" | "railroad" | "chance" | "utility";
   name: string;
+  players: string[];
   position: Position;
   color: CellColor;
   rollType: CellRollType;
 };
+
+export type PlayerData = {
+  id: string;
+  name: string;
+  color: string;
+  sector: string;
+}
+
+export type Vector3Array = [number, number, number];

@@ -25,7 +25,7 @@ function App() {
       <AppProvider>
         <div className="h-screen">
           <UI />
-          <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [5, 10, 10] }}>
+          <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0.1, 49, 33] }}>
             <Scene />
           </Canvas>
         </div>
