@@ -1,6 +1,7 @@
-import { CameraControls, useKeyboardControls } from "@react-three/drei";
+import { CameraControls as CameraControlsComponent, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import CameraControls from "camera-controls";
 
 interface Props {
   keysMovespeed?: number;
@@ -9,7 +10,13 @@ interface Props {
 export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, getKeys] = useKeyboardControls();
-  const cameraControls = useRef<CameraControls | null>(null);
+  const cameraControls = useRef<CameraControlsComponent | null>(null);
+
+  useEffect(() => {
+    if (cameraControls.current) {
+      cameraControls.current.mouseButtons.right = CameraControls.ACTION.SCREEN_PAN;
+    }
+  }, [cameraControls]);
 
   useFrame((_, delta) => {
     const { forward, backward, left, right, up, down, turnLeft, turnRight } = getKeys();
@@ -25,7 +32,7 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
     if (turnRight) cameraControls.current?.rotate(-speed / 10, 0, false);
   });
 
-  return <CameraControls ref={cameraControls} makeDefault dollyToCursor />;
+  return <CameraControlsComponent ref={cameraControls} makeDefault dollyToCursor />;
 }
 
 export default CustomCameraControls;
