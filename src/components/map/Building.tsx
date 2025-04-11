@@ -1,6 +1,5 @@
 import { colors } from "@/types";
 import { Gltf } from "@react-three/drei";
-import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 const smallBuildingUrl = `${import.meta.env.BASE_URL}assets/models/small_buildingD.glb`;
@@ -26,31 +25,45 @@ const buildingColors = {
 };
 
 export default function Building({ position, type, scale }: Props) {
-  const gltfRef = useRef(null);
+  // const gltfRef = useRef<null | THREE.Group>(null);
 
-  useEffect(() => {
-    if (gltfRef.current) {
+  const updateModel = (model: THREE.Group) => {
+    if (model) {
       // Traverse the model and adjust properties
-      gltfRef.current.traverse((child) => {
-        if (child.isMesh) {
-          // console.log(child.name);
-          const color = wallMeshNames.includes(child.name)
-            ? buildingColors[type ?? "small"]
-            : child.material.color;
-          // Adjust the material to respond to lighting (e.g., MeshStandardMaterial)
-          child.material = new THREE.MeshStandardMaterial({
-            color,
-            roughness: 0.5,
-            metalness: 0.5,
-          });
+      model.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          const mesh = child;
+          const isWallMesh = wallMeshNames.includes(mesh.name);
 
-          // Set cast and receive shadow properties
-          // child.castShadow = true;
-          // child.receiveShadow = true;
+          // Ensure each mesh has its own material instance
+          if (Array.isArray(mesh.material)) {
+            mesh.material = mesh.material.map((material) => {
+              if (material instanceof THREE.MeshStandardMaterial) {
+                // Update roughness and metalness
+                material.roughness = 0.5;
+                material.metalness = 0.5;
+                // Set color for specific meshes
+                if (isWallMesh) {
+                  material.color.set(buildingColors[type ?? "small"]); // Use appropriate type
+                }
+                material.needsUpdate = true;
+              }
+              return material;
+            });
+          } else if (mesh.material instanceof THREE.MeshStandardMaterial) {
+            // Update roughness and metalness
+            mesh.material.roughness = 0.5;
+            mesh.material.metalness = 0.5;
+            // Set color for specific meshes
+            if (isWallMesh) {
+              mesh.material.color.set(buildingColors[type ?? "small"]); // Use appropriate type
+            }
+            mesh.material.needsUpdate = true;
+          }
         }
       });
     }
-  }, [gltfRef]);
+  };
 
   let modelUrl = smallBuildingUrl;
   if (type === "large") {
@@ -61,7 +74,7 @@ export default function Building({ position, type, scale }: Props) {
 
   return (
     <Gltf
-      ref={gltfRef}
+      ref={updateModel}
       src={modelUrl}
       position={position}
       scale={scale ?? 1}
