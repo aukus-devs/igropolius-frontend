@@ -1,3 +1,4 @@
+import { colors } from "@/types";
 import { Gltf } from "@react-three/drei";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
@@ -12,6 +13,18 @@ type Props = {
   scale?: number;
 };
 
+const wallMeshNames = [
+  "Mesh_small_buildingD_1",
+  "Mesh_large_buildingC_4",
+  "Mesh_skyscraperE_3",
+];
+
+const buildingColors = {
+  small: colors.brown,
+  large: colors.green,
+  biggest: colors.pink,
+};
+
 export default function Building({ position, type, scale }: Props) {
   const gltfRef = useRef(null);
 
@@ -20,16 +33,20 @@ export default function Building({ position, type, scale }: Props) {
       // Traverse the model and adjust properties
       gltfRef.current.traverse((child) => {
         if (child.isMesh) {
+          // console.log(child.name);
+          const color = wallMeshNames.includes(child.name)
+            ? buildingColors[type ?? "small"]
+            : child.material.color;
           // Adjust the material to respond to lighting (e.g., MeshStandardMaterial)
           child.material = new THREE.MeshStandardMaterial({
-            color: child.material.color,
+            color,
             roughness: 0.5,
             metalness: 0.5,
           });
 
           // Set cast and receive shadow properties
-          child.castShadow = true;
-          child.receiveShadow = true;
+          // child.castShadow = true;
+          // child.receiveShadow = true;
         }
       });
     }
