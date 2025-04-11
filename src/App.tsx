@@ -15,7 +15,7 @@ function App() {
       { name: Controls.left, keys: ["ArrowLeft", "KeyA"] },
       { name: Controls.right, keys: ["ArrowRight", "KeyD"] },
       { name: Controls.up, keys: ["Space", "KeyQ"] },
-      { name: Controls.down, keys: ["KeyC", "KeyE", "Shift"] },
+      { name: Controls.down, keys: ["KeyC", "KeyE"] },
     ],
     [],
   );
