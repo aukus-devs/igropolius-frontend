@@ -4,7 +4,6 @@ import { useContext } from "react";
 import Sector from "./Sector";
 import { FLOOR_SIZE, SECTOR_ELEVATION } from "@/lib/constants";
 import { Vector3Array } from "@/types";
-import Player from "./Player";
 
 interface Props {
   sectorWidth?: number;
@@ -67,9 +66,15 @@ function GameBoard({ sectorWidth = 6, sectorHeight = 6, scale = 1 }: Props) {
           offsetY = (sectorHeight - sectorWidth) / 2;
         }
 
+        const players_ids = sector.players;
+        const players = players_ids
+          .map((id) => playersData.find((player) => player.id === id))
+          .filter((p) => p !== undefined);
+
         return (
           <Sector
-            {...sector}
+            sector={sector}
+            players={players}
             key={sector.id}
             position={[
               sector.position.x * sectorWidth + offsetX,
@@ -81,15 +86,7 @@ function GameBoard({ sectorWidth = 6, sectorHeight = 6, scale = 1 }: Props) {
             onClick={() => setSelectedSectorId(sector.id)}
             onPointerOver={() => setSelectedSectorId(sector.id)}
             isSelected={selectedSector?.id === sector.id}
-          >
-            {sector.players.map((id) => {
-              const player = playersData.find((player) => player.id === id);
-
-              if (!player) throw new Error(`Player with id: ${id} not found`);
-
-              return <Player {...player} key={player.name} />;
-            })}
-          </Sector>
+          />
         );
       })}
     </group>

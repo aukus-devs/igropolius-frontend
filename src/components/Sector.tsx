@@ -1,9 +1,12 @@
-import { SectorData, Vector3Array } from "@/types";
+import { PlayerData, SectorData, Vector3Array } from "@/types";
 import { Edges } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import Building from "./map/Building";
+import PlayerModel from "./PlayerModel";
 
-interface Props extends Omit<SectorData, "position"> {
+type Props = {
+  sector: SectorData;
+  players: PlayerData[];
   position: Vector3Array;
   rotation: Vector3Array;
   shape: Vector3Array;
@@ -11,12 +14,11 @@ interface Props extends Omit<SectorData, "position"> {
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
   onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
-  children?: React.ReactNode;
-}
+};
 
 export function Sector({
-  id,
-  color,
+  sector,
+  players,
   shape,
   position,
   rotation,
@@ -24,21 +26,23 @@ export function Sector({
   onPointerOver,
   onPointerLeave,
   isSelected,
-  children,
-  type,
 }: Props) {
-  const canHaveBuildings = type === "property";
+  const canHaveBuildings = sector.type === "property";
 
   return (
-    <group name={`${id}`} position={position} rotation={rotation}>
-      <group name="players">{children}</group>
+    <group name={`${sector.id}`} position={position} rotation={rotation}>
+      <group name="players">
+        {players.map((p, idx) => (
+          <PlayerModel player={p} key={idx} />
+        ))}
+      </group>
       <mesh
         onClick={(e) => (e.stopPropagation(), onClick?.(e))}
         onPointerOver={(e) => (e.stopPropagation(), onPointerOver?.(e))}
         onPointerLeave={onPointerLeave}
       >
         <boxGeometry args={shape} />
-        <meshStandardMaterial color={color} emissive={isSelected ? "white" : 0} />
+        <meshStandardMaterial color={sector.color} emissive={isSelected ? "white" : 0} />
         <Edges scale={1.01} color="black" />
       </mesh>
       {canHaveBuildings && (

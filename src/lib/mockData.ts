@@ -368,12 +368,12 @@ export const playersData: PlayerData[] = [
     id: "1",
     name: "Player 1",
     sector: "short_line",
-    color: "#fff",
+    color: colors.green,
   },
   {
     id: "2",
     name: "Player 2",
     sector: "marvin_gardens",
-    color: "#fff",
+    color: colors.pink,
   },
 ];
