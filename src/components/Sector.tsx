@@ -25,7 +25,10 @@ export function Sector({
   onPointerLeave,
   isSelected,
   children,
+  type,
 }: Props) {
+  const canHaveBuildings = type === "property";
+
   return (
     <group name={`${id}`} position={position} rotation={rotation}>
       <group name="players">{children}</group>
@@ -38,11 +41,13 @@ export function Sector({
         <meshStandardMaterial color={color} emissive={isSelected ? "white" : 0} />
         <Edges scale={1.01} color="black" />
       </mesh>
-      <group name="buildings">
-        <Building type="small" position={[2, 0, 1.5]} />
-        <Building type="large" position={[0.5, 0, 1.5]} />
-        <Building type="biggest" position={[-1, 0, 1.5]} />
-      </group>
+      {canHaveBuildings && (
+        <group name="buildings">
+          <Building type="small" position={[2, 0, 1.5]} />
+          <Building type="large" position={[0.5, 0, 1.5]} />
+          <Building type="biggest" position={[-1, 0, 1.5]} />
+        </group>
+      )}
     </group>
   );
 }
