@@ -4,7 +4,7 @@ import { AppProvider } from "./contexts/AppContext";
 import { useMemo } from "react";
 import { KeyboardControls, KeyboardControlsEntry } from "@react-three/drei";
 import { Controls } from "./lib/constants";
-import Scene from "./components/Scene";
+import Scene from "./components/map/Scene";
 import UI from "./components/UI";
 
 function App() {

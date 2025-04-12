@@ -1,7 +1,7 @@
 import { PlayerData, SectorData, Vector3Array } from "@/types";
 import { Edges } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
-import Building from "./map/Building";
+import Building from "./Building";
 import PlayerModel from "./PlayerModel";
 
 type Props = {
