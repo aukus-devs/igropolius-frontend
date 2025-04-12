@@ -1,9 +1,16 @@
 import { useContext } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import { AppContext } from "@/contexts/AppContext";
+import Card from "./core/Card";
+import PlayersList from "./core/PlayersList";
+import { playersData } from "@/lib/mockData";
+import QuickMenu from "./core/QuickMenu";
+import Notifications from "./core/Notifications";
 
 function UI() {
   const { selectedSector } = useContext(AppContext);
+
+  const players = playersData;
 
   return (
     <div>
@@ -11,7 +18,7 @@ function UI() {
         <CardContent>Event 3D</CardContent>
       </Card>
       {selectedSector && (
-        <Card className="absolute top-8 left-8 w-52 z-10">
+        <Card className="absolute top-100 left-8 w-52 z-10">
           <CardHeader>
             <CardTitle>{selectedSector.name}</CardTitle>
             <p className="text-xs text-muted-foreground">#{selectedSector.id}</p>
@@ -22,6 +29,9 @@ function UI() {
           </CardContent>
         </Card>
       )}
+      <PlayersList players={players} />
+      <QuickMenu />
+      <Notifications />
     </div>
   );
 }
