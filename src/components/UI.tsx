@@ -6,6 +6,7 @@ import PlayersList from "./core/PlayersList";
 import { playersData } from "@/lib/mockData";
 import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
+import LoginCard from "./core/LoginCard";
 
 function UI() {
   const { selectedSector } = useContext(AppContext);
@@ -29,6 +30,7 @@ function UI() {
           </CardContent>
         </Card>
       )}
+      <LoginCard />
       <PlayersList players={players} />
       <QuickMenu />
       <Notifications />

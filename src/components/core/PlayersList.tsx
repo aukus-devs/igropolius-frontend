@@ -7,7 +7,7 @@ type Props = {
 
 export default function PlayersList({ players }: Props) {
   return (
-    <div className="w-75 left-7 top-10 absolute flex flex-col gap-[10px]">
+    <div className="absolute top-10 right-7 w-60 text-16 z-10 flex flex-col gap-[10px]">
       {players.map((player) => (
         <PlayerItem key={player.id} player={player} />
       ))}

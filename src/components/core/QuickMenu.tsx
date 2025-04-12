@@ -13,12 +13,15 @@ export default function QuickMenu() {
   };
 
   return (
-    <div className="absolute top-10 right-7 w-60 text-16 z-10" onMouseLeave={handleMouseLeave}>
+    <div
+      className="absolute w-[220px] left-[30px] top-[85px] text-16 z-10 flex flex-col gap-[8px]"
+      onMouseLeave={handleMouseLeave}
+    >
       <Card className="cursor-pointer" onMouseEnter={handleMouseEnter}>
         Меню быстрого доступа
       </Card>
       {open && (
-        <div>
+        <div className="flex flex-col gap-[5px]">
           <Card className="cursor-pointer" onMouseEnter={handleMouseEnter}>
             Правила
           </Card>
