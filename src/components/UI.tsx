@@ -18,7 +18,7 @@ function UI() {
         <CardContent>Event 3D</CardContent>
       </Card>
       {selectedSector && (
-        <Card className="absolute top-100 left-8 w-52 z-10">
+        <Card className="absolute bottom-10 left-8 w-52 z-10">
           <CardHeader>
             <CardTitle>{selectedSector.name}</CardTitle>
             <p className="text-xs text-muted-foreground">#{selectedSector.id}</p>
