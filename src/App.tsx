@@ -25,7 +25,7 @@ function App() {
     <KeyboardControls map={map}>
       <div className="h-screen">
         <UI />
-        <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0.1, 49, 33] }}>
+        <Canvas camera={{ fov: 60, near: 0.1, far: 1000, position: [0.1, 49, 33] }}>
           <Scene />
         </Canvas>
       </div>

@@ -32,7 +32,7 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
     if (turnRight) cameraControls.current?.rotate(-speed / 10, 0, false);
   });
 
-  return <CameraControlsComponent ref={cameraControls} makeDefault dollyToCursor />;
+  return <CameraControlsComponent ref={cameraControls} makeDefault dollyToCursor maxDistance={120} />;
 }
 
 export default CustomCameraControls;
