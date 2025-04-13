@@ -8,9 +8,9 @@ type Props = {
 
 export function PlayerModel({ player, onClick }: Props) {
   return (
-    <group name={player.name} position={[0, PLAYER_ELEVATION, 0]}>
+    <group name={player.name} position={[0, PLAYER_ELEVATION, -3]}>
       <mesh onClick={onClick}>
-        <capsuleGeometry args={[PLAYER_HEIGHT, 1, 1]} />
+        <capsuleGeometry args={[PLAYER_HEIGHT, 2, 2]} />
         <meshStandardMaterial color={player.color} />
       </mesh>
     </group>

@@ -11,7 +11,7 @@ interface Props {
   scale?: number;
 }
 
-function GameBoard({ sectorWidth = 6, sectorHeight = 6, scale = 1 }: Props) {
+function GameBoard({ sectorWidth = 6, sectorHeight = 12, scale = 1 }: Props) {
   const { selectedSector, setSelectedSectorId } = useContext(AppContext);
   const sectorsPerSide = 12;
   const centerPosition = (FLOOR_SIZE / sectorsPerSide) * sectorWidth;

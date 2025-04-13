@@ -1,5 +1,5 @@
 import { PlayerData, SectorData, Vector3Array } from "@/types";
-import { Edges } from "@react-three/drei";
+import { Edges, Text } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import Building from "./Building";
 import PlayerModel from "./PlayerModel";
@@ -47,11 +47,25 @@ export function Sector({
       </mesh>
       {canHaveBuildings && (
         <group name="buildings">
-          <Building type="small" position={[2, 0, 1.5]} />
-          <Building type="large" position={[0.5, 0, 1.5]} />
-          <Building type="biggest" position={[-1, 0, 1.5]} />
+          <Building type="small" position={[2, 0, 5]} />
+          <Building type="large" position={[0.5, 0, 5]} />
+          <Building type="biggest" position={[-1, 0, 5]} />
+          <Building type="large" position={[2, 0, 3.5]} />
+          <Building type="biggest" position={[0.5, 0, 3.5]} />
+          <Building type="small" position={[-1, 0, 3.5]} />
+          <Building type="biggest" position={[2, 0, 2]} />
+          <Building type="small" position={[0.5, 0, 2]} />
+          <Building type="large" position={[-1, 0, 2]} />
         </group>
       )}
+      <Text
+        position={[0, 0.2, -5]}
+        rotation={[Math.PI / 2, Math.PI, 0]}
+        fontSize={1}
+        color="black"
+      >
+        {sector.id}
+      </Text>
     </group>
   );
 }
