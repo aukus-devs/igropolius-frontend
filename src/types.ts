@@ -41,7 +41,6 @@ export type SectorData = {
   id: number;
   type: "corner" | "property" | "community_chest" | "tax" | "railroad" | "chance" | "utility";
   name: string;
-  players: string[];
   position: Position;
   color: CellColor;
   rollType: CellRollType;
