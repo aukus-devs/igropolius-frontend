@@ -14,6 +14,7 @@ type Props = {
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
   onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
+  isCorner?: boolean;
 };
 
 export function Sector({
@@ -26,8 +27,14 @@ export function Sector({
   onPointerOver,
   onPointerLeave,
   isSelected,
+  isCorner,
 }: Props) {
   const canHaveBuildings = sector.type === "property";
+
+  const textPosition: Vector3Array = isCorner ? [-5, 0.2, -5] : [0, 0.2, -5];
+  const textRotation: Vector3Array = isCorner
+    ? [Math.PI / 2, Math.PI, Math.PI / 4]
+    : [Math.PI / 2, Math.PI, 0];
 
   return (
     <group name={`${sector.id}`} position={position} rotation={rotation}>
@@ -58,12 +65,7 @@ export function Sector({
           <Building type="large" position={[-1, 0, 2]} color={colors.biege} />
         </group>
       )}
-      <Text
-        position={[0, 0.2, -5]}
-        rotation={[Math.PI / 2, Math.PI, 0]}
-        fontSize={1}
-        color="black"
-      >
+      <Text position={textPosition} rotation={textRotation} fontSize={1} color="black">
         {sector.id}
       </Text>
     </group>
