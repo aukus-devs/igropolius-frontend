@@ -1,26 +1,44 @@
-import { AppContext } from "@/contexts/AppContext";
 import { playersData, sectorsData } from "@/lib/mockData";
-import { useContext } from "react";
 import Sector from "./Sector";
-import { FLOOR_SIZE, SECTOR_ELEVATION } from "@/lib/constants";
+import { FLOOR_SIZE, PLAYER_ELEVATION, SECTOR_DEPTH, SECTOR_ELEVATION, SECTOR_WIDTH } from "@/lib/constants";
 import { Vector3Array } from "@/types";
+import PlayerModel from "./PlayerModel";
+import useAppStore from "@/stores/appStore";
 
 interface Props {
-  sectorWidth?: number;
-  sectorHeight?: number;
   scale?: number;
 }
 
-function GameBoard({ sectorWidth = 6, sectorHeight = 6, scale = 1 }: Props) {
-  const { selectedSector, setSelectedSectorId } = useContext(AppContext);
+function GameBoard({ scale = 1 }: Props) {
+  const selectedSector = useAppStore((state) => state.selectedSector);
+  const setSelectedSectorId = useAppStore((state) => state.setSelectedSectorId);
   const sectorsPerSide = 12;
-  const centerPosition = (FLOOR_SIZE / sectorsPerSide) * sectorWidth;
+  const centerPosition = (FLOOR_SIZE / sectorsPerSide) * SECTOR_WIDTH;
 
   return (
     <group
       position={[-centerPosition, SECTOR_ELEVATION, -centerPosition]}
       scale={[scale, 1, scale]}
     >
+      <group name="players">
+        {playersData.map((player, idx) => {
+          const sector = sectorsData.find((s) => s.id === player.sectorId);
+          if (!sector) throw new Error(`Sector with id ${player.sectorId} not found`);
+
+          return (
+            <PlayerModel
+              key={idx}
+              player={player}
+              position={[
+                sector.position.x * SECTOR_WIDTH,
+                PLAYER_ELEVATION,
+                sector.position.y * SECTOR_WIDTH
+              ]}
+            />
+          )
+        })}
+      </group>
+
       {sectorsData.map((sector) => {
         const isBottomSector = sector.position.y === 0;
         const isLeftSector = sector.position.x === 0;
@@ -33,8 +51,8 @@ function GameBoard({ sectorWidth = 6, sectorHeight = 6, scale = 1 }: Props) {
           (isTopSector && isLeftSector) ||
           (isTopSector && isRightSector);
 
-        const sectorSize: Vector3Array = [sectorWidth, 0.1, sectorHeight];
-        const cornerSize: Vector3Array = [sectorHeight, 0.1, sectorHeight];
+        const sectorSize: Vector3Array = [SECTOR_WIDTH, 0.1, SECTOR_DEPTH];
+        const cornerSize: Vector3Array = [SECTOR_DEPTH, 0.1, SECTOR_DEPTH];
         const boxShape: Vector3Array = isCorner ? cornerSize : sectorSize;
 
         const bottomRotation: Vector3Array = [0, 0, 0];
@@ -48,38 +66,32 @@ function GameBoard({ sectorWidth = 6, sectorHeight = 6, scale = 1 }: Props) {
 
         if (isBottomSector) {
           rotation = bottomRotation;
-          offsetY = -(sectorHeight - sectorWidth) / 2;
+          offsetY = -(SECTOR_DEPTH - SECTOR_WIDTH) / 2;
         }
 
         if (isLeftSector) {
           rotation = leftRotation;
-          offsetX = -(sectorHeight - sectorWidth) / 2;
+          offsetX = -(SECTOR_DEPTH - SECTOR_WIDTH) / 2;
         }
 
         if (isRightSector) {
           rotation = rightRotation;
-          offsetX = (sectorHeight - sectorWidth) / 2;
+          offsetX = (SECTOR_DEPTH - SECTOR_WIDTH) / 2;
         }
 
         if (isTopSector) {
           rotation = topRotation;
-          offsetY = (sectorHeight - sectorWidth) / 2;
+          offsetY = (SECTOR_DEPTH - SECTOR_WIDTH) / 2;
         }
-
-        const players_ids = sector.players;
-        const players = players_ids
-          .map((id) => playersData.find((player) => player.id === id))
-          .filter((p) => p !== undefined);
 
         return (
           <Sector
             sector={sector}
-            players={players}
             key={sector.id}
             position={[
-              sector.position.x * sectorWidth + offsetX,
+              sector.position.x * SECTOR_WIDTH + offsetX,
               SECTOR_ELEVATION,
-              sector.position.y * sectorWidth + offsetY,
+              sector.position.y * SECTOR_WIDTH + offsetY,
             ]}
             rotation={rotation}
             shape={boxShape}

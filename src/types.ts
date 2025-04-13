@@ -71,7 +71,7 @@ export type PlayerData = {
   id: string;
   name: string;
   color: string;
-  sector: string;
+  sectorId: number;
 };
 
 export type Vector3Array = [number, number, number];

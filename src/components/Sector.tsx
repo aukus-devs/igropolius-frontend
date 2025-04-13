@@ -1,12 +1,11 @@
-import { PlayerData, SectorData, Vector3Array } from "@/types";
+import { SectorData, Vector3Array } from "@/types";
 import { Edges } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import Building from "./map/Building";
-import PlayerModel from "./PlayerModel";
+import { useMemo } from "react";
 
 type Props = {
   sector: SectorData;
-  players: PlayerData[];
   position: Vector3Array;
   rotation: Vector3Array;
   shape: Vector3Array;
@@ -18,7 +17,6 @@ type Props = {
 
 export function Sector({
   sector,
-  players,
   shape,
   position,
   rotation,
@@ -29,13 +27,21 @@ export function Sector({
 }: Props) {
   const canHaveBuildings = sector.type === "property";
 
+  // Temporary fix f unnecessary re-renders
+  const buildings = useMemo(() => {
+    if (!canHaveBuildings) return null;
+
+    return (
+      <group name="buildings">
+        <Building type="small" position={[2, 0, 1.5]} />
+        <Building type="large" position={[0.5, 0, 1.5]} />
+        <Building type="biggest" position={[-1, 0, 1.5]} />
+      </group>
+    )
+  }, [canHaveBuildings]);
+
   return (
     <group name={`${sector.id}`} position={position} rotation={rotation}>
-      <group name="players">
-        {players.map((p, idx) => (
-          <PlayerModel player={p} key={idx} />
-        ))}
-      </group>
       <mesh
         onClick={(e) => (e.stopPropagation(), onClick?.(e))}
         onPointerOver={(e) => (e.stopPropagation(), onPointerOver?.(e))}
@@ -45,13 +51,7 @@ export function Sector({
         <meshStandardMaterial color={sector.color} emissive={isSelected ? "white" : 0} />
         <Edges scale={1.01} color="black" />
       </mesh>
-      {canHaveBuildings && (
-        <group name="buildings">
-          <Building type="small" position={[2, 0, 1.5]} />
-          <Building type="large" position={[0.5, 0, 1.5]} />
-          <Building type="biggest" position={[-1, 0, 1.5]} />
-        </group>
-      )}
+      {buildings}
     </group>
   );
 }

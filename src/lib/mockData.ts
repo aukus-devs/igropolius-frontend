@@ -366,14 +366,17 @@ export const sectorsData: SectorData[] = [
 export const playersData: PlayerData[] = [
   {
     id: "1",
+    sectorId: 38,
     name: "Player 1",
-    sector: "short_line",
     color: colors.green,
   },
   {
     id: "2",
+    sectorId: 25,
     name: "Player 2",
-    sector: "marvin_gardens",
     color: colors.pink,
   },
 ];
+
+
+export const myPlayerData: PlayerData = playersData[0];
