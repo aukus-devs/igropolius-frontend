@@ -37,6 +37,7 @@ function UI() {
       >
         Ходить
       </Button>
+      {/* <Notifications /> */}
     </div>
   );
 }
