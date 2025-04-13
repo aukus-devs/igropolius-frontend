@@ -1,4 +1,4 @@
-import { SECTOR_WIDTH } from '@/lib/constants';
+import { SECTOR_OFFSET, SECTOR_WIDTH } from '@/lib/constants';
 import { myPlayerData, sectorsData } from '@/lib/mockData';
 import { sleep } from '@/lib/utils';
 import { PlayerData, SectorData } from '@/types';
@@ -65,13 +65,20 @@ const useAppStore = create<AppStore>((set, get) => ({
 
       if (!myPlayer?.modelRef) throw new Error(`myPlayer.modelRef is not defined.`);
 
+      const directionX = nextSector.position.x - prevSector.position.x;
+      const directionY = nextSector.position.y - prevSector.position.y;
+      const nextX = (prevSector.position.x + directionX) * SECTOR_WIDTH;
+      const nextY = (prevSector.position.y + directionY) * SECTOR_WIDTH;
+      const offsetX = nextSector.position.x === 0 ? -SECTOR_OFFSET * 2 : nextSector.position.x === 10 ? SECTOR_OFFSET * 2 : 0;
+      const offsetY = nextSector.position.y === 0 ? -SECTOR_OFFSET * 2 : nextSector.position.y === 10 ? SECTOR_OFFSET * 2 : 0;
+
       animate(myPlayer.modelRef.position, {
-        x: (prevSector.position.x + (nextSector.position.x - prevSector.position.x)) * SECTOR_WIDTH,
-        z: (prevSector.position.y + (nextSector.position.y - prevSector.position.y)) * SECTOR_WIDTH,
-        duration: 700
+        x: nextX + offsetX,
+        z: nextY + offsetY,
+        duration: 500
       });
 
-      await sleep(700);
+      await sleep(500);
 
       prevSector = nextSector;
     }
