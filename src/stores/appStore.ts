@@ -95,9 +95,14 @@ const useAppStore = create<AppStore>((set, get) => ({
     }
 
     if (!prevSector) throw new Error(`Previous sector not found.`);
-    myPlayer.sectorId = prevSector.id;
 
-    set({ isPlayerMoving: false, myPlayer });
+    set({
+      isPlayerMoving: false,
+      myPlayer: {
+        ...myPlayer,
+        sectorId: prevSector.id,
+      },
+    });
   },
 }));
 
