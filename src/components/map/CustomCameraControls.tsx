@@ -2,6 +2,8 @@ import { CameraControls as CameraControlsComponent, useKeyboardControls } from "
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import CameraControls from "camera-controls";
+import { Box3, Vector3 } from "three";
+import { FLOOR_SIZE, SECTOR_WIDTH } from "@/lib/constants";
 
 interface Props {
   keysMovespeed?: number;
@@ -14,7 +16,16 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
 
   useEffect(() => {
     if (cameraControls.current) {
+      const boundarySize = FLOOR_SIZE / 2 + SECTOR_WIDTH * 2;
+      const bb = new Box3(
+        new Vector3(-boundarySize, 1, -boundarySize),
+        new Vector3(boundarySize, boundarySize, boundarySize)
+      );
+      // const helper = new Box3Helper(bb, 0xffff00);
+      // scene.add(helper);
+
       cameraControls.current.mouseButtons.right = CameraControls.ACTION.SCREEN_PAN;
+      cameraControls.current.setBoundary(bb);
     }
   }, [cameraControls]);
 
@@ -32,7 +43,18 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
     if (turnRight) cameraControls.current?.rotate(-speed / 10, 0, false);
   });
 
-  return <CameraControlsComponent ref={cameraControls} makeDefault dollyToCursor maxDistance={120} />;
+  return (
+    <>
+      <CameraControlsComponent
+        ref={cameraControls}
+        makeDefault
+        dollyToCursor
+        dollySpeed={0.75}
+        maxDistance={120}
+        maxZoom={120}
+      />
+    </>
+  );
 }
 
 export default CustomCameraControls;

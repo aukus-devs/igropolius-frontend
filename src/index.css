@@ -82,6 +82,8 @@
   }
 
   body {
+    font-family: 'Golos Text', sans-serif;
+
     @apply bg-background text-foreground;
   }
 }

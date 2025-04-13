@@ -17,7 +17,7 @@ function UI() {
   const players = playersData;
 
   return (
-    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10">
+    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10 overflow-hidden">
       <Card className="absolute top-8 left-1/2 -translate-x-1/2">
         <CardContent>Выпало: {rolledNumber || "—"}</CardContent>
       </Card>
@@ -27,7 +27,7 @@ function UI() {
       <LoginCard />
       <PlayersList players={players} />
       <QuickMenu />
-      <Notifications />
+      {/* <Notifications /> */}
 
       <Button
         variant="outline"
@@ -37,7 +37,6 @@ function UI() {
       >
         Ходить
       </Button>
-      {/* <Notifications /> */}
     </div>
   );
 }
