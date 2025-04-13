@@ -21,7 +21,7 @@ function PlayerItem({ player }: { player: PlayerData }) {
       <div className="flex items-center gap-2">
         <div className="flex flex-col">
           <div className="text-sm font-medium">{player.name}</div>
-          <div className="text-xs text-muted-foreground">{player.sector}</div>
+          <div className="text-xs text-muted-foreground">{player.sectorId}</div>
         </div>
       </div>
     </Card>

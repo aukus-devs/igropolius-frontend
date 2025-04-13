@@ -43,21 +43,20 @@ export function Sector({
         <Building type="small" position={[0.5, 0, 2]} color={colors.lightblue} />
         <Building type="large" position={[-1, 0, 2]} color={colors.biege} />
       </group>
-    )
+    );
   }, [canHaveBuildings]);
 
   const textId = useMemo(() => {
-    const isCorner = sector.type === 'corner';
+    const isCorner = sector.type === "corner";
     const textPosition: Vector3Array = isCorner ? [-5, 0.2, -5] : [0, 0.2, -5];
     const textRotation: Vector3Array = isCorner
       ? [Math.PI / 2, Math.PI, Math.PI / 4]
       : [Math.PI / 2, Math.PI, 0];
     return (
-
       <Text position={textPosition} rotation={textRotation} fontSize={1} color="black">
         {sector.id}
       </Text>
-    )
+    );
   }, [sector.id, sector.type]);
 
   return (
