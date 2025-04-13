@@ -17,8 +17,8 @@ function UI() {
   const players = playersData;
 
   return (
-    <div>
-      <Card className="absolute top-8 left-1/2 -translate-x-1/2 z-10">
+    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10">
+      <Card className="absolute top-8 left-1/2 -translate-x-1/2">
         <CardContent>Выпало: {rolledNumber || "—"}</CardContent>
       </Card>
 
@@ -31,7 +31,7 @@ function UI() {
 
       <Button
         variant="outline"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
         onClick={moveMyPlayer}
         disabled={isPlayerMoving}
       >

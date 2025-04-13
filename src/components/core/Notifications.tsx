@@ -8,7 +8,7 @@ export default function Notifications() {
   ];
 
   return (
-    <div className="absolute top-27 right-7 z-5">
+    <div className="absolute top-27 right-7">
       <div className="text-right text-[#828282]">Уведомления</div>
       <div className="flex flex-col gap-[10px]">
         {notifications.map((notification, index) => (

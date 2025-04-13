@@ -18,7 +18,7 @@ export default function QuickMenu() {
   return (
     <>
       <div
-        className="absolute w-[220px] left-[30px] top-[85px] text-16 z-10 flex flex-col gap-[8px]"
+        className="absolute w-[220px] left-[30px] top-[85px] text-16 flex flex-col gap-[8px]"
         onMouseLeave={handleMouseLeave}
       >
         <Card className="cursor-pointer" onMouseEnter={handleMouseEnter}>
