@@ -10,33 +10,7 @@ const ColorBiege = "#F5F5DC";
 const ColorPastelGreen = "#AAD4A3";
 const ColorHighlight = "#9400D3";
 
-type ColorName =
-  | "brown"
-  | "lightblue"
-  | "pink"
-  | "orange"
-  | "red"
-  | "yellow"
-  | "green"
-  | "blue"
-  | "biege"
-  | "pastelgreen"
-  | "highlight";
-
-type CellColor =
-  | typeof ColorBrown
-  | typeof ColorLightBlue
-  | typeof ColorPink
-  | typeof ColorOrange
-  | typeof ColorRed
-  | typeof ColorYellow
-  | typeof ColorGreen
-  | typeof ColorBlue
-  | typeof ColorBiege
-  | typeof ColorPastelGreen
-  | typeof ColorHighlight;
-
-export const colors: Record<ColorName, CellColor> = {
+export const colors = {
   brown: ColorBrown,
   lightblue: ColorLightBlue,
   pink: ColorPink,
@@ -49,6 +23,12 @@ export const colors: Record<ColorName, CellColor> = {
   pastelgreen: ColorPastelGreen,
   highlight: ColorHighlight,
 };
+
+// Type for the keys of the map
+export type ColorName = keyof typeof colors;
+
+// Type for the values of the map
+export type CellColor = (typeof colors)[ColorName];
 
 export type CellRollType = "auc" | "steam" | "voting";
 

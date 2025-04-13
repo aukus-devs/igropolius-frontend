@@ -1,4 +1,4 @@
-import { colors } from "@/types";
+import { CellColor } from "@/types";
 import { Gltf } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -10,6 +10,7 @@ type Props = {
   type?: "small" | "large" | "biggest";
   position: [number, number, number];
   scale?: number;
+  color: CellColor;
 };
 
 const wallMeshNames = [
@@ -18,13 +19,7 @@ const wallMeshNames = [
   "Mesh_skyscraperE_3",
 ];
 
-const buildingColors = {
-  small: colors.brown,
-  large: colors.green,
-  biggest: colors.pink,
-};
-
-export default function Building({ position, type, scale }: Props) {
+export default function Building({ position, type, scale, color }: Props) {
   // const gltfRef = useRef<null | THREE.Group>(null);
 
   const updateModel = (model: THREE.Group) => {
@@ -38,27 +33,30 @@ export default function Building({ position, type, scale }: Props) {
           // Ensure each mesh has its own material instance
           if (Array.isArray(mesh.material)) {
             mesh.material = mesh.material.map((material) => {
-              if (material instanceof THREE.MeshStandardMaterial) {
-                // Update roughness and metalness
-                material.roughness = 0.5;
-                material.metalness = 0.5;
-                // Set color for specific meshes
+              let mat = material;
+              if (mat instanceof THREE.MeshStandardMaterial) {
                 if (isWallMesh) {
-                  material.color.set(buildingColors[type ?? "small"]); // Use appropriate type
+                  mat = mat.clone();
+                  mat.color.set(color);
                 }
-                material.needsUpdate = true;
+                // Update roughness and metalness
+                mat.roughness = 0.5;
+                mat.metalness = 0.5;
+                mat.needsUpdate = true;
               }
-              return material;
+              return mat;
             });
           } else if (mesh.material instanceof THREE.MeshStandardMaterial) {
-            // Update roughness and metalness
-            mesh.material.roughness = 0.5;
-            mesh.material.metalness = 0.5;
-            // Set color for specific meshes
+            let mat = mesh.material;
             if (isWallMesh) {
-              mesh.material.color.set(buildingColors[type ?? "small"]); // Use appropriate type
+              mat = mat.clone();
+              mat.color.set(color);
             }
-            mesh.material.needsUpdate = true;
+            // Update roughness and metalness
+            mat.roughness = 0.5;
+            mat.metalness = 0.5;
+            mat.needsUpdate = true;
+            mesh.material = mat;
           }
         }
       });

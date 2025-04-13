@@ -1,4 +1,4 @@
-import { PlayerData, SectorData, Vector3Array } from "@/types";
+import { colors, PlayerData, SectorData, Vector3Array } from "@/types";
 import { Edges, Text } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import Building from "./Building";
@@ -47,15 +47,15 @@ export function Sector({
       </mesh>
       {canHaveBuildings && (
         <group name="buildings">
-          <Building type="small" position={[2, 0, 5]} />
-          <Building type="large" position={[0.5, 0, 5]} />
-          <Building type="biggest" position={[-1, 0, 5]} />
-          <Building type="large" position={[2, 0, 3.5]} />
-          <Building type="biggest" position={[0.5, 0, 3.5]} />
-          <Building type="small" position={[-1, 0, 3.5]} />
-          <Building type="biggest" position={[2, 0, 2]} />
-          <Building type="small" position={[0.5, 0, 2]} />
-          <Building type="large" position={[-1, 0, 2]} />
+          <Building type="small" position={[2, 0, 5]} color={colors.blue} />
+          <Building type="large" position={[0.5, 0, 5]} color={colors.red} />
+          <Building type="biggest" position={[-1, 0, 5]} color={colors.brown} />
+          <Building type="large" position={[2, 0, 3.5]} color={colors.green} />
+          <Building type="biggest" position={[0.5, 0, 3.5]} color={colors.yellow} />
+          <Building type="small" position={[-1, 0, 3.5]} color={colors.pink} />
+          <Building type="biggest" position={[2, 0, 2]} color={colors.orange} />
+          <Building type="small" position={[0.5, 0, 2]} color={colors.lightblue} />
+          <Building type="large" position={[-1, 0, 2]} color={colors.biege} />
         </group>
       )}
       <Text
