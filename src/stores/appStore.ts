@@ -1,4 +1,4 @@
-import { SECTOR_DEPTH } from '@/lib/constants';
+import { SECTOR_WIDTH } from '@/lib/constants';
 import { myPlayerData, sectorsData } from '@/lib/mockData';
 import { sleep } from '@/lib/utils';
 import { PlayerData, SectorData } from '@/types';
@@ -66,8 +66,8 @@ const useAppStore = create<AppStore>((set, get) => ({
       if (!myPlayer?.modelRef) throw new Error(`myPlayer.modelRef is not defined.`);
 
       animate(myPlayer.modelRef.position, {
-        x: (prevSector.position.x + (nextSector.position.x - prevSector.position.x)) * SECTOR_DEPTH,
-        z: (prevSector.position.y + (nextSector.position.y - prevSector.position.y)) * SECTOR_DEPTH,
+        x: (prevSector.position.x + (nextSector.position.x - prevSector.position.x)) * SECTOR_WIDTH,
+        z: (prevSector.position.y + (nextSector.position.y - prevSector.position.y)) * SECTOR_WIDTH,
         duration: 700
       });
 

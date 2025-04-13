@@ -1,6 +1,6 @@
 import CustomCameraControls from "./CustomCameraControls";
 import Floor from "./Floor";
-import { Grid } from "@react-three/drei";
+import { Grid, Stats } from "@react-three/drei";
 import GameBoard from "./GameBoard";
 
 function Scene() {
@@ -29,6 +29,7 @@ function Scene() {
 
       {/* origin position marker */}
       <Grid position={[0, 1, 0]} args={[1, 1]} {...gridConfig} />
+      <Stats />
     </>
   );
 }

@@ -1,12 +1,20 @@
-import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import useAppStore from "@/stores/appStore";
 import SectorInfo from "./SectorInfo";
+import { CardContent } from "./ui/card";
+import Card from "./core/Card";
+import PlayersList from "./core/PlayersList";
+import { playersData } from "@/lib/mockData";
+import QuickMenu from "./core/QuickMenu";
+import Notifications from "./core/Notifications";
+import LoginCard from "./core/LoginCard";
 
 function UI() {
   const rolledNumber = useAppStore((state) => state.rolledNumber);
   const moveMyPlayer = useAppStore((state) => state.moveMyPlayer);
   const isPlayerMoving = useAppStore((state) => state.isPlayerMoving);
+
+  const players = playersData;
 
   return (
     <div>
@@ -15,6 +23,11 @@ function UI() {
       </Card>
 
       <SectorInfo />
+
+      <LoginCard />
+      <PlayersList players={players} />
+      <QuickMenu />
+      <Notifications />
 
       <Button
         variant="outline"

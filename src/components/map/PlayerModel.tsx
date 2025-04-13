@@ -13,12 +13,11 @@ type Props = {
 };
 
 export function PlayerModel({ player, position, onClick }: Props) {
-  const playerObjectRef = useRef<Group | null>(null);
   const updateMyPlayerObject = useAppStore(state => state.updateMyPlayerModelRef);
+  const playerObjectRef = useRef<Group | null>(null);
 
   useEffect(() => {
     if (playerObjectRef.current && player.id === myPlayerData.id) {
-      console.log(playerObjectRef.current)
       updateMyPlayerObject(playerObjectRef.current);
     }
   }, [player.id, updateMyPlayerObject]);

@@ -2,14 +2,20 @@ import { playersData, sectorsData } from "@/lib/mockData";
 import Sector from "./Sector";
 import { FLOOR_SIZE, PLAYER_ELEVATION, SECTOR_DEPTH, SECTOR_ELEVATION, SECTOR_WIDTH } from "@/lib/constants";
 import { Vector3Array } from "@/types";
-import PlayerModel from "./PlayerModel";
 import useAppStore from "@/stores/appStore";
+import { PlayerModel } from "./PlayerModel";
 
-interface Props {
-  scale?: number;
-}
+type SectorPosition =
+  | "bottom"
+  | "top"
+  | "left"
+  | "right"
+  | "bottom-left"
+  | "bottom-right"
+  | "top-left"
+  | "top-right";
 
-function GameBoard({ scale = 1 }: Props) {
+function GameBoard() {
   const selectedSector = useAppStore((state) => state.selectedSector);
   const setSelectedSectorId = useAppStore((state) => state.setSelectedSectorId);
   const sectorsPerSide = 12;
@@ -18,7 +24,6 @@ function GameBoard({ scale = 1 }: Props) {
   return (
     <group
       position={[-centerPosition, SECTOR_ELEVATION, -centerPosition]}
-      scale={[scale, 1, scale]}
     >
       <group name="players">
         {playersData.map((player, idx) => {
@@ -41,8 +46,8 @@ function GameBoard({ scale = 1 }: Props) {
 
       {sectorsData.map((sector) => {
         const isBottomSector = sector.position.y === 0;
-        const isLeftSector = sector.position.x === 0;
-        const isRightSector = sector.position.x === 10;
+        const isRightSector = sector.position.x === 0;
+        const isLeftSector = sector.position.x === 10;
         const isTopSector = sector.position.y === 10;
 
         const isCorner =
@@ -55,32 +60,35 @@ function GameBoard({ scale = 1 }: Props) {
         const cornerSize: Vector3Array = [SECTOR_DEPTH, 0.1, SECTOR_DEPTH];
         const boxShape: Vector3Array = isCorner ? cornerSize : sectorSize;
 
-        const bottomRotation: Vector3Array = [0, 0, 0];
-        const topRotation: Vector3Array = [0, Math.PI, 0];
-        const leftRotation: Vector3Array = [0, Math.PI / 2, 0];
-        const rightRotation: Vector3Array = [0, -Math.PI / 2, 0];
+        let boardPosition: SectorPosition = "bottom";
+        if (isLeftSector) boardPosition = "left";
+        if (isRightSector) boardPosition = "right";
+        if (isTopSector) boardPosition = "top";
+        if (isBottomSector) boardPosition = "bottom";
+        if (isCorner) {
+          if (isBottomSector && isLeftSector) boardPosition = "bottom-left";
+          if (isBottomSector && isRightSector) boardPosition = "bottom-right";
+          if (isTopSector && isLeftSector) boardPosition = "top-left";
+          if (isTopSector && isRightSector) boardPosition = "top-right";
+        }
 
-        let rotation: Vector3Array = [0, 0, 0];
+        const rotation = getSectorRotation(boardPosition);
         let offsetX = 0;
         let offsetY = 0;
 
         if (isBottomSector) {
-          rotation = bottomRotation;
           offsetY = -(SECTOR_DEPTH - SECTOR_WIDTH) / 2;
         }
 
-        if (isLeftSector) {
-          rotation = leftRotation;
+        if (isRightSector) {
           offsetX = -(SECTOR_DEPTH - SECTOR_WIDTH) / 2;
         }
 
-        if (isRightSector) {
-          rotation = rightRotation;
+        if (isLeftSector) {
           offsetX = (SECTOR_DEPTH - SECTOR_WIDTH) / 2;
         }
 
         if (isTopSector) {
-          rotation = topRotation;
           offsetY = (SECTOR_DEPTH - SECTOR_WIDTH) / 2;
         }
 
@@ -106,3 +114,40 @@ function GameBoard({ scale = 1 }: Props) {
 }
 
 export default GameBoard;
+
+const bottomRotation: Vector3Array = [0, 0, 0];
+const topRotation: Vector3Array = [0, Math.PI, 0];
+const leftRotation: Vector3Array = [0, -Math.PI / 2, 0];
+const rightRotation: Vector3Array = [0, Math.PI / 2, 0];
+
+// start sector
+const bottomRightRotation: Vector3Array = [0, 0, 0];
+// prison visit
+const bottomLeftRotation: Vector3Array = [0, -Math.PI / 2, 0];
+// parking
+const topLeftRotation: Vector3Array = [0, -Math.PI, 0];
+// prison
+const topRightRotation: Vector3Array = [0, Math.PI / 2, 0];
+
+function getSectorRotation(pos: SectorPosition): Vector3Array {
+  switch (pos) {
+    case "bottom":
+      return bottomRotation;
+    case "top":
+      return topRotation;
+    case "left":
+      return leftRotation;
+    case "right":
+      return rightRotation;
+    case "bottom-left":
+      return bottomLeftRotation;
+    case "bottom-right":
+      return bottomRightRotation;
+    case "top-left":
+      return topLeftRotation;
+    case "top-right":
+      return topRightRotation;
+    default:
+      return [0, 0, 0];
+  }
+}
