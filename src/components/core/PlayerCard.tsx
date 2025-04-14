@@ -1,8 +1,9 @@
 import { PlayerData } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Zap } from "lucide-react";
-import useAppStore from "@/stores/appStore";
 import { Card } from "../ui/card";
+import useCameraStore from "@/stores/cameraStore";
+import useModelsStore from "@/stores/modelsStore";
 
 interface Props extends PlayerData {
   placement: number;
@@ -10,8 +11,8 @@ interface Props extends PlayerData {
 }
 
 function PlayerCard({ sectorId, name, avatar, placement }: Props) {
-  const cameraControls = useAppStore((state) => state.cameraControls);
-  const getSectorModel = useAppStore((state) => state.getSectorModel);
+  const cameraControls = useCameraStore((state) => state.cameraControls);
+  const getSectorModel = useModelsStore((state) => state.getSectorModel);
   const randomPoints = Math.floor(Math.random() * 9999).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
   async function cameraToPlayer() {

@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import useAppStore from "@/stores/appStore";
+import useSectorStore from "@/stores/sectorStore";
 
 function SectorInfo() {
-  const selectedSector = useAppStore((state) => state.selectedSector);
+  const selectedSector = useSectorStore((state) => state.selectedSector);
 
   return (
     <>

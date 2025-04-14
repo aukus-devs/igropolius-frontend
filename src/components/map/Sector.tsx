@@ -4,7 +4,7 @@ import { ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import Building from "./Building";
 import { Group } from "three";
-import useAppStore from "@/stores/appStore";
+import useModelsStore from "@/stores/modelsStore";
 
 type Props = {
   sector: SectorData;
@@ -27,7 +27,7 @@ export function Sector({
   onPointerLeave,
   isSelected,
 }: Props) {
-  const addSectorModel = useAppStore((state) => state.addSectorModel);
+  const addSectorModel = useModelsStore((state) => state.addSectorModel);
   const sectorRef = useRef<Group | null>(null);
   const canHaveBuildings = sector.type === "property";
 

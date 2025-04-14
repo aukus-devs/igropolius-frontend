@@ -1,5 +1,5 @@
 import { PLAYER_HEIGHT } from "@/lib/constants";
-import useAppStore from "@/stores/appStore";
+import useModelsStore from "@/stores/modelsStore";
 import { PlayerData, Vector3Array } from "@/types";
 import { ThreeEvent } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function PlayerModel({ player, position, onClick }: Props) {
-  const addPlayerModel = useAppStore((state) => state.addPlayerModel);
+  const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
   const playerObjectRef = useRef<Group | null>(null);
 
   useEffect(() => {

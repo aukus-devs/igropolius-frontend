@@ -4,14 +4,14 @@ import { useEffect, useRef } from "react";
 import CameraControls from "camera-controls";
 import { Box3, Vector3 } from "three";
 import { FLOOR_SIZE, SECTOR_WIDTH } from "@/lib/constants";
-import useAppStore from "@/stores/appStore";
+import useCameraStore from "@/stores/cameraStore";
 
 interface Props {
   keysMovespeed?: number;
 }
 
 export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
-  const setCameraControls = useAppStore((state) => state.setCameraControls);
+  const setCameraControls = useCameraStore((state) => state.setCameraControls);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, getKeys] = useKeyboardControls();
   const cameraControls = useRef<CameraControlsComponent | null>(null);

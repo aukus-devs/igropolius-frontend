@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import useAppStore from "@/stores/appStore";
+import usePlayerStore from "@/stores/playerStore";
 import { Card, CardContent } from "./ui/card";
 import PlayersList from "./core/PlayersList";
 import { playersData } from "@/lib/mockData";
@@ -8,9 +8,9 @@ import Notifications from "./core/Notifications";
 import SectorInfo from "./SectorInfo";
 
 function UI() {
-  const rolledNumber = useAppStore((state) => state.rolledNumber);
-  const moveMyPlayer = useAppStore((state) => state.moveMyPlayer);
-  const isPlayerMoving = useAppStore((state) => state.isPlayerMoving);
+  const rolledNumber = usePlayerStore((state) => state.rolledNumber);
+  const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
+  const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
 
   const players = playersData;
 
