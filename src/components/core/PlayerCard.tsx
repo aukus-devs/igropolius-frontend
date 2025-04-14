@@ -5,15 +5,19 @@ import { Card } from "../ui/card";
 import useCameraStore from "@/stores/cameraStore";
 import useModelsStore from "@/stores/modelsStore";
 
-interface Props extends PlayerData {
+type Props = {
+  player: PlayerData;
   placement: number;
   onClick?: () => void;
-}
+};
 
-function PlayerCard({ sectorId, name, avatar, placement }: Props) {
+function PlayerCard({ player, placement }: Props) {
+  const { sectorId, name, avatar } = player;
   const cameraControls = useCameraStore((state) => state.cameraControls);
   const getSectorModel = useModelsStore((state) => state.getSectorModel);
-  const randomPoints = Math.floor(Math.random() * 9999).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  const randomPoints = Math.floor(Math.random() * 9999)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
   async function cameraToPlayer() {
     if (!cameraControls) return;
@@ -21,24 +25,31 @@ function PlayerCard({ sectorId, name, avatar, placement }: Props) {
     const sectorModel = getSectorModel(sectorId);
 
     if (sectorModel) {
-      let rotationY = sectorModel.rotation.y;
+      let targetRotationY = sectorModel.rotation.y;
 
-      if (rotationY === Math.PI) {
-        rotationY -= Math.PI;
-      } else if (rotationY === 0) {
-        rotationY += Math.PI;
+      if (targetRotationY === Math.PI) {
+        targetRotationY -= Math.PI;
+      } else if (targetRotationY === 0) {
+        targetRotationY += Math.PI;
       } else {
-        rotationY = -rotationY;
+        targetRotationY = -targetRotationY;
       }
 
+      const cameraAzimuth = cameraControls.azimuthAngle ?? 0;
+      const base = Math.floor(cameraAzimuth / (Math.PI * 2));
+      const targetAzimuth = base * Math.PI * 2 + targetRotationY;
+
       cameraControls.fitToBox(sectorModel, true, { cover: true });
-      cameraControls.rotateTo(rotationY, Math.PI / 4, true);
+      cameraControls.rotateTo(targetAzimuth, Math.PI / 4, true);
       cameraControls.dollyTo(15, true);
     }
   }
 
   return (
-    <Card className="flex-row gap-2 rounded-xl p-2 w-[16.75rem] items-center select-none cursor-pointer" onClick={cameraToPlayer}>
+    <Card
+      className="flex-row gap-2 rounded-xl p-2 w-[16.75rem] items-center select-none cursor-pointer"
+      onClick={cameraToPlayer}
+    >
       <div className="relative">
         <Avatar className="w-8 h-8">
           <AvatarImage src={avatar} />
@@ -51,12 +62,14 @@ function PlayerCard({ sectorId, name, avatar, placement }: Props) {
           <div>
             <span className="text-muted-foreground font-bold">{placement} · </span> {name}
           </div>
-          <div className="flex text-muted-foreground items-center gap-1">{randomPoints} <Zap size="1rem" /></div>
+          <div className="flex text-muted-foreground items-center gap-1">
+            {randomPoints} <Zap size="1rem" />
+          </div>
         </div>
         <div className="text-sm text-muted-foreground">Проводит аукцион</div>
       </div>
     </Card>
-  )
+  );
 }
 
 export default PlayerCard;
