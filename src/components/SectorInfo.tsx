@@ -7,7 +7,7 @@ function SectorInfo() {
   return (
     <>
       {selectedSector && (
-        <Card className="absolute bottom-4 left-4 w-52">
+        <Card className="w-52 pointer-events-none">
           <CardHeader>
             <CardTitle>{selectedSector.name}</CardTitle>
             <p className="text-xs text-muted-foreground">#{selectedSector.id}</p>

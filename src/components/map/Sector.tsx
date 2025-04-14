@@ -1,10 +1,11 @@
 import { SectorData, Vector3Array, colors } from "@/types";
-import { Edges, Text } from "@react-three/drei";
+import { Edges, Html, Text } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import Building from "./Building";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
+import SectorInfo from "../SectorInfo";
 
 type Props = {
   sector: SectorData;
@@ -17,7 +18,7 @@ type Props = {
   onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
 };
 
-export function Sector({
+function Sector({
   sector,
   shape,
   position,
@@ -84,6 +85,10 @@ export function Sector({
 
       {buildings}
       {textId}
+
+      <Html center position={[0, 10, 0]}>
+        {isSelected && <SectorInfo />}
+      </Html>
     </group>
   );
 }

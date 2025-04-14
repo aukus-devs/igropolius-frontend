@@ -1,6 +1,6 @@
 import { Card } from "../ui/card";
 
-export default function LoginCard() {
+function LoginCard() {
   return (
     <Card className="absolute top-10 left-[30px] w-[220px] h-[35px] flex flex-row justify-between items-center">
       <div>Lasqa</div>
@@ -8,3 +8,5 @@ export default function LoginCard() {
     </Card>
   );
 }
+
+export default LoginCard;

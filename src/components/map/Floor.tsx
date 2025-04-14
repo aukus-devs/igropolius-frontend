@@ -1,7 +1,7 @@
 import { FLOOR_HEIGHT, FLOOR_SIZE } from "@/lib/constants";
 import { colors } from "@/types";
 
-export function Floor() {
+function Floor() {
   return (
     <group>
       <mesh receiveShadow>

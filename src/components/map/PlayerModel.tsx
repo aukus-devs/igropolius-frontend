@@ -11,7 +11,7 @@ type Props = {
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
 };
 
-export function PlayerModel({ player, position, onClick }: Props) {
+function PlayerModel({ player, position, onClick }: Props) {
   const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
   const playerObjectRef = useRef<Group | null>(null);
 

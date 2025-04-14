@@ -19,7 +19,7 @@ const wallMeshNames = [
   "Mesh_skyscraperE_3",
 ];
 
-export default function Building({ position, type, scale, color }: Props) {
+function Building({ position, type, scale, color }: Props) {
   // const gltfRef = useRef<null | THREE.Group>(null);
 
   const updateModel = (model: THREE.Group) => {
@@ -80,3 +80,5 @@ export default function Building({ position, type, scale, color }: Props) {
     />
   );
 }
+
+export default Building;

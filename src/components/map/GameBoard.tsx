@@ -3,7 +3,7 @@ import Sector from "./Sector";
 import { FLOOR_CENTER_POSITION, PLAYER_ELEVATION, SECTOR_DEPTH, SECTOR_ELEVATION, SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
 import { PlayerData, SectorData, Vector3Array } from "@/types";
 import useSectorStore from "@/stores/sectorStore";
-import { PlayerModel } from "./PlayerModel";
+import PlayerModel from "./PlayerModel";
 
 type SectorPosition =
   | "bottom"

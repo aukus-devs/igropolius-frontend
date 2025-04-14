@@ -1,7 +1,7 @@
 import { ZapIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
-export default function Notifications() {
+function Notifications() {
   const notifications = [
     { date: '12 января 17:12', text: 'Вы ступили на поле игрока Honeymad', points: 9640, type: 'negative' },
     { date: '12 января 13:11', text: 'Melharucos ступил на ваше поле', points: 1200, type: 'positive' },
@@ -32,3 +32,5 @@ export default function Notifications() {
     </div>
   );
 }
+
+export default Notifications;

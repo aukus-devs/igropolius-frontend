@@ -1,7 +1,8 @@
 import CustomCameraControls from "./CustomCameraControls";
 import Floor from "./Floor";
-import { Grid, Stats } from "@react-three/drei";
+import { Grid, Helper, Sky, Stats } from "@react-three/drei";
 import GameBoard from "./GameBoard";
+import { DirectionalLight } from "three";
 
 function Scene() {
   const gridConfig = {
@@ -19,8 +20,12 @@ function Scene() {
 
   return (
     <>
-      <ambientLight intensity={1} />
-      <directionalLight position={[10, 20, 10]} intensity={3} />
+      <ambientLight intensity={0.3} color="#D3D3D3" />
+      <hemisphereLight position={[0, 20, 0]} intensity={0.15} />
+      <directionalLight position={[10, 20, 10]} intensity={1} />
+      <Helper type={DirectionalLight} />
+
+      <Sky sunPosition={[100, 20, 100]} />
       <CustomCameraControls />
 
       <GameBoard />

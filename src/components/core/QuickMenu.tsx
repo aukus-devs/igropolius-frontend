@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const sharedStyles = 'justify-start w-full text-base font-semibold rounded-xl px-3 py-2 backdrop-blur-[1.5rem] bg-card/60 border-none';
 
-export default function QuickMenu() {
+function QuickMenu() {
   // const menuButtons = [
   //   { icon: NotebookTextIcon, text: "Правила" },
   //   { icon: HeartIcon, text: "Привязать поинтаук" },
@@ -68,3 +68,5 @@ export default function QuickMenu() {
     </>
   );
 }
+
+export default QuickMenu;

@@ -5,7 +5,7 @@ type Props = {
   players: PlayerData[];
 };
 
-export default function PlayersList({ players }: Props) {
+function PlayersList({ players }: Props) {
   return (
     <div className="absolute top-10 left-4 flex flex-col gap-2">
       {players.map((player, idx) => (
@@ -14,3 +14,5 @@ export default function PlayersList({ players }: Props) {
     </div>
   );
 }
+
+export default PlayersList;
