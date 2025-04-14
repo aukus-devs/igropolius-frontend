@@ -1,11 +1,12 @@
 import { FLOOR_HEIGHT, FLOOR_SIZE } from "@/lib/constants";
+import { colors } from "@/types";
 
 export function Floor() {
   return (
     <group>
       <mesh receiveShadow>
         <boxGeometry args={[FLOOR_SIZE, FLOOR_HEIGHT, FLOOR_SIZE]} />
-        <meshStandardMaterial color="#2a2a2a" />
+        <meshStandardMaterial color={colors.pastelgreen} />
       </mesh>
     </group>
   );
