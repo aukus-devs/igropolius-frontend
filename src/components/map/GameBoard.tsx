@@ -25,7 +25,7 @@ function PlayerWrapper({ player }: { player: PlayerData }) {
 }
 
 function SectorWrapper({ sector }: { sector: SectorData }) {
-  const selectedSector = useSectorStore((state) => state.selectedSector);
+  const isSelected = useSectorStore((state) => state.selectedSector?.id === sector.id);
   const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
 
   const sectorSide = getSectorSide(sector);
@@ -42,7 +42,7 @@ function SectorWrapper({ sector }: { sector: SectorData }) {
       shape={boxShape}
       onClick={() => setSelectedSectorId(sector.id)}
       onPointerOver={() => setSelectedSectorId(sector.id)}
-      isSelected={selectedSector?.id === sector.id}
+      isSelected={isSelected}
     />
   );
 }
