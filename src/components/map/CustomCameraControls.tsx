@@ -51,10 +51,11 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
       <CameraControlsComponent
         ref={cameraControls}
         makeDefault
-        dollyToCursor
+        // dollyToCursor
         dollySpeed={0.75}
         maxDistance={120}
         maxZoom={120}
+        maxPolarAngle={Math.PI / 2}
       />
     </>
   );
