@@ -1,4 +1,4 @@
-import Card from "./Card";
+import { Card } from "../ui/card";
 
 export default function LoginCard() {
   return (

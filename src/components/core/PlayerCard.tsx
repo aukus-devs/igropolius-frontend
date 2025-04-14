@@ -1,15 +1,13 @@
 import { PlayerData } from "@/types";
-import Card from "./Card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Zap } from "lucide-react";
 import useAppStore from "@/stores/appStore";
+import { Card } from "../ui/card";
 
 interface Props extends PlayerData {
   placement: number;
   onClick?: () => void;
 }
-
-// https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg
 
 function PlayerCard({ sectorId, name, avatar, placement }: Props) {
   const cameraControls = useAppStore((state) => state.cameraControls);

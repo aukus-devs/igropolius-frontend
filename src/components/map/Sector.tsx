@@ -66,7 +66,6 @@ export function Sector({
 
   useEffect(() => {
     if (sectorRef.current) {
-      console.log('???')
       addSectorModel(sectorRef.current);
     }
   }, [sectorRef, addSectorModel])
