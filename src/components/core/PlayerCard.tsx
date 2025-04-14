@@ -1,0 +1,63 @@
+import { PlayerData } from "@/types";
+import Card from "./Card";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Zap } from "lucide-react";
+import useAppStore from "@/stores/appStore";
+
+interface Props extends PlayerData {
+  placement: number;
+  onClick?: () => void;
+}
+
+// https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg
+
+function PlayerCard({ sectorId, name, avatar, placement }: Props) {
+  const cameraControls = useAppStore((state) => state.cameraControls);
+  const getSectorModel = useAppStore((state) => state.getSectorModel);
+  const randomPoints = Math.floor(Math.random() * 9999).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+  async function cameraToPlayer() {
+    if (!cameraControls) return;
+
+    const sectorModel = getSectorModel(sectorId);
+
+    if (sectorModel) {
+      let rotationY = sectorModel.rotation.y;
+
+      if (rotationY === Math.PI) {
+        rotationY -= Math.PI;
+      } else if (rotationY === 0) {
+        rotationY += Math.PI;
+      } else {
+        rotationY = -rotationY;
+      }
+
+      cameraControls.fitToBox(sectorModel, true, { cover: true });
+      cameraControls.rotateTo(rotationY, Math.PI / 4, true);
+      cameraControls.dollyTo(15, true);
+    }
+  }
+
+  return (
+    <Card className="flex-row gap-2 rounded-xl p-2 w-[16.75rem] items-center select-none cursor-pointer" onClick={cameraToPlayer}>
+      <div className="relative">
+        <Avatar className="w-8 h-8">
+          <AvatarImage src={avatar} />
+          <AvatarFallback className="uppercase">{name.slice(0, 2)}</AvatarFallback>
+        </Avatar>
+        <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-green-500"></span>
+      </div>
+      <div className="flex flex-col w-full font-semibold">
+        <div className="flex justify-between text-base ">
+          <div>
+            <span className="text-muted-foreground font-bold">{placement} · </span> {name}
+          </div>
+          <div className="flex text-muted-foreground items-center gap-1">{randomPoints} <Zap size="1rem" /></div>
+        </div>
+        <div className="text-sm text-muted-foreground">Проводит аукцион</div>
+      </div>
+    </Card>
+  )
+}
+
+export default PlayerCard;

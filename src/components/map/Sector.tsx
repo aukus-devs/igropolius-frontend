@@ -1,8 +1,10 @@
 import { SectorData, Vector3Array, colors } from "@/types";
 import { Edges, Text } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Building from "./Building";
+import { Group } from "three";
+import useAppStore from "@/stores/appStore";
 
 type Props = {
   sector: SectorData;
@@ -25,6 +27,8 @@ export function Sector({
   onPointerLeave,
   isSelected,
 }: Props) {
+  const addSectorModel = useAppStore((state) => state.addSectorModel);
+  const sectorRef = useRef<Group | null>(null);
   const canHaveBuildings = sector.type === "property";
 
   // Temporary performance fix from unnecessary re-renders
@@ -52,6 +56,7 @@ export function Sector({
     const textRotation: Vector3Array = isCorner
       ? [Math.PI / 2, Math.PI, Math.PI / 4]
       : [Math.PI / 2, Math.PI, 0];
+
     return (
       <Text position={textPosition} rotation={textRotation} fontSize={1} color="black">
         {sector.id}
@@ -59,8 +64,15 @@ export function Sector({
     );
   }, [sector.id, sector.type]);
 
+  useEffect(() => {
+    if (sectorRef.current) {
+      console.log('???')
+      addSectorModel(sectorRef.current);
+    }
+  }, [sectorRef, addSectorModel])
+
   return (
-    <group name={`${sector.id}`} position={position} rotation={rotation}>
+    <group ref={sectorRef} name={`sector_${sector.id}`} position={position} rotation={rotation}>
       <mesh
         onClick={(e) => (e.stopPropagation(), onClick?.(e))}
         onPointerOver={(e) => (e.stopPropagation(), onPointerOver?.(e))}

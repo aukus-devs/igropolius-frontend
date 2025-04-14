@@ -1,5 +1,4 @@
 import { PLAYER_HEIGHT } from "@/lib/constants";
-import { myPlayerData } from "@/lib/mockData";
 import useAppStore from "@/stores/appStore";
 import { PlayerData, Vector3Array } from "@/types";
 import { ThreeEvent } from "@react-three/fiber";
@@ -13,17 +12,17 @@ type Props = {
 };
 
 export function PlayerModel({ player, position, onClick }: Props) {
-  const updateMyPlayerObject = useAppStore(state => state.updateMyPlayerModelRef);
+  const addPlayerModel = useAppStore((state) => state.addPlayerModel);
   const playerObjectRef = useRef<Group | null>(null);
 
   useEffect(() => {
-    if (playerObjectRef.current && player.id === myPlayerData.id) {
-      updateMyPlayerObject(playerObjectRef.current);
+    if (playerObjectRef.current) {
+      addPlayerModel(playerObjectRef.current);
     }
-  }, [player.id, updateMyPlayerObject]);
+  }, [player.id, addPlayerModel]);
 
   return (
-    <group ref={playerObjectRef} name={player.name} position={position}>
+    <group ref={playerObjectRef} name={player.id} position={position}>
       <mesh onClick={(e) => (e.stopPropagation(), onClick?.(e))}>
         <capsuleGeometry args={[0.5, PLAYER_HEIGHT, 1]} />
         <meshStandardMaterial color={player.color} />

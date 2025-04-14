@@ -3,20 +3,28 @@ import { myPlayerData, sectorsData } from "@/lib/mockData";
 import { sleep } from "@/lib/utils";
 import { PlayerData, SectorData } from "@/types";
 import { animate } from "animejs";
+import CameraControls from "camera-controls";
 import { Group } from "three";
 import { randInt } from "three/src/math/MathUtils.js";
 import { create } from "zustand";
 
 interface AppStore {
   selectedSectorId: number | null;
-  myPlayer: (PlayerData & { modelRef?: Group }) | null;
+  myPlayer: PlayerData | null;
   isPlayerMoving: boolean;
   rolledNumber: number | null;
   selectedSector: SectorData | null;
+  cameraControls: CameraControls | null;
+  playersModels: { [key: string]: Group };
+  sectorsModels: { [key: string]: Group };
   setSelectedSectorId: (id: number | null) => void;
   updateMyPlayerSectorId: (id: number) => void;
-  updateMyPlayerModelRef: (object3D: Group) => void;
   moveMyPlayer: () => Promise<void>;
+  setCameraControls: (controls: CameraControls) => void;
+  addPlayerModel: (object3D: Group) => void;
+  getPlayerModel: (id: string) => Group;
+  addSectorModel: (object3D: Group) => void;
+  getSectorModel: (id: number) => Group;
 }
 
 const useAppStore = create<AppStore>((set, get) => ({
@@ -25,16 +33,27 @@ const useAppStore = create<AppStore>((set, get) => ({
   isPlayerMoving: false,
   rolledNumber: null,
   selectedSector: null,
+  cameraControls: null,
+  playersModels: {},
+  sectorsModels: {},
+
+  getSectorModel: (id) => get().sectorsModels[`sector_${id}`],
+
+  addSectorModel: (object3D) => set((state) => ({
+    sectorsModels: { ...state.sectorsModels, [object3D.name]: object3D }
+  })),
+
+  getPlayerModel: (id) => get().playersModels[id],
+
+  addPlayerModel: (object3D) => set((state) => ({
+    playersModels: { ...state.playersModels, [object3D.name]: object3D }
+  })),
+
+  setCameraControls: (controls) => set({ cameraControls: controls }),
 
   setSelectedSectorId: (id) => {
     const selectedSector = sectorsData.find((sector) => sector.id === id) || null;
     set({ selectedSectorId: id, selectedSector });
-  },
-
-  updateMyPlayerModelRef: (object3D) => {
-    set((state) => ({
-      myPlayer: state.myPlayer ? { ...state.myPlayer, modelRef: object3D } : null,
-    }));
   },
 
   updateMyPlayerSectorId: (id: number) => {
@@ -47,8 +66,11 @@ const useAppStore = create<AppStore>((set, get) => ({
     const randomNumber = randInt(2, 12);
     set({ rolledNumber: randomNumber });
 
-    const { myPlayer } = get();
+    const { myPlayer, getPlayerModel } = get();
     if (!myPlayer) throw new Error(`Player not found.`);
+
+    const myPlayerModel = getPlayerModel(myPlayer.id);
+    if (!myPlayerModel) throw new Error(`Player model not found.`);
 
     let prevSector = sectorsData.find((s) => s.id === myPlayer.sectorId);
 
@@ -64,7 +86,7 @@ const useAppStore = create<AppStore>((set, get) => ({
       if (!prevSector || !nextSector)
         throw new Error(`Failed to find path from ${prevSector.id} to ${nextSector?.id}.`);
 
-      if (!myPlayer?.modelRef) throw new Error(`myPlayer.modelRef is not defined.`);
+      if (!myPlayerModel) throw new Error(`myPlayer.modelRef is not defined.`);
 
       const directionX = nextSector.position.x - prevSector.position.x;
       const directionY = nextSector.position.y - prevSector.position.y;
@@ -83,7 +105,7 @@ const useAppStore = create<AppStore>((set, get) => ({
             ? SECTOR_OFFSET * 2
             : 0;
 
-      animate(myPlayer.modelRef.position, {
+      animate(myPlayerModel.position, {
         x: nextX + offsetX,
         z: nextY + offsetY,
         duration: 500,

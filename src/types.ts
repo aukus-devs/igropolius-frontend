@@ -49,6 +49,7 @@ export type SectorData = {
 export type PlayerData = {
   id: string;
   name: string;
+  avatar: string;
   color: string;
   sectorId: number;
 };

@@ -27,7 +27,7 @@ function UI() {
       <LoginCard />
       <PlayersList players={players} />
       <QuickMenu />
-      {/* <Notifications /> */}
+      <Notifications />
 
       <Button
         variant="outline"
