@@ -1,8 +1,7 @@
 import CustomCameraControls from "./CustomCameraControls";
 import Floor from "./Floor";
-import { Grid, Helper, Sky, Stats } from "@react-three/drei";
+import { Grid, Sky, Stats } from "@react-three/drei";
 import GameBoard from "./GameBoard";
-import { DirectionalLight } from "three";
 
 function Scene() {
   const gridConfig = {
@@ -17,13 +16,29 @@ function Scene() {
     followCamera: false,
     infiniteGrid: false,
   };
+  // const scene = useThree((state) => state.scene);
+  // const hemisphereLightRef = useRef<HemisphereLight>(null);
+  // const directionalLightRef = useRef<DirectionalLight>(null);
+
+  // useEffect(() => {
+  //   if (hemisphereLightRef.current) {
+  //     const helper = new HemisphereLightHelper(hemisphereLightRef.current, 3);
+  //     scene.add(helper);
+  //   }
+  // }, [hemisphereLightRef, scene]);
+
+  // useEffect(() => {
+  //   if (directionalLightRef.current) {
+  //     const helper = new DirectionalLightHelper(directionalLightRef.current, 3);
+  //     scene.add(helper);
+  //   }
+  // }, [directionalLightRef, scene]);
 
   return (
     <>
       <ambientLight intensity={0.3} color="#D3D3D3" />
-      <hemisphereLight position={[0, 20, 0]} intensity={0.15} />
-      <directionalLight position={[10, 20, 10]} intensity={1} />
-      <Helper type={DirectionalLight} />
+      <hemisphereLight args={["#6c84a3", "#AAD4A3", 1]} position={[0, 1, 0]} />
+      <directionalLight position={[50, 50, 50]} intensity={2.5} lookAt={[0, 0, 0]} />
 
       <Sky sunPosition={[100, 20, 100]} />
       <CustomCameraControls />

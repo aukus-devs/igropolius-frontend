@@ -1,22 +1,19 @@
 import { SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
 import { myPlayerData, sectorsData } from "@/lib/mockData";
-import { sleep } from "@/lib/utils";
 import { PlayerData } from "@/types";
-import { animate } from "animejs";
-import { randInt } from "three/src/math/MathUtils.js";
+import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
+import useDiceStore from "./diceStore";
 
 const usePlayerStore = create<{
   myPlayer: PlayerData | null;
   isPlayerMoving: boolean;
-  rolledNumber: number | null;
   updateMyPlayerSectorId: (id: number) => void;
   moveMyPlayer: () => Promise<void>;
 }>((set, get) => ({
   myPlayer: myPlayerData,
   isPlayerMoving: false,
-  rolledNumber: null,
 
   updateMyPlayerSectorId: (id: number) => {
     set((state) => ({
@@ -31,16 +28,16 @@ const usePlayerStore = create<{
     const myPlayerModel = useModelsStore.getState().getPlayerModel(myPlayer.id);
     if (!myPlayerModel) throw new Error(`Player model not found.`);
 
-    const randomNumber = randInt(2, 12);
-    set({ rolledNumber: randomNumber });
-
     let currentSectorId = myPlayer.sectorId;
     let currentSector = sectorsData.find((s) => s.id === currentSectorId);
     if (!currentSector) throw new Error(`Current sector not found.`);
 
     set({ isPlayerMoving: true });
+    const rolledNumber = await useDiceStore.getState().rollDice();
 
-    for (let i = 0; i < randomNumber; i++) {
+    const tl = createTimeline();
+
+    for (let i = 0; i < rolledNumber; i++) {
       const nextSectorId = currentSectorId + 1 > sectorsData.length ? 1 : currentSectorId + 1;
       const nextSector = sectorsData.find((s) => s.id === nextSectorId);
       if (!nextSector) throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
@@ -62,25 +59,21 @@ const usePlayerStore = create<{
             ? SECTOR_OFFSET * 2
             : 0;
 
-      animate(myPlayerModel.position, {
+      tl.add(myPlayerModel.position, {
         x: nextX + offsetX,
         z: nextY + offsetY,
         duration: 500,
       });
 
-      await sleep(500);
-
       currentSectorId = nextSectorId;
       currentSector = nextSector;
     }
 
-    set({
-      isPlayerMoving: false,
-      myPlayer: {
-        ...myPlayer,
-        sectorId: currentSectorId,
-      },
-    });
+    tl.play()
+      .then(() => {
+        set({ isPlayerMoving: false });
+        get().updateMyPlayerSectorId(currentSectorId);
+      });
   },
 }));
 

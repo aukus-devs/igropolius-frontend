@@ -6,6 +6,7 @@ import Building from "./Building";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
 import SectorInfo from "../SectorInfo";
+import useSectorStore from "@/stores/sectorStore";
 
 type Props = {
   sector: SectorData;
@@ -23,16 +24,13 @@ function Sector({
   shape,
   position,
   rotation,
-  onClick,
-  onPointerOver,
-  onPointerLeave,
-  isSelected,
 }: Props) {
+  const isSelected = useSectorStore((state) => state.selectedSector?.id === sector.id);
+  const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
   const addSectorModel = useModelsStore((state) => state.addSectorModel);
   const sectorRef = useRef<Group | null>(null);
   const canHaveBuildings = sector.type === "property";
 
-  // Temporary performance fix from unnecessary re-renders
   const buildings = useMemo(() => {
     if (!canHaveBuildings) return null;
 
@@ -69,14 +67,13 @@ function Sector({
     if (sectorRef.current) {
       addSectorModel(sectorRef.current);
     }
-  }, [sectorRef, addSectorModel])
+  }, [sectorRef, addSectorModel]);
 
   return (
     <group ref={sectorRef} name={`sector_${sector.id}`} position={position} rotation={rotation}>
       <mesh
-        onClick={(e) => (e.stopPropagation(), onClick?.(e))}
-        onPointerOver={(e) => (e.stopPropagation(), onPointerOver?.(e))}
-        onPointerLeave={onPointerLeave}
+        onClick={(e) => (e.stopPropagation(), setSelectedSectorId(sector.id))}
+        onPointerMissed={() => setSelectedSectorId(null)}
       >
         <boxGeometry args={shape} />
         <meshStandardMaterial color={sector.color} emissive={isSelected ? "white" : 0} />

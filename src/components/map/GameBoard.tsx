@@ -2,7 +2,6 @@ import { playersData, sectorsData } from "@/lib/mockData";
 import Sector from "./Sector";
 import { FLOOR_CENTER_POSITION, PLAYER_ELEVATION, SECTOR_DEPTH, SECTOR_ELEVATION, SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
 import { PlayerData, SectorData, Vector3Array } from "@/types";
-import useSectorStore from "@/stores/sectorStore";
 import PlayerModel from "./PlayerModel";
 
 type SectorPosition =
@@ -25,9 +24,6 @@ function PlayerWrapper({ player }: { player: PlayerData }) {
 }
 
 function SectorWrapper({ sector }: { sector: SectorData }) {
-  const isSelected = useSectorStore((state) => state.selectedSector?.id === sector.id);
-  const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
-
   const sectorSide = getSectorSide(sector);
   const isCorner = ["bottom-left", "bottom-right", "top-left", "top-right"].includes(sectorSide);
   const position = calculatePosition(sector.position, 'sector');
@@ -40,9 +36,6 @@ function SectorWrapper({ sector }: { sector: SectorData }) {
       position={position}
       rotation={rotation}
       shape={boxShape}
-      onClick={() => setSelectedSectorId(sector.id)}
-      onPointerOver={() => setSelectedSectorId(sector.id)}
-      isSelected={isSelected}
     />
   );
 }

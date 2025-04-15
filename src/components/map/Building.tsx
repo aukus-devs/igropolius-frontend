@@ -1,4 +1,4 @@
-import { CellColor } from "@/types";
+import { CellColor, Vector3Array } from "@/types";
 import { Gltf } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -8,7 +8,7 @@ const biggestBuildingUrl = `${import.meta.env.BASE_URL}assets/models/skyscraperE
 
 type Props = {
   type?: "small" | "large" | "biggest";
-  position: [number, number, number];
+  position: Vector3Array;
   scale?: number;
   color: CellColor;
 };
