@@ -1,5 +1,7 @@
 import { BuildingType, CellColor, Vector3Array } from "@/types";
 import { Gltf } from "@react-three/drei";
+import { eases } from "animejs";
+import { animate } from "animejs";
 import * as THREE from "three";
 
 const buildingUrls: { [k in BuildingType]: string } = {
@@ -31,6 +33,17 @@ const meshesToColor = [
   "Mesh_skyscraperD_4", // wall
   "Mesh_skyscraperD_1", // panels
 ];
+
+function animateAppearance(model: THREE.Group) {
+  model.position.y = -5.5;
+
+  animate(model.position, {
+    y: 0,
+    ease: eases.inOutCubic,
+    duration: 3000,
+    // loop: true,
+  })
+}
 
 function Building({ position, type, scale, color }: Props) {
   const updateModel = (model: THREE.Group) => {
@@ -71,6 +84,8 @@ function Building({ position, type, scale, color }: Props) {
           }
         }
       });
+
+      animateAppearance(model);
     }
   };
 
