@@ -39,7 +39,7 @@ function SectorInfoCard({ id }: SectorInfoCardProps) {
   const isSelected = useSectorStore((state) => state.selectedSector?.id === id);
 
   return (
-    <Html center position={[0, 10, 0]}>
+    <Html pointerEvents="none" style={{ pointerEvents: "none" }} center position={[0, 10, 0]}>
       {isSelected && <SectorInfo />}
     </Html>
   )
