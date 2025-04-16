@@ -19,12 +19,7 @@ type Props = {
   onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
 };
 
-function Sector({
-  sector,
-  shape,
-  position,
-  rotation,
-}: Props) {
+function Sector({ sector, shape, position, rotation }: Props) {
   const isSelected = useSectorStore((state) => state.selectedSector?.id === sector.id);
   const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
   const addSectorModel = useModelsStore((state) => state.addSectorModel);
@@ -36,15 +31,12 @@ function Sector({
 
     return (
       <group name="buildings">
-        <Building type="small" position={[2, 0, 5]} color={colors.blue} />
-        <Building type="large" position={[0.5, 0, 5]} color={colors.red} />
-        <Building type="biggest" position={[-1, 0, 5]} color={colors.brown} />
-        <Building type="large" position={[2, 0, 3.5]} color={colors.green} />
-        <Building type="biggest" position={[0.5, 0, 3.5]} color={colors.yellow} />
-        <Building type="small" position={[-1, 0, 3.5]} color={colors.pink} />
-        <Building type="biggest" position={[2, 0, 2]} color={colors.orange} />
-        <Building type="small" position={[0.5, 0, 2]} color={colors.lightblue} />
-        <Building type="large" position={[-1, 0, 2]} color={colors.biege} />
+        <Building type="height-6" position={[2, 0, 5]} color={colors.blue} />
+        <Building type="height-5" position={[0.5, 0, 5]} color={colors.red} />
+        <Building type="height-4" position={[-1, 0, 5]} color={colors.brown} />
+        <Building type="height-3" position={[2, 0, 3.5]} color={colors.green} />
+        <Building type="height-2" position={[0.5, 0, 3.5]} color={colors.yellow} />
+        <Building type="height-1" position={[-1, 0, 3.5]} color={colors.pink} />
       </group>
     );
   }, [canHaveBuildings]);
@@ -70,7 +62,12 @@ function Sector({
   }, [sectorRef, addSectorModel]);
 
   return (
-    <group ref={sectorRef} name={`sector_${sector.id}`} position={position} rotation={rotation}>
+    <group
+      ref={sectorRef}
+      name={`sector_${sector.id}`}
+      position={position}
+      rotation={rotation}
+    >
       <mesh
         onClick={(e) => (e.stopPropagation(), setSelectedSectorId(sector.id))}
         onPointerMissed={() => setSelectedSectorId(null)}

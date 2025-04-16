@@ -1,41 +1,52 @@
-import { CellColor, Vector3Array } from "@/types";
+import { BuildingType, CellColor, Vector3Array } from "@/types";
 import { Gltf } from "@react-three/drei";
 import * as THREE from "three";
 
-const smallBuildingUrl = `${import.meta.env.BASE_URL}assets/models/small_buildingD.glb`;
-const largeBuildingUrl = `${import.meta.env.BASE_URL}assets/models/large_buildingC.glb`;
-const biggestBuildingUrl = `${import.meta.env.BASE_URL}assets/models/skyscraperE.glb`;
+const buildingUrls: { [k in BuildingType]: string } = {
+  "height-1": `${import.meta.env.BASE_URL}assets/models/small_buildingD.glb`,
+  "height-2": `${import.meta.env.BASE_URL}assets/models/large_buildingC.glb`,
+  "height-3": `${import.meta.env.BASE_URL}assets/models/skyscraperE.glb`,
+  "height-4": `${import.meta.env.BASE_URL}assets/models/skyscraperA.glb`,
+  "height-5": `${import.meta.env.BASE_URL}assets/models/skyscraperF.glb`,
+  "height-6": `${import.meta.env.BASE_URL}assets/models/skyscraperD.glb`,
+};
 
 type Props = {
-  type?: "small" | "large" | "biggest";
+  type: BuildingType;
   position: Vector3Array;
   scale?: number;
   color: CellColor;
 };
 
-const wallMeshNames = [
+const meshesToColor = [
   "Mesh_small_buildingD_1",
   "Mesh_large_buildingC_4",
   "Mesh_skyscraperE_3",
+  "Mesh_skyscraperA_1", // roof
+  "Mesh_skyscraperA_2", // wall
+  "Mesh_skyscraperA_4", // panels
+  "Mesh_skyscraperF_3", // roof
+  "Mesh_skyscraperF_2", // wall
+  "Mesh_skyscraperD_2", // roof
+  "Mesh_skyscraperD_4", // wall
+  "Mesh_skyscraperD_1", // panels
 ];
 
 function Building({ position, type, scale, color }: Props) {
-  // const gltfRef = useRef<null | THREE.Group>(null);
-
   const updateModel = (model: THREE.Group) => {
     if (model) {
       // Traverse the model and adjust properties
       model.traverse((child) => {
         if (child instanceof THREE.Mesh) {
           const mesh = child;
-          const isWallMesh = wallMeshNames.includes(mesh.name);
+          const shouldRecolor = meshesToColor.includes(mesh.name);
 
           // Ensure each mesh has its own material instance
           if (Array.isArray(mesh.material)) {
             mesh.material = mesh.material.map((material) => {
               let mat = material;
               if (mat instanceof THREE.MeshStandardMaterial) {
-                if (isWallMesh) {
+                if (shouldRecolor) {
                   mat = mat.clone();
                   mat.color.set(color);
                 }
@@ -48,7 +59,7 @@ function Building({ position, type, scale, color }: Props) {
             });
           } else if (mesh.material instanceof THREE.MeshStandardMaterial) {
             let mat = mesh.material;
-            if (isWallMesh) {
+            if (shouldRecolor) {
               mat = mat.clone();
               mat.color.set(color);
             }
@@ -63,12 +74,7 @@ function Building({ position, type, scale, color }: Props) {
     }
   };
 
-  let modelUrl = smallBuildingUrl;
-  if (type === "large") {
-    modelUrl = largeBuildingUrl;
-  } else if (type === "biggest") {
-    modelUrl = biggestBuildingUrl;
-  }
+  const modelUrl = buildingUrls[type];
 
   return (
     <Gltf
