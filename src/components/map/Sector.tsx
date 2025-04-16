@@ -113,8 +113,8 @@ function SectorBase({ id, color, shape, canHaveBuildings }: SectorBaseProps) {
 
   return (
     <group
-      onPointerOver={(e) => (e.stopPropagation(), setSelectedSectorId(id))}
-      onPointerMissed={() => setSelectedSectorId(null)}
+      onPointerEnter={(e) => (e.stopPropagation(), setSelectedSectorId(id))}
+      onPointerLeave={(e) => (e.stopPropagation(), setSelectedSectorId(null))}
     >
       <SectorBuildingsPlatform id={id} shape={shape} canHaveBuildings={canHaveBuildings} />
       {canHaveBuildings && <SectorColoredPlatform color={color} />}
