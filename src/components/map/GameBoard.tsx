@@ -1,6 +1,6 @@
 import { playersData, sectorsData } from "@/lib/mockData";
 import Sector from "./Sector";
-import { FLOOR_CENTER_POSITION, PLAYER_ELEVATION, SECTOR_DEPTH, SECTOR_ELEVATION, SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
+import { FLOOR_CENTER_POSITION, PLAYER_ELEVATION, SECTOR_ELEVATION, SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
 import { PlayerData, SectorData, Vector3Array } from "@/types";
 import PlayerModel from "./PlayerModel";
 
@@ -25,9 +25,7 @@ function PlayerWrapper({ player }: { player: PlayerData }) {
 
 function SectorWrapper({ sector }: { sector: SectorData }) {
   const sectorSide = getSectorSide(sector);
-  const isCorner = ["bottom-left", "bottom-right", "top-left", "top-right"].includes(sectorSide);
   const position = calculatePosition(sector.position, 'sector');
-  const boxShape: Vector3Array = isCorner ? [SECTOR_DEPTH, 0.1, SECTOR_DEPTH] : [SECTOR_WIDTH, 0.1, SECTOR_DEPTH];
   const rotation = getSectorRotation(sectorSide);
 
   return (
@@ -35,7 +33,6 @@ function SectorWrapper({ sector }: { sector: SectorData }) {
       sector={sector}
       position={position}
       rotation={rotation}
-      shape={boxShape}
     />
   );
 }

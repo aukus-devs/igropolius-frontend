@@ -6,7 +6,7 @@ function Floor() {
     <group>
       <mesh receiveShadow>
         <boxGeometry args={[FLOOR_SIZE, FLOOR_HEIGHT, FLOOR_SIZE]} />
-        <meshStandardMaterial color={colors.pastelgreen} />
+        <meshStandardMaterial color={colors.pastelgreen} metalness={0.25} roughness={0.5} />
       </mesh>
     </group>
   );
