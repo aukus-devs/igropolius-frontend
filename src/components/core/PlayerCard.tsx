@@ -1,9 +1,9 @@
 import { PlayerData } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Zap } from "lucide-react";
-import { Card } from "../ui/card";
 import useCameraStore from "@/stores/cameraStore";
 import useModelsStore from "@/stores/modelsStore";
+import { Button } from "../ui/button";
 
 type Props = {
   player: PlayerData;
@@ -46,8 +46,9 @@ function PlayerCard({ player, placement }: Props) {
   }
 
   return (
-    <Card
-      className="flex-row gap-2 rounded-xl p-2 w-[16.75rem] items-center select-none cursor-pointer"
+    <Button
+      variant="outline"
+      className="flex-row gap-2 rounded-xl p-2 w-[16.75rem] items-center select-none cursor-pointer justify-start text-base text-foreground font-semibold backdrop-blur-[1.5rem] bg-card/60 border-none"
       onClick={cameraToPlayer}
     >
       <div className="relative">
@@ -68,7 +69,7 @@ function PlayerCard({ player, placement }: Props) {
         </div>
         <div className="text-sm text-muted-foreground">Проводит аукцион</div>
       </div>
-    </Card>
+    </Button>
   );
 }
 
