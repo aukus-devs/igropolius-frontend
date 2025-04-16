@@ -1,6 +1,5 @@
-import { SelectValue } from "@radix-ui/react-select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Input } from "../ui/input";
