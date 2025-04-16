@@ -2,7 +2,6 @@ import { PlayerData } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { MapPinIcon, Zap } from "lucide-react";
 import useCameraStore from "@/stores/cameraStore";
-import useModelsStore from "@/stores/modelsStore";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
@@ -13,38 +12,12 @@ type Props = {
 };
 
 function PlayerCard({ player, placement }: Props) {
+  const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
   const { sectorId, name, avatar } = player;
-  const cameraControls = useCameraStore((state) => state.cameraControls);
-  const getSectorModel = useModelsStore((state) => state.getSectorModel);
+
   const randomPoints = Math.floor(Math.random() * 9999)
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-
-  async function cameraToPlayer() {
-    if (!cameraControls) return;
-
-    const sectorModel = getSectorModel(sectorId);
-
-    if (sectorModel) {
-      let targetRotationY = sectorModel.rotation.y;
-
-      if (targetRotationY === Math.PI) {
-        targetRotationY -= Math.PI;
-      } else if (targetRotationY === 0) {
-        targetRotationY += Math.PI;
-      } else {
-        targetRotationY = -targetRotationY;
-      }
-
-      const cameraAzimuth = cameraControls.azimuthAngle ?? 0;
-      const base = Math.floor(cameraAzimuth / (Math.PI * 2));
-      const targetAzimuth = base * Math.PI * 2 + targetRotationY;
-
-      cameraControls.fitToBox(sectorModel, true, { cover: true });
-      cameraControls.rotateTo(targetAzimuth, Math.PI / 4, true);
-      cameraControls.dollyTo(15, true);
-    }
-  }
 
   return (
     <div className="group relative">
@@ -81,7 +54,7 @@ function PlayerCard({ player, placement }: Props) {
       </Dialog>
       <Button
         className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 rounded-xl group-hover:translate-x-[calc(100%+0.5rem)]"
-        onClick={(e) => (e.stopPropagation(), cameraToPlayer())}
+        onClick={(e) => (e.stopPropagation(), cameraToPlayer(sectorId))}
       >
         <MapPinIcon />Показать на карте
       </Button>

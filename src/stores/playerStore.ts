@@ -5,6 +5,7 @@ import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
 import useDiceStore from "./diceStore";
+import useCameraStore from "./cameraStore";
 
 const usePlayerStore = create<{
   myPlayer: PlayerData | null;
@@ -25,6 +26,8 @@ const usePlayerStore = create<{
     const { myPlayer } = get();
     if (!myPlayer) throw new Error(`Player not found.`);
 
+    const cameraToPlayer = useCameraStore.getState().cameraToPlayer;
+    if (!cameraToPlayer) throw new Error(`Camera not found.`);
     const myPlayerModel = useModelsStore.getState().getPlayerModel(myPlayer.id);
     if (!myPlayerModel) throw new Error(`Player model not found.`);
 
@@ -33,6 +36,9 @@ const usePlayerStore = create<{
     if (!currentSector) throw new Error(`Current sector not found.`);
 
     set({ isPlayerMoving: true });
+
+    await cameraToPlayer(currentSectorId);
+
     const rolledNumber = await useDiceStore.getState().rollDice();
 
     const tl = createTimeline();

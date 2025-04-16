@@ -6,10 +6,22 @@ import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
 
-function UI() {
+function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
   const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
 
+  return (
+    <Button
+      variant="outline"
+      onClick={moveMyPlayer}
+      disabled={isPlayerMoving}
+    >
+      Ходить
+    </Button>
+  )
+}
+
+function UI() {
   const players = playersData;
 
   return (
@@ -22,13 +34,7 @@ function UI() {
       </div>
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-        <Button
-          variant="outline"
-          onClick={moveMyPlayer}
-          disabled={isPlayerMoving}
-        >
-          Ходить
-        </Button>
+        <MoveButton />
         <GameReviewForm />
       </div>
 
