@@ -31,6 +31,10 @@ function Scene() {
   //   if (directionalLightRef.current) {
   //     const helper = new DirectionalLightHelper(directionalLightRef.current, 3);
   //     scene.add(helper);
+
+  //     // Create a helper for the shadow camera
+  //     const shadowCameraHelper = new CameraHelper(directionalLightRef.current.shadow.camera)
+  //     scene.add(shadowCameraHelper)
   //   }
   // }, [directionalLightRef, scene]);
 
@@ -38,8 +42,21 @@ function Scene() {
     <>
       <ambientLight intensity={0.3} color="#D3D3D3" />
       <hemisphereLight args={["#6c84a3", "#AAD4A3", 1]} position={[0, 1, 0]} />
-      <directionalLight position={[50, 50, 50]} intensity={2.5} lookAt={[0, 0, 0]} />
-
+      <directionalLight
+        // ref={directionalLightRef}
+        position={[50, 50, 50]}
+        intensity={2.5}
+        lookAt={[0, 0, 0]}
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-near={0.1}
+        shadow-camera-far={500}
+        shadow-camera-left={-75}
+        shadow-camera-right={75}
+        shadow-camera-top={75}
+        shadow-camera-bottom={-75}
+      />
       <Sky sunPosition={[100, 20, 100]} />
       <CustomCameraControls />
 

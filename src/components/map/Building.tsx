@@ -1,3 +1,4 @@
+import { BUILDING_ELEVATION } from "@/lib/constants";
 import { BuildingType, CellColor, Vector3Array } from "@/types";
 import { Gltf } from "@react-three/drei";
 import { eases } from "animejs";
@@ -38,14 +39,14 @@ function animateAppearance(model: THREE.Group) {
   model.position.y = -5.5;
 
   animate(model.position, {
-    y: 0,
+    y: BUILDING_ELEVATION,
     ease: eases.inOutCubic,
     duration: 3000,
     // loop: true,
   })
 }
 
-function Building({ position, type, scale, color }: Props) {
+function Building({ position, type, scale = 1, color }: Props) {
   const updateModel = (model: THREE.Group) => {
     if (model) {
       // Traverse the model and adjust properties
@@ -53,6 +54,9 @@ function Building({ position, type, scale, color }: Props) {
         if (child instanceof THREE.Mesh) {
           const mesh = child;
           const shouldRecolor = meshesToColor.includes(mesh.name);
+
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
 
           // Ensure each mesh has its own material instance
           if (Array.isArray(mesh.material)) {
@@ -96,8 +100,8 @@ function Building({ position, type, scale, color }: Props) {
       ref={updateModel}
       src={modelUrl}
       position={position}
-      scale={scale ?? 1}
-      rotation={[0, THREE.MathUtils.degToRad(180), 0]}
+      scale={scale}
+      rotation={[0, Math.PI, 0]}
     />
   );
 }

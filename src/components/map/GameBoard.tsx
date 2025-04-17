@@ -1,8 +1,8 @@
 import { playersData, sectorsData } from "@/lib/mockData";
-import Sector from "./Sector";
 import { FLOOR_CENTER_POSITION, PLAYER_ELEVATION, SECTOR_ELEVATION, SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
 import { PlayerData, SectorData, Vector3Array } from "@/types";
 import PlayerModel from "./PlayerModel";
+import Sector from "./sector/Sector";
 
 type SectorPosition =
   | "bottom"

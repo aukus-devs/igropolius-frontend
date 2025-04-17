@@ -37,9 +37,9 @@ function PlayerModel({ player, position, onClick }: Props) {
   return (
     <group ref={playerObjectRef} name={player.id} position={position}>
       {isMyPlayer && <MyPlayerComponents />}
-      <mesh onClick={(e) => (e.stopPropagation(), onClick?.(e))}>
+      <mesh onClick={(e) => (e.stopPropagation(), onClick?.(e))} castShadow receiveShadow>
         <capsuleGeometry args={[0.5, PLAYER_HEIGHT, 1]} />
-        <meshStandardMaterial color={player.color} />
+        <meshPhongMaterial color={player.color} />
       </mesh>
     </group>
   );
