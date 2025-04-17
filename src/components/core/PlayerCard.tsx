@@ -13,7 +13,7 @@ type Props = {
 
 function PlayerCard({ player, placement }: Props) {
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
-  const { sectorId, name, avatar } = player;
+  const { current_position: sectorId, name, avatar } = player;
 
   const randomPoints = Math.floor(Math.random() * 9999)
     .toString()

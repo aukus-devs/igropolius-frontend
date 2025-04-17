@@ -46,12 +46,21 @@ export type SectorData = {
   rollType: CellRollType;
 };
 
+export type GameLength = "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
+
+export type SectorOwnership = {
+  sector_id: number;
+  game_title: string;
+  length: GameLength;
+};
+
 export type PlayerData = {
   id: string;
   name: string;
   avatar: string;
   color: string;
-  sectorId: number;
+  current_position: number;
+  sector_ownership: SectorOwnership[];
 };
 
 export type Vector3Array = [number, number, number];

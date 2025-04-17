@@ -326,59 +326,75 @@ export const sectorsData: SectorData[] = [
 export const playersData: PlayerData[] = [
   {
     id: "1",
-    sectorId: 39,
+    current_position: 39,
     name: "Player 1",
-    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg',
+    avatar:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg",
     color: colors.green,
+    sector_ownership: [],
   },
   {
     id: "2",
-    sectorId: 25,
+    current_position: 25,
     name: "Player 2",
-    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg',
+    avatar:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg",
     color: colors.pink,
+    sector_ownership: [],
   },
   {
     id: "3",
-    sectorId: 6,
+    current_position: 6,
     name: "Player 3",
-    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg',
+    avatar:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg",
     color: colors.orange,
+    sector_ownership: [],
   },
   {
     id: "4",
-    sectorId: 40,
+    current_position: 40,
     name: "Player 4",
-    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg',
+    avatar:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg",
     color: colors.yellow,
+    sector_ownership: [],
   },
   {
     id: "5",
-    sectorId: 1,
+    current_position: 1,
     name: "Player 5",
-    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg',
+    avatar:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg",
     color: colors.brown,
+    sector_ownership: [],
   },
   {
     id: "6",
-    sectorId: 12,
+    current_position: 12,
     name: "Player 6",
-    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg',
+    avatar:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg",
     color: colors.red,
+    sector_ownership: [],
   },
   {
     id: "7",
-    sectorId: 31,
+    current_position: 31,
     name: "Player 7",
-    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg',
+    avatar:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg",
     color: colors.blue,
+    sector_ownership: [],
   },
   {
     id: "8",
-    sectorId: 17,
+    current_position: 17,
     name: "Player 8",
-    avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg',
+    avatar:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/lasqa-profile_image-49dc25f1e724dbd6-150x150.jpeg",
     color: colors.lightblue,
+    sector_ownership: [],
   },
 ];
 
