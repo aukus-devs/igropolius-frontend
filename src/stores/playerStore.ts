@@ -18,7 +18,7 @@ const usePlayerStore = create<{
 
   updateMyPlayerSectorId: (id: number) => {
     set((state) => ({
-      myPlayer: state.myPlayer ? { ...state.myPlayer, sectorId: id } : null,
+      myPlayer: state.myPlayer ? { ...state.myPlayer, current_position: id } : null,
     }));
   },
 
@@ -31,7 +31,7 @@ const usePlayerStore = create<{
     const myPlayerModel = useModelsStore.getState().getPlayerModel(myPlayer.id);
     if (!myPlayerModel) throw new Error(`Player model not found.`);
 
-    let currentSectorId = myPlayer.sectorId;
+    let currentSectorId = myPlayer.current_position;
     let currentSector = sectorsData.find((s) => s.id === currentSectorId);
     if (!currentSector) throw new Error(`Current sector not found.`);
 
@@ -46,7 +46,8 @@ const usePlayerStore = create<{
     for (let i = 0; i < rolledNumber; i++) {
       const nextSectorId = currentSectorId + 1 > sectorsData.length ? 1 : currentSectorId + 1;
       const nextSector = sectorsData.find((s) => s.id === nextSectorId);
-      if (!nextSector) throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
+      if (!nextSector)
+        throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
 
       const directionX = nextSector.position.x - currentSector.position.x;
       const directionY = nextSector.position.y - currentSector.position.y;
@@ -75,11 +76,10 @@ const usePlayerStore = create<{
       currentSector = nextSector;
     }
 
-    tl.play()
-      .then(() => {
-        set({ isPlayerMoving: false });
-        get().updateMyPlayerSectorId(currentSectorId);
-      });
+    tl.play().then(() => {
+      set({ isPlayerMoving: false });
+      get().updateMyPlayerSectorId(currentSectorId);
+    });
   },
 }));
 

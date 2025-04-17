@@ -13,7 +13,7 @@ type Props = {
 
 function PlayerCard({ player, placement }: Props) {
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
-  const { sectorId, name, avatar } = player;
+  const { current_position, name, avatar } = player;
 
   const randomPoints = Math.floor(Math.random() * 9999)
     .toString()
@@ -38,7 +38,8 @@ function PlayerCard({ player, placement }: Props) {
             <div className="flex flex-col w-full font-semibold">
               <div className="flex justify-between text-base ">
                 <div>
-                  <span className="text-muted-foreground font-bold">{placement} · </span> {name}
+                  <span className="text-muted-foreground font-bold">{placement} · </span>{" "}
+                  {name}
                 </div>
                 <div className="flex text-muted-foreground items-center gap-1">
                   {randomPoints} <Zap size="1rem" />
@@ -48,18 +49,16 @@ function PlayerCard({ player, placement }: Props) {
             </div>
           </Button>
         </DialogTrigger>
-        <DialogContent>
-          {player.name}
-        </DialogContent>
+        <DialogContent>{player.name}</DialogContent>
       </Dialog>
       <Button
         className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 bg-card/60 backdrop-blur-[1.5rem] rounded-xl group-hover:translate-x-[calc(100%+0.5rem)] h-full opacity-0 group-hover:opacity-100 items-start p-2 hover:bg-accent"
-        onClick={(e) => (e.stopPropagation(), cameraToPlayer(sectorId))}
+        onClick={(e) => (e.stopPropagation(), cameraToPlayer(current_position))}
       >
         <MapPinIcon />
         <div>
           <div className="flex items-center gap-1 font-bold">Показать на карте</div>
-          <div className="text-muted-foreground text-sm justify-self-start">{player.sectorId} клетка</div>
+          <div className="text-muted-foreground text-sm justify-self-start">{current_position} клетка</div>
         </div>
       </Button>
     </div>
