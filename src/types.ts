@@ -51,7 +51,7 @@ export type GameLength = "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
 export type SectorOwnership = {
   sector_id: number;
   game_title: string;
-  length: GameLength;
+  game_length: GameLength | "drop";
 };
 
 export type PlayerData = {
