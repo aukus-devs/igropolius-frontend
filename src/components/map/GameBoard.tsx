@@ -47,9 +47,11 @@ function GameBoard() {
       </group>
 
       <group name="sectors">
-        {sectorsData.map((sector) => (
-          <SectorWrapper key={sector.id} sector={sector} />
-        ))}
+        <instancedMesh args={[undefined, undefined, sectorsData.length]}>
+          {sectorsData.map((sector) => (
+            <SectorWrapper key={sector.id} sector={sector} />
+          ))}
+        </instancedMesh>
       </group>
     </group>
   );

@@ -1,6 +1,6 @@
 import CustomCameraControls from "./CustomCameraControls";
 import Floor from "./Floor";
-import { Grid, Sky, Stats } from "@react-three/drei";
+import { Grid, Stats } from "@react-three/drei";
 import GameBoard from "./GameBoard";
 
 function Scene() {
@@ -16,6 +16,11 @@ function Scene() {
     followCamera: false,
     infiniteGrid: false,
   };
+  // const gl = useThree((state) => state.gl);
+
+  // useFrame(() => {
+  //   console.log("Draw Calls:", gl.info.render.calls);
+  // })
   // const scene = useThree((state) => state.scene);
   // const hemisphereLightRef = useRef<HemisphereLight>(null);
   // const directionalLightRef = useRef<DirectionalLight>(null);
@@ -41,9 +46,10 @@ function Scene() {
   return (
     <>
       <ambientLight intensity={0.3} color="#D3D3D3" />
-      <hemisphereLight args={["#6c84a3", "#AAD4A3", 1]} position={[0, 1, 0]} />
+      <hemisphereLight args={["#09090b", "#AAD4A3", 1]} position={[0, 1, 0]} />
       <directionalLight
         // ref={directionalLightRef}
+        color={"#fff4e6"}
         position={[50, 50, 50]}
         intensity={2.5}
         lookAt={[0, 0, 0]}
@@ -51,13 +57,13 @@ function Scene() {
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-near={0.1}
-        shadow-camera-far={500}
-        shadow-camera-left={-75}
-        shadow-camera-right={75}
-        shadow-camera-top={75}
-        shadow-camera-bottom={-75}
+        shadow-camera-far={150}
+        shadow-camera-left={-60}
+        shadow-camera-right={60}
+        shadow-camera-top={40}
+        shadow-camera-bottom={-40}
       />
-      <Sky sunPosition={[100, 20, 100]} />
+
       <CustomCameraControls />
 
       <GameBoard />

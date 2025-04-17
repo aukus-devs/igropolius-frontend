@@ -3,7 +3,7 @@ import useSectorStore from "@/stores/sectorStore";
 import { Vector3Array, colors } from "@/types";
 import { Edges } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { Mesh, Color, MeshStandardMaterial } from "three";
 
 type Props = {
@@ -30,13 +30,23 @@ function SectorMainPlatform({ id, shape, canHaveBuildings }: Omit<Props, 'color'
   const isSelected = useSectorStore((state) => state.selectedSector?.id === id);
   const meshRef = useRef<Mesh>(null);
 
-  const color = new Color(colors.pastelgreen);
-  const finalShape: Vector3Array = canHaveBuildings
-    ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 85]
-    : shape;
-  const position: Vector3Array = canHaveBuildings
-    ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
-    : [0, 0, 0];
+  const platform = useMemo(() => {
+    const color = new Color(colors.pastelgreen);
+    const finalShape: Vector3Array = canHaveBuildings
+      ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 85]
+      : shape;
+    const position: Vector3Array = canHaveBuildings
+      ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
+      : [0, 0, 0];
+
+    return (
+      <mesh ref={meshRef} position={position} receiveShadow>
+        <boxGeometry args={finalShape} />
+        <meshStandardMaterial color={color} roughness={0.5} metalness={0.25} />
+        <Edges scale={1} lineWidth={3} color="black" />
+      </mesh>
+    )
+  }, [canHaveBuildings, shape]);
 
   useFrame(() => {
     if (!meshRef.current) return;
@@ -46,11 +56,9 @@ function SectorMainPlatform({ id, shape, canHaveBuildings }: Omit<Props, 'color'
   });
 
   return (
-    <mesh ref={meshRef} position={position} receiveShadow>
-      <boxGeometry args={finalShape} />
-      <meshStandardMaterial color={color} roughness={0.5} metalness={0.25} />
-      <Edges scale={1} lineWidth={3} color="black" />
-    </mesh>
+    <>
+      {platform}
+    </>
   )
 }
 

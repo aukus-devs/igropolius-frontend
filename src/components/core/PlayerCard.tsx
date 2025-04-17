@@ -53,10 +53,14 @@ function PlayerCard({ player, placement }: Props) {
         </DialogContent>
       </Dialog>
       <Button
-        className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 rounded-xl group-hover:translate-x-[calc(100%+0.5rem)]"
+        className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 bg-card/60 backdrop-blur-[1.5rem] rounded-xl group-hover:translate-x-[calc(100%+0.5rem)] h-full opacity-0 group-hover:opacity-100 items-start p-2 hover:bg-accent"
         onClick={(e) => (e.stopPropagation(), cameraToPlayer(sectorId))}
       >
-        <MapPinIcon />Показать на карте
+        <MapPinIcon />
+        <div>
+          <div className="flex items-center gap-1 font-bold">Показать на карте</div>
+          <div className="text-muted-foreground text-sm justify-self-start">{player.sectorId} клетка</div>
+        </div>
       </Button>
     </div>
   );
