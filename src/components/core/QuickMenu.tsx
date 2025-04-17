@@ -28,7 +28,7 @@ function QuickMenu() {
           <Button variant="outline" className={cn(sharedStyles, "justify-between")}>
             <div className="flex gap-2 items-center font-bold">
               <Avatar className="w-6 h-6">
-                <AvatarImage />
+                <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback className="bg-yellow-500">LA</AvatarFallback>
               </Avatar>
               Игрок

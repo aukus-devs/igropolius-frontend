@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { Group } from "three";
 import DiceModel from "./DiceModel";
 import MovesCounter from "./MovesCounter";
+import { Edges } from "@react-three/drei";
 
 type Props = {
   player: PlayerData;
@@ -40,6 +41,7 @@ function PlayerModel({ player, position, onClick }: Props) {
       <mesh onClick={(e) => (e.stopPropagation(), onClick?.(e))} castShadow receiveShadow>
         <capsuleGeometry args={[0.5, PLAYER_HEIGHT, 1]} />
         <meshPhongMaterial color={player.color} />
+        <Edges scale={1.05} threshold={0.01} color="black" />
       </mesh>
     </group>
   );
