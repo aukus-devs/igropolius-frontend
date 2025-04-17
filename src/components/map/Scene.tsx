@@ -40,9 +40,9 @@ function Scene() {
 
   return (
     <>
-      <ambientLight intensity={0.3} color="#D3D3D3" />
+      <ambientLight intensity={3} color="#D3D3D3" />
       <hemisphereLight args={["#6c84a3", "#AAD4A3", 1]} position={[0, 1, 0]} />
-      <directionalLight
+      {/* <directionalLight
         // ref={directionalLightRef}
         position={[50, 50, 50]}
         intensity={2.5}
@@ -56,8 +56,8 @@ function Scene() {
         shadow-camera-right={75}
         shadow-camera-top={75}
         shadow-camera-bottom={-75}
-      />
-      <Sky sunPosition={[100, 20, 100]} />
+      /> */}
+      {/* <Sky sunPosition={[100, 20, 100]} rayleigh={0.1} /> */}
       <CustomCameraControls />
 
       <GameBoard />
