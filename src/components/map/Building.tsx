@@ -6,6 +6,7 @@ import { animate } from "animejs";
 import * as THREE from "three";
 
 const buildingUrls: { [k in BuildingType]: string } = {
+  ruins: `${import.meta.env.BASE_URL}assets/models/ruins.glb`,
   "height-1": `${import.meta.env.BASE_URL}assets/models/small_buildingD.glb`,
   "height-2": `${import.meta.env.BASE_URL}assets/models/large_buildingC.glb`,
   "height-3": `${import.meta.env.BASE_URL}assets/models/skyscraperE.glb`,
@@ -43,7 +44,7 @@ function animateAppearance(model: THREE.Group) {
     ease: eases.inOutCubic,
     duration: 3000,
     // loop: true,
-  })
+  });
 }
 
 function Building({ position, type, scale = 1, color }: Props) {

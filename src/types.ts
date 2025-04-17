@@ -66,6 +66,7 @@ export type PlayerData = {
 export type Vector3Array = [number, number, number];
 
 export type BuildingType =
+  | "ruins"
   | "height-1"
   | "height-2"
   | "height-3"
