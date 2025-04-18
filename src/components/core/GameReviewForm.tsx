@@ -30,7 +30,7 @@ function GameStatus() {
 
 function GamePoster({ src }: { src: string }) {
   return (
-    <div className="w-32 aspect-[2/3] rounded-xl overflow-hidden">
+    <div className="w-32 aspect-[2/3] rounded-md overflow-hidden">
       <img className="h-full object-cover" src={src} />
     </div>
   )

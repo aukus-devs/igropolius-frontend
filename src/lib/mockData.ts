@@ -1,4 +1,4 @@
-import { colors, PlayerData, SectorData } from "@/types";
+import { colors, GameReviewType, PlayerData, SectorData } from "@/types";
 
 export const sectorsData: SectorData[] = [
   {
@@ -391,3 +391,33 @@ export const playersData: PlayerData[] = [
 ];
 
 export const myPlayerData: PlayerData = playersData[0];
+
+export const mockReviews: GameReviewType[] = [
+  {
+    gameTitle: "Haste 1",
+    description: "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
+    rating: 8,
+    points: 1000,
+    poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp",
+    status: "drop",
+    date: new Date(),
+  },
+  {
+    gameTitle: "Haste 2",
+    description: "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
+    rating: 8,
+    points: 1000,
+    poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp",
+    status: "drop",
+    date: new Date(),
+  },
+  {
+    gameTitle: "Haste 3",
+    description: "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
+    rating: 8,
+    points: 1000,
+    poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp",
+    status: "drop",
+    date: new Date(),
+  },
+];

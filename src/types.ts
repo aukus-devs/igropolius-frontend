@@ -47,6 +47,16 @@ export type SectorData = {
 };
 
 export type GameLength = "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
+export type GameStatusType = "drop" | "in_progress" | "completed" | "reroll";
+export type GameReviewType = {
+  gameTitle: string;
+  description: string;
+  rating: number;
+  points: number;
+  poster?: string;
+  status: GameStatusType;
+  date: Date;
+}
 
 export type SectorOwnership = {
   sector_id: number;
