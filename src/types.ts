@@ -39,7 +39,7 @@ type Position = {
 
 export type SectorData = {
   id: number;
-  type: "corner" | "property" | "community_chest" | "tax" | "railroad" | "chance" | "utility";
+  type: "prison" | "property" | "railroad" | "bonus" | "utility";
   name: string;
   position: Position;
   color: CellColor;

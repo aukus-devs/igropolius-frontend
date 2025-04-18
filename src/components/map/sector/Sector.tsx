@@ -27,7 +27,7 @@ function Sector({ sector, position, rotation }: Props) {
 
   const getBuildings = usePlayerStore((state) => state.getBuildings);
 
-  const isCorner = sector.type === "corner";
+  const isCorner = ["prison", "utility"].includes(sector.type);
   const canHaveBuildings = ["property", "railroad"].includes(sector.type);
   const showColorGroup = sector.type === "property";
   const shape: Vector3Array = isCorner
