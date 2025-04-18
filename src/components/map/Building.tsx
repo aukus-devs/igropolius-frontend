@@ -23,9 +23,12 @@ type Props = {
 };
 
 const meshesToColor = [
-  "Mesh_small_buildingD_1",
-  "Mesh_large_buildingC_4",
-  "Mesh_skyscraperE_3",
+  "Mesh_small_buildingD_1", // wall
+  "Mesh_small_buildingD_2", // roof/floor
+  "Mesh_large_buildingC_4", // wall
+  "Mesh_large_buildingC_2", // roof
+  "Mesh_skyscraperE_3", // wall
+  "Mesh_skyscraperE_5", // roof
   "Mesh_skyscraperA_1", // roof
   "Mesh_skyscraperA_2", // wall
   "Mesh_skyscraperA_4", // panels
