@@ -24,7 +24,7 @@ function Rating({ onChange }: Props) {
 
     return (
       <div
-        className={`relative bg-muted-foreground transition-all rounded-xl h-full w-11 hover:scale-115 overflow-hidden active:scale-100 ${isActive ? "scale-115" : ""} overflow-hidden`}
+        className={`relative bg-popover transition-all rounded-xl h-full w-11 hover:scale-115 overflow-hidden active:scale-100 ${isActive ? "scale-115" : ""} overflow-hidden`}
       >
         <div className="relative z-20 pointer-events-none w-full h-full flex items-center justify-center">
           {ratingValue}

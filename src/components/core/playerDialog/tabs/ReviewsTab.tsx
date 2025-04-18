@@ -14,7 +14,7 @@ function ReviewsTab({ reviews }: Props) {
 
   return (
     <>
-      <div className="relative mb-8">
+      <div className="relative">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size="1rem" />
         <Input
           id="search"
@@ -25,7 +25,7 @@ function ReviewsTab({ reviews }: Props) {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 py-8">
         {filteredReviews.map((review) => <GameReview key={review.gameTitle} review={review} />)}
       </div>
     </>

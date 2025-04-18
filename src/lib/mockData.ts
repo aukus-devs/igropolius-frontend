@@ -408,7 +408,7 @@ export const mockReviews: GameReviewType[] = [
     rating: 8,
     points: 1000,
     poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp",
-    status: "drop",
+    status: "completed",
     date: new Date(),
   },
   {
@@ -417,7 +417,7 @@ export const mockReviews: GameReviewType[] = [
     rating: 8,
     points: 1000,
     poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp",
-    status: "drop",
+    status: "reroll",
     date: new Date(),
   },
 ];

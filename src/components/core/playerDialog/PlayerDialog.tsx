@@ -28,7 +28,10 @@ function PlayerDialog({ player, placement }: Props) {
         <DialogTrigger>
           <PlayerDialogTrigger name={name} avatar={avatar} placement={placement} pointsAmount={randomPoints} />
         </DialogTrigger>
-        <DialogContent className="flex flex-col gap-8 sm:max-w-[600px] h-[660px] p-0 overflow-hidden" aria-describedby="">
+        <DialogContent
+          className="flex flex-col gap-8 h-[660px] p-0 overflow-hidden"
+          aria-describedby=""
+        >
           <ScrollArea className="flex h-full">
             <DialogHeader className="absolute top-5 mx-auto left-0 right-0">
               <DialogTitle className="text-center font-semibold text-muted-foreground text-sm">

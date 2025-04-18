@@ -16,10 +16,14 @@ function PlayerDialogTabs({ reviews }: Props) {
   ];
 
   return (
-    <Tabs defaultValue={tabs[0].value}>
-      <TabsList className="w-full bg-transparent gap-2 bg-8">
+    <Tabs className="px-5" defaultValue={tabs[0].value}>
+      <TabsList className="w-full bg-transparent gap-2">
         {tabs.map(({ name, value }) => (
-          <TabsTrigger key={value} className="text-muted-foreground bg-foreground/20 rounded-lg hover:text-foreground transition-colors data-[state=active]:text-foreground data-[state=active]:bg-primary-foreground h-8" value={value}>
+          <TabsTrigger
+            key={value}
+            className="text-muted-foreground bg-foreground/20 rounded-lg hover:text-foreground transition-colors data-[state=active]:text-primary-foreground data-[state=active]:bg-primary h-8"
+            value={value}
+          >
             {name}
           </TabsTrigger>
         ))}

@@ -8,7 +8,7 @@ type Props = {
 
 function PlayerDialogHero({ name, avatar, socials }: Props) {
   return (
-    <div className="relative mb-8 mt-[76px]">
+    <div className="relative mb-8 pt-[76px]">
       <div className="absolute top-0 left-0 z-[-1] w-full h-[240px] blur-2xl">
         <img src={avatar} className="w-full h-full opacity-50" alt="player avatar" />
       </div>

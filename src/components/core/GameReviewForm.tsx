@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Button } from "../ui/button";
 import { useState } from "react";
@@ -14,7 +14,7 @@ function GameStatus() {
 
   return (
     <Select onValueChange={setGameStatus}>
-      <SelectTrigger className="w-48">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Статус" />
       </SelectTrigger>
       <SelectContent>
@@ -42,7 +42,7 @@ function GameTime() {
 
   return (
     <Select onValueChange={setGameTime}>
-      <SelectTrigger className="w-48">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Время прохождения" />
       </SelectTrigger>
       <SelectContent>
@@ -89,12 +89,9 @@ function GameTitle() {
 
 function HLTBLink() {
   return (
-    <Button
-      variant="link"
-      className="font-semibold"
-    >
+    <Button variant="outline" className="font-semibold bg-popover text-popover-foreground border-none p-0">
       <a
-        className="flex gap-1 items-center justify-center"
+        className="flex gap-1 size-full items-center justify-center"
         href="https://howlongtobeat.com/"
         target="_blank"
       >
@@ -128,12 +125,9 @@ function GameReviewForm() {
       <DialogTrigger asChild>
         <Button variant="outline">Оценка игры</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-fit justify-end items-end">
+      <DialogContent className="sm:max-w-fit justify-end items-end" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Новый ход</DialogTitle>
-          <DialogDescription className="sr-only">
-            Новый ход
-          </DialogDescription>
         </DialogHeader>
 
         <div className="flex gap-4">
@@ -149,12 +143,12 @@ function GameReviewForm() {
               <GameStatus />
               <GameTime />
             </div>
-            <GameReview />
             <Rating onChange={setRating} />
+            <GameReview />
           </div>
         </div>
         <Button
-          size="lg"
+          size="sm"
           className="justify-self-end"
           disabled={isSendButtonDisabled}
           onClick={onConfirm}
