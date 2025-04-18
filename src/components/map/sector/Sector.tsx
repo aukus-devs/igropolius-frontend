@@ -10,6 +10,7 @@ import SectorText from "./SectorText";
 import SectorBuildings from "./SectorBuildings";
 import usePlayerStore from "@/stores/playerStore";
 import TrainModel from "./TrainModel";
+import PrisonModel from "./PrisonModel";
 
 type Props = {
   sector: SectorData;
@@ -40,6 +41,8 @@ function Sector({ sector, position, rotation }: Props) {
 
   const buildings = getBuildings(sector.id);
 
+  const isPrison = sector.type === "prison";
+
   const train = TrainsConfig.find((train) => train.sectorFrom === sector.id);
 
   return (
@@ -53,6 +56,7 @@ function Sector({ sector, position, rotation }: Props) {
 
       {canHaveBuildings && <SectorBuildings buildings={buildings} />}
       {train && <TrainModel train={train} />}
+      {isPrison && <PrisonModel />}
       <SectorText text={`${sector.id}`} isCorner={isCorner} />
 
       <SectorBase
