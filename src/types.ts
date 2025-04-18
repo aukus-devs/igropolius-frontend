@@ -95,3 +95,8 @@ export type BuildingData = {
   gameLength: GameLength | "drop";
   gameTitle: string;
 };
+
+export type TrainData = {
+  sectorFrom: number;
+  sectorTo: number;
+};

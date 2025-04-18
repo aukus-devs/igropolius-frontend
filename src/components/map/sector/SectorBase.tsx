@@ -1,4 +1,10 @@
-import { SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH, EMISSION_FULL, EMISSION_NONE } from "@/lib/constants";
+import {
+  SECTOR_WIDTH,
+  SECTOR_HEIGHT,
+  SECTOR_DEPTH,
+  EMISSION_FULL,
+  EMISSION_NONE,
+} from "@/lib/constants";
 import useSectorStore from "@/stores/sectorStore";
 import { Vector3Array, colors } from "@/types";
 import { Edges } from "@react-three/drei";
@@ -10,11 +16,11 @@ type Props = {
   id: number;
   shape: Vector3Array;
   color: string;
-  canHaveBuildings: boolean;
-}
+  showColorGroup: boolean;
+};
 
 function SectorColoredPlatform({ color }: { color: string }) {
-  const shape: Vector3Array = [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 15];
+  const shape: Vector3Array = [SECTOR_WIDTH, SECTOR_HEIGHT, (SECTOR_DEPTH / 100) * 15];
   const position: Vector3Array = [0, 0, -SECTOR_DEPTH / 2 + shape[2] / 2];
 
   return (
@@ -26,16 +32,16 @@ function SectorColoredPlatform({ color }: { color: string }) {
   );
 }
 
-function SectorMainPlatform({ id, shape, canHaveBuildings }: Omit<Props, 'color'>) {
+function SectorMainPlatform({ id, shape, showColorGroup }: Omit<Props, "color">) {
   const isSelected = useSectorStore((state) => state.selectedSector?.id === id);
   const meshRef = useRef<Mesh>(null);
 
   const platform = useMemo(() => {
     const color = new Color(colors.pastelgreen);
-    const finalShape: Vector3Array = canHaveBuildings
-      ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 85]
+    const finalShape: Vector3Array = showColorGroup
+      ? [SECTOR_WIDTH, SECTOR_HEIGHT, (SECTOR_DEPTH / 100) * 85]
       : shape;
-    const position: Vector3Array = canHaveBuildings
+    const position: Vector3Array = showColorGroup
       ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
       : [0, 0, 0];
 
@@ -45,8 +51,8 @@ function SectorMainPlatform({ id, shape, canHaveBuildings }: Omit<Props, 'color'
         <meshStandardMaterial color={color} roughness={0.5} metalness={0.25} />
         <Edges scale={1} lineWidth={3} color="black" />
       </mesh>
-    )
-  }, [canHaveBuildings, shape]);
+    );
+  }, [showColorGroup, shape]);
 
   useFrame(() => {
     if (!meshRef.current) return;
@@ -55,14 +61,10 @@ function SectorMainPlatform({ id, shape, canHaveBuildings }: Omit<Props, 'color'
     material.emissive.lerp(isSelected ? EMISSION_FULL : EMISSION_NONE, 0.1);
   });
 
-  return (
-    <>
-      {platform}
-    </>
-  )
+  return <>{platform}</>;
 }
 
-function SectorBase({ id, color, shape, canHaveBuildings }: Props) {
+function SectorBase({ id, color, shape, showColorGroup }: Props) {
   const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
 
   return (
@@ -70,10 +72,10 @@ function SectorBase({ id, color, shape, canHaveBuildings }: Props) {
       onPointerEnter={(e) => (e.stopPropagation(), setSelectedSectorId(id))}
       onPointerLeave={(e) => (e.stopPropagation(), setSelectedSectorId(null))}
     >
-      <SectorMainPlatform id={id} shape={shape} canHaveBuildings={canHaveBuildings} />
-      {canHaveBuildings && <SectorColoredPlatform color={color} />}
+      <SectorMainPlatform id={id} shape={shape} showColorGroup={showColorGroup} />
+      {showColorGroup && <SectorColoredPlatform color={color} />}
     </group>
-  )
+  );
 }
 
 export default SectorBase;

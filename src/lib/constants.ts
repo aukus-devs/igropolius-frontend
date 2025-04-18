@@ -1,4 +1,4 @@
-import { BuildingType, GameLengthWithDrop } from "@/types";
+import { BuildingType, GameLengthWithDrop, TrainData } from "@/types";
 import { Color } from "three";
 
 export enum Controls {
@@ -26,6 +26,7 @@ export const BUILDING_ELEVATION = SECTOR_HEIGHT / 2;
 
 export const PLAYER_HEIGHT = 1;
 export const PLAYER_ELEVATION = SECTOR_HEIGHT / 2 + SECTOR_ELEVATION * 2 + PLAYER_HEIGHT / 2;
+export const TRAIN_ELEVATION = BUILDING_ELEVATION + 0.6;
 
 export const FLOOR_CENTER_POSITION = (FLOOR_SIZE / SECTORS_PER_SIDE) * SECTOR_WIDTH;
 
@@ -41,3 +42,22 @@ export const GameLengthToBuildingType: { [key in GameLengthWithDrop]: BuildingTy
   "20-25": "height-5",
   "25+": "height-6",
 };
+
+export const TrainsConfig: TrainData[] = [
+  {
+    sectorFrom: 6,
+    sectorTo: 16,
+  },
+  {
+    sectorFrom: 16,
+    sectorTo: 26,
+  },
+  {
+    sectorFrom: 26,
+    sectorTo: 36,
+  },
+  {
+    sectorFrom: 36,
+    sectorTo: 6,
+  },
+];

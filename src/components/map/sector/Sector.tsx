@@ -3,12 +3,13 @@ import { ThreeEvent } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
-import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH } from "@/lib/constants";
+import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH, TrainsConfig } from "@/lib/constants";
 import SectorInfo from "./SectorInfo";
 import SectorBase from "./SectorBase";
 import SectorText from "./SectorText";
 import SectorBuildings from "./SectorBuildings";
 import usePlayerStore from "@/stores/playerStore";
+import TrainModel from "./TrainModel";
 
 type Props = {
   sector: SectorData;
@@ -28,6 +29,7 @@ function Sector({ sector, position, rotation }: Props) {
 
   const isCorner = sector.type === "corner";
   const canHaveBuildings = ["property", "railroad"].includes(sector.type);
+  const showColorGroup = sector.type === "property";
   const shape: Vector3Array = isCorner
     ? [SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_DEPTH]
     : [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH];
@@ -37,6 +39,8 @@ function Sector({ sector, position, rotation }: Props) {
   }, [sectorRef, addSectorModel]);
 
   const buildings = getBuildings(sector.id);
+
+  const train = TrainsConfig.find((train) => train.sectorFrom === sector.id);
 
   return (
     <group
@@ -48,13 +52,14 @@ function Sector({ sector, position, rotation }: Props) {
       <SectorInfo id={sector.id} />
 
       {canHaveBuildings && <SectorBuildings buildings={buildings} />}
+      {train && <TrainModel train={train} />}
       <SectorText text={`${sector.id}`} isCorner={isCorner} />
 
       <SectorBase
         id={sector.id}
         color={sector.color}
         shape={shape}
-        canHaveBuildings={canHaveBuildings}
+        showColorGroup={showColorGroup}
       />
     </group>
   );
