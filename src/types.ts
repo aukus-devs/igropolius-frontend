@@ -47,6 +47,8 @@ export type SectorData = {
 };
 
 export type GameLength = "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
+export type GameLengthWithDrop = GameLength | "drop";
+
 export type GameStatusType = "drop" | "in_progress" | "completed" | "reroll";
 export type GameReviewType = {
   gameTitle: string;
@@ -62,7 +64,7 @@ export type SectorOwnership = {
   created_at: number;
   sector_id: number;
   game_title: string;
-  game_length: GameLength | "drop";
+  game_length: GameLengthWithDrop;
 };
 
 export type PlayerData = {
@@ -84,3 +86,12 @@ export type BuildingType =
   | "height-4"
   | "height-5"
   | "height-6";
+
+export type BuildingData = {
+  type: BuildingType;
+  owner: PlayerData;
+  sectorId: number;
+  createdAt: number;
+  gameLength: GameLength | "drop";
+  gameTitle: string;
+};

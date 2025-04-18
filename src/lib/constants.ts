@@ -1,3 +1,4 @@
+import { BuildingType, GameLengthWithDrop } from "@/types";
 import { Color } from "three";
 
 export enum Controls {
@@ -30,3 +31,13 @@ export const FLOOR_CENTER_POSITION = (FLOOR_SIZE / SECTORS_PER_SIDE) * SECTOR_WI
 
 export const EMISSION_FULL = new Color("white");
 export const EMISSION_NONE = new Color("black");
+
+export const GameLengthToBuildingType: { [key in GameLengthWithDrop]: BuildingType } = {
+  drop: "ruins",
+  "2-5": "height-1",
+  "5-10": "height-2",
+  "10-15": "height-3",
+  "15-20": "height-4",
+  "20-25": "height-5",
+  "25+": "height-6",
+};

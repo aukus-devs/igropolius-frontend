@@ -1,21 +1,48 @@
 import { BUILDING_ELEVATION } from "@/lib/constants";
-import { colors } from "@/types";
+import { BuildingData, Vector3Array } from "@/types";
 import Building from "../Building";
 
-function SectorBuildings() {
+type Props = {
+  buildings: BuildingData[];
+};
+
+const BuildingPositions: Vector3Array[] = [
+  [2, BUILDING_ELEVATION, 5],
+  [0.5, BUILDING_ELEVATION, 5],
+  [-1, BUILDING_ELEVATION, 5],
+  [2, BUILDING_ELEVATION, 3.5],
+  [0.5, BUILDING_ELEVATION, 3.5],
+  [-1, BUILDING_ELEVATION, 3.5],
+  [2, BUILDING_ELEVATION, 2],
+  [0.5, BUILDING_ELEVATION, 2],
+  [-1, BUILDING_ELEVATION, 2],
+  [2, BUILDING_ELEVATION, 0.5],
+  [0.5, BUILDING_ELEVATION, 0.5],
+  [-1, BUILDING_ELEVATION, 0.5],
+  [2, BUILDING_ELEVATION, -1],
+  [0.5, BUILDING_ELEVATION, -1],
+  [-1, BUILDING_ELEVATION, -1],
+];
+
+function SectorBuildings({ buildings }: Props) {
   return (
     <group name="buildings">
-      <Building type="height-6" position={[2, BUILDING_ELEVATION, 5]} color={colors.blue} />
-      <Building type="height-5" position={[0.5, BUILDING_ELEVATION, 5]} color={colors.red} />
-      <Building type="height-4" position={[-1, BUILDING_ELEVATION, 5]} color={colors.brown} />
-      <Building type="height-3" position={[2, BUILDING_ELEVATION, 3.5]} color={colors.green} />
-      <Building
-        type="height-2"
-        position={[0.5, BUILDING_ELEVATION, 3.5]}
-        color={colors.yellow}
-      />
-      <Building type="height-1" position={[-1, BUILDING_ELEVATION, 3.5]} color={colors.pink} />
-      <Building type="ruins" position={[2, BUILDING_ELEVATION, 2]} color={colors.orange} />
+      {buildings.map((building, index) => {
+        const position = BuildingPositions[index];
+        if (!position) {
+          console.warn(`No position found for building at index ${index}`);
+          return null;
+        }
+
+        return (
+          <Building
+            key={index}
+            type={building.type}
+            position={BuildingPositions[index]}
+            color={building.owner.color}
+          />
+        );
+      })}
     </group>
   );
 }

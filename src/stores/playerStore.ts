@@ -1,6 +1,6 @@
-import { SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
+import { GameLengthToBuildingType, SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
 import { myPlayerData, sectorsData } from "@/lib/mockData";
-import { PlayerData } from "@/types";
+import { BuildingData, PlayerData } from "@/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
@@ -12,14 +12,55 @@ const usePlayerStore = create<{
   isPlayerMoving: boolean;
   updateMyPlayerSectorId: (id: number) => void;
   moveMyPlayer: () => Promise<void>;
+  players: PlayerData[];
+  setPlayers: (players: PlayerData[]) => void;
+  buildingsPerSector: Record<number, BuildingData[]>;
+  getBuildings: (sectorId: number) => BuildingData[];
 }>((set, get) => ({
   myPlayer: myPlayerData,
   isPlayerMoving: false,
+  players: [],
+  buildingsPerSector: {},
 
   updateMyPlayerSectorId: (id: number) => {
     set((state) => ({
       myPlayer: state.myPlayer ? { ...state.myPlayer, current_position: id } : null,
     }));
+  },
+
+  setPlayers: (players: PlayerData[]) => {
+    const buildings = players.reduce((acc: { [k: number]: BuildingData[] }, player) => {
+      player.sector_ownership.forEach((item) => {
+        if (!acc[item.sector_id]) {
+          acc[item.sector_id] = [];
+        }
+        acc[item.sector_id].push({
+          type: GameLengthToBuildingType[item.game_length],
+          owner: player,
+          sectorId: item.sector_id,
+          createdAt: item.created_at,
+          gameLength: item.game_length,
+          gameTitle: item.game_title,
+        });
+      });
+      return acc;
+    }, {});
+
+    // sort all buildings values by createdAt
+    Object.values(buildings).forEach((sectorBuildings) => {
+      sectorBuildings.sort((a, b) => {
+        if (a.createdAt < b.createdAt) return -1;
+        if (a.createdAt > b.createdAt) return 1;
+        return 0;
+      });
+    });
+
+    set({ players, buildingsPerSector: buildings });
+  },
+
+  getBuildings: (sectorId: number) => {
+    const buildings = get().buildingsPerSector[sectorId];
+    return buildings || [];
   },
 
   moveMyPlayer: async () => {

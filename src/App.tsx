@@ -1,10 +1,12 @@
 import "./index.css";
 import { Canvas } from "@react-three/fiber";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { KeyboardControls, KeyboardControlsEntry } from "@react-three/drei";
 import { Controls } from "./lib/constants";
 import Scene from "./components/map/Scene";
 import UI from "./components/UI";
+import usePlayerStore from "./stores/playerStore";
+import { playersData } from "./lib/mockData";
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -20,6 +22,11 @@ function App() {
     ],
     [],
   );
+
+  const setPlayers = usePlayerStore((state) => state.setPlayers);
+  useEffect(() => {
+    setPlayers(playersData);
+  }, [setPlayers]);
 
   return (
     <KeyboardControls map={map}>

@@ -8,6 +8,7 @@ import SectorInfo from "./SectorInfo";
 import SectorBase from "./SectorBase";
 import SectorText from "./SectorText";
 import SectorBuildings from "./SectorBuildings";
+import usePlayerStore from "@/stores/playerStore";
 
 type Props = {
   sector: SectorData;
@@ -17,19 +18,25 @@ type Props = {
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
   onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
-}
+};
 
 function Sector({ sector, position, rotation }: Props) {
   const addSectorModel = useModelsStore((state) => state.addSectorModel);
   const sectorRef = useRef<Group | null>(null);
 
+  const getBuildings = usePlayerStore((state) => state.getBuildings);
+
   const isCorner = sector.type === "corner";
-  const canHaveBuildings = sector.type === "property";
-  const shape: Vector3Array = isCorner ? [SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_DEPTH] : [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH];
+  const canHaveBuildings = ["property", "railroad"].includes(sector.type);
+  const shape: Vector3Array = isCorner
+    ? [SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_DEPTH]
+    : [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH];
 
   useEffect(() => {
     if (sectorRef.current) addSectorModel(sectorRef.current);
   }, [sectorRef, addSectorModel]);
+
+  const buildings = getBuildings(sector.id);
 
   return (
     <group
@@ -40,7 +47,7 @@ function Sector({ sector, position, rotation }: Props) {
     >
       <SectorInfo id={sector.id} />
 
-      {canHaveBuildings && <SectorBuildings />}
+      {canHaveBuildings && <SectorBuildings buildings={buildings} />}
       <SectorText text={`${sector.id}`} isCorner={isCorner} />
 
       <SectorBase

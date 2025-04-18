@@ -330,7 +330,56 @@ export const playersData: PlayerData[] = [
     name: "Player 1",
     avatar: "https://github.com/shadcn.png",
     color: colors.green,
-    sector_ownership: [],
+    sector_ownership: [
+      {
+        sector_id: 38,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "2-5",
+        game_title: "Haste",
+      },
+      {
+        sector_id: 5,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "25+",
+        game_title: "Haste",
+      },
+      {
+        sector_id: 5,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "20-25",
+        game_title: "Haste",
+      },
+      {
+        sector_id: 5,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "15-20",
+        game_title: "Haste",
+      },
+      {
+        sector_id: 5,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "10-15",
+        game_title: "Haste",
+      },
+      {
+        sector_id: 5,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "5-10",
+        game_title: "Haste",
+      },
+      {
+        sector_id: 5,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "2-5",
+        game_title: "Haste",
+      },
+      {
+        sector_id: 5,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "drop",
+        game_title: "Haste",
+      },
+    ],
   },
   {
     id: "2",
@@ -338,7 +387,20 @@ export const playersData: PlayerData[] = [
     name: "Player 2",
     avatar: "https://github.com/shadcn.png",
     color: colors.pink,
-    sector_ownership: [],
+    sector_ownership: [
+      {
+        sector_id: 24,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "25+",
+        game_title: "Haste",
+      },
+      {
+        sector_id: 2,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "15-20",
+        game_title: "Haste",
+      },
+    ],
   },
   {
     id: "3",
@@ -346,7 +408,14 @@ export const playersData: PlayerData[] = [
     name: "Player 3",
     avatar: "https://github.com/shadcn.png",
     color: colors.orange,
-    sector_ownership: [],
+    sector_ownership: [
+      {
+        sector_id: 2,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "5-10",
+        game_title: "Haste",
+      },
+    ],
   },
   {
     id: "4",
@@ -354,7 +423,14 @@ export const playersData: PlayerData[] = [
     name: "Player 4",
     avatar: "https://github.com/shadcn.png",
     color: colors.yellow,
-    sector_ownership: [],
+    sector_ownership: [
+      {
+        sector_id: 2,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "drop",
+        game_title: "Haste",
+      },
+    ],
   },
   {
     id: "5",
@@ -362,7 +438,14 @@ export const playersData: PlayerData[] = [
     name: "Player 5",
     avatar: "https://github.com/shadcn.png",
     color: colors.brown,
-    sector_ownership: [],
+    sector_ownership: [
+      {
+        sector_id: 2,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "2-5",
+        game_title: "Haste",
+      },
+    ],
   },
   {
     id: "6",
@@ -370,7 +453,14 @@ export const playersData: PlayerData[] = [
     name: "Player 6",
     avatar: "https://github.com/shadcn.png",
     color: colors.red,
-    sector_ownership: [],
+    sector_ownership: [
+      {
+        sector_id: 10,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "15-20",
+        game_title: "Haste",
+      },
+    ],
   },
   {
     id: "7",
@@ -378,7 +468,14 @@ export const playersData: PlayerData[] = [
     name: "Player 7",
     avatar: "https://github.com/shadcn.png",
     color: colors.blue,
-    sector_ownership: [],
+    sector_ownership: [
+      {
+        sector_id: 10,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "15-20",
+        game_title: "Haste",
+      },
+    ],
   },
   {
     id: "8",
@@ -386,7 +483,14 @@ export const playersData: PlayerData[] = [
     name: "Player 8",
     avatar: "https://github.com/shadcn.png",
     color: colors.lightblue,
-    sector_ownership: [],
+    sector_ownership: [
+      {
+        sector_id: 10,
+        created_at: Math.ceil(Date.now() / 1000),
+        game_length: "5-10",
+        game_title: "Haste",
+      },
+    ],
   },
 ];
 
@@ -395,7 +499,8 @@ export const myPlayerData: PlayerData = playersData[0];
 export const mockReviews: GameReviewType[] = [
   {
     gameTitle: "Haste 1",
-    description: "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
+    description:
+      "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
     rating: 8,
     points: 1000,
     poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp",
@@ -404,7 +509,8 @@ export const mockReviews: GameReviewType[] = [
   },
   {
     gameTitle: "Haste 2",
-    description: "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
+    description:
+      "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
     rating: 8,
     points: 1000,
     poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp",
@@ -413,7 +519,8 @@ export const mockReviews: GameReviewType[] = [
   },
   {
     gameTitle: "Haste 3",
-    description: "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
+    description:
+      "Очень весело бывает купаться, и очень интересно в воде плескаться. Это круто - плавать в озере. Лучше ничего, практически, не может быть!",
     rating: 8,
     points: 1000,
     poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp",
