@@ -56,9 +56,10 @@ export type GameReviewType = {
   poster?: string;
   status: GameStatusType;
   date: Date;
-}
+};
 
 export type SectorOwnership = {
+  created_at: number;
   sector_id: number;
   game_title: string;
   game_length: GameLength | "drop";
