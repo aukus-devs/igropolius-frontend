@@ -13,13 +13,14 @@ type Props = {
 };
 
 export default function TrainModel({ train }: Props) {
-  const ref = useRef<THREE.Group>(null);
   const colorMap = useTexture(TextureUrl);
 
-  useEffect(() => {
-    if (!ref.current) return;
+  const updateModel = (model: THREE.Group) => {
+    if (!model) return;
+    // colorMap.encoding = THREE.sRGBEncoding;
     colorMap.colorSpace = THREE.SRGBColorSpace;
-    ref.current.traverse((child) => {
+    colorMap.flipY = false;
+    model.traverse((child) => {
       // if (child.isMesh) {
       if (child instanceof THREE.Mesh) {
         const mesh = child as THREE.Mesh;
@@ -29,7 +30,7 @@ export default function TrainModel({ train }: Props) {
         material.needsUpdate = true;
       }
     });
-  }, [colorMap]);
+  };
 
   return (
     <group name="train" rotation={[0, Math.PI / 3.9, 0]} position={[2, 0, 7]}>
@@ -42,7 +43,7 @@ export default function TrainModel({ train }: Props) {
       <Gltf src={RailUrl} position={[0, 1, 24]} />
       <Gltf src={RailUrl} position={[0, 1, 28]} />
       <Gltf src={RailUrl} position={[0, 1, 32]} />
-      <Gltf ref={ref} src={TrainUrl} position={[0, 0, 0]} scale={1} />
+      <Gltf ref={updateModel} src={TrainUrl} position={[0, 0, 0]} scale={1} />
     </group>
   );
 }
