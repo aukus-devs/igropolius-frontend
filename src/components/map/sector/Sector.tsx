@@ -27,7 +27,11 @@ function Sector({ sector, position, rotation }: Props) {
   const addSectorModel = useModelsStore((state) => state.addSectorModel);
   const sectorRef = useRef<Group | null>(null);
 
-  const getBuildings = usePlayerStore((state) => state.getBuildings);
+  useEffect(() => {
+    if (sectorRef.current) addSectorModel(sectorRef.current);
+  }, [sectorRef, addSectorModel]);
+
+  const buildings = usePlayerStore((state) => state.buildingsPerSector[sector.id] ?? []);
 
   const isCorner = ["prison", "utility"].includes(sector.type);
   const canHaveBuildings = ["property", "railroad"].includes(sector.type);
@@ -36,11 +40,6 @@ function Sector({ sector, position, rotation }: Props) {
     ? [SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_DEPTH]
     : [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH];
 
-  useEffect(() => {
-    if (sectorRef.current) addSectorModel(sectorRef.current);
-  }, [sectorRef, addSectorModel]);
-
-  const buildings = getBuildings(sector.id);
   const isPrison = sector.type === "prison";
   const train = TrainsConfig.find((train) => train.sectorFrom === sector.id);
   const isStart = sector.id === 1;

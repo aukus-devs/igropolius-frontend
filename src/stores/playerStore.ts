@@ -15,7 +15,6 @@ const usePlayerStore = create<{
   players: PlayerData[];
   setPlayers: (players: PlayerData[]) => void;
   buildingsPerSector: Record<number, BuildingData[]>;
-  getBuildings: (sectorId: number) => BuildingData[];
 }>((set, get) => ({
   myPlayer: myPlayerData,
   isPlayerMoving: false,
@@ -56,11 +55,6 @@ const usePlayerStore = create<{
     });
 
     set({ players, buildingsPerSector: buildings });
-  },
-
-  getBuildings: (sectorId: number) => {
-    const buildings = get().buildingsPerSector[sectorId];
-    return buildings || [];
   },
 
   moveMyPlayer: async () => {
