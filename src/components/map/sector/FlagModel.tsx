@@ -27,7 +27,7 @@ export default function FlagModel() {
     <Gltf
       ref={updateModel}
       src={FlagUrl}
-      position={[0, 0, 0]}
+      position={[4, 0, 4]}
       scale={5}
       rotation={[0, Math.PI, 0]}
     />
