@@ -3,7 +3,7 @@ import { Group } from "three";
 
 const useModelsStore = create<{
   playersModels: { [key: number]: Group };
-  sectorsModels: { [key: number]: Group };
+  sectorsModels: { [key: string]: Group };
   addPlayerModel: (object3D: Group) => void;
   getPlayerModel: (id: number) => Group;
   addSectorModel: (object3D: Group) => void;
@@ -12,7 +12,7 @@ const useModelsStore = create<{
   playersModels: {},
   sectorsModels: {},
 
-  getSectorModel: (id) => get().sectorsModels[id],
+  getSectorModel: (id) => get().sectorsModels[`sector_${id}`],
 
   addSectorModel: (object3D) =>
     set((state) => ({

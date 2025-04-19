@@ -333,7 +333,7 @@ export const playersData: PlayerData[] = [
     nickname: "Praden",
     first_name: "Денис",
     is_online: true,
-    current_position: 39,
+    current_position: 7,
 
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
@@ -409,7 +409,7 @@ export const playersData: PlayerData[] = [
     nickname: "Player-2",
     first_name: "Илья",
 
-    is_online: true,
+    is_online: false,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     online_count: 50,
@@ -484,7 +484,7 @@ export const playersData: PlayerData[] = [
 
     first_name: "Илья",
 
-    is_online: true,
+    is_online: false,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     online_count: 50,
@@ -518,7 +518,7 @@ export const playersData: PlayerData[] = [
 
     first_name: "Илья",
 
-    is_online: true,
+    is_online: false,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     online_count: 50,
@@ -610,7 +610,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 8,
-    current_position: 17,
+    current_position: 16,
     nickname: "Player-8",
     avatar_link: "https://github.com/shadcn.png",
     color: colors.lightblue,

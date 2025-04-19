@@ -25,19 +25,13 @@ function PlayerDialog({ player, placement }: Props) {
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
   const { current_position, nickname, avatar_link } = player;
 
-  const randomPoints = Math.floor(Math.random() * 9999);
   const mockSocials = ["twitch.tv", "youtube.com", "donationalerts.com"];
 
   return (
     <div className="group relative">
       <Dialog>
         <DialogTrigger>
-          <PlayerDialogTrigger
-            name={nickname}
-            avatar={avatar_link}
-            placement={placement}
-            pointsAmount={randomPoints}
-          />
+          <PlayerDialogTrigger player={player} placement={placement} />
         </DialogTrigger>
         <DialogContent
           className="flex flex-col gap-8 h-[660px] p-0 overflow-hidden"
