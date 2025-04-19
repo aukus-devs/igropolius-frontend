@@ -32,25 +32,17 @@ export default function TrainModel({ train }: Props) {
   }, [colorMap]);
 
   return (
-    <group>
-      <Gltf src={RailUrl} position={[0, 1, 6]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[2.5, 1, 8.5]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[5, 1, 11]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[7.5, 1, 13.5]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[10, 1, 16]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[12.5, 1, 18.5]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[15, 1, 21]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[17.5, 1, 23.5]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[20, 1, 26]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[22.5, 1, 28.5]} rotation={[0, Math.PI / 4, 0]} />
-      <Gltf src={RailUrl} position={[25, 1, 31]} rotation={[0, Math.PI / 4, 0]} />,
-      <Gltf
-        ref={ref}
-        src={TrainUrl}
-        position={[1, 0, 7]}
-        scale={1}
-        rotation={[0, Math.PI / 4, 0]}
-      />
+    <group name="train" rotation={[0, Math.PI / 3.9, 0]} position={[2, 0, 7]}>
+      <Gltf src={RailUrl} position={[0, 1, 0]} />
+      <Gltf src={RailUrl} position={[0, 1, 4]} />
+      <Gltf src={RailUrl} position={[0, 1, 8]} />
+      <Gltf src={RailUrl} position={[0, 1, 12]} />
+      <Gltf src={RailUrl} position={[0, 1, 16]} />
+      <Gltf src={RailUrl} position={[0, 1, 20]} />
+      <Gltf src={RailUrl} position={[0, 1, 24]} />
+      <Gltf src={RailUrl} position={[0, 1, 28]} />
+      <Gltf src={RailUrl} position={[0, 1, 32]} />
+      <Gltf ref={ref} src={TrainUrl} position={[0, 0, 0]} scale={1} />
     </group>
   );
 }
