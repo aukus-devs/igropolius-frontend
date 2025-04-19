@@ -27,12 +27,22 @@ export function calculatePlayerPosition(sector: SectorData): Vector3Array {
   const elevation = PLAYER_ELEVATION;
   const cornerOffset = offset * 2;
 
+  const movePlayerDown = -2;
+
   return [
     sector.position.x * SECTOR_WIDTH +
-      (sector.position.x === 0 ? -cornerOffset : sector.position.x === 10 ? 0 : -offset),
+      (sector.position.x === 0
+        ? -cornerOffset + movePlayerDown
+        : sector.position.x === 10
+          ? -movePlayerDown
+          : -offset),
     elevation,
     sector.position.y * SECTOR_WIDTH +
-      (sector.position.y === 0 ? -cornerOffset : sector.position.y === 10 ? 0 : -offset),
+      (sector.position.y === 0
+        ? -cornerOffset + movePlayerDown
+        : sector.position.y === 10
+          ? -movePlayerDown
+          : -offset),
   ];
 }
 
