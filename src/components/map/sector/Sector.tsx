@@ -11,6 +11,7 @@ import SectorBuildings from "./SectorBuildings";
 import usePlayerStore from "@/stores/playerStore";
 import TrainModel from "./TrainModel";
 import PrisonModel from "./PrisonModel";
+import FlagModel from "./FlagModel";
 
 type Props = {
   sector: SectorData;
@@ -40,10 +41,10 @@ function Sector({ sector, position, rotation }: Props) {
   }, [sectorRef, addSectorModel]);
 
   const buildings = getBuildings(sector.id);
-
   const isPrison = sector.type === "prison";
-
   const train = TrainsConfig.find((train) => train.sectorFrom === sector.id);
+  const isStart = sector.id === 1;
+  const isTopLeftCorner = sector.id === 21;
 
   return (
     <group
@@ -58,6 +59,8 @@ function Sector({ sector, position, rotation }: Props) {
       {train && <TrainModel train={train} />}
       {isPrison && <PrisonModel />}
       <SectorText text={`${sector.id}`} isCorner={isCorner} />
+      {isStart && <FlagModel />}
+      {isTopLeftCorner && <FlagModel />}
 
       <SectorBase
         id={sector.id}
