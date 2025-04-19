@@ -2,6 +2,8 @@ import "./index.css";
 import { Canvas } from "@react-three/fiber";
 import { useEffect, useMemo } from "react";
 import { KeyboardControls, KeyboardControlsEntry } from "@react-three/drei";
+import { useShallow } from "zustand/shallow";
+
 import { Controls } from "./lib/constants";
 import Scene from "./components/map/Scene";
 import UI from "./components/UI";
@@ -23,10 +25,17 @@ function App() {
     [],
   );
 
-  const setPlayers = usePlayerStore((state) => state.setPlayers);
+  const { setPlayers, setMyPlayerId } = usePlayerStore(
+    useShallow((state) => ({
+      setPlayers: state.setPlayers,
+      setMyPlayerId: state.setMyPlayerId,
+    })),
+  );
+
   useEffect(() => {
+    setMyPlayerId(playersData[0].id);
     setPlayers(playersData);
-  }, [setPlayers]);
+  }, [setPlayers, setMyPlayerId]);
 
   return (
     <KeyboardControls map={map}>
