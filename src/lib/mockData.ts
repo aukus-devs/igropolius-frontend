@@ -348,7 +348,7 @@ export const playersData: PlayerData[] = [
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
 
-    total_score: 200,
+    total_score: 9999,
 
     avatar_link: "https://github.com/shadcn.png",
     color: colors.green,
@@ -423,7 +423,7 @@ export const playersData: PlayerData[] = [
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
 
-    total_score: 200,
+    total_score: 5000,
     avatar_link: "https://github.com/shadcn.png",
     color: colors.pink,
     sector_ownership: [
