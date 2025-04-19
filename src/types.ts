@@ -69,11 +69,29 @@ export type SectorOwnership = {
 
 export type PlayerData = {
   id: number;
-  name: string;
-  avatar: string;
-  color: string;
+  nickname: string;
+  first_name: string;
+  is_online: boolean;
+
+  current_game: string | null;
+  current_game_updated_at: number | null;
+  online_count: number | null;
+  current_auc_total_sum: number | null;
+  current_auc_started_at: number | null;
+  pointauc_token: string | null;
+
+  twitch_stream_link: string | null;
+  vk_stream_link: string | null;
+  kick_stream_link: string | null;
+  telegram_link: string | null;
+  donation_link: string | null;
+
+  total_score: number;
   current_position: number;
   sector_ownership: SectorOwnership[];
+
+  avatar_link: string;
+  color: string;
 };
 
 export type Vector3Array = [number, number, number];

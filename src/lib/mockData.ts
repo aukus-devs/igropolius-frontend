@@ -330,9 +330,27 @@ export const SectorsById: Record<number, SectorData> = Object.fromEntries(
 export const playersData: PlayerData[] = [
   {
     id: 1,
+    nickname: "Praden",
+    first_name: "Денис",
+    is_online: true,
     current_position: 39,
-    name: "Player 1",
-    avatar: "https://github.com/shadcn.png",
+
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
+
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.green,
     sector_ownership: [
       {
@@ -388,8 +406,25 @@ export const playersData: PlayerData[] = [
   {
     id: 2,
     current_position: 25,
-    name: "Player 2",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-2",
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.pink,
     sector_ownership: [
       {
@@ -409,9 +444,28 @@ export const playersData: PlayerData[] = [
   {
     id: 3,
     current_position: 6,
-    name: "Player 3",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-3",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.orange,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
+
     sector_ownership: [
       {
         sector_id: 2,
@@ -424,9 +478,28 @@ export const playersData: PlayerData[] = [
   {
     id: 4,
     current_position: 40,
-    name: "Player 4",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-4",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.yellow,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
+
     sector_ownership: [
       {
         sector_id: 2,
@@ -439,9 +512,27 @@ export const playersData: PlayerData[] = [
   {
     id: 5,
     current_position: 1,
-    name: "Player 5",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-5",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.brown,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
     sector_ownership: [
       {
         sector_id: 2,
@@ -454,9 +545,27 @@ export const playersData: PlayerData[] = [
   {
     id: 6,
     current_position: 12,
-    name: "Player 6",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-6",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.red,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
     sector_ownership: [
       {
         sector_id: 10,
@@ -469,9 +578,27 @@ export const playersData: PlayerData[] = [
   {
     id: 7,
     current_position: 31,
-    name: "Player 7",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-7",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.blue,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
     sector_ownership: [
       {
         sector_id: 10,
@@ -484,9 +611,27 @@ export const playersData: PlayerData[] = [
   {
     id: 8,
     current_position: 17,
-    name: "Player 8",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-8",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.lightblue,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
     sector_ownership: [
       {
         sector_id: 10,
