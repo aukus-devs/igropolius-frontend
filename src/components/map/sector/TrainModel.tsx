@@ -1,6 +1,6 @@
 import { Gltf, useTexture } from "@react-three/drei";
 import { TrainData } from "@/types";
-import { useEffect, useRef } from "react";
+
 import * as THREE from "three";
 
 const RailUrl = `${import.meta.env.BASE_URL}assets/models/railroad-straight.glb`;

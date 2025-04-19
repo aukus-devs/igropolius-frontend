@@ -12,6 +12,7 @@ import usePlayerStore from "@/stores/playerStore";
 import TrainModel from "./TrainModel";
 import PrisonModel from "./PrisonModel";
 import FlagModel from "./FlagModel";
+import BonusWheelModel from "./BonusWheelModel";
 
 type Props = {
   sector: SectorData;
@@ -44,6 +45,7 @@ function Sector({ sector, position, rotation }: Props) {
   const train = TrainsConfig.find((train) => train.sectorFrom === sector.id);
   const isStart = sector.id === 1;
   const isTopLeftCorner = sector.id === 21;
+  const isBonusSector = sector.type === "bonus";
 
   return (
     <group
@@ -60,6 +62,7 @@ function Sector({ sector, position, rotation }: Props) {
       <SectorText text={`${sector.id}`} isCorner={isCorner} />
       {isStart && <FlagModel />}
       {isTopLeftCorner && <FlagModel />}
+      {isBonusSector && <BonusWheelModel />}
 
       <SectorBase
         id={sector.id}
