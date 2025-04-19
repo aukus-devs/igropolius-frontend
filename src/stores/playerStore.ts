@@ -1,5 +1,5 @@
 import { GameLengthToBuildingType, SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
-import { myPlayerData, sectorsData } from "@/lib/mockData";
+import { sectorsData } from "@/lib/mockData";
 import { BuildingData, PlayerData } from "@/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
@@ -8,6 +8,8 @@ import useDiceStore from "./diceStore";
 import useCameraStore from "./cameraStore";
 
 const usePlayerStore = create<{
+  myPlayerId: number | null;
+  setMyPlayerId: (id: number | null) => void;
   myPlayer: PlayerData | null;
   isPlayerMoving: boolean;
   updateMyPlayerSectorId: (id: number) => void;
@@ -16,10 +18,26 @@ const usePlayerStore = create<{
   setPlayers: (players: PlayerData[]) => void;
   buildingsPerSector: Record<number, BuildingData[]>;
 }>((set, get) => ({
-  myPlayer: myPlayerData,
+  myPlayerId: null,
+  myPlayer: null,
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
+
+  setMyPlayerId: (id: number | null) => {
+    const update: Partial<ReturnType<typeof usePlayerStore.getState>> = {
+      myPlayerId: id,
+      myPlayer: null,
+    };
+    if (id) {
+      const players = get().players;
+      const player = players.find((p) => p.id === id);
+      if (player) {
+        update.myPlayer = player;
+      }
+    }
+    set(update);
+  },
 
   updateMyPlayerSectorId: (id: number) => {
     set((state) => ({

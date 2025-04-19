@@ -1,9 +1,10 @@
-import { playersData, SectorsById, sectorsData } from "@/lib/mockData";
+import { SectorsById, sectorsData } from "@/lib/mockData";
 import { FLOOR_CENTER_POSITION } from "@/lib/constants";
 import { PlayerData, SectorData, Vector3Array } from "@/types";
 import PlayerModel from "./PlayerModel";
 import Sector from "./sector/Sector";
 import { calculatePlayerPosition, calculateSectorPosition } from "./utils";
+import usePlayerStore from "@/stores/playerStore";
 
 type SectorPosition =
   | "bottom"
@@ -32,6 +33,7 @@ function SectorWrapper({ sector }: { sector: SectorData }) {
 }
 
 function GameBoard() {
+  const playersData = usePlayerStore((state) => state.players);
   return (
     <group name="board" position={[-FLOOR_CENTER_POSITION, 0, -FLOOR_CENTER_POSITION]}>
       <group name="players">

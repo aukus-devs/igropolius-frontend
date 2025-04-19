@@ -1,7 +1,6 @@
 import { Button } from "./ui/button";
 import usePlayerStore from "@/stores/playerStore";
 import PlayersList from "./core/PlayersList";
-import { playersData } from "@/lib/mockData";
 import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
@@ -11,18 +10,14 @@ function MoveButton() {
   const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
 
   return (
-    <Button
-      variant="outline"
-      onClick={moveMyPlayer}
-      disabled={isPlayerMoving}
-    >
+    <Button variant="outline" onClick={moveMyPlayer} disabled={isPlayerMoving}>
       Ходить
     </Button>
-  )
+  );
 }
 
 function UI() {
-  const players = playersData;
+  const players = usePlayerStore((state) => state.players);
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10 overflow-hidden">
@@ -37,7 +32,6 @@ function UI() {
         <MoveButton />
         <GameReviewForm />
       </div>
-
     </div>
   );
 }

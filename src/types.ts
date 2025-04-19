@@ -68,7 +68,7 @@ export type SectorOwnership = {
 };
 
 export type PlayerData = {
-  id: string;
+  id: number;
   name: string;
   avatar: string;
   color: string;

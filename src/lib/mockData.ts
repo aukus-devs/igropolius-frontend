@@ -329,7 +329,7 @@ export const SectorsById: Record<number, SectorData> = Object.fromEntries(
 
 export const playersData: PlayerData[] = [
   {
-    id: "1",
+    id: 1,
     current_position: 39,
     name: "Player 1",
     avatar: "https://github.com/shadcn.png",
@@ -386,7 +386,7 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "2",
+    id: 2,
     current_position: 25,
     name: "Player 2",
     avatar: "https://github.com/shadcn.png",
@@ -407,7 +407,7 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "3",
+    id: 3,
     current_position: 6,
     name: "Player 3",
     avatar: "https://github.com/shadcn.png",
@@ -422,7 +422,7 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "4",
+    id: 4,
     current_position: 40,
     name: "Player 4",
     avatar: "https://github.com/shadcn.png",
@@ -437,7 +437,7 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "5",
+    id: 5,
     current_position: 1,
     name: "Player 5",
     avatar: "https://github.com/shadcn.png",
@@ -452,7 +452,7 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "6",
+    id: 6,
     current_position: 12,
     name: "Player 6",
     avatar: "https://github.com/shadcn.png",
@@ -467,7 +467,7 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "7",
+    id: 7,
     current_position: 31,
     name: "Player 7",
     avatar: "https://github.com/shadcn.png",
@@ -482,7 +482,7 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "8",
+    id: 8,
     current_position: 17,
     name: "Player 8",
     avatar: "https://github.com/shadcn.png",
