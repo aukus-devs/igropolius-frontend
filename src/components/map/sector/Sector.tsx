@@ -31,7 +31,7 @@ function Sector({ sector, position, rotation }: Props) {
     if (sectorRef.current) addSectorModel(sectorRef.current);
   }, [sectorRef, addSectorModel]);
 
-  const buildings = usePlayerStore((state) => state.buildingsPerSector[sector.id] ?? []);
+  const buildings = usePlayerStore((state) => state.buildingsPerSector[sector.id]) ?? [];
 
   const isCorner = ["prison", "utility"].includes(sector.type);
   const canHaveBuildings = ["property", "railroad"].includes(sector.type);
