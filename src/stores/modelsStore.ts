@@ -3,27 +3,27 @@ import { Group } from "three";
 
 const useModelsStore = create<{
   playersModels: { [key: number]: Group };
-  sectorsModels: { [key: string]: Group };
-  addPlayerModel: (object3D: Group) => void;
+  sectorsModels: { [key: number]: Group };
+  addPlayerModel: (id: number, object3D: Group) => void;
   getPlayerModel: (id: number) => Group;
-  addSectorModel: (object3D: Group) => void;
+  addSectorModel: (id: number, object3D: Group) => void;
   getSectorModel: (id: number) => Group;
 }>((set, get) => ({
   playersModels: {},
   sectorsModels: {},
 
-  getSectorModel: (id) => get().sectorsModels[`sector_${id}`],
+  getSectorModel: (id) => get().sectorsModels[id],
 
-  addSectorModel: (object3D) =>
+  addSectorModel: (id, object3D) =>
     set((state) => ({
-      sectorsModels: { ...state.sectorsModels, [object3D.name]: object3D },
+      sectorsModels: { ...state.sectorsModels, [id]: object3D },
     })),
 
   getPlayerModel: (id) => get().playersModels[id],
 
-  addPlayerModel: (object3D) =>
+  addPlayerModel: (id, object3D) =>
     set((state) => ({
-      playersModels: { ...state.playersModels, [object3D.name]: object3D },
+      playersModels: { ...state.playersModels, [id]: object3D },
     })),
 }));
 
