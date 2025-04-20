@@ -30,6 +30,22 @@ export type ColorName = keyof typeof colors;
 // Type for the values of the map
 export type CellColor = (typeof colors)[ColorName];
 
+export const playerColors = {
+  red: "#FF453A",
+  orange: "#FF9F0A",
+  yellow: "#FFD60A",
+  green: "#30D158",
+  lightBlue: "#64D2FF",
+  blue: "#0A84FF",
+  darkBlue: "#5E5CE6",
+  purple: "#BF5AF2",
+  pink: "#FF375F",
+  brown: "#AC8E68",
+} as const;
+
+export type PlayerColor = keyof typeof playerColors;
+export type PlayerColorValue = (typeof playerColors)[PlayerColor];
+
 export type CellRollType = "auc" | "steam" | "voting";
 
 type Position = {
@@ -91,7 +107,7 @@ export type PlayerData = {
   sector_ownership: SectorOwnership[];
 
   avatar_link: string;
-  color: string;
+  color: PlayerColorValue;
 };
 
 export type Vector3Array = [number, number, number];

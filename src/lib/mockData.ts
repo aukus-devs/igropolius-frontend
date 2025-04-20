@@ -1,4 +1,11 @@
-import { colors, GameReviewType, DeckCardData, PlayerData, SectorData } from "@/types";
+import {
+  colors,
+  GameReviewType,
+  DeckCardData,
+  PlayerData,
+  SectorData,
+  playerColors,
+} from "@/types";
 
 export const sectorsData: SectorData[] = [
   {
@@ -351,7 +358,7 @@ export const playersData: PlayerData[] = [
     total_score: 9999,
 
     avatar_link: "https://github.com/shadcn.png",
-    color: colors.green,
+    color: playerColors.red,
     sector_ownership: [
       {
         sector_id: 38,
@@ -425,7 +432,7 @@ export const playersData: PlayerData[] = [
 
     total_score: 5000,
     avatar_link: "https://github.com/shadcn.png",
-    color: colors.pink,
+    color: playerColors.orange,
     sector_ownership: [
       {
         sector_id: 24,
@@ -488,7 +495,7 @@ export const playersData: PlayerData[] = [
     current_position: 6,
     nickname: "Player-3",
     avatar_link: "https://github.com/shadcn.png",
-    color: colors.orange,
+    color: playerColors.yellow,
 
     first_name: "Илья",
 
@@ -528,7 +535,7 @@ export const playersData: PlayerData[] = [
     current_position: 40,
     nickname: "Player-4",
     avatar_link: "https://github.com/shadcn.png",
-    color: colors.yellow,
+    color: playerColors.green,
 
     first_name: "Илья",
 
@@ -562,7 +569,7 @@ export const playersData: PlayerData[] = [
     current_position: 1,
     nickname: "Player-5",
     avatar_link: "https://github.com/shadcn.png",
-    color: colors.brown,
+    color: playerColors.lightBlue,
 
     first_name: "Илья",
 
@@ -595,7 +602,7 @@ export const playersData: PlayerData[] = [
     current_position: 12,
     nickname: "Player-6",
     avatar_link: "https://github.com/shadcn.png",
-    color: colors.red,
+    color: playerColors.blue,
 
     first_name: "Илья",
 
@@ -628,7 +635,7 @@ export const playersData: PlayerData[] = [
     current_position: 31,
     nickname: "Player-7",
     avatar_link: "https://github.com/shadcn.png",
-    color: colors.blue,
+    color: playerColors.darkBlue,
 
     first_name: "Илья",
 
@@ -661,7 +668,7 @@ export const playersData: PlayerData[] = [
     current_position: 16,
     nickname: "Player-8",
     avatar_link: "https://github.com/shadcn.png",
-    color: colors.lightblue,
+    color: playerColors.purple,
 
     first_name: "Илья",
 
