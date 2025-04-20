@@ -6,6 +6,7 @@ import useModelsStore from "./modelsStore";
 import useDiceStore from "./diceStore";
 import useCameraStore from "./cameraStore";
 import { calculatePlayerPosition } from "@/components/map/utils";
+import { SectorsById, sectorsData } from "@/lib/mockData";
 
 const usePlayerStore = create<{
   myPlayer: PlayerData | null;
@@ -68,7 +69,7 @@ const usePlayerStore = create<{
     if (!myPlayerModel) throw new Error(`Player model not found.`);
 
     let currentSectorId = myPlayer.current_position;
-    let currentSector = sectorsData.find((sector) => sector.id === currentSectorId);
+    let currentSector = SectorsById[currentSectorId];
     if (!currentSector) throw new Error(`Current sector not found.`);
 
     set({ isPlayerMoving: true });

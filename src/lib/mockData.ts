@@ -1,10 +1,4 @@
-import {
-  colors,
-  GameReviewType,
-  DeckCardData,
-  PlayerData,
-  SectorData,
-} from "@/types";
+import { colors, GameReviewType, DeckCardData, PlayerData, SectorData } from "@/types";
 
 export const sectorsData: SectorData[] = [
   {
@@ -330,7 +324,7 @@ export const sectorsData: SectorData[] = [
 ];
 
 export const SectorsById: Record<number, SectorData> = Object.fromEntries(
-  sectorsData.map((sector) => [sector.id, sector])
+  sectorsData.map((sector) => [sector.id, sector]),
 );
 
 export const playersData: PlayerData[] = [
@@ -339,7 +333,7 @@ export const playersData: PlayerData[] = [
     nickname: "Praden",
     first_name: "Денис",
     is_online: true,
-    current_position: 7,
+    current_position: 5,
 
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
@@ -730,8 +724,7 @@ export const deckCardsData: DeckCardData[] = [
     id: "5",
     name: "Чето пока нехочу)))",
     picture: "https://placehold.co/744x1039/FF375F/white",
-    description:
-      "Реролл игры из стима - используется после ролла игры, но до ее запуска.",
+    description: "Реролл игры из стима - используется после ролла игры, но до ее запуска.",
   },
   {
     id: "6",
