@@ -1,26 +1,31 @@
-import { GameLengthToBuildingType, SECTOR_OFFSET, SECTOR_WIDTH } from "@/lib/constants";
-import { myPlayerData, sectorsData } from "@/lib/mockData";
+import { GameLengthToBuildingType } from "@/lib/constants";
+import { sectorsData } from "@/lib/mockData";
 import { BuildingData, PlayerData } from "@/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
 import useDiceStore from "./diceStore";
 import useCameraStore from "./cameraStore";
+import { calculatePlayerPosition } from "@/components/map/utils";
 
 const usePlayerStore = create<{
   myPlayer: PlayerData | null;
   isPlayerMoving: boolean;
   players: PlayerData[];
   buildingsPerSector: Record<number, BuildingData[]>;
+  setMyPlayer: (player: PlayerData) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: PlayerData[]) => void;
   moveMyPlayer: () => Promise<void>;
-  getBuildings: (sectorId: number) => BuildingData[];
 }>((set, get) => ({
-  myPlayer: myPlayerData,
+  myPlayer: null,
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
+
+  setMyPlayer: (player: PlayerData) => {
+    set({ myPlayer: player });
+  },
 
   updateMyPlayerSectorId: (id: number) => {
     set((state) => ({
@@ -56,11 +61,6 @@ const usePlayerStore = create<{
     set({ players, buildingsPerSector: buildings });
   },
 
-  getBuildings: (sectorId: number) => {
-    const buildings = get().buildingsPerSector[sectorId];
-    return buildings || [];
-  },
-
   moveMyPlayer: async () => {
     const { myPlayer } = get();
     if (!myPlayer) throw new Error(`Player not found.`);
@@ -85,27 +85,12 @@ const usePlayerStore = create<{
       if (!nextSector)
         throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
 
-      const directionX = nextSector.position.x - currentSector.position.x;
-      const directionY = nextSector.position.y - currentSector.position.y;
-      const nextX = (currentSector.position.x + directionX) * SECTOR_WIDTH;
-      const nextY = (currentSector.position.y + directionY) * SECTOR_WIDTH;
-      const offsetX =
-        nextSector.position.x === 0
-          ? -SECTOR_OFFSET * 2.5
-          : nextSector.position.x === 10
-            ? SECTOR_OFFSET * 2.5
-            : 0;
-      const offsetY =
-        nextSector.position.y === 0
-          ? -SECTOR_OFFSET * 2.5
-          : nextSector.position.y === 10
-            ? SECTOR_OFFSET * 2.5
-            : 0;
+      const nextPosition = calculatePlayerPosition(nextSector);
 
       tl.add(myPlayerModel.position, {
-        x: nextX + offsetX,
+        x: nextPosition[0],
         y: [myPlayerModel.position.y, myPlayerModel.position.y + 1.5, myPlayerModel.position.y],
-        z: nextY + offsetY,
+        z: nextPosition[2],
         duration: 500,
       });
 

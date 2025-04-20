@@ -1,11 +1,17 @@
-import { colors, GameReviewType, PlayerData, SectorData } from "@/types";
+import {
+  colors,
+  GameReviewType,
+  DeckCardData,
+  PlayerData,
+  SectorData,
+} from "@/types";
 
 export const sectorsData: SectorData[] = [
   {
     id: 1,
     name: "GO",
     position: { x: 0, y: 0 },
-    type: "corner",
+    type: "utility",
     color: colors.pastelgreen,
     rollType: "voting",
   },
@@ -21,7 +27,7 @@ export const sectorsData: SectorData[] = [
     id: 3,
     name: "Community Chest 1",
     position: { x: 2, y: 0 },
-    type: "community_chest",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -61,7 +67,7 @@ export const sectorsData: SectorData[] = [
     id: 8,
     name: "Chance 1",
     position: { x: 7, y: 0 },
-    type: "chance",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -85,7 +91,7 @@ export const sectorsData: SectorData[] = [
     id: 11,
     name: "Jail / Just Visiting",
     position: { x: 10, y: 0 },
-    type: "corner",
+    type: "prison",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -101,7 +107,7 @@ export const sectorsData: SectorData[] = [
     id: 13,
     name: "Electric Company",
     position: { x: 10, y: 2 },
-    type: "utility",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -141,7 +147,7 @@ export const sectorsData: SectorData[] = [
     id: 18,
     name: "Community Chest 2",
     position: { x: 10, y: 7 },
-    type: "community_chest",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -165,7 +171,7 @@ export const sectorsData: SectorData[] = [
     id: 21,
     name: "Free Parking",
     position: { x: 10, y: 10 },
-    type: "corner",
+    type: "utility",
     color: colors.pastelgreen,
     rollType: "voting",
   },
@@ -181,7 +187,7 @@ export const sectorsData: SectorData[] = [
     id: 23,
     name: "Chance 2",
     position: { x: 8, y: 10 },
-    type: "chance",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -229,7 +235,7 @@ export const sectorsData: SectorData[] = [
     id: 29,
     name: "Water Works",
     position: { x: 2, y: 10 },
-    type: "utility",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -245,7 +251,7 @@ export const sectorsData: SectorData[] = [
     id: 31,
     name: "Go To Jail",
     position: { x: 0, y: 10 },
-    type: "corner",
+    type: "prison",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -269,7 +275,7 @@ export const sectorsData: SectorData[] = [
     id: 34,
     name: "Community Chest 3",
     position: { x: 0, y: 7 },
-    type: "community_chest",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -293,7 +299,7 @@ export const sectorsData: SectorData[] = [
     id: 37,
     name: "Chance 3",
     position: { x: 0, y: 4 },
-    type: "chance",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -309,7 +315,7 @@ export const sectorsData: SectorData[] = [
     id: 39,
     name: "Luxury Tax",
     position: { x: 0, y: 2 },
-    type: "tax",
+    type: "bonus",
     color: colors.pastelgreen,
     rollType: "steam",
   },
@@ -323,12 +329,34 @@ export const sectorsData: SectorData[] = [
   },
 ];
 
+export const SectorsById: Record<number, SectorData> = Object.fromEntries(
+  sectorsData.map((sector) => [sector.id, sector])
+);
+
 export const playersData: PlayerData[] = [
   {
-    id: "1",
-    current_position: 39,
-    name: "Player 1",
-    avatar: "https://github.com/shadcn.png",
+    id: 1,
+    nickname: "Praden",
+    first_name: "Денис",
+    is_online: true,
+    current_position: 7,
+
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 9999,
+
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.green,
     sector_ownership: [
       {
@@ -382,10 +410,27 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "2",
+    id: 2,
     current_position: 25,
-    name: "Player 2",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-2",
+    first_name: "Илья",
+
+    is_online: false,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 5000,
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.pink,
     sector_ownership: [
       {
@@ -445,11 +490,30 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "3",
+    id: 3,
     current_position: 6,
-    name: "Player 3",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-3",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.orange,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
+
     sector_ownership: [
       {
         sector_id: 2,
@@ -466,11 +530,30 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "4",
+    id: 4,
     current_position: 40,
-    name: "Player 4",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-4",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.yellow,
+
+    first_name: "Илья",
+
+    is_online: false,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
+
     sector_ownership: [
       {
         sector_id: 2,
@@ -481,11 +564,29 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "5",
+    id: 5,
     current_position: 1,
-    name: "Player 5",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-5",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.brown,
+
+    first_name: "Илья",
+
+    is_online: false,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
     sector_ownership: [
       {
         sector_id: 2,
@@ -496,11 +597,29 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "6",
+    id: 6,
     current_position: 12,
-    name: "Player 6",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-6",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.red,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
     sector_ownership: [
       {
         sector_id: 10,
@@ -511,11 +630,29 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "7",
+    id: 7,
     current_position: 31,
-    name: "Player 7",
-    avatar: "https://github.com/shadcn.png",
+    nickname: "Player-7",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.blue,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
     sector_ownership: [
       {
         sector_id: 10,
@@ -526,11 +663,29 @@ export const playersData: PlayerData[] = [
     ],
   },
   {
-    id: "8",
-    current_position: 17,
-    name: "Player 8",
-    avatar: "https://github.com/shadcn.png",
+    id: 8,
+    current_position: 16,
+    nickname: "Player-8",
+    avatar_link: "https://github.com/shadcn.png",
     color: colors.lightblue,
+
+    first_name: "Илья",
+
+    is_online: true,
+    current_game: "Gothic",
+    current_game_updated_at: Math.ceil(Date.now() / 1000),
+    online_count: 50,
+    current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_auc_total_sum: null,
+    pointauc_token: "abc",
+
+    twitch_stream_link: "https://twitch.tv/praden",
+    vk_stream_link: "https://vkvideo.com/praden",
+    kick_stream_link: "https://kick.com/praden",
+    telegram_link: "https://t.me/praden",
+    donation_link: "https://donate.praden.com",
+
+    total_score: 200,
     sector_ownership: [
       {
         sector_id: 10,
@@ -539,6 +694,51 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+  },
+];
+
+export const deckCardsData: DeckCardData[] = [
+  {
+    id: "1",
+    name: "Плюс один или минус один",
+    picture: "https://placehold.co/744x1039/FF453A/white",
+    description:
+      "Возможность добавить/убавить 1 у кубика - после ролла кубикова, но перед началом движения изменить результат кубика.",
+  },
+  {
+    id: "2",
+    name: "Только 1 кубик",
+    picture: "https://placehold.co/744x1039/0A84FF/white",
+    description:
+      "Возможность выбрать только один кубик из трех и сходить на данное значение - после ролла кубикова, но перед началом движения выбрать один кубик.",
+  },
+  {
+    id: "3",
+    name: "Сквотируемся",
+    picture: "https://placehold.co/744x1039/30D158/white",
+    description:
+      "Нет 'арендной платы' на улице - Перед попаданием на клетку с чужими постройками, можно активировать карточку и не платить арендную плату.",
+  },
+  {
+    id: "4",
+    name: "Хорошее поведение",
+    picture: "https://placehold.co/744x1039/BF5AF2/white",
+    description:
+      "Минус день тюрьмы - можно использовать на клетке 'тюрьма' и 'посещение тюрьмы', как до, так и после ролла игры для того, чтобы покинуть тюрьму.",
+  },
+  {
+    id: "5",
+    name: "Чето пока нехочу)))",
+    picture: "https://placehold.co/744x1039/FF375F/white",
+    description:
+      "Реролл игры из стима - используется после ролла игры, но до ее запуска.",
+  },
+  {
+    id: "6",
+    name: "Без налога",
+    picture: "https://placehold.co/744x1039/FFD60A/white",
+    description:
+      "Нет 'налога' за круг - при использовании освобождает от арендной платы после прохождения круга.",
   },
 ];
 

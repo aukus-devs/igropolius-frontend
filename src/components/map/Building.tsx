@@ -1,4 +1,4 @@
-import { BUILDING_ELEVATION } from "@/lib/constants";
+import { SECTOR_CONTENT_ELEVATION } from "@/lib/constants";
 import { BuildingType, CellColor, Vector3Array } from "@/types";
 import { Gltf } from "@react-three/drei";
 import { eases } from "animejs";
@@ -43,7 +43,7 @@ function animateAppearance(model: THREE.Group) {
   model.position.y = -5.5;
 
   animate(model.position, {
-    y: BUILDING_ELEVATION,
+    y: SECTOR_CONTENT_ELEVATION,
     ease: eases.inOutCubic,
     duration: 3000,
     // loop: true,

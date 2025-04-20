@@ -2,12 +2,16 @@ import { SectorData, Vector3Array } from "@/types";
 import { useEffect, useRef } from "react";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
-import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH } from "@/lib/constants";
+import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH, TrainsConfig } from "@/lib/constants";
 import SectorInfo from "./SectorInfo";
 import SectorBase from "./SectorBase";
 import SectorText from "./SectorText";
 import SectorBuildings from "./SectorBuildings";
 import usePlayerStore from "@/stores/playerStore";
+import TrainModel from "./TrainModel";
+import PrisonModel from "./PrisonModel";
+import FlagModel from "./FlagModel";
+import BonusWheelModel from "./BonusWheelModel";
 
 type Props = {
   sector: SectorData;
@@ -20,19 +24,24 @@ function Sector({ sector, position, rotation }: Props) {
   const addSectorModel = useModelsStore((state) => state.addSectorModel);
   const sectorRef = useRef<Group | null>(null);
 
-  const getBuildings = usePlayerStore((state) => state.getBuildings);
-
-  const isCorner = sector.type === "corner";
-  const canHaveBuildings = ["property", "railroad"].includes(sector.type);
-  const shape: Vector3Array = isCorner
-    ? [SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_DEPTH]
-    : [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH];
-
   useEffect(() => {
     if (sectorRef.current) addSectorModel(sectorRef.current);
   }, [sectorRef, addSectorModel]);
 
-  const buildings = getBuildings(sector.id);
+  const buildings = usePlayerStore((state) => state.buildingsPerSector[sector.id]) ?? [];
+
+  const isCorner = ["prison", "utility"].includes(sector.type);
+  const canHaveBuildings = ["property", "railroad"].includes(sector.type);
+  const showColorGroup = sector.type === "property";
+  const shape: Vector3Array = isCorner
+    ? [SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_DEPTH]
+    : [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH];
+
+  const isPrison = sector.type === "prison";
+  const train = TrainsConfig.find((train) => train.sectorFrom === sector.id);
+  const isStart = sector.id === 1;
+  const isTopLeftCorner = sector.id === 21;
+  const isBonusSector = sector.type === "bonus";
 
   return (
     <group
@@ -44,13 +53,18 @@ function Sector({ sector, position, rotation }: Props) {
       <SectorInfo sector={sector} />
 
       {canHaveBuildings && <SectorBuildings buildings={buildings} />}
+      {train && <TrainModel train={train} />}
+      {isPrison && <PrisonModel />}
       <SectorText text={`${sector.id}`} isCorner={isCorner} />
+      {isStart && <FlagModel />}
+      {isTopLeftCorner && <FlagModel />}
+      {isBonusSector && <BonusWheelModel />}
 
       <SectorBase
         id={sector.id}
         color={sector.color}
         shape={shape}
-        canHaveBuildings={canHaveBuildings}
+        showColorGroup={showColorGroup}
       />
     </group>
   );

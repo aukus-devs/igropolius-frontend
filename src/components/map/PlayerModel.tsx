@@ -1,5 +1,4 @@
 import { PLAYER_HEIGHT } from "@/lib/constants";
-import { myPlayerData } from "@/lib/mockData";
 import useModelsStore from "@/stores/modelsStore";
 import { PlayerData, Vector3Array } from "@/types";
 import { ThreeEvent } from "@react-three/fiber";
@@ -7,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { Group } from "three";
 import DiceModel from "./DiceModel";
 import MovesCounter from "./MovesCounter";
+import usePlayerStore from "@/stores/playerStore";
 
 type Props = {
   player: PlayerData;
@@ -25,17 +25,17 @@ function MyPlayerComponents() {
 
 function PlayerModel({ player, position, onClick }: Props) {
   const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
+  const isMyPlayer = usePlayerStore((state) => state.myPlayer?.id === player.id);
   const playerObjectRef = useRef<Group | null>(null);
-  const isMyPlayer = player.id === myPlayerData.id;
 
   useEffect(() => {
     if (playerObjectRef.current) {
       addPlayerModel(playerObjectRef.current);
     }
-  }, [player.id, addPlayerModel]);
+  }, [playerObjectRef, addPlayerModel]);
 
   return (
-    <group ref={playerObjectRef} name={player.id} position={position}>
+    <group ref={playerObjectRef} name={`${player.id}`} position={position}>
       {isMyPlayer && <MyPlayerComponents />}
       <mesh onClick={(e) => (e.stopPropagation(), onClick?.(e))} castShadow receiveShadow>
         <capsuleGeometry args={[0.5, PLAYER_HEIGHT, 1]} />

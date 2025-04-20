@@ -2,13 +2,7 @@ import { ChevronDownIcon, HeartIcon, NotebookTextIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { cn } from "@/lib/utils";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import usePlayerStore from "@/stores/playerStore";
 
@@ -17,7 +11,7 @@ const sharedStyles =
 
 function QuickMenu() {
   const myPlayer = usePlayerStore((state) => state.myPlayer);
-  const playerName = myPlayer ? myPlayer.name : "Зритель";
+  const playerName = myPlayer ? myPlayer.nickname : "Зритель";
 
   return (
     <>
@@ -28,12 +22,16 @@ function QuickMenu() {
               <div className="flex gap-2 items-center font-bold">
                 <Avatar className="w-6 h-6">
                   <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback className="bg-primary-foreground uppercase">{myPlayer.name.slice(0, 2)}</AvatarFallback>
+                  <AvatarFallback className="bg-primary-foreground uppercase">
+                    {myPlayer.nickname.slice(0, 2)}
+                  </AvatarFallback>
                 </Avatar>
-                {myPlayer.name}
+                {myPlayer.nickname}
               </div>
             )}
-            <div className={`flex gap-1 items-center font-semibold text-muted-foreground ${myPlayer ? "" : "justify-between w-full"}`}>
+            <div
+              className={`flex gap-1 items-center font-semibold text-muted-foreground ${myPlayer ? "" : "justify-between w-full"}`}
+            >
               Меню
               <ChevronDownIcon className="h-4 w-4" />
             </div>
@@ -55,9 +53,7 @@ function QuickMenu() {
                 </DialogTitle>
               </DialogHeader>
 
-              <div>
-
-              </div>
+              <div></div>
             </DialogContent>
           </Dialog>
           <Button variant="outline" className={sharedStyles}>

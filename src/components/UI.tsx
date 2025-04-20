@@ -1,28 +1,24 @@
 import { Button } from "./ui/button";
 import usePlayerStore from "@/stores/playerStore";
 import PlayersList from "./core/PlayersList";
-import { playersData } from "@/lib/mockData";
 import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
+import RollDeckCard from "./core/RollDeckCard";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
   const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
 
   return (
-    <Button
-      variant="outline"
-      onClick={moveMyPlayer}
-      disabled={isPlayerMoving}
-    >
+    <Button variant="outline" onClick={moveMyPlayer} disabled={isPlayerMoving}>
       Ходить
     </Button>
-  )
+  );
 }
 
 function UI() {
-  const players = playersData;
+  const players = usePlayerStore((state) => state.players);
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10 overflow-hidden">
@@ -36,8 +32,8 @@ function UI() {
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         <MoveButton />
         <GameReviewForm />
+        <RollDeckCard />
       </div>
-
     </div>
   );
 }

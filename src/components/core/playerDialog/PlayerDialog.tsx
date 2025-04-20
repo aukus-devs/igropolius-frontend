@@ -2,7 +2,13 @@ import { PlayerData } from "@/types";
 import { MapPinIcon } from "lucide-react";
 import useCameraStore from "@/stores/cameraStore";
 import { Button } from "../../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../ui/dialog";
 import PlayerDialogTrigger from "./PlayerDialogTrigger";
 import PlayerDialogTabs from "./tabs/PlayerDialogTabs";
 import { mockReviews } from "@/lib/mockData";
@@ -17,16 +23,15 @@ type Props = {
 
 function PlayerDialog({ player, placement }: Props) {
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
-  const { current_position, name, avatar } = player;
+  const { current_position, nickname, avatar_link } = player;
 
-  const randomPoints = Math.floor(Math.random() * 9999);
-  const mockSocials = ['twitch.tv', 'youtube.com', 'donationalerts.com'];
+  const mockSocials = ["twitch.tv", "youtube.com", "donationalerts.com"];
 
   return (
     <div className="group relative">
       <Dialog>
         <DialogTrigger>
-          <PlayerDialogTrigger name={name} avatar={avatar} placement={placement} pointsAmount={randomPoints} />
+          <PlayerDialogTrigger player={player} placement={placement} />
         </DialogTrigger>
         <DialogContent
           className="flex flex-col gap-8 h-[660px] p-0 overflow-hidden"
@@ -39,7 +44,7 @@ function PlayerDialog({ player, placement }: Props) {
               </DialogTitle>
             </DialogHeader>
 
-            <PlayerDialogHero name={name} avatar={avatar} socials={mockSocials} />
+            <PlayerDialogHero name={nickname} avatar={avatar_link} socials={mockSocials} />
             <PlayerDialogTabs reviews={mockReviews} />
           </ScrollArea>
         </DialogContent>
@@ -51,7 +56,9 @@ function PlayerDialog({ player, placement }: Props) {
         <MapPinIcon className="mt-1 self-start" />
         <div>
           <div className="flex items-center gap-1 font-bold">Показать на карте</div>
-          <div className="text-muted-foreground text-sm justify-self-start">{current_position} клетка</div>
+          <div className="text-muted-foreground text-sm justify-self-start">
+            {current_position} клетка
+          </div>
         </div>
       </Button>
     </div>

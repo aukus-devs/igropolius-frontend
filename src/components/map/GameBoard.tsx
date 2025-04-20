@@ -1,14 +1,10 @@
-import { playersData, sectorsData } from "@/lib/mockData";
-import {
-  FLOOR_CENTER_POSITION,
-  PLAYER_ELEVATION,
-  SECTOR_ELEVATION,
-  SECTOR_OFFSET,
-  SECTOR_WIDTH,
-} from "@/lib/constants";
+import { SectorsById, sectorsData } from "@/lib/mockData";
+import { FLOOR_CENTER_POSITION } from "@/lib/constants";
 import { PlayerData, SectorData, Vector3Array } from "@/types";
 import PlayerModel from "./PlayerModel";
 import Sector from "./sector/Sector";
+import { calculatePlayerPosition, calculateSectorPosition } from "./utils";
+import usePlayerStore from "@/stores/playerStore";
 
 type SectorPosition =
   | "bottom"
@@ -21,23 +17,23 @@ type SectorPosition =
   | "top-right";
 
 function PlayerWrapper({ player }: { player: PlayerData }) {
-  const sector = sectorsData.find((s) => s.id === player.current_position);
+  const sector = SectorsById[player.current_position];
   if (!sector) throw new Error(`Sector with id ${player.current_position} not found`);
 
-  const position = calculatePosition(sector.position, "player");
-
+  const position = calculatePlayerPosition(sector);
   return <PlayerModel player={player} position={position} />;
 }
 
 function SectorWrapper({ sector }: { sector: SectorData }) {
   const sectorSide = getSectorSide(sector);
-  const position = calculatePosition(sector.position, "sector");
+  const position = calculateSectorPosition(sector);
   const rotation = getSectorRotation(sectorSide);
 
   return <Sector sector={sector} position={position} rotation={rotation} />;
 }
 
 function GameBoard() {
+  const playersData = usePlayerStore((state) => state.players);
   return (
     <group name="board" position={[-FLOOR_CENTER_POSITION, 0, -FLOOR_CENTER_POSITION]}>
       <group name="players">
@@ -47,28 +43,12 @@ function GameBoard() {
       </group>
 
       <group name="sectors">
-        <instancedMesh args={[undefined, undefined, sectorsData.length]}>
-          {sectorsData.map((sector) => (
-            <SectorWrapper key={sector.id} sector={sector} />
-          ))}
-        </instancedMesh>
+        {sectorsData.map((sector) => (
+          <SectorWrapper key={sector.id} sector={sector} />
+        ))}
       </group>
     </group>
   );
-}
-
-function calculatePosition(
-  position: SectorData["position"],
-  type: "player" | "sector",
-): Vector3Array {
-  const offset = type === "player" ? SECTOR_OFFSET * 2.5 : SECTOR_OFFSET;
-  const elevation = type === "player" ? PLAYER_ELEVATION : SECTOR_ELEVATION;
-
-  return [
-    position.x * SECTOR_WIDTH + (position.x === 0 ? -offset : position.x === 10 ? offset : 0),
-    elevation,
-    position.y * SECTOR_WIDTH + (position.y === 0 ? -offset : position.y === 10 ? offset : 0),
-  ];
 }
 
 function getSectorRotation(position: SectorPosition): Vector3Array {
