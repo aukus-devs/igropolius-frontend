@@ -1,5 +1,4 @@
 import { GameLengthToBuildingType } from "@/lib/constants";
-import { sectorsData } from "@/lib/mockData";
 import { BuildingData, PlayerData } from "@/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
@@ -51,7 +50,7 @@ const usePlayerStore = create<{
           gameTitle: building.game_title,
         });
       }
-    };
+    }
 
     // sort all buildings values by createdAt
     for (const building of Object.values(buildings)) {
@@ -89,7 +88,11 @@ const usePlayerStore = create<{
 
       tl.add(myPlayerModel.position, {
         x: nextPosition[0],
-        y: [myPlayerModel.position.y, myPlayerModel.position.y + 1.5, myPlayerModel.position.y],
+        y: [
+          myPlayerModel.position.y,
+          myPlayerModel.position.y + 1.5,
+          myPlayerModel.position.y,
+        ],
         z: nextPosition[2],
         duration: 500,
       });
