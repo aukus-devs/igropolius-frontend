@@ -5,20 +5,17 @@ import { playersData } from "@/lib/mockData";
 import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
+import RollDeckCard from "./core/RollDeckCard";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
   const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
 
   return (
-    <Button
-      variant="outline"
-      onClick={moveMyPlayer}
-      disabled={isPlayerMoving}
-    >
+    <Button variant="outline" onClick={moveMyPlayer} disabled={isPlayerMoving}>
       Ходить
     </Button>
-  )
+  );
 }
 
 function UI() {
@@ -36,8 +33,8 @@ function UI() {
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         <MoveButton />
         <GameReviewForm />
+        <RollDeckCard />
       </div>
-
     </div>
   );
 }

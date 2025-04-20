@@ -39,7 +39,14 @@ type Position = {
 
 export type SectorData = {
   id: number;
-  type: "corner" | "property" | "community_chest" | "tax" | "railroad" | "chance" | "utility";
+  type:
+    | "corner"
+    | "property"
+    | "community_chest"
+    | "tax"
+    | "railroad"
+    | "chance"
+    | "utility";
   name: string;
   position: Position;
   color: CellColor;
@@ -64,6 +71,13 @@ export type PlayerData = {
 };
 
 export type Vector3Array = [number, number, number];
+
+export type DeckCardData = {
+  id: string;
+  name: string;
+  picture: string;
+  description: string;
+};
 
 export type BuildingType =
   | "ruins"
