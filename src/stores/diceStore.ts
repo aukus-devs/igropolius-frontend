@@ -48,9 +48,9 @@ function animateDice(model: Group) {
       easing: 'easeInOutCubic',
     })
     .add(model.rotation, {
-      x: xRotation,
-      y: yRotation,
-      z: zRotation,
+      x: [0, xRotation],
+      y: [0, yRotation],
+      z: [0, zRotation],
       duration: 1000,
       easing: 'easeInOutQuad',
     })

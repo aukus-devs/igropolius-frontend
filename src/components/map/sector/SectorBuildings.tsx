@@ -7,21 +7,21 @@ type Props = {
 };
 
 const BuildingPositions: Vector3Array[] = [
-  [2, BUILDING_ELEVATION, 5],
-  [0.5, BUILDING_ELEVATION, 5],
-  [-1, BUILDING_ELEVATION, 5],
-  [2, BUILDING_ELEVATION, 3.5],
-  [0.5, BUILDING_ELEVATION, 3.5],
-  [-1, BUILDING_ELEVATION, 3.5],
-  [2, BUILDING_ELEVATION, 2],
-  [0.5, BUILDING_ELEVATION, 2],
-  [-1, BUILDING_ELEVATION, 2],
-  [2, BUILDING_ELEVATION, 0.5],
-  [0.5, BUILDING_ELEVATION, 0.5],
-  [-1, BUILDING_ELEVATION, 0.5],
-  [2, BUILDING_ELEVATION, -1],
-  [0.5, BUILDING_ELEVATION, -1],
-  [-1, BUILDING_ELEVATION, -1],
+  [1.5, BUILDING_ELEVATION, 4.5],
+  [0, BUILDING_ELEVATION, 4.5],
+  [-1.5, BUILDING_ELEVATION, 4.5],
+  [1.5, BUILDING_ELEVATION, 3],
+  [0, BUILDING_ELEVATION, 3],
+  [-1.5, BUILDING_ELEVATION, 3],
+  [1.5, BUILDING_ELEVATION, 1.5],
+  [0, BUILDING_ELEVATION, 1.5],
+  [-1.5, BUILDING_ELEVATION, 1.5],
+  [1.5, BUILDING_ELEVATION, 0],
+  [0, BUILDING_ELEVATION, 0],
+  [-1.5, BUILDING_ELEVATION, 0],
+  [1.5, BUILDING_ELEVATION, -1.5],
+  [0, BUILDING_ELEVATION, -1.5],
+  [-1.5, BUILDING_ELEVATION, -1.5],
 ];
 
 function SectorBuildings({ buildings }: Props) {
@@ -29,10 +29,7 @@ function SectorBuildings({ buildings }: Props) {
     <group name="buildings">
       {buildings.map((building, index) => {
         const position = BuildingPositions[index];
-        if (!position) {
-          console.warn(`No position found for building at index ${index}`);
-          return null;
-        }
+        if (!position) throw new Error((`No position found for building at index ${index}`));
 
         return (
           <Building

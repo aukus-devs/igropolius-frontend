@@ -51,7 +51,7 @@ function QuickMenu() {
               <DialogHeader>
                 <DialogTitle className="flel flex-col font-black text-[2rem]">
                   <div>Добро пожаловать в Millionaire Boys Club,</div>
-                  <div className="text-primary-foreground">{playerName}</div>
+                  <div className="text-primary">{playerName}</div>
                 </DialogTitle>
               </DialogHeader>
 

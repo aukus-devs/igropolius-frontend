@@ -1,5 +1,4 @@
 import { SectorData, Vector3Array } from "@/types";
-import { ThreeEvent } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
@@ -15,9 +14,6 @@ type Props = {
   position: Vector3Array;
   rotation: Vector3Array;
   isSelected?: boolean;
-  onClick?: (e: ThreeEvent<MouseEvent>) => void;
-  onPointerOver?: (e: ThreeEvent<PointerEvent>) => void;
-  onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
 };
 
 function Sector({ sector, position, rotation }: Props) {
@@ -45,7 +41,7 @@ function Sector({ sector, position, rotation }: Props) {
       position={position}
       rotation={rotation}
     >
-      <SectorInfo id={sector.id} />
+      <SectorInfo sector={sector} />
 
       {canHaveBuildings && <SectorBuildings buildings={buildings} />}
       <SectorText text={`${sector.id}`} isCorner={isCorner} />

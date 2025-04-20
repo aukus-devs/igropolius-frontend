@@ -1,27 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useSectorStore from "@/stores/sectorStore";
+import { SectorData } from "@/types";
 import { Html } from "@react-three/drei";
 
 type Props = {
-  id: number;
+  sector: SectorData;
 };
 
-function SectorInfo({ id }: Props) {
-  const selectedSector = useSectorStore((state) => state.selectedSector);
+function SectorInfo({ sector }: Props) {
+  const { id, name, type, rollType } = sector;
   const isSelected = useSectorStore((state) => state.selectedSector?.id === id);
 
   return (
     <>
       <Html pointerEvents="none" style={{ pointerEvents: "none" }} center position={[0, 10, 0]}>
-        {selectedSector && isSelected && (
+        {isSelected && (
           <Card className="w-52 pointer-events-none">
             <CardHeader>
-              <CardTitle>{selectedSector.name}</CardTitle>
-              <p className="text-xs text-muted-foreground">#{selectedSector.id}</p>
+              <CardTitle>{name}</CardTitle>
+              <p className="text-xs text-muted-foreground">#{id}</p>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">Тип: {selectedSector.type}</p>
-              <p className="text-sm">Ролл игры: {selectedSector.rollType}</p>
+              <p className="text-sm">Тип: {type}</p>
+              <p className="text-sm">Ролл игры: {rollType}</p>
             </CardContent>
           </Card>
         )}

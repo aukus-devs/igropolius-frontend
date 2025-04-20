@@ -14,7 +14,7 @@ type Props = {
 }
 
 function SectorColoredPlatform({ color }: { color: string }) {
-  const shape: Vector3Array = [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 15];
+  const shape: Vector3Array = [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 25];
   const position: Vector3Array = [0, 0, -SECTOR_DEPTH / 2 + shape[2] / 2];
 
   return (
@@ -33,7 +33,7 @@ function SectorMainPlatform({ id, shape, canHaveBuildings }: Omit<Props, 'color'
   const platform = useMemo(() => {
     const color = new Color(colors.pastelgreen);
     const finalShape: Vector3Array = canHaveBuildings
-      ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 85]
+      ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 75]
       : shape;
     const position: Vector3Array = canHaveBuildings
       ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
@@ -55,11 +55,7 @@ function SectorMainPlatform({ id, shape, canHaveBuildings }: Omit<Props, 'color'
     material.emissive.lerp(isSelected ? EMISSION_FULL : EMISSION_NONE, 0.1);
   });
 
-  return (
-    <>
-      {platform}
-    </>
-  )
+  return <>{platform}</>
 }
 
 function SectorBase({ id, color, shape, canHaveBuildings }: Props) {

@@ -61,7 +61,7 @@ function calculatePosition(
   position: SectorData["position"],
   type: "player" | "sector",
 ): Vector3Array {
-  const offset = type === "player" ? SECTOR_OFFSET * 2 : SECTOR_OFFSET;
+  const offset = type === "player" ? SECTOR_OFFSET * 2.5 : SECTOR_OFFSET;
   const elevation = type === "player" ? PLAYER_ELEVATION : SECTOR_ELEVATION;
 
   return [
