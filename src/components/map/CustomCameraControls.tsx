@@ -1,4 +1,7 @@
-import { CameraControls as CameraControlsComponent, useKeyboardControls } from "@react-three/drei";
+import {
+  CameraControls as CameraControlsComponent,
+  useKeyboardControls,
+} from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import CameraControls from "camera-controls";
@@ -21,7 +24,7 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
       const boundarySize = FLOOR_SIZE / 2 + SECTOR_WIDTH * 2;
       const bb = new Box3(
         new Vector3(-boundarySize, 1, -boundarySize),
-        new Vector3(boundarySize, boundarySize, boundarySize)
+        new Vector3(boundarySize, boundarySize, boundarySize),
       );
       // const helper = new Box3Helper(bb, 0xffff00);
       // scene.add(helper);
@@ -55,6 +58,7 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
         maxDistance={120}
         maxZoom={120}
         maxPolarAngle={Math.PI / 2}
+        smoothTime={0.2}
       />
     </>
   );
