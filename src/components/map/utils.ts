@@ -12,38 +12,50 @@ export function calculateSectorPosition(sector: SectorData): Vector3Array {
   const offset = SECTOR_OFFSET;
   const elevation = SECTOR_ELEVATION;
 
-  const cornerOffset = offset * 2;
+  const halfWidth = SECTOR_WIDTH / 2;
+
+  const cornerOffset = offset;
 
   return [
     sector.position.x * SECTOR_WIDTH +
-    (sector.position.x === 0 ? -cornerOffset : sector.position.x === 10 ? 0 : -offset),
+      (sector.position.x === 0
+        ? -cornerOffset
+        : sector.position.x === 10
+          ? (SECTOR_DEPTH - SECTOR_WIDTH * 2) / 2
+          : -halfWidth),
     elevation,
     sector.position.y * SECTOR_WIDTH +
-    (sector.position.y === 0 ? -cornerOffset : sector.position.y === 10 ? 0 : -offset),
+      (sector.position.y === 0
+        ? -cornerOffset
+        : sector.position.y === 10
+          ? (SECTOR_DEPTH - SECTOR_WIDTH * 2) / 2
+          : -halfWidth),
   ];
 }
 
 export function calculatePlayerPosition(sector: SectorData): Vector3Array {
   const offset = SECTOR_OFFSET;
   const elevation = PLAYER_ELEVATION;
-  const cornerOffset = offset * 2;
+  const cornerOffset = offset;
 
-  const movePlayerDown = -SECTOR_DEPTH / 2 + 1.5;
+  const halfWidth = SECTOR_WIDTH / 2;
+
+  const movePlayerDown = -SECTOR_DEPTH / 2 + 6;
 
   return [
     sector.position.x * SECTOR_WIDTH +
-    (sector.position.x === 0
-      ? -cornerOffset + movePlayerDown
-      : sector.position.x === 10
-        ? -movePlayerDown
-        : -offset),
+      (sector.position.x === 0
+        ? -cornerOffset + movePlayerDown
+        : sector.position.x === 10
+          ? -movePlayerDown
+          : -halfWidth),
     elevation,
     sector.position.y * SECTOR_WIDTH +
-    (sector.position.y === 0
-      ? -cornerOffset + movePlayerDown
-      : sector.position.y === 10
-        ? -movePlayerDown
-        : -offset),
+      (sector.position.y === 0
+        ? -cornerOffset + movePlayerDown
+        : sector.position.y === 10
+          ? -movePlayerDown
+          : -halfWidth),
   ];
 }
 

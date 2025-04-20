@@ -7,6 +7,10 @@ import DiceModel from "./DiceModel";
 import MovesCounter from "./MovesCounter";
 import usePlayerStore from "@/stores/playerStore";
 
+// const ModelsUrls = {
+//   1: ''
+// }
+
 type Props = {
   player: PlayerData;
   position?: Vector3Array;

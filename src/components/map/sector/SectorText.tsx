@@ -1,4 +1,4 @@
-import { SECTOR_CONTENT_ELEVATION } from "@/lib/constants";
+import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
 import { Vector3Array } from "@/types";
 import { Text } from "@react-three/drei";
 
@@ -7,10 +7,12 @@ type Props = {
   isCorner: boolean;
 };
 
+const SectorBottom = SECTOR_DEPTH / 2 - 1;
+
 function SectorText({ text, isCorner }: Props) {
   const position: Vector3Array = isCorner
     ? [-4.5, SECTOR_CONTENT_ELEVATION + 0.1, -4.5]
-    : [0, SECTOR_CONTENT_ELEVATION + 0.1, -4.5];
+    : [0, SECTOR_CONTENT_ELEVATION + 0.1, -SectorBottom];
   const rotation: Vector3Array = isCorner
     ? [Math.PI / 2, Math.PI, Math.PI / 4]
     : [Math.PI / 2, Math.PI, 0];

@@ -19,8 +19,12 @@ type Props = {
   showColorGroup: boolean;
 };
 
+const BottomPartPercentage = 15;
+const SectorBottom = (SECTOR_DEPTH / 100) * BottomPartPercentage;
+const SectorTop = (SECTOR_DEPTH / 100) * (100 - BottomPartPercentage);
+
 function SectorColoredPlatform({ color }: { color: string }) {
-  const shape: Vector3Array = [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 25];
+  const shape: Vector3Array = [SECTOR_WIDTH, SECTOR_HEIGHT, SectorBottom];
   const position: Vector3Array = [0, 0, -SECTOR_DEPTH / 2 + shape[2] / 2];
 
   return (
@@ -39,7 +43,7 @@ function SectorMainPlatform({ id, shape, showColorGroup }: Omit<Props, "color">)
   const platform = useMemo(() => {
     const color = new Color(colors.pastelgreen);
     const finalShape: Vector3Array = showColorGroup
-      ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH / 100 * 75]
+      ? [SECTOR_WIDTH, SECTOR_HEIGHT, SectorTop]
       : shape;
     const position: Vector3Array = showColorGroup
       ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
@@ -61,7 +65,7 @@ function SectorMainPlatform({ id, shape, showColorGroup }: Omit<Props, "color">)
     material.emissive.lerp(isSelected ? EMISSION_FULL : EMISSION_NONE, 0.1);
   });
 
-  return <>{platform}</>
+  return <>{platform}</>;
 }
 
 function SectorBase({ id, color, shape, showColorGroup }: Props) {

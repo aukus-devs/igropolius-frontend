@@ -1,27 +1,29 @@
-import { SECTOR_CONTENT_ELEVATION } from "@/lib/constants";
+import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
 import { BuildingData, Vector3Array } from "@/types";
-import Building from "../Building";
+import Building from "./Building";
 
 type Props = {
   buildings: BuildingData[];
 };
 
+const UpperSide = SECTOR_DEPTH / 2 - 1;
+
 const BuildingPositions: Vector3Array[] = [
-  [1.5, SECTOR_CONTENT_ELEVATION, 4.5],
-  [0, SECTOR_CONTENT_ELEVATION, 4.5],
-  [-1.5, SECTOR_CONTENT_ELEVATION, 4.5],
-  [1.5, SECTOR_CONTENT_ELEVATION, 3],
-  [0, SECTOR_CONTENT_ELEVATION, 3],
-  [-1.5, SECTOR_CONTENT_ELEVATION, 3],
-  [1.5, SECTOR_CONTENT_ELEVATION, 1.5],
-  [0, SECTOR_CONTENT_ELEVATION, 1.5],
-  [-1.5, SECTOR_CONTENT_ELEVATION, 1.5],
-  [1.5, SECTOR_CONTENT_ELEVATION, 0],
-  [0, SECTOR_CONTENT_ELEVATION, 0],
-  [-1.5, SECTOR_CONTENT_ELEVATION, 0],
-  [1.5, SECTOR_CONTENT_ELEVATION, -1.5],
-  [0, SECTOR_CONTENT_ELEVATION, -1.5],
-  [-1.5, SECTOR_CONTENT_ELEVATION, -1.5],
+  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide],
+  [0, SECTOR_CONTENT_ELEVATION, UpperSide],
+  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide],
+  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 1.5],
+  [0, SECTOR_CONTENT_ELEVATION, UpperSide - 1.5],
+  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 1.5],
+  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 3],
+  [0, SECTOR_CONTENT_ELEVATION, UpperSide - 3],
+  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 3],
+  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 4.5],
+  [0, SECTOR_CONTENT_ELEVATION, UpperSide - 4.5],
+  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 4.5],
+  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 6],
+  [0, SECTOR_CONTENT_ELEVATION, UpperSide - 6],
+  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 6],
 ];
 
 function SectorBuildings({ buildings }: Props) {
@@ -29,7 +31,7 @@ function SectorBuildings({ buildings }: Props) {
     <group name="buildings">
       {buildings.map((building, index) => {
         const position = BuildingPositions[index];
-        if (!position) throw new Error((`No position found for building at index ${index}`));
+        if (!position) throw new Error(`No position found for building at index ${index}`);
 
         return (
           <Building

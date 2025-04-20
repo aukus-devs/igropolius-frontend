@@ -18,8 +18,8 @@ export const FLOOR_HEIGHT = 1;
 
 export const SECTOR_WIDTH = 6;
 export const SECTOR_HEIGHT = 1;
-export const SECTOR_DEPTH = 12;
-export const SECTOR_OFFSET = SECTOR_WIDTH / 2;
+export const SECTOR_DEPTH = 16;
+export const SECTOR_OFFSET = SECTOR_DEPTH / 2;
 export const SECTOR_ELEVATION = 0;
 
 export const FLOOR_SIZE = SECTOR_WIDTH * 9;
