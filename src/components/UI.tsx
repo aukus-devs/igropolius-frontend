@@ -4,6 +4,7 @@ import PlayersList from "./core/PlayersList";
 import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
+import RollDeckCard from "./core/RollDeckCard";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -31,6 +32,7 @@ function UI() {
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         <MoveButton />
         <GameReviewForm />
+        <RollDeckCard />
       </div>
     </div>
   );

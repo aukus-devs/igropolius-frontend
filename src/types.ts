@@ -96,6 +96,13 @@ export type PlayerData = {
 
 export type Vector3Array = [number, number, number];
 
+export type DeckCardData = {
+  id: string;
+  name: string;
+  picture: string;
+  description: string;
+};
+
 export type BuildingType =
   | "ruins"
   | "height-1"

@@ -1,4 +1,10 @@
-import { colors, GameReviewType, PlayerData, SectorData } from "@/types";
+import {
+  colors,
+  GameReviewType,
+  DeckCardData,
+  PlayerData,
+  SectorData,
+} from "@/types";
 
 export const sectorsData: SectorData[] = [
   {
@@ -324,7 +330,7 @@ export const sectorsData: SectorData[] = [
 ];
 
 export const SectorsById: Record<number, SectorData> = Object.fromEntries(
-  sectorsData.map((sector) => [sector.id, sector]),
+  sectorsData.map((sector) => [sector.id, sector])
 );
 
 export const playersData: PlayerData[] = [
@@ -640,6 +646,51 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+  },
+];
+
+export const deckCardsData: DeckCardData[] = [
+  {
+    id: "1",
+    name: "Плюс один или минус один",
+    picture: "https://placehold.co/744x1039/FF453A/white",
+    description:
+      "Возможность добавить/убавить 1 у кубика - после ролла кубикова, но перед началом движения изменить результат кубика.",
+  },
+  {
+    id: "2",
+    name: "Только 1 кубик",
+    picture: "https://placehold.co/744x1039/0A84FF/white",
+    description:
+      "Возможность выбрать только один кубик из трех и сходить на данное значение - после ролла кубикова, но перед началом движения выбрать один кубик.",
+  },
+  {
+    id: "3",
+    name: "Сквотируемся",
+    picture: "https://placehold.co/744x1039/30D158/white",
+    description:
+      "Нет 'арендной платы' на улице - Перед попаданием на клетку с чужими постройками, можно активировать карточку и не платить арендную плату.",
+  },
+  {
+    id: "4",
+    name: "Хорошее поведение",
+    picture: "https://placehold.co/744x1039/BF5AF2/white",
+    description:
+      "Минус день тюрьмы - можно использовать на клетке 'тюрьма' и 'посещение тюрьмы', как до, так и после ролла игры для того, чтобы покинуть тюрьму.",
+  },
+  {
+    id: "5",
+    name: "Чето пока нехочу)))",
+    picture: "https://placehold.co/744x1039/FF375F/white",
+    description:
+      "Реролл игры из стима - используется после ролла игры, но до ее запуска.",
+  },
+  {
+    id: "6",
+    name: "Без налога",
+    picture: "https://placehold.co/744x1039/FFD60A/white",
+    description:
+      "Нет 'налога' за круг - при использовании освобождает от арендной платы после прохождения круга.",
   },
 ];
 
