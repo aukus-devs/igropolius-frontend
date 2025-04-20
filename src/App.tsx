@@ -33,8 +33,8 @@ function App() {
   );
 
   useEffect(() => {
-    setMyPlayerId(playersData[0].id);
     setPlayers(playersData);
+    setMyPlayerId(playersData[0].id);
   }, [setPlayers, setMyPlayerId]);
 
   return (

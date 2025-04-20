@@ -1,6 +1,6 @@
 import { SectorData, Vector3Array } from "@/types";
 import { ThreeEvent } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
 import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH, TrainsConfig } from "@/lib/constants";
@@ -26,11 +26,10 @@ type Props = {
 
 function Sector({ sector, position, rotation }: Props) {
   const addSectorModel = useModelsStore((state) => state.addSectorModel);
-  const sectorRef = useRef<Group | null>(null);
 
-  useEffect(() => {
-    if (sectorRef.current) addSectorModel(sectorRef.current);
-  }, [sectorRef, addSectorModel]);
+  const onSectorRender = (item: Group) => {
+    if (item) addSectorModel(sector.id, item);
+  };
 
   const buildings = usePlayerStore((state) => state.buildingsPerSector[sector.id]) ?? [];
 
@@ -49,7 +48,7 @@ function Sector({ sector, position, rotation }: Props) {
 
   return (
     <group
-      ref={sectorRef}
+      ref={onSectorRender}
       name={`sector_${sector.id}`}
       position={position}
       rotation={rotation}
