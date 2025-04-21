@@ -23,7 +23,7 @@ function UI() {
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10 overflow-hidden">
-      <div className="absolute top-2 left-4">
+      <div className="absolute top-2 left-4 flex flex-col gap-2">
         <div className="text-[#494949] font-wide-black">
           МСК — <Clock />
         </div>
