@@ -36,16 +36,13 @@ function UI() {
         <RollDeckCard />
       </div>
 
-      <div
-        className="absolute top-[10px] left-4 font-wide-black"
-        style={{ color: "rgba(255,255,255,0.2)" }}
-      >
+      <div className="absolute top-[10px] left-4 font-wide-black" style={{ color: "#494949" }}>
         МСК — <Clock />
       </div>
 
       <div
         className="absolute top-[10px] right-4 font-wide-black"
-        style={{ color: "rgba(255,255,255,0.2)" }}
+        style={{ color: "#494949" }}
       >
         Твое время — <Clock />
       </div>
