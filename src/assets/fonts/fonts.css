@@ -11,3 +11,10 @@
     font-weight: 800;
     font-style: normal;
 }
+
+@font-face {
+    font-family: "MursGothicWideMedium";
+    src: url("./MursGothic-WideMedium.otf") format("opentype");
+    font-weight: 600;
+    font-style: normal;
+}

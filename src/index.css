@@ -107,6 +107,10 @@
     font-family: "MursGothicMassiveBlack";
 }
 
+.font-wide-medium {
+    font-family: "MursGothicWideMedium";
+}
+
 .fps-meter {
     position: absolute !important;
     top: auto !important;
