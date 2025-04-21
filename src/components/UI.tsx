@@ -23,15 +23,15 @@ function UI() {
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10 overflow-hidden">
-      <div className="absolute top-2 left-4">
-        <div className="text-[#494949] font-wide-black">
+      <div className="absolute top-3 left-4">
+        <div className="text-[#494949] font-wide-black text-sm pb-3">
           МСК — <Clock />
         </div>
         <PlayersList players={players} />
       </div>
 
-      <div className="absolute right-4 top-2 flex flex-col gap-2 w-[15rem]">
-        <div className="text-[#494949] font-wide-black">
+      <div className="absolute right-4 top-3 w-[15rem]">
+        <div className="text-[#494949] font-wide-black text-sm pb-3 text-end">
           Твое время — <Clock />
         </div>
         <QuickMenu />

@@ -11,7 +11,7 @@ const SectorBottom = SECTOR_DEPTH / 2 - 1;
 
 function SectorText({ text, isCorner }: Props) {
   const position: Vector3Array = isCorner
-    ? [-4.5, SECTOR_CONTENT_ELEVATION + 0.1, -4.5]
+    ? [-SectorBottom, SECTOR_CONTENT_ELEVATION + 0.1, -SectorBottom]
     : [0, SECTOR_CONTENT_ELEVATION + 0.1, -SectorBottom];
   const rotation: Vector3Array = isCorner
     ? [Math.PI / 2, Math.PI, Math.PI / 4]

@@ -1,4 +1,4 @@
-import { PLAYER_HEIGHT } from "@/lib/constants";
+import { PLAYER_DEPTH, PLAYER_HEIGHT, PLAYER_WIDTH } from "@/lib/constants";
 import useModelsStore from "@/stores/modelsStore";
 import { PlayerData, Vector3Array } from "@/types";
 import { ThreeEvent } from "@react-three/fiber";
@@ -13,7 +13,8 @@ import usePlayerStore from "@/stores/playerStore";
 
 type Props = {
   player: PlayerData;
-  position?: Vector3Array;
+  position: Vector3Array;
+  rotation: Vector3Array;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
 };
 
@@ -26,7 +27,7 @@ function MyPlayerComponents() {
   );
 }
 
-function PlayerModel({ player, position, onClick }: Props) {
+function PlayerModel({ player, position, rotation, onClick }: Props) {
   const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
   const isMyPlayer = usePlayerStore((state) => state.myPlayer?.id === player.id);
 
@@ -37,10 +38,10 @@ function PlayerModel({ player, position, onClick }: Props) {
   };
 
   return (
-    <group ref={onModelRender} name={`${player.id}`} position={position}>
+    <group ref={onModelRender} name={`${player.id}`} position={position} rotation={rotation}>
       {isMyPlayer && <MyPlayerComponents />}
       <mesh onClick={(e) => (e.stopPropagation(), onClick?.(e))} castShadow receiveShadow>
-        <capsuleGeometry args={[0.5, PLAYER_HEIGHT, 1]} />
+        <boxGeometry args={[PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_DEPTH]} />
         <meshPhongMaterial color={player.color} />
       </mesh>
     </group>

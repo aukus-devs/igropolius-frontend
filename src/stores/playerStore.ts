@@ -5,8 +5,9 @@ import { create } from "zustand";
 import useModelsStore from "./modelsStore";
 import useDiceStore from "./diceStore";
 import useCameraStore from "./cameraStore";
-import { calculatePlayerPosition } from "@/components/map/utils";
+import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
 import { SectorsById, sectorsData } from "@/lib/mockData";
+import { Euler, Quaternion } from "three";
 
 const usePlayerStore = create<{
   myPlayer: PlayerData | null;
@@ -78,6 +79,7 @@ const usePlayerStore = create<{
     const rolledNumber = await useDiceStore.getState().rollDice();
 
     const tl = createTimeline();
+    const jumpHeight = 1.5;
 
     for (let i = 0; i < rolledNumber; i++) {
       const nextSectorId = currentSectorId + 1 > sectorsData.length ? 1 : currentSectorId + 1;
@@ -85,18 +87,33 @@ const usePlayerStore = create<{
       if (!nextSector)
         throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
 
-      const nextPosition = calculatePlayerPosition(nextSector);
+      const nextSectorPlayers = get().players.filter((player) => player.current_position === nextSectorId);
+      const nextPosition = calculatePlayerPosition(nextSectorPlayers.length, nextSectorPlayers.length, nextSector);
+      const currentRotation = getSectorRotation(currentSector.position);
+      const nextRotation = getSectorRotation(nextSector.position);
 
       tl.add(myPlayerModel.position, {
         x: nextPosition[0],
         y: [
           myPlayerModel.position.y,
-          myPlayerModel.position.y + 1.5,
+          myPlayerModel.position.y + jumpHeight,
           myPlayerModel.position.y,
         ],
         z: nextPosition[2],
         duration: 500,
       });
+
+      if (!currentRotation.every((value, index) => value === nextRotation[index])) {
+        const targetQuat = new Quaternion().setFromEuler(new Euler(...nextRotation, "XYZ"));
+
+        tl.add({ t: 0 }, {
+          t: 1,
+          duration: 500,
+          onUpdate: (self) => {
+            myPlayerModel.quaternion.rotateTowards(targetQuat, self.progress);
+          }
+        });
+      }
 
       currentSectorId = nextSectorId;
       currentSector = nextSector;

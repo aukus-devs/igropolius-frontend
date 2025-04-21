@@ -6,7 +6,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import CameraControls from "camera-controls";
 import { Box3, Vector3 } from "three";
-import { FLOOR_SIZE, SECTOR_WIDTH } from "@/lib/constants";
+import { BOARD_SIZE, SECTOR_DEPTH, SECTOR_HEIGHT } from "@/lib/constants";
 import useCameraStore from "@/stores/cameraStore";
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 }
 
 export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
+  // const scene = useThree((state) => state.scene);
   const setCameraControls = useCameraStore((state) => state.setCameraControls);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, getKeys] = useKeyboardControls();
@@ -21,9 +22,9 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
 
   useEffect(() => {
     if (cameraControls.current) {
-      const boundarySize = FLOOR_SIZE / 2 + SECTOR_WIDTH * 2;
+      const boundarySize = BOARD_SIZE / 2 + SECTOR_DEPTH;
       const bb = new Box3(
-        new Vector3(-boundarySize, 1, -boundarySize),
+        new Vector3(-boundarySize, SECTOR_HEIGHT, -boundarySize),
         new Vector3(boundarySize, boundarySize, boundarySize),
       );
       // const helper = new Box3Helper(bb, 0xffff00);

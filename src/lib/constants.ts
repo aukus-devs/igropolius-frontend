@@ -12,24 +12,21 @@ export enum Controls {
   turnRight = "turnRight",
 }
 
-export const SECTORS_PER_SIDE = 12;
-
-export const FLOOR_HEIGHT = 1;
+export const SECTORS_PER_SIDE = 9;
 
 export const SECTOR_WIDTH = 8;
 export const SECTOR_HEIGHT = 1;
 export const SECTOR_DEPTH = 16;
-export const SECTOR_OFFSET = SECTOR_DEPTH / 2;
-export const SECTOR_ELEVATION = 0;
 
-export const FLOOR_SIZE = SECTOR_WIDTH * 9;
+export const BOARD_SIZE = SECTORS_PER_SIDE * SECTOR_WIDTH;
+export const HALF_BOARD = SECTORS_PER_SIDE * SECTOR_WIDTH / 2 + SECTOR_WIDTH / 2;
 
 export const SECTOR_CONTENT_ELEVATION = SECTOR_HEIGHT / 2;
 
+export const PLAYER_WIDTH = 2;
 export const PLAYER_HEIGHT = 1;
-export const PLAYER_ELEVATION = SECTOR_HEIGHT / 2 + SECTOR_HEIGHT;
-
-export const FLOOR_CENTER_POSITION = FLOOR_SIZE / 2;
+export const PLAYER_DEPTH = 1.25;
+export const PLAYER_ELEVATION = SECTOR_HEIGHT / 2 + PLAYER_HEIGHT / 2;
 
 export const EMISSION_FULL = new Color("white");
 export const EMISSION_NONE = new Color("black");
