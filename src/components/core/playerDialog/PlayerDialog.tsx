@@ -23,9 +23,6 @@ type Props = {
 
 function PlayerDialog({ player, placement }: Props) {
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
-  const { current_position, nickname, avatar_link } = player;
-
-  const mockSocials = ["twitch.tv", "youtube.com", "donationalerts.com"];
 
   return (
     <div className="group relative">
@@ -44,20 +41,20 @@ function PlayerDialog({ player, placement }: Props) {
               </DialogTitle>
             </DialogHeader>
 
-            <PlayerDialogHeader name={nickname} avatar={avatar_link} socials={mockSocials} />
+            <PlayerDialogHeader player={player} />
             <PlayerDialogTabs reviews={mockReviews} />
           </ScrollArea>
         </DialogContent>
       </Dialog>
       <Button
         className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 bg-card/60 backdrop-blur-[1.5rem] rounded-xl group-hover:translate-x-[calc(100%+0.5rem)] h-full opacity-0 group-hover:opacity-100 p-2 hover:bg-accent items-center text-primary"
-        onClick={(e) => (e.stopPropagation(), cameraToPlayer(current_position))}
+        onClick={(e) => (e.stopPropagation(), cameraToPlayer(player.current_position))}
       >
         <MapPinIcon className="mt-1 self-start" />
         <div>
           <div className="flex items-center gap-1 font-bold">Показать на карте</div>
           <div className="text-muted-foreground text-sm justify-self-start">
-            {current_position} клетка
+            {player.current_position} клетка
           </div>
         </div>
       </Button>

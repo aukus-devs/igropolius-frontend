@@ -350,7 +350,7 @@ export const playersData: PlayerData[] = [
     pointauc_token: "abc",
 
     twitch_stream_link: "https://twitch.tv/praden",
-    vk_stream_link: "https://vkvideo.com/praden",
+    vk_stream_link: "https://live.vkvideo.ru/praden",
     kick_stream_link: "https://kick.com/praden",
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
@@ -425,7 +425,7 @@ export const playersData: PlayerData[] = [
     pointauc_token: "abc",
 
     twitch_stream_link: "https://twitch.tv/praden",
-    vk_stream_link: "https://vkvideo.com/praden",
+    vk_stream_link: "https://live.vkvideo.ru/praden",
     kick_stream_link: "https://kick.com/praden",
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
@@ -508,7 +508,7 @@ export const playersData: PlayerData[] = [
     pointauc_token: "abc",
 
     twitch_stream_link: "https://twitch.tv/praden",
-    vk_stream_link: "https://vkvideo.com/praden",
+    vk_stream_link: "https://live.vkvideo.ru/praden",
     kick_stream_link: "https://kick.com/praden",
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
@@ -548,7 +548,7 @@ export const playersData: PlayerData[] = [
     pointauc_token: "abc",
 
     twitch_stream_link: "https://twitch.tv/praden",
-    vk_stream_link: "https://vkvideo.com/praden",
+    vk_stream_link: "https://live.vkvideo.ru/praden",
     kick_stream_link: "https://kick.com/praden",
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
@@ -582,7 +582,7 @@ export const playersData: PlayerData[] = [
     pointauc_token: "abc",
 
     twitch_stream_link: "https://twitch.tv/praden",
-    vk_stream_link: "https://vkvideo.com/praden",
+    vk_stream_link: "https://live.vkvideo.ru/praden",
     kick_stream_link: "https://kick.com/praden",
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
@@ -615,7 +615,7 @@ export const playersData: PlayerData[] = [
     pointauc_token: "abc",
 
     twitch_stream_link: "https://twitch.tv/praden",
-    vk_stream_link: "https://vkvideo.com/praden",
+    vk_stream_link: "https://live.vkvideo.ru/praden",
     kick_stream_link: "https://kick.com/praden",
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
@@ -648,7 +648,7 @@ export const playersData: PlayerData[] = [
     pointauc_token: "abc",
 
     twitch_stream_link: "https://twitch.tv/praden",
-    vk_stream_link: "https://vkvideo.com/praden",
+    vk_stream_link: "https://live.vkvideo.ru/praden",
     kick_stream_link: "https://kick.com/praden",
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
@@ -681,7 +681,7 @@ export const playersData: PlayerData[] = [
     pointauc_token: "abc",
 
     twitch_stream_link: "https://twitch.tv/praden",
-    vk_stream_link: "https://vkvideo.com/praden",
+    vk_stream_link: "https://live.vkvideo.ru/praden",
     kick_stream_link: "https://kick.com/praden",
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
