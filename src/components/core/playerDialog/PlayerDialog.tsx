@@ -35,10 +35,17 @@ function PlayerDialog({ player, placement }: Props) {
           aria-describedby=""
         >
           <ScrollArea className="flex h-full">
-            <DialogHeader className="absolute top-5 mx-auto left-0 right-0">
+            <DialogHeader className="relative pt-5 mb-8">
               <DialogTitle className="text-center font-wide-demi text-muted-foreground text-sm">
                 LIVE — Hotline Miami
               </DialogTitle>
+              <div className="absolute top-0 left-0 z-[-1] w-full h-[240px] blur-2xl">
+                <img
+                  src={player.avatar_link}
+                  className="w-full h-full opacity-50"
+                  alt="player avatar"
+                />
+              </div>
             </DialogHeader>
 
             <PlayerDialogHeader player={player} />
