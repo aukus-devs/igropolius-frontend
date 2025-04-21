@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { GameReviewType } from "@/types";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
-import GameReview from "../../GameReview";
+import GameReview from "./GameReview";
 
 type Props = {
   reviews: GameReviewType[];

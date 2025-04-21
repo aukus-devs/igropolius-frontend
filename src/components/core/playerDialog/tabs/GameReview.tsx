@@ -49,6 +49,7 @@ function GameReview({ review }: Props) {
       <h3 className="text-2xl mb-2 font-wide-demi">{gameTitle}</h3>
       <div className="flex gap-2.5">
         <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
+          
           <img className="h-full object-cover" src={poster || fallbackPoster} />
         </div>
         <div className="text-muted-foreground">
