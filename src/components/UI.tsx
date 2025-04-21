@@ -5,6 +5,7 @@ import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
 import RollDeckCard from "./core/RollDeckCard";
+import Clock from "./core/Clock";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -33,6 +34,20 @@ function UI() {
         <MoveButton />
         <GameReviewForm />
         <RollDeckCard />
+      </div>
+
+      <div
+        className="absolute top-[10px] left-4 very-wide-text"
+        style={{ color: "rgba(255,255,255,0.2)" }}
+      >
+        МСК — <Clock />
+      </div>
+
+      <div
+        className="absolute top-[10px] right-4 very-wide-text"
+        style={{ color: "rgba(255,255,255,0.2)" }}
+      >
+        Твое время — <Clock />
       </div>
     </div>
   );

@@ -72,7 +72,7 @@ function Scene() {
 
       {/* origin position marker */}
       <Grid position={[0, 1, 0]} args={[1, 1]} {...gridConfig} />
-      <Stats />
+      <Stats className="fps-meter" />
     </>
   );
 }
