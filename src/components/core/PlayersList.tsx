@@ -7,7 +7,7 @@ type Props = {
 
 function PlayersList({ players }: Props) {
   return (
-    <div className="absolute top-10 left-4 flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       {players.map((player, idx) => (
         <PlayerDialog key={player.id} player={player} placement={idx + 1} />
       ))}

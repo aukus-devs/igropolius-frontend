@@ -25,7 +25,7 @@ function Notifications() {
 
   return (
     <div>
-      <div className="text-right text-[#828282] font-wide-black">Уведомления</div>
+      <div className="text-right text-[#494949] font-wide-black">Уведомления</div>
       <div className="flex flex-col gap-2">
         {notifications.map(({ date, text, points, type }, idx) => {
           const color = type === "positive" ? "text-blue-500" : "text-red-500";

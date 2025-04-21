@@ -23,9 +23,17 @@ function UI() {
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10 overflow-hidden">
-      <PlayersList players={players} />
+      <div className="absolute top-2 left-4">
+        <div className="text-[#494949] font-wide-black">
+          МСК — <Clock />
+        </div>
+        <PlayersList players={players} />
+      </div>
 
-      <div className="absolute right-4 top-10 flex flex-col gap-2 w-[15rem]">
+      <div className="absolute right-4 top-2 flex flex-col gap-2 w-[15rem]">
+        <div className="text-[#494949] font-wide-black">
+          Твое время — <Clock />
+        </div>
         <QuickMenu />
         <Notifications />
       </div>
@@ -34,17 +42,6 @@ function UI() {
         <MoveButton />
         <GameReviewForm />
         <RollDeckCard />
-      </div>
-
-      <div className="absolute top-[10px] left-4 font-wide-black" style={{ color: "#494949" }}>
-        МСК — <Clock />
-      </div>
-
-      <div
-        className="absolute top-[10px] right-4 font-wide-black"
-        style={{ color: "#494949" }}
-      >
-        Твое время — <Clock />
       </div>
     </div>
   );
