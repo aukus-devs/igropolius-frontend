@@ -13,7 +13,7 @@ import PlayerDialogTrigger from "./PlayerDialogTrigger";
 import PlayerDialogTabs from "./tabs/PlayerDialogTabs";
 import { mockReviews } from "@/lib/mockData";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import PlayerDialogHero from "./PlayerDialogHero";
+import PlayerDialogHeader from "./PlayerDialogHeader";
 
 type Props = {
   player: PlayerData;
@@ -44,7 +44,7 @@ function PlayerDialog({ player, placement }: Props) {
               </DialogTitle>
             </DialogHeader>
 
-            <PlayerDialogHero name={nickname} avatar={avatar_link} socials={mockSocials} />
+            <PlayerDialogHeader name={nickname} avatar={avatar_link} socials={mockSocials} />
             <PlayerDialogTabs reviews={mockReviews} />
           </ScrollArea>
         </DialogContent>

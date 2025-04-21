@@ -6,7 +6,7 @@ type Props = {
   socials: string[];
 };
 
-function PlayerDialogHero({ name, avatar, socials }: Props) {
+function PlayerDialogHeader({ name, avatar, socials }: Props) {
   return (
     <div className="relative mb-8 pt-[76px]">
       <div className="absolute top-0 left-0 z-[-1] w-full h-[240px] blur-2xl">
@@ -30,4 +30,4 @@ function PlayerDialogHero({ name, avatar, socials }: Props) {
   );
 }
 
-export default PlayerDialogHero;
+export default PlayerDialogHeader;
