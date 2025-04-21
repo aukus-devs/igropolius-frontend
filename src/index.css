@@ -99,11 +99,11 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
-.wide-text {
+.font-wide-demi {
     font-family: "MursGothicMassiveDemi";
 }
 
-.very-wide-text {
+.font-wide-black {
     font-family: "MursGothicMassiveBlack";
 }
 

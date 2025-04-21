@@ -37,14 +37,14 @@ function UI() {
       </div>
 
       <div
-        className="absolute top-[10px] left-4 very-wide-text"
+        className="absolute top-[10px] left-4 font-wide-black"
         style={{ color: "rgba(255,255,255,0.2)" }}
       >
         МСК — <Clock />
       </div>
 
       <div
-        className="absolute top-[10px] right-4 very-wide-text"
+        className="absolute top-[10px] right-4 font-wide-black"
         style={{ color: "rgba(255,255,255,0.2)" }}
       >
         Твое время — <Clock />
