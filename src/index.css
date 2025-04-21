@@ -117,3 +117,7 @@
     bottom: 0px !important;
     left: 0px !important;
 }
+
+button[data-slot="dialog-close"] {
+    display: none !important;
+}
