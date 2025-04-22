@@ -6,6 +6,7 @@ import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
 import RollDeckCard from "./core/RollDeckCard";
 import Clock from "./core/Clock";
+import Countdown from "./core/Countdown";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -32,7 +33,7 @@ function UI() {
 
       <div className="absolute right-4 top-3 w-[15rem]">
         <div className="text-[#494949] font-wide-black text-sm pb-3 text-end">
-          Твое время — <Clock />
+          <Countdown />
         </div>
         <QuickMenu />
         <Notifications />
