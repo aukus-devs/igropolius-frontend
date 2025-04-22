@@ -1,7 +1,7 @@
-import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
+import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH, STORAGE_BASE_URL } from "@/lib/constants";
 import { Gltf } from "@react-three/drei";
 
-const modelUrl = `${import.meta.env.BASE_URL}assets/models/prison.glb`;
+const modelUrl = `${STORAGE_BASE_URL}/models/buildings/prison.glb`;
 
 export default function PrisonModel() {
   return (

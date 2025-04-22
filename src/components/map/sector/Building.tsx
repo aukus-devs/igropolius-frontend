@@ -1,4 +1,4 @@
-import { SECTOR_CONTENT_ELEVATION } from "@/lib/constants";
+import { SECTOR_CONTENT_ELEVATION, STORAGE_BASE_URL } from "@/lib/constants";
 import { BuildingType, CellColor, Vector3Array } from "@/types";
 import { Gltf } from "@react-three/drei";
 import { eases } from "animejs";
@@ -6,13 +6,13 @@ import { animate } from "animejs";
 import * as THREE from "three";
 
 const buildingUrls: { [k in BuildingType]: string } = {
-  ruins: `${import.meta.env.BASE_URL}assets/models/ruins.glb`,
-  "height-1": `${import.meta.env.BASE_URL}assets/models/small_buildingD.glb`,
-  "height-2": `${import.meta.env.BASE_URL}assets/models/large_buildingC.glb`,
-  "height-3": `${import.meta.env.BASE_URL}assets/models/skyscraperE.glb`,
-  "height-4": `${import.meta.env.BASE_URL}assets/models/skyscraperA.glb`,
-  "height-5": `${import.meta.env.BASE_URL}assets/models/skyscraperF.glb`,
-  "height-6": `${import.meta.env.BASE_URL}assets/models/skyscraperD.glb`,
+  ruins: `${STORAGE_BASE_URL}/models/buildings/ruins.glb`,
+  "height-1": `${STORAGE_BASE_URL}/models/buildings/small_buildingD.glb`,
+  "height-2": `${STORAGE_BASE_URL}/models/buildings/large_buildingC.glb`,
+  "height-3": `${STORAGE_BASE_URL}/models/buildings/skyscraperE.glb`,
+  "height-4": `${STORAGE_BASE_URL}/models/buildings/skyscraperA.glb`,
+  "height-5": `${STORAGE_BASE_URL}/models/buildings/skyscraperF.glb`,
+  "height-6": `${STORAGE_BASE_URL}/models/buildings/skyscraperD.glb`,
 };
 
 type Props = {
