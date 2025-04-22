@@ -1,7 +1,7 @@
-import { SECTOR_CONTENT_ELEVATION } from "@/lib/constants";
+import { SECTOR_CONTENT_ELEVATION, STORAGE_BASE_URL } from "@/lib/constants";
 import { Gltf } from "@react-three/drei";
 
-const modelUrl = `${import.meta.env.BASE_URL}assets/models/buildings/bonus-wheel.glb`;
+const modelUrl = `${STORAGE_BASE_URL}/models/buildings/bonus-wheel.glb`;
 
 export default function BonusWheelModel() {
   return (

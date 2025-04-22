@@ -25,3 +25,4 @@ dist-ssr
 
 # ignore 3d models
 public/assets/models/*
+monopoly_s3/*
