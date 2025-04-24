@@ -1,13 +1,9 @@
+# Exported from Render on 2025-04-24T19:24:29Z
 services:
 - type: web
   name: igropolus
   runtime: static
   repo: https://github.com/aukus-devs/monopoly
-  envVars:
-  - key: VITE_BASE_URL
-    sync: false
-  - key: SKIP_INSTALL_DEPS
-    sync: false
-  buildCommand: yarn install; yarn build:prod
+  buildCommand: yarn build:prod
   staticPublishPath: dist
 version: "1"
