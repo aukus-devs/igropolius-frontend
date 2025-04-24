@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "predeploy": "npm run build",
+    "build:prod": "cross-env VITE_BASE_URL=/ vite build",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -50,6 +51,7 @@
     "@types/three": "^0.175.0",
     "@vitejs/plugin-react": "^4.3.4",
     "animejs": "^4.0.1",
+    "cross-env": "^7.0.3",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",

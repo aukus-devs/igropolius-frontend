@@ -5,6 +5,9 @@ import { defineConfig, Plugin } from "vite";
 import serveStatic from "serve-static";
 
 // https://vite.dev/config/
+
+const base = process.env.VITE_BASE_URL || '/react-3d/'
+
 export default defineConfig(({ mode }) => {
   const isDev = mode === "development";
   // @ts-ignore
@@ -30,7 +33,7 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(__dirname, "./src"),
       },
     },
-    base: "/react-3d/",
+    base: base,
     build: {
       outDir: "dist",
       rollupOptions: {

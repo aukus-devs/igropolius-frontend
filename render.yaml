@@ -1,0 +1,8 @@
+services:
+- type: web
+  name: monopoly
+  runtime: static
+  repo: https://github.com/aukus-devs/monopoly
+  buildCommand: yarn build:prod
+  staticPublishPath: ./dist
+version: "1"
