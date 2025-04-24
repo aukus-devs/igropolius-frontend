@@ -1,8 +1,13 @@
 services:
 - type: web
-  name: monopoly
+  name: igropolus
   runtime: static
   repo: https://github.com/aukus-devs/monopoly
-  buildCommand: yarn build:prod
-  staticPublishPath: ./dist
+  envVars:
+  - key: VITE_BASE_URL
+    sync: false
+  - key: SKIP_INSTALL_DEPS
+    sync: false
+  buildCommand: npm install; vite build
+  staticPublishPath: dist
 version: "1"
