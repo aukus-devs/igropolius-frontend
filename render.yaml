@@ -8,6 +8,6 @@ services:
     sync: false
   - key: SKIP_INSTALL_DEPS
     sync: false
-  buildCommand: npm install; vite build
+  buildCommand: yarn install; yarn build:prod
   staticPublishPath: dist
 version: "1"
