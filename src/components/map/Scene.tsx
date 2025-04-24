@@ -2,6 +2,7 @@ import CustomCameraControls from "./CustomCameraControls";
 import Floor from "./Floor";
 import { Grid, Stats } from "@react-three/drei";
 import GameBoard from "./GameBoard";
+import { Railroad } from "./Railroad";
 
 function Scene() {
   const gridConfig = {
@@ -67,7 +68,7 @@ function Scene() {
       <CustomCameraControls />
 
       <GameBoard />
-
+      <Railroad />
       <Floor />
 
       {/* origin position marker */}

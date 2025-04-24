@@ -56,8 +56,8 @@ export function CustomCameraControls({ keysMovespeed = 10 }: Props) {
         ref={cameraControls}
         makeDefault
         dollySpeed={0.75}
-        maxDistance={120}
-        maxZoom={120}
+        maxDistance={225}
+        maxZoom={225}
         maxPolarAngle={Math.PI / 2}
         smoothTime={0.2}
       />

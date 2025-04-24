@@ -1,5 +1,4 @@
 import { PLAYER_HEIGHT, STORAGE_BASE_URL } from "@/lib/constants";
-import * as THREE from "three";
 import useModelsStore from "@/stores/modelsStore";
 import { PlayerData, Vector3Array } from "@/types";
 import { ThreeEvent } from "@react-three/fiber";

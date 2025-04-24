@@ -79,7 +79,6 @@ const usePlayerStore = create<{
     const rolledNumber = await useDiceStore.getState().rollDice();
 
     const tl = createTimeline();
-    const jumpHeight = 1.5;
 
     for (let i = 0; i < rolledNumber; i++) {
       const nextSectorId = currentSectorId + 1 > sectorsData.length ? 1 : currentSectorId + 1;
@@ -94,13 +93,9 @@ const usePlayerStore = create<{
 
       tl.add(myPlayerModel.position, {
         x: nextPosition[0],
-        y: [
-          myPlayerModel.position.y,
-          myPlayerModel.position.y + jumpHeight,
-          myPlayerModel.position.y,
-        ],
         z: nextPosition[2],
-        duration: 500,
+        duration: 700,
+        ease: 'linear',
       });
 
       if (!currentRotation.every((value, index) => value === nextRotation[index])) {
@@ -108,7 +103,8 @@ const usePlayerStore = create<{
 
         tl.add({ t: 0 }, {
           t: 1,
-          duration: 500,
+          duration: 300,
+          ease: 'linear',
           onUpdate: (self) => {
             myPlayerModel.quaternion.rotateTowards(targetQuat, self.progress);
           }

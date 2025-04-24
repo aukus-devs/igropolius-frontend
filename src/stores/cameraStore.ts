@@ -13,8 +13,9 @@ const useCameraStore = create<{
 
   cameraToPlayer: async (sectorId) => {
     const cameraControls = useCameraStore.getState().cameraControls;
-    const sectorModel = useModelsStore.getState().getSectorModel(sectorId);
     if (!cameraControls) return;
+
+    const sectorModel = useModelsStore.getState().getSectorModel(sectorId);
 
     if (sectorModel) {
       let targetRotationY = sectorModel.rotation.y;
@@ -33,7 +34,7 @@ const useCameraStore = create<{
 
       cameraControls.fitToBox(sectorModel, true, { cover: true });
       cameraControls.rotateTo(targetAzimuth, Math.PI / 4, true);
-      await cameraControls.dollyTo(15, true);
+      await cameraControls.dollyTo(40, true);
     }
   },
 }));

@@ -16,7 +16,9 @@ export const SECTORS_PER_SIDE = 9;
 
 export const SECTOR_WIDTH = 8;
 export const SECTOR_HEIGHT = 1;
-export const SECTOR_DEPTH = 16;
+export const SECTOR_DEPTH = 18;
+
+export const BUILDING_SCALE = 1;
 
 export const BOARD_SIZE = SECTORS_PER_SIDE * SECTOR_WIDTH;
 export const HALF_BOARD = (SECTORS_PER_SIDE * SECTOR_WIDTH) / 2 + SECTOR_WIDTH / 2;

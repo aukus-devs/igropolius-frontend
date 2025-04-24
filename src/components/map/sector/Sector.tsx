@@ -1,13 +1,11 @@
 import { SectorData, Vector3Array } from "@/types";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
-import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH, TrainsConfig } from "@/lib/constants";
+import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH } from "@/lib/constants";
 import SectorInfo from "./SectorInfo";
 import SectorBase from "./SectorBase";
 import SectorText from "./SectorText";
 import SectorBuildings from "./SectorBuildings";
-import usePlayerStore from "@/stores/playerStore";
-import TrainModel from "./TrainModel";
 import PrisonModel from "./PrisonModel";
 import FlagModel from "./FlagModel";
 import BonusWheelModel from "./BonusWheelModel";
@@ -26,8 +24,6 @@ function Sector({ sector, position, rotation }: Props) {
     if (item) addSectorModel(sector.id, item);
   };
 
-  const buildings = usePlayerStore((state) => state.buildingsPerSector[sector.id]) ?? [];
-
   const isCorner = ["prison", "utility"].includes(sector.type);
   const canHaveBuildings = ["property", "railroad"].includes(sector.type);
   const showColorGroup = sector.type === "property";
@@ -36,7 +32,6 @@ function Sector({ sector, position, rotation }: Props) {
     : [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH];
 
   const isPrison = sector.type === "prison";
-  const train = TrainsConfig.find((train) => train.sectorFrom === sector.id);
   const isStart = sector.id === 1;
   const isTopLeftCorner = sector.id === 21;
   const isBonusSector = sector.type === "bonus";
@@ -50,8 +45,7 @@ function Sector({ sector, position, rotation }: Props) {
     >
       <SectorInfo sector={sector} />
 
-      {canHaveBuildings && <SectorBuildings buildings={buildings} />}
-      {train && <TrainModel train={train} />}
+      {canHaveBuildings && <SectorBuildings sectorId={sector.id} />}
       {isPrison && <PrisonModel />}
       <SectorText text={`${sector.id}`} isCorner={isCorner} />
       {isStart && <FlagModel />}

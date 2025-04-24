@@ -1,43 +1,43 @@
-import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
-import { BuildingData, Vector3Array } from "@/types";
+import { BUILDING_SCALE, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
+import { Vector3Array } from "@/types";
 import Building from "./Building";
+import usePlayerStore from "@/stores/playerStore";
 
 type Props = {
-  buildings: BuildingData[];
+  sectorId: number;
 };
 
-const UpperSide = SECTOR_DEPTH / 2 - 1;
+const ROWS = 4;
+const COLS = 4;
+const SPACING = BUILDING_SCALE + BUILDING_SCALE / 2;
 
-const BuildingPositions: Vector3Array[] = [
-  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide],
-  [0, SECTOR_CONTENT_ELEVATION, UpperSide],
-  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide],
-  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 1.5],
-  [0, SECTOR_CONTENT_ELEVATION, UpperSide - 1.5],
-  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 1.5],
-  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 3],
-  [0, SECTOR_CONTENT_ELEVATION, UpperSide - 3],
-  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 3],
-  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 4.5],
-  [0, SECTOR_CONTENT_ELEVATION, UpperSide - 4.5],
-  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 4.5],
-  [1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 6],
-  [0, SECTOR_CONTENT_ELEVATION, UpperSide - 6],
-  [-1.5, SECTOR_CONTENT_ELEVATION, UpperSide - 6],
-];
+function getBuildingPosition(index: number): Vector3Array {
 
-function SectorBuildings({ buildings }: Props) {
+  const row = ROWS - 1 - Math.floor(index / COLS);
+  const col = COLS - 1 - (index % COLS);
+
+  const x = (col * SPACING) - (COLS - 1) * SPACING;
+  const z = (row * SPACING) - (ROWS - 1) * SPACING;
+
+  return [x, SECTOR_CONTENT_ELEVATION, z];
+}
+
+function SectorBuildings({ sectorId }: Props) {
+  const buildings = usePlayerStore((state) => state.buildingsPerSector[sectorId]) || [];
+
   return (
-    <group name="buildings">
+    <group
+      name="buildings"
+      position={[BUILDING_SCALE / 2 * ROWS, 0, SECTOR_DEPTH / 2 - BUILDING_SCALE]}
+    >
       {buildings.map((building, index) => {
-        const position = BuildingPositions[index];
-        if (!position) throw new Error(`No position found for building at index ${index}`);
+        const position = getBuildingPosition(index);
 
         return (
           <Building
             key={index}
             type={building.type}
-            position={BuildingPositions[index]}
+            position={position}
             color={building.owner.color}
           />
         );

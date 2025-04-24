@@ -42,10 +42,10 @@ export function calculateSectorPosition(sector: SectorData): Vector3Array {
   return [posX + x, 0, posY + z];
 }
 
-const MAX_COLUMNS = 3;
-const COL_SPACING = PLAYER_WIDTH + 0.5;
-const ROW_SPACING = PLAYER_DEPTH + 0.5;
-const OFFSET_FROM_TOP = SECTOR_DEPTH / 2;
+const MAX_COLUMNS = 2;
+const COL_SPACING = PLAYER_WIDTH + 1.5;
+const ROW_SPACING = PLAYER_DEPTH + 1;
+const OFFSET_FROM_TOP = SECTOR_DEPTH / 2.5;
 
 export function calculatePlayerPosition(
   idx: number,
@@ -100,17 +100,17 @@ function calculateBasePosition(sector: SectorData) {
 
   // Handle corner positions
   if (sectorX === 0 && sectorY === 0) {
-    x = -SECTOR_DEPTH / 4;
-    z = -SECTOR_DEPTH / 4;
+    x = -SECTOR_DEPTH / 3;
+    z = -SECTOR_DEPTH / 3;
   } else if (sectorX === 0 && sectorY === 10) {
-    x = -SECTOR_DEPTH / 4;
-    z = SECTOR_DEPTH / 4;
+    x = -SECTOR_DEPTH / 3;
+    z = SECTOR_DEPTH / 3;
   } else if (sectorX === 10 && sectorY === 0) {
-    x = SECTOR_DEPTH / 4;
-    z = -SECTOR_DEPTH / 4;
+    x = SECTOR_DEPTH / 3;
+    z = -SECTOR_DEPTH / 3;
   } else if (sectorX === 10 && sectorY === 10) {
-    x = SECTOR_DEPTH / 4;
-    z = SECTOR_DEPTH / 4;
+    x = SECTOR_DEPTH / 3;
+    z = SECTOR_DEPTH / 3;
   }
 
   return { x, z };

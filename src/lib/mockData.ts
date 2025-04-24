@@ -492,7 +492,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 3,
-    current_position: 1,
+    current_position: 5,
     nickname: "Player-3",
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.yellow,

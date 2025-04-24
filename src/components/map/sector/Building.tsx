@@ -1,4 +1,4 @@
-import { SECTOR_CONTENT_ELEVATION, STORAGE_BASE_URL } from "@/lib/constants";
+import { BUILDING_SCALE, SECTOR_CONTENT_ELEVATION, STORAGE_BASE_URL } from "@/lib/constants";
 import { BuildingType, CellColor, Vector3Array } from "@/types";
 import { Gltf } from "@react-three/drei";
 import { eases } from "animejs";
@@ -50,7 +50,7 @@ function animateAppearance(model: THREE.Group) {
   });
 }
 
-function Building({ position, type, scale = 1, color }: Props) {
+function Building({ position, type, color }: Props) {
   const updateModel = (model: THREE.Group) => {
     if (model) {
       // Traverse the model and adjust properties
@@ -104,7 +104,7 @@ function Building({ position, type, scale = 1, color }: Props) {
       ref={updateModel}
       src={modelUrl}
       position={position}
-      scale={scale}
+      scale={BUILDING_SCALE}
       rotation={[0, Math.PI, 0]}
     />
   );
