@@ -300,9 +300,9 @@ export const sectorsData: SectorData[] = [
     id: 37,
     name: "Chance 3",
     position: { x: 0, y: 4 },
-    type: "bonus",
-    color: colors.pastelgreen,
-    rollType: "steam",
+    type: "property",
+    color: colors.blue,
+    rollType: "auc",
   },
   {
     id: 38,

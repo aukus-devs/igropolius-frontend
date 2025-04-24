@@ -1,14 +1,12 @@
-const ColorBrown = "#8B4513";
-const ColorLightBlue = "#00BFFF";
-const ColorPink = "#FF1493";
-const ColorOrange = "#FF6600";
-const ColorRed = "#FF0000";
-const ColorYellow = "#DAA520";
-const ColorGreen = "#008000";
-const ColorBlue = "#0000FF";
-const ColorBiege = "#F5F5DC";
+const ColorBrown = "#AC8E68";
+const ColorLightBlue = "#64D2FF";
+const ColorPink = "#BF5AF2";
+const ColorOrange = "#FF9F0A";
+const ColorRed = "#FF453A";
+const ColorYellow = "#FFD60A";
+const ColorGreen = "#30D158";
+const ColorBlue = "#0A84FF";
 const ColorPastelGreen = "#AAD4A3";
-const ColorHighlight = "#9400D3";
 
 export const colors = {
   brown: ColorBrown,
@@ -19,9 +17,7 @@ export const colors = {
   yellow: ColorYellow,
   green: ColorGreen,
   blue: ColorBlue,
-  biege: ColorBiege,
   pastelgreen: ColorPastelGreen,
-  highlight: ColorHighlight,
 };
 
 // Type for the keys of the map
