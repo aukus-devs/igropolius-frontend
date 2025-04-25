@@ -6,57 +6,45 @@ import {
   EMISSION_NONE,
 } from "@/lib/constants";
 import useSectorStore from "@/stores/sectorStore";
-import { Vector3Array, colors } from "@/types";
-import { Edges } from "@react-three/drei";
+import { ColorName, Vector3Array } from "@/types";
+import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
-import { Mesh, Color, MeshStandardMaterial } from "three";
+import { useRef } from "react";
+import { Mesh, MeshStandardMaterial } from "three";
 
 type Props = {
   id: number;
   shape: Vector3Array;
-  color: string;
+  color: ColorName;
   showColorGroup: boolean;
 };
 
-const BottomPartPercentage = 15;
-const SectorBottom = (SECTOR_DEPTH / 100) * BottomPartPercentage;
-const SectorTop = (SECTOR_DEPTH / 100) * (100 - BottomPartPercentage);
-
-function SectorColoredPlatform({ color }: { color: string }) {
-  const shape: Vector3Array = [SECTOR_WIDTH, SECTOR_HEIGHT, SectorBottom];
-  const position: Vector3Array = [0, 0, -SECTOR_DEPTH / 2 + shape[2] / 2];
-
-  return (
-    <mesh position={position} receiveShadow>
-      <boxGeometry args={shape} />
-      <meshStandardMaterial color={color} roughness={0.5} metalness={0.25} />
-      <Edges scale={1} lineWidth={3} color="black" />
-    </mesh>
-  );
+function getSectorTexture(color: ColorName) {
+  switch (color) {
+    case "brown": return `${import.meta.env.BASE_URL}assets/sectors/textures/brown.png`;
+    case "lightblue": return `${import.meta.env.BASE_URL}/assets/sectors/textures/lightblue.png`;
+    case "pink": return `${import.meta.env.BASE_URL}/assets/sectors/textures/pink.png`;
+    case "orange": return `${import.meta.env.BASE_URL}/assets/sectors/textures/orange.png`;
+    case "red": return `${import.meta.env.BASE_URL}/assets/sectors/textures/red.png`;
+    case "yellow": return `${import.meta.env.BASE_URL}/assets/sectors/textures/yellow.png`;
+    case "green": return `${import.meta.env.BASE_URL}/assets/sectors/textures/green.png`;
+    case "blue": return `${import.meta.env.BASE_URL}/assets/sectors/textures/blue.png`;
+    case "pastelgreen": return `${import.meta.env.BASE_URL}/assets/sectors/textures/pastelgreen.png`;
+  }
 }
 
-function SectorMainPlatform({ id, shape, showColorGroup }: Omit<Props, "color">) {
+function SectorBase({ id, color, shape, showColorGroup }: Props) {
+  const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
   const isSelected = useSectorStore((state) => state.selectedSector?.id === id);
   const meshRef = useRef<Mesh>(null);
-
-  const platform = useMemo(() => {
-    const color = new Color(colors.pastelgreen);
-    const finalShape: Vector3Array = showColorGroup
-      ? [SECTOR_WIDTH, SECTOR_HEIGHT, SectorTop]
-      : shape;
-    const position: Vector3Array = showColorGroup
-      ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
-      : [0, 0, 0];
-
-    return (
-      <mesh ref={meshRef} position={position} receiveShadow>
-        <boxGeometry args={finalShape} />
-        <meshStandardMaterial color={color} roughness={0.5} metalness={0.25} />
-        <Edges scale={1} lineWidth={3} color="black" />
-      </mesh>
-    );
-  }, [showColorGroup, shape]);
+  const texture = useTexture(getSectorTexture(color));
+  texture.flipY = false;
+  const finalShape: Vector3Array = showColorGroup
+    ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH]
+    : shape;
+  const position: Vector3Array = showColorGroup
+    ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
+    : [0, 0, 0];
 
   useFrame(() => {
     if (!meshRef.current) return;
@@ -65,20 +53,17 @@ function SectorMainPlatform({ id, shape, showColorGroup }: Omit<Props, "color">)
     material.emissive.lerp(isSelected ? EMISSION_FULL : EMISSION_NONE, 0.1);
   });
 
-  return <>{platform}</>;
-}
-
-function SectorBase({ id, color, shape, showColorGroup }: Props) {
-  const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
-
   return (
-    <group
+    <mesh
+      ref={meshRef}
+      position={position}
+      receiveShadow
       onPointerEnter={(e) => (e.stopPropagation(), setSelectedSectorId(id))}
       onPointerLeave={(e) => (e.stopPropagation(), setSelectedSectorId(null))}
     >
-      <SectorMainPlatform id={id} shape={shape} showColorGroup={showColorGroup} />
-      {showColorGroup && <SectorColoredPlatform color={color} />}
-    </group>
+      <boxGeometry args={finalShape} />
+      <meshStandardMaterial color="white" roughness={0.75} map={texture} />
+    </mesh>
   );
 }
 

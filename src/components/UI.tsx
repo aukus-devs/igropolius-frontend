@@ -29,7 +29,9 @@ function UI() {
         <div className="text-[#494949] font-wide-black text-sm pb-3 text-end">
           <Countdown />
         </div>
-        <QuickMenu />
+        <div className="pb-8">
+          <QuickMenu />
+        </div>
         <Notifications />
       </div>
 

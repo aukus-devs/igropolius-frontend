@@ -75,7 +75,9 @@ const usePlayerStore = create<{
 
     set({ isPlayerMoving: true });
 
-    await useCameraStore.getState().cameraToPlayer(currentSectorId);
+    if (!useCameraStore.getState().isOrthographic) {
+      await useCameraStore.getState().cameraToPlayer(currentSectorId);
+    }
     const rolledNumber = await useDiceStore.getState().rollDice();
 
     const tl = createTimeline();

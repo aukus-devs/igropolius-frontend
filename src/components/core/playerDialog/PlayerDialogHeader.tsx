@@ -18,16 +18,15 @@ function PlayerDialogHeader({ player }: Props) {
     <div className="relative mb-8">
       <div className="font-wide-black text-4xl text-center mb-2">{player.nickname}</div>
       <div className="flex gap-5 justify-center">
-        {socials.map(({ href, title }) =>
-        (href && (
+        {socials.map(({ href, title }) => (href && (
           <Button
+            key={title}
             className="font-wide-semibold text-muted-foreground hover:text-foreground h-auto p-0"
             variant="link"
           >
             <a href={href} target="_blank">{title}</a>
           </Button>
-        ))
-        )}
+        )))}
       </div>
     </div>
   );

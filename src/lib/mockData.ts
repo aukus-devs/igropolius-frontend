@@ -1,5 +1,4 @@
 import {
-  colors,
   GameReviewType,
   DeckCardData,
   PlayerData,
@@ -13,7 +12,7 @@ export const sectorsData: SectorData[] = [
     name: "GO",
     position: { x: 0, y: 0 },
     type: "utility",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "voting",
   },
   {
@@ -21,7 +20,7 @@ export const sectorsData: SectorData[] = [
     name: "Mediterranean Avenue",
     position: { x: 1, y: 0 },
     type: "property",
-    color: colors.brown,
+    color: "brown",
     rollType: "auc",
   },
   {
@@ -29,7 +28,7 @@ export const sectorsData: SectorData[] = [
     name: "Community Chest 1",
     position: { x: 2, y: 0 },
     type: "bonus",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -37,7 +36,7 @@ export const sectorsData: SectorData[] = [
     name: "Baltic Avenue",
     position: { x: 3, y: 0 },
     type: "property",
-    color: colors.brown,
+    color: "brown",
     rollType: "auc",
   },
   {
@@ -45,7 +44,7 @@ export const sectorsData: SectorData[] = [
     name: "Income Tax",
     position: { x: 4, y: 0 },
     type: "property",
-    color: colors.brown,
+    color: "brown",
     rollType: "auc",
   },
   {
@@ -53,7 +52,7 @@ export const sectorsData: SectorData[] = [
     name: "Reading Railroad",
     position: { x: 5, y: 0 },
     type: "railroad",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -61,7 +60,7 @@ export const sectorsData: SectorData[] = [
     name: "Oriental Avenue",
     position: { x: 6, y: 0 },
     type: "property",
-    color: colors.lightblue,
+    color: "lightblue",
     rollType: "auc",
   },
   {
@@ -69,7 +68,7 @@ export const sectorsData: SectorData[] = [
     name: "Chance 1",
     position: { x: 7, y: 0 },
     type: "bonus",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -77,7 +76,7 @@ export const sectorsData: SectorData[] = [
     name: "Vermont Avenue",
     position: { x: 8, y: 0 },
     type: "property",
-    color: colors.lightblue,
+    color: "lightblue",
     rollType: "auc",
   },
   {
@@ -85,7 +84,7 @@ export const sectorsData: SectorData[] = [
     name: "Connecticut Avenue",
     position: { x: 9, y: 0 },
     type: "property",
-    color: colors.lightblue,
+    color: "lightblue",
     rollType: "auc",
   },
   {
@@ -93,7 +92,7 @@ export const sectorsData: SectorData[] = [
     name: "Jail / Just Visiting",
     position: { x: 10, y: 0 },
     type: "prison",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -101,7 +100,7 @@ export const sectorsData: SectorData[] = [
     name: "St. Charles Place",
     position: { x: 10, y: 1 },
     type: "property",
-    color: colors.pink,
+    color: "pink",
     rollType: "auc",
   },
   {
@@ -109,7 +108,7 @@ export const sectorsData: SectorData[] = [
     name: "Electric Company",
     position: { x: 10, y: 2 },
     type: "bonus",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -117,7 +116,7 @@ export const sectorsData: SectorData[] = [
     name: "States Avenue",
     position: { x: 10, y: 3 },
     type: "property",
-    color: colors.pink,
+    color: "pink",
     rollType: "auc",
   },
   {
@@ -125,7 +124,7 @@ export const sectorsData: SectorData[] = [
     name: "Virginia Avenue",
     position: { x: 10, y: 4 },
     type: "property",
-    color: colors.pink,
+    color: "pink",
     rollType: "auc",
   },
   {
@@ -133,7 +132,7 @@ export const sectorsData: SectorData[] = [
     name: "Pennsylvania Railroad",
     position: { x: 10, y: 5 },
     type: "railroad",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -141,7 +140,7 @@ export const sectorsData: SectorData[] = [
     name: "St. James Place",
     position: { x: 10, y: 6 },
     type: "property",
-    color: colors.orange,
+    color: "orange",
     rollType: "auc",
   },
   {
@@ -149,7 +148,7 @@ export const sectorsData: SectorData[] = [
     name: "Community Chest 2",
     position: { x: 10, y: 7 },
     type: "bonus",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -157,7 +156,7 @@ export const sectorsData: SectorData[] = [
     name: "Tennessee Avenue",
     position: { x: 10, y: 8 },
     type: "property",
-    color: colors.orange,
+    color: "orange",
     rollType: "auc",
   },
   {
@@ -165,7 +164,7 @@ export const sectorsData: SectorData[] = [
     name: "New York Avenue",
     position: { x: 10, y: 9 },
     type: "property",
-    color: colors.orange,
+    color: "orange",
     rollType: "auc",
   },
   {
@@ -173,7 +172,7 @@ export const sectorsData: SectorData[] = [
     name: "Free Parking",
     position: { x: 10, y: 10 },
     type: "utility",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "voting",
   },
   {
@@ -181,7 +180,7 @@ export const sectorsData: SectorData[] = [
     name: "Kentucky Avenue",
     position: { x: 9, y: 10 },
     type: "property",
-    color: colors.red,
+    color: "red",
     rollType: "auc",
   },
   {
@@ -189,7 +188,7 @@ export const sectorsData: SectorData[] = [
     name: "Chance 2",
     position: { x: 8, y: 10 },
     type: "bonus",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -197,7 +196,7 @@ export const sectorsData: SectorData[] = [
     name: "Indiana Avenue",
     position: { x: 7, y: 10 },
     type: "property",
-    color: colors.red,
+    color: "red",
     rollType: "auc",
   },
   {
@@ -205,7 +204,7 @@ export const sectorsData: SectorData[] = [
     name: "Illinois Avenue",
     position: { x: 6, y: 10 },
     type: "property",
-    color: colors.red,
+    color: "red",
     rollType: "auc",
   },
   {
@@ -213,7 +212,7 @@ export const sectorsData: SectorData[] = [
     name: "B. & O. Railroad",
     position: { x: 5, y: 10 },
     type: "railroad",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -221,7 +220,7 @@ export const sectorsData: SectorData[] = [
     name: "Atlantic Avenue",
     position: { x: 4, y: 10 },
     type: "property",
-    color: colors.yellow,
+    color: "yellow",
     rollType: "auc",
   },
   {
@@ -229,7 +228,7 @@ export const sectorsData: SectorData[] = [
     name: "Ventnor Avenue",
     position: { x: 3, y: 10 },
     type: "property",
-    color: colors.yellow,
+    color: "yellow",
     rollType: "auc",
   },
   {
@@ -237,7 +236,7 @@ export const sectorsData: SectorData[] = [
     name: "Water Works",
     position: { x: 2, y: 10 },
     type: "bonus",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -245,7 +244,7 @@ export const sectorsData: SectorData[] = [
     name: "Marvin Gardens",
     position: { x: 1, y: 10 },
     type: "property",
-    color: colors.yellow,
+    color: "yellow",
     rollType: "auc",
   },
   {
@@ -253,7 +252,7 @@ export const sectorsData: SectorData[] = [
     name: "Go To Jail",
     position: { x: 0, y: 10 },
     type: "prison",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -261,7 +260,7 @@ export const sectorsData: SectorData[] = [
     name: "Pacific Avenue",
     position: { x: 0, y: 9 },
     type: "property",
-    color: colors.green,
+    color: "green",
     rollType: "auc",
   },
   {
@@ -269,7 +268,7 @@ export const sectorsData: SectorData[] = [
     name: "North Carolina Avenue",
     position: { x: 0, y: 8 },
     type: "property",
-    color: colors.green,
+    color: "green",
     rollType: "auc",
   },
   {
@@ -277,7 +276,7 @@ export const sectorsData: SectorData[] = [
     name: "Community Chest 3",
     position: { x: 0, y: 7 },
     type: "bonus",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -285,7 +284,7 @@ export const sectorsData: SectorData[] = [
     name: "Pennsylvania Avenue",
     position: { x: 0, y: 6 },
     type: "property",
-    color: colors.green,
+    color: "green",
     rollType: "auc",
   },
   {
@@ -293,7 +292,7 @@ export const sectorsData: SectorData[] = [
     name: "Short Line",
     position: { x: 0, y: 5 },
     type: "railroad",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -301,7 +300,7 @@ export const sectorsData: SectorData[] = [
     name: "Chance 3",
     position: { x: 0, y: 4 },
     type: "property",
-    color: colors.blue,
+    color: "blue",
     rollType: "auc",
   },
   {
@@ -309,7 +308,7 @@ export const sectorsData: SectorData[] = [
     name: "Park Place",
     position: { x: 0, y: 3 },
     type: "property",
-    color: colors.blue,
+    color: "blue",
     rollType: "auc",
   },
   {
@@ -317,7 +316,7 @@ export const sectorsData: SectorData[] = [
     name: "Luxury Tax",
     position: { x: 0, y: 2 },
     type: "bonus",
-    color: colors.pastelgreen,
+    color: "pastelgreen",
     rollType: "steam",
   },
   {
@@ -325,7 +324,7 @@ export const sectorsData: SectorData[] = [
     name: "Boardwalk",
     position: { x: 0, y: 1 },
     type: "property",
-    color: colors.blue,
+    color: "blue",
     rollType: "auc",
   },
 ];

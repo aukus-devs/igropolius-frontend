@@ -1,16 +1,39 @@
-import { ChevronDownIcon, HeartIcon, NotebookTextIcon } from "lucide-react";
+import { BoxIcon, ChevronDownIcon, HeartIcon, NotebookTextIcon, SquareIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import usePlayerStore from "@/stores/playerStore";
+import useCameraStore from "@/stores/cameraStore";
 
 const sharedStyles =
   "justify-start w-full text-base font-semibold rounded-xl px-3 py-2 backdrop-blur-[1.5rem] bg-card/60 border-none";
 
+function ToggleOrthographic() {
+  const toggleOrthographic = useCameraStore((state) => state.toggleOrthographic);
+  const isOrthographic = useCameraStore((state) => state.isOrthographic);
+
+  return (
+    <Button variant="outline" className={sharedStyles} onClick={toggleOrthographic}>
+      {isOrthographic ?
+        <>
+          <BoxIcon className="h-4 w-4" />
+          3D
+        </>
+        :
+        <>
+          <SquareIcon className="h-4 w-4" />
+          Вид сверху
+        </>
+      }
+    </Button>
+  )
+}
+
 function QuickMenu() {
   const myPlayer = usePlayerStore((state) => state.myPlayer);
+
   const playerName = myPlayer ? myPlayer.nickname : "Зритель";
 
   return (
@@ -60,6 +83,8 @@ function QuickMenu() {
             <HeartIcon className="h-4 w-4" />
             Привязать поинтаук
           </Button>
+
+          <ToggleOrthographic />
         </CollapsibleContent>
       </Collapsible>
     </>

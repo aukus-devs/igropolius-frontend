@@ -4,10 +4,15 @@ import useModelsStore from "./modelsStore";
 
 const useCameraStore = create<{
   cameraControls: CameraControls | null;
+  isOrthographic: boolean;
   setCameraControls: (controls: CameraControls) => void;
   cameraToPlayer: (sectorId: number) => Promise<void>;
+  toggleOrthographic: () => void;
 }>((set) => ({
   cameraControls: null,
+  isOrthographic: false,
+
+  toggleOrthographic: () => set({ isOrthographic: !useCameraStore.getState().isOrthographic }),
 
   setCameraControls: (controls) => set({ cameraControls: controls }),
 

@@ -54,7 +54,7 @@ export type SectorData = {
   type: "prison" | "property" | "railroad" | "bonus" | "utility";
   name: string;
   position: Position;
-  color: CellColor;
+  color: ColorName;
   rollType: CellRollType;
 };
 
