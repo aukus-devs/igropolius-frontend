@@ -26,7 +26,7 @@ function UI() {
       </div>
 
       <div className="absolute right-4 top-3 w-[15rem]">
-        <div className="text-[#494949] font-wide-black text-sm pb-3 text-end">
+        <div className="text-[#494949] roboto-flex-wide text-sm pb-3 text-end">
           <Countdown />
         </div>
         <QuickMenu />

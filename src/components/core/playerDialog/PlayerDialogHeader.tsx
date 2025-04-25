@@ -8,7 +8,7 @@ type Props = {
 function PlayerDialogHeader({ player }: Props) {
   return (
     <div className="relative mb-8">
-      <div className="font-wide-black text-4xl text-center mb-2">{player.nickname}</div>
+      <div className="roboto-flex-wide text-4xl text-center mb-2">{player.nickname}</div>
       <div className="flex gap-5 justify-center">
         {player.twitch_stream_link && (
           <Button
