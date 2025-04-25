@@ -22,14 +22,14 @@ type Props = {
 function getSectorTexture(color: ColorName) {
   switch (color) {
     case "brown": return `${import.meta.env.BASE_URL}assets/sectors/textures/brown.png`;
-    case "lightblue": return `${import.meta.env.BASE_URL}/assets/sectors/textures/lightblue.png`;
-    case "pink": return `${import.meta.env.BASE_URL}/assets/sectors/textures/pink.png`;
-    case "orange": return `${import.meta.env.BASE_URL}/assets/sectors/textures/orange.png`;
-    case "red": return `${import.meta.env.BASE_URL}/assets/sectors/textures/red.png`;
-    case "yellow": return `${import.meta.env.BASE_URL}/assets/sectors/textures/yellow.png`;
-    case "green": return `${import.meta.env.BASE_URL}/assets/sectors/textures/green.png`;
-    case "blue": return `${import.meta.env.BASE_URL}/assets/sectors/textures/blue.png`;
-    case "pastelgreen": return `${import.meta.env.BASE_URL}/assets/sectors/textures/pastelgreen.png`;
+    case "lightblue": return `${import.meta.env.BASE_URL}assets/sectors/textures/lightblue.png`;
+    case "pink": return `${import.meta.env.BASE_URL}assets/sectors/textures/pink.png`;
+    case "orange": return `${import.meta.env.BASE_URL}assets/sectors/textures/orange.png`;
+    case "red": return `${import.meta.env.BASE_URL}assets/sectors/textures/red.png`;
+    case "yellow": return `${import.meta.env.BASE_URL}assets/sectors/textures/yellow.png`;
+    case "green": return `${import.meta.env.BASE_URL}assets/sectors/textures/green.png`;
+    case "blue": return `${import.meta.env.BASE_URL}assets/sectors/textures/blue.png`;
+    case "pastelgreen": return `${import.meta.env.BASE_URL}assets/sectors/textures/pastelgreen.png`;
   }
 }
 
