@@ -59,7 +59,7 @@ function Rating({ onChange }: Props) {
           <Button
             key={index}
             variant="ghost"
-            className="relative px-[3px] py-0 h-6 hover:bg-transparent"
+            className="relative px-[3px] py-0 h-6 hover:bg-transparent font-roboto-wide-semibold-italic"
             onClick={() => handleClick(index)}
             onMouseMove={(e) => handleMouseMove(e, index)}
             onMouseEnter={() => setHoverValue(index + 1)}

@@ -39,8 +39,7 @@
 }
 
 @theme inline {
-  --font-wide-medium: "MursGothicWideMedium", sans-serif;
-  --font-wide-demi: "MursGothicMassiveDemi", sans-serif;
+  --font-wide-semibold: "MursGothicMassiveDemi", sans-serif;
   --font-wide-black: "MursGothicMassiveBlack", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -91,7 +90,46 @@
   }
 }
 
-.roboto-flex-wide {
+.font-roboto-wide-semibold {
+  font-family: "Roboto Flex", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0,
+    "wdth" 151,
+    "GRAD" 0,
+    "XOPQ" 140,
+    "XTRA" 520,
+    "YOPQ" 79,
+    "YTAS" 750,
+    "YTDE" -203,
+    "YTFI" 738,
+    "YTLC" 514,
+    "YTUC" 712;
+}
+
+.font-roboto-wide-semibold-italic {
+  font-family: "Roboto Flex", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" -10,
+    "wdth" 151,
+    "GRAD" 0,
+    "XOPQ" 140,
+    "XTRA" 520,
+    "YOPQ" 79,
+    "YTAS" 750,
+    "YTDE" -203,
+    "YTFI" 738,
+    "YTLC" 514,
+    "YTUC" 712;
+}
+
+/*
+.font-wide-black {
   font-family: "Roboto Flex", sans-serif;
   font-optical-sizing: auto;
   font-weight: 900;
@@ -108,7 +146,7 @@
     "YTFI" 738,
     "YTLC" 514,
     "YTUC" 712;
-}
+} */
 
 .fps-meter {
   position: absolute !important;

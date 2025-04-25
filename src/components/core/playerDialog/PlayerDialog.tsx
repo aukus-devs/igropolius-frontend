@@ -50,7 +50,7 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
         >
           <ScrollArea className="flex h-full">
             <DialogHeader className="relative pt-5 mb-8">
-              <DialogTitle className="text-center font-wide-demi text-muted-foreground text-sm">
+              <DialogTitle className="text-center font-demi text-muted-foreground text-sm">
                 LIVE — Hotline Miami
               </DialogTitle>
               <div className="absolute top-0 left-0 z-[-1] w-full h-[240px] blur-2xl">

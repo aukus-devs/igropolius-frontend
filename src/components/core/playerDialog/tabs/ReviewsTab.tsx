@@ -24,7 +24,7 @@ function ReviewsTab({ reviews }: Props) {
         <Input
           id="search"
           type="text"
-          className="pl-8 font-wide-medium"
+          className="pl-8 font-roboto-wide-semibold"
           placeholder="Поиск по играм"
           onKeyDown={(e) => e.stopPropagation()}
           onChange={(e) => setSearchText(e.target.value)}

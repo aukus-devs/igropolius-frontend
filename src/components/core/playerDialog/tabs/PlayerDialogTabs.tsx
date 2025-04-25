@@ -21,7 +21,7 @@ function PlayerDialogTabs({ reviews }: Props) {
         {tabs.map(({ name, value }) => (
           <TabsTrigger
             key={value}
-            className="text-muted-foreground bg-foreground/20 rounded-lg hover:text-foreground transition-colors data-[state=active]:text-primary-foreground data-[state=active]:bg-primary h-8 roboto-flex-wide"
+            className="text-muted-foreground bg-foreground/20 rounded-lg hover:text-foreground transition-colors data-[state=active]:text-primary-foreground data-[state=active]:bg-primary h-8 font-roboto-wide-semibold"
             value={value}
           >
             {name}

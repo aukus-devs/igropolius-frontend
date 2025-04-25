@@ -80,6 +80,7 @@ function GameTitle() {
       id="game-name"
       type="text"
       placeholder="Название игры"
+      className="font-roboto-wide-semibold"
       value={gameTitle}
       onKeyDown={(e) => e.stopPropagation()}
       onChange={(e) => setGameTitle(e.target.value)}
@@ -91,7 +92,7 @@ function HLTBLink() {
   return (
     <Button variant="outline" className="font-semibold bg-popover text-popover-foreground border-none p-0">
       <a
-        className="flex gap-1 size-full items-center justify-center"
+        className="flex gap-1 size-full items-center justify-center font-roboto-wide-semibold"
         href="https://howlongtobeat.com/"
         target="_blank"
       >
