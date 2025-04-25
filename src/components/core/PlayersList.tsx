@@ -9,8 +9,8 @@ function PlayersList() {
   const [isCompact, setIsCompact] = useState(false);
 
   return (
-    <div className="relative flex flex-col gap-2">
-      <div className="flex justify-between items-center">
+    <div className="relative flex flex-col gap-2 !pointer-events-none">
+      <div className="flex justify-between items-center !pointer-events-auto">
         <span className="text-[#494949] font-wide-black text-sm">
           МСК — <Clock />
         </span>

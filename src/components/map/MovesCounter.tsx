@@ -6,7 +6,7 @@ function MovesCounter() {
   const rolledNumber = useDiceStore((state) => state.rolledNumber);
 
   return (
-    <Html center>
+    <Html zIndexRange={[0, 0]} center>
       <Card
         className="p-1 w-10 items-center scale-0 data-[open=true]:scale-100 duration-300"
         data-open={!!rolledNumber}

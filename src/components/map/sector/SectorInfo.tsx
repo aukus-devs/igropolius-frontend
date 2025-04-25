@@ -13,7 +13,7 @@ function SectorInfo({ sector }: Props) {
 
   return (
     <>
-      <Html pointerEvents="none" style={{ pointerEvents: "none" }} center position={[0, 10, 0]}>
+      <Html zIndexRange={[0, 0]} pointerEvents="none" style={{ pointerEvents: "none" }} center position={[0, 10, 0]}>
         {isSelected && (
           <Card className="w-52 pointer-events-none">
             <CardHeader>

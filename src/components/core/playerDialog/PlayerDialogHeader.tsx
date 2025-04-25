@@ -6,63 +6,27 @@ type Props = {
 };
 
 function PlayerDialogHeader({ player }: Props) {
+  const socials = [
+    { href: player.twitch_stream_link, title: 'Твич' },
+    { href: player.vk_stream_link, title: 'ВкВидео' },
+    { href: player.kick_stream_link, title: 'Кик' },
+    { href: player.telegram_link, title: 'Телеграм' },
+    { href: player.donation_link, title: 'Донат' },
+  ];
+
   return (
     <div className="relative mb-8">
       <div className="font-wide-black text-4xl text-center mb-2">{player.nickname}</div>
       <div className="flex gap-5 justify-center">
-        {player.twitch_stream_link && (
+        {socials.map(({ href, title }) =>
+        (href && (
           <Button
             className="font-wide-semibold text-muted-foreground hover:text-foreground h-auto p-0"
             variant="link"
           >
-            <a href={player.twitch_stream_link} target="_blank noreferrer noopener">
-              Твич
-            </a>
+            <a href={href} target="_blank">{title}</a>
           </Button>
-        )}
-
-        {player.vk_stream_link && (
-          <Button
-            className="font-wide-semibold text-muted-foreground hover:text-foreground h-auto p-0"
-            variant="link"
-          >
-            <a href={player.vk_stream_link} target="_blank noreferrer noopener">
-              ВкВидео
-            </a>
-          </Button>
-        )}
-
-        {player.kick_stream_link && (
-          <Button
-            className="font-wide-semibold text-muted-foreground hover:text-foreground h-auto p-0"
-            variant="link"
-          >
-            <a href={player.kick_stream_link} target="_blank noreferrer noopener">
-              Кик
-            </a>
-          </Button>
-        )}
-
-        {player.telegram_link && (
-          <Button
-            className="font-wide-semibold text-muted-foreground hover:text-foreground h-auto p-0"
-            variant="link"
-          >
-            <a href={player.telegram_link} target="_blank noreferrer noopener">
-              Телеграм
-            </a>
-          </Button>
-        )}
-
-        {player.donation_link && (
-          <Button
-            className="font-wide-semibold text-muted-foreground hover:text-foreground h-auto p-0"
-            variant="link"
-          >
-            <a href={player.donation_link} target="_blank noreferrer noopener">
-              Донат
-            </a>
-          </Button>
+        ))
         )}
       </div>
     </div>

@@ -20,8 +20,8 @@ function MoveButton() {
 
 function UI() {
   return (
-    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10 overflow-hidden">
-      <div className="absolute top-3 left-4">
+    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden">
+      <div className="absolute top-3 left-4 !pointer-events-none">
         <PlayersList />
       </div>
 
