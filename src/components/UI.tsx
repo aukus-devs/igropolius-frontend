@@ -5,7 +5,6 @@ import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
 import RollDeckCard from "./core/RollDeckCard";
-import Clock from "./core/Clock";
 import Countdown from "./core/Countdown";
 
 function MoveButton() {
@@ -20,15 +19,10 @@ function MoveButton() {
 }
 
 function UI() {
-  const players = usePlayerStore((state) => state.players);
-
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-10 overflow-hidden">
       <div className="absolute top-3 left-4">
-        <div className="text-[#494949] font-wide-black text-sm pb-3">
-          МСК — <Clock />
-        </div>
-        <PlayersList players={players} />
+        <PlayersList />
       </div>
 
       <div className="absolute right-4 top-3 w-[15rem]">

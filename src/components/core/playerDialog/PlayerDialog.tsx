@@ -18,14 +18,28 @@ import PlayerDialogHeader from "./PlayerDialogHeader";
 type Props = {
   player: PlayerData;
   placement: number;
-  onClick?: () => void;
+  zIndex: number;
+  isHidden: boolean;
 };
 
-function PlayerDialog({ player, placement }: Props) {
+function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
 
+  const collapseToPlacement = 3;
+  const translatePercent = 105;
+  const translateY = -translatePercent * (placement - collapseToPlacement);
+  const isCollapsible = isHidden && placement > collapseToPlacement;
+
   return (
-    <div className="group relative">
+    <div
+      className="group relative transition-[transform,opacity] duration-300"
+      style={{
+        transform: isCollapsible ? `translateY(${translateY}%)` : "translateY(0)",
+        opacity: isCollapsible ? 0.3 : 1,
+        pointerEvents: isCollapsible ? "none" : "auto",
+        zIndex
+      }}
+    >
       <Dialog>
         <DialogTrigger>
           <PlayerDialogTrigger player={player} placement={placement} />

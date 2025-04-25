@@ -33,7 +33,6 @@ function TrainModel({ ...props }) {
       lastRailModel.getWorldPosition(endPosition);
       firstRailModel.getWorldQuaternion(rotation);
 
-      // console.log(worldPosition, lastRailModel);
       tl
         .add(trainRef.current.position, {
           x: startPosition.x,
