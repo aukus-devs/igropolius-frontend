@@ -8,7 +8,8 @@ import { Controls } from "./lib/constants";
 import Scene from "./components/map/Scene";
 import UI from "./components/UI";
 import usePlayerStore from "./stores/playerStore";
-import { playersData } from "./lib/mockData";
+import { fetchCurrentPlayer, fetchPlayers } from "./lib/api";
+import { useQuery } from "@tanstack/react-query";
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -25,17 +26,30 @@ function App() {
     [],
   );
 
-  const { setPlayers, setMyPlayer } = usePlayerStore(
+  const { data: currentPlayerData } = useQuery({
+    queryKey: ["current-player"],
+    queryFn: fetchCurrentPlayer,
+  });
+
+  const { data: playersData } = useQuery({
+    queryKey: ["players-list"],
+    queryFn: fetchPlayers,
+  });
+
+  const { setPlayers, setMyPlayerId } = usePlayerStore(
     useShallow((state) => ({
       setPlayers: state.setPlayers,
-      setMyPlayer: state.setMyPlayer,
+      setMyPlayerId: state.setMyPlayerId,
     })),
   );
 
   useEffect(() => {
-    setMyPlayer(playersData[0]);
-    setPlayers(playersData);
-  }, [setPlayers, setMyPlayer]);
+    setMyPlayerId(currentPlayerData?.id);
+  }, [currentPlayerData?.id, setMyPlayerId]);
+
+  useEffect(() => {
+    setPlayers(playersData?.players ?? []);
+  }, [setPlayers, playersData]);
 
   return (
     <KeyboardControls map={map}>

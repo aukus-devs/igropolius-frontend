@@ -27,6 +27,7 @@
     "@react-three/drei": "^10.0.5",
     "@react-three/fiber": "^9.1.0",
     "@tailwindcss/vite": "^4.0.15",
+    "@tanstack/react-query": "^5.74.7",
     "camera-controls": "^2.10.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

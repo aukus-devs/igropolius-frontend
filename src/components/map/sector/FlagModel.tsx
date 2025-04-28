@@ -1,6 +1,5 @@
 import { STORAGE_BASE_URL } from "@/lib/constants";
 import { Gltf } from "@react-three/drei";
-import * as THREE from "three";
 
 const FlagUrl = `${STORAGE_BASE_URL}/models/flags/flag-green.glb`;
 

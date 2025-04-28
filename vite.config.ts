@@ -6,11 +6,11 @@ import serveStatic from "serve-static";
 
 // https://vite.dev/config/
 
-const base = process.env.VITE_BASE_URL || '/react-3d/'
+const base = process.env.VITE_BASE_URL || "/react-3d/";
 
 export default defineConfig(({ mode }) => {
   const isDev = mode === "development";
-  // @ts-ignore
+  // @ts-expect-error plugins are not well-typed
   const plugins: Plugin[] = [react(), tailwindcss()];
   if (isDev) {
     const devAssetsPlugin: Plugin = {
