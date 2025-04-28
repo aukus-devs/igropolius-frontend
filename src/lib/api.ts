@@ -2,7 +2,7 @@ import { PlayerData, PlayerEvent } from "@/types";
 import { playersData } from "./mockData";
 
 const IS_DEV = import.meta.env.MODE === "development";
-const MOCK_API = IS_DEV;
+const MOCK_API = IS_DEV || true;
 
 type PlayerEventsResponse = {
   events: PlayerEvent[];
