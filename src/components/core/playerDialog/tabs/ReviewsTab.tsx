@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { GameReviewType } from "@/types";
+import { GameReviewType } from "@/lib/types";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import GameReview from "./GameReview";

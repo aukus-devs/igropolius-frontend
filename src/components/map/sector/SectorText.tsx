@@ -1,5 +1,5 @@
 import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
-import { Vector3Array } from "@/types";
+import { Vector3Array } from "@/lib/types";
 import { Text } from "@react-three/drei";
 
 type Props = {

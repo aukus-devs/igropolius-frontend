@@ -1,4 +1,4 @@
-import { PlayerData, PlayerEvent } from "@/types";
+import { PlayerData, PlayerEvent } from "@/lib/types";
 import { playersData } from "./mockData";
 
 const IS_DEV = import.meta.env.MODE === "development";

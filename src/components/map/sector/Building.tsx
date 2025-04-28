@@ -1,5 +1,5 @@
 import { BUILDING_SCALE, SECTOR_CONTENT_ELEVATION, STORAGE_BASE_URL } from "@/lib/constants";
-import { BuildingType, CellColor, Vector3Array } from "@/types";
+import { BuildingType, CellColor, Vector3Array } from "@/lib/types";
 import { Gltf } from "@react-three/drei";
 import { eases } from "animejs";
 import { animate } from "animejs";

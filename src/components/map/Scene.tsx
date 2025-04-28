@@ -3,7 +3,7 @@ import Floor from "./Floor";
 import { Grid, Stats } from "@react-three/drei";
 import GameBoard from "./GameBoard";
 import { Railroad } from "./Railroad";
-import { colors } from "@/types";
+import { colors } from "@/lib/types";
 
 function Scene() {
   const gridConfig = {
@@ -48,7 +48,7 @@ function Scene() {
   return (
     <>
       <ambientLight intensity={0.3} color="#D3D3D3" />
-      <hemisphereLight args={['#87CEEB', colors.pastelgreen, 0.5]} position={[0, 5, 0]} />
+      <hemisphereLight args={["#87CEEB", colors.pastelgreen, 0.5]} position={[0, 5, 0]} />
       <directionalLight
         // ref={directionalLightRef}
         color="#fcffb5"

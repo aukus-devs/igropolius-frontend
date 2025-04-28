@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { PlayerData } from "@/types";
+import { PlayerData } from "@/lib/types";
 import { ZapIcon } from "lucide-react";
 
 type Props = {

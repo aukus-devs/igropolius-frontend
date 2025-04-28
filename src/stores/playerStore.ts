@@ -1,5 +1,5 @@
 import { GameLengthToBuildingType } from "@/lib/constants";
-import { BuildingData, PlayerData } from "@/types";
+import { BuildingData, PlayerData } from "@/lib/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";

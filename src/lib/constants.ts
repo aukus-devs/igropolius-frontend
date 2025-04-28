@@ -1,4 +1,4 @@
-import { BuildingType, GameLengthWithDrop, TrainData } from "@/types";
+import { BuildingType, GameLengthWithDrop, TrainData } from "@/lib/types";
 import { Color } from "three";
 
 export enum Controls {

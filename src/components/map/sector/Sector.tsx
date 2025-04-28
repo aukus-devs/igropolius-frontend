@@ -1,4 +1,4 @@
-import { SectorData, Vector3Array } from "@/types";
+import { SectorData, Vector3Array } from "@/lib/types";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
 import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH } from "@/lib/constants";

@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReviewsTab from "./ReviewsTab";
-import { GameReviewType } from "@/types";
+import { GameReviewType } from "@/lib/types";
 import CardsTab from "./CardsTab";
 import ArchiveTab from "./ArchiveTab";
 

@@ -1,6 +1,6 @@
 import { PLAYER_HEIGHT, STORAGE_BASE_URL } from "@/lib/constants";
 import useModelsStore from "@/stores/modelsStore";
-import { PlayerData, Vector3Array } from "@/types";
+import { PlayerData, Vector3Array } from "@/lib/types";
 import { ThreeEvent } from "@react-three/fiber";
 import { Group } from "three";
 import DiceModel from "./DiceModel";

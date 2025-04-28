@@ -1,4 +1,4 @@
-import { PlayerData } from "@/types";
+import { PlayerData } from "@/lib/types";
 import { MapPinIcon } from "lucide-react";
 import useCameraStore from "@/stores/cameraStore";
 import { Button } from "../../ui/button";
@@ -37,7 +37,7 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
         transform: isCollapsible ? `translateY(${translateY}%)` : "translateY(0)",
         opacity: isCollapsible ? 0.3 : 1,
         pointerEvents: isCollapsible ? "none" : "auto",
-        zIndex
+        zIndex,
       }}
     >
       <Dialog>
