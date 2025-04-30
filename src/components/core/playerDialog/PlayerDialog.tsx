@@ -63,13 +63,7 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
               <DialogTitle className="hidden" />
               <PlayerDialogHeader player={player} />
             </DialogHeader>
-<<<<<<< HEAD
-            <PlayerDialogTabs />
-=======
-
-            <PlayerDialogHeader player={player} />
-            <PlayerDialogTabs reviews={mockReviews} events={events} />
->>>>>>> 73f71addad94c907f7a1b4460dc840d7c09527fc
+            <PlayerDialogTabs games={[]} events={[]} />
           </ScrollArea>
         </DialogContent>
       </Dialog>
