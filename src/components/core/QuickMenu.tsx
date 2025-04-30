@@ -8,7 +8,7 @@ import usePlayerStore from "@/stores/playerStore";
 import useCameraStore from "@/stores/cameraStore";
 
 const sharedStyles =
-  "justify-start w-full text-base font-semibold rounded-xl px-3 py-2 backdrop-blur-[1.5rem] bg-card/60 border-none";
+  "justify-start w-full text-base font-semibold rounded-xl px-3 py-2 backdrop-blur-[1.5rem] bg-card/70 border-none";
 
 function ToggleOrthographic() {
   const toggleOrthographic = useCameraStore((state) => state.toggleOrthographic);

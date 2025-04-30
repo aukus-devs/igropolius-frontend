@@ -72,8 +72,8 @@ function Building({ position, type, color }: Props) {
                   mat.color.set(color);
                 }
                 // Update roughness and metalness
-                mat.roughness = 0.5;
-                mat.metalness = 0.5;
+                mat.roughness = 0.75;
+                mat.metalness = 0.25;
                 mat.needsUpdate = true;
               }
               return mat;
@@ -85,8 +85,8 @@ function Building({ position, type, color }: Props) {
               mat.color.set(color);
             }
             // Update roughness and metalness
-            mat.roughness = 0.5;
-            mat.metalness = 0.5;
+            mat.roughness = 0.75;
+            mat.metalness = 0.25;
             mat.needsUpdate = true;
             mesh.material = mat;
           }

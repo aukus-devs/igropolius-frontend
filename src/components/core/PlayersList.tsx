@@ -17,7 +17,7 @@ function PlayersList() {
 
         <Button
           variant="outline"
-          className="relative rounded-md px-2 py-0.5 h-[1.5rem] items-center font-semibold backdrop-blur-[1.5rem] bg-card/60 border-none font-wide-black text-xs text-muted-foreground"
+          className="relative rounded-md px-2 py-0.5 h-[1.5rem] items-center font-semibold backdrop-blur-[1.5rem] bg-card/70 border-none font-wide-black text-xs text-muted-foreground"
           onClick={() => setIsCompact(!isCompact)}
         >
           {isCompact ? 'Раскрыть' : 'Скрыть'}

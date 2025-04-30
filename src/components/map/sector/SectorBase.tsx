@@ -62,7 +62,7 @@ function SectorBase({ id, color, shape, showColorGroup }: Props) {
       onPointerLeave={(e) => (e.stopPropagation(), setSelectedSectorId(null))}
     >
       <boxGeometry args={finalShape} />
-      <meshStandardMaterial color="white" roughness={0.75} map={texture} />
+      <meshStandardMaterial color="white" roughness={0.75} map={texture} emissiveIntensity={0.25} />
     </mesh>
   );
 }

@@ -1,64 +1,58 @@
 import { GameReviewType, GameStatusType } from "@/types";
-import { ZapIcon } from "lucide-react";
 
 type Props = {
-  review: GameReviewType;
+  game: GameReviewType;
 };
 
 function getStatusData(status: GameStatusType) {
   switch (status) {
     case "drop":
       return {
-        statusName: "Дропнул",
-        statusColor: "text-red-500",
-      };
-    case "in_progress":
-      return {
-        statusName: "Текущая игра",
-        statusColor: "",
+        title: "Дропнул",
+        color: "text-red-500",
       };
     case "completed":
       return {
-        statusName: "Прошел",
-        statusColor: "text-green-500",
+        title: "Прошел",
+        color: "text-green-500",
       };
     case "reroll":
       return {
-        statusName: "Реролл",
-        statusColor: "text-blue-500",
+        title: "Реролл",
+        color: "text-blue-500",
       };
+    default: {
+      return {
+        title: "",
+        color: "",
+      };
+    }
   }
 }
 
-function GameReview({ review }: Props) {
-  const { gameTitle, description, rating, points, status, date, poster } = review;
+function GameReview({ game }: Props) {
+  const { gameTitle, description, rating, status, date, poster } = game;
   const fallbackPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
   const formattedDate = new Intl.DateTimeFormat("ru-RU", {
     day: "numeric",
     month: "long",
   }).format(date);
-  const { statusColor, statusName } = getStatusData(status);
-  const formattedPoints = points.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  const pointsSymbol = points >= 0 ? "+" : "-";
+  const { color, title } = getStatusData(status);
 
   return (
     <div className="font-semibold">
-      <div className={`text-xs ${statusColor} font-wide-semibold`}>
-        {statusName} — {formattedDate}
+      <div className={`text-xs ${color} font-wide-semibold`}>
+        {title} — {formattedDate}
       </div>
       <h3 className="text-2xl mb-2 font-wide-semibold">{gameTitle}</h3>
       <div className="flex gap-2.5">
         <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
-
           <img className="h-full object-cover" src={poster || fallbackPoster} />
         </div>
         <div className="text-muted-foreground">
           <p>
             {rating} / 10 — {description}
           </p>
-          <div className="flex items-center gap-1 mt-2">
-            {pointsSymbol} {formattedPoints} <ZapIcon size="1rem" />
-          </div>
         </div>
       </div>
     </div>

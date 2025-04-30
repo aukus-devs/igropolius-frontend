@@ -1,6 +1,14 @@
-function CardsTab() {
+import { DeckCardData } from "@/types";
+
+function CardsTab({ cards }: { cards: DeckCardData[] }) {
   return (
-    <div>cards</div>
+    <div>
+      {cards.map((card, idx) => (
+        <div key={idx}>
+          {card.name}
+        </div>
+      ))}
+    </div>
   )
 }
 
