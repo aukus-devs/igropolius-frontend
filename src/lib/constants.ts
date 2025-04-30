@@ -62,7 +62,7 @@ export const TrainsConfig: TrainData[] = [
   },
 ];
 
-const IS_DEV = import.meta.env.MODE === "development";
+export const IS_DEV = import.meta.env.MODE === "development";
 export const STORAGE_BASE_URL = IS_DEV
   ? `/monopoly_s3/assets`
   : `https://storage.yandexcloud.net/monopoly2025/assets`;

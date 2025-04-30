@@ -13,16 +13,16 @@ function PlayerDialogTabs({ games, events }: Props) {
   const tabs = [
     { name: "Игры", value: "games", content: <GamesTab games={games} /> },
     { name: "Карточки", value: "cards", content: <CardsTab cards={[]} /> },
-    { name: "Ходы", value: "events", content: <EventsTab events={events} /> },
+    { name: "Действия", value: "actions", content: <EventsTab events={events} /> },
   ];
 
   return (
     <Tabs className="px-5" defaultValue={tabs[0].value}>
-      <TabsList className="w-full bg-transparent gap-2">
+      <TabsList className="w-full bg-transparent gap-2 p-0">
         {tabs.map(({ name, value }) => (
           <TabsTrigger
             key={value}
-            className="text-muted-foreground bg-foreground/20 rounded-lg hover:text-foreground transition-colors data-[state=active]:text-primary-foreground data-[state=active]:bg-primary h-8 font-roboto-wide-semibold"
+            className="text-muted-foreground bg-foreground/20 rounded-xl hover:text-foreground transition-colors data-[state=active]:text-primary-foreground data-[state=active]:bg-primary h-8 font-roboto-wide-semibold"
             value={value}
           >
             {name}

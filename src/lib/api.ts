@@ -1,7 +1,7 @@
 import { PlayerData, PlayerEvent } from "@/lib/types";
 import { playersData } from "./mockData";
+import { IS_DEV } from "./constants";
 
-const IS_DEV = import.meta.env.MODE === "development";
 const MOCK_API = IS_DEV || true;
 
 type PlayerEventsResponse = {
@@ -14,7 +14,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
       events: [
         {
           event_type: "game",
-          timestamp: Math.ceil(Date.now() / 1000) - 60,
+          timestamp: new Date("04 30 2025 18:22").getTime(),
           type: "completed",
           game_title: "Witcher 5",
           game_review: "good",
@@ -24,7 +24,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         },
         {
           event_type: "player-move",
-          timestamp: Math.ceil(Date.now() / 1000) - 30,
+          timestamp: new Date("04 30 2025 17:40").getTime(),
           adjusted_roll: 5,
           type: "dice-roll",
           sector_id: 10,
@@ -33,11 +33,26 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         },
         {
           event_type: "score-change",
-          timestamp: Math.ceil(Date.now() / 1000) - 10,
+          timestamp: new Date("04 29 2025 07:07").getTime(),
           type: "street-tax",
           sector_id: 15,
           amount: -20,
           tax_player_id: 2,
+        },
+        {
+          event_type: "score-change",
+          timestamp: new Date("04 29 2025 02:54").getTime(),
+          type: "map-tax",
+          sector_id: 15,
+          amount: 100,
+        },
+        {
+          event_type: "score-change",
+          timestamp: new Date("04 28 2025 11:23").getTime(),
+          type: "street-tax",
+          sector_id: 7,
+          amount: 50,
+          tax_player_id: 3,
         },
       ],
     });

@@ -1,4 +1,11 @@
 @font-face {
+  font-family: "MursGothicMassiveBlack";
+  src: url("./MursGothic-MassiveBlack.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "MursGothicMassiveDemi";
   src: url("./MursGothic-MassiveDemi.otf") format("opentype");
   font-weight: 800;
@@ -6,8 +13,8 @@
 }
 
 @font-face {
-  font-family: "MursGothicMassiveBlack";
-  src: url("./MursGothic-MassiveBlack.otf") format("opentype");
-  font-weight: 900;
+  font-family: "MursGothicMassiveMedium";
+  src: url("./MursGothic-WideMedium.otf") format("opentype");
+  font-weight: 500;
   font-style: normal;
 }

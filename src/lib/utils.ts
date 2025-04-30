@@ -1,4 +1,4 @@
-import { PlayerEvent } from "@/lib/types";
+import { PlayerEvent, PlayerEventBonusCard, PlayerEventGame, PlayerEventMove, PlayerEventScoreChange } from "@/lib/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -10,47 +10,106 @@ export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function getEventDescription(event: PlayerEvent): string {
+function getEventGameInfo(event: PlayerEventGame) {
+  let title = "";
+
+  switch (event.type) {
+    case "completed":
+      title = "Прошел игру";
+      break;
+    case "drop":
+      title = "Дроп игры";
+      break;
+    case "reroll":
+      title = "Реролл игры";
+      break;
+  }
+
+  return {
+    title,
+    description: event.game_title,
+  }
+}
+
+function getEventMoveInfo(event: PlayerEventMove) {
+  let title = "";
+
+  switch (event.type) {
+    case "train-ride":
+      title = "Проехал на поезде";
+      break;
+    case "dice-roll":
+      title = "Ход на карте";
+      break;
+  }
+
+  return {
+    title,
+    description: `С ${event.sector_id} клетки на ${event.sector_to}`,
+  };
+}
+
+function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
+  let title = "";
+
+  switch (event.type) {
+    case "street-tax":
+      title = `${event.amount > 0 ? "Получил" : "Заплатил"} налог на клетке ${event.sector_id}`;
+      break;
+    case "map-tax":
+      title = "Получил налог за круг";
+      break;
+    case "game-completed":
+      title = "Получил очки за игру";
+      break;
+    case "game-dropped":
+      title = "Потерял очки за дроп игры";
+      break;
+  }
+
+  return {
+    title,
+    description: event.amount.toString(),
+  };
+}
+
+function getEventBonusCardInfo(event: PlayerEventBonusCard) {
+  let title = "";
+
+  switch (event.type) {
+    case "received":
+      title = "Получил карточку";
+      break;
+    case "used":
+      title = "Использовал карточку";
+      break;
+    case "lost":
+      title = "Потерял карточку";
+      break;
+  }
+
+  return {
+    title,
+    description: event.bonus_type,
+  };
+}
+
+export function getEventDescription(event: PlayerEvent) {
   if (event.event_type === "game") {
-    if (event.type === "completed") {
-      return `Прошел ${event.game_title}`;
-    }
-    if (event.type === "drop") {
-      return `Дропнул ${event.game_title}`;
-    }
-    if (event.type === "reroll") {
-      return `Рерольнул ${event.game_title}`;
-    }
+    return getEventGameInfo(event);
   }
+
   if (event.event_type === "bonus-card") {
-    if (event.type === "received") {
-      return `Получил бонуску ${event.bonus_type}`;
-    }
-    if (event.type === "used") {
-      return `Использовал бонуску ${event.bonus_type}`;
-    }
-    if (event.type === "lost") {
-      return `Потерял бонуску ${event.bonus_type}`;
-    }
+    return getEventBonusCardInfo(event);
   }
+
   if (event.event_type === "player-move") {
-    if (event.type === "train-ride") {
-      return `Проехал на поезде с ${event.sector_id} до ${event.sector_to}`;
-    }
-    if (event.type === "dice-roll") {
-      return `Бросил кубик на ${event.adjusted_roll} и попал на сектор ${event.sector_to}`;
-    }
+    return getEventMoveInfo(event);
   }
+
   if (event.event_type === "score-change") {
-    if (event.type === "map-tax") {
-      return `Заплатил налог за круг: ${event.amount}`;
-    }
-    if (event.type === "street-tax") {
-      return `Заплатил налог за сектор: ${event.amount}`;
-    }
-    if (event.type === "game-completed") {
-      return `Получил очков за игру: ${event.amount}`;
-    }
+    return getEventScoreChangeInfo(event);
   }
-  return `unsupported event type: ${event.event_type}` as never;
+
+  throw new Error(`Unsupported event type`);
 }

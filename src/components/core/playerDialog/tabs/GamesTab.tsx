@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { GameReviewType } from "@/lib/types";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
-import GameReview from "./GameReview";
+import GameReview from "../../GameReview";
 
 function ReviewsTab({ games }: { games: GameReviewType[] }) {
   const [searchText, setSearchText] = useState("");
@@ -20,7 +20,7 @@ function ReviewsTab({ games }: { games: GameReviewType[] }) {
         <Input
           id="search"
           type="text"
-          className="pl-8 font-roboto-wide-semibold bg-foreground/10"
+          className="pl-8 font-roboto-wide-semibold bg-foreground/10 border-none"
           placeholder="Поиск по играм"
           onKeyDown={(e) => e.stopPropagation()}
           onChange={(e) => setSearchText(e.target.value)}

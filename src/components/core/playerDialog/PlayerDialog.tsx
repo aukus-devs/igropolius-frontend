@@ -15,6 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import PlayerDialogHeader from "./PlayerDialogHeader";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayerEvents } from "@/lib/api";
+import { mockReviews } from "@/lib/mockData";
 
 type Props = {
   player: PlayerData;
@@ -63,7 +64,7 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
               <DialogTitle className="hidden" />
               <PlayerDialogHeader player={player} />
             </DialogHeader>
-            <PlayerDialogTabs games={[]} events={[]} />
+            <PlayerDialogTabs games={mockReviews} events={events} />
           </ScrollArea>
         </DialogContent>
       </Dialog>

@@ -41,10 +41,11 @@
 @theme inline {
   --font-wide-semibold: "MursGothicMassiveDemi", sans-serif;
   --font-wide-black: "MursGothicMassiveBlack", sans-serif;
+  --font-wide-medium: "MursGothicMassiveMedium", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 2px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
