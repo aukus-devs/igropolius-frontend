@@ -6,7 +6,7 @@ import {
   PLAYER_WIDTH,
   PLAYER_DEPTH,
 } from "@/lib/constants";
-import { SectorData, Vector3Array } from "@/types";
+import { SectorData, Vector3Array } from "@/lib/types";
 
 export type SectorPosition =
   | "bottom"
@@ -50,7 +50,7 @@ const OFFSET_FROM_TOP = SECTOR_DEPTH / 2.5;
 export function calculatePlayerPosition(
   idx: number,
   totalPlayers: number,
-  sector: SectorData
+  sector: SectorData,
 ): Vector3Array {
   const { rowOffset, columnOffset } = calculateGridOffsets(idx, totalPlayers);
   const { x: baseX, z: baseZ } = calculateBasePosition(sector);
@@ -58,7 +58,7 @@ export function calculatePlayerPosition(
     rowOffset,
     columnOffset,
     sector,
-    totalPlayers
+    totalPlayers,
   );
 
   return [
@@ -120,7 +120,7 @@ function calculatePlayerOffsets(
   rowOffset: number,
   columnOffset: number,
   sector: SectorData,
-  totalPlayers: number
+  totalPlayers: number,
 ) {
   const { x: sectorX, y: sectorY } = sector.position;
   let offsetX = 0;

@@ -4,7 +4,7 @@ import {
   PlayerData,
   SectorData,
   playerColors,
-} from "@/types";
+} from "@/lib/types";
 
 export const sectorsData: SectorData[] = [
   {

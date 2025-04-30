@@ -137,3 +137,55 @@ export type TrainData = {
   sectorFrom: number;
   sectorTo: number;
 };
+
+type EventType = "game" | "bonus-card" | "player-move" | "score-change";
+
+export type PlayerEventBase = {
+  event_type: EventType;
+  timestamp: number;
+  sector_id: number;
+};
+
+export type PlayerEventGame = PlayerEventBase & {
+  event_type: "game";
+  type: "completed" | "drop" | "reroll";
+  game_title: string;
+  game_review: string;
+  game_score: number;
+  duration: number;
+};
+
+export type BonusCardType =
+  | "adjust-roll-by1"
+  | "skip-prison-day"
+  | "evade-street-tax"
+  | "evade-map-tax"
+  | "reroll-game";
+
+export type PlayerEventBonusCard = PlayerEventBase & {
+  event_type: "bonus-card";
+  type: "received" | "used" | "lost";
+  bonus_type: BonusCardType;
+};
+
+export type PlayerEventMove = PlayerEventBase & {
+  event_type: "player-move";
+  type: "dice-roll" | "train-ride";
+  sector_to: number;
+  adjusted_roll: number;
+  dice_roll?: number[];
+  completed_map: boolean;
+};
+
+export type PlayerEventScoreChange = PlayerEventBase & {
+  event_type: "score-change";
+  type: "street-tax" | "map-tax" | "game-completed" | "game-dropped";
+  amount: number;
+  tax_player_id?: number;
+};
+
+export type PlayerEvent =
+  | PlayerEventGame
+  | PlayerEventMove
+  | PlayerEventScoreChange
+  | PlayerEventBonusCard;

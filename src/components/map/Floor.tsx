@@ -1,5 +1,5 @@
 import { BOARD_SIZE, SECTOR_HEIGHT } from "@/lib/constants";
-import { colors } from "@/types";
+import { colors } from "@/lib/types";
 
 function Floor() {
   return (

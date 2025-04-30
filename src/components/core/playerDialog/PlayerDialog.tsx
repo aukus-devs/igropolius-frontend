@@ -1,4 +1,4 @@
-import { PlayerData } from "@/types";
+import { PlayerData } from "@/lib/types";
 import { MapPinIcon } from "lucide-react";
 import useCameraStore from "@/stores/cameraStore";
 import { Button } from "../../ui/button";
@@ -13,6 +13,8 @@ import PlayerDialogTrigger from "./PlayerDialogTrigger";
 import PlayerDialogTabs from "./tabs/PlayerDialogTabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PlayerDialogHeader from "./PlayerDialogHeader";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPlayerEvents } from "@/lib/api";
 
 type Props = {
   player: PlayerData;
@@ -22,6 +24,15 @@ type Props = {
 };
 
 function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
+  const { data: eventsData } = useQuery({
+    queryKey: ["player-events", player.id],
+    queryFn: () => fetchPlayerEvents(player.id),
+    refetchInterval: 30 * 1000,
+  });
+
+  const events = eventsData?.events || [];
+  events.sort((a, b) => (a.timestamp >= b.timestamp ? -1 : 1));
+
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
 
   const collapseToPlacement = 3;
@@ -36,7 +47,7 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
         transform: isCollapsible ? `translateY(${translateY}%)` : "translateY(0)",
         opacity: isCollapsible ? 0.3 : 1,
         pointerEvents: isCollapsible ? "none" : "auto",
-        zIndex
+        zIndex,
       }}
     >
       <Dialog>
@@ -52,7 +63,13 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
               <DialogTitle className="hidden" />
               <PlayerDialogHeader player={player} />
             </DialogHeader>
+<<<<<<< HEAD
             <PlayerDialogTabs />
+=======
+
+            <PlayerDialogHeader player={player} />
+            <PlayerDialogTabs reviews={mockReviews} events={events} />
+>>>>>>> 73f71addad94c907f7a1b4460dc840d7c09527fc
           </ScrollArea>
         </DialogContent>
       </Dialog>

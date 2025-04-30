@@ -1,5 +1,5 @@
 import { GameLengthToBuildingType } from "@/lib/constants";
-import { BuildingData, PlayerData } from "@/types";
+import { BuildingData, PlayerData } from "@/lib/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
@@ -10,22 +10,29 @@ import { SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
 
 const usePlayerStore = create<{
+  myPlayerId: number | null;
   myPlayer: PlayerData | null;
   isPlayerMoving: boolean;
   players: PlayerData[];
   buildingsPerSector: Record<number, BuildingData[]>;
-  setMyPlayer: (player: PlayerData) => void;
+  setMyPlayerId: (id?: number) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: PlayerData[]) => void;
   moveMyPlayer: () => Promise<void>;
 }>((set, get) => ({
+  myPlayerId: null,
   myPlayer: null,
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
 
-  setMyPlayer: (player: PlayerData) => {
-    set({ myPlayer: player });
+  setMyPlayerId: (id?: number) => {
+    const { players, myPlayer } = get();
+    if (myPlayer?.id !== id) {
+      const myPlayerNew = players.find((player) => player.id === id) ?? null;
+      set({ myPlayer: myPlayerNew });
+    }
+    set({ myPlayerId: id });
   },
 
   updateMyPlayerSectorId: (id: number) => {
@@ -59,6 +66,12 @@ const usePlayerStore = create<{
       building.sort((a, b) => a.createdAt - b.createdAt);
     }
 
+    const { myPlayer, myPlayerId } = get();
+    if (myPlayer?.id !== myPlayerId) {
+      const myPlayerNew = players.find((player) => player.id === myPlayerId) ?? null;
+      set({ myPlayer: myPlayerNew });
+    }
+
     set({ players, buildingsPerSector: buildings });
   },
 
@@ -88,8 +101,14 @@ const usePlayerStore = create<{
       if (!nextSector)
         throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
 
-      const nextSectorPlayers = get().players.filter((player) => player.current_position === nextSectorId);
-      const nextPosition = calculatePlayerPosition(nextSectorPlayers.length, nextSectorPlayers.length, nextSector);
+      const nextSectorPlayers = get().players.filter(
+        (player) => player.current_position === nextSectorId,
+      );
+      const nextPosition = calculatePlayerPosition(
+        nextSectorPlayers.length,
+        nextSectorPlayers.length,
+        nextSector,
+      );
       const currentRotation = getSectorRotation(currentSector.position);
       const nextRotation = getSectorRotation(nextSector.position);
 
@@ -97,20 +116,23 @@ const usePlayerStore = create<{
         x: nextPosition[0],
         z: nextPosition[2],
         duration: 700,
-        ease: 'linear',
+        ease: "linear",
       });
 
       if (!currentRotation.every((value, index) => value === nextRotation[index])) {
         const targetQuat = new Quaternion().setFromEuler(new Euler(...nextRotation, "XYZ"));
 
-        tl.add({ t: 0 }, {
-          t: 1,
-          duration: 300,
-          ease: 'linear',
-          onUpdate: (self) => {
-            myPlayerModel.quaternion.rotateTowards(targetQuat, self.progress);
-          }
-        });
+        tl.add(
+          { t: 0 },
+          {
+            t: 1,
+            duration: 300,
+            ease: "linear",
+            onUpdate: (self) => {
+              myPlayerModel.quaternion.rotateTowards(targetQuat, self.progress);
+            },
+          },
+        );
       }
 
       currentSectorId = nextSectorId;

@@ -1,4 +1,4 @@
-import { GameReviewType, GameStatusType } from "@/types";
+import { GameReviewType, GameStatusType } from "@/lib/types";
 
 type Props = {
   game: GameReviewType;

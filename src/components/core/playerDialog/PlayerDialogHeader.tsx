@@ -1,15 +1,14 @@
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { PlayerData } from "@/types";
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { PlayerData } from "@/lib/types";
 
 function PlayerSocials({ player }: { player: PlayerData; }) {
   const socials = [
-    { href: player.twitch_stream_link, title: 'Твич' },
-    { href: player.vk_stream_link, title: 'ВкВидео' },
-    { href: player.kick_stream_link, title: 'Кик' },
-    { href: player.telegram_link, title: 'Телеграм' },
-    { href: player.donation_link, title: 'Донат' },
+    { href: player.twitch_stream_link, title: "Твич" },
+    { href: player.vk_stream_link, title: "ВкВидео" },
+    { href: player.kick_stream_link, title: "Кик" },
+    { href: player.telegram_link, title: "Телеграм" },
+    { href: player.donation_link, title: "Донат" },
   ];
 
   return (

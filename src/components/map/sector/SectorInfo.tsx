@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useSectorStore from "@/stores/sectorStore";
-import { SectorData } from "@/types";
+import { SectorData } from "@/lib/types";
 import { Html } from "@react-three/drei";
 
 type Props = {
@@ -13,7 +13,13 @@ function SectorInfo({ sector }: Props) {
 
   return (
     <>
-      <Html zIndexRange={[0, 0]} pointerEvents="none" style={{ pointerEvents: "none" }} center position={[0, 10, 0]}>
+      <Html
+        zIndexRange={[0, 0]}
+        pointerEvents="none"
+        style={{ pointerEvents: "none" }}
+        center
+        position={[0, 10, 0]}
+      >
         {isSelected && (
           <Card className="w-52 pointer-events-none">
             <CardHeader>

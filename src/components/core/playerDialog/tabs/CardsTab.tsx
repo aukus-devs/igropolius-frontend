@@ -1,4 +1,4 @@
-import { DeckCardData } from "@/types";
+import { DeckCardData } from "@/lib/types";
 
 function CardsTab({ cards }: { cards: DeckCardData[] }) {
   return (
