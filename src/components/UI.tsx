@@ -6,6 +6,8 @@ import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
 import RollDeckCard from "./core/RollDeckCard";
 import Countdown from "./core/Countdown";
+import useTrainsStore from "@/stores/trainStore";
+import { SectorsById } from "@/lib/mockData";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -16,6 +18,22 @@ function MoveButton() {
       Ходить
     </Button>
   );
+}
+
+function TrainMoveButton() {
+  const moveTrain = useTrainsStore((state) => state.moveTrain);
+  const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
+  const currentSector = usePlayerStore((state) => {
+    if (!state.myPlayer) return;
+
+    return SectorsById[state.myPlayer.current_position];
+  });
+
+  return (
+    <Button variant="outline" disabled={isPlayerMoving} onClick={() => moveTrain(currentSector?.id || 0)}>
+      Проехать на поезде
+    </Button>
+  )
 }
 
 function UI() {
@@ -39,6 +57,7 @@ function UI() {
         <MoveButton />
         <GameReviewForm />
         <RollDeckCard />
+        <TrainMoveButton />
       </div>
     </div>
   );

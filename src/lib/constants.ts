@@ -43,24 +43,24 @@ export const GameLengthToBuildingType: { [key in GameLengthWithDrop]: BuildingTy
   "25+": "height-6",
 };
 
-export const TrainsConfig: TrainData[] = [
-  {
+export const TrainsConfig: Record<number, TrainData> = {
+  6: {
     sectorFrom: 6,
     sectorTo: 16,
   },
-  {
+  16: {
     sectorFrom: 16,
     sectorTo: 26,
   },
-  {
+  26: {
     sectorFrom: 26,
     sectorTo: 36,
   },
-  {
+  36: {
     sectorFrom: 36,
     sectorTo: 6,
   },
-];
+}
 
 export const IS_DEV = import.meta.env.MODE === "development";
 export const STORAGE_BASE_URL = IS_DEV

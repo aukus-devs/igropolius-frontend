@@ -1,5 +1,5 @@
 import { sectorsData } from "@/lib/mockData";
-import { SectorData } from "@/types";
+import { SectorData } from "@/lib/types";
 import { create } from "zustand";
 
 const useSectorStore = create<{

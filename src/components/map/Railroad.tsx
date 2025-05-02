@@ -1,7 +1,7 @@
-import { BOARD_SIZE, SECTOR_CONTENT_ELEVATION, SECTORS_PER_SIDE, STORAGE_BASE_URL } from '@/lib/constants';
-import { Vector3Array } from '@/types';
+import { BOARD_SIZE, SECTOR_CONTENT_ELEVATION, SECTORS_PER_SIDE, STORAGE_BASE_URL, TrainsConfig } from '@/lib/constants';
 import { Instance, Instances, useGLTF } from '@react-three/drei'
 import TrainModel from './TrainModel';
+import { Vector3Array } from '@/lib/types';
 
 const RailUrl = `${STORAGE_BASE_URL}/models/trains/railroad-straight.glb`;
 
@@ -25,7 +25,10 @@ export function Railroad() {
 
   return (
     <>
-      <TrainModel />
+      <TrainModel id={6} />
+      <TrainModel id={16} />
+      <TrainModel id={26} />
+      <TrainModel id={36} />
 
       <Instances
         // @ts-expect-error might be undefined
@@ -33,13 +36,13 @@ export function Railroad() {
         material={materials.colormap}
         dispose={null}
       >
-        {Array.from({ length: 4 }).map((_, j) => {
+        {Object.keys(TrainsConfig).map((key, j) => {
           return (
             <group key={j} position={positions[j]} rotation={rotations[j]}>
               {Array.from({ length: railroadLength }, (_, i) => i).map((i) => (
                 <Instance
                   key={`${j}-${i}`}
-                  name={`rail-${j}-${i === 0 ? 'first' : i === railroadLength - 1 ? 'last' : i}`}
+                  name={`rail-${key}-${i === 1 ? 'first' : i === railroadLength - 1 ? 'last' : i}`}
                   position={[0, 0, i * 4]}
                 />
               ))}
