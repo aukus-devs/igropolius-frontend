@@ -41,10 +41,10 @@ const usePlayerStore = create<{
   },
 
   setNextTurnState: () => {
-    const { myPlayerId, turnState } = get();
-    if (!myPlayerId || !turnState) return;
+    const { myPlayer, turnState } = get();
+    if (!myPlayer || !turnState) return;
 
-    const nextTurnState = getNextTurnState(myPlayerId, turnState, []);
+    const nextTurnState = getNextTurnState(myPlayer.current_position, turnState, []);
     set({ turnState: nextTurnState });
   },
 
