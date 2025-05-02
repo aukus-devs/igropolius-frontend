@@ -32,7 +32,11 @@ function TrainMoveButton() {
   });
 
   return (
-    <Button variant="outline" disabled={isPlayerMoving} onClick={() => moveTrain(currentSector?.id || 0)}>
+    <Button
+      variant="outline"
+      disabled={isPlayerMoving}
+      onClick={() => moveTrain(currentSector?.id || 0)}
+    >
       Проехать на поезде
     </Button>
   )

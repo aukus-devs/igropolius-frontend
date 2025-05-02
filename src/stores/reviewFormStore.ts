@@ -31,7 +31,15 @@ const useReviewFormStore = create<{
       gameTime: get().gameTime,
       gameStatus: get().gameStatus,
       gameReview: get().gameReview
-    })
+    });
+
+    set({
+      rating: 0,
+      gameTitle: '',
+      gameTime: '',
+      gameStatus: '',
+      gameReview: ''
+    });
   },
 }));
 

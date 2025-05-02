@@ -17,7 +17,10 @@ type Props = {
   shape: Vector3Array;
   color: ColorName;
   showColorGroup: boolean;
+  isCorner: boolean;
 };
+
+const cornerTexture = `${import.meta.env.BASE_URL}assets/sectors/textures/corner.png`;
 
 function getSectorTexture(color: ColorName) {
   switch (color) {
@@ -42,11 +45,11 @@ function getSectorTexture(color: ColorName) {
   }
 }
 
-function SectorBase({ id, color, shape, showColorGroup }: Props) {
+function SectorBase({ id, color, shape, showColorGroup, isCorner }: Props) {
   const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
   const isSelected = useSectorStore((state) => state.selectedSector?.id === id);
   const meshRef = useRef<Mesh>(null);
-  const texture = useTexture(getSectorTexture(color));
+  const texture = useTexture(isCorner ? cornerTexture : getSectorTexture(color));
   texture.flipY = false;
   const finalShape: Vector3Array = showColorGroup
     ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH]

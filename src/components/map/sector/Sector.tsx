@@ -57,6 +57,7 @@ function Sector({ sector, position, rotation }: Props) {
         color={sector.color}
         shape={shape}
         showColorGroup={showColorGroup}
+        isCorner={isCorner}
       />
     </group>
   );
