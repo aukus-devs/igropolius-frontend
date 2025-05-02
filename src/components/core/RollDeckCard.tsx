@@ -76,7 +76,10 @@ function RollDeckCard({ onRollFinish }: Props) {
 
       rouletteRef.current.style.transition = "transform 9s cubic-bezier(0.1,.41,.17,1.0)";
       rouletteRef.current.style.transform = `translateX(-${distanceOfRoll}px)`;
-      onRollFinish(winner);
+
+      setTimeout(() => {
+        onRollFinish(winner);
+      }, 9000);
     }, 400);
   };
 
@@ -97,8 +100,9 @@ function RollDeckCard({ onRollFinish }: Props) {
           >
             <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-white z-10" />
             <div ref={rouletteRef} style={{ gap: `${gap}px` }} className="absolute flex">
-              {displayedCards.map((item) => (
+              {displayedCards.map((item, idx) => (
                 <Card
+                  key={idx}
                   style={{ height: `${cardHeight}px`, width: `${cardWidth}px` }}
                   className="overflow-hidden"
                 >
