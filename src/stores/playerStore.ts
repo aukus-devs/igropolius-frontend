@@ -1,5 +1,5 @@
 import { GameLengthToBuildingType } from "@/lib/constants";
-import { BuildingData, PlayerData } from "@/lib/types";
+import { BuildingData, PlayerData, PlayerTurnState } from "@/lib/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
@@ -8,6 +8,7 @@ import useCameraStore from "./cameraStore";
 import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
 import { SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
+import { getNextTurnState } from "@/lib/utils";
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -19,12 +20,16 @@ const usePlayerStore = create<{
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: PlayerData[]) => void;
   moveMyPlayer: () => Promise<void>;
+  turnState: PlayerTurnState | null;
+  setTurnState: (turnState: PlayerTurnState | null) => void;
+  setNextTurnState: () => void;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
+  turnState: null,
 
   setMyPlayerId: (id?: number) => {
     const { players, myPlayer } = get();
@@ -35,7 +40,18 @@ const usePlayerStore = create<{
     set({ myPlayerId: id });
   },
 
+  setNextTurnState: () => {
+    const { myPlayer, turnState } = get();
+    if (!myPlayer || !turnState) return;
+
+    const nextTurnState = getNextTurnState(myPlayer.current_position, turnState, []);
+    set({ turnState: nextTurnState });
+  },
+
   updateMyPlayerSectorId: (id: number) => {
+    const currentSector = SectorsById[id];
+    if (!currentSector) return;
+
     set((state) => ({
       myPlayer: state.myPlayer ? { ...state.myPlayer, current_position: id } : null,
     }));
@@ -141,9 +157,13 @@ const usePlayerStore = create<{
 
     tl.play().then(() => {
       set({ isPlayerMoving: false });
-      get().updateMyPlayerSectorId(currentSectorId);
+      const { updateMyPlayerSectorId, setNextTurnState } = get();
+      updateMyPlayerSectorId(currentSectorId);
+      setNextTurnState();
     });
   },
+
+  setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),
 }));
 
 export default usePlayerStore;

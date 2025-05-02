@@ -51,7 +51,7 @@ type Position = {
 
 export type SectorData = {
   id: number;
-  type: "prison" | "property" | "railroad" | "bonus" | "utility";
+  type: "prison" | "property" | "railroad" | "bonus" | "start-corner";
   name: string;
   position: Position;
   color: ColorName;
@@ -107,13 +107,6 @@ export type PlayerData = {
 };
 
 export type Vector3Array = [number, number, number];
-
-export type DeckCardData = {
-  id: string;
-  name: string;
-  picture: string;
-  description: string;
-};
 
 export type BuildingType =
   | "ruins"
@@ -189,3 +182,23 @@ export type PlayerEvent =
   | PlayerEventMove
   | PlayerEventScoreChange
   | PlayerEventBonusCard;
+
+export type PlayerTurnState =
+  | "rolling-dice"
+  | "using-dice-bonuses"
+  | "using-sector-bonuses"
+  | "rolling-bonus-card"
+  | "using-reroll-bonuses"
+  | "filling-game-review"
+  | "choosing-train-ride";
+
+export type PlayerBonusCard = {
+  type: BonusCardType;
+};
+
+export type BonusCardData = {
+  id: string;
+  name: string;
+  picture: string;
+  description: string;
+};

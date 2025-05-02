@@ -1,6 +1,6 @@
 import {
   GameReviewType,
-  DeckCardData,
+  BonusCardData,
   PlayerData,
   SectorData,
   playerColors,
@@ -11,7 +11,7 @@ export const sectorsData: SectorData[] = [
     id: 1,
     name: "GO",
     position: { x: 0, y: 0 },
-    type: "utility",
+    type: "start-corner",
     color: "pastelgreen",
     rollType: "voting",
   },
@@ -171,7 +171,7 @@ export const sectorsData: SectorData[] = [
     id: 21,
     name: "Free Parking",
     position: { x: 10, y: 10 },
-    type: "utility",
+    type: "start-corner",
     color: "pastelgreen",
     rollType: "voting",
   },
@@ -697,7 +697,7 @@ export const playersData: PlayerData[] = [
   },
 ];
 
-export const deckCardsData: DeckCardData[] = [
+export const deckCardsData: BonusCardData[] = [
   {
     id: "1",
     name: "Плюс один или минус один",

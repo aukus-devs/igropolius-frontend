@@ -8,6 +8,8 @@ import RollDeckCard from "./core/RollDeckCard";
 import Countdown from "./core/Countdown";
 import useTrainsStore from "@/stores/trainStore";
 import { SectorsById } from "@/lib/mockData";
+import { useShallow } from "zustand/shallow";
+import { BonusCardData } from "@/lib/types";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -15,7 +17,7 @@ function MoveButton() {
 
   return (
     <Button variant="outline" onClick={moveMyPlayer} disabled={isPlayerMoving}>
-      Ходить
+      Бросить кубик и ходить
     </Button>
   );
 }
@@ -37,6 +39,23 @@ function TrainMoveButton() {
 }
 
 function UI() {
+  const { turnState, setNextTurnState, myPlayer } = usePlayerStore(
+    useShallow((state) => ({
+      turnState: state.turnState,
+      setNextTurnState: state.setNextTurnState,
+      myPlayer: state.myPlayer,
+    })),
+  );
+
+  const handleRollFinish = (card: BonusCardData) => {
+    // TODO: add card to player cards
+    setNextTurnState();
+  };
+
+  const handleSubmitReview = () => {
+    setNextTurnState();
+  };
+
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden">
       <div className="absolute top-3 left-4 !pointer-events-none">
@@ -54,10 +73,15 @@ function UI() {
       </div>
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-        <MoveButton />
-        <GameReviewForm />
-        <RollDeckCard />
-        <TrainMoveButton />
+        {(turnState === "rolling-dice" || turnState === "choosing-train-ride") && <MoveButton />}
+        {turnState === "choosing-train-ride" && <TrainMoveButton />}
+        {turnState === "filling-game-review" && (
+          <GameReviewForm onSubmit={handleSubmitReview} />
+        )}
+        {turnState === "rolling-bonus-card" && (
+          <RollDeckCard onRollFinish={handleRollFinish} />
+        )}
+        #{myPlayer?.current_position} ход: {turnState}
       </div>
     </div>
   );
