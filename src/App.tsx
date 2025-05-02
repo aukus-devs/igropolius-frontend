@@ -36,16 +36,18 @@ function App() {
     queryFn: fetchPlayers,
   });
 
-  const { setPlayers, setMyPlayerId } = usePlayerStore(
+  const { setPlayers, setMyPlayerId, setTurnState } = usePlayerStore(
     useShallow((state) => ({
       setPlayers: state.setPlayers,
       setMyPlayerId: state.setMyPlayerId,
+      setTurnState: state.setTurnState,
     })),
   );
 
   useEffect(() => {
     setMyPlayerId(currentPlayerData?.id);
-  }, [currentPlayerData?.id, setMyPlayerId]);
+    setTurnState(currentPlayerData?.turn_state ?? null);
+  }, [currentPlayerData?.id, currentPlayerData?.turn_state, setMyPlayerId, setTurnState]);
 
   useEffect(() => {
     setPlayers(playersData?.players ?? []);

@@ -1,4 +1,4 @@
-import { PlayerData, PlayerEvent } from "@/lib/types";
+import { PlayerData, PlayerEvent, PlayerTurnState } from "@/lib/types";
 import { playersData } from "./mockData";
 import { IS_DEV } from "./constants";
 
@@ -64,6 +64,7 @@ type CurrentPlayerResponse = {
   id: number;
   nickname: string;
   url_handle: string;
+  turn_state: PlayerTurnState;
 };
 
 export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
@@ -72,6 +73,7 @@ export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
       id: 1,
       nickname: "Praden",
       url_handle: "praden",
+      turn_state: "rolling-dice",
     });
   }
   return fetch("/api/players/current").then((res) => res.json());

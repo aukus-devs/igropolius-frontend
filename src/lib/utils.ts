@@ -1,6 +1,15 @@
-import { PlayerEvent, PlayerEventBonusCard, PlayerEventGame, PlayerEventMove, PlayerEventScoreChange } from "@/lib/types";
+import {
+  PlayerBonusCard,
+  PlayerEvent,
+  PlayerEventBonusCard,
+  PlayerEventGame,
+  PlayerEventMove,
+  PlayerEventScoreChange,
+  PlayerTurnState,
+} from "@/lib/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { SectorsById } from "./mockData";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,7 +37,7 @@ function getEventGameInfo(event: PlayerEventGame) {
   return {
     title,
     description: event.game_title,
-  }
+  };
 }
 
 function getEventMoveInfo(event: PlayerEventMove) {
@@ -112,4 +121,65 @@ export function getEventDescription(event: PlayerEvent) {
   }
 
   throw new Error(`Unsupported event type`);
+}
+
+export function getNextTurnState(
+  mapPosition: number,
+  currentState: PlayerTurnState,
+  bonusCards: PlayerBonusCard[],
+): PlayerTurnState {
+  const sector = SectorsById[mapPosition];
+
+  const streetTaxCards = bonusCards.filter((card) => card.type === "evade-street-tax");
+  const prisonCards = bonusCards.filter((card) => card.type === "skip-prison-day");
+  const rerollCards = bonusCards.filter((card) => card.type === "reroll-game");
+  const diceCards = bonusCards.filter((card) => card.type === "adjust-roll-by1");
+
+  switch (currentState) {
+    case "rolling-dice":
+      if (diceCards.length > 0) {
+        return "using-dice-bonuses";
+      }
+      if (sector.type === "bonus") {
+        return "rolling-bonus-card";
+      }
+      if (streetTaxCards.length > 0) {
+        return "using-sector-bonuses";
+      }
+      if (rerollCards.length > 0) {
+        return "using-reroll-bonuses";
+      }
+      return "filling-game-review";
+    case "using-dice-bonuses":
+      if (sector.type === "bonus") {
+        return "rolling-bonus-card";
+      }
+      if (sector.type === "prison" && prisonCards.length > 0) {
+        return "using-sector-bonuses";
+      }
+      if (
+        (sector.type === "property" || sector.type === "railroad") &&
+        streetTaxCards.length > 0
+      ) {
+        return "using-sector-bonuses";
+      }
+      if (rerollCards.length > 0) {
+        return "using-reroll-bonuses";
+      }
+      return "filling-game-review";
+    case "rolling-bonus-card":
+      return "filling-game-review";
+    case "using-sector-bonuses":
+      return "filling-game-review";
+    case "using-reroll-bonuses":
+      return "filling-game-review";
+    case "filling-game-review":
+      if (sector.type === "railroad") {
+        return "choosing-train-ride";
+      }
+      return "rolling-dice";
+    case "choosing-train-ride":
+      return "rolling-dice";
+  }
+  return null as never;
 }
