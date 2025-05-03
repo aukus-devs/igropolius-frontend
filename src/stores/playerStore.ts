@@ -130,9 +130,9 @@ const usePlayerStore = create<{
 
       tl.add(myPlayerModel.position, {
         x: nextPosition[0],
+        y: [myPlayerModel.position.y, myPlayerModel.position.y + 3, myPlayerModel.position.y],
         z: nextPosition[2],
         duration: 700,
-        ease: "linear",
       });
 
       if (!currentRotation.every((value, index) => value === nextRotation[index])) {
