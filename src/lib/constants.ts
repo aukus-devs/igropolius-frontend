@@ -1,4 +1,4 @@
-import { BuildingType, GameLengthWithDrop, TrainData } from "@/lib/types";
+import { BuildingType, GameLength, GameLengthWithDrop, TrainData } from "@/lib/types";
 import { Color } from "three";
 
 export enum Controls {
@@ -60,9 +60,18 @@ export const TrainsConfig: Record<number, TrainData> = {
     sectorFrom: 36,
     sectorTo: 6,
   },
-}
+};
 
 export const IS_DEV = import.meta.env.MODE === "development";
 export const STORAGE_BASE_URL = IS_DEV
   ? `/monopoly_s3/assets`
   : `https://storage.yandexcloud.net/monopoly2025/assets`;
+
+export const ScoreByGameLength: { [key in GameLength]: number } = {
+  "2-5": 10,
+  "5-10": 20,
+  "10-15": 30,
+  "15-20": 40,
+  "20-25": 50,
+  "25+": 60,
+};

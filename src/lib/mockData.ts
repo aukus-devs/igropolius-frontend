@@ -354,7 +354,7 @@ export const playersData: PlayerData[] = [
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
 
-    total_score: 9999,
+    total_score: 0,
 
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.red,

@@ -7,10 +7,22 @@ import { ArrowRightIcon } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import useReviewFormStore from "@/stores/reviewFormStore";
 import Rating from "./Rating";
+import { ScoreByGameLength } from "@/lib/constants";
+import { GameLength, GameStatusType } from "@/lib/types";
+import { useShallow } from "zustand/shallow";
+
+type StatesOption = {
+  title: string;
+  value: GameStatusType;
+};
 
 function GameStatus() {
   const setGameStatus = useReviewFormStore((state) => state.setGameStatus);
-  const options = ["Прошел", "Дропнул", "Реролл"];
+  const options: StatesOption[] = [
+    { title: "Прошел", value: "completed" },
+    { title: "Дропнул", value: "drop" },
+    { title: "Реролл", value: "reroll" },
+  ];
 
   return (
     <Select onValueChange={setGameStatus}>
@@ -18,9 +30,9 @@ function GameStatus() {
         <SelectValue placeholder="Статус" />
       </SelectTrigger>
       <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option} value={option}>
-            {option}
+        {options.map((option, idx) => (
+          <SelectItem key={idx} value={option.value}>
+            {option.title}
           </SelectItem>
         ))}
       </SelectContent>
@@ -36,9 +48,21 @@ function GamePoster({ src }: { src: string }) {
   );
 }
 
+type GameTimeOption = {
+  title: string;
+  value: GameLength;
+};
+
 function GameTime() {
   const setGameTime = useReviewFormStore((state) => state.setGameTime);
-  const options = ["2-5 ч.", "6-10 ч.", "11-15 ч.", "16-20 ч.", "21-25 ч.", "26+ ч."];
+  const options: GameTimeOption[] = [
+    { title: "2-5 ч.", value: "2-5" },
+    { title: "6-10 ч.", value: "5-10" },
+    { title: "11-15 ч.", value: "10-15" },
+    { title: "16-20 ч.", value: "15-20" },
+    { title: "21-25 ч.", value: "20-25" },
+    { title: "26+ ч.", value: "25+" },
+  ];
 
   return (
     <Select onValueChange={setGameTime}>
@@ -46,9 +70,9 @@ function GameTime() {
         <SelectValue placeholder="Время прохождения" />
       </SelectTrigger>
       <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option} value={option}>
-            {option}
+        {options.map((option, idx) => (
+          <SelectItem key={idx} value={option.value}>
+            {option.title}
           </SelectItem>
         ))}
       </SelectContent>
@@ -106,21 +130,37 @@ function HLTBLink() {
 }
 
 type Props = {
-  onSubmit: () => void;
+  onSubmit: (score: number) => void;
 };
 
 function GameReviewForm({ onSubmit }: Props) {
   const [open, setOpen] = useState(false);
   const setRating = useReviewFormStore((state) => state.setRating);
   const sendReview = useReviewFormStore((state) => state.sendReview);
+  const { buttonText, scores } = useReviewFormStore(
+    useShallow((state) => {
+      if (state.gameStatus === "completed" && state.gameTime) {
+        const scores = ScoreByGameLength[state.gameTime];
+        return { buttonText: `Получить ${scores} очков`, scores };
+      }
+      if (state.gameStatus === "drop") {
+        return { buttonText: "Дропнуть игру", scores: 0 };
+      }
+      return { buttonText: "Заполни форму", scores: 0 };
+    }),
+  );
   const isSendButtonDisabled = useReviewFormStore((state) => {
-    return (
-      !state.gameReview ||
-      !state.gameTitle ||
-      !state.gameTime ||
-      !state.gameStatus ||
-      state.rating === 0
-    );
+    if (!state.gameTitle) return true;
+    if (!state.gameStatus) return true;
+    if (state.gameReview.length === 0) return true;
+    if (state.rating === 0) return true;
+
+    if (state.gameStatus === "reroll") return false;
+    if (state.gameStatus === "drop") return false;
+
+    // completed
+    if (state.gameTime) return false;
+    return true;
   });
 
   const mockPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
@@ -128,7 +168,7 @@ function GameReviewForm({ onSubmit }: Props) {
   function onConfirm() {
     sendReview();
     setOpen(false);
-    onSubmit();
+    onSubmit(scores);
   }
 
   return (
@@ -141,7 +181,7 @@ function GameReviewForm({ onSubmit }: Props) {
         aria-describedby={undefined}
       >
         <DialogHeader>
-          <DialogTitle>Новый ход</DialogTitle>
+          <DialogTitle>Оценка игры</DialogTitle>
         </DialogHeader>
 
         <div className="flex gap-4">
@@ -167,7 +207,7 @@ function GameReviewForm({ onSubmit }: Props) {
           disabled={isSendButtonDisabled}
           onClick={onConfirm}
         >
-          Кинуть кубики
+          {buttonText}
         </Button>
       </DialogContent>
     </Dialog>

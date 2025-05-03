@@ -22,21 +22,24 @@ function MoveButton() {
 }
 
 function UI() {
-  const { turnState, setNextTurnState, myPlayer, isPlayerMoving } = usePlayerStore(
-    useShallow((state) => ({
-      turnState: state.turnState,
-      setNextTurnState: state.setNextTurnState,
-      myPlayer: state.myPlayer,
-      isPlayerMoving: state.isPlayerMoving,
-    })),
-  );
+  const { turnState, setNextTurnState, position, isPlayerMoving, updateMyScore } =
+    usePlayerStore(
+      useShallow((state) => ({
+        turnState: state.turnState,
+        setNextTurnState: state.setNextTurnState,
+        position: state.myPlayer?.current_position,
+        isPlayerMoving: state.isPlayerMoving,
+        updateMyScore: state.updateMyScore,
+      })),
+    );
 
   const handleRollFinish = (card: BonusCardData) => {
     // TODO: add card to player cards
     setNextTurnState();
   };
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = (score: number) => {
+    updateMyScore(score);
     setNextTurnState();
   };
 
@@ -68,7 +71,7 @@ function UI() {
       </div>
 
       <div className="absolute bottom-4 right-4">
-        #{myPlayer?.current_position} ход: {turnState}
+        #{position} ход: {turnState}
       </div>
     </div>
   );

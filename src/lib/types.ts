@@ -61,7 +61,7 @@ export type SectorData = {
 export type GameLength = "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
 export type GameLengthWithDrop = GameLength | "drop";
 
-export type GameStatusType = "drop" | "in_progress" | "completed" | "reroll";
+export type GameStatusType = "drop" | "completed" | "reroll";
 export type GameReviewType = {
   gameTitle: string;
   description: string;
