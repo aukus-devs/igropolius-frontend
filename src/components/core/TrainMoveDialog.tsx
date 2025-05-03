@@ -33,6 +33,7 @@ export default function TrainMoveDialog() {
       <span className="font-wide-semibold">
         Проехать на поезде до сектора {targetSector.sectorTo}?
       </span>
+      После действия будет бросок кубика
       <div className="flex justify-evenly mt-2 gap-2">
         <Button
           className="bg-[#0A84FF] w-full flex-1"
