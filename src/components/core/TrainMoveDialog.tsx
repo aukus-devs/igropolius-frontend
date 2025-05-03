@@ -29,11 +29,23 @@ export default function TrainMoveDialog() {
   }
 
   return (
-    <Card className="p-2">
-      Проехать на поезде до клетки {targetSector.sectorTo}?
-      <div className="flex justify-between mt-2">
-        <Button onClick={() => moveTrain(moveData.currentSector.id)}>Ехать</Button>
-        <Button onClick={() => moveData.setNextTurnState()}>Остаться</Button>
+    <Card className="p-4">
+      <span className="font-wide-semibold">
+        Проехать на поезде до сектора {targetSector.sectorTo}?
+      </span>
+      <div className="flex justify-evenly mt-2 gap-2">
+        <Button
+          className="bg-[#0A84FF] w-full flex-1"
+          onClick={() => moveData.setNextTurnState()}
+        >
+          Остаться
+        </Button>
+        <Button
+          className="bg-[#30D158] w-full flex-1"
+          onClick={() => moveTrain(moveData.currentSector.id)}
+        >
+          Ехать
+        </Button>
       </div>
     </Card>
   );
