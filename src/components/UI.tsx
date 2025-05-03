@@ -65,6 +65,9 @@ function UI() {
         {turnState === "rolling-bonus-card" && (
           <RollDeckCard onRollFinish={handleRollFinish} />
         )}
+      </div>
+
+      <div className="absolute bottom-4 right-4">
         #{myPlayer?.current_position} ход: {turnState}
       </div>
     </div>
