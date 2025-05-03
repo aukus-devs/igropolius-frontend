@@ -30,14 +30,17 @@ const useTrainsStore = create<{
     const train = get().trains[trainId];
     if (!train) throw new Error(`Train with id ${trainId} not found`);
 
-    const playerModel = useModelsStore.getState().getPlayerModel(usePlayerStore.getState().myPlayerId!);
+    const myPlayerId = usePlayerStore.getState().myPlayerId;
+    if (!myPlayerId) throw new Error(`My player not found`);
+
+    const playerModel = useModelsStore.getState().getPlayerModel(myPlayerId);
+    const playerMesh = playerModel.children[0];
     const carriageModel = train.model.getObjectByName('carriage');
 
     const carriageWorldPosition = new Vector3();
     const initialPlayerRotation = new Quaternion().setFromEuler(new Euler(0, Math.PI / 4, 0));
 
     carriageModel?.getWorldPosition(carriageWorldPosition);
-    carriageWorldPosition.y += 0.4;
     carriageWorldPosition.x += HALF_BOARD;
     carriageWorldPosition.z += HALF_BOARD;
 
@@ -51,8 +54,8 @@ const useTrainsStore = create<{
       destinationSector,
     );
     const destinationRotation = getSectorRotation(destinationSector.position);
-    const dest = new Quaternion().setFromEuler(new Euler(...destinationRotation, "XYZ"));
-    const destinationQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, "XYZ"));
+    const playerGroupQuat = new Quaternion().setFromEuler(new Euler(...destinationRotation, "XYZ"));
+    const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, "XYZ"));
 
     usePlayerStore.setState({ isPlayerMoving: true });
 
@@ -66,7 +69,7 @@ const useTrainsStore = create<{
         z: carriageWorldPosition.z,
         duration: 500,
         onUpdate: ({ progress }) => {
-          playerModel.children[0].quaternion.rotateTowards(initialPlayerRotation, progress);
+          playerMesh.quaternion.rotateTowards(initialPlayerRotation, progress);
         }
       })
       .add(playerModel.position, {
@@ -88,10 +91,6 @@ const useTrainsStore = create<{
           playerModel.position.z = carriageWorldPosition.z;
         },
         onComplete: () => {
-          setTimeout(() => {
-            train.model.position.copy(train.startPosition);
-          }, 1000);
-
           createTimeline()
             .add(playerModel.position, {
               y: playerModel.position.y + 3,
@@ -102,8 +101,8 @@ const useTrainsStore = create<{
               z: destinationPosition[2],
               duration: 500,
               onUpdate: ({ progress }) => {
-                playerModel.quaternion.rotateTowards(dest, progress);
-                playerModel.children[0].quaternion.rotateTowards(destinationQuat, progress);
+                playerModel.quaternion.rotateTowards(playerGroupQuat, progress);
+                playerMesh.quaternion.rotateTowards(playerMeshQuat, progress);
               }
             })
             .add(playerModel.position, {
@@ -111,6 +110,8 @@ const useTrainsStore = create<{
               duration: 300,
             })
             .then(() => {
+              train.model.position.copy(train.startPosition);
+
               usePlayerStore.setState({ isPlayerMoving: false });
               usePlayerStore.getState().updateMyPlayerSectorId(destinationSector.id);
             })

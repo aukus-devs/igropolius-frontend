@@ -16,11 +16,11 @@ const usePlayerStore = create<{
   isPlayerMoving: boolean;
   players: PlayerData[];
   buildingsPerSector: Record<number, BuildingData[]>;
+  turnState: PlayerTurnState | null;
   setMyPlayerId: (id?: number) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: PlayerData[]) => void;
   moveMyPlayer: () => Promise<void>;
-  turnState: PlayerTurnState | null;
   setTurnState: (turnState: PlayerTurnState | null) => void;
   setNextTurnState: () => void;
 }>((set, get) => ({
@@ -104,9 +104,9 @@ const usePlayerStore = create<{
 
     set({ isPlayerMoving: true });
 
-    if (!useCameraStore.getState().isOrthographic) {
-      await useCameraStore.getState().cameraToPlayer(currentSectorId);
-    }
+    const { isOrthographic, cameraToPlayer } = useCameraStore.getState();
+    if (!isOrthographic) await cameraToPlayer(currentSectorId);
+
     const rolledNumber = await useDiceStore.getState().rollDice();
 
     const tl = createTimeline();
