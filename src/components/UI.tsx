@@ -10,6 +10,7 @@ import useTrainsStore from "@/stores/trainStore";
 import { SectorsById } from "@/lib/mockData";
 import { useShallow } from "zustand/shallow";
 import { BonusCardData } from "@/lib/types";
+import TrainMoveDialog from "./core/TrainMoveDialog";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -22,32 +23,13 @@ function MoveButton() {
   );
 }
 
-function TrainMoveButton() {
-  const moveTrain = useTrainsStore((state) => state.moveTrain);
-  const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
-  const currentSector = usePlayerStore((state) => {
-    if (!state.myPlayer) return;
-
-    return SectorsById[state.myPlayer.current_position];
-  });
-
-  return (
-    <Button
-      variant="outline"
-      disabled={isPlayerMoving}
-      onClick={() => moveTrain(currentSector?.id || 0)}
-    >
-      Проехать на поезде
-    </Button>
-  )
-}
-
 function UI() {
-  const { turnState, setNextTurnState, myPlayer } = usePlayerStore(
+  const { turnState, setNextTurnState, myPlayer, isPlayerMoving } = usePlayerStore(
     useShallow((state) => ({
       turnState: state.turnState,
       setNextTurnState: state.setNextTurnState,
       myPlayer: state.myPlayer,
+      isPlayerMoving: state.isPlayerMoving,
     })),
   );
 
@@ -77,8 +59,8 @@ function UI() {
       </div>
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-        {(turnState === "rolling-dice" || turnState === "choosing-train-ride") && <MoveButton />}
-        {turnState === "choosing-train-ride" && <TrainMoveButton />}
+        {turnState === "rolling-dice" && !isPlayerMoving && <MoveButton />}
+        {turnState === "choosing-train-ride" && !isPlayerMoving && <TrainMoveDialog />}
         {turnState === "filling-game-review" && (
           <GameReviewForm onSubmit={handleSubmitReview} />
         )}

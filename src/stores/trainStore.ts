@@ -12,7 +12,7 @@ type TrainConfig = {
   startPosition: Vector3;
   endPosition: Vector3;
   model: Group;
-}
+};
 
 const useTrainsStore = create<{
   trains: { [key: number]: TrainConfig };
@@ -23,7 +23,7 @@ const useTrainsStore = create<{
 
   addTrain: (id: number, startPosition: Vector3, endPosition: Vector3, model: Group) =>
     set((state) => ({
-      trains: { ...state.trains, [id]: { id, startPosition, endPosition, model } }
+      trains: { ...state.trains, [id]: { id, startPosition, endPosition, model } },
     })),
 
   moveTrain: (trainId: number) => {
@@ -35,7 +35,7 @@ const useTrainsStore = create<{
 
     const playerModel = useModelsStore.getState().getPlayerModel(myPlayerId);
     const playerMesh = playerModel.children[0];
-    const carriageModel = train.model.getObjectByName('carriage');
+    const carriageModel = train.model.getObjectByName("carriage");
 
     const carriageWorldPosition = new Vector3();
     const initialPlayerRotation = new Quaternion().setFromEuler(new Euler(0, Math.PI / 4, 0));
@@ -45,16 +45,18 @@ const useTrainsStore = create<{
     carriageWorldPosition.z += HALF_BOARD;
 
     const destinationSector = SectorsById[TrainsConfig[trainId].sectorTo];
-    const destinationSectorPlayers = usePlayerStore.getState().players.filter(
-      (player) => player.current_position === destinationSector.id,
-    );
+    const destinationSectorPlayers = usePlayerStore
+      .getState()
+      .players.filter((player) => player.current_position === destinationSector.id);
     const destinationPosition = calculatePlayerPosition(
       destinationSectorPlayers.length,
       destinationSectorPlayers.length,
       destinationSector,
     );
     const destinationRotation = getSectorRotation(destinationSector.position);
-    const playerGroupQuat = new Quaternion().setFromEuler(new Euler(...destinationRotation, "XYZ"));
+    const playerGroupQuat = new Quaternion().setFromEuler(
+      new Euler(...destinationRotation, "XYZ"),
+    );
     const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, "XYZ"));
 
     usePlayerStore.setState({ isPlayerMoving: true });
@@ -70,7 +72,7 @@ const useTrainsStore = create<{
         duration: 500,
         onUpdate: ({ progress }) => {
           playerMesh.quaternion.rotateTowards(initialPlayerRotation, progress);
-        }
+        },
       })
       .add(playerModel.position, {
         y: playerModel.position.y + 0.4,
@@ -80,7 +82,7 @@ const useTrainsStore = create<{
         x: train.endPosition.x,
         y: train.endPosition.y,
         z: train.endPosition.z,
-        ease: 'linear',
+        ease: "linear",
         duration: 3000,
         onUpdate: () => {
           carriageModel?.getWorldPosition(carriageWorldPosition);
@@ -103,7 +105,7 @@ const useTrainsStore = create<{
               onUpdate: ({ progress }) => {
                 playerModel.quaternion.rotateTowards(playerGroupQuat, progress);
                 playerMesh.quaternion.rotateTowards(playerMeshQuat, progress);
-              }
+              },
             })
             .add(playerModel.position, {
               y: playerModel.position.y - 0.4,
@@ -114,10 +116,11 @@ const useTrainsStore = create<{
 
               usePlayerStore.setState({ isPlayerMoving: false });
               usePlayerStore.getState().updateMyPlayerSectorId(destinationSector.id);
-            })
-        }
+              usePlayerStore.getState().setNextTurnState();
+            });
+        },
       });
-  }
+  },
 }));
 
 export default useTrainsStore;
