@@ -22,26 +22,14 @@ function MoveButton() {
 }
 
 function UI() {
-  const { turnState, setNextTurnState, position, isPlayerMoving, updateMyScore } =
-    usePlayerStore(
-      useShallow((state) => ({
-        turnState: state.turnState,
-        setNextTurnState: state.setNextTurnState,
-        position: state.myPlayer?.current_position,
-        isPlayerMoving: state.isPlayerMoving,
-        updateMyScore: state.updateMyScore,
-      })),
-    );
-
-  const handleRollFinish = (card: BonusCardData) => {
-    // TODO: add card to player cards
-    setNextTurnState();
-  };
-
-  const handleSubmitReview = (score: number) => {
-    updateMyScore(score);
-    setNextTurnState();
-  };
+  const { turnState, position, isPlayerMoving } = usePlayerStore(
+    useShallow((state) => ({
+      turnState: state.turnState,
+      setNextTurnState: state.setNextTurnState,
+      position: state.myPlayer?.current_position,
+      isPlayerMoving: state.isPlayerMoving,
+    })),
+  );
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden">
@@ -62,12 +50,8 @@ function UI() {
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         {turnState === "rolling-dice" && !isPlayerMoving && <MoveButton />}
         {turnState === "choosing-train-ride" && !isPlayerMoving && <TrainMoveDialog />}
-        {turnState === "filling-game-review" && (
-          <GameReviewForm onSubmit={handleSubmitReview} />
-        )}
-        {turnState === "rolling-bonus-card" && (
-          <RollDeckCard onRollFinish={handleRollFinish} />
-        )}
+        {turnState === "filling-game-review" && <GameReviewForm />}
+        {turnState === "rolling-bonus-card" && <RollDeckCard />}
       </div>
 
       <div className="absolute bottom-4 right-4">

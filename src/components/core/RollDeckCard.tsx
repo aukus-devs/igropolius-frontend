@@ -11,17 +11,16 @@ import { useRef, useState } from "react";
 import { deckCardsData } from "@/lib/mockData";
 import { Card, CardFooter } from "../ui/card";
 import { BonusCardData } from "@/lib/types";
+import usePlayerStore from "@/stores/playerStore";
 
-type Props = {
-  onRollFinish(card: BonusCardData): void;
-};
-
-function RollDeckCard({ onRollFinish }: Props) {
+function RollDeckCard() {
   const rouletteRef = useRef<HTMLDivElement>(null);
   const rouletteContainerRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [rolling, setRolling] = useState(false);
   const [displayedCards, setDisplayedCards] = useState<BonusCardData[]>([]);
+
+  const receiveBonusCard = usePlayerStore((state) => state.receiveBonusCard);
 
   const getRandomCard = (): BonusCardData => {
     return deckCardsData[Math.floor(Math.random() * deckCardsData.length)];
@@ -78,7 +77,7 @@ function RollDeckCard({ onRollFinish }: Props) {
       rouletteRef.current.style.transform = `translateX(-${distanceOfRoll}px)`;
 
       setTimeout(() => {
-        onRollFinish(winner);
+        receiveBonusCard("skip-prison-day");
       }, 9000);
     }, 400);
   };

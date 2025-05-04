@@ -10,6 +10,7 @@ import Rating from "./Rating";
 import { ScoreByGameLength } from "@/lib/constants";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
+import usePlayerStore from "@/stores/playerStore";
 
 type StatesOption = {
   title: string;
@@ -129,11 +130,7 @@ function HLTBLink() {
   );
 }
 
-type Props = {
-  onSubmit: (score: number) => void;
-};
-
-function GameReviewForm({ onSubmit }: Props) {
+function GameReviewForm() {
   const [open, setOpen] = useState(false);
   const setRating = useReviewFormStore((state) => state.setRating);
   const sendReview = useReviewFormStore((state) => state.sendReview);
@@ -163,12 +160,20 @@ function GameReviewForm({ onSubmit }: Props) {
     return true;
   });
 
+  const { updateMyScore, setNextTurnState } = usePlayerStore(
+    useShallow((state) => ({
+      updateMyScore: state.updateMyScore,
+      setNextTurnState: state.setNextTurnState,
+    })),
+  );
+
   const mockPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
 
   function onConfirm() {
     sendReview();
     setOpen(false);
-    onSubmit(scores);
+    updateMyScore(scores);
+    setNextTurnState();
   }
 
   return (
