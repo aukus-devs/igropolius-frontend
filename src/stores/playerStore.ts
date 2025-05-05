@@ -1,5 +1,5 @@
 import { GameLengthToBuildingType, IS_DEV } from "@/lib/constants";
-import { BuildingData, PlayerData, PlayerTurnState } from "@/lib/types";
+import { BonusCardType, BuildingData, PlayerData, PlayerTurnState } from "@/lib/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
@@ -24,6 +24,7 @@ const usePlayerStore = create<{
   setTurnState: (turnState: PlayerTurnState | null) => void;
   setNextTurnState: () => void;
   updateMyScore: (diff: number) => void;
+  receiveBonusCard: (type: BonusCardType) => void;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -194,6 +195,12 @@ const usePlayerStore = create<{
       myPlayer: { ...myPlayer, total_score: myPlayer.total_score + diff },
       players: [...players],
     });
+  },
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  receiveBonusCard: (type: BonusCardType) => {
+    const { setNextTurnState } = get();
+    setNextTurnState();
   },
 }));
 
