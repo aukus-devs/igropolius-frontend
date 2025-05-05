@@ -7,7 +7,6 @@ import GameReviewForm from "./core/GameReviewForm";
 import RollDeckCard from "./core/RollDeckCard";
 import Countdown from "./core/Countdown";
 import { useShallow } from "zustand/shallow";
-import { BonusCardData } from "@/lib/types";
 import TrainMoveDialog from "./core/TrainMoveDialog";
 
 function MoveButton() {
