@@ -19,6 +19,12 @@ export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export function getShortestRotationDelta(current: number, target: number) {
+  const delta = target - current;
+  // Normalize to [-π, π] range to get shortest path
+  return ((delta + Math.PI) % (2 * Math.PI)) - Math.PI;
+}
+
 function getEventGameInfo(event: PlayerEventGame) {
   let title = "";
 

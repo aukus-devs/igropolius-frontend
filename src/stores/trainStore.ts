@@ -6,6 +6,7 @@ import usePlayerStore from "./playerStore";
 import { HALF_BOARD, TrainsConfig } from "@/lib/constants";
 import { SectorsById } from "@/lib/mockData";
 import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
+import useCameraStore from "./cameraStore";
 
 type TrainConfig = {
   id: number;
@@ -58,10 +59,13 @@ const useTrainsStore = create<{
       new Euler(...destinationRotation, "XYZ"),
     );
     const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, "XYZ"));
+    const { moveToPlayer } = useCameraStore.getState();
 
     usePlayerStore.setState({ isPlayerMoving: true });
 
-    createTimeline()
+    createTimeline({
+      onUpdate: () => moveToPlayer(playerModel, false),
+    })
       .add(playerModel.position, {
         y: playerModel.position.y + 3,
         duration: 300,
@@ -93,7 +97,9 @@ const useTrainsStore = create<{
           playerModel.position.z = carriageWorldPosition.z;
         },
         onComplete: () => {
-          createTimeline()
+          createTimeline({
+            onUpdate: () => moveToPlayer(playerModel, false),
+          })
             .add(playerModel.position, {
               y: playerModel.position.y + 3,
               duration: 300,

@@ -1,4 +1,4 @@
-import { GameLengthToBuildingType } from "@/lib/constants";
+import { GameLengthToBuildingType, IS_DEV } from "@/lib/constants";
 import { BuildingData, PlayerData, PlayerTurnState } from "@/lib/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
@@ -105,10 +105,16 @@ const usePlayerStore = create<{
 
     set({ isPlayerMoving: true });
 
-    const { isOrthographic, cameraToPlayer } = useCameraStore.getState();
-    if (!isOrthographic) await cameraToPlayer(currentSectorId);
+    const {
+      isOrthographic,
+      cameraToPlayer,
+      moveToPlayer,
+      rotateAroundPlayer
+    } = useCameraStore.getState();
 
-    const rolledNumber = await useDiceStore.getState().rollDice();
+    if (!isOrthographic) await cameraToPlayer(myPlayer.id);
+
+    const rolledNumber = IS_DEV ? 5 : await useDiceStore.getState().rollDice();
 
     const tl = createTimeline();
 
@@ -131,9 +137,17 @@ const usePlayerStore = create<{
 
       tl.add(myPlayerModel.position, {
         x: nextPosition[0],
-        y: [myPlayerModel.position.y, myPlayerModel.position.y + 3, myPlayerModel.position.y],
+        y: [
+          myPlayerModel.position.y,
+          myPlayerModel.position.y + 3,
+          myPlayerModel.position.y
+        ],
         z: nextPosition[2],
-        duration: 700,
+        ease: "inOutSine",
+        duration: IS_DEV ? 100 : 500,
+        onUpdate: () => {
+          moveToPlayer(myPlayerModel, false);
+        },
       });
 
       if (!currentRotation.every((value, index) => value === nextRotation[index])) {
@@ -146,6 +160,7 @@ const usePlayerStore = create<{
             duration: 300,
             ease: "linear",
             onUpdate: (self) => {
+              rotateAroundPlayer(myPlayerModel, false);
               myPlayerModel.quaternion.rotateTowards(targetQuat, self.progress);
             },
           },

@@ -70,7 +70,7 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
       </Dialog>
       <Button
         className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 bg-card/70 backdrop-blur-[1.5rem] rounded-xl group-hover:translate-x-[calc(100%+0.5rem)] h-full opacity-0 group-hover:opacity-100 p-2 hover:bg-accent items-center text-primary"
-        onClick={(e) => (e.stopPropagation(), cameraToPlayer(player.current_position))}
+        onClick={(e) => (e.stopPropagation(), cameraToPlayer(player.id))}
       >
         <MapPinIcon className="mt-1 self-start" />
         <div>
