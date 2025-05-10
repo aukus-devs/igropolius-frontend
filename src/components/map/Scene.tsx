@@ -4,6 +4,7 @@ import { Grid, Stats } from "@react-three/drei";
 import GameBoard from "./GameBoard";
 import { Railroad } from "./Railroad";
 import { colors } from "@/lib/types";
+import Skybox from "./Skybox";
 
 function Scene() {
   const gridConfig = {
@@ -75,6 +76,7 @@ function Scene() {
       {/* origin position marker */}
       <Grid position={[0, 1, 0]} args={[1, 1]} {...gridConfig} />
       <Stats className="fps-meter" />
+      <Skybox />
     </>
   );
 }
