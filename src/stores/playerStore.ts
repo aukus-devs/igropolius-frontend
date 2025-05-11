@@ -106,12 +106,8 @@ const usePlayerStore = create<{
 
     set({ isPlayerMoving: true });
 
-    const {
-      isOrthographic,
-      cameraToPlayer,
-      moveToPlayer,
-      rotateAroundPlayer
-    } = useCameraStore.getState();
+    const { isOrthographic, cameraToPlayer, moveToPlayer, rotateAroundPlayer } =
+      useCameraStore.getState();
 
     if (!isOrthographic) await cameraToPlayer(myPlayer.id);
 
@@ -138,11 +134,7 @@ const usePlayerStore = create<{
 
       tl.add(myPlayerModel.position, {
         x: nextPosition[0],
-        y: [
-          myPlayerModel.position.y,
-          myPlayerModel.position.y + 3,
-          myPlayerModel.position.y
-        ],
+        y: [myPlayerModel.position.y, myPlayerModel.position.y + 3, myPlayerModel.position.y],
         z: nextPosition[2],
         ease: "inOutSine",
         duration: IS_DEV ? 100 : 500,
@@ -197,8 +189,7 @@ const usePlayerStore = create<{
     });
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  receiveBonusCard: (type: BonusCardType) => {
+  receiveBonusCard: (_type: BonusCardType) => {
     const { setNextTurnState } = get();
     setNextTurnState();
   },
