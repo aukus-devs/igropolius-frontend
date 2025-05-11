@@ -53,13 +53,7 @@ export function RichTextDisplay({ value }: DisplayProps) {
   }, [value]);
 
   return (
-    <div
-      className="rich-display"
-      style={{
-        // backgroundColor: "darkgrey",
-        borderRadius: "15px",
-      }}
-    >
+    <div className="rich-display">
       <Editor ref={quillRef} readOnly />
     </div>
   );
@@ -158,7 +152,7 @@ const Editor = forwardRef<Quill | null, EditorProps>(
       };
     }, [ref, readOnly]);
 
-    return <div className={`rounded-2xl ${readOnly ? "read-only" : ""}`} ref={containerRef} />;
+    return <div className={`${readOnly ? "read-only" : ""}`} ref={containerRef} />;
   },
 );
 
@@ -180,7 +174,11 @@ export function RichTextDiff({ oldContent, newContent }: DiffProps) {
   if (diff.ops.length === 0) {
     return <div>Изменения стиля</div>;
   }
-  return <Editor ref={quillRef} readOnly />;
+  return (
+    <div className="rich-diff">
+      <Editor ref={quillRef} readOnly />
+    </div>
+  );
 }
 
 // Helper to split Delta into text lines
@@ -251,6 +249,10 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
     }
 
     if (oldLine !== newLine) {
+      if (result.ops.length > 0) {
+        result.ops.push({ insert: "\n" });
+      }
+
       if (lastCommonLine) {
         result.ops.push({ insert: lastCommonLine });
         result.ops.push({ insert: "\n" });
@@ -265,7 +267,6 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
         result.ops.push(...deltas[1].ops);
         result.ops.push({ insert: "\n" });
       }
-      result.ops.push({ insert: "\n" });
     }
   }
 

@@ -202,3 +202,8 @@ export type BonusCardData = {
   picture: string;
   description: string;
 };
+
+export type RulesVersion = {
+  content: string;
+  created_at: number;
+};

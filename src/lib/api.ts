@@ -1,4 +1,4 @@
-import { PlayerData, PlayerEvent, PlayerTurnState } from "@/lib/types";
+import { PlayerData, PlayerEvent, PlayerTurnState, RulesVersion } from "@/lib/types";
 import { playersData } from "./mockData";
 import { IS_DEV } from "./constants";
 
@@ -90,4 +90,42 @@ export async function fetchPlayers(): Promise<PlayersResponse> {
     });
   }
   return fetch("/api/players").then((res) => res.json());
+}
+
+type RulesResponse = {
+  rules: RulesVersion[];
+};
+
+export async function fetchRules(): Promise<RulesResponse> {
+  if (MOCK_API) {
+    return Promise.resolve({
+      rules: [
+        {
+          content: JSON.stringify({
+            ops: [
+              { insert: "Третья версия правил" },
+              { insert: "\n" },
+              { insert: "Читы и подсказки запрещены" },
+            ],
+          }),
+          created_at: Math.ceil(new Date("2025-04-30").getTime() / 1000),
+        },
+        {
+          content: JSON.stringify({
+            ops: [
+              { insert: "Вторая версия правил" },
+              { insert: "\n" },
+              { insert: "Читы запрещены" },
+            ],
+          }),
+          created_at: Math.ceil(new Date("2025-04-29").getTime() / 1000),
+        },
+        {
+          content: JSON.stringify({ ops: [{ insert: "Первая версия правил" }] }),
+          created_at: Math.ceil(new Date("2025-04-28").getTime() / 1000),
+        },
+      ],
+    });
+  }
+  return fetch("/api/rules").then((res) => res.json());
 }

@@ -156,7 +156,7 @@
   left: 0px !important;
 }
 
-/* styles for rich editor toolbar */
+/* styles for rich editor */
 .rich-editor .ql-toolbar svg .ql-stroke,
 .rich-editor .ql-toolbar svg .ql-line {
   stroke: white;
@@ -178,4 +178,18 @@
 .rich-editor .ql-tooltip {
   left: 50% !important;
   transform: translateX(-50%) !important;
+}
+
+.rich-display .ql-container.ql-disabled {
+  border: unset;
+}
+
+.rich-diff .ql-container.ql-disabled {
+  border: unset;
+}
+
+.rich-editor .ql-container .ql-editor {
+  overflow-y: auto;
+  max-height: 400px;
+  height: 45vh;
 }
