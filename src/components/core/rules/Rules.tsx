@@ -3,8 +3,16 @@ import { RichTextDisplay, RichTextEditor } from "./RichText";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRules } from "@/lib/api";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function Rules() {
+  const { value: localRules, save: localSave } = useLocalStorage<string>({
+    key: "rules-local",
+    defaultValue: "",
+  });
+
+  const [editValue, setEditValue] = useState<string>("");
+
   const [editing, setEditing] = useState(false);
   const canEdit = true;
 
@@ -26,16 +34,24 @@ export default function Rules() {
       rules = sortedRules[0].content;
     }
   }
+  if (localRules && localRules.length > 0) {
+    rules = localRules;
+  }
+
+  const handleSave = () => {
+    setEditing(false);
+    localSave(editValue);
+  };
 
   return (
     <div>
       {editing ? (
         <>
-          <Button onClick={() => setEditing(false)}>Сохранить</Button>
+          <Button onClick={handleSave}>Сохранить</Button>
           <RichTextEditor
             initialValue={rules}
             onTextChange={(value) => {
-              console.log(value);
+              setEditValue(value);
             }}
           />
         </>
