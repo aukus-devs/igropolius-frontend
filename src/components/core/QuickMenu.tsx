@@ -84,7 +84,9 @@ function QuickMenu() {
                     <div className="text-primary">{playerName}</div>
                   </DialogTitle>
                 </DialogHeader>
-                <RulesTabs />
+                <div className="mt-4">
+                  <RulesTabs />
+                </div>
               </ScrollArea>
             </DialogContent>
           </Dialog>
