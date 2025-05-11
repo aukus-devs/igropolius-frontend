@@ -1,4 +1,10 @@
-import { BoxIcon, ChevronDownIcon, HeartIcon, NotebookTextIcon, SquareIcon } from "lucide-react";
+import {
+  BoxIcon,
+  ChevronDownIcon,
+  HeartIcon,
+  NotebookTextIcon,
+  SquareIcon,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { cn } from "@/lib/utils";
@@ -6,6 +12,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import usePlayerStore from "@/stores/playerStore";
 import useCameraStore from "@/stores/cameraStore";
+import { ScrollArea } from "../ui/scroll-area";
+import RulesTabs from "./rules/RulesTabs";
 
 const sharedStyles =
   "justify-start w-full text-base font-semibold rounded-xl px-3 py-2 backdrop-blur-[1.5rem] bg-card/70 border-none";
@@ -16,19 +24,19 @@ function ToggleOrthographic() {
 
   return (
     <Button variant="outline" className={sharedStyles} onClick={toggleOrthographic}>
-      {isOrthographic ?
+      {isOrthographic ? (
         <>
           <BoxIcon className="h-4 w-4" />
           3D
         </>
-        :
+      ) : (
         <>
           <SquareIcon className="h-4 w-4" />
           Вид сверху
         </>
-      }
+      )}
     </Button>
-  )
+  );
 }
 
 function QuickMenu() {
@@ -69,14 +77,15 @@ function QuickMenu() {
               </Button>
             </DialogTrigger>
             <DialogContent className="w-[37.5rem] h-[41.25rem]" aria-describedby="">
-              <DialogHeader>
-                <DialogTitle className="flel flex-col font-black text-[2rem]">
-                  <div>Добро пожаловать в Millionaire Boys Club,</div>
-                  <div className="text-primary">{playerName}</div>
-                </DialogTitle>
-              </DialogHeader>
-
-              <div></div>
+              <ScrollArea className="h-full w-full overflow-visible">
+                <DialogHeader className="w-full">
+                  <DialogTitle className="flex flex-col font-black text-[2rem]">
+                    <div>Добро пожаловать в Millionaire Boys Club,</div>
+                    <div className="text-primary">{playerName}</div>
+                  </DialogTitle>
+                </DialogHeader>
+                <RulesTabs />
+              </ScrollArea>
             </DialogContent>
           </Dialog>
           <Button variant="outline" className={sharedStyles}>

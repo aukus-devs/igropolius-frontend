@@ -155,3 +155,27 @@
   bottom: 0px !important;
   left: 0px !important;
 }
+
+/* styles for rich editor toolbar */
+.rich-editor .ql-toolbar svg .ql-stroke,
+.rich-editor .ql-toolbar svg .ql-line {
+  stroke: white;
+}
+
+.rich-editor .ql-toolbar .ql-picker-options svg .ql-stroke,
+.rich-editor .ql-toolbar .ql-picker-options svg .ql-line {
+  stroke: #444;
+}
+
+.rich-editor .ql-toolbar svg .ql-fill {
+  fill: white;
+}
+
+.rich-editor .ql-picker-label {
+  color: white;
+}
+
+.rich-editor .ql-tooltip {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
