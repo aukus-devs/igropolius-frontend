@@ -1,12 +1,14 @@
-import { PLAYER_HEIGHT, STORAGE_BASE_URL } from "@/lib/constants";
+import { EMISSION_FULL, EMISSION_NONE, PLAYER_HEIGHT, STORAGE_BASE_URL } from "@/lib/constants";
 import useModelsStore from "@/stores/modelsStore";
 import { PlayerData, Vector3Array } from "@/lib/types";
-import { ThreeEvent } from "@react-three/fiber";
-import { Group } from "three";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
+import { Group, Mesh } from "three";
 import DiceModel from "./DiceModel";
 import MovesCounter from "./MovesCounter";
 import usePlayerStore from "@/stores/playerStore";
 import { Gltf } from "@react-three/drei";
+import { useEffect, useRef, useState } from "react";
+import PlayerInfo from "./PlayerInfo";
 
 const ModelsUrls: Record<string, string> = {
   praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck.glb`,
@@ -38,21 +40,40 @@ function MyPlayerComponents() {
 function PlayerModel({ player, position, rotation, onClick }: Props) {
   const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
   const isMyPlayer = usePlayerStore((state) => state.myPlayer?.id === player.id);
-
+  const [isHovered, setIsHovered] = useState(false);
+  const groupRef = useRef<Group>(null);
   const modelUrl = ModelsUrls[player.nickname.toLowerCase()];
 
-  const onModelRender = (model: Group) => {
-    if (model) {
-      addPlayerModel(player.id, model);
-    }
-  };
+  useEffect(() => {
+    if (!groupRef.current) return;
+
+    groupRef.current.traverse((child) => {
+      if (child instanceof Mesh) {
+        child.material.emissiveIntensity = 0.25;
+      }
+    })
+
+    addPlayerModel(player.id, groupRef.current);
+  }, [addPlayerModel, player.id]);
+
+  useFrame(() => {
+    if (!groupRef.current) return;
+
+    groupRef.current.traverse((child) => {
+      if (child instanceof Mesh) {
+        child.material.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
+      }
+    })
+  });
 
   return (
     <group
-      ref={onModelRender}
+      ref={groupRef}
       name={`player_${player.id}`}
       position={position}
       rotation={rotation}
+      onPointerEnter={(e) => (e.stopPropagation(), (setIsHovered(true)))}
+      onPointerLeave={(e) => (e.stopPropagation(), (setIsHovered(false)))}
     >
       <Gltf
         src={modelUrl}
@@ -61,6 +82,7 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
         receiveShadow
         rotation={[0, Math.PI / 2, 0]}
       />
+      {isHovered && <PlayerInfo player={player} />}
       {isMyPlayer && <MyPlayerComponents />}
     </group>
   );
