@@ -77,7 +77,7 @@ function QuickMenu() {
               </Button>
             </DialogTrigger>
             <DialogContent className="w-[37.5rem] h-[41.25rem]" aria-describedby="">
-              <ScrollArea className="h-full w-full overflow-scroll">
+              <ScrollArea className="h-full w-full overflow-auto">
                 <DialogHeader className="w-full">
                   <DialogTitle className="flex flex-col font-black text-[2rem]">
                     <div>
