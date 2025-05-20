@@ -77,14 +77,15 @@ function QuickMenu() {
               </Button>
             </DialogTrigger>
             <DialogContent className="w-[37.5rem] h-[41.25rem]" aria-describedby="">
-              <ScrollArea className="h-full w-full overflow-visible">
+              <ScrollArea className="h-full w-full overflow-scroll">
                 <DialogHeader className="w-full">
                   <DialogTitle className="flex flex-col font-black text-[2rem]">
-                    <div>Добро пожаловать в Millionaire Boys Club,</div>
-                    <div className="text-primary">{playerName}</div>
+                    <div>
+                      Добро пожаловать в <span className="text-primary">Игрополиус</span>
+                    </div>
                   </DialogTitle>
                 </DialogHeader>
-                <div className="mt-4">
+                <div className="mt-7">
                   <RulesTabs />
                 </div>
               </ScrollArea>

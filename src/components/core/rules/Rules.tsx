@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { RichTextDisplay, RichTextEditor } from "./RichText";
+import { RichTextEditor } from "./RichText";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRules } from "@/lib/api";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import RichDisplay from "./RichDisplay";
 
 export default function Rules() {
   const { value: localRules, save: localSave } = useLocalStorage<string>({
@@ -58,7 +59,11 @@ export default function Rules() {
       ) : (
         <>
           {canEdit && <Button onClick={() => setEditing(true)}>Редактировать</Button>}
-          <RichTextDisplay value={rules} />
+          <div className="mt-2">
+            <div className="rich-display">
+              <RichDisplay value={rules} />
+            </div>
+          </div>
         </>
       )}
     </div>
