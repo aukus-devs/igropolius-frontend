@@ -5,18 +5,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 type Props = {
   styles?: string;
   open?: boolean;
+  hideTrigger?: boolean;
 };
 
-export default function AboutDialog({ styles, open }: Props) {
+export default function AboutDialog({ styles, open, hideTrigger }: Props) {
   const [isOpen, setIsOpen] = useState(Boolean(open));
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className={styles}>
-          Об ивенте
-        </Button>
-      </DialogTrigger>
+      {!hideTrigger && (
+        <DialogTrigger asChild>
+          <Button variant="outline" className={styles}>
+            Об ивенте
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="w-[37.5rem]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">Об ивенте</DialogTitle>

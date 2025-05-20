@@ -68,7 +68,7 @@ function UI() {
       <div className="absolute bottom-4 right-4">
         #{position} ход: {turnState}
       </div>
-      <AboutDialog open={firstTimeVisit} />
+      <AboutDialog open={firstTimeVisit} hideTrigger />
     </div>
   );
 }
