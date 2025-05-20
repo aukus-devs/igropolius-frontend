@@ -8,6 +8,9 @@ import RollDeckCard from "./core/RollDeckCard";
 import Countdown from "./core/Countdown";
 import { useShallow } from "zustand/shallow";
 import TrainMoveDialog from "./core/TrainMoveDialog";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import AboutDialog from "./core/AboutDialog";
+import { useEffect } from "react";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -21,6 +24,15 @@ function MoveButton() {
 }
 
 function UI() {
+  const { value: firstTimeVisit, save: saveFirstTimeVisit } = useLocalStorage({
+    key: "first-time-visit",
+    defaultValue: true,
+  });
+
+  useEffect(() => {
+    saveFirstTimeVisit(false);
+  }, [saveFirstTimeVisit]);
+
   const { turnState, position, isPlayerMoving } = usePlayerStore(
     useShallow((state) => ({
       turnState: state.turnState,
@@ -56,6 +68,7 @@ function UI() {
       <div className="absolute bottom-4 right-4">
         #{position} ход: {turnState}
       </div>
+      <AboutDialog open={firstTimeVisit} />
     </div>
   );
 }

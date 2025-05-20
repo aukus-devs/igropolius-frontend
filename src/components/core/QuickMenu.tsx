@@ -14,6 +14,7 @@ import usePlayerStore from "@/stores/playerStore";
 import useCameraStore from "@/stores/cameraStore";
 import { ScrollArea } from "../ui/scroll-area";
 import RulesTabs from "./rules/RulesTabs";
+import AboutDialog from "./AboutDialog";
 
 const sharedStyles =
   "justify-start w-full text-base font-semibold rounded-xl px-3 py-2 backdrop-blur-[1.5rem] bg-card/70 border-none";
@@ -57,7 +58,7 @@ function QuickMenu() {
                     {myPlayer.nickname.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
-                {myPlayer.nickname}
+                {playerName}
               </div>
             )}
             <div
@@ -95,8 +96,8 @@ function QuickMenu() {
             <HeartIcon className="h-4 w-4" />
             Привязать поинтаук
           </Button>
-
           <ToggleOrthographic />
+          <AboutDialog styles={sharedStyles} />
         </CollapsibleContent>
       </Collapsible>
     </>
