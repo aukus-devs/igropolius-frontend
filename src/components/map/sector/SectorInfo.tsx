@@ -12,28 +12,26 @@ function SectorInfo({ sector }: Props) {
   const isSelected = useSectorStore((state) => state.selectedSector?.id === id);
 
   return (
-    <>
-      <Html
-        zIndexRange={[0, 0]}
-        pointerEvents="none"
-        style={{ pointerEvents: "none" }}
-        center
-        position={[0, 10, 0]}
-      >
-        {isSelected && (
-          <Card className="w-52 pointer-events-none">
-            <CardHeader>
-              <CardTitle>{name}</CardTitle>
-              <p className="text-xs text-muted-foreground">#{id}</p>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm">Тип: {type}</p>
-              <p className="text-sm">Ролл игры: {rollType}</p>
-            </CardContent>
-          </Card>
-        )}
-      </Html>
-    </>
+    <Html
+      zIndexRange={[0, 0]}
+      pointerEvents="none"
+      style={{ pointerEvents: "none" }}
+      center
+      position={[0, 10, 0]}
+    >
+      {isSelected && (
+        <Card className="w-52 pointer-events-none">
+          <CardHeader>
+            <CardTitle>{name}</CardTitle>
+            <p className="text-xs text-muted-foreground">#{id}</p>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm">Тип: {type}</p>
+            <p className="text-sm">Ролл игры: {rollType}</p>
+          </CardContent>
+        </Card>
+      )}
+    </Html>
   );
 }
 

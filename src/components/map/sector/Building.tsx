@@ -1,9 +1,12 @@
-import { BUILDING_SCALE, SECTOR_CONTENT_ELEVATION, STORAGE_BASE_URL } from "@/lib/constants";
-import { BuildingType, CellColor, Vector3Array } from "@/lib/types";
+import { BUILDING_SCALE, EMISSION_FULL, EMISSION_NONE, STORAGE_BASE_URL } from "@/lib/constants";
+import { BuildingData, BuildingType, Vector3Array } from "@/lib/types";
 import { Gltf } from "@react-three/drei";
 import { eases } from "animejs";
 import { animate } from "animejs";
 import * as THREE from "three";
+import BuildingInfo from "../BuildingInfo";
+import { useEffect, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
 
 const buildingUrls: { [k in BuildingType]: string } = {
   ruins: `${STORAGE_BASE_URL}/models/buildings/ruins.glb`,
@@ -16,10 +19,8 @@ const buildingUrls: { [k in BuildingType]: string } = {
 };
 
 type Props = {
-  type: BuildingType;
+  building: BuildingData;
   position: Vector3Array;
-  scale?: number;
-  color: CellColor;
 };
 
 const meshesToColor = [
@@ -40,73 +41,67 @@ const meshesToColor = [
 ];
 
 function animateAppearance(model: THREE.Group) {
-  model.position.y = -5.5;
+  model.scale.set(1, 0.01, 1)
 
-  animate(model.position, {
-    y: SECTOR_CONTENT_ELEVATION,
+  animate(model.scale, {
+    y: 1,
     ease: eases.inOutCubic,
-    duration: 3000,
-    // loop: true,
+    duration: 1500,
   });
 }
 
-function Building({ position, type, color }: Props) {
-  const updateModel = (model: THREE.Group) => {
-    if (model) {
-      // Traverse the model and adjust properties
-      model.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          const mesh = child;
-          const shouldRecolor = meshesToColor.includes(mesh.name);
+function Building({ building, position }: Props) {
+  const { type, owner } = building;
 
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
-
-          // Ensure each mesh has its own material instance
-          if (Array.isArray(mesh.material)) {
-            mesh.material = mesh.material.map((material) => {
-              let mat = material;
-              if (mat instanceof THREE.MeshStandardMaterial) {
-                if (shouldRecolor) {
-                  mat = mat.clone();
-                  mat.color.set(color);
-                }
-                // Update roughness and metalness
-                mat.roughness = 0.75;
-                mat.metalness = 0.25;
-                mat.needsUpdate = true;
-              }
-              return mat;
-            });
-          } else if (mesh.material instanceof THREE.MeshStandardMaterial) {
-            let mat = mesh.material;
-            if (shouldRecolor) {
-              mat = mat.clone();
-              mat.color.set(color);
-            }
-            // Update roughness and metalness
-            mat.roughness = 0.75;
-            mat.metalness = 0.25;
-            mat.needsUpdate = true;
-            mesh.material = mat;
-          }
-        }
-      });
-
-      animateAppearance(model);
-    }
-  };
-
+  const [isHovered, setIsHovered] = useState(false);
+  const gltfRef = useRef<THREE.Group>(null);
   const modelUrl = buildingUrls[type];
 
+  useEffect(() => {
+    if (!gltfRef.current) return;
+
+    gltfRef.current.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        const shouldRecolor = meshesToColor.includes(child.name);
+        const material = child.material.clone() as THREE.MeshStandardMaterial;
+
+        material.roughness = 0.75;
+        material.metalness = 0.25;
+        material.emissiveIntensity = 0.25;
+        if (shouldRecolor) material.color.set(owner.color);
+
+        child.castShadow = true;
+        child.receiveShadow = true;
+        child.material = material;
+      }
+    });
+
+    animateAppearance(gltfRef.current);
+  }, [owner.color]);
+
+  useFrame(() => {
+    if (!gltfRef.current) return;
+
+    gltfRef.current.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        const material = child.material;
+        material.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
+      }
+    })
+  })
+
   return (
-    <Gltf
-      ref={updateModel}
-      src={modelUrl}
-      position={position}
-      scale={BUILDING_SCALE}
-      rotation={[0, Math.PI, 0]}
-    />
+    <group position={position}>
+      <Gltf
+        ref={gltfRef}
+        src={modelUrl}
+        scale={BUILDING_SCALE}
+        rotation={[0, Math.PI, 0]}
+        onPointerEnter={(e) => (e.stopPropagation(), setIsHovered(true))}
+        onPointerLeave={(e) => (e.stopPropagation(), setIsHovered(false))}
+      />
+      {isHovered && <BuildingInfo building={building} />}
+    </group>
   );
 }
 

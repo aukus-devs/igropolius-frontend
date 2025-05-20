@@ -35,9 +35,8 @@ function SectorBuildings({ sectorId }: Props) {
         return (
           <Building
             key={index}
-            type={building.type}
+            building={building}
             position={position}
-            color={building.owner.color}
           />
         );
       })}
