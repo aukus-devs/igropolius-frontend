@@ -5,7 +5,7 @@ import { EquirectangularReflectionMapping } from "three";
 import { RGBELoader } from "three-stdlib";
 
 export default function Skybox() {
-  const hdr = useLoader(RGBELoader, `${STORAGE_BASE_URL}/textures/sky2.hdr`);
+  const hdr = useLoader(RGBELoader, `${STORAGE_BASE_URL}/textures/sky2_2k.hdr`);
 
   useEffect(() => {
     hdr.mapping = EquirectangularReflectionMapping;
