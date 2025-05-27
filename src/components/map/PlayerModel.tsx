@@ -2,7 +2,7 @@ import { PLAYER_HEIGHT, STORAGE_BASE_URL } from "@/lib/constants";
 import useModelsStore from "@/stores/modelsStore";
 import { PlayerData, Vector3Array } from "@/lib/types";
 import { ThreeEvent } from "@react-three/fiber";
-import { Group, Mesh } from "three";
+import { Color, Group, Mesh, MeshStandardMaterial } from "three";
 import DiceModel from "./DiceModel";
 import MovesCounter from "./MovesCounter";
 import usePlayerStore from "@/stores/playerStore";
@@ -49,11 +49,14 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
     groupRef.current.traverse((child) => {
       if (child instanceof Mesh) {
         child.material.emissiveIntensity = 0.25;
+        child.material = new MeshStandardMaterial({
+          color: new Color(player.color)
+        });
       }
     })
 
     addPlayerModel(player.id, groupRef.current);
-  }, [addPlayerModel, player.id]);
+  }, [addPlayerModel, player.id, player.color]);
 
   return (
     <group
