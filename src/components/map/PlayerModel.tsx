@@ -11,7 +11,7 @@ import { useEffect, useRef } from "react";
 import PlayerInfo from "./PlayerInfo";
 
 const ModelsUrls: Record<string, string> = {
-  praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck.glb`,
+  praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
   "player-2": `${STORAGE_BASE_URL}/models/players/cars/delivery.glb`,
   "player-3": `${STORAGE_BASE_URL}/models/players/cars/race-future.glb`,
   "player-4": `${STORAGE_BASE_URL}/models/players/cars/sedan-sports.glb`,
@@ -40,32 +40,43 @@ function MyPlayerComponents() {
 function PlayerModel({ player, position, rotation, onClick }: Props) {
   const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
   const isMyPlayer = usePlayerStore((state) => state.myPlayer?.id === player.id);
-  const groupRef = useRef<Group>(null);
   const modelUrl = ModelsUrls[player.nickname.toLowerCase()];
 
-  useEffect(() => {
-    if (!groupRef.current) return;
+  const onGroupRender = (group: Group | null) => {
+    if (!group) return;
 
-    groupRef.current.traverse((child) => {
+    group.traverse((child) => {
       if (child instanceof Mesh) {
         child.material.emissiveIntensity = 0.25;
-        child.material = new MeshStandardMaterial({
-          color: new Color(player.color)
-        });
       }
-    })
+    });
 
-    addPlayerModel(player.id, groupRef.current);
-  }, [addPlayerModel, player.id, player.color]);
+    addPlayerModel(player.id, group);
+  };
+
+  const onModelRender = (model: Group | null) => {
+    if (!model) return;
+
+    model.traverse((child) => {
+      if (child instanceof Mesh) {
+        if (child.name === "body") {
+          child.material = new MeshStandardMaterial({
+            color: new Color(player.color),
+          });
+        }
+      }
+    });
+  };
 
   return (
     <group
-      ref={groupRef}
+      ref={onGroupRender}
       name={`player_${player.id}`}
       position={position}
       rotation={rotation}
     >
       <Gltf
+        ref={onModelRender}
         src={modelUrl}
         onClick={(e) => (e.stopPropagation(), onClick?.(e))}
         castShadow
