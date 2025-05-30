@@ -7,18 +7,17 @@ import DiceModel from "./DiceModel";
 import MovesCounter from "./MovesCounter";
 import usePlayerStore from "@/stores/playerStore";
 import { Gltf } from "@react-three/drei";
-import { useEffect, useRef } from "react";
 import PlayerInfo from "./PlayerInfo";
 
 const ModelsUrls: Record<string, string> = {
   praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
-  "player-2": `${STORAGE_BASE_URL}/models/players/cars/delivery.glb`,
-  "player-3": `${STORAGE_BASE_URL}/models/players/cars/race-future.glb`,
-  "player-4": `${STORAGE_BASE_URL}/models/players/cars/sedan-sports.glb`,
-  "player-5": `${STORAGE_BASE_URL}/models/players/cars/tractor.glb`,
-  "player-6": `${STORAGE_BASE_URL}/models/players/cars/delivery-flat.glb`,
-  "player-7": `${STORAGE_BASE_URL}/models/players/cars/truck.glb`,
-  "player-8": `${STORAGE_BASE_URL}/models/players/cars/van.glb`,
+  "player-2": `${STORAGE_BASE_URL}/models/players/cars/delivery1.glb`,
+  "player-3": `${STORAGE_BASE_URL}/models/players/cars/race-future1.glb`,
+  "player-4": `${STORAGE_BASE_URL}/models/players/cars/sedan-sports1.glb`,
+  "player-5": `${STORAGE_BASE_URL}/models/players/cars/tractor1.glb`,
+  "player-6": `${STORAGE_BASE_URL}/models/players/cars/delivery-flat1.glb`,
+  "player-7": `${STORAGE_BASE_URL}/models/players/cars/truck1.glb`,
+  "player-8": `${STORAGE_BASE_URL}/models/players/cars/van1.glb`,
 };
 
 type Props = {
@@ -59,7 +58,7 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
 
     model.traverse((child) => {
       if (child instanceof Mesh) {
-        if (child.name === "body") {
+        if (child.name === "body001") {
           child.material = new MeshStandardMaterial({
             color: new Color(player.color),
           });
