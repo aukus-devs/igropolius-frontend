@@ -22,7 +22,7 @@ function PlayerDialogTrigger({ player, placement }: Props) {
       <div className="relative">
         <Avatar className="w-8 h-8">
           <AvatarImage src={player.avatar_link} />
-          <AvatarFallback className="uppercase">{player.nickname.slice(0, 2)}</AvatarFallback>
+          <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
         </Avatar>
         {player.is_online ? (
           <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-green-500" />
@@ -34,7 +34,7 @@ function PlayerDialogTrigger({ player, placement }: Props) {
         <div className="flex justify-between text-base">
           <div className="font-bold">
             <span className="text-muted-foreground">{placement} · </span>
-            <span>{player.nickname}</span>
+            <span>{player.username}</span>
           </div>
           <div className="flex text-muted-foreground items-center gap-1 font-semibold">
             {points} <ZapIcon size="1rem" />

@@ -14,9 +14,7 @@ function PlayerInfo({ player }: Props) {
       center
       position={[0, 2.5, 0]}
     >
-      <div className="text-shadow-md/50 whitespace-nowrap">
-        {player.nickname}
-      </div>
+      <div className="text-shadow-md/50 whitespace-nowrap">{player.username}</div>
     </Html>
   );
 }

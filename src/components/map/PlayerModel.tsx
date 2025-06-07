@@ -39,7 +39,7 @@ function MyPlayerComponents() {
 function PlayerModel({ player, position, rotation, onClick }: Props) {
   const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
   const isMyPlayer = usePlayerStore((state) => state.myPlayer?.id === player.id);
-  const modelUrl = ModelsUrls[player.nickname.toLowerCase()];
+  const modelUrl = ModelsUrls[player.username.toLowerCase()];
 
   const onGroupRender = (group: Group | null) => {
     if (!group) return;

@@ -22,7 +22,7 @@ function BuildingInfo({ building }: Props) {
           <CardTitle>{gameTitle}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm">Владелец: {owner.nickname}</p>
+          <p className="text-sm">Владелец: {owner.username}</p>
           <p className="text-sm">Длительность: {gameLength}</p>
         </CardContent>
       </Card>

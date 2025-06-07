@@ -44,7 +44,7 @@ function ToggleOrthographic() {
 function QuickMenu() {
   const myPlayer = usePlayerStore((state) => state.myPlayer);
 
-  const playerName = myPlayer ? myPlayer.nickname : "Зритель";
+  const playerName = myPlayer ? myPlayer.username : "Зритель";
 
   return (
     <>
@@ -56,7 +56,7 @@ function QuickMenu() {
                 <Avatar className="w-6 h-6">
                   <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback className="bg-primary-foreground uppercase">
-                    {myPlayer.nickname.slice(0, 2)}
+                    {myPlayer.username.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 {playerName}

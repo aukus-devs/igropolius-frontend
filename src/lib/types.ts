@@ -81,7 +81,7 @@ export type SectorOwnership = {
 
 export type PlayerData = {
   id: number;
-  nickname: string;
+  username: string;
   first_name: string;
   is_online: boolean;
 
@@ -100,7 +100,8 @@ export type PlayerData = {
 
   total_score: number;
   current_position: number;
-  sector_ownership: SectorOwnership[];
+  games: SectorOwnership[];
+  bonus_cards: PlayerBonusCard[];
 
   avatar_link: string;
   color: PlayerColorValue;

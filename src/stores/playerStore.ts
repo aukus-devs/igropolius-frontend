@@ -63,7 +63,7 @@ const usePlayerStore = create<{
     const buildings: Record<number, BuildingData[]> = {};
 
     for (const player of players) {
-      for (const building of player.sector_ownership) {
+      for (const building of player.games) {
         if (!buildings[building.sector_id]) {
           buildings[building.sector_id] = [];
         }
