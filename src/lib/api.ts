@@ -2,7 +2,25 @@ import { PlayerData, PlayerEvent, PlayerTurnState, RulesVersion } from "@/lib/ty
 import { playersData } from "./mockData";
 import { IS_DEV } from "./constants";
 
-const MOCK_API = IS_DEV || true;
+const MOCK_API = IS_DEV && false;
+
+const API_HOST = "http://localhost:8000";
+
+async function apiRequest<T>(endpoint: string, params: RequestInit = {}): Promise<T> {
+  const token = localStorage.getItem("access-token") ?? "";
+  const response = await fetch(`${API_HOST}${endpoint}`, {
+    ...params,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    return Promise.reject({ body: errorData, status: response.status });
+  }
+  return response.json() as Promise<T>;
+}
 
 type PlayerEventsResponse = {
   events: PlayerEvent[];
@@ -57,7 +75,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
       ],
     });
   }
-  return fetch(`/api/players/${playerId}/events`).then((res) => res.json());
+  return apiRequest(`/api/players/${playerId}/events`);
 }
 
 type CurrentPlayerResponse = {
@@ -76,7 +94,7 @@ export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
       turn_state: "rolling-dice",
     });
   }
-  return fetch("/api/players/current").then((res) => res.json());
+  return apiRequest("/api/players/current");
 }
 
 type PlayersResponse = {
@@ -89,7 +107,7 @@ export async function fetchPlayers(): Promise<PlayersResponse> {
       players: playersData,
     });
   }
-  return fetch("/api/players").then((res) => res.json());
+  return apiRequest("/api/players");
 }
 
 type RulesResponse = {
@@ -127,5 +145,21 @@ export async function fetchRules(): Promise<RulesResponse> {
       ],
     });
   }
-  return fetch("/api/rules").then((res) => res.json());
+  return apiRequest("/api/rules");
+}
+
+type LoginResponse = {
+  token: string;
+};
+
+export async function login(username: string, password: string): Promise<LoginResponse> {
+  if (MOCK_API) {
+    return Promise.resolve({
+      token: "mock-token",
+    });
+  }
+  return apiRequest("/api/login", {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+  });
 }

@@ -15,6 +15,7 @@ import useCameraStore from "@/stores/cameraStore";
 import { ScrollArea } from "../ui/scroll-area";
 import RulesTabs from "./rules/RulesTabs";
 import AboutDialog from "./AboutDialog";
+import LoginDialog from "./LoginDialog";
 
 const sharedStyles =
   "justify-start w-full text-base font-semibold rounded-xl px-3 py-2 backdrop-blur-[1.5rem] bg-card/70 border-none";
@@ -50,7 +51,7 @@ function QuickMenu() {
       <Collapsible className="w-full space-y-2">
         <CollapsibleTrigger asChild>
           <Button variant="outline" className={cn(sharedStyles, "justify-between")}>
-            {myPlayer && (
+            {myPlayer ? (
               <div className="flex gap-2 items-center font-bold">
                 <Avatar className="w-6 h-6">
                   <AvatarImage src="https://github.com/shadcn.png" />
@@ -59,6 +60,13 @@ function QuickMenu() {
                   </AvatarFallback>
                 </Avatar>
                 {playerName}
+              </div>
+            ) : (
+              <div className="flex gap-2 items-center font-bold">
+                <Avatar className="w-6 h-6">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                </Avatar>
+                Зритель
               </div>
             )}
             <div
@@ -70,6 +78,7 @@ function QuickMenu() {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="space-y-1">
+          <LoginDialog className={sharedStyles} />
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" className={sharedStyles}>
