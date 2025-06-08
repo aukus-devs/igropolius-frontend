@@ -48,7 +48,7 @@ const useTrainsStore = create<{
     const destinationSector = SectorsById[TrainsConfig[trainId].sectorTo];
     const destinationSectorPlayers = usePlayerStore
       .getState()
-      .players.filter((player) => player.current_position === destinationSector.id);
+      .players.filter((player) => player.sector_id === destinationSector.id);
     const destinationPosition = calculatePlayerPosition(
       destinationSectorPlayers.length,
       destinationSectorPlayers.length,

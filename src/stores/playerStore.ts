@@ -46,7 +46,7 @@ const usePlayerStore = create<{
     const { myPlayer, turnState } = get();
     if (!myPlayer || !turnState) return;
 
-    const nextTurnState = getNextTurnState(myPlayer.current_position, turnState, []);
+    const nextTurnState = getNextTurnState(myPlayer.sector_id, turnState, []);
     set({ turnState: nextTurnState });
   },
 
@@ -55,7 +55,7 @@ const usePlayerStore = create<{
     if (!currentSector) return;
 
     set((state) => ({
-      myPlayer: state.myPlayer ? { ...state.myPlayer, current_position: id } : null,
+      myPlayer: state.myPlayer ? { ...state.myPlayer, sector_id: id } : null,
     }));
   },
 
@@ -100,7 +100,7 @@ const usePlayerStore = create<{
     const myPlayerModel = useModelsStore.getState().getPlayerModel(myPlayer.id);
     if (!myPlayerModel) throw new Error(`Player model not found.`);
 
-    let currentSectorId = myPlayer.current_position;
+    let currentSectorId = myPlayer.sector_id;
     let currentSector = SectorsById[currentSectorId];
     if (!currentSector) throw new Error(`Current sector not found.`);
 
@@ -122,7 +122,7 @@ const usePlayerStore = create<{
         throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
 
       const nextSectorPlayers = get().players.filter(
-        (player) => player.current_position === nextSectorId,
+        (player) => player.sector_id === nextSectorId,
       );
       const nextPosition = calculatePlayerPosition(
         nextSectorPlayers.length,

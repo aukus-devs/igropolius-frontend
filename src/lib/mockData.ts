@@ -339,7 +339,7 @@ export const playersData: PlayerData[] = [
     username: "Praden",
     first_name: "Денис",
     is_online: true,
-    current_position: 1,
+    sector_id: 1,
 
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
@@ -412,7 +412,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 2,
-    current_position: 5,
+    sector_id: 5,
     username: "Player-2",
     first_name: "Илья",
 
@@ -493,7 +493,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 3,
-    current_position: 5,
+    sector_id: 5,
     username: "Player-3",
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.yellow,
@@ -534,7 +534,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 4,
-    current_position: 5,
+    sector_id: 5,
     username: "Player-4",
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.green,
@@ -569,7 +569,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 5,
-    current_position: 5,
+    sector_id: 5,
     username: "Player-5",
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.lightBlue,
@@ -603,7 +603,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 6,
-    current_position: 5,
+    sector_id: 5,
     username: "Player-6",
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.blue,
@@ -637,7 +637,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 7,
-    current_position: 5,
+    sector_id: 5,
     username: "Player-7",
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.darkBlue,
@@ -671,7 +671,7 @@ export const playersData: PlayerData[] = [
   },
   {
     id: 8,
-    current_position: 5,
+    sector_id: 5,
     username: "Player-8",
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.purple,

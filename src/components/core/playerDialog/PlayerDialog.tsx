@@ -76,7 +76,7 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
         <div>
           <div className="flex items-center gap-1 font-bold">Показать на карте</div>
           <div className="text-muted-foreground text-sm justify-self-start">
-            {player.current_position} клетка
+            {player.sector_id} клетка
           </div>
         </div>
       </Button>

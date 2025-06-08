@@ -12,14 +12,18 @@ function GameBoard() {
   return (
     <group name="board" position={[-HALF_BOARD, 0, -HALF_BOARD]}>
       {sectorsData.map((sector) => {
-        const playersOnSector = playersData.filter((player) => player.current_position === sector.id);
+        const playersOnSector = playersData.filter((player) => player.sector_id === sector.id);
         const sectorPosition = calculateSectorPosition(sector);
         const rotation = getSectorRotation(sector.position);
 
         return (
           <React.Fragment key={sector.id}>
             {playersOnSector.map((player, idx) => {
-              const playerPosition = calculatePlayerPosition(idx, playersOnSector.length, sector);
+              const playerPosition = calculatePlayerPosition(
+                idx,
+                playersOnSector.length,
+                sector,
+              );
               return (
                 <PlayerModel
                   key={player.id}
@@ -27,12 +31,17 @@ function GameBoard() {
                   position={playerPosition}
                   rotation={rotation}
                 />
-              )
+              );
             })}
 
-            <Sector key={sector.id} sector={sector} position={sectorPosition} rotation={rotation} />
+            <Sector
+              key={sector.id}
+              sector={sector}
+              position={sectorPosition}
+              rotation={rotation}
+            />
           </React.Fragment>
-        )
+        );
       })}
     </group>
   );

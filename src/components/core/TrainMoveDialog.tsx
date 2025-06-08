@@ -13,7 +13,7 @@ export default function TrainMoveDialog() {
       if (!state.myPlayer) return;
 
       return {
-        currentSector: SectorsById[state.myPlayer.current_position],
+        currentSector: SectorsById[state.myPlayer.sector_id],
         setNextTurnState: state.setNextTurnState,
       };
     }),

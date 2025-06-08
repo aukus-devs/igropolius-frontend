@@ -99,7 +99,7 @@ export type PlayerData = {
   donation_link: string | null;
 
   total_score: number;
-  current_position: number;
+  sector_id: number;
   games: SectorOwnership[];
   bonus_cards: PlayerBonusCard[];
 

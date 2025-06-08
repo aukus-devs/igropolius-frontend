@@ -37,7 +37,7 @@ function UI() {
     useShallow((state) => ({
       turnState: state.turnState,
       setNextTurnState: state.setNextTurnState,
-      position: state.myPlayer?.current_position,
+      position: state.myPlayer?.sector_id,
       isPlayerMoving: state.isPlayerMoving,
     })),
   );
