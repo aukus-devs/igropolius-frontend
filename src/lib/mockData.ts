@@ -358,7 +358,7 @@ export const playersData: PlayerData[] = [
 
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.red,
-    sector_ownership: [
+    games: [
       {
         sector_id: 38,
         created_at: Math.ceil(Date.now() / 1000),
@@ -408,6 +408,7 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+    bonus_cards: [],
   },
   {
     id: 2,
@@ -432,7 +433,7 @@ export const playersData: PlayerData[] = [
     total_score: 5000,
     avatar_link: "https://github.com/shadcn.png",
     color: playerColors.orange,
-    sector_ownership: [
+    games: [
       {
         sector_id: 24,
         created_at: Math.ceil(Date.now() / 1000),
@@ -488,6 +489,7 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+    bonus_cards: [],
   },
   {
     id: 3,
@@ -514,7 +516,7 @@ export const playersData: PlayerData[] = [
 
     total_score: 200,
 
-    sector_ownership: [
+    games: [
       {
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
@@ -528,6 +530,7 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+    bonus_cards: [],
   },
   {
     id: 4,
@@ -554,7 +557,7 @@ export const playersData: PlayerData[] = [
 
     total_score: 200,
 
-    sector_ownership: [
+    games: [
       {
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
@@ -562,6 +565,7 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+    bonus_cards: [],
   },
   {
     id: 5,
@@ -587,7 +591,7 @@ export const playersData: PlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
-    sector_ownership: [
+    games: [
       {
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
@@ -595,6 +599,7 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+    bonus_cards: [],
   },
   {
     id: 6,
@@ -620,7 +625,7 @@ export const playersData: PlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
-    sector_ownership: [
+    games: [
       {
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
@@ -628,6 +633,7 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+    bonus_cards: [],
   },
   {
     id: 7,
@@ -653,7 +659,7 @@ export const playersData: PlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
-    sector_ownership: [
+    games: [
       {
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
@@ -661,6 +667,7 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+    bonus_cards: [],
   },
   {
     id: 8,
@@ -686,7 +693,7 @@ export const playersData: PlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
-    sector_ownership: [
+    games: [
       {
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
@@ -694,6 +701,7 @@ export const playersData: PlayerData[] = [
         game_title: "Haste",
       },
     ],
+    bonus_cards: [],
   },
 ];
 

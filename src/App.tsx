@@ -10,6 +10,7 @@ import UI from "./components/UI";
 import usePlayerStore from "./stores/playerStore";
 import { fetchCurrentPlayer, fetchPlayers } from "./lib/api";
 import { useQuery } from "@tanstack/react-query";
+import LoadingModal from "./components/core/LoadingModal";
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -31,7 +32,7 @@ function App() {
     queryFn: fetchCurrentPlayer,
   });
 
-  const { data: playersData } = useQuery({
+  const { data: playersData, isLoading } = useQuery({
     queryKey: ["players-list"],
     queryFn: fetchPlayers,
   });
@@ -52,6 +53,10 @@ function App() {
   useEffect(() => {
     setPlayers(playersData?.players ?? []);
   }, [setPlayers, playersData]);
+
+  if (isLoading) {
+    return <LoadingModal />;
+  }
 
   return (
     <KeyboardControls map={map}>
