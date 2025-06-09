@@ -13,7 +13,7 @@ const useReviewFormStore = create<{
   setGameTime: (value: GameLength) => void;
   setGameStatus: (value: GameStatusType) => void;
   setGameReview: (value: string) => void;
-  sendReview: () => Promise<void>;
+  sendReview: (scores: number) => Promise<void>;
 }>((set, get) => ({
   rating: 0,
   gameTitle: "",
@@ -26,7 +26,7 @@ const useReviewFormStore = create<{
   setGameTime: (value) => set({ gameTime: value }),
   setGameStatus: (value) => set({ gameStatus: value }),
   setGameReview: (value) => set({ gameReview: value }),
-  sendReview: async () => {
+  sendReview: async (scores: number) => {
     const { rating, gameTitle, gameTime, gameStatus, gameReview } = get();
 
     if (!gameStatus) {
@@ -44,6 +44,7 @@ const useReviewFormStore = create<{
       rating,
       review: gameReview,
       length,
+      scores,
     });
 
     set({

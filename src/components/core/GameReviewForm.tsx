@@ -11,7 +11,7 @@ import { ScoreByGameLength } from "@/lib/constants";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
-import { resetPlayersQuery } from "@/lib/queryClient";
+import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 
 type StatesOption = {
   title: string;
@@ -161,9 +161,8 @@ function GameReviewForm() {
     return true;
   });
 
-  const { updateMyScore, setNextTurnState } = usePlayerStore(
+  const { setNextTurnState } = usePlayerStore(
     useShallow((state) => ({
-      updateMyScore: state.updateMyScore,
       setNextTurnState: state.setNextTurnState,
     })),
   );
@@ -171,11 +170,11 @@ function GameReviewForm() {
   const mockPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
 
   const onConfirm = async () => {
-    await sendReview();
+    await sendReview(scores);
     setOpen(false);
-    updateMyScore(scores);
     setNextTurnState();
     resetPlayersQuery();
+    resetCurrentPlayerQuery();
   };
 
   return (

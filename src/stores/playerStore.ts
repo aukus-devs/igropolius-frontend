@@ -30,7 +30,6 @@ const usePlayerStore = create<{
   moveMyPlayer: () => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
   setNextTurnState: () => Promise<void>;
-  updateMyScore: (diff: number) => void;
   receiveBonusCard: (type: BonusCardType) => void;
 }>((set, get) => ({
   myPlayerId: null,
@@ -200,21 +199,6 @@ const usePlayerStore = create<{
   },
 
   setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),
-
-  updateMyScore: (diff: number) => {
-    const { myPlayer, players } = get();
-    if (!myPlayer) throw new Error(`Player not found.`);
-
-    const player = players.find((player) => player.id === myPlayer.id);
-    if (!player) throw new Error(`Player not found.`);
-
-    player.total_score += diff;
-
-    set({
-      myPlayer: { ...myPlayer, total_score: myPlayer.total_score + diff },
-      players: [...players],
-    });
-  },
 
   receiveBonusCard: (_type: BonusCardType) => {
     const { setNextTurnState } = get();
