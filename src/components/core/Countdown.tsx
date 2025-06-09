@@ -10,7 +10,7 @@ export default function Countdown() {
     return () => clearInterval(interval);
   }, []);
 
-  const targetTime = new Date("2025-06-15T00:00:00+03:00").getTime();
+  const targetTime = new Date("2025-07-01T00:00:00+03:00").getTime();
 
   const diff = targetTime - time;
   const message = diff > 0 ? `До конца — ${formatDiff(diff)}` : "Ивент завершен";
