@@ -39,7 +39,7 @@ export default function LoginDialog({ className }: { className?: string }) {
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger asChild>
         <Button variant="outline" className={className} onClick={() => setOpen(true)}>
           <UserIcon className="h-4 w-4" />
