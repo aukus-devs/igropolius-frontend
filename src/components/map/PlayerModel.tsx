@@ -11,11 +11,11 @@ import PlayerInfo from "./PlayerInfo";
 
 const ModelsUrls: Record<string, string> = {
   praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
-  "player-2": `${STORAGE_BASE_URL}/models/players/cars/delivery1.glb`,
+  "player-2": `${STORAGE_BASE_URL}/models/players/cars/delivery2.glb`,
   "player-3": `${STORAGE_BASE_URL}/models/players/cars/race-future1.glb`,
-  "player-4": `${STORAGE_BASE_URL}/models/players/cars/sedan-sports1.glb`,
-  "player-5": `${STORAGE_BASE_URL}/models/players/cars/tractor1.glb`,
-  "player-6": `${STORAGE_BASE_URL}/models/players/cars/delivery-flat1.glb`,
+  "player-4": `${STORAGE_BASE_URL}/models/players/cars/sedan-sports2.glb`,
+  "player-5": `${STORAGE_BASE_URL}/models/players/cars/tractor2.glb`,
+  "player-6": `${STORAGE_BASE_URL}/models/players/cars/delivery-flat2.glb`,
   "player-7": `${STORAGE_BASE_URL}/models/players/cars/truck1.glb`,
   "player-8": `${STORAGE_BASE_URL}/models/players/cars/van1.glb`,
 };
