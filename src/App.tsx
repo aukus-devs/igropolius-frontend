@@ -27,7 +27,7 @@ function App() {
     [],
   );
 
-  const { data: currentPlayerData } = useQuery({
+  const { data: currentPlayerData, isError: currentPlayerDataError } = useQuery({
     queryKey: ["current-player"],
     queryFn: fetchCurrentPlayer,
   });
@@ -46,9 +46,20 @@ function App() {
   );
 
   useEffect(() => {
+    if (currentPlayerDataError) {
+      setMyPlayerId(undefined);
+      setTurnState(null);
+      return;
+    }
     setMyPlayerId(currentPlayerData?.id);
     setTurnState(currentPlayerData?.turn_state ?? null);
-  }, [currentPlayerData?.id, currentPlayerData?.turn_state, setMyPlayerId, setTurnState]);
+  }, [
+    currentPlayerData?.id,
+    currentPlayerData?.turn_state,
+    setMyPlayerId,
+    setTurnState,
+    currentPlayerDataError,
+  ]);
 
   useEffect(() => {
     setPlayers(playersData?.players ?? []);
