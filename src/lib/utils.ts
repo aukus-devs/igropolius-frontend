@@ -28,7 +28,7 @@ export function getShortestRotationDelta(current: number, target: number) {
 function getEventGameInfo(event: PlayerEventGame) {
   let title = "";
 
-  switch (event.type) {
+  switch (event.subtype) {
     case "completed":
       title = "Прошел игру";
       break;
@@ -49,7 +49,7 @@ function getEventGameInfo(event: PlayerEventGame) {
 function getEventMoveInfo(event: PlayerEventMove) {
   let title = "";
 
-  switch (event.type) {
+  switch (event.subtype) {
     case "train-ride":
       title = "Проехал на поезде";
       break;
@@ -67,7 +67,7 @@ function getEventMoveInfo(event: PlayerEventMove) {
 function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
   let title = "";
 
-  switch (event.type) {
+  switch (event.subtype) {
     case "street-tax":
       title = `${event.amount > 0 ? "Получил" : "Заплатил"} налог на клетке ${event.sector_id}`;
       break;
@@ -91,7 +91,7 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
 function getEventBonusCardInfo(event: PlayerEventBonusCard) {
   let title = "";
 
-  switch (event.type) {
+  switch (event.subtype) {
     case "received":
       title = "Получил карточку";
       break;

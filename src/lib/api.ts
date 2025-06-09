@@ -1,4 +1,11 @@
-import { BackendPlayerData, PlayerEvent, PlayerTurnState, RulesVersion } from "@/lib/types";
+import {
+  BackendPlayerData,
+  GameLengthWithDrop,
+  GameStatusType,
+  PlayerEvent,
+  PlayerTurnState,
+  RulesVersion,
+} from "@/lib/types";
 import { playersData } from "./mockData";
 
 const MOCK_API = false;
@@ -37,7 +44,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         {
           event_type: "game",
           timestamp: new Date("04 30 2025 18:22").getTime(),
-          type: "completed",
+          subtype: "completed",
           game_title: "Witcher 5",
           game_review: "good",
           game_score: 9.5,
@@ -48,7 +55,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           event_type: "player-move",
           timestamp: new Date("04 30 2025 17:40").getTime(),
           adjusted_roll: 5,
-          type: "dice-roll",
+          subtype: "dice-roll",
           sector_id: 10,
           sector_to: 15,
           completed_map: false,
@@ -56,7 +63,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         {
           event_type: "score-change",
           timestamp: new Date("04 29 2025 07:07").getTime(),
-          type: "street-tax",
+          subtype: "street-tax",
           sector_id: 15,
           amount: -20,
           tax_player_id: 2,
@@ -64,14 +71,14 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         {
           event_type: "score-change",
           timestamp: new Date("04 29 2025 02:54").getTime(),
-          type: "map-tax",
+          subtype: "map-tax",
           sector_id: 15,
           amount: 100,
         },
         {
           event_type: "score-change",
           timestamp: new Date("04 28 2025 11:23").getTime(),
-          type: "street-tax",
+          subtype: "street-tax",
           sector_id: 7,
           amount: 50,
           tax_player_id: 3,
@@ -208,5 +215,25 @@ export async function setTurnState(state: PlayerTurnState): Promise<void> {
   await apiRequest("/api/players/current/turn-state", {
     method: "POST",
     body: JSON.stringify({ turn_state: state }),
+  });
+}
+
+type GameReviewRequest = {
+  status: GameStatusType;
+  title: string;
+  review: string;
+  rating: number;
+  length: GameLengthWithDrop;
+};
+
+export async function saveGameReview(request: GameReviewRequest): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest("/api/player-games", {
+    method: "POST",
+    body: JSON.stringify({
+      request,
+    }),
   });
 }

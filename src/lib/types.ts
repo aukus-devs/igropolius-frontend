@@ -146,7 +146,7 @@ export type PlayerEventBase = {
 
 export type PlayerEventGame = PlayerEventBase & {
   event_type: "game";
-  type: "completed" | "drop" | "reroll";
+  subtype: GameStatusType;
   game_title: string;
   game_review: string;
   game_score: number;
@@ -162,13 +162,13 @@ export type BonusCardType =
 
 export type PlayerEventBonusCard = PlayerEventBase & {
   event_type: "bonus-card";
-  type: "received" | "used" | "lost";
+  subtype: "received" | "used" | "lost";
   bonus_type: BonusCardType;
 };
 
 export type PlayerEventMove = PlayerEventBase & {
   event_type: "player-move";
-  type: "dice-roll" | "train-ride";
+  subtype: "dice-roll" | "train-ride";
   sector_to: number;
   adjusted_roll: number;
   dice_roll?: number[];
@@ -177,7 +177,7 @@ export type PlayerEventMove = PlayerEventBase & {
 
 export type PlayerEventScoreChange = PlayerEventBase & {
   event_type: "score-change";
-  type: "street-tax" | "map-tax" | "game-completed" | "game-dropped";
+  subtype: "street-tax" | "map-tax" | "game-completed" | "game-dropped";
   amount: number;
   tax_player_id?: number;
 };
