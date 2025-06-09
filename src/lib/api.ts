@@ -1,10 +1,9 @@
 import { BackendPlayerData, PlayerEvent, PlayerTurnState, RulesVersion } from "@/lib/types";
 import { playersData } from "./mockData";
-import { IS_DEV } from "./constants";
 
-const MOCK_API = IS_DEV;
+const MOCK_API = false;
 
-const API_HOST = IS_DEV ? "http://localhost:8000" : "https://igropolius-backend.onrender.com";
+const API_HOST = "";
 
 async function apiRequest<T>(endpoint: string, params: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem("access-token") ?? "";
