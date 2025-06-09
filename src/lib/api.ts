@@ -162,3 +162,10 @@ export async function login(username: string, password: string): Promise<LoginRe
     body: JSON.stringify({ username, password }),
   });
 }
+
+export async function logout(): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  return apiRequest("/api/logout", { method: "POST" });
+}
