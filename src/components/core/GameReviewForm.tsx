@@ -11,7 +11,7 @@ import { ScoreByGameLength } from "@/lib/constants";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
-import { useQueryClient } from "@tanstack/react-query";
+import { resetPlayersQuery } from "@/lib/queryClient";
 
 type StatesOption = {
   title: string;
@@ -168,8 +168,6 @@ function GameReviewForm() {
     })),
   );
 
-  const queryClient = useQueryClient();
-
   const mockPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
 
   const onConfirm = async () => {
@@ -177,7 +175,7 @@ function GameReviewForm() {
     setOpen(false);
     updateMyScore(scores);
     setNextTurnState();
-    queryClient.invalidateQueries({ queryKey: ["players-list"] });
+    resetPlayersQuery();
   };
 
   return (

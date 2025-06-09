@@ -1,11 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "../ui/button";
 import { UserIcon } from "lucide-react";
 import { logout } from "@/lib/api";
+import { resetCurrentPlayerQuery } from "@/lib/queryClient";
 
 export function LogoutButton({ className }: { className?: string }) {
-  const queryClient = useQueryClient();
-
   const { mutateAsync: logoutRequest } = useMutation({
     mutationFn: logout,
   });
@@ -13,9 +12,7 @@ export function LogoutButton({ className }: { className?: string }) {
   const handleLogout = () => {
     logoutRequest().then(() => {
       localStorage.removeItem("access-token");
-      queryClient.invalidateQueries({
-        queryKey: ["current-player"],
-      });
+      resetCurrentPlayerQuery();
     });
   };
 

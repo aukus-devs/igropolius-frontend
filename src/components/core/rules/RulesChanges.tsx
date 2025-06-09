@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { RichTextDiff } from "./RichText";
 import { fetchRules } from "@/lib/api";
 import { RulesVersion } from "@/lib/types";
+import { queryKeys } from "@/lib/queryClient";
 
 export default function RulesChanges() {
   const { data: rulesData } = useQuery({
-    queryKey: ["rules"],
+    queryKey: queryKeys.rules,
     queryFn: fetchRules,
   });
 

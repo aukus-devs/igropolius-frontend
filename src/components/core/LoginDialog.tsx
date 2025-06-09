@@ -3,8 +3,9 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { login } from "@/lib/api";
+import { resetCurrentPlayerQuery } from "@/lib/queryClient";
 
 export default function LoginDialog({ className }: { className?: string }) {
   const [username, setUsername] = useState("");
@@ -13,7 +14,6 @@ export default function LoginDialog({ className }: { className?: string }) {
 
   const [error, setError] = useState<string | null>(null);
 
-  const queryClient = useQueryClient();
   const { mutateAsync: loginRequest } = useMutation({
     mutationFn: async ({ user, pass }: { user: string; pass: string }) => {
       return login(user, pass);
@@ -24,9 +24,7 @@ export default function LoginDialog({ className }: { className?: string }) {
     loginRequest({ user: username, pass: password })
       .then((res) => {
         localStorage.setItem("access-token", res.token);
-        queryClient.invalidateQueries({
-          queryKey: ["current-player"],
-        });
+        resetCurrentPlayerQuery();
         setOpen(false);
       })
       .catch((err) => {

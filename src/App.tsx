@@ -11,6 +11,7 @@ import usePlayerStore from "./stores/playerStore";
 import { fetchCurrentPlayer, fetchPlayers } from "./lib/api";
 import { useQuery } from "@tanstack/react-query";
 import LoadingModal from "./components/core/LoadingModal";
+import { queryKeys } from "./lib/queryClient";
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -28,12 +29,12 @@ function App() {
   );
 
   const { data: currentPlayerData, isError: currentPlayerDataError } = useQuery({
-    queryKey: ["current-player"],
+    queryKey: queryKeys.currentPlayer,
     queryFn: fetchCurrentPlayer,
   });
 
   const { data: playersData, isLoading } = useQuery({
-    queryKey: ["players-list"],
+    queryKey: queryKeys.players,
     queryFn: fetchPlayers,
   });
 

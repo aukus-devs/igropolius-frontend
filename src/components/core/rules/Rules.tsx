@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchRules } from "@/lib/api";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import RichDisplay from "./RichDisplay";
+import { queryKeys } from "@/lib/queryClient";
 
 export default function Rules() {
   const { value: localRules, save: localSave } = useLocalStorage<string>({
@@ -18,7 +19,7 @@ export default function Rules() {
   const canEdit = true;
 
   const { data: rulesData, isLoading } = useQuery({
-    queryKey: ["rules"],
+    queryKey: queryKeys.rules,
     queryFn: fetchRules,
   });
 

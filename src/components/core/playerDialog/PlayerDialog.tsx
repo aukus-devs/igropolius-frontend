@@ -16,6 +16,7 @@ import PlayerDialogHeader from "./PlayerDialogHeader";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayerEvents } from "@/lib/api";
 import { mockReviews } from "@/lib/mockData";
+import { queryKeys } from "@/lib/queryClient";
 
 type Props = {
   player: PlayerData;
@@ -26,7 +27,7 @@ type Props = {
 
 function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
   const { data: eventsData } = useQuery({
-    queryKey: ["player-events", player.id],
+    queryKey: queryKeys.playerEvents(player.id),
     queryFn: () => fetchPlayerEvents(player.id),
     refetchInterval: 30 * 1000,
   });
