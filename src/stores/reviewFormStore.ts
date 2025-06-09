@@ -1,3 +1,4 @@
+import { saveGameReview } from "@/lib/api";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { create } from "zustand";
 
@@ -12,7 +13,7 @@ const useReviewFormStore = create<{
   setGameTime: (value: GameLength) => void;
   setGameStatus: (value: GameStatusType) => void;
   setGameReview: (value: string) => void;
-  sendReview: () => void;
+  sendReview: () => Promise<void>;
 }>((set, get) => ({
   rating: 0,
   gameTitle: "",
@@ -25,13 +26,24 @@ const useReviewFormStore = create<{
   setGameTime: (value) => set({ gameTime: value }),
   setGameStatus: (value) => set({ gameStatus: value }),
   setGameReview: (value) => set({ gameReview: value }),
-  sendReview: () => {
-    console.log({
-      rating: get().rating,
-      gameTitle: get().gameTitle,
-      gameTime: get().gameTime,
-      gameStatus: get().gameStatus,
-      gameReview: get().gameReview,
+  sendReview: async () => {
+    const { rating, gameTitle, gameTime, gameStatus, gameReview } = get();
+
+    if (!gameStatus) {
+      throw new Error("Game status is required");
+    }
+
+    const length = gameStatus === "drop" ? "drop" : gameTime;
+    if (!length) {
+      throw new Error("Game length is required");
+    }
+
+    await saveGameReview({
+      title: gameTitle,
+      status: gameStatus,
+      rating,
+      review: gameReview,
+      length,
     });
 
     set({

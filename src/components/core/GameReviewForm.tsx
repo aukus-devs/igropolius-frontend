@@ -169,12 +169,12 @@ function GameReviewForm() {
 
   const mockPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
 
-  function onConfirm() {
-    sendReview();
+  const onConfirm = async () => {
+    await sendReview();
     setOpen(false);
     updateMyScore(scores);
     setNextTurnState();
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
