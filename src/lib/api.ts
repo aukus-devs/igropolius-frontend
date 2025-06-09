@@ -195,7 +195,7 @@ export async function makePlayerMove(request: PlayerMoveRequest): Promise<void> 
   if (MOCK_API) {
     return Promise.resolve();
   }
-  await apiRequest("/api/players-moves", {
+  await apiRequest("/api/player-moves", {
     method: "POST",
     body: JSON.stringify(request),
   });
