@@ -16,6 +16,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import RulesTabs from "./rules/RulesTabs";
 import AboutDialog from "./AboutDialog";
 import LoginDialog from "./LoginDialog";
+import { LogoutButton } from "./LogoutButton";
 
 const sharedStyles =
   "justify-start w-full text-base font-semibold rounded-xl px-3 py-2 backdrop-blur-[1.5rem] bg-card/70 border-none";
@@ -78,7 +79,7 @@ function QuickMenu() {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="space-y-1">
-          <LoginDialog className={sharedStyles} />
+          {!myPlayer && <LoginDialog className={sharedStyles} />}
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" className={sharedStyles}>
@@ -107,6 +108,7 @@ function QuickMenu() {
           </Button>
           <ToggleOrthographic />
           <AboutDialog styles={sharedStyles} />
+          {myPlayer && <LogoutButton className={sharedStyles} />}
         </CollapsibleContent>
       </Collapsible>
     </>
