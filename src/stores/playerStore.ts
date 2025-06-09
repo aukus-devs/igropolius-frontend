@@ -15,6 +15,7 @@ import { calculatePlayerPosition, getSectorRotation } from "@/components/map/uti
 import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
 import { getNextTurnState } from "@/lib/utils";
+import { makePlayerMove } from "@/lib/api";
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -129,6 +130,14 @@ const usePlayerStore = create<{
     if (!isOrthographic) await cameraToPlayer(myPlayer.id);
 
     const rolledNumber = IS_DEV ? 5 : await useDiceStore.getState().rollDice();
+
+    await makePlayerMove({
+      type: "dice-roll",
+      bonuses_used: [],
+      dice_roll_id: 0,
+      selected_die: null,
+      tmp_roll_result: rolledNumber,
+    });
 
     const tl = createTimeline();
 

@@ -16,6 +16,11 @@ async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<R
   });
   if (!response.ok) {
     const errorData = await response.json();
+    console.error("API request failed:", {
+      endpoint,
+      status: response.status,
+      error: errorData,
+    });
     return Promise.reject({ body: errorData, status: response.status });
   }
   return response;
@@ -176,4 +181,22 @@ export async function logout(): Promise<void> {
   if (!response.ok) {
     return Promise.reject("Logout failed");
   }
+}
+
+type PlayerMoveRequest = {
+  type: "dice-roll" | "train-ride";
+  dice_roll_id: number;
+  bonuses_used: string[];
+  selected_die: number | null;
+  tmp_roll_result: number;
+};
+
+export async function makePlayerMove(request: PlayerMoveRequest): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest("/api/players-moves", {
+    method: "POST",
+    body: JSON.stringify(request),
+  });
 }
