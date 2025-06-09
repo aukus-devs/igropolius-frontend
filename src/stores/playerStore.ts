@@ -108,6 +108,10 @@ const usePlayerStore = create<{
       set({ myPlayer: myPlayerNew });
     }
 
+    players.sort((a, b) => {
+      return b.total_score - a.total_score;
+    });
+
     set({ players, buildingsPerSector: buildings });
   },
 
