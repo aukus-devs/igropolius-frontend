@@ -5,7 +5,7 @@ on:
     branches: [ "docker" ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
@@ -25,3 +25,21 @@ jobs:
         with:
           push: true
           tags: olegsvs/monopoly-frontend-2025
+
+  call-deploy-to-server1:
+    needs: build
+    uses: ./.github/workflows/deploy_to_server.yml
+    secrets:
+      host: ${{ secrets.HOST_SERVER1 }}
+      username: ${{ secrets.USERNAME_SERVER1 }}
+      password: ${{ secrets.PASSWORD_SERVER1 }}
+      port: ${{ secrets.PORT_SERVER1 }}
+
+  call-deploy-to-server2:
+    needs: build
+    uses: ./.github/workflows/deploy_to_server.yml
+    secrets:
+      host: ${{ secrets.HOST_SERVER2 }}
+      username: ${{ secrets.USERNAME_SERVER2 }}
+      password: ${{ secrets.PASSWORD_SERVER2 }}
+      port: ${{ secrets.PORT_SERVER2 }}

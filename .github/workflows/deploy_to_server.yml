@@ -1,0 +1,27 @@
+name: Docker pull to server
+
+on:
+  workflow_call:
+    secrets:
+      host:
+        description: "Host for SSH"
+      username:
+        description: "Username for SSH"
+      password:
+        description: "Password for SSH"
+      port:
+        description: "Port for SSH"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.host }}
+          username: ${{ secrets.username }}
+          password: ${{ secrets.password }}
+          port: ${{ secrets.port }}
+          command_timeout: 2m
+          script: cd /root/monopoly && docker compose pull && docker compose up -d >> /var/log/docker-update.log 2>&1
