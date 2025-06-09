@@ -5,7 +5,7 @@ const MOCK_API = false;
 
 const API_HOST = "";
 
-async function apiRequest<T>(endpoint: string, params: RequestInit = {}): Promise<T> {
+async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<Response> {
   const token = localStorage.getItem("access-token") ?? "";
   const response = await fetch(`${API_HOST}${endpoint}`, {
     ...params,
@@ -18,7 +18,7 @@ async function apiRequest<T>(endpoint: string, params: RequestInit = {}): Promis
     const errorData = await response.json();
     return Promise.reject({ body: errorData, status: response.status });
   }
-  return response.json() as Promise<T>;
+  return response;
 }
 
 type PlayerEventsResponse = {
@@ -74,7 +74,8 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
       ],
     });
   }
-  return apiRequest(`/api/players/${playerId}/events`);
+  const response = await apiRequest(`/api/players/${playerId}/events`);
+  return response.json();
 }
 
 type CurrentPlayerResponse = {
@@ -93,7 +94,8 @@ export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
       turn_state: "rolling-dice",
     });
   }
-  return apiRequest("/api/players/current");
+  const response = await apiRequest("/api/players/current");
+  return response.json();
 }
 
 type PlayersResponse = {
@@ -106,7 +108,8 @@ export async function fetchPlayers(): Promise<PlayersResponse> {
       players: playersData,
     });
   }
-  return apiRequest("/api/players");
+  const response = await apiRequest("/api/players");
+  return response.json();
 }
 
 type RulesResponse = {
@@ -144,7 +147,8 @@ export async function fetchRules(): Promise<RulesResponse> {
       ],
     });
   }
-  return apiRequest("/api/rules");
+  const response = await apiRequest("/api/rules");
+  return response.json();
 }
 
 type LoginResponse = {
@@ -157,15 +161,19 @@ export async function login(username: string, password: string): Promise<LoginRe
       token: "mock-token",
     });
   }
-  return apiRequest("/api/login", {
+  const response = await apiRequest("/api/login", {
     method: "POST",
     body: JSON.stringify({ username, password }),
   });
+  return response.json();
 }
 
 export async function logout(): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
   }
-  return apiRequest("/api/logout", { method: "POST" });
+  const response = await apiRequest("/api/logout", { method: "POST" });
+  if (!response.ok) {
+    return Promise.reject("Logout failed");
+  }
 }
