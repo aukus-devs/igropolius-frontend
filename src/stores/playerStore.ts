@@ -1,12 +1,18 @@
 import { GameLengthToBuildingType, IS_DEV } from "@/lib/constants";
-import { BonusCardType, BuildingData, PlayerData, PlayerTurnState } from "@/lib/types";
+import {
+  BackendPlayerData,
+  BonusCardType,
+  BuildingData,
+  PlayerData,
+  PlayerTurnState,
+} from "@/lib/types";
 import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
 import useDiceStore from "./diceStore";
 import useCameraStore from "./cameraStore";
 import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
-import { SectorsById, sectorsData } from "@/lib/mockData";
+import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
 import { getNextTurnState } from "@/lib/utils";
 
@@ -19,7 +25,7 @@ const usePlayerStore = create<{
   turnState: PlayerTurnState | null;
   setMyPlayerId: (id?: number) => void;
   updateMyPlayerSectorId: (id: number) => void;
-  setPlayers: (players: PlayerData[]) => void;
+  setPlayers: (players: BackendPlayerData[]) => void;
   moveMyPlayer: () => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
   setNextTurnState: () => void;
@@ -59,8 +65,19 @@ const usePlayerStore = create<{
     }));
   },
 
-  setPlayers: (players: PlayerData[]) => {
+  setPlayers: (playersData: BackendPlayerData[]) => {
     const buildings: Record<number, BuildingData[]> = {};
+    const players: PlayerData[] = playersData.map((playerData) => {
+      const frontendData = playersFrontendData[playerData.username] ?? {
+        avatar_link: "",
+        color: "white",
+      };
+
+      return {
+        ...playerData,
+        ...frontendData,
+      };
+    });
 
     for (const player of players) {
       for (const building of player.games) {

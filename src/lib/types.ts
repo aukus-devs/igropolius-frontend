@@ -79,7 +79,7 @@ export type SectorOwnership = {
   game_length: GameLengthWithDrop;
 };
 
-export type PlayerData = {
+export type BackendPlayerData = {
   id: number;
   username: string;
   first_name: string;
@@ -102,10 +102,14 @@ export type PlayerData = {
   sector_id: number;
   games: SectorOwnership[];
   bonus_cards: PlayerBonusCard[];
+};
 
+export type PlayerFrontendData = {
   avatar_link: string;
   color: PlayerColorValue;
 };
+
+export type PlayerData = BackendPlayerData & PlayerFrontendData;
 
 export type Vector3Array = [number, number, number];
 

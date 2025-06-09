@@ -1,4 +1,4 @@
-import { PlayerData, PlayerEvent, PlayerTurnState, RulesVersion } from "@/lib/types";
+import { BackendPlayerData, PlayerEvent, PlayerTurnState, RulesVersion } from "@/lib/types";
 import { playersData } from "./mockData";
 import { IS_DEV } from "./constants";
 
@@ -98,7 +98,7 @@ export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
 }
 
 type PlayersResponse = {
-  players: PlayerData[];
+  players: BackendPlayerData[];
 };
 
 export async function fetchPlayers(): Promise<PlayersResponse> {

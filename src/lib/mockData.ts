@@ -1,9 +1,10 @@
 import {
   GameReviewType,
   BonusCardData,
-  PlayerData,
   SectorData,
   playerColors,
+  PlayerFrontendData,
+  BackendPlayerData,
 } from "@/lib/types";
 
 export const sectorsData: SectorData[] = [
@@ -333,7 +334,7 @@ export const SectorsById: Record<number, SectorData> = Object.fromEntries(
   sectorsData.map((sector) => [sector.id, sector]),
 );
 
-export const playersData: PlayerData[] = [
+export const playersData: BackendPlayerData[] = [
   {
     id: 1,
     username: "Praden",
@@ -356,8 +357,6 @@ export const playersData: PlayerData[] = [
 
     total_score: 0,
 
-    avatar_link: "https://github.com/shadcn.png",
-    color: playerColors.red,
     games: [
       {
         sector_id: 38,
@@ -431,8 +430,6 @@ export const playersData: PlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 5000,
-    avatar_link: "https://github.com/shadcn.png",
-    color: playerColors.orange,
     games: [
       {
         sector_id: 24,
@@ -495,8 +492,6 @@ export const playersData: PlayerData[] = [
     id: 3,
     sector_id: 5,
     username: "Player-3",
-    avatar_link: "https://github.com/shadcn.png",
-    color: playerColors.yellow,
 
     first_name: "Илья",
 
@@ -536,8 +531,6 @@ export const playersData: PlayerData[] = [
     id: 4,
     sector_id: 5,
     username: "Player-4",
-    avatar_link: "https://github.com/shadcn.png",
-    color: playerColors.green,
 
     first_name: "Илья",
 
@@ -571,8 +564,6 @@ export const playersData: PlayerData[] = [
     id: 5,
     sector_id: 5,
     username: "Player-5",
-    avatar_link: "https://github.com/shadcn.png",
-    color: playerColors.lightBlue,
 
     first_name: "Илья",
 
@@ -605,8 +596,6 @@ export const playersData: PlayerData[] = [
     id: 6,
     sector_id: 5,
     username: "Player-6",
-    avatar_link: "https://github.com/shadcn.png",
-    color: playerColors.blue,
 
     first_name: "Илья",
 
@@ -639,8 +628,6 @@ export const playersData: PlayerData[] = [
     id: 7,
     sector_id: 5,
     username: "Player-7",
-    avatar_link: "https://github.com/shadcn.png",
-    color: playerColors.darkBlue,
 
     first_name: "Илья",
 
@@ -673,8 +660,6 @@ export const playersData: PlayerData[] = [
     id: 8,
     sector_id: 5,
     username: "Player-8",
-    avatar_link: "https://github.com/shadcn.png",
-    color: playerColors.purple,
 
     first_name: "Илья",
 
@@ -749,8 +734,6 @@ export const deckCardsData: BonusCardData[] = [
   },
 ];
 
-export const myPlayerData: PlayerData = playersData[0];
-
 export const mockReviews: GameReviewType[] = [
   {
     gameTitle: "Haste 1",
@@ -783,3 +766,38 @@ export const mockReviews: GameReviewType[] = [
     date: new Date(),
   },
 ];
+
+export const playersFrontendData: Record<string, PlayerFrontendData> = {
+  Praden: {
+    color: playerColors.red,
+    avatar_link: "https://github.com/shadcn.png",
+  },
+  "Player-2": {
+    color: playerColors.orange,
+    avatar_link: "https://github.com/shadcn.png",
+  },
+  "Player-3": {
+    color: playerColors.yellow,
+    avatar_link: "https://github.com/shadcn.png",
+  },
+  "Player-4": {
+    color: playerColors.green,
+    avatar_link: "https://github.com/shadcn.png",
+  },
+  "Player-5": {
+    color: playerColors.lightBlue,
+    avatar_link: "https://github.com/shadcn.png",
+  },
+  "Player-6": {
+    color: playerColors.blue,
+    avatar_link: "https://github.com/shadcn.png",
+  },
+  "Player-7": {
+    color: playerColors.darkBlue,
+    avatar_link: "https://github.com/shadcn.png",
+  },
+  "Player-8": {
+    color: playerColors.purple,
+    avatar_link: "https://github.com/shadcn.png",
+  },
+};
