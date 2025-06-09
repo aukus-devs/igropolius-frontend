@@ -195,8 +195,18 @@ export async function makePlayerMove(request: PlayerMoveRequest): Promise<void> 
   if (MOCK_API) {
     return Promise.resolve();
   }
-  await apiRequest("/api/player-moves", {
+  await apiRequest("/api/players/current/moves", {
     method: "POST",
     body: JSON.stringify(request),
+  });
+}
+
+export async function setTurnState(state: PlayerTurnState): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest("/api/players/current/turn-state", {
+    method: "POST",
+    body: JSON.stringify({ turn_state: state }),
   });
 }

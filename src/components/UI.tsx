@@ -36,7 +36,6 @@ function UI() {
   const { turnState, position, isPlayerMoving } = usePlayerStore(
     useShallow((state) => ({
       turnState: state.turnState,
-      setNextTurnState: state.setNextTurnState,
       position: state.myPlayer?.sector_id,
       isPlayerMoving: state.isPlayerMoving,
     })),
