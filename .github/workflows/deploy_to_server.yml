@@ -24,4 +24,4 @@ jobs:
           password: ${{ secrets.password }}
           port: ${{ secrets.port }}
           command_timeout: 2m
-          script: cd /root/monopoly && docker compose pull && docker compose up -d >> /var/log/docker-update.log 2>&1
+          script: cd /root/monopoly && docker compose pull frontend && docker compose up -d --no-deps frontend >> /var/log/docker-update-frontend.log 2>&1
