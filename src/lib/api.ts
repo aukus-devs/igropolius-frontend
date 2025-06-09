@@ -232,8 +232,6 @@ export async function saveGameReview(request: GameReviewRequest): Promise<void> 
   }
   await apiRequest("/api/player-games", {
     method: "POST",
-    body: JSON.stringify({
-      request,
-    }),
+    body: JSON.stringify(request),
   });
 }
