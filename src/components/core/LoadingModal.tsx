@@ -28,7 +28,7 @@ export default function LoadingModal() {
             d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
           />
         </svg>
-        <p className="text-gray-700 font-medium">Загрузка ивента...</p>
+        <p className="text-gray-700 font-medium">Подключаюсь к серверам...</p>
       </div>
     </div>
   );
