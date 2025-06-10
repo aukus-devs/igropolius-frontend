@@ -1,5 +1,6 @@
 import {
   BackendPlayerData,
+  BonusCardType,
   GameLengthWithDrop,
   GameStatusType,
   PlayerEvent,
@@ -234,5 +235,15 @@ export async function saveGameReview(request: GameReviewRequest): Promise<void> 
   await apiRequest("/api/player-games", {
     method: "POST",
     body: JSON.stringify(request),
+  });
+}
+
+export async function giveBonusCard(bonusType: BonusCardType): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest(`/api/players/current/bonus-cards`, {
+    method: "POST",
+    body: JSON.stringify({ bonus_type: bonusType }),
   });
 }
