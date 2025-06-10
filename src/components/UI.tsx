@@ -4,7 +4,7 @@ import PlayersList from "./core/PlayersList";
 import QuickMenu from "./core/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
-import RollDeckCard from "./core/RollDeckCard";
+import RollBonusCard from "./core/RollBonusCard";
 import Countdown from "./core/Countdown";
 import { useShallow } from "zustand/shallow";
 import TrainMoveDialog from "./core/TrainMoveDialog";
@@ -61,7 +61,7 @@ function UI() {
         {turnState === "rolling-dice" && !isPlayerMoving && <MoveButton />}
         {turnState === "choosing-train-ride" && !isPlayerMoving && <TrainMoveDialog />}
         {turnState === "filling-game-review" && <GameReviewForm />}
-        {turnState === "rolling-bonus-card" && <RollDeckCard />}
+        {turnState === "rolling-bonus-card" && <RollBonusCard />}
       </div>
 
       <div className="absolute bottom-4 right-4">

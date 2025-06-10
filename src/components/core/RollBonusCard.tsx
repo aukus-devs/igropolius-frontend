@@ -13,7 +13,9 @@ import { Card, CardFooter } from "../ui/card";
 import { BonusCardData } from "@/lib/types";
 import usePlayerStore from "@/stores/playerStore";
 
-function RollDeckCard() {
+const ROLLING_TIME_MS = 9000;
+
+function RollBonusCard() {
   const rouletteRef = useRef<HTMLDivElement>(null);
   const rouletteContainerRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -73,12 +75,12 @@ function RollDeckCard() {
         Math.floor(displayedCards.length / 2) * (cardWidth + gap) + cardWidth / 2
       }px)`;
 
-      rouletteRef.current.style.transition = "transform 9s cubic-bezier(0.1,.41,.17,1.0)";
+      rouletteRef.current.style.transition = `transform ${ROLLING_TIME_MS}ms cubic-bezier(0.1,.41,.17,1.0)`;
       rouletteRef.current.style.transform = `translateX(-${distanceOfRoll}px)`;
 
       setTimeout(() => {
         receiveBonusCard("skip-prison-day");
-      }, 9000);
+      }, ROLLING_TIME_MS);
     }, 400);
   };
 
@@ -125,4 +127,4 @@ function RollDeckCard() {
   );
 }
 
-export default RollDeckCard;
+export default RollBonusCard;

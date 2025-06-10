@@ -155,10 +155,12 @@ export type PlayerEventGame = PlayerEventBase & {
 
 export type BonusCardType =
   | "adjust-roll-by1"
+  | "choose-1-die"
   | "skip-prison-day"
+  | "reroll-game"
   | "evade-street-tax"
   | "evade-map-tax"
-  | "reroll-game";
+  | "game-help-allowed";
 
 export type PlayerEventBonusCard = PlayerEventBase & {
   event_type: "bonus-card";
