@@ -1,5 +1,5 @@
 import {
-  PlayerBonusCard,
+  ActiveBonusCard,
   PlayerEvent,
   PlayerEventBonusCard,
   PlayerEventGame,
@@ -132,7 +132,7 @@ export function getEventDescription(event: PlayerEvent) {
 export function getNextTurnState(
   mapPosition: number,
   currentState: PlayerTurnState,
-  bonusCards: PlayerBonusCard[],
+  bonusCards: ActiveBonusCard[],
 ): PlayerTurnState {
   const sector = SectorsById[mapPosition];
 

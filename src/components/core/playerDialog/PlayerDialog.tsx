@@ -13,10 +13,6 @@ import PlayerDialogTrigger from "./PlayerDialogTrigger";
 import PlayerDialogTabs from "./tabs/PlayerDialogTabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PlayerDialogHeader from "./PlayerDialogHeader";
-import { useQuery } from "@tanstack/react-query";
-import { fetchPlayerEvents } from "@/lib/api";
-import { mockReviews } from "@/lib/mockData";
-import { queryKeys } from "@/lib/queryClient";
 
 type Props = {
   player: PlayerData;
@@ -26,15 +22,6 @@ type Props = {
 };
 
 function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
-  const { data: eventsData } = useQuery({
-    queryKey: queryKeys.playerEvents(player.id),
-    queryFn: () => fetchPlayerEvents(player.id),
-    refetchInterval: 30 * 1000,
-  });
-
-  const events = eventsData?.events || [];
-  events.sort((a, b) => (a.timestamp >= b.timestamp ? -1 : 1));
-
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
 
   const collapseToPlacement = 3;
@@ -65,7 +52,7 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
               <DialogTitle className="hidden" />
               <PlayerDialogHeader player={player} />
             </DialogHeader>
-            <PlayerDialogTabs games={mockReviews} events={events} />
+            <PlayerDialogTabs player={player} />
           </ScrollArea>
         </DialogContent>
       </Dialog>

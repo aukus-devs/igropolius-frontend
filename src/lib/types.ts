@@ -101,7 +101,7 @@ export type BackendPlayerData = {
   total_score: number;
   sector_id: number;
   games: SectorOwnership[];
-  bonus_cards: PlayerBonusCard[];
+  bonus_cards: ActiveBonusCard[];
 };
 
 export type PlayerFrontendData = {
@@ -199,12 +199,13 @@ export type PlayerTurnState =
   | "filling-game-review"
   | "choosing-train-ride";
 
-export type PlayerBonusCard = {
+export type ActiveBonusCard = {
   type: BonusCardType;
+  received_at: number;
+  received_on_sector: number;
 };
 
-export type BonusCardData = {
-  id: string;
+export type FrontendCardData = {
   name: string;
   picture: string;
   description: string;

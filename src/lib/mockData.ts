@@ -1,10 +1,11 @@
 import {
   GameReviewType,
-  BonusCardData,
+  FrontendCardData,
   SectorData,
   playerColors,
   PlayerFrontendData,
   BackendPlayerData,
+  BonusCardType,
 } from "@/lib/types";
 
 export const sectorsData: SectorData[] = [
@@ -690,49 +691,49 @@ export const playersData: BackendPlayerData[] = [
   },
 ];
 
-export const deckCardsData: BonusCardData[] = [
-  {
-    id: "1",
+export const frontendCardsData: Record<BonusCardType, FrontendCardData> = {
+  "adjust-roll-by1": {
     name: "Плюс один или минус один",
-    picture: "https://placehold.co/744x1039/FF453A/white",
+    picture: "https://placehold.co/744x1039/FF453A/FF453A",
     description:
-      "Возможность добавить/убавить 1 у кубика - после ролла кубикова, но перед началом движения изменить результат кубика.",
+      "Возможность добавить/убавить 1 у кубика - после ролла кубиков, но перед началом движения изменить результат кубика.",
   },
-  {
-    id: "2",
+  "choose-1-die": {
     name: "Только 1 кубик",
-    picture: "https://placehold.co/744x1039/0A84FF/white",
+    picture: "https://placehold.co/744x1039/0A84FF/0A84FF",
     description:
       "Возможность выбрать только один кубик из трех и сходить на данное значение - после ролла кубикова, но перед началом движения выбрать один кубик.",
   },
-  {
-    id: "3",
-    name: "Сквотируемся",
-    picture: "https://placehold.co/744x1039/30D158/white",
-    description:
-      "Нет 'арендной платы' на улице - Перед попаданием на клетку с чужими постройками, можно активировать карточку и не платить арендную плату.",
+  "reroll-game": {
+    name: "Чето пока нехочу)))",
+    picture: "https://placehold.co/744x1039/FF375F/FF375F",
+    description: "Реролл игры из стима - используется после ролла игры, но до ее запуска.",
   },
-  {
-    id: "4",
+  "skip-prison-day": {
     name: "Хорошее поведение",
-    picture: "https://placehold.co/744x1039/BF5AF2/white",
+    picture: "https://placehold.co/744x1039/BF5AF2/BF5AF2",
     description:
       "Минус день тюрьмы - можно использовать на клетке 'тюрьма' и 'посещение тюрьмы', как до, так и после ролла игры для того, чтобы покинуть тюрьму.",
   },
-  {
-    id: "5",
-    name: "Чето пока нехочу)))",
-    picture: "https://placehold.co/744x1039/FF375F/white",
-    description: "Реролл игры из стима - используется после ролла игры, но до ее запуска.",
+  "evade-street-tax": {
+    name: "Сквотируемся",
+    picture: "https://placehold.co/744x1039/30D158/30D158",
+    description:
+      "Нет 'арендной платы' на улице - Перед попаданием на клетку с чужими постройками, можно активировать карточку и не платить арендную плату.",
   },
-  {
-    id: "6",
+  "evade-map-tax": {
     name: "Без налога",
-    picture: "https://placehold.co/744x1039/FFD60A/white",
+    picture: "https://placehold.co/744x1039/FFD60A/FFD60A",
     description:
       "Нет 'налога' за круг - при использовании освобождает от арендной платы после прохождения круга.",
   },
-];
+  "game-help-allowed": {
+    name: "Помощь зала",
+    picture: "https://placehold.co/744x1039/FF9F0A/FF9F0A",
+    description:
+      "Можно попросить помощи у друзей - позволяет в любой момент игры попросить помощи у других игроков, которые могут помочь с деньгами или бонусами.",
+  },
+};
 
 export const mockReviews: GameReviewType[] = [
   {

@@ -8,9 +8,9 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { useRef, useState } from "react";
-import { deckCardsData } from "@/lib/mockData";
+import { frontendCardsData } from "@/lib/mockData";
 import { Card, CardFooter } from "../ui/card";
-import { BonusCardData } from "@/lib/types";
+import { BonusCardType } from "@/lib/types";
 import usePlayerStore from "@/stores/playerStore";
 
 const ROLLING_TIME_MS = 9000;
@@ -20,15 +20,16 @@ function RollBonusCard() {
   const rouletteContainerRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [rolling, setRolling] = useState(false);
-  const [displayedCards, setDisplayedCards] = useState<BonusCardData[]>([]);
+  const [displayedCards, setDisplayedCards] = useState<BonusCardType[]>([]);
 
   const receiveBonusCard = usePlayerStore((state) => state.receiveBonusCard);
 
-  const getRandomCard = (): BonusCardData => {
-    return deckCardsData[Math.floor(Math.random() * deckCardsData.length)];
+  const getRandomCard = (): BonusCardType => {
+    const cardTypes = Object.keys(frontendCardsData) as BonusCardType[];
+    return cardTypes[Math.floor(Math.random() * cardTypes.length)];
   };
 
-  const generateRandomCards = (count: number): BonusCardData[] =>
+  const generateRandomCards = (count: number): BonusCardType[] =>
     Array.from({ length: count }, () => {
       return getRandomCard();
     });
@@ -49,7 +50,7 @@ function RollBonusCard() {
     if (!rouletteRef.current) return;
     setRolling(true);
 
-    const winner = deckCardsData[Math.floor(Math.random() * deckCardsData.length)];
+    const winner = getRandomCard() as BonusCardType;
     console.log(winner);
 
     rouletteRef.current.style.transition = "transform 0.4s cubic-bezier(0,.26,.46,3)";
@@ -79,7 +80,7 @@ function RollBonusCard() {
       rouletteRef.current.style.transform = `translateX(-${distanceOfRoll}px)`;
 
       setTimeout(() => {
-        receiveBonusCard("skip-prison-day");
+        receiveBonusCard(winner);
       }, ROLLING_TIME_MS);
     }, 400);
   };
@@ -101,16 +102,19 @@ function RollBonusCard() {
           >
             <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-white z-10" />
             <div ref={rouletteRef} style={{ gap: `${gap}px` }} className="absolute flex">
-              {displayedCards.map((item, idx) => (
-                <Card
-                  key={idx}
-                  style={{ height: `${cardHeight}px`, width: `${cardWidth}px` }}
-                  className="overflow-hidden"
-                >
-                  <img src={item.picture} className="absolute top-0"></img>
-                  <CardFooter className="z-10">{item.name}</CardFooter>
-                </Card>
-              ))}
+              {displayedCards.map((item, idx) => {
+                const cardData = frontendCardsData[item];
+                return (
+                  <Card
+                    key={idx}
+                    style={{ height: `${cardHeight}px`, width: `${cardWidth}px` }}
+                    className="overflow-hidden"
+                  >
+                    <img src={cardData.picture} className="absolute top-0"></img>
+                    <CardFooter className="z-10">{cardData.name}</CardFooter>
+                  </Card>
+                );
+              })}
             </div>
             <Button
               variant="secondary"

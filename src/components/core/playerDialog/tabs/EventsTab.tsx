@@ -1,11 +1,21 @@
-import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { PlayerEvent } from "@/lib/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { fetchPlayerEvents } from "@/lib/api";
+import { queryKeys } from "@/lib/queryClient";
+import { PlayerData, PlayerEvent } from "@/lib/types";
 import { getEventDescription } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { ZapIcon } from "lucide-react";
 import { Fragment } from "react";
 
 type Props = {
-  events: PlayerEvent[];
+  player: PlayerData;
 };
 
 function Event({ event }: { event: PlayerEvent }) {
@@ -27,7 +37,7 @@ function Event({ event }: { event: PlayerEvent }) {
 type EventsTabFilterOption = {
   title: string;
   value: PlayerEvent["event_type"];
-}
+};
 
 function EventsTabFilter() {
   const options: EventsTabFilterOption[] = [
@@ -56,10 +66,19 @@ function EventsTabFilter() {
         </SelectContent>
       </Select>
     </div>
-  )
+  );
 }
 
-export default function EventsTab({ events }: Props) {
+export default function EventsTab({ player }: Props) {
+  const { data: eventsData } = useQuery({
+    queryKey: queryKeys.playerEvents(player.id),
+    queryFn: () => fetchPlayerEvents(player.id),
+    refetchInterval: 30 * 1000,
+  });
+
+  const events = eventsData?.events || [];
+  events.sort((a, b) => (a.timestamp >= b.timestamp ? -1 : 1));
+
   const eventsByDate = getEventsByDate(events);
 
   return (
@@ -80,7 +99,7 @@ export default function EventsTab({ events }: Props) {
                 ))}
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </div>
@@ -88,8 +107,18 @@ export default function EventsTab({ events }: Props) {
 }
 
 const months = [
-  'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+  "января",
+  "февраля",
+  "марта",
+  "апреля",
+  "мая",
+  "июня",
+  "июля",
+  "августа",
+  "сентября",
+  "октября",
+  "ноября",
+  "декабря",
 ];
 
 function getFormattedTime(ts: number) {
@@ -104,11 +133,14 @@ function getFormattedTime(ts: number) {
 }
 
 function getEventsByDate(events: PlayerEvent[]) {
-  const eventsByDate = events.reduce((acc, cur) => {
-    const date = new Date(cur.timestamp).toDateString();
-    (acc[date] = acc[date] || []).push(cur);
-    return acc;
-  }, {} as Record<string, PlayerEvent[]>);
+  const eventsByDate = events.reduce(
+    (acc, cur) => {
+      const date = new Date(cur.timestamp).toDateString();
+      (acc[date] = acc[date] || []).push(cur);
+      return acc;
+    },
+    {} as Record<string, PlayerEvent[]>,
+  );
 
   for (const events of Object.values(eventsByDate)) {
     events.sort((a, b) => b.timestamp - a.timestamp);
