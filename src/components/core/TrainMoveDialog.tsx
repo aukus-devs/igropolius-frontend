@@ -7,7 +7,7 @@ import { useShallow } from "zustand/shallow";
 import { TrainsConfig } from "@/lib/constants";
 
 export default function TrainMoveDialog() {
-  const moveTrain = useTrainsStore((state) => state.moveTrain);
+  const rideTrain = useTrainsStore((state) => state.rideTrain);
   const moveData = usePlayerStore(
     useShallow((state) => {
       if (!state.myPlayer) return;
@@ -43,7 +43,7 @@ export default function TrainMoveDialog() {
         </Button>
         <Button
           className="bg-[#30D158] w-full flex-1"
-          onClick={() => moveTrain(moveData.currentSector.id)}
+          onClick={() => rideTrain(moveData.currentSector.id)}
         >
           Ехать
         </Button>

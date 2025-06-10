@@ -45,14 +45,14 @@ function animateDice(model: Group) {
       y: 1,
       z: 1,
       duration: 300,
-      easing: 'easeInOutCubic',
+      easing: "easeInOutCubic",
     })
     .add(model.rotation, {
       x: [0, xRotation],
       y: [0, yRotation],
       z: [0, zRotation],
       duration: 1000,
-      easing: 'easeInOutQuad',
+      easing: "easeInOutQuad",
     })
     .add(model.scale, {
       x: 0,
@@ -60,7 +60,7 @@ function animateDice(model: Group) {
       z: 0,
       delay: 400,
       duration: 300,
-      easing: 'easeInOutCubic',
+      easing: "easeInOutCubic",
     })
     .play();
 }

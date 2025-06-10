@@ -7,6 +7,7 @@ import { HALF_BOARD, TrainsConfig } from "@/lib/constants";
 import { SectorsById } from "@/lib/mockData";
 import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
 import useCameraStore from "./cameraStore";
+import { makePlayerMove } from "@/lib/api";
 
 type TrainConfig = {
   id: number;
@@ -18,7 +19,7 @@ type TrainConfig = {
 const useTrainsStore = create<{
   trains: { [key: number]: TrainConfig };
   addTrain: (id: number, startPosition: Vector3, endPosition: Vector3, model: Group) => void;
-  moveTrain: (id: number) => void;
+  rideTrain: (id: number) => void;
 }>((set, get) => ({
   trains: {},
 
@@ -27,12 +28,22 @@ const useTrainsStore = create<{
       trains: { ...state.trains, [id]: { id, startPosition, endPosition, model } },
     })),
 
-  moveTrain: (trainId: number) => {
+  rideTrain: async (trainId: number) => {
     const train = get().trains[trainId];
     if (!train) throw new Error(`Train with id ${trainId} not found`);
 
     const myPlayerId = usePlayerStore.getState().myPlayerId;
     if (!myPlayerId) throw new Error(`My player not found`);
+
+    await makePlayerMove({
+      type: "train-ride",
+      bonuses_used: [],
+      dice_roll_id: 0,
+      selected_die: null,
+      tmp_roll_result: 10,
+    });
+
+    usePlayerStore.setState({ isPlayerMoving: true });
 
     const playerModel = useModelsStore.getState().getPlayerModel(myPlayerId);
     const playerMesh = playerModel.children[0];
@@ -60,8 +71,6 @@ const useTrainsStore = create<{
     );
     const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, "XYZ"));
     const { moveToPlayer } = useCameraStore.getState();
-
-    usePlayerStore.setState({ isPlayerMoving: true });
 
     createTimeline({
       onUpdate: () => moveToPlayer(playerModel, false),
@@ -117,12 +126,14 @@ const useTrainsStore = create<{
               y: playerModel.position.y - 0.4,
               duration: 300,
             })
-            .then(() => {
+            .then(async () => {
               train.model.position.copy(train.startPosition);
-
-              usePlayerStore.setState({ isPlayerMoving: false });
+              try {
+                await usePlayerStore.getState().setNextTurnState();
+              } finally {
+                usePlayerStore.setState({ isPlayerMoving: false });
+              }
               usePlayerStore.getState().updateMyPlayerSectorId(destinationSector.id);
-              usePlayerStore.getState().setNextTurnState();
             });
         },
       });
