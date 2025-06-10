@@ -171,8 +171,8 @@ function GameReviewForm() {
 
   const onConfirm = async () => {
     await sendReview(scores);
+    await setNextTurnState();
     setOpen(false);
-    setNextTurnState();
     resetPlayersQuery();
     resetCurrentPlayerQuery();
   };

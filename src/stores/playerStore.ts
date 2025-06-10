@@ -15,7 +15,7 @@ import { calculatePlayerPosition, getSectorRotation } from "@/components/map/uti
 import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
 import { getNextTurnState } from "@/lib/utils";
-import { makePlayerMove, setTurnState } from "@/lib/api";
+import { makePlayerMove, saveTurnState } from "@/lib/api";
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -53,7 +53,7 @@ const usePlayerStore = create<{
     if (!myPlayer || !turnState) return;
 
     const nextTurnState = getNextTurnState(myPlayer.sector_id, turnState, []);
-    await setTurnState(nextTurnState);
+    await saveTurnState(nextTurnState);
     set({ turnState: nextTurnState });
   },
 

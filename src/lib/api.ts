@@ -208,7 +208,7 @@ export async function makePlayerMove(request: PlayerMoveRequest): Promise<void> 
   });
 }
 
-export async function setTurnState(state: PlayerTurnState): Promise<void> {
+export async function saveTurnState(state: PlayerTurnState): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
   }
