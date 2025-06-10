@@ -9,7 +9,8 @@
     "build:prod": "cross-env VITE_BASE_URL=/ vite build",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc --build --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.4",

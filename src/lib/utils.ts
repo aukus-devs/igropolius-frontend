@@ -136,10 +136,10 @@ export function getNextTurnState(
 ): PlayerTurnState {
   const sector = SectorsById[mapPosition];
 
-  const streetTaxCards = bonusCards.filter((card) => card.type === "evade-street-tax");
-  const prisonCards = bonusCards.filter((card) => card.type === "skip-prison-day");
-  const rerollCards = bonusCards.filter((card) => card.type === "reroll-game");
-  const diceCards = bonusCards.filter((card) => card.type === "adjust-roll-by1");
+  const streetTaxCards = bonusCards.filter((card) => card.bonus_type === "evade-street-tax");
+  const prisonCards = bonusCards.filter((card) => card.bonus_type === "skip-prison-day");
+  const rerollCards = bonusCards.filter((card) => card.bonus_type === "reroll-game");
+  const diceCards = bonusCards.filter((card) => card.bonus_type === "adjust-roll-by1");
 
   switch (currentState) {
     case "rolling-dice":
