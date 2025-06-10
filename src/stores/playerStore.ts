@@ -87,12 +87,12 @@ const usePlayerStore = create<{
         }
 
         buildings[building.sector_id].push({
-          type: GameLengthToBuildingType[building.game_length],
+          type: GameLengthToBuildingType[building.length],
           owner: player,
           sectorId: building.sector_id,
           createdAt: building.created_at,
-          gameLength: building.game_length,
-          gameTitle: building.game_title,
+          gameLength: building.length,
+          gameTitle: building.title,
         });
       }
     }

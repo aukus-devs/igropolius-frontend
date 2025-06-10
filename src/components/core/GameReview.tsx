@@ -1,7 +1,7 @@
-import { GameReviewType, GameStatusType } from "@/lib/types";
+import { GameStatusType, PlayerGame } from "@/lib/types";
 
 type Props = {
-  game: GameReviewType;
+  game: PlayerGame;
 };
 
 function getStatusData(status: GameStatusType) {
@@ -31,12 +31,12 @@ function getStatusData(status: GameStatusType) {
 }
 
 function GameReview({ game }: Props) {
-  const { gameTitle, description, rating, status, date, poster } = game;
+  const { title: gameTitle, review, rating, status, created_at } = game;
   const fallbackPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
   const formattedDate = new Intl.DateTimeFormat("ru-RU", {
     day: "numeric",
     month: "long",
-  }).format(date);
+  }).format(new Date(created_at * 1000));
   const { color, title } = getStatusData(status);
 
   return (
@@ -47,11 +47,11 @@ function GameReview({ game }: Props) {
       <h3 className="text-2xl mb-2 font-wide-semibold">{gameTitle}</h3>
       <div className="flex gap-2.5">
         <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
-          <img className="h-full object-cover" src={poster || fallbackPoster} />
+          <img className="h-full object-cover" src={fallbackPoster} />
         </div>
         <div className="text-muted-foreground">
           <p>
-            {rating} / 10 — {description}
+            {rating} / 10 — {review}
           </p>
         </div>
       </div>

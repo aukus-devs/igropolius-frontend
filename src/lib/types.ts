@@ -72,11 +72,16 @@ export type GameReviewType = {
   date: Date;
 };
 
-export type SectorOwnership = {
+export type PlayerGame = {
   created_at: number;
   sector_id: number;
-  game_title: string;
-  game_length: GameLengthWithDrop;
+  status: GameStatusType;
+  title: string;
+  length: GameLengthWithDrop;
+  review: string;
+  rating: number;
+  duration: number | null;
+  vod_links: string | null;
 };
 
 export type BackendPlayerData = {
@@ -100,7 +105,7 @@ export type BackendPlayerData = {
 
   total_score: number;
   sector_id: number;
-  games: SectorOwnership[];
+  games: PlayerGame[];
   bonus_cards: ActiveBonusCard[];
 };
 
