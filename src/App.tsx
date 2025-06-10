@@ -31,6 +31,7 @@ function App() {
   const { data: currentPlayerData, isError: currentPlayerDataError } = useQuery({
     queryKey: queryKeys.currentPlayer,
     queryFn: fetchCurrentPlayer,
+    retry: false,
   });
 
   const { data: playersData, isLoading } = useQuery({
