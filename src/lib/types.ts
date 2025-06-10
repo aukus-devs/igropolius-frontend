@@ -200,7 +200,7 @@ export type PlayerTurnState =
   | "choosing-train-ride";
 
 export type ActiveBonusCard = {
-  type: BonusCardType;
+  bonus_type: BonusCardType;
   received_at: number;
   received_on_sector: number;
 };
