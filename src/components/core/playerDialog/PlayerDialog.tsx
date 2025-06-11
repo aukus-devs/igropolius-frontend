@@ -42,11 +42,13 @@ function PlayerDialog({ player, placement, zIndex, isHidden, isCurrentPlayer }: 
     >
       <Dialog>
         <DialogTrigger>
-          <PlayerDialogTrigger
-            player={player}
-            placement={placement}
-            isCurrentPlayer={isCurrentPlayer}
-          />
+          <div className="bg-card/70 rounded-xl">
+            <PlayerDialogTrigger
+              player={player}
+              placement={placement}
+              isCurrentPlayer={isCurrentPlayer}
+            />
+          </div>
         </DialogTrigger>
         <DialogContent
           className="flex flex-col gap-8 h-[660px] p-0 overflow-hidden"

@@ -12,7 +12,7 @@ type Props = {
 
 function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
   const points = player.total_score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  const bgColor = isCurrentPlayer ? "bg-[#81A772]/20" : "bg-card/70";
+  const bgColor = isCurrentPlayer ? "bg-[#81A772]/20" : "bg-transparent";
 
   return (
     <div
