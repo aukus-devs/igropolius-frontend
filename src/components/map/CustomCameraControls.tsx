@@ -8,16 +8,26 @@ import CameraControls from "camera-controls";
 import { Box3, OrthographicCamera, PerspectiveCamera, Vector3 } from "three";
 import { BOARD_SIZE, SECTOR_DEPTH, SECTOR_HEIGHT } from "@/lib/constants";
 import useCameraStore from "@/stores/cameraStore";
+import usePlayerStore from "@/stores/playerStore";
 
 export function CustomCameraControls() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, getKeys] = useKeyboardControls();
   const { set } = useThree(({ set }) => ({ set }));
   const setCameraControls = useCameraStore((state) => state.setCameraControls);
   const isOrthographic = useCameraStore((state) => state.isOrthographic);
+  const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
+  const myPlayerId = usePlayerStore((state) => state.myPlayerId);
   const cameraControls = useRef<CameraControlsComponent | null>(null);
 
   const keysMovespeed = 10;
+
+  useEffect(() => {
+    if (myPlayerId) {
+      setTimeout(() => {
+        cameraToPlayer(myPlayerId);
+      }, 700)
+    }
+  }, [myPlayerId, cameraToPlayer]);
 
   useEffect(() => {
     const newCamera = isOrthographic

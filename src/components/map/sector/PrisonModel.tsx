@@ -7,8 +7,8 @@ export default function PrisonModel() {
   return (
     <Gltf
       src={modelUrl}
-      position={[SECTOR_DEPTH / 6, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH / 6]}
-      scale={[SECTOR_DEPTH / 2, 2, SECTOR_DEPTH / 2]}
+      position={[0, SECTOR_CONTENT_ELEVATION, 0]}
+      scale={[SECTOR_DEPTH / 1.5, 2, SECTOR_DEPTH / 1.5]}
     />
   );
 }
