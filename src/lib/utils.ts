@@ -146,9 +146,6 @@ export function getNextTurnState(
       if (diceCards.length > 0) {
         return "using-dice-bonuses";
       }
-      if (sector.type === "bonus") {
-        return "rolling-bonus-card";
-      }
       if (streetTaxCards.length > 0) {
         return "using-sector-bonuses";
       }
@@ -174,7 +171,7 @@ export function getNextTurnState(
       }
       return "filling-game-review";
     case "rolling-bonus-card":
-      return "filling-game-review";
+      return "rolling-dice";
     case "using-sector-bonuses":
       return "filling-game-review";
     case "using-reroll-bonuses":
@@ -182,6 +179,9 @@ export function getNextTurnState(
     case "filling-game-review":
       if (sector.type === "railroad") {
         return "choosing-train-ride";
+      }
+      if (sector.type === "bonus") {
+        return "rolling-bonus-card";
       }
       return "rolling-dice";
     case "choosing-train-ride":
