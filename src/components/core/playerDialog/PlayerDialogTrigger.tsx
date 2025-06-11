@@ -7,16 +7,18 @@ import { ZapIcon } from "lucide-react";
 type Props = {
   player: PlayerData;
   placement: number;
+  isCurrentPlayer: boolean;
 };
 
-function PlayerDialogTrigger({ player, placement }: Props) {
+function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
   const points = player.total_score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const bgColor = isCurrentPlayer ? "bg-[#81A772]/20" : "bg-card/70";
 
   return (
     <div
       className={cn(
         buttonVariants({ variant: "outline" }),
-        "relative z-20 flex-row gap-2 rounded-xl p-2 w-[16.75rem] h-auto items-center select-none cursor-pointer text-base text-foreground font-semibold backdrop-blur-[1.5rem] bg-card/70 border-none",
+        `relative z-20 flex-row gap-2 rounded-xl p-2 w-[16.75rem] h-auto items-center select-none cursor-pointer text-base text-foreground font-semibold backdrop-blur-[1.5rem] ${bgColor} border-none`,
       )}
     >
       <div className="relative">

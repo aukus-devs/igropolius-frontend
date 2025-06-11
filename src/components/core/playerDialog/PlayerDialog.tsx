@@ -19,9 +19,10 @@ type Props = {
   placement: number;
   zIndex: number;
   isHidden: boolean;
+  isCurrentPlayer: boolean;
 };
 
-function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
+function PlayerDialog({ player, placement, zIndex, isHidden, isCurrentPlayer }: Props) {
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
 
   const collapseToPlacement = 3;
@@ -41,7 +42,11 @@ function PlayerDialog({ player, placement, zIndex, isHidden }: Props) {
     >
       <Dialog>
         <DialogTrigger>
-          <PlayerDialogTrigger player={player} placement={placement} />
+          <PlayerDialogTrigger
+            player={player}
+            placement={placement}
+            isCurrentPlayer={isCurrentPlayer}
+          />
         </DialogTrigger>
         <DialogContent
           className="flex flex-col gap-8 h-[660px] p-0 overflow-hidden"
