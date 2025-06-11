@@ -12,6 +12,7 @@ import { frontendCardsData } from "@/lib/mockData";
 import { Card, CardFooter } from "../ui/card";
 import { BonusCardType } from "@/lib/types";
 import usePlayerStore from "@/stores/playerStore";
+import { useShallow } from "zustand/shallow";
 
 const ROLLING_TIME_MS = 9000;
 
@@ -22,11 +23,23 @@ function RollBonusCard() {
   const [rolling, setRolling] = useState(false);
   const [displayedCards, setDisplayedCards] = useState<BonusCardType[]>([]);
 
-  const receiveBonusCard = usePlayerStore((state) => state.receiveBonusCard);
+  const { receiveBonusCard, myPlayer } = usePlayerStore(
+    useShallow((state) => ({
+      receiveBonusCard: state.receiveBonusCard,
+      myPlayer: state.myPlayer,
+    })),
+  );
+
+  const myCurrentCards = myPlayer?.bonus_cards ?? [];
+  const myCurrentCardsTypes = myCurrentCards.map((card) => card.bonus_type) as BonusCardType[];
+
+  const allCardTypes = Object.keys(frontendCardsData) as BonusCardType[];
+  const cardTypesForRoll = allCardTypes.filter(
+    (cardType) => !myCurrentCardsTypes.includes(cardType),
+  );
 
   const getRandomCard = (): BonusCardType => {
-    const cardTypes = Object.keys(frontendCardsData) as BonusCardType[];
-    return cardTypes[Math.floor(Math.random() * cardTypes.length)];
+    return cardTypesForRoll[Math.floor(Math.random() * cardTypesForRoll.length)];
   };
 
   const generateRandomCards = (count: number): BonusCardType[] =>
@@ -50,7 +63,7 @@ function RollBonusCard() {
     if (!rouletteRef.current) return;
     setRolling(true);
 
-    const winner = getRandomCard() as BonusCardType;
+    const winner = getRandomCard();
     console.log(winner);
 
     rouletteRef.current.style.transition = "transform 0.4s cubic-bezier(0,.26,.46,3)";
