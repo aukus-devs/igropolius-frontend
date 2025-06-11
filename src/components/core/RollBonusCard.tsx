@@ -16,12 +16,13 @@ import { useShallow } from "zustand/shallow";
 
 const ROLLING_TIME_MS = 9000;
 
-function RollBonusCard() {
+export default function RollBonusCard() {
   const rouletteRef = useRef<HTMLDivElement>(null);
   const rouletteContainerRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const [rolling, setRolling] = useState(false);
+  const [state, setState] = useState<"idle" | "rolling" | "finished">("idle");
   const [displayedCards, setDisplayedCards] = useState<BonusCardType[]>([]);
+  const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
 
   const { receiveBonusCard, myPlayer } = usePlayerStore(
     useShallow((state) => ({
@@ -38,14 +39,7 @@ function RollBonusCard() {
     (cardType) => !myCurrentCardsTypes.includes(cardType),
   );
 
-  const getRandomCard = (): BonusCardType => {
-    return cardTypesForRoll[Math.floor(Math.random() * cardTypesForRoll.length)];
-  };
-
-  const generateRandomCards = (count: number): BonusCardType[] =>
-    Array.from({ length: count }, () => {
-      return getRandomCard();
-    });
+  const winner = winnerIndex ? displayedCards[winnerIndex] : null;
 
   const cardWidth = 80;
   const cardHeight = Math.floor(cardWidth * 1.4);
@@ -53,47 +47,40 @@ function RollBonusCard() {
 
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
-      setDisplayedCards(generateRandomCards(9));
-      setRolling(false);
+      const randomCards = generateList(80, cardTypesForRoll);
+      setDisplayedCards(randomCards);
+      setState("idle");
+      setWinnerIndex(null);
     }
     setOpen(isOpen);
   };
 
   const handleRollClick = () => {
     if (!rouletteRef.current) return;
-    setRolling(true);
+    setState("rolling");
 
-    const winner = getRandomCard();
-    console.log(winner);
+    const visibleCards = 9;
+    const totalCards = displayedCards.length;
+    const centerIndex = Math.floor(visibleCards / 2);
+
+    const winIndex =
+      Math.floor(Math.random() * visibleCards) + (totalCards - visibleCards * 2);
+    setWinnerIndex(winIndex);
 
     rouletteRef.current.style.transition = "transform 0.4s cubic-bezier(0,.26,.46,3)";
     rouletteRef.current.style.transform = `translateX(15px)`;
 
-    const winnerIndex = Math.floor(Math.random() * 10) + 49;
-
-    const randomItems = generateRandomCards(winnerIndex + 5);
-
-    randomItems[winnerIndex] = winner;
-    const newCards = [...displayedCards, ...randomItems];
-
-    const distanceOfRoll =
-      (winnerIndex + 1 + Math.floor(displayedCards.length / 2)) * (cardWidth + gap) +
-      Math.floor(Math.random() * cardWidth) -
-      cardWidth / 2;
-
     setTimeout(() => {
       if (!rouletteRef.current) return;
-      setDisplayedCards(newCards);
 
-      rouletteRef.current.style.left = `calc(50% - ${
-        Math.floor(displayedCards.length / 2) * (cardWidth + gap) + cardWidth / 2
-      }px)`;
+      const scrollDistance = (winIndex + 1 - centerIndex) * (cardWidth + gap);
 
+      rouletteRef.current.style.left = `0px`; // No calc() needed
       rouletteRef.current.style.transition = `transform ${ROLLING_TIME_MS}ms cubic-bezier(0.1,.41,.17,1.0)`;
-      rouletteRef.current.style.transform = `translateX(-${distanceOfRoll}px)`;
+      rouletteRef.current.style.transform = `translateX(-${scrollDistance}px)`;
 
       setTimeout(() => {
-        receiveBonusCard(winner);
+        setState("finished");
       }, ROLLING_TIME_MS);
     }, 400);
   };
@@ -129,14 +116,21 @@ function RollBonusCard() {
                 );
               })}
             </div>
-            <Button
-              variant="secondary"
-              className="z-20"
-              onClick={handleRollClick}
-              hidden={rolling}
-            >
-              Gamba
-            </Button>
+            {state === "idle" && (
+              <Button variant="secondary" className="z-20" onClick={handleRollClick}>
+                Gamba
+              </Button>
+            )}
+            {state === "finished" && winner && (
+              <Button
+                variant="secondary"
+                className="z-20"
+                onClick={() => receiveBonusCard(winner)}
+              >
+                Получить карточку: {winner} <br />
+                {frontendCardsData[winner].name}
+              </Button>
+            )}
           </div>
         </DialogHeader>
       </DialogContent>
@@ -144,4 +138,27 @@ function RollBonusCard() {
   );
 }
 
-export default RollBonusCard;
+function generateList<T>(len: number, options: T[]): T[] {
+  if (options.length === 0) {
+    throw new Error("Need at least 2 options for neighbor constraint.");
+  }
+  if (options.length === 1) {
+    return Array(len).fill(options[0]);
+  }
+  const result: T[] = [];
+  for (let i = 0; i < len; i++) {
+    // Filter out the previous item to avoid duplicates
+    const available = i === 0 ? options : options.filter((opt) => opt !== result[i - 1]);
+    if (available.length === 0) {
+      throw new Error("No valid options to choose from at position " + i);
+    }
+    // Pick a random option from available
+    const choice = available[Math.floor(Math.random() * available.length)];
+    result.push(choice);
+  }
+  return result;
+}
+
+// Example usage:
+// const list = generateList(10, ['A', 'B', 'C']);
+// console.log(list);
