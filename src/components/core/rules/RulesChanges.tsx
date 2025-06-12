@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { RichTextDiff } from "./RichText";
-import { fetchRules } from "@/lib/api";
+import { fetchCurrentRules } from "@/lib/api";
 import { RulesVersion } from "@/lib/types";
 import { queryKeys } from "@/lib/queryClient";
+import { formatTsToFullDate } from "@/lib/utils";
 
 export default function RulesChanges() {
   const { data: rulesData } = useQuery({
     queryKey: queryKeys.rules,
-    queryFn: fetchRules,
+    queryFn: fetchCurrentRules,
   });
 
   const rules = rulesData?.rules ?? [];
@@ -27,21 +28,11 @@ export default function RulesChanges() {
       {diffPairs.map(([oldV, newV], idx) => {
         return (
           <div key={idx}>
-            Изменения {formatTs(newV.created_at)}
+            Изменения {formatTsToFullDate(newV.created_at)}
             <RichTextDiff oldContent={oldV.content} newContent={newV.content} />
           </div>
         );
       })}
     </div>
   );
-}
-
-function formatTs(ts: number) {
-  return new Date(ts * 1000).toLocaleString("ru-RU", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 }

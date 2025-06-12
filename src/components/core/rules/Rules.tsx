@@ -2,16 +2,17 @@ import { useState } from "react";
 import { RichTextEditor } from "./RichText";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { fetchRules } from "@/lib/api";
+import { fetchCurrentRules } from "@/lib/api";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import RichDisplay from "./RichDisplay";
 import { queryKeys } from "@/lib/queryClient";
+import { formatTsToFullDate } from "@/lib/utils";
 
 export default function Rules() {
-  const { value: localRules, save: localSave } = useLocalStorage<string>({
-    key: "rules-local",
-    defaultValue: "",
-  });
+  // const { value: localRules, save: localSave } = useLocalStorage<string>({
+  //   key: "rules-local",
+  //   defaultValue: "",
+  // });
 
   const [editValue, setEditValue] = useState<string>("");
 
@@ -20,30 +21,24 @@ export default function Rules() {
 
   const { data: rulesData, isLoading } = useQuery({
     queryKey: queryKeys.rules,
-    queryFn: fetchRules,
+    queryFn: fetchCurrentRules,
   });
 
-  const loading = JSON.stringify({ ops: [{ insert: "Загрузка..." }] });
-  const empty = JSON.stringify({ ops: [{ insert: "Добавь правила" }] });
+  // const empty = JSON.stringify({ ops: [{ insert: "Добавь правила" }] });
 
-  let rules = empty;
-  if (isLoading) {
-    rules = loading;
-  }
-  if (rulesData && rulesData.rules.length > 0) {
-    const sortedRules = rulesData.rules.sort((a, b) => b.created_at - a.created_at);
-    if (sortedRules.length > 0) {
-      rules = sortedRules[0].content;
-    }
-  }
-  if (localRules && localRules.length > 0) {
-    rules = localRules;
-  }
+  const rules = rulesData?.rules[0];
+  // if (localRules && localRules.length > 0) {
+  //   rules = localRules;
+  // }
 
   const handleSave = () => {
     setEditing(false);
-    localSave(editValue);
+    // localSave({created_at: , editValue});
   };
+
+  if (isLoading || !rules) {
+    return <div>Загрузка...</div>;
+  }
 
   return (
     <div>
@@ -51,7 +46,7 @@ export default function Rules() {
         <>
           <Button onClick={handleSave}>Сохранить</Button>
           <RichTextEditor
-            initialValue={rules}
+            initialValue={rules.content}
             onTextChange={(value) => {
               setEditValue(value);
             }}
@@ -59,10 +54,13 @@ export default function Rules() {
         </>
       ) : (
         <>
-          {canEdit && <Button onClick={() => setEditing(true)}>Редактировать</Button>}
+          <div className="flex justify-between items-center">
+            {canEdit && <Button onClick={() => setEditing(true)}>Редактировать</Button>}
+            от {formatTsToFullDate(rules.created_at)}
+          </div>
           <div className="mt-2">
             <div className="rich-display">
-              <RichDisplay value={rules} />
+              <RichDisplay value={rules.content} />
             </div>
           </div>
         </>

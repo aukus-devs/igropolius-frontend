@@ -129,7 +129,7 @@ type RulesResponse = {
   rules: RulesVersion[];
 };
 
-export async function fetchRules(): Promise<RulesResponse> {
+export async function fetchCurrentRules(): Promise<RulesResponse> {
   if (MOCK_API) {
     return Promise.resolve({
       rules: [
@@ -160,7 +160,7 @@ export async function fetchRules(): Promise<RulesResponse> {
       ],
     });
   }
-  const response = await apiRequest("/api/rules");
+  const response = await apiRequest("/api/rules/current");
   return response.json();
 }
 
