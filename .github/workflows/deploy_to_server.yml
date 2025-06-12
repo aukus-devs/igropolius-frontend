@@ -28,7 +28,12 @@ jobs:
           password: ${{ secrets.password }}
           port: ${{ secrets.port }}
           command_timeout: 2m
-          script: cd /root/monopoly && docker compose pull frontend && docker compose up -d --no-deps frontend
+          script: |
+            cd /root/monopoly
+            docker compose pull frontend
+            docker compose up -d --no-deps frontend
+            sleep 5
+            docker ps --filter "name=frontend" --format "{{.Status}}" | grep -q "Up" || (echo "Container is not running" && exit 1)
       - name: Success to telegram
         if: success()
         run: |
