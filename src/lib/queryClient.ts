@@ -22,6 +22,6 @@ export const resetPlayerEventsQuery = (playerId: number) => {
   client.invalidateQueries({ queryKey: queryKeys.playerEvents(playerId) });
 };
 
-export const resetRulesQuery = () => {
-  client.invalidateQueries({ queryKey: queryKeys.currentRules });
+export const resetCurrentRulesQuery = () => {
+  client.invalidateQueries({ queryKey: queryKeys.currentRulesVersion });
 };

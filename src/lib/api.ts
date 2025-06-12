@@ -185,6 +185,19 @@ export async function fetchAllRules(): Promise<RulesResponse> {
   return response.json();
 }
 
+export async function saveRulesVersion(content: string): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  const response = await apiRequest("/api/rules", {
+    method: "POST",
+    body: JSON.stringify({ content, created_at: 0 }),
+  });
+  if (!response.ok) {
+    return Promise.reject("Failed to save rules version");
+  }
+}
+
 type LoginResponse = {
   token: string;
 };

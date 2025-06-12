@@ -1,43 +1,43 @@
 import { useState } from "react";
 import { RichTextEditor } from "./RichText";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
-import { fetchCurrentRules } from "@/lib/api";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { fetchCurrentRules, saveRulesVersion } from "@/lib/api";
 import RichDisplay from "./RichDisplay";
-import { queryKeys } from "@/lib/queryClient";
+import { queryKeys, resetCurrentRulesQuery } from "@/lib/queryClient";
 import { formatTsToFullDate } from "@/lib/utils";
+import LoadingSpinner from "../loadng/LoadingSpinner";
 
 export default function Rules() {
-  // const { value: localRules, save: localSave } = useLocalStorage<string>({
-  //   key: "rules-local",
-  //   defaultValue: "",
-  // });
-
   const [editValue, setEditValue] = useState<string>("");
 
   const [editing, setEditing] = useState(false);
   const canEdit = true;
+
+  const { mutateAsync: saveRules, isPending } = useMutation({
+    mutationFn: saveRulesVersion,
+  });
 
   const { data: rulesData, isLoading } = useQuery({
     queryKey: queryKeys.currentRulesVersion,
     queryFn: fetchCurrentRules,
   });
 
-  // const empty = JSON.stringify({ ops: [{ insert: "Добавь правила" }] });
-
   const version = rulesData?.versions[0];
-  // if (localRules && localRules.length > 0) {
-  //   rules = localRules;
-  // }
 
   const handleSave = () => {
     setEditing(false);
-    // localSave({created_at: , editValue});
+    saveRules(editValue).then(() => {
+      resetCurrentRulesQuery();
+    });
   };
 
-  if (isLoading || !version) {
-    return <div>Загрузка...</div>;
+  if (isLoading || !version || isPending) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <LoadingSpinner text="Загрузка правил..." />
+      </div>
+    );
   }
 
   return (

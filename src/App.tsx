@@ -10,7 +10,7 @@ import UI from "./components/UI";
 import usePlayerStore from "./stores/playerStore";
 import { fetchCurrentPlayer, fetchPlayers } from "./lib/api";
 import { useQuery } from "@tanstack/react-query";
-import LoadingModal from "./components/core/LoadingModal";
+import LoadingModal from "./components/core/loadng/LoadingModal";
 import { queryKeys } from "./lib/queryClient";
 
 function App() {
