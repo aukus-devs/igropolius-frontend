@@ -1,25 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { RichTextDiff } from "./RichText";
-import { fetchCurrentRules } from "@/lib/api";
+import { fetchAllRules } from "@/lib/api";
 import { RulesVersion } from "@/lib/types";
 import { queryKeys } from "@/lib/queryClient";
 import { formatTsToFullDate } from "@/lib/utils";
 
 export default function RulesChanges() {
   const { data: rulesData } = useQuery({
-    queryKey: queryKeys.rules,
-    queryFn: fetchCurrentRules,
+    queryKey: queryKeys.allRulesVersions,
+    queryFn: fetchAllRules,
   });
 
-  const rules = rulesData?.rules ?? [];
-  const rulesSorted = rules.sort((a, b) => {
+  const versions = rulesData?.versions ?? [];
+  const versionsSorted = versions.sort((a, b) => {
     return b.created_at - a.created_at;
   });
 
   const diffPairs: [RulesVersion, RulesVersion][] = [];
-  for (let i = 0; i < rulesSorted.length - 1; i++) {
-    const newV = rulesSorted[i];
-    const oldV = rulesSorted[i + 1];
+  for (let i = 0; i < versionsSorted.length - 1; i++) {
+    const newV = versionsSorted[i];
+    const oldV = versionsSorted[i + 1];
     diffPairs.push([oldV, newV]);
   }
 

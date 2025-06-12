@@ -126,13 +126,34 @@ export async function fetchPlayers(): Promise<PlayersResponse> {
 }
 
 type RulesResponse = {
-  rules: RulesVersion[];
+  versions: RulesVersion[];
 };
 
 export async function fetchCurrentRules(): Promise<RulesResponse> {
   if (MOCK_API) {
     return Promise.resolve({
-      rules: [
+      versions: [
+        {
+          content: JSON.stringify({
+            ops: [
+              { insert: "Третья версия правил" },
+              { insert: "\n" },
+              { insert: "Читы и подсказки запрещены" },
+            ],
+          }),
+          created_at: Math.ceil(new Date("2025-04-30").getTime() / 1000),
+        },
+      ],
+    });
+  }
+  const response = await apiRequest("/api/rules/current");
+  return response.json();
+}
+
+export async function fetchAllRules(): Promise<RulesResponse> {
+  if (MOCK_API) {
+    return Promise.resolve({
+      versions: [
         {
           content: JSON.stringify({
             ops: [
@@ -160,7 +181,7 @@ export async function fetchCurrentRules(): Promise<RulesResponse> {
       ],
     });
   }
-  const response = await apiRequest("/api/rules/current");
+  const response = await apiRequest("/api/rules");
   return response.json();
 }
 

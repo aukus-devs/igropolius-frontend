@@ -20,13 +20,13 @@ export default function Rules() {
   const canEdit = true;
 
   const { data: rulesData, isLoading } = useQuery({
-    queryKey: queryKeys.rules,
+    queryKey: queryKeys.currentRulesVersion,
     queryFn: fetchCurrentRules,
   });
 
   // const empty = JSON.stringify({ ops: [{ insert: "Добавь правила" }] });
 
-  const rules = rulesData?.rules[0];
+  const version = rulesData?.versions[0];
   // if (localRules && localRules.length > 0) {
   //   rules = localRules;
   // }
@@ -36,7 +36,7 @@ export default function Rules() {
     // localSave({created_at: , editValue});
   };
 
-  if (isLoading || !rules) {
+  if (isLoading || !version) {
     return <div>Загрузка...</div>;
   }
 
@@ -46,7 +46,7 @@ export default function Rules() {
         <>
           <Button onClick={handleSave}>Сохранить</Button>
           <RichTextEditor
-            initialValue={rules.content}
+            initialValue={version.content}
             onTextChange={(value) => {
               setEditValue(value);
             }}
@@ -56,11 +56,11 @@ export default function Rules() {
         <>
           <div className="flex justify-between items-center">
             {canEdit && <Button onClick={() => setEditing(true)}>Редактировать</Button>}
-            от {formatTsToFullDate(rules.created_at)}
+            от {formatTsToFullDate(version.created_at)}
           </div>
           <div className="mt-2">
             <div className="rich-display">
-              <RichDisplay value={rules.content} />
+              <RichDisplay value={version.content} />
             </div>
           </div>
         </>

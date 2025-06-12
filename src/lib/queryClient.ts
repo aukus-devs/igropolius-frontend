@@ -6,7 +6,8 @@ export const queryKeys = {
   players: ["players-list"],
   currentPlayer: ["current-player"],
   playerEvents: (playerId: number) => ["player-events", playerId],
-  rules: ["rules"],
+  currentRulesVersion: ["current-rules-version"],
+  allRulesVersions: ["all-rules-versions"],
 } as const;
 
 export const resetCurrentPlayerQuery = () => {
@@ -22,5 +23,5 @@ export const resetPlayerEventsQuery = (playerId: number) => {
 };
 
 export const resetRulesQuery = () => {
-  client.invalidateQueries({ queryKey: queryKeys.rules });
+  client.invalidateQueries({ queryKey: queryKeys.currentRules });
 };
