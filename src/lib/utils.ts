@@ -199,3 +199,12 @@ export function formatTsToFullDate(ts: number) {
     minute: "2-digit",
   });
 }
+
+export function formatTsToMonthDatetime(ts: number) {
+  return new Date(ts * 1000).toLocaleString("ru-RU", {
+    month: "long",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}

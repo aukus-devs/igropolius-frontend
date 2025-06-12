@@ -53,6 +53,14 @@ const usePlayerStore = create<{
     if (!myPlayer || !turnState) return;
 
     const nextTurnState = getNextTurnState(myPlayer.sector_id, turnState, []);
+
+    if (turnState === "rolling-dice" && nextTurnState === "filling-game-review") {
+      const currentSector = SectorsById[myPlayer.sector_id];
+      if (currentSector.type === "property" || currentSector.type === "railroad") {
+        // await payTaxes();
+      }
+    }
+
     await saveTurnState(nextTurnState);
     set({ turnState: nextTurnState });
   },
