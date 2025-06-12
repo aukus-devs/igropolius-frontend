@@ -43,17 +43,22 @@ export default function Rules() {
   return (
     <div>
       {editing ? (
-        <>
-          <Button onClick={handleSave}>Сохранить</Button>
+        <div>
+          <div className="flex gap-4 items-center">
+            <Button onClick={handleSave}>Сохранить</Button>
+            <Button onClick={() => setEditing(false)} variant="destructive">
+              Отменить
+            </Button>
+          </div>
           <RichTextEditor
             initialValue={version.content}
             onTextChange={(value) => {
               setEditValue(value);
             }}
           />
-        </>
+        </div>
       ) : (
-        <>
+        <div>
           <div className="flex justify-between items-center">
             {canEdit && <Button onClick={() => setEditing(true)}>Редактировать</Button>}
             от {formatTsToFullDate(version.created_at)}
@@ -63,7 +68,7 @@ export default function Rules() {
               <RichDisplay value={version.content} />
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
