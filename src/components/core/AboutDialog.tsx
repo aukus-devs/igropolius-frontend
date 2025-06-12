@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { InfoIcon } from "lucide-react";
 
 type Props = {
   styles?: string;
@@ -16,6 +17,7 @@ export default function AboutDialog({ styles, open, hideTrigger }: Props) {
       {!hideTrigger && (
         <DialogTrigger asChild>
           <Button variant="outline" className={styles}>
+            <InfoIcon />
             Об ивенте
           </Button>
         </DialogTrigger>
