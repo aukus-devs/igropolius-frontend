@@ -11,6 +11,10 @@ on:
         description: "Password for SSH"
       port:
         description: "Port for SSH"
+      server_name:
+        description: "Server name"
+      tg_token:
+        description: "TG token"
 
 jobs:
   deploy:
@@ -25,3 +29,15 @@ jobs:
           port: ${{ secrets.port }}
           command_timeout: 2m
           script: cd /root/monopoly && docker compose pull frontend && docker compose up -d --no-deps frontend
+      - name: Success to telegram
+        if: success()
+        run: |
+          msg_text='✅ Igropolius frontend upload success on server: ${{ secrets.server_name }}!'
+          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage' \
+          -d "message_thread_id=4632&chat_id=-1002576065779_4632&text=${msg_text}&"
+      - name: Failure to telegram
+        if: failure()
+        run: |
+          msg_text='⚠️ Igropolius frontend upload failure on server: ${{ secrets.server_name }}!'
+          curl -s -X POST 'https://api.telegram.org/bot${{ secrets.TG_TOKEN }}/sendMessage' \
+          -d "message_thread_id=4632&chat_id=-1002576065779_4632&text=${msg_text}&"
