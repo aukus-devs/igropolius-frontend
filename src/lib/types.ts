@@ -51,7 +51,7 @@ type Position = {
 
 export type SectorData = {
   id: number;
-  type: "prison" | "property" | "railroad" | "bonus" | "start-corner";
+  type: "prison" | "property" | "railroad" | "bonus" | "start-corner" | "parking";
   name: string;
   position: Position;
   color: ColorName;

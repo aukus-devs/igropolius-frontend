@@ -7,11 +7,12 @@ import { ArrowRightIcon } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import useReviewFormStore from "@/stores/reviewFormStore";
 import Rating from "./Rating";
-import { ScoreByGameLength } from "@/lib/constants";
+import { ScoreByGameLength, SectorScoreMultiplier } from "@/lib/constants";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
 import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
+import { SectorsById } from "@/lib/mockData";
 
 type StatesOption = {
   title: string;
@@ -133,12 +134,25 @@ function HLTBLink() {
 
 function GameReviewForm() {
   const [open, setOpen] = useState(false);
+
+  const { setNextTurnState, myPlayer } = usePlayerStore(
+    useShallow((state) => ({
+      setNextTurnState: state.setNextTurnState,
+      myPlayer: state.myPlayer,
+    })),
+  );
+
+  const currentSector = myPlayer?.sector_id ? SectorsById[myPlayer.sector_id] : null;
+
   const setRating = useReviewFormStore((state) => state.setRating);
   const sendReview = useReviewFormStore((state) => state.sendReview);
+
   const { buttonText, scores } = useReviewFormStore(
     useShallow((state) => {
       if (state.gameStatus === "completed" && state.gameTime) {
-        const scores = ScoreByGameLength[state.gameTime];
+        const baseScores = ScoreByGameLength[state.gameTime];
+        const multiliper = currentSector ? SectorScoreMultiplier[currentSector.type] : 1;
+        const scores = baseScores * multiliper;
         return { buttonText: `Получить ${scores} очков`, scores };
       }
       if (state.gameStatus === "drop") {
@@ -160,12 +174,6 @@ function GameReviewForm() {
     if (state.gameTime) return false;
     return true;
   });
-
-  const { setNextTurnState } = usePlayerStore(
-    useShallow((state) => ({
-      setNextTurnState: state.setNextTurnState,
-    })),
-  );
 
   const mockPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
 

@@ -1,4 +1,10 @@
-import { BuildingType, GameLength, GameLengthWithDrop, TrainData } from "@/lib/types";
+import {
+  BuildingType,
+  GameLength,
+  GameLengthWithDrop,
+  SectorData,
+  TrainData,
+} from "@/lib/types";
 import { Color } from "three";
 
 export enum Controls {
@@ -74,4 +80,13 @@ export const ScoreByGameLength: { [key in GameLength]: number } = {
   "15-20": 40,
   "20-25": 50,
   "25+": 60,
+};
+
+export const SectorScoreMultiplier: { [key in SectorData["type"]]: number } = {
+  "start-corner": 1.5,
+  parking: 1.5,
+  bonus: 1.5,
+  prison: 1,
+  property: 1,
+  railroad: 1,
 };

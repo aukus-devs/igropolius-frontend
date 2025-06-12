@@ -24,7 +24,7 @@ function Sector({ sector, position, rotation }: Props) {
     if (item) addSectorModel(sector.id, item);
   };
 
-  const isCorner = ["prison", "start-corner"].includes(sector.type);
+  const isCorner = ["prison", "start-corner", "parking"].includes(sector.type);
   const canHaveBuildings = ["property", "railroad"].includes(sector.type);
   const showColorGroup = sector.type === "property";
   const shape: Vector3Array = isCorner

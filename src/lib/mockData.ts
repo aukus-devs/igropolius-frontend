@@ -173,7 +173,7 @@ export const sectorsData: SectorData[] = [
     id: 21,
     name: "Free Parking",
     position: { x: 10, y: 10 },
-    type: "start-corner",
+    type: "parking",
     color: "pastelgreen",
     rollType: "voting",
   },
