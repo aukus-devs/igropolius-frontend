@@ -15,7 +15,8 @@ import { calculatePlayerPosition, getSectorRotation } from "@/components/map/uti
 import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
 import { getNextTurnState } from "@/lib/utils";
-import { giveBonusCard, makePlayerMove, saveTurnState } from "@/lib/api";
+import { giveBonusCard, makePlayerMove, payTaxes, saveTurnState } from "@/lib/api";
+import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -57,12 +58,12 @@ const usePlayerStore = create<{
     if (turnState === "rolling-dice" && nextTurnState === "filling-game-review") {
       const currentSector = SectorsById[myPlayer.sector_id];
       if (currentSector.type === "property" || currentSector.type === "railroad") {
-        // await payTaxes();
+        await payTaxes("street-tax");
       }
     }
-
     await saveTurnState(nextTurnState);
-    set({ turnState: nextTurnState });
+    resetCurrentPlayerQuery();
+    resetPlayersQuery();
   },
 
   updateMyPlayerSectorId: (id: number) => {
@@ -141,7 +142,7 @@ const usePlayerStore = create<{
 
     if (!isOrthographic) await cameraToPlayer(myPlayer.id);
 
-    const rolledNumber = IS_DEV ? 2 : await useDiceStore.getState().rollDice();
+    const rolledNumber = IS_DEV ? 5 : await useDiceStore.getState().rollDice();
 
     await makePlayerMove({
       type: "dice-roll",

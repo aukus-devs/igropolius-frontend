@@ -182,9 +182,11 @@ export type PlayerEventMove = PlayerEventBase & {
   completed_map: boolean;
 };
 
+export type TaxType = "street-tax" | "map-tax";
+
 export type PlayerEventScoreChange = PlayerEventBase & {
   event_type: "score-change";
-  subtype: "street-tax" | "map-tax" | "game-completed" | "game-dropped";
+  subtype: TaxType | "game-completed" | "game-dropped";
   amount: number;
   tax_player_id?: number;
 };

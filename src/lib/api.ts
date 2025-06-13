@@ -6,6 +6,7 @@ import {
   PlayerEvent,
   PlayerTurnState,
   RulesVersion,
+  TaxType,
 } from "@/lib/types";
 import { playersData } from "./mockData";
 import { IS_DEV } from "./constants";
@@ -279,5 +280,15 @@ export async function giveBonusCard(bonusType: BonusCardType): Promise<void> {
   await apiRequest(`/api/players/current/bonus-cards`, {
     method: "POST",
     body: JSON.stringify({ bonus_type: bonusType }),
+  });
+}
+
+export async function payTaxes(taxType: TaxType): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest("/api/players/current/pay-taxes", {
+    method: "POST",
+    body: JSON.stringify({ tax_type: taxType }),
   });
 }
