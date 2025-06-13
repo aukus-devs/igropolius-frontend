@@ -29,6 +29,8 @@ function SectorInfo({ sector }: Props) {
       return sum + ScoreByGameLength[building.gameLength] * IncomeScoreMultiplier;
     }, 0) * TaxScoreMultiplier;
 
+  const showTax = sector.type === "railroad" || sector.type === "property";
+
   return (
     <Html
       zIndexRange={[0, 0]}
@@ -46,7 +48,7 @@ function SectorInfo({ sector }: Props) {
           <CardContent>
             <p className="text-sm">Тип: {type}</p>
             <p className="text-sm">Ролл игры: {rollType}</p>
-            <p className="text-sm">Налог: {totalTaxValue}</p>
+            {showTax && <p className="text-sm">Налог: {totalTaxValue}</p>}
           </CardContent>
         </Card>
       )}
