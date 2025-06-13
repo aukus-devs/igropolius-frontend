@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScoreByGameLength } from "@/lib/constants";
+import { IncomeScoreMultiplier, ScoreByGameLength } from "@/lib/constants";
 import { BuildingData } from "@/lib/types";
 import { formatTsToMonthDatetime } from "@/lib/utils";
 import { Html } from "@react-three/drei";
@@ -11,7 +11,8 @@ type Props = {
 
 function BuildingInfo({ building }: Props) {
   const { gameTitle, owner, gameLength } = building;
-  const income = gameLength === "drop" ? 0 : ScoreByGameLength[gameLength];
+  const income =
+    gameLength === "drop" ? 0 : ScoreByGameLength[gameLength] * IncomeScoreMultiplier;
 
   return (
     <Html

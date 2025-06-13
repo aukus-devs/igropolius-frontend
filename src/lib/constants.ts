@@ -82,6 +82,9 @@ export const ScoreByGameLength: { [key in GameLength]: number } = {
   "25+": 60,
 };
 
+export const IncomeScoreMultiplier = 0.4;
+export const TaxScoreMultiplier = 0.5;
+
 export const SectorScoreMultiplier: { [key in SectorData["type"]]: number } = {
   "start-corner": 1.5,
   parking: 1.5,
