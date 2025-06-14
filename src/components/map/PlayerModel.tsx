@@ -38,6 +38,7 @@ function MyPlayerComponents() {
 
 function PlayerModel({ player, position, rotation, onClick }: Props) {
   const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
+  const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
   const isMyPlayer = usePlayerStore((state) => state.myPlayer?.id === player.id);
   const modelUrl = ModelsUrls[player.username.toLowerCase()];
 
@@ -82,7 +83,7 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
         receiveShadow
         rotation={[0, Math.PI / 2, 0]}
       />
-      <PlayerInfo player={player} />
+      {!isPlayerMoving && <PlayerInfo player={player} />}
       {isMyPlayer && <MyPlayerComponents />}
     </group>
   );
