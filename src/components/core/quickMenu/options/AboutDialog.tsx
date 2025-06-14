@@ -1,28 +1,34 @@
-import { useState } from "react";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { useEffect, useState } from "react";
+import { buttonVariants } from "../../../ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../../ui/dialog";
 import { InfoIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 type Props = {
-  styles?: string;
-  open?: boolean;
-  hideTrigger?: boolean;
+  className?: string;
 };
 
-export default function AboutDialog({ styles, open, hideTrigger }: Props) {
-  const [isOpen, setIsOpen] = useState(Boolean(open));
+export default function AboutDialog({ className }: Props) {
+  const { value: firstTimeVisit, save: saveFirstTimeVisit } = useLocalStorage({
+    key: "first-time-visit",
+    defaultValue: true,
+  });
+  const [isOpen, setIsOpen] = useState(firstTimeVisit ? true : false);
+
+  useEffect(() => {
+    saveFirstTimeVisit(false);
+  }, [saveFirstTimeVisit]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {!hideTrigger && (
-        <DialogTrigger asChild>
-          <Button variant="outline" className={styles}>
-            <InfoIcon />
-            Об ивенте
-          </Button>
-        </DialogTrigger>
-      )}
-      <DialogContent className="w-[37.5rem]">
+      <DialogTrigger
+        className={cn(buttonVariants({ variant: "outline" }), className)}
+      >
+        <InfoIcon />
+        Об ивенте
+      </DialogTrigger>
+      <DialogContent className="w-[37.5rem]" aria-describedby="">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">Об ивенте</DialogTitle>
         </DialogHeader>

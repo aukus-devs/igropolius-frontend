@@ -41,7 +41,7 @@ export default function Rules() {
   }
 
   return (
-    <div>
+    <div className="my-5">
       {editing ? (
         <div>
           <div className="flex gap-4 items-center">

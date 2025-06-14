@@ -1,16 +1,14 @@
 import { Button } from "./ui/button";
 import usePlayerStore from "@/stores/playerStore";
 import PlayersList from "./core/PlayersList";
-import QuickMenu from "./core/QuickMenu";
+import QuickMenu from "./core/quickMenu/QuickMenu";
 import Notifications from "./core/Notifications";
 import GameReviewForm from "./core/GameReviewForm";
 import RollBonusCard from "./core/RollBonusCard";
-import Countdown from "./core/Countdown";
 import { useShallow } from "zustand/shallow";
 import TrainMoveDialog from "./core/TrainMoveDialog";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import AboutDialog from "./core/AboutDialog";
-import { useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileTabs from "./core/mobile/MobileTabs";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -23,16 +21,7 @@ function MoveButton() {
   );
 }
 
-function UI() {
-  const { value: firstTimeVisit, save: saveFirstTimeVisit } = useLocalStorage({
-    key: "first-time-visit",
-    defaultValue: true,
-  });
-
-  useEffect(() => {
-    saveFirstTimeVisit(false);
-  }, [saveFirstTimeVisit]);
-
+function DesktopUI() {
   const { turnState, position, isPlayerMoving } = usePlayerStore(
     useShallow((state) => ({
       turnState: state.turnState,
@@ -42,16 +31,12 @@ function UI() {
   );
 
   return (
-    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden">
-      <div className="absolute top-3 left-4 !pointer-events-none">
+    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:block hidden">
+      <div className="absolute top-3 left-4">
         <PlayersList />
       </div>
-
       <div className="absolute right-4 top-3 w-[15rem]">
-        <div className="text-[#494949] font-wide-black text-sm pb-3 text-end">
-          <Countdown />
-        </div>
-        <div className="pb-8">
+        <div className="mb-[50px]">
           <QuickMenu />
         </div>
         <Notifications />
@@ -67,9 +52,22 @@ function UI() {
       <div className="absolute bottom-4 right-4">
         #{position} ход: {turnState}
       </div>
-      <AboutDialog open={firstTimeVisit} hideTrigger />
     </div>
-  );
+  )
+}
+
+function MobileUI() {
+  return (
+    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:hidden block">
+      <MobileTabs />
+    </div>
+  )
+}
+
+function UI() {
+  const isMobile = useIsMobile();
+
+  return isMobile ? <MobileUI /> : <DesktopUI />;
 }
 
 export default UI;

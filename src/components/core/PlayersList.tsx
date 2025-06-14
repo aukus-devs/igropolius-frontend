@@ -1,9 +1,8 @@
 import PlayerDialog from "./playerDialog/PlayerDialog";
-import { Button } from "../ui/button";
-import { useState } from "react";
 import usePlayerStore from "@/stores/playerStore";
 import Clock from "./Clock";
 import { useShallow } from "zustand/shallow";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./Collapsible";
 
 function PlayersList() {
   const { players, myPlayer } = usePlayerStore(
@@ -13,38 +12,49 @@ function PlayersList() {
     })),
   );
 
-  const [isCompact, setIsCompact] = useState(false);
+  const nonCollapsiblePlayersCount = 3;
+  const nonCollapsiblePlayers = players.slice(0, nonCollapsiblePlayersCount);
+  const collapsiblePlayers = players.slice(nonCollapsiblePlayersCount);
 
-  return (
-    <div className="relative flex flex-col gap-2 !pointer-events-none">
-      <div className="flex justify-between items-center !pointer-events-auto">
-        <span className="text-[#494949] font-wide-black text-sm">
-          МСК — <Clock />
-        </span>
-
-        <Button
-          variant="outline"
-          className="relative rounded-md px-2 py-0.5 h-[1.5rem] items-center font-semibold backdrop-blur-[1.5rem] bg-card/70 border-none font-wide-black text-xs text-muted-foreground"
-          onClick={() => setIsCompact(!isCompact)}
-        >
-          {isCompact ? "Раскрыть" : "Скрыть"}
-        </Button>
+  return players.length > 0 &&
+    (
+      <div className="w-[268px]">
+        <Collapsible>
+          <div className="flex w-full justify-between items-center">
+            <span className="text-[#494949] font-wide-black text-sm">
+              МСК — <Clock />
+            </span>
+            <CollapsibleTrigger className="p-0 h-auto" />
+          </div>
+          <div className="space-y-[5px]">
+            {nonCollapsiblePlayers.map((player, idx) => {
+              const isCurrentPlayer = myPlayer?.id === player.id;
+              return (
+                <PlayerDialog
+                  key={player.id}
+                  player={player}
+                  isCurrentPlayer={isCurrentPlayer}
+                  placement={idx + 1}
+                />
+              );
+            })}
+          </div>
+          <CollapsibleContent>
+            {collapsiblePlayers.map((player, idx) => {
+              const isCurrentPlayer = myPlayer?.id === player.id;
+              return (
+                <PlayerDialog
+                  key={player.id}
+                  player={player}
+                  isCurrentPlayer={isCurrentPlayer}
+                  placement={idx + 1}
+                />
+              );
+            })}
+          </CollapsibleContent>
+        </Collapsible>
       </div>
-      {players.map((player, idx) => {
-        const isCurrentPlayer = myPlayer?.id === player.id;
-        return (
-          <PlayerDialog
-            key={player.id}
-            player={player}
-            isCurrentPlayer={isCurrentPlayer}
-            placement={idx + 1}
-            isHidden={isCompact}
-            zIndex={players.length - idx}
-          />
-        );
-      })}
-    </div>
-  );
+    )
 }
 
 export default PlayersList;

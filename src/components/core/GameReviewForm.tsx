@@ -30,7 +30,7 @@ function GameStatus() {
   return (
     <Select onValueChange={setGameStatus}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Статус" />
+        <SelectValue placeholder="Выберите исход" />
       </SelectTrigger>
       <SelectContent>
         {options.map((option, idx) => (
@@ -70,7 +70,7 @@ function GameTime() {
   return (
     <Select onValueChange={setGameTime}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Время прохождения" />
+        <SelectValue placeholder="Время по HLTB" />
       </SelectTrigger>
       <SelectContent>
         {options.map((option, idx) => (
@@ -107,7 +107,7 @@ function GameTitle() {
       id="game-name"
       type="text"
       placeholder="Название игры"
-      className="font-roboto-wide-semibold"
+      className="font-roboto-wide-semibold bg-white/15 border-transparent"
       value={gameTitle}
       onKeyDown={(e) => e.stopPropagation()}
       onChange={(e) => setGameTitle(e.target.value)}
@@ -118,15 +118,14 @@ function GameTitle() {
 function HLTBLink() {
   return (
     <Button
-      variant="outline"
-      className="font-semibold bg-popover text-popover-foreground border-none p-0"
+      className="font-semibold border-none py-0 px-9 rounded-md"
     >
       <a
-        className="flex gap-1 size-full items-center justify-center font-roboto-wide-semibold"
+        className="flex gap-1 size-full items-center justify-center"
         href="https://howlongtobeat.com/"
         target="_blank"
       >
-        HLTB <ArrowRightIcon />
+        На HLTB <ArrowRightIcon />
       </a>
     </Button>
   );
@@ -145,6 +144,7 @@ function GameReviewForm() {
   const currentSector = myPlayer?.sector_id ? SectorsById[myPlayer.sector_id] : null;
 
   const setRating = useReviewFormStore((state) => state.setRating);
+  const rating = useReviewFormStore((state) => state.rating);
   const sendReview = useReviewFormStore((state) => state.sendReview);
 
   const { buttonText, scores } = useReviewFormStore(
@@ -191,26 +191,30 @@ function GameReviewForm() {
         <Button variant="outline">Оценка игры</Button>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-fit justify-end items-end"
-        aria-describedby={undefined}
+        className="sm:max-w-[790px] p-2.5"
+        aria-describedby=""
       >
-        <DialogHeader>
-          <DialogTitle>Оценка игры</DialogTitle>
+        <DialogHeader className="hidden">
+          <DialogTitle />
         </DialogHeader>
 
         <div className="flex gap-4">
           <div className="flex flex-col gap-3">
             <GamePoster src={mockPoster} />
-            <HLTBLink />
           </div>
-          <div className="flex flex-col gap-2">
+
+          <div className="flex flex-col gap-2 w-full">
             <div>
               <GameTitle />
             </div>
-            <div className="flex gap-2">
+
+            <div className="flex gap-2 w-full">
               <GameStatus />
               <GameTime />
+              <HLTBLink />
             </div>
+
+            <div className="font-roboto-wide-semibold">Оценка — {rating}</div>
             <Rating onChange={setRating} />
             <GameReview />
           </div>

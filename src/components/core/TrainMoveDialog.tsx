@@ -36,13 +36,15 @@ export default function TrainMoveDialog() {
       После действия будет бросок кубика
       <div className="flex justify-evenly mt-2 gap-2">
         <Button
-          className="bg-[#0A84FF] w-full flex-1"
+          variant="outline"
+          className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
           onClick={() => moveData.setNextTurnState()}
         >
           Остаться
         </Button>
         <Button
-          className="bg-[#30D158] w-full flex-1"
+          variant="outline"
+          className="bg-[#30D158] hover:bg-[#30D158]/70 w-full flex-1"
           onClick={() => rideTrain(moveData.currentSector.id)}
         >
           Ехать

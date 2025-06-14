@@ -1,11 +1,12 @@
 import { UserIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Input } from "../ui/input";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/lib/api";
 import { resetCurrentPlayerQuery } from "@/lib/queryClient";
+import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { buttonVariants, Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function LoginDialog({ className }: { className?: string }) {
   const [username, setUsername] = useState("");
@@ -37,12 +38,13 @@ export default function LoginDialog({ className }: { className?: string }) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className={className} onClick={() => setOpen(true)}>
-          <UserIcon className="h-4 w-4" />
-          Логин
-        </Button>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        className={cn(buttonVariants({ variant: "outline" }), className)}
+        onClick={() => setOpen(true)}
+      >
+        <UserIcon className="h-4 w-4" />
+        Логин
       </DialogTrigger>
       <DialogContent aria-describedby="" className="w-[400px]">
         <DialogHeader>

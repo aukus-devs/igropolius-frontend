@@ -212,10 +212,10 @@ function getHighlightedLines(oldLine: string, newLine: string): [Delta, Delta] {
       newDelta.insert(newToken);
     } else {
       if (oldToken) {
-        oldDelta.insert(oldToken, { color: "salmon" });
+        oldDelta.insert(oldToken, { color: "#FF453A" });
       }
       if (newToken) {
-        newDelta.insert(newToken, { color: "lightgreen" });
+        newDelta.insert(newToken, { color: "#30D158" });
       }
     }
   }

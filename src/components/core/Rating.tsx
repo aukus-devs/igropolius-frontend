@@ -18,13 +18,13 @@ function Rating({ onChange }: Props) {
   const renderSector = (index: number) => {
     const ratingValue = index + 1;
     const displayValue = hoverValue !== null ? hoverValue : value;
-    const isActive = value === ratingValue || value === ratingValue - 0.5;
+    // const isActive = value === ratingValue || value === ratingValue - 0.5;
     const isFull = displayValue >= ratingValue;
     const isHalf = displayValue >= ratingValue - 0.5;
 
     return (
       <div
-        className={`relative bg-popover transition-all rounded-xl h-full w-11 hover:scale-115 overflow-hidden active:scale-100 ${isActive ? "scale-115" : ""} overflow-hidden`}
+        className="relative bg-popover transition-all rounded-xl h-full w-11 hover:scale-115 overflow-hidden active:scale-100"
       >
         <div className="relative z-20 pointer-events-none w-full h-full flex items-center justify-center">
           {ratingValue}

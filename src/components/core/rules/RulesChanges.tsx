@@ -24,12 +24,16 @@ export default function RulesChanges() {
   }
 
   return (
-    <div>
+    <div className="mt-8">
       {diffPairs.map(([oldV, newV], idx) => {
         return (
           <div key={idx}>
-            Изменения {formatTsToFullDate(newV.created_at)}
-            <RichTextDiff oldContent={oldV.content} newContent={newV.content} />
+            <div className="font-roboto-wide-semibold text-xl">
+              Изменения {formatTsToFullDate(newV.created_at)}
+            </div>
+            <div className="font-semibold text-base">
+              <RichTextDiff oldContent={oldV.content} newContent={newV.content} />
+            </div>
           </div>
         );
       })}

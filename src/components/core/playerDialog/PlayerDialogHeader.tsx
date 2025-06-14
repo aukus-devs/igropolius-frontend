@@ -12,7 +12,7 @@ function PlayerSocials({ player }: { player: PlayerData }) {
   ];
 
   return (
-    <div className="flex gap-5 justify-center">
+    <div className="flex justify-evenly">
       {socials.map(
         ({ href, title }) =>
           href && (
@@ -33,17 +33,19 @@ function PlayerSocials({ player }: { player: PlayerData }) {
 
 function PlayerDialogHeader({ player }: { player: PlayerData }) {
   return (
-    <div className="relative pt-8 mb-6">
+    <div className="relative md:pt-8 pt-6 mb-6">
       <div className="flex gap-2 justify-center items-center mb-5">
         <div className="relative">
-          <Avatar className="w-11 h-11 overflow-auto">
+          <Avatar className="w-[54px] h-[54px] overflow-auto">
             <AvatarImage src={player.avatar_link} />
             <AvatarFallback className="uppercase">
               {player.username.slice(0, 2)}
             </AvatarFallback>
           </Avatar>
           {player.is_online && (
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[10px] leading-3 bg-red-500 px-1 rounded-[2px] font-medium">
+            <div
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm leading-[17px] bg-red-500 px-2 rounded-[2px] font-bold"
+            >
               LIVE
             </div>
           )}

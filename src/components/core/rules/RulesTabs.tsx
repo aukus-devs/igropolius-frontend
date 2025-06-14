@@ -7,8 +7,9 @@ export default function RulesTabs() {
     { name: "Правила", value: "rules", content: <Rules /> },
     { name: "Изменения", value: "changelog", content: <RulesChanges /> },
   ];
+
   return (
-    <Tabs defaultValue={tabs[0].value}>
+    <Tabs defaultValue={tabs[0].value} className="gap-0">
       <TabsList className="w-full bg-transparent gap-2 p-0">
         {tabs.map(({ name, value }) => (
           <TabsTrigger

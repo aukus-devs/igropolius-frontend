@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-export default function Countdown() {
+type Props = {
+  className?: string;
+};
+
+export default function Countdown({ className }: Props) {
   const [time, setTime] = useState(() => Date.now());
 
   useEffect(() => {
@@ -14,7 +18,8 @@ export default function Countdown() {
 
   const diff = targetTime - time;
   const message = diff > 0 ? `До конца — ${formatDiff(diff)}` : "Ивент завершен";
-  return <span>{message}</span>;
+
+  return <div className={className}>{message}</div>;
 }
 
 function formatDiff(diffMs: number) {
