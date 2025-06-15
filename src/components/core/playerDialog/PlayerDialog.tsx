@@ -57,7 +57,7 @@ function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
           </DialogClose>
         </DialogContent>
       </Dialog>
-      <div className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 group-hover/player-dialog:translate-x-[calc(100%+0rem)] h-full opacity-0 group-hover/player-dialog:opacity-100 pl-2 transition-all">
+      <div className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 group-hover/player-dialog:translate-x-[calc(100%+0rem)] h-full opacity-0 group-hover/player-dialog:opacity-100 pl-2 transition-all md:block hidden">
         <Button
           className="bg-card/70 backdrop-blur-[1.5rem] rounded-xl h-full p-2 hover:bg-accent items-center text-primary"
           onClick={(e) => (e.stopPropagation(), cameraToPlayer(player.id))}

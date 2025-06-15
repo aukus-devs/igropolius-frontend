@@ -12,7 +12,7 @@ function MobileTabs() {
   ];
 
   return (
-    <Tabs className="h-full" defaultValue={tabs[0].value}>
+    <Tabs defaultValue={tabs[0].value}>
       {tabs.map(({ value, content }) => (
         <TabsContent key={value} value={value}>
           {content}
