@@ -1,7 +1,7 @@
 import { BOARD_SIZE, SECTOR_CONTENT_ELEVATION, SECTORS_PER_SIDE, STORAGE_BASE_URL, TrainsConfig } from '@/lib/constants';
 import { Instance, Instances, useGLTF } from '@react-three/drei'
-import TrainModel from './TrainModel';
 import { Vector3Array } from '@/lib/types';
+import TrainModel from './models/TrainModel';
 
 const RailUrl = `${STORAGE_BASE_URL}/models/trains/railroad-straight.glb`;
 

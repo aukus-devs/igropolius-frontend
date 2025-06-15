@@ -113,7 +113,7 @@ function Notifications() {
 
         <Button
           variant="outline"
-          className="w-full shrink rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 text-muted-foreground"
+          className="w-full shrink rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 text-muted-foreground border-none"
           onClick={dismissAllNotifications}
         >
           <XIcon strokeWidth={4} />

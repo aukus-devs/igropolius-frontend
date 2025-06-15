@@ -1,10 +1,10 @@
 import { sectorsData } from "@/lib/mockData";
 import { HALF_BOARD } from "@/lib/constants";
-import PlayerModel from "./PlayerModel";
 import Sector from "./sector/Sector";
 import { calculatePlayerPosition, calculateSectorPosition, getSectorRotation } from "./utils";
 import usePlayerStore from "@/stores/playerStore";
 import React from "react";
+import PlayerModel from "./models/PlayerModel";
 
 function GameBoard() {
   const playersData = usePlayerStore((state) => state.players);

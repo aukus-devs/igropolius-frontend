@@ -4,9 +4,9 @@ import { Gltf } from "@react-three/drei";
 import { eases } from "animejs";
 import { animate } from "animejs";
 import * as THREE from "three";
-import BuildingInfo from "../BuildingInfo";
 import { useEffect, useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
+import useCanvasTooltipStore from "@/stores/canvasTooltipStore";
 
 const buildingUrls: { [k in BuildingType]: string } = {
   ruins: `${STORAGE_BASE_URL}/models/buildings/ruins.glb`,
@@ -16,11 +16,6 @@ const buildingUrls: { [k in BuildingType]: string } = {
   "height-4": `${STORAGE_BASE_URL}/models/buildings/skyscraperA.glb`,
   "height-5": `${STORAGE_BASE_URL}/models/buildings/skyscraperF.glb`,
   "height-6": `${STORAGE_BASE_URL}/models/buildings/skyscraperD.glb`,
-};
-
-type Props = {
-  building: BuildingData;
-  position: Vector3Array;
 };
 
 const meshesToColor = [
@@ -40,6 +35,11 @@ const meshesToColor = [
   "Mesh_skyscraperD_1", // panels
 ];
 
+type Props = {
+  building: BuildingData;
+  position: Vector3Array;
+};
+
 function animateAppearance(model: THREE.Group) {
   model.scale.set(1, 0.01, 1)
 
@@ -53,6 +53,8 @@ function animateAppearance(model: THREE.Group) {
 function Building({ building, position }: Props) {
   const { type, owner } = building;
 
+  const setData = useCanvasTooltipStore((state) => state.setData);
+  const dismiss = useCanvasTooltipStore((state) => state.dismiss);
   const [isHovered, setIsHovered] = useState(false);
   const gltfRef = useRef<THREE.Group>(null);
   const modelUrl = buildingUrls[type];
@@ -90,6 +92,20 @@ function Building({ building, position }: Props) {
     })
   })
 
+  function onPointerEnter(e: ThreeEvent<PointerEvent>) {
+    e.stopPropagation();
+
+    setData({ type: 'building', payload: building });
+    setIsHovered(true);
+  }
+
+  function onPointerLeave(e: ThreeEvent<PointerEvent>) {
+    e.stopPropagation();
+
+    dismiss();
+    setIsHovered(false);
+  }
+
   return (
     <group position={position}>
       <Gltf
@@ -97,10 +113,9 @@ function Building({ building, position }: Props) {
         src={modelUrl}
         scale={BUILDING_SCALE}
         rotation={[0, Math.PI, 0]}
-        onPointerEnter={(e) => (e.stopPropagation(), setIsHovered(true))}
-        onPointerLeave={(e) => (e.stopPropagation(), setIsHovered(false))}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
       />
-      {isHovered && <BuildingInfo building={building} />}
     </group>
   );
 }

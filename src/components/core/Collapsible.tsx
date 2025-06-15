@@ -19,7 +19,7 @@ function CollapsibleTrigger({ className, children }: { className?: string; child
   return (
     <Button
       variant="outline"
-      className={cn("flex-row justify-between p-[5px] bg-card/70 rounded-[8px] backdrop-blur-[1.5rem]", className)}
+      className={cn("flex-row justify-between p-[5px] bg-card/70 rounded-[8px] backdrop-blur-[1.5rem] border-none", className)}
       onClick={toggleCollapse}
     >
       {children}

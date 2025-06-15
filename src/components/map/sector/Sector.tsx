@@ -2,13 +2,12 @@ import { SectorData, Vector3Array } from "@/lib/types";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
 import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH } from "@/lib/constants";
-import SectorInfo from "./SectorInfo";
 import SectorBase from "./SectorBase";
 import SectorText from "./SectorText";
 import SectorBuildings from "./SectorBuildings";
-import PrisonModel from "./PrisonModel";
-import FlagModel from "./FlagModel";
-import BonusWheelModel from "./BonusWheelModel";
+import PrisonModel from "../models/PrisonModel";
+import FlagModel from "../models/FlagModel";
+import BonusWheelModel from "../models/BonusWheelModel";
 
 type Props = {
   sector: SectorData;
@@ -43,8 +42,6 @@ function Sector({ sector, position, rotation }: Props) {
       position={position}
       rotation={rotation}
     >
-      <SectorInfo sector={sector} />
-
       {canHaveBuildings && <SectorBuildings sectorId={sector.id} />}
       {isPrison && <PrisonModel />}
       <SectorText text={`${sector.id}`} isCorner={isCorner} />
@@ -54,6 +51,7 @@ function Sector({ sector, position, rotation }: Props) {
 
       <SectorBase
         id={sector.id}
+        sector={sector}
         color={sector.color}
         shape={shape}
         showColorGroup={showColorGroup}

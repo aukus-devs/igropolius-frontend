@@ -5,15 +5,16 @@ import {
   EMISSION_FULL,
   EMISSION_NONE,
 } from "@/lib/constants";
-import useSectorStore from "@/stores/sectorStore";
-import { ColorName, Vector3Array } from "@/lib/types";
+import { ColorName, SectorData, Vector3Array } from "@/lib/types";
 import { useTexture } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
+import { useRef, useState } from "react";
 import { Mesh, MeshStandardMaterial } from "three";
+import useCanvasTooltipStore from "@/stores/canvasTooltipStore";
 
 type Props = {
   id: number;
+  sector: SectorData;
   shape: Vector3Array;
   color: ColorName;
   showColorGroup: boolean;
@@ -45,9 +46,10 @@ function getSectorTexture(color: ColorName) {
   }
 }
 
-function SectorBase({ id, color, shape, showColorGroup, isCorner }: Props) {
-  const setSelectedSectorId = useSectorStore((state) => state.setSelectedSectorId);
-  const isSelected = useSectorStore((state) => state.selectedSector?.id === id);
+function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
+  const setData = useCanvasTooltipStore((state) => state.setData);
+  const dismiss = useCanvasTooltipStore((state) => state.dismiss);
+  const [isHovered, setIsHovered] = useState(false);
   const meshRef = useRef<Mesh>(null);
   const texture = useTexture(isCorner ? cornerTexture : getSectorTexture(color));
   texture.flipY = false;
@@ -62,19 +64,38 @@ function SectorBase({ id, color, shape, showColorGroup, isCorner }: Props) {
     if (!meshRef.current) return;
 
     const material = meshRef.current.material as MeshStandardMaterial;
-    material.emissive.lerp(isSelected ? EMISSION_FULL : EMISSION_NONE, 0.1);
+    material.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
   });
+
+  function onPointerEnter(e: ThreeEvent<PointerEvent>) {
+    e.stopPropagation();
+
+    setData({ type: 'sector', payload: sector });
+    setIsHovered(true);
+  }
+
+  function onPointerLeave(e: ThreeEvent<PointerEvent>) {
+    e.stopPropagation();
+
+    dismiss();
+    setIsHovered(false);
+  }
 
   return (
     <mesh
       ref={meshRef}
       position={position}
       receiveShadow
-      onPointerEnter={(e) => (e.stopPropagation(), setSelectedSectorId(id))}
-      onPointerLeave={(e) => (e.stopPropagation(), setSelectedSectorId(null))}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
     >
       <boxGeometry args={finalShape} />
-      <meshStandardMaterial color="white" roughness={0.75} map={texture} emissiveIntensity={0.25} />
+      <meshStandardMaterial
+        color="white"
+        roughness={0.75}
+        map={texture}
+        emissiveIntensity={0.25}
+      />
     </mesh>
   );
 }

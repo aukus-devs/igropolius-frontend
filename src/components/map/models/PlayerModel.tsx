@@ -4,10 +4,10 @@ import { PlayerData, Vector3Array } from "@/lib/types";
 import { ThreeEvent } from "@react-three/fiber";
 import { Color, Group, Mesh, MeshStandardMaterial } from "three";
 import DiceModel from "./DiceModel";
-import MovesCounter from "./MovesCounter";
 import usePlayerStore from "@/stores/playerStore";
 import { Gltf } from "@react-three/drei";
-import PlayerInfo from "./PlayerInfo";
+import MovesCounter from "../MovesCounter";
+import PlayerInfo from "../PlayerInfo";
 
 const ModelsUrls: Record<string, string> = {
   praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,

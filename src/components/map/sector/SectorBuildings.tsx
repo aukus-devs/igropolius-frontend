@@ -1,6 +1,6 @@
 import { BUILDING_SCALE, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
 import { Vector3Array } from "@/lib/types";
-import Building from "./Building";
+import Building from "../models/BuildingModel";
 import usePlayerStore from "@/stores/playerStore";
 
 type Props = {

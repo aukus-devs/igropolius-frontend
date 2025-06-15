@@ -12,6 +12,7 @@ import { fetchCurrentPlayer, fetchPlayers } from "./lib/api";
 import { useQuery } from "@tanstack/react-query";
 import LoadingModal from "./components/core/loadng/LoadingModal";
 import { queryKeys } from "./lib/queryClient";
+import CanvasTooltip from "./components/map/canvasTooltip/CanvasTooltip";
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -74,6 +75,7 @@ function App() {
   return (
     <KeyboardControls map={map}>
       <div className="h-screen">
+        <CanvasTooltip />
         <UI />
         <Canvas>
           <Scene />
