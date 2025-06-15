@@ -59,7 +59,7 @@ function DesktopUI() {
 
 function MobileUI() {
   return (
-    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:hidden block">
+    <div className="absolute h-dvh w-dvw [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:hidden block">
       <MobileTabs />
       <MobilePlayersList />
     </div>

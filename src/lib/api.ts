@@ -11,7 +11,7 @@ import {
 import { playersData } from "./mockData";
 import { IS_DEV } from "./constants";
 
-const MOCK_API = IS_DEV ? true : false;
+const MOCK_API = IS_DEV;
 const API_HOST = IS_DEV ? "http://localhost:8000" : "https://igropolius.ru";
 
 async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<Response> {
