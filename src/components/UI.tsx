@@ -9,6 +9,7 @@ import { useShallow } from "zustand/shallow";
 import TrainMoveDialog from "./core/TrainMoveDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileTabs from "./core/mobile/MobileTabs";
+import MobilePlayersList from "./core/mobile/MobilePlayerList";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -60,6 +61,7 @@ function MobileUI() {
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:hidden block">
       <MobileTabs />
+      <MobilePlayersList />
     </div>
   )
 }

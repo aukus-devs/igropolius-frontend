@@ -33,7 +33,7 @@ function PlayerSocials({ player }: { player: PlayerData }) {
 
 function PlayerDialogHeader({ player }: { player: PlayerData }) {
   return (
-    <div className="relative md:pt-8 pt-6 mb-6">
+    <div className="relative md:pt-8 pt-[50px] mb-6">
       <div className="flex gap-2 justify-center items-center mb-5">
         <div className="relative">
           <Avatar className="w-[54px] h-[54px] overflow-auto">

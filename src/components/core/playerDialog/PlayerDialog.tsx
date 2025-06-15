@@ -1,10 +1,9 @@
 import { PlayerData } from "@/lib/types";
-import { ArrowLeftIcon, MapPinIcon } from "lucide-react";
+import { MapPinIcon } from "lucide-react";
 import useCameraStore from "@/stores/cameraStore";
-import { Button, buttonVariants } from "../../ui/button";
+import { Button } from "../../ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -14,7 +13,6 @@ import PlayerDialogTrigger from "./PlayerDialogTrigger";
 import PlayerDialogTabs from "./tabs/PlayerDialogTabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PlayerDialogHeader from "./PlayerDialogHeader";
-import { cn } from "@/lib/utils";
 
 type Props = {
   player: PlayerData;
@@ -36,7 +34,7 @@ function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
           />
         </DialogTrigger>
         <DialogContent
-          className="flex flex-col gap-8 md:h-[660px] h-screen w-screen md:w-[600px] p-0 overflow-hidden"
+          className="flex flex-col gap-8 md:h-[660px] h-[calc(100vh_-_74px)] bottom-0 top-auto left-0 translate-0 md:bottom-auto w-screen md:w-[600px] p-0 overflow-hidden"
           aria-describedby=""
         >
           <ScrollArea className="flex h-full">
@@ -46,15 +44,6 @@ function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
             </DialogHeader>
             <PlayerDialogTabs player={player} />
           </ScrollArea>
-          <DialogClose
-            className={cn(
-              buttonVariants(),
-              "absolute bottom-4 left-1/2 -translate-x-1/2 z-50 text-base font-semibold p-0 h-auto rounded-[10px] has-[>svg]:px-5 py-3 md:hidden")
-            }
-          >
-            <ArrowLeftIcon />
-            Назад к списку
-          </DialogClose>
         </DialogContent>
       </Dialog>
       <div className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 group-hover/player-dialog:translate-x-[calc(100%+0rem)] h-full opacity-0 group-hover/player-dialog:opacity-100 pl-2 transition-all md:block hidden">
