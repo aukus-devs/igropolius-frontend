@@ -572,7 +572,13 @@ export const playersData: BackendPlayerData[] = [
         vod_links: null,
       },
     ],
-    bonus_cards: [],
+    bonus_cards: [
+      {
+        bonus_type: "adjust-roll-by1",
+        received_at: Math.ceil(Date.now() / 1000),
+        received_on_sector: 5
+      }
+    ],
   },
   {
     id: 3,
@@ -696,7 +702,13 @@ export const playersData: BackendPlayerData[] = [
         vod_links: "https://www.twitch.tv/videos/1234567890",
       },
     ],
-    bonus_cards: [],
+    bonus_cards: [
+      {
+        bonus_type: "adjust-roll-by1",
+        received_at: Math.ceil(Date.now() / 1000),
+        received_on_sector: 5
+      }
+    ],
   },
   {
     id: 6,
@@ -733,7 +745,13 @@ export const playersData: BackendPlayerData[] = [
         vod_links: "https://www.twitch.tv/videos/5566778899",
       },
     ],
-    bonus_cards: [],
+    bonus_cards: [
+      {
+        bonus_type: "adjust-roll-by1",
+        received_at: Math.ceil(Date.now() / 1000),
+        received_on_sector: 5
+      }
+    ],
   },
   {
     id: 7,
@@ -770,7 +788,13 @@ export const playersData: BackendPlayerData[] = [
         vod_links: "https://www.twitch.tv/videos/9988776655",
       },
     ],
-    bonus_cards: [],
+    bonus_cards: [
+      {
+        bonus_type: "adjust-roll-by1",
+        received_at: Math.ceil(Date.now() / 1000),
+        received_on_sector: 5
+      }
+    ],
   },
   {
     id: 8,
@@ -807,7 +831,13 @@ export const playersData: BackendPlayerData[] = [
         vod_links: "https://www.twitch.tv/videos/2233445566",
       },
     ],
-    bonus_cards: [],
+    bonus_cards: [
+      {
+        bonus_type: "adjust-roll-by1",
+        received_at: Math.ceil(Date.now() / 1000),
+        received_on_sector: 5
+      }
+    ],
   },
 ];
 
@@ -854,6 +884,8 @@ export const frontendCardsData: Record<BonusCardType, FrontendCardData> = {
       "Можно попросить помощи у друзей - позволяет в любой момент игры попросить помощи у других игроков, которые могут помочь с деньгами или бонусами.",
   },
 };
+
+export const cardTypes = Object.keys(frontendCardsData) as BonusCardType[];
 
 export const mockReviews: GameReviewType[] = [
   {

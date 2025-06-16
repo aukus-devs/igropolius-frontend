@@ -1,25 +1,48 @@
-import { frontendCardsData } from "@/lib/mockData";
+import { cardTypes, frontendCardsData } from "@/lib/mockData";
 import { ActiveBonusCard, BonusCardType } from "@/lib/types";
 
-function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
-  const cardTypes = Object.keys(frontendCardsData) as BonusCardType[];
+type GameCardProps = {
+  type: BonusCardType;
+  inactive?: boolean;
+};
+
+function GameCard({ type, inactive }: GameCardProps) {
+  const title = frontendCardsData[type].name;
+
   return (
-    <div className="flex flex-col gap-2">
-      {cardTypes.map((type) => {
-        const hasCard = cards.some((card) => card.bonus_type === type);
-        if (hasCard) {
-          return (
-            <div key={type} className="text-lg font-semibold">
-              {frontendCardsData[type].name}
-            </div>
-          );
-        }
-        return (
-          <div key={type} className="text-lg font-semibold text-muted-foreground">
-            {frontendCardsData[type].name}
+    <div
+      className="flex w-[134px] h-[189px] bg-primary text-primary-foreground rounded-xl data-[inactive=true]:pointer-events-none data-[inactive=true]:grayscale-100"
+      data-inactive={inactive}
+    >
+      <div className="text-lg font-semibold">{title}</div>
+    </div>
+  );
+}
+
+function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
+  const availableCards = cardTypes.filter((type) => cards.some((card) => card.bonus_type === type));
+  const unavailableCards = cardTypes.filter((type) => !availableCards.includes(type));
+
+  return (
+    <div className="flex flex-col my-5">
+      {availableCards.length > 0 && (
+        <div className="flex flex-wrap gap-y-2.5 gap-x-2 mb-[50px]">
+          {availableCards.map((type) =>
+            <GameCard key={type} type={type} />
+          )}
+        </div>
+      )}
+
+      {unavailableCards.length > 0 && (
+        <>
+          <p className="text-center text-xs font-wide-semibold text-muted-foreground mb-5">Не полученые</p>
+          <div className="flex flex-wrap gap-y-2.5 gap-x-2">
+            {unavailableCards.map((type) =>
+              <GameCard key={type} type={type} inactive />
+            )}
           </div>
-        );
-      })}
+        </>
+      )}
     </div>
   );
 }

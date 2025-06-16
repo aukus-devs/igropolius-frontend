@@ -1,4 +1,9 @@
 import { GameStatusType, PlayerGame } from "@/lib/types";
+import { Badge } from "../ui/badge";
+import { formatMs } from "@/lib/utils";
+import { CirclePlayIcon } from "lucide-react";
+import { useState } from "react";
+import { Toggle } from "../ui/toggle";
 
 type Props = {
   game: PlayerGame;
@@ -8,22 +13,22 @@ function getStatusData(status: GameStatusType) {
   switch (status) {
     case "drop":
       return {
-        title: "Дропнул",
+        statusText: "Дропнул",
         color: "text-red-500",
       };
     case "completed":
       return {
-        title: "Прошел",
+        statusText: "Прошел",
         color: "text-green-500",
       };
     case "reroll":
       return {
-        title: "Реролл",
+        statusText: "Реролл",
         color: "text-blue-500",
       };
     default: {
       return {
-        title: "",
+        statusText: "",
         color: "",
       };
     }
@@ -31,28 +36,66 @@ function getStatusData(status: GameStatusType) {
 }
 
 function GameReview({ game }: Props) {
-  const { title: gameTitle, review, rating, status, created_at } = game;
+  const { title, review, vod_links, duration, length, rating, status, created_at } = game;
+
+  const [isVodsOpen, setIsVodsOpen] = useState(false);
+
   const fallbackPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
   const formattedDate = new Intl.DateTimeFormat("ru-RU", {
     day: "numeric",
     month: "long",
   }).format(new Date(created_at * 1000));
-  const { color, title } = getStatusData(status);
+  const { color, statusText } = getStatusData(status);
+
+  function toggleVods() {
+    setIsVodsOpen(!isVodsOpen);
+  }
 
   return (
     <div className="font-semibold">
-      <div className={`text-xs ${color} font-wide-semibold`}>
-        {title} — {formattedDate}
+      <div className="w-full flex gap-[3px] justify-between">
+        <div className={`text-xs ${color} font-wide-semibold`}>
+          {statusText} — {formattedDate}
+        </div>
+        <Toggle
+          className="text-sm gap-1.5 py-[3px] px-2.5 h-fit border-none data-[state=off]:bg-white/20 text-white/70"
+          disabled={!vod_links}
+          onPressedChange={toggleVods}
+        >
+          <CirclePlayIcon />
+          Записи
+        </Toggle>
       </div>
-      <h3 className="text-2xl mb-2 font-wide-semibold">{gameTitle}</h3>
+      <h3 className="text-2xl mb-2 font-wide-semibold">{title}</h3>
       <div className="flex gap-2.5">
         <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
           <img className="h-full object-cover" src={fallbackPoster} />
         </div>
         <div className="text-muted-foreground">
-          <p>
-            {rating} / 10 — {review}
-          </p>
+          {(duration && length) && (
+            <div className="flex gap-2 mb-2.5">
+              <Badge className="bg-white/20 text-white/70 font-semibold">
+                <p> Время — {formatMs(duration * 60 * 60)}</p>
+              </Badge>
+              <Badge className="bg-white/20 text-white/70 font-semibold">
+                <p> По HLTB — {length}ч</p>
+              </Badge>
+            </div>
+          )}
+          {isVodsOpen ? (
+            vod_links?.split(",")?.map((vod) => (
+              <a
+                key={vod}
+                href={vod}
+                target="_blank"
+                className="hover:underline underline-offset-4"
+              >
+                {vod}
+              </a>
+            ))
+          ) : (
+            <p> {rating} / 10 — {review} </p>
+          )}
         </div>
       </div>
     </div>
