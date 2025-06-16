@@ -1,7 +1,8 @@
 import { BUILDING_SCALE, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
-import { Vector3Array } from "@/lib/types";
+import { BuildingType, GameLength, playerColors, Vector3Array } from "@/lib/types";
 import Building from "../models/BuildingModel";
-import usePlayerStore from "@/stores/playerStore";
+// import usePlayerStore from "@/stores/playerStore";
+import { playersData } from "@/lib/mockData";
 
 type Props = {
   sectorId: number;
@@ -21,15 +22,44 @@ function getBuildingPosition(index: number): Vector3Array {
   return [x, SECTOR_CONTENT_ELEVATION, z];
 }
 
+function getMaxGames(sectorId: number) {
+  const maxGames = 16;
+
+  const types: BuildingType[] = [
+    "ruins",
+    "height-1",
+    "height-2",
+    "height-3",
+    "height-4",
+    "height-5",
+    "height-6"
+  ];
+  const lengths: GameLength[] = ["2-5", "5-10", "10-15", "15-20", "20-25", "25+"]
+
+  return Array.from({ length: maxGames }, () => ({
+    type: types[Math.floor(Math.random() * types.length)],
+    owner: {
+      ...playersData[Math.floor(Math.random() * playersData.length)],
+      color: Object.values(playerColors)[Math.floor(Math.random() * Object.values(playerColors).length)],
+      avatar_link: "https://github.com/shadcn.png",
+    },
+    sectorId,
+    createdAt: 1,
+    gameLength: lengths[Math.floor(Math.random() * lengths.length)],
+    gameTitle: "Haste",
+  }));
+}
+
 function SectorBuildings({ sectorId }: Props) {
-  const buildings = usePlayerStore((state) => state.buildingsPerSector[sectorId]) || [];
+  // const buildings = usePlayerStore((state) => state.buildingsPerSector[sectorId]) || [];
+  const maxBuildings = getMaxGames(sectorId);
 
   return (
     <group
       name="buildings"
       position={[(BUILDING_SCALE / 2) * ROWS, 0, SECTOR_DEPTH / 2 - BUILDING_SCALE]}
     >
-      {buildings.map((building, index) => {
+      {maxBuildings.map((building, index) => {
         const position = getBuildingPosition(index);
 
         return (
