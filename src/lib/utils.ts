@@ -159,7 +159,7 @@ export function getNextTurnState({
 
   let maxLoops = 10;
   while (maxLoops--) {
-    const nextState = getNextState({
+    const iteration = getNextState({
       currentState,
       sector,
       mapCompleted,
@@ -171,8 +171,8 @@ export function getNextTurnState({
       action,
     });
 
-    if (nextState.stop) {
-      return nextState.nextState; // Stop condition met, return next state
+    if (iteration.stop) {
+      return iteration.nextState; // Stop condition met, return next state
     }
   }
   throw new Error("Infinite loop detected in getNextTurnState");
