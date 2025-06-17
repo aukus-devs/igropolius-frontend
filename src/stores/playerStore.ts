@@ -53,7 +53,10 @@ const usePlayerStore = create<{
     const { myPlayer, turnState } = get();
     if (!myPlayer || !turnState) return;
 
-    const nextTurnState = getNextTurnState(myPlayer.sector_id, turnState, []);
+    const nextTurnState = getNextTurnState({
+      player: myPlayer,
+      currentState: turnState,
+    });
 
     if (turnState === "rolling-dice" && nextTurnState === "filling-game-review") {
       const currentSector = SectorsById[myPlayer.sector_id];

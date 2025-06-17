@@ -1,11 +1,13 @@
 import {
-  ActiveBonusCard,
+  PlayerData,
   PlayerEvent,
   PlayerEventBonusCard,
   PlayerEventGame,
   PlayerEventMove,
   PlayerEventScoreChange,
+  PlayerStateAction,
   PlayerTurnState,
+  SectorData,
 } from "@/lib/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -129,65 +131,158 @@ export function getEventDescription(event: PlayerEvent) {
   throw new Error(`Unsupported event type`);
 }
 
-export function getNextTurnState(
-  mapPosition: number,
-  currentState: PlayerTurnState,
-  bonusCards: ActiveBonusCard[],
-): PlayerTurnState {
-  const sector = SectorsById[mapPosition];
+type NextTurnStateParams = {
+  player: PlayerData;
+  currentState: PlayerTurnState;
+  nextPosition?: number;
+  action?: PlayerStateAction;
+};
 
-  const streetTaxCards = bonusCards.filter((card) => card.bonus_type === "evade-street-tax");
-  const prisonCards = bonusCards.filter((card) => card.bonus_type === "skip-prison-day");
-  const rerollCards = bonusCards.filter((card) => card.bonus_type === "reroll-game");
-  const diceCards = bonusCards.filter((card) => card.bonus_type === "adjust-roll-by1");
+export function getNextTurnState({
+  player,
+  currentState,
+  nextPosition,
+  action,
+}: NextTurnStateParams): PlayerTurnState {
+  const sector = SectorsById[player.sector_id];
+
+  const mapCompleted = Boolean(nextPosition && nextPosition < player.sector_id);
+
+  const bonusCardsSet = new Set(player.bonus_cards.map((card) => card.bonus_type));
+
+  const hasStreetTaxCard = bonusCardsSet.has("evade-street-tax");
+  const hasMapTaxCard = bonusCardsSet.has("evade-map-tax");
+  const hasPrisonCard = bonusCardsSet.has("skip-prison-day");
+  const hasRerollCard = bonusCardsSet.has("reroll-game");
+  const hasDiceCards =
+    bonusCardsSet.has("adjust-roll-by1") || bonusCardsSet.has("choose-1-die");
+
+  let maxLoops = 10;
+  while (maxLoops--) {
+    const nextState = getNextState({
+      currentState,
+      sector,
+      mapCompleted,
+      hasStreetTaxCard,
+      hasMapTaxCard,
+      hasPrisonCard,
+      hasRerollCard,
+      hasDiceCards,
+      action,
+    });
+
+    if (nextState.stop) {
+      return nextState.nextState; // Stop condition met, return next state
+    }
+  }
+  throw new Error("Infinite loop detected in getNextTurnState");
+}
+
+type GetNextStateParams = {
+  currentState: PlayerTurnState;
+  action?: PlayerStateAction;
+  sector: SectorData;
+  mapCompleted?: boolean;
+  hasStreetTaxCard: boolean;
+  hasMapTaxCard: boolean;
+  hasPrisonCard: boolean;
+  hasRerollCard: boolean;
+  hasDiceCards: boolean;
+};
+
+type StateCycle = {
+  stop: boolean;
+  nextState: PlayerTurnState;
+};
+
+function getNextState({
+  currentState,
+  action,
+  sector,
+  mapCompleted,
+  hasStreetTaxCard,
+  hasMapTaxCard,
+  hasPrisonCard,
+  hasRerollCard,
+  hasDiceCards,
+}: GetNextStateParams): StateCycle {
+  const skip = action === "skip-bonus";
 
   switch (currentState) {
     case "rolling-dice":
-      if (diceCards.length > 0) {
-        return "using-dice-bonuses";
-      }
-      if (streetTaxCards.length > 0) {
-        return "using-sector-bonuses";
-      }
-      if (rerollCards.length > 0) {
-        return "using-reroll-bonuses";
-      }
-      return "filling-game-review";
+      return { stop: false, nextState: "using-dice-bonuses" };
     case "using-dice-bonuses":
-      if (sector.type === "bonus") {
-        return "rolling-bonus-card";
+      if (hasDiceCards && !skip) {
+        return { stop: true, nextState: "using-dice-bonuses" };
       }
-      if (sector.type === "prison" && prisonCards.length > 0) {
-        return "using-sector-bonuses";
+      return { stop: false, nextState: "using-map-tax-bonuses" };
+    case "using-map-tax-bonuses":
+      if (mapCompleted && hasMapTaxCard && !skip) {
+        return { stop: true, nextState: "using-map-tax-bonuses" };
       }
+      return { stop: false, nextState: "using-street-tax-bonuses" };
+    case "using-street-tax-bonuses":
       if (
         (sector.type === "property" || sector.type === "railroad") &&
-        streetTaxCards.length > 0
+        hasStreetTaxCard &&
+        !skip
       ) {
-        return "using-sector-bonuses";
+        return { stop: true, nextState: "using-street-tax-bonuses" };
       }
-      if (rerollCards.length > 0) {
-        return "using-reroll-bonuses";
+      return { stop: false, nextState: "using-prison-bonuses" };
+    case "using-prison-bonuses":
+      if (sector.type === "prison" && hasPrisonCard && !skip) {
+        if (action === "skip-prison") {
+          return { stop: true, nextState: "filling-game-review" };
+        }
+        return { stop: true, nextState: "using-prison-bonuses" };
       }
-      return "filling-game-review";
-    case "rolling-bonus-card":
-      return "rolling-dice";
-    case "using-sector-bonuses":
-      return "filling-game-review";
+      return { stop: false, nextState: "using-reroll-bonuses" };
     case "using-reroll-bonuses":
-      return "filling-game-review";
+      if (hasRerollCard && !skip) {
+        return { stop: true, nextState: "using-reroll-bonuses" };
+      }
+      return { stop: false, nextState: "filling-game-review" };
     case "filling-game-review":
-      if (sector.type === "railroad") {
-        return "choosing-train-ride";
+      if (action === "drop-game") {
+        return { stop: false, nextState: "using-prison-bonuses" };
       }
-      if (sector.type === "bonus") {
-        return "rolling-bonus-card";
+      if (action === "reroll-game") {
+        return { stop: false, nextState: "using-reroll-bonuses" };
       }
-      return "rolling-dice";
+      switch (sector.type) {
+        case "railroad":
+          return { stop: true, nextState: "choosing-train-ride" };
+        case "bonus":
+          return { stop: true, nextState: "rolling-bonus-card" };
+        case "property":
+          return { stop: true, nextState: "rolling-dice" };
+        case "prison":
+          return { stop: true, nextState: "entering-prison" };
+        case "parking":
+          return { stop: true, nextState: "stealing-bonus-card" };
+        case "start-corner":
+          return { stop: true, nextState: "choosing-building-sector" };
+        default: {
+          const sectorType: never = sector.type;
+          throw new Error(`Unsupported sector type: ${sectorType}`);
+        }
+      }
+    case "rolling-bonus-card":
+      return { stop: true, nextState: "rolling-dice" };
     case "choosing-train-ride":
-      return "rolling-dice";
+      return { stop: true, nextState: "rolling-dice" };
+    case "entering-prison":
+      return { stop: false, nextState: "using-prison-bonuses" };
+    case "stealing-bonus-card":
+      return { stop: true, nextState: "rolling-dice" };
+    case "choosing-building-sector":
+      return { stop: true, nextState: "rolling-dice" };
+    default: {
+      const state: never = currentState;
+      throw new Error(`Unsupported turn state: ${state}`);
+    }
   }
-  return null as never;
 }
 
 export function formatTsToFullDate(ts: number) {

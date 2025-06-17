@@ -200,11 +200,18 @@ export type PlayerEvent =
 export type PlayerTurnState =
   | "rolling-dice"
   | "using-dice-bonuses"
-  | "using-sector-bonuses"
+  | "using-prison-bonuses"
   | "rolling-bonus-card"
   | "using-reroll-bonuses"
   | "filling-game-review"
-  | "choosing-train-ride";
+  | "choosing-train-ride"
+  | "using-map-tax-bonuses"
+  | "using-street-tax-bonuses"
+  | "entering-prison"
+  | "stealing-bonus-card"
+  | "choosing-building-sector";
+
+export type PlayerStateAction = "skip-bonus" | "skip-prison" | "drop-game" | "reroll-game";
 
 export type ActiveBonusCard = {
   bonus_type: BonusCardType;
