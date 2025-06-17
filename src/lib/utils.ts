@@ -134,20 +134,17 @@ export function getEventDescription(event: PlayerEvent) {
 type NextTurnStateParams = {
   player: PlayerData;
   currentState: PlayerTurnState;
-  nextPosition?: number;
+  mapCompleted: boolean;
   action?: PlayerStateAction;
 };
 
 export function getNextTurnState({
   player,
   currentState,
-  nextPosition,
+  mapCompleted,
   action,
 }: NextTurnStateParams): PlayerTurnState {
   const sector = SectorsById[player.sector_id];
-
-  const mapCompleted = Boolean(nextPosition && nextPosition < player.sector_id);
-
   const bonusCardsSet = new Set(player.bonus_cards.map((card) => card.bonus_type));
 
   const hasStreetTaxCard = bonusCardsSet.has("evade-street-tax");

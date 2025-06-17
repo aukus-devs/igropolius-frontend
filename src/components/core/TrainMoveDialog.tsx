@@ -38,7 +38,7 @@ export default function TrainMoveDialog() {
         <Button
           variant="outline"
           className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
-          onClick={() => moveData.setNextTurnState()}
+          onClick={() => moveData.setNextTurnState({})}
         >
           Остаться
         </Button>

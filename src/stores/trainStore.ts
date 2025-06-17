@@ -32,7 +32,8 @@ const useTrainsStore = create<{
     const train = get().trains[trainId];
     if (!train) throw new Error(`Train with id ${trainId} not found`);
 
-    const myPlayerId = usePlayerStore.getState().myPlayerId;
+    const myPlayer = usePlayerStore.getState().myPlayer;
+    const myPlayerId = myPlayer?.id;
     if (!myPlayerId) throw new Error(`My player not found`);
 
     await makePlayerMove({
@@ -129,7 +130,9 @@ const useTrainsStore = create<{
             .then(async () => {
               train.model.position.copy(train.startPosition);
               try {
-                await usePlayerStore.getState().setNextTurnState();
+                await usePlayerStore.getState().setNextTurnState({
+                  prevSectorId: myPlayer.sector_id,
+                });
               } finally {
                 usePlayerStore.setState({ isPlayerMoving: false });
               }

@@ -30,7 +30,7 @@ const usePlayerStore = create<{
   setPlayers: (players: BackendPlayerData[]) => void;
   moveMyPlayer: () => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
-  setNextTurnState: () => Promise<void>;
+  setNextTurnState: (params: { prevSectorId?: number }) => Promise<void>;
   receiveBonusCard: (type: BonusCardType) => void;
 }>((set, get) => ({
   myPlayerId: null,
@@ -49,14 +49,23 @@ const usePlayerStore = create<{
     set({ myPlayerId: id });
   },
 
-  setNextTurnState: async () => {
+  setNextTurnState: async (params: { prevSectorId?: number }) => {
     const { myPlayer, turnState } = get();
     if (!myPlayer || !turnState) return;
+
+    const mapCompleted = Boolean(
+      params.prevSectorId && myPlayer.sector_id < params.prevSectorId,
+    );
 
     const nextTurnState = getNextTurnState({
       player: myPlayer,
       currentState: turnState,
+      mapCompleted,
     });
+
+    if (mapCompleted) {
+      await payTaxes("map-tax");
+    }
 
     if (turnState === "rolling-dice" && nextTurnState === "filling-game-review") {
       const currentSector = SectorsById[myPlayer.sector_id];
@@ -210,7 +219,7 @@ const usePlayerStore = create<{
       set({ isPlayerMoving: false });
       const { updateMyPlayerSectorId, setNextTurnState } = get();
       updateMyPlayerSectorId(currentSectorId);
-      setNextTurnState();
+      setNextTurnState({ prevSectorId: myPlayer.sector_id });
     });
   },
 
@@ -219,7 +228,7 @@ const usePlayerStore = create<{
   receiveBonusCard: async (type: BonusCardType) => {
     const { setNextTurnState } = get();
     await giveBonusCard(type);
-    await setNextTurnState();
+    await setNextTurnState({});
   },
 }));
 

@@ -117,9 +117,7 @@ function GameTitle() {
 
 function HLTBLink() {
   return (
-    <Button
-      className="font-semibold border-none py-0 px-9 rounded-md"
-    >
+    <Button className="font-semibold border-none py-0 px-9 rounded-md">
       <a
         className="flex gap-1 size-full items-center justify-center"
         href="https://howlongtobeat.com/"
@@ -179,7 +177,7 @@ function GameReviewForm() {
 
   const onConfirm = async () => {
     await sendReview(scores);
-    await setNextTurnState();
+    await setNextTurnState({});
     setOpen(false);
     resetPlayersQuery();
     resetCurrentPlayerQuery();
@@ -190,10 +188,7 @@ function GameReviewForm() {
       <DialogTrigger asChild>
         <Button variant="outline">Оценка игры</Button>
       </DialogTrigger>
-      <DialogContent
-        className="sm:max-w-[790px] p-2.5"
-        aria-describedby=""
-      >
+      <DialogContent className="sm:max-w-[790px] p-2.5" aria-describedby="">
         <DialogHeader className="hidden">
           <DialogTitle />
         </DialogHeader>
