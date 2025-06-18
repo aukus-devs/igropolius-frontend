@@ -1,4 +1,4 @@
-import { GameLengthToBuildingType, IS_DEV } from "@/lib/constants";
+import { GameLengthToBuildingType, IS_DEV, MOCK_DICE_ROLL } from "@/lib/constants";
 import {
   BackendPlayerData,
   BonusCardType,
@@ -154,7 +154,7 @@ const usePlayerStore = create<{
 
     if (!isOrthographic) await cameraToPlayer(myPlayer.id);
 
-    const rolledNumber = IS_DEV ? 5 : await useDiceStore.getState().rollDice();
+    const rolledNumber = IS_DEV ? MOCK_DICE_ROLL : await useDiceStore.getState().rollDice();
 
     await makePlayerMove({
       type: "dice-roll",

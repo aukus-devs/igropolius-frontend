@@ -66,6 +66,7 @@ export const TrainsConfig: Record<number, TrainData> = {
   },
 };
 
+export const MOCK_DICE_ROLL = 5;
 export const IS_DEV = import.meta.env.MODE === "development";
 export const NO_MOCKS = Boolean(import.meta.env.VITE_NO_MOCKS);
 
