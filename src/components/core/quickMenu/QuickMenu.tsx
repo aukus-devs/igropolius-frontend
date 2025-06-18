@@ -11,8 +11,9 @@ import { PlayerData } from "@/lib/types";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../Collapsible";
 import LoginDialog from "./options/LoginDialog";
 import { LogoutButton } from "./options/LogoutButton";
+import { Separator } from "@/components/ui/separator";
 
-const buttonStyle = "justify-start bg-transparent font-semibold text-base w-full rounded-none";
+const buttonStyle = "justify-start bg-transparent font-semibold text-base w-full rounded-none border-none";
 const groupStyle = "flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]"
 
 function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerData | null; }) {
@@ -54,7 +55,9 @@ function QuickMenu() {
 
         <div className={groupStyle}>
           <PointaucIntegration className={buttonStyle} />
+          <Separator />
           <RulesDialog className={buttonStyle} />
+          <Separator />
           <AboutDialog className={buttonStyle} />
         </div>
 

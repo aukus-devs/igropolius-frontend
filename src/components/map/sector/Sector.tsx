@@ -8,15 +8,17 @@ import SectorBuildings from "./SectorBuildings";
 import PrisonModel from "../models/PrisonModel";
 import FlagModel from "../models/FlagModel";
 import BonusWheelModel from "../models/BonusWheelModel";
+import { InstanceProps } from "@react-three/fiber";
 
 type Props = {
   sector: SectorData;
   position: Vector3Array;
   rotation: Vector3Array;
+  models: React.FC<InstanceProps> & Record<string, React.FC<InstanceProps>>;
   isSelected?: boolean;
 };
 
-function Sector({ sector, position, rotation }: Props) {
+function Sector({ sector, position, rotation, models }: Props) {
   const addSectorModel = useModelsStore((state) => state.addSectorModel);
 
   const onSectorRender = (item: Group) => {
@@ -42,13 +44,14 @@ function Sector({ sector, position, rotation }: Props) {
       position={position}
       rotation={rotation}
     >
-      {canHaveBuildings && <SectorBuildings sectorId={sector.id} />}
       {isPrison && <PrisonModel />}
-      <SectorText text={`${sector.id}`} isCorner={isCorner} />
       {isStart && <FlagModel />}
       {isTopLeftCorner && <FlagModel />}
       {isBonusSector && <BonusWheelModel />}
 
+      {canHaveBuildings && <SectorBuildings sectorId={sector.id} models={models} />}
+
+      <SectorText text={`${sector.id}`} isCorner={isCorner} />
       <SectorBase
         id={sector.id}
         sector={sector}

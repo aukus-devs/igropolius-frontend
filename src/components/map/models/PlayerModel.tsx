@@ -2,7 +2,7 @@ import { PLAYER_HEIGHT, STORAGE_BASE_URL } from "@/lib/constants";
 import useModelsStore from "@/stores/modelsStore";
 import { PlayerData, Vector3Array } from "@/lib/types";
 import { ThreeEvent } from "@react-three/fiber";
-import { Color, Group, Mesh, MeshStandardMaterial } from "three";
+import { Group, Mesh } from "three";
 import DiceModel from "./DiceModel";
 import usePlayerStore from "@/stores/playerStore";
 import { Gltf } from "@react-three/drei";
@@ -60,9 +60,7 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
     model.traverse((child) => {
       if (child instanceof Mesh) {
         if (child.name === "body001") {
-          child.material = new MeshStandardMaterial({
-            color: new Color(player.color),
-          });
+          child.material.color.set(player.color);
         }
       }
     });

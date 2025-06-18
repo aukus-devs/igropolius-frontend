@@ -49,7 +49,12 @@ function Scene() {
   return (
     <>
       <ambientLight intensity={0.3} color="#D3D3D3" />
-      <hemisphereLight args={["#87CEEB", colors.pastelgreen, 0.5]} position={[0, 5, 0]} />
+      <hemisphereLight
+        position={[0, 5, 0]}
+        intensity={0.5}
+        color="#87CEEB"
+        groundColor={colors.pastelgreen}
+      />
       <directionalLight
         // ref={directionalLightRef}
         color="#fcffb5"

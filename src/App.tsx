@@ -1,9 +1,8 @@
 import "./index.css";
 import { Canvas } from "@react-three/fiber";
-import { useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import { KeyboardControls, KeyboardControlsEntry } from "@react-three/drei";
 import { useShallow } from "zustand/shallow";
-
 import { Controls } from "./lib/constants";
 import Scene from "./components/map/Scene";
 import UI from "./components/UI";
@@ -13,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingModal from "./components/core/loadng/LoadingModal";
 import { queryKeys } from "./lib/queryClient";
 import CanvasTooltip from "./components/map/canvasTooltip/CanvasTooltip";
+import SceneLoader from "./components/map/SceneLoader";
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -78,7 +78,9 @@ function App() {
         <CanvasTooltip />
         <UI />
         <Canvas>
-          <Scene />
+          <Suspense fallback={<SceneLoader />}>
+            <Scene />
+          </Suspense>
         </Canvas>
       </div>
     </KeyboardControls>

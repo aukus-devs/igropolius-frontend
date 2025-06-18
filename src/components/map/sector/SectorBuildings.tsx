@@ -1,23 +1,30 @@
-import { BUILDING_SCALE, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
+import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
 import { BuildingType, GameLength, playerColors, Vector3Array } from "@/lib/types";
-import Building from "../models/BuildingModel";
 // import usePlayerStore from "@/stores/playerStore";
 import { playersData } from "@/lib/mockData";
+import BuildingModel from "../models/BuildingModel";
+import { InstanceProps } from "@react-three/fiber";
+import { useMemo } from "react";
 
 type Props = {
   sectorId: number;
+  models: React.FC<InstanceProps> & Record<string, React.FC<InstanceProps>>;
 };
 
 const ROWS = 4;
 const COLS = 4;
-const SPACING = BUILDING_SCALE + BUILDING_SCALE / 2;
+const GRID_GAP = 0.25;
+const BUILDING_SIZE = 1.25;
+const SIZE_WITH_GAP = BUILDING_SIZE + GRID_GAP;
+const POSITION_X = SIZE_WITH_GAP * (ROWS / 2) - SIZE_WITH_GAP / 2;
+const POSITION_Z = SECTOR_DEPTH / 2 - BUILDING_SIZE;
 
 function getBuildingPosition(index: number): Vector3Array {
   const row = ROWS - 1 - Math.floor(index / COLS);
   const col = COLS - 1 - (index % COLS);
 
-  const x = col * SPACING - (COLS - 1) * SPACING;
-  const z = row * SPACING - (ROWS - 1) * SPACING;
+  const x = col * SIZE_WITH_GAP - (COLS - 1) * SIZE_WITH_GAP;
+  const z = row * SIZE_WITH_GAP - (ROWS - 1) * SIZE_WITH_GAP;
 
   return [x, SECTOR_CONTENT_ELEVATION, z];
 }
@@ -27,12 +34,12 @@ function getMaxGames(sectorId: number) {
 
   const types: BuildingType[] = [
     "ruins",
-    "height-1",
-    "height-2",
-    "height-3",
-    "height-4",
-    "height-5",
-    "height-6"
+    "small",
+    "large",
+    "skyscraperA",
+    "skyscraperD",
+    "skyscraperE",
+    "skyscraperF"
   ];
   const lengths: GameLength[] = ["2-5", "5-10", "10-15", "15-20", "20-25", "25+"]
 
@@ -50,23 +57,21 @@ function getMaxGames(sectorId: number) {
   }));
 }
 
-function SectorBuildings({ sectorId }: Props) {
+function SectorBuildings({ sectorId, models }: Props) {
   // const buildings = usePlayerStore((state) => state.buildingsPerSector[sectorId]) || [];
-  const maxBuildings = getMaxGames(sectorId);
+  const buildings = useMemo(() => getMaxGames(sectorId), [sectorId]);
 
   return (
-    <group
-      name="buildings"
-      position={[(BUILDING_SCALE / 2) * ROWS, 0, SECTOR_DEPTH / 2 - BUILDING_SCALE]}
-    >
-      {maxBuildings.map((building, index) => {
+    <group position={[POSITION_X, 0, POSITION_Z]}>
+      {buildings.map((building, index) => {
         const position = getBuildingPosition(index);
 
         return (
-          <Building
+          <BuildingModel
             key={index}
             building={building}
             position={position}
+            models={models}
           />
         );
       })}

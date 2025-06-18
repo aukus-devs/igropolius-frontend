@@ -24,8 +24,6 @@ export const SECTOR_WIDTH = 8;
 export const SECTOR_HEIGHT = 1;
 export const SECTOR_DEPTH = 18;
 
-export const BUILDING_SCALE = 1;
-
 export const BOARD_SIZE = SECTORS_PER_SIDE * SECTOR_WIDTH;
 export const HALF_BOARD = (SECTORS_PER_SIDE * SECTOR_WIDTH) / 2 + SECTOR_WIDTH / 2;
 
@@ -41,12 +39,12 @@ export const EMISSION_NONE = new Color("black");
 
 export const GameLengthToBuildingType: { [key in GameLengthWithDrop]: BuildingType } = {
   drop: "ruins",
-  "2-5": "height-1",
-  "5-10": "height-2",
-  "10-15": "height-3",
-  "15-20": "height-4",
-  "20-25": "height-5",
-  "25+": "height-6",
+  "2-5": "small",
+  "5-10": "large",
+  "10-15": "scraperD",
+  "15-20": "scraperF",
+  "20-25": "scraperA",
+  "25+": "scraperE",
 };
 
 export const TrainsConfig: Record<number, TrainData> = {
