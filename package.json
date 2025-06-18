@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:no-mocks": "VITE_NO_MOCKS=1 vite",
     "predeploy": "npm run build",
     "build:prod": "cross-env VITE_BASE_URL=/ vite build",
     "build": "vite build",

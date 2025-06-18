@@ -1,10 +1,11 @@
-import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
+import { NO_MOCKS, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
 import { BuildingType, GameLength, playerColors, Vector3Array } from "@/lib/types";
 // import usePlayerStore from "@/stores/playerStore";
 import { playersData } from "@/lib/mockData";
 import BuildingModel from "../models/BuildingModel";
 import { InstanceProps } from "@react-three/fiber";
 import { useMemo } from "react";
+import usePlayerStore from "@/stores/playerStore";
 
 type Props = {
   sectorId: number;
@@ -39,15 +40,18 @@ function getMaxGames(sectorId: number) {
     "skyscraperA",
     "skyscraperD",
     "skyscraperE",
-    "skyscraperF"
+    "skyscraperF",
   ];
-  const lengths: GameLength[] = ["2-5", "5-10", "10-15", "15-20", "20-25", "25+"]
+  const lengths: GameLength[] = ["2-5", "5-10", "10-15", "15-20", "20-25", "25+"];
 
   return Array.from({ length: maxGames }, () => ({
     type: types[Math.floor(Math.random() * types.length)],
     owner: {
       ...playersData[Math.floor(Math.random() * playersData.length)],
-      color: Object.values(playerColors)[Math.floor(Math.random() * Object.values(playerColors).length)],
+      color:
+        Object.values(playerColors)[
+          Math.floor(Math.random() * Object.values(playerColors).length)
+        ],
       avatar_link: "https://github.com/shadcn.png",
     },
     sectorId,
@@ -58,8 +62,9 @@ function getMaxGames(sectorId: number) {
 }
 
 function SectorBuildings({ sectorId, models }: Props) {
-  // const buildings = usePlayerStore((state) => state.buildingsPerSector[sectorId]) || [];
-  const buildings = useMemo(() => getMaxGames(sectorId), [sectorId]);
+  const playerBuildings = usePlayerStore((state) => state.buildingsPerSector[sectorId]) || [];
+  const demoBuildings = useMemo(() => getMaxGames(sectorId), [sectorId]);
+  const buildings = NO_MOCKS ? playerBuildings : demoBuildings;
 
   return (
     <group position={[POSITION_X, 0, POSITION_Z]}>
@@ -67,12 +72,7 @@ function SectorBuildings({ sectorId, models }: Props) {
         const position = getBuildingPosition(index);
 
         return (
-          <BuildingModel
-            key={index}
-            building={building}
-            position={position}
-            models={models}
-          />
+          <BuildingModel key={index} building={building} position={position} models={models} />
         );
       })}
     </group>

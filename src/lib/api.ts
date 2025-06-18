@@ -9,9 +9,10 @@ import {
   TaxType,
 } from "@/lib/types";
 import { playersData } from "./mockData";
-import { IS_DEV } from "./constants";
+import { IS_DEV, NO_MOCKS } from "./constants";
 
-const MOCK_API = IS_DEV;
+const MOCK_API = NO_MOCKS ? false : IS_DEV;
+
 const API_HOST = IS_DEV ? "http://localhost:8000" : "https://igropolius.ru";
 
 async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<Response> {

@@ -67,6 +67,8 @@ export const TrainsConfig: Record<number, TrainData> = {
 };
 
 export const IS_DEV = import.meta.env.MODE === "development";
+export const NO_MOCKS = Boolean(import.meta.env.VITE_NO_MOCKS);
+
 export const STORAGE_BASE_URL = IS_DEV
   ? `/monopoly_s3/assets`
   : `https://storage.yandexcloud.net/monopoly2025/assets`;
