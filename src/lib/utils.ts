@@ -155,10 +155,11 @@ export function getNextTurnState({
     bonusCardsSet.has("adjust-roll-by1") || bonusCardsSet.has("choose-1-die");
 
   let maxLoops = 10;
+  let state = currentState;
   console.log("current state:", currentState);
   while (maxLoops--) {
     const iteration = getNextState({
-      currentState,
+      currentState: state,
       sector,
       mapCompleted,
       hasStreetTaxCard,
@@ -173,6 +174,7 @@ export function getNextTurnState({
     if (iteration.stop) {
       return iteration.nextState; // Stop condition met, return next state
     }
+    state = iteration.nextState; // Update state for next iteration
   }
   throw new Error("Infinite loop detected in getNextTurnState");
 }
