@@ -155,6 +155,7 @@ export function getNextTurnState({
     bonusCardsSet.has("adjust-roll-by1") || bonusCardsSet.has("choose-1-die");
 
   let maxLoops = 10;
+  console.log("current state:", currentState);
   while (maxLoops--) {
     const iteration = getNextState({
       currentState,
@@ -167,6 +168,7 @@ export function getNextTurnState({
       hasDiceCards,
       action,
     });
+    console.log("next state:", iteration.nextState);
 
     if (iteration.stop) {
       return iteration.nextState; // Stop condition met, return next state
