@@ -41,10 +41,10 @@ export const GameLengthToBuildingType: { [key in GameLengthWithDrop]: BuildingTy
   drop: "ruins",
   "2-5": "small",
   "5-10": "large",
-  "10-15": "scraperD",
-  "15-20": "scraperF",
-  "20-25": "scraperA",
-  "25+": "scraperE",
+  "10-15": "skyscraperD",
+  "15-20": "skyscraperF",
+  "20-25": "skyscraperA",
+  "25+": "skyscraperE",
 };
 
 export const TrainsConfig: Record<number, TrainData> = {
