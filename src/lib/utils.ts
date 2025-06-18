@@ -243,7 +243,7 @@ function getNextState({
       if (hasRerollCard && !skip) {
         return { stop: true, nextState: "using-reroll-bonuses" };
       }
-      return { stop: false, nextState: "filling-game-review" };
+      return { stop: true, nextState: "filling-game-review" };
     case "filling-game-review":
       if (action === "drop-game") {
         return { stop: false, nextState: "using-prison-bonuses" };
