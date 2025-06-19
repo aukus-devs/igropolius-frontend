@@ -357,6 +357,7 @@ export const playersData: BackendPlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 0,
+    maps_completed: 0,
 
     games: [
       {
@@ -470,6 +471,8 @@ export const playersData: BackendPlayerData[] = [
     telegram_link: "https://t.me/praden",
     donation_link: "https://donate.praden.com",
 
+    maps_completed: 0,
+
     total_score: 5000,
     games: [
       {
@@ -576,8 +579,8 @@ export const playersData: BackendPlayerData[] = [
       {
         bonus_type: "adjust-roll-by1",
         received_at: Math.ceil(Date.now() / 1000),
-        received_on_sector: 5
-      }
+        received_on_sector: 5,
+      },
     ],
   },
   {
@@ -602,6 +605,7 @@ export const playersData: BackendPlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
+    maps_completed: 1,
 
     games: [
       {
@@ -651,6 +655,7 @@ export const playersData: BackendPlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
+    maps_completed: 2,
 
     games: [
       {
@@ -689,6 +694,7 @@ export const playersData: BackendPlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
+    maps_completed: 0,
     games: [
       {
         sector_id: 2,
@@ -699,15 +705,16 @@ export const playersData: BackendPlayerData[] = [
         rating: 2,
         review: "Не понравилась, слишком скучная.",
         status: "completed",
-        vod_links: "https://www.twitch.tv/videos/1234567890, https://www.twitch.tv/videos/1234567891, https://www.twitch.tv/videos/1234567892",
+        vod_links:
+          "https://www.twitch.tv/videos/1234567890, https://www.twitch.tv/videos/1234567891, https://www.twitch.tv/videos/1234567892",
       },
     ],
     bonus_cards: [
       {
         bonus_type: "adjust-roll-by1",
         received_at: Math.ceil(Date.now() / 1000),
-        received_on_sector: 5
-      }
+        received_on_sector: 5,
+      },
     ],
   },
   {
@@ -732,6 +739,7 @@ export const playersData: BackendPlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
+    maps_completed: 0,
     games: [
       {
         sector_id: 10,
@@ -749,8 +757,8 @@ export const playersData: BackendPlayerData[] = [
       {
         bonus_type: "adjust-roll-by1",
         received_at: Math.ceil(Date.now() / 1000),
-        received_on_sector: 5
-      }
+        received_on_sector: 5,
+      },
     ],
   },
   {
@@ -775,6 +783,7 @@ export const playersData: BackendPlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
+    maps_completed: 0,
     games: [
       {
         sector_id: 10,
@@ -792,8 +801,8 @@ export const playersData: BackendPlayerData[] = [
       {
         bonus_type: "adjust-roll-by1",
         received_at: Math.ceil(Date.now() / 1000),
-        received_on_sector: 5
-      }
+        received_on_sector: 5,
+      },
     ],
   },
   {
@@ -818,6 +827,7 @@ export const playersData: BackendPlayerData[] = [
     donation_link: "https://donate.praden.com",
 
     total_score: 200,
+    maps_completed: 0,
     games: [
       {
         sector_id: 10,
@@ -835,8 +845,8 @@ export const playersData: BackendPlayerData[] = [
       {
         bonus_type: "adjust-roll-by1",
         received_at: Math.ceil(Date.now() / 1000),
-        received_on_sector: 5
-      }
+        received_on_sector: 5,
+      },
     ],
   },
 ];

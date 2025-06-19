@@ -107,6 +107,7 @@ export type BackendPlayerData = {
   sector_id: number;
   games: PlayerGame[];
   bonus_cards: ActiveBonusCard[];
+  maps_completed: number;
 };
 
 export type PlayerFrontendData = {

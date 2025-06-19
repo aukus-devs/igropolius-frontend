@@ -61,10 +61,13 @@ const useReviewFormStore = create<{
   },
   getReviewScores: () => {
     const { gameStatus, gameTime } = get();
-    const currentSectorId = usePlayerStore.getState().myPlayer?.sector_id;
+    const myPlayer = usePlayerStore.getState().myPlayer;
+    const currentSectorId = myPlayer?.sector_id;
     if (!currentSectorId) {
       return 0;
     }
+
+    const mapCompletionBonus = myPlayer.maps_completed * 5;
 
     const sector = SectorsById[currentSectorId];
 
@@ -72,7 +75,7 @@ const useReviewFormStore = create<{
       const baseScores = ScoreByGameLength[gameTime];
       const multiliper = SectorScoreMultiplier[sector.type] || 1;
       const scores = baseScores * multiliper;
-      return scores;
+      return scores + mapCompletionBonus;
     }
     if (gameStatus === "drop") {
       return 0;
