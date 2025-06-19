@@ -4,6 +4,7 @@ import {
   BonusCardType,
   BuildingData,
   PlayerData,
+  PlayerStateAction,
   PlayerTurnState,
 } from "@/lib/types";
 import { createTimeline } from "animejs";
@@ -30,7 +31,10 @@ const usePlayerStore = create<{
   setPlayers: (players: BackendPlayerData[]) => void;
   moveMyPlayer: () => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
-  setNextTurnState: (params: { prevSectorId?: number }) => Promise<void>;
+  setNextTurnState: (params: {
+    prevSectorId?: number;
+    action?: PlayerStateAction;
+  }) => Promise<void>;
   receiveBonusCard: (type: BonusCardType) => void;
 }>((set, get) => ({
   myPlayerId: null,
@@ -49,7 +53,7 @@ const usePlayerStore = create<{
     set({ myPlayerId: id });
   },
 
-  setNextTurnState: async (params: { prevSectorId?: number }) => {
+  setNextTurnState: async (params: { prevSectorId?: number; action?: PlayerStateAction }) => {
     const { myPlayer, turnState } = get();
     if (!myPlayer || !turnState) return;
 
@@ -61,6 +65,7 @@ const usePlayerStore = create<{
       player: myPlayer,
       currentState: turnState,
       mapCompleted,
+      action: params.action,
     });
 
     if (mapCompleted) {

@@ -63,7 +63,7 @@ const useReviewFormStore = create<{
     const { gameStatus, gameTime } = get();
     const currentSectorId = usePlayerStore.getState().myPlayer?.sector_id;
     if (!currentSectorId) {
-      throw new Error("Current sector not found");
+      return 0;
     }
 
     const sector = SectorsById[currentSectorId];

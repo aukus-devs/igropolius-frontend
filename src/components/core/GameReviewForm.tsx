@@ -139,22 +139,22 @@ function GameReviewForm() {
   const setRating = useReviewFormStore((state) => state.setRating);
   const rating = useReviewFormStore((state) => state.rating);
   const sendReview = useReviewFormStore((state) => state.sendReview);
+  const gameStatus = useReviewFormStore((state) => state.gameStatus);
+  const scores = useReviewFormStore((state) => state.getReviewScores());
 
-  const { buttonText, scores } = useReviewFormStore(
-    useShallow((state) => {
-      const scores = state.getReviewScores();
-      if (state.gameStatus === "completed" && state.gameTime) {
-        return { buttonText: `Получить ${scores} очков`, scores };
-      }
-      if (state.gameStatus === "drop") {
-        return { buttonText: "Дропнуть игру", scores: 0 };
-      }
-      if (state.gameStatus === "reroll") {
-        return { buttonText: "Рерольнуть", scores: 0 };
-      }
-      return { buttonText: "Заполни форму", scores: 0 };
-    }),
-  );
+  let buttonText = "Заполни форму";
+  switch (gameStatus) {
+    case "completed":
+      buttonText = `Получить ${scores} очков`;
+      break;
+    case "drop":
+      buttonText = "Дропнуть игру";
+      break;
+    case "reroll":
+      buttonText = "Рерольнуть";
+      break;
+  }
+
   const isSendButtonDisabled = useReviewFormStore((state) => {
     if (!state.gameTitle) return true;
     if (!state.gameStatus) return true;
@@ -173,7 +173,16 @@ function GameReviewForm() {
 
   const onConfirm = async () => {
     await sendReview(scores);
-    await setNextTurnState({});
+    let turnParams = {};
+    switch (gameStatus) {
+      case "drop":
+        turnParams = { action: "drop-game" };
+        break;
+      case "reroll":
+        turnParams = { action: "reroll-game" };
+        break;
+    }
+    await setNextTurnState(turnParams);
     setOpen(false);
     resetPlayersQuery();
     resetCurrentPlayerQuery();
