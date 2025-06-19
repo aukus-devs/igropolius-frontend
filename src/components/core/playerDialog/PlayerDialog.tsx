@@ -36,16 +36,14 @@ function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
           />
         </DialogTrigger>
         <DialogContent
-          className="flex flex-col gap-8 md:h-[660px] h-dvh w-screen md:w-[600px] p-0 overflow-hidden"
+          className="flex flex-col gap-8 md:h-[660px] left-0 bottom-0 h-[calc(100dvh_-_74px)] w-screen md:w-[600px] p-0"
           aria-describedby=""
         >
+          <DialogClose className={cn(buttonVariants(), "absolute -top-[74px] left-[15px] rounded-[10px] h-11 mt-[15px] mx-auto md:hidden")}>
+            <ArrowLeftIcon />
+            <span>Назад к списку</span>
+          </DialogClose>
           <ScrollArea className="flex h-full">
-            <div className="w-full items-center flex md:hidden">
-              <DialogClose className={cn(buttonVariants(), "rounded-[10px] h-11 mt-[15px] mx-auto")}>
-                <ArrowLeftIcon />
-                <span>Назад к списку</span>
-              </DialogClose>
-            </div>
             <DialogHeader>
               <DialogTitle className="hidden" />
               <PlayerDialogHeader player={player} />
