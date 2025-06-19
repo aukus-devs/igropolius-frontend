@@ -35,12 +35,13 @@ function getMaxGames(sectorId: number) {
 
   const types: BuildingType[] = [
     "ruins",
-    "small",
+    // "small",
     "large",
     "skyscraperA",
     "skyscraperD",
     "skyscraperE",
     "skyscraperF",
+    "skyscraperX",
   ];
   const lengths: GameLength[] = ["2-5", "5-10", "10-15", "15-20", "20-25", "25+"];
 
@@ -50,7 +51,7 @@ function getMaxGames(sectorId: number) {
       ...playersData[Math.floor(Math.random() * playersData.length)],
       color:
         Object.values(playerColors)[
-          Math.floor(Math.random() * Object.values(playerColors).length)
+        Math.floor(Math.random() * Object.values(playerColors).length)
         ],
       avatar_link: "https://github.com/shadcn.png",
     },

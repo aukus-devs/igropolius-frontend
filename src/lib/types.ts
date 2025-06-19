@@ -120,12 +120,13 @@ export type Vector3Array = [number, number, number];
 
 export type BuildingType =
   | "ruins"
-  | "small"
+  // | "small"
   | "large"
   | "skyscraperD"
   | "skyscraperF"
   | "skyscraperA"
-  | "skyscraperE";
+  | "skyscraperE"
+  | "skyscraperX";
 
 export type BuildingData = {
   type: BuildingType;

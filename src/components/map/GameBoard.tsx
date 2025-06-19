@@ -12,12 +12,13 @@ import { GLTF } from "three-stdlib";
 
 const buildingUrls = [
   `${STORAGE_BASE_URL}/models/buildings/ruins1.glb`,
-  `${STORAGE_BASE_URL}/models/buildings/small.glb`,
+  // `${STORAGE_BASE_URL}/models/buildings/small.glb`,
   `${STORAGE_BASE_URL}/models/buildings/large.glb`,
   `${STORAGE_BASE_URL}/models/buildings/skyscraperE1.glb`,
   `${STORAGE_BASE_URL}/models/buildings/skyscraperA1.glb`,
   `${STORAGE_BASE_URL}/models/buildings/skyscraperF1.glb`,
   `${STORAGE_BASE_URL}/models/buildings/skyscraperD1.glb`,
+  `${STORAGE_BASE_URL}/models/buildings/skyscraperX.glb`,
 ];
 
 function getBuildingMeshes(prefix: string, gltf: GLTF & ObjectMap) {
@@ -39,16 +40,17 @@ function getBuildingMeshes(prefix: string, gltf: GLTF & ObjectMap) {
 
 function GameBoard() {
   const playersData = usePlayerStore((state) => state.players);
-  const [ruins, small, large, scraperE, scraperA, scraperF, scraperD] = useGLTF(buildingUrls);
+  const [ruins, large, scraperE, scraperA, scraperF, scraperD, scraperX] = useGLTF(buildingUrls);
   const meshes = useMemo(() => ({
     ...getBuildingMeshes('ruins', ruins),
-    ...getBuildingMeshes('small', small),
+    // ...getBuildingMeshes('small', small),
     ...getBuildingMeshes('large', large),
     ...getBuildingMeshes('skyscraperE', scraperE),
     ...getBuildingMeshes('skyscraperA', scraperA),
     ...getBuildingMeshes('skyscraperF', scraperF),
     ...getBuildingMeshes('skyscraperD', scraperD),
-  }), [ruins, small, large, scraperE, scraperA, scraperF, scraperD]);
+    ...getBuildingMeshes('skyscraperX', scraperX),
+  }), [ruins, large, scraperE, scraperA, scraperF, scraperD, scraperX]);
 
   return (
     <Merged meshes={meshes}>
