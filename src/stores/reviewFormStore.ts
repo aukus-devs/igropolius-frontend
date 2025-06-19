@@ -1,6 +1,9 @@
 import { saveGameReview } from "@/lib/api";
+import { ScoreByGameLength, SectorScoreMultiplier } from "@/lib/constants";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { create } from "zustand";
+import usePlayerStore from "./playerStore";
+import { SectorsById } from "@/lib/mockData";
 
 const useReviewFormStore = create<{
   rating: number;
@@ -14,6 +17,7 @@ const useReviewFormStore = create<{
   setGameStatus: (value: GameStatusType) => void;
   setGameReview: (value: string) => void;
   sendReview: (scores: number) => Promise<void>;
+  getReviewScores: () => number;
 }>((set, get) => ({
   rating: 0,
   gameTitle: "",
@@ -54,6 +58,26 @@ const useReviewFormStore = create<{
       gameStatus: null,
       gameReview: "",
     });
+  },
+  getReviewScores: () => {
+    const { gameStatus, gameTime } = get();
+    const currentSectorId = usePlayerStore.getState().myPlayer?.sector_id;
+    if (!currentSectorId) {
+      throw new Error("Current sector not found");
+    }
+
+    const sector = SectorsById[currentSectorId];
+
+    if (gameStatus === "completed" && gameTime) {
+      const baseScores = ScoreByGameLength[gameTime];
+      const multiliper = SectorScoreMultiplier[sector.type] || 1;
+      const scores = baseScores * multiliper;
+      return scores;
+    }
+    if (gameStatus === "drop") {
+      return 0;
+    }
+    return 0;
   },
 }));
 

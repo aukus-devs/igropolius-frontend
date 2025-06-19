@@ -6,12 +6,10 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import useReviewFormStore from "@/stores/reviewFormStore";
 import Rating from "./Rating";
-import { ScoreByGameLength, SectorScoreMultiplier } from "@/lib/constants";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
 import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
-import { SectorsById } from "@/lib/mockData";
 import { ArrowRight } from "../icons";
 
 type StatesOption = {
@@ -132,14 +130,11 @@ function HLTBLink() {
 function GameReviewForm() {
   const [open, setOpen] = useState(false);
 
-  const { setNextTurnState, myPlayer } = usePlayerStore(
+  const { setNextTurnState } = usePlayerStore(
     useShallow((state) => ({
       setNextTurnState: state.setNextTurnState,
-      myPlayer: state.myPlayer,
     })),
   );
-
-  const currentSector = myPlayer?.sector_id ? SectorsById[myPlayer.sector_id] : null;
 
   const setRating = useReviewFormStore((state) => state.setRating);
   const rating = useReviewFormStore((state) => state.rating);
@@ -147,14 +142,15 @@ function GameReviewForm() {
 
   const { buttonText, scores } = useReviewFormStore(
     useShallow((state) => {
+      const scores = state.getReviewScores();
       if (state.gameStatus === "completed" && state.gameTime) {
-        const baseScores = ScoreByGameLength[state.gameTime];
-        const multiliper = currentSector ? SectorScoreMultiplier[currentSector.type] : 1;
-        const scores = baseScores * multiliper;
         return { buttonText: `Получить ${scores} очков`, scores };
       }
       if (state.gameStatus === "drop") {
         return { buttonText: "Дропнуть игру", scores: 0 };
+      }
+      if (state.gameStatus === "reroll") {
+        return { buttonText: "Рерольнуть", scores: 0 };
       }
       return { buttonText: "Заполни форму", scores: 0 };
     }),
