@@ -39,9 +39,9 @@ function SectorInfo({ sector }: Props) {
         <p className="text-sm">Тип: {type}</p>
         <p className="text-sm">Ролл игры: {rollType}</p>
         {showTax && (
-          <div className="flex gap-1 items-center">
+          <div className="flex items-center">
             <p className="text-sm">Налог: {totalTaxValue}</p>
-            <Share />
+            <Share className="w-4 h-4" />
           </div>
         )}
       </CardContent>

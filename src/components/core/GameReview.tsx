@@ -58,7 +58,7 @@ function GameReview({ game }: Props) {
           {statusText} — {formattedDate}
         </div>
         <Toggle
-          className="text-sm gap-1.5 py-[3px] px-2.5 h-fit border-none data-[state=off]:bg-white/20 text-white/70"
+          className="text-sm gap-[3px] py-[3px] px-2.5 h-fit border-none data-[state=off]:bg-white/20 text-white/70"
           disabled={!vod_links}
           onPressedChange={toggleVods}
         >

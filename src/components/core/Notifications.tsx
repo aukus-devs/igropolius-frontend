@@ -86,7 +86,7 @@ function NotificationCard({ notification, isLast = false }: NotificationCardProp
         <CardTitle className="text-base">{text}</CardTitle>
       </CardHeader>
       <CardContent
-        className={`px-0 text-base flex items-center gap-1 ${color}`}
+        className={`px-0 text-base flex items-center ${color}`}
       >
         {`${symbol} ${points}`} <Share className="w-4 h-4" />
       </CardContent>

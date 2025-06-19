@@ -1,28 +1,30 @@
+import { Donationalerts, Telegram, Twitch, VkVideoLive } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { PlayerData } from "@/lib/types";
 
 function PlayerSocials({ player }: { player: PlayerData }) {
   const socials = [
-    { href: player.twitch_stream_link, title: "Твич" },
-    { href: player.vk_stream_link, title: "ВкВидео" },
-    { href: player.kick_stream_link, title: "Кик" },
-    { href: player.telegram_link, title: "Телеграм" },
-    { href: player.donation_link, title: "Донат" },
+    { href: player.twitch_stream_link, title: "Твич", Icon: <Twitch /> },
+    { href: player.vk_stream_link, title: "ВкВидео", Icon: <VkVideoLive /> },
+    { href: player.kick_stream_link, title: "Кик", Icon: null },
+    { href: player.telegram_link, title: "Телеграм", Icon: <Telegram /> },
+    { href: player.donation_link, title: "Донат", Icon: <Donationalerts /> },
   ];
 
   return (
-    <div className="flex justify-evenly">
+    <div className="flex justify-evenly flex-wrap gap-2 px-4">
       {socials.map(
-        ({ href, title }) =>
+        ({ href, title, Icon }) =>
           href && (
             <Button
               key={title}
               className="font-wide-semibold text-muted-foreground hover:text-foreground h-auto p-0"
               variant="link"
             >
-              <a href={href} target="_blank">
-                {title}
+              <a href={href} target="_blank" className="flex items-center gap-[5px]">
+                {Icon}
+                <span style={{ textBoxTrim: "trim-end" }}>{title}</span>
               </a>
             </Button>
           ),
@@ -50,7 +52,7 @@ function PlayerDialogHeader({ player }: { player: PlayerData }) {
             </div>
           )}
         </div>
-        <div className="font-wide-black text-4xl text-center">{player.username}</div>
+        <div className="font-wide-black text-4xl text-center" style={{ textBoxTrim: "trim-end" }}>{player.username}</div>
       </div>
       <PlayerSocials player={player} />
     </div>

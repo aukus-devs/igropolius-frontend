@@ -35,7 +35,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
       <div className="flex flex-col w-full md:gap-[3px] gap-[5px]">
         <div className="flex justify-between text-base leading-[19px]">
           <div className="font-bold">{player.username}</div>
-          <div className="flex text-muted-foreground items-center gap-1 font-semibold group-data-[highlighted=true]:text-primary">
+          <div className="flex text-muted-foreground items-center font-semibold group-data-[highlighted=true]:text-primary">
             {points} <Share />
           </div>
         </div>

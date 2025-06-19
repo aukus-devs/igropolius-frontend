@@ -21,9 +21,9 @@ function BuildingInfo({ building }: Props) {
       <CardContent>
         <p className="text-sm">Владелец: {owner.username}</p>
         {/* <p className="text-sm">Длительность: {gameLength}</p> */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center">
           <p className="text-sm">Доход: {income}</p>
-          <Share />
+          <Share className="w-4 h-4" />
         </div>
         <p className="text-sm">Построено: {formatTsToMonthDatetime(building.createdAt)}</p>
       </CardContent>
