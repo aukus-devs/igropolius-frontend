@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { NotebookTextIcon } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import RulesTabs from "../../rules/RulesTabs";
+import { Document } from "@/components/icons";
 
 function RulesDialog({ className }: { className?: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" className={className}>
-          <NotebookTextIcon className="h-4 w-4" />
+          <Document className="h-4 w-4" />
           Правила
         </Button>
       </DialogTrigger>

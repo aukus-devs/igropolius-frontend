@@ -1,6 +1,6 @@
+import { Box, PictureFrame } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import useCameraStore from "@/stores/cameraStore";
-import { BoxIcon, SquareIcon } from "lucide-react";
 
 function OrthographicToggle({ className }: { className?: string }) {
   const toggleOrthographic = useCameraStore((state) => state.toggleOrthographic);
@@ -10,11 +10,11 @@ function OrthographicToggle({ className }: { className?: string }) {
     <Button variant="outline" className={className} onClick={toggleOrthographic}>
       {isOrthographic ? (
         <>
-          <BoxIcon /> 3D Вид
+          <Box /> 3D Вид
         </>
       ) : (
         <>
-          <SquareIcon /> 2D Вид
+          <PictureFrame /> 2D Вид
         </>
       )}
     </Button>

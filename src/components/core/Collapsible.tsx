@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronUp } from "../icons";
 
 type CollapsibleContextType = {
   isCollapsed: boolean;
@@ -26,7 +26,7 @@ function CollapsibleTrigger({ className, children }: { className?: string; child
       <div
         className="rounded-md py-[3px] px-[13px] h-auto items-center font-semibold border-none font-wide-black text-xs text-muted-foreground [&_svg:not([class*='size-'])]:size-[19px] bg-white/[0.08]"
       >
-        {!isCollapsed ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        {!isCollapsed ? <ChevronUp /> : <ChevronDown />}
       </div>
     </Button>
   )

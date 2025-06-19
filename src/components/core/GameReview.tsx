@@ -1,9 +1,9 @@
 import { GameStatusType, PlayerGame } from "@/lib/types";
 import { Badge } from "../ui/badge";
 import { formatMs } from "@/lib/utils";
-import { CirclePlayIcon } from "lucide-react";
 import { useState } from "react";
 import { Toggle } from "../ui/toggle";
+import { VideoCircle } from "../icons";
 
 type Props = {
   game: PlayerGame;
@@ -62,7 +62,7 @@ function GameReview({ game }: Props) {
           disabled={!vod_links}
           onPressedChange={toggleVods}
         >
-          <CirclePlayIcon />
+          <VideoCircle />
           Записи
         </Toggle>
       </div>

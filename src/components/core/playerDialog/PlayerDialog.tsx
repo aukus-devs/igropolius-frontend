@@ -1,5 +1,4 @@
 import { PlayerData } from "@/lib/types";
-import { ArrowLeftIcon, MapPinIcon } from "lucide-react";
 import useCameraStore from "@/stores/cameraStore";
 import { Button, buttonVariants } from "../../ui/button";
 import {
@@ -15,6 +14,7 @@ import PlayerDialogTabs from "./tabs/PlayerDialogTabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PlayerDialogHeader from "./PlayerDialogHeader";
 import { cn } from "@/lib/utils";
+import { ArrowLeft, Location } from "@/components/icons";
 
 type Props = {
   player: PlayerData;
@@ -40,7 +40,7 @@ function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
           aria-describedby=""
         >
           <DialogClose className={cn(buttonVariants(), "absolute -top-[74px] left-[15px] rounded-[10px] h-11 mt-[15px] mx-auto md:hidden")}>
-            <ArrowLeftIcon />
+            <ArrowLeft />
             <span>Назад к списку</span>
           </DialogClose>
           <ScrollArea className="flex h-full">
@@ -57,7 +57,7 @@ function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
           className="bg-card/70 backdrop-blur-[1.5rem] rounded-xl h-full p-2 hover:bg-accent items-center text-primary"
           onClick={(e) => (e.stopPropagation(), cameraToPlayer(player.id))}
         >
-          <MapPinIcon className="mt-1 self-start" />
+          <Location className="mt-1 self-start" />
           <div>
             <div className="flex items-center gap-1 font-bold">Показать на карте</div>
             <div className="text-muted-foreground text-sm justify-self-start">

@@ -1,12 +1,12 @@
-import { HomeIcon, Rows3Icon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MapTab from "./tabs/MapTab";
 import RulesTab from "./tabs/RulesTab";
+import { Document, Home } from "@/components/icons";
 
 function MobileTabs() {
   const tabs = [
-    { icon: <HomeIcon />, value: "map", content: <MapTab /> },
-    { icon: <Rows3Icon />, value: "rules", content: <RulesTab /> },
+    { icon: <Home />, value: "map", content: <MapTab /> },
+    { icon: <Document />, value: "rules", content: <RulesTab /> },
   ];
 
   return (

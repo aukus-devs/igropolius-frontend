@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PlayerData } from "@/lib/types";
-import { ZapIcon } from "lucide-react";
+import { Share } from "@/components/icons";
 
 type Props = {
   player: PlayerData;
@@ -36,7 +36,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
         <div className="flex justify-between text-base leading-[19px]">
           <div className="font-bold">{player.username}</div>
           <div className="flex text-muted-foreground items-center gap-1 font-semibold group-data-[highlighted=true]:text-primary">
-            {points} <ZapIcon size="1rem" />
+            {points} <Share />
           </div>
         </div>
         <div className="flex text-sm text-muted-foreground  font-semibold group-data-[highlighted=true]:text-primary w-full leading-[17px]">

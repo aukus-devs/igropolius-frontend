@@ -3,7 +3,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Input } from "../ui/input";
-import { ArrowRightIcon } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import useReviewFormStore from "@/stores/reviewFormStore";
 import Rating from "./Rating";
@@ -13,6 +12,7 @@ import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
 import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 import { SectorsById } from "@/lib/mockData";
+import { ArrowRight } from "../icons";
 
 type StatesOption = {
   title: string;
@@ -123,7 +123,7 @@ function HLTBLink() {
         href="https://howlongtobeat.com/"
         target="_blank"
       >
-        На HLTB <ArrowRightIcon />
+        На HLTB <ArrowRight />
       </a>
     </Button>
   );

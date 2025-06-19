@@ -1,3 +1,4 @@
+import { Share } from "@/components/icons";
 import {
   Select,
   SelectContent,
@@ -11,7 +12,6 @@ import { queryKeys } from "@/lib/queryClient";
 import { PlayerData, PlayerEvent } from "@/lib/types";
 import { getEventDescription } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { ZapIcon } from "lucide-react";
 import { Fragment } from "react";
 
 type Props = {
@@ -28,7 +28,7 @@ function Event({ event }: { event: PlayerEvent }) {
       <div className="text-muted-foreground text-sm font-semibold">{`${hours}:${minutes}`}</div>
       <h3 className="font-wide-medium">{title}</h3>
       <p className={`text-muted-foreground text-sm font-semibold`}>
-        {description} {isScoreChangeEvent && <ZapIcon className="w-3.5 h-3.5 inline" />}
+        {description} {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
       </p>
     </div>
   );

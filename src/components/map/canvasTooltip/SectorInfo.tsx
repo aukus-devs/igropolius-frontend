@@ -3,7 +3,7 @@ import { SectorData } from "@/lib/types";
 import usePlayerStore from "@/stores/playerStore";
 import { IncomeScoreMultiplier, ScoreByGameLength, TaxScoreMultiplier } from "@/lib/constants";
 import { useShallow } from "zustand/shallow";
-import { ZapIcon } from "lucide-react";
+import { Share } from "@/components/icons";
 
 type Props = {
   sector: SectorData;
@@ -41,7 +41,7 @@ function SectorInfo({ sector }: Props) {
         {showTax && (
           <div className="flex gap-1 items-center">
             <p className="text-sm">Налог: {totalTaxValue}</p>
-            <ZapIcon size="1rem" />
+            <Share />
           </div>
         )}
       </CardContent>

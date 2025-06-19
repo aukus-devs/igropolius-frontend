@@ -1,9 +1,9 @@
-import { BellIcon, XIcon, ZapIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./Collapsible";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
+import { Notification, Share, X } from "../icons";
 
 type NotificationType = {
   date: string;
@@ -88,7 +88,7 @@ function NotificationCard({ notification, isLast = false }: NotificationCardProp
       <CardContent
         className={`px-0 text-base flex items-center gap-1 ${color}`}
       >
-        {`${symbol} ${points}`} <ZapIcon className="w-4 h-4" />
+        {`${symbol} ${points}`} <Share className="w-4 h-4" />
       </CardContent>
     </Card>
   )
@@ -107,7 +107,7 @@ function Notifications() {
     <Collapsible>
       <div className="flex gap-[5px]">
         <CollapsibleTrigger className="!pr-[5px] font-semibold text-sm text-muted-foreground">
-          <BellIcon />
+          <Notification />
           Уведомления
         </CollapsibleTrigger>
 
@@ -116,7 +116,7 @@ function Notifications() {
           className="w-full shrink rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 text-muted-foreground border-none"
           onClick={dismissAllNotifications}
         >
-          <XIcon strokeWidth={4} />
+          <X style={{ width: "23px", height: "23px" }} />
         </Button>
       </div>
 

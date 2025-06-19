@@ -1,8 +1,8 @@
+import { Share } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IncomeScoreMultiplier, ScoreByGameLength } from "@/lib/constants";
 import { BuildingData } from "@/lib/types";
 import { formatTsToMonthDatetime } from "@/lib/utils";
-import { ZapIcon } from "lucide-react";
 
 type Props = {
   building: BuildingData;
@@ -23,7 +23,7 @@ function BuildingInfo({ building }: Props) {
         {/* <p className="text-sm">Длительность: {gameLength}</p> */}
         <div className="flex items-center gap-1">
           <p className="text-sm">Доход: {income}</p>
-          <ZapIcon size="1rem" />
+          <Share />
         </div>
         <p className="text-sm">Построено: {formatTsToMonthDatetime(building.createdAt)}</p>
       </CardContent>

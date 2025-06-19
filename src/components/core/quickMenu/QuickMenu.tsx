@@ -1,4 +1,3 @@
-import { ListFilterIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import usePlayerStore from "@/stores/playerStore";
@@ -12,6 +11,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../Collapsi
 import LoginDialog from "./options/LoginDialog";
 import { LogoutButton } from "./options/LogoutButton";
 import { Separator } from "@/components/ui/separator";
+import { Sort } from "@/components/icons";
 
 const buttonStyle = "justify-start bg-transparent font-semibold text-base w-full rounded-none border-none";
 const groupStyle = "flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]"
@@ -31,7 +31,7 @@ function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerData | null; }) {
         </div>
       ) : (
         <div className="flex gap-2 items-center font-bold pl-[7px] text-base">
-          <ListFilterIcon />
+          <Sort />
           Быстрый доступ
         </div>
       )}
