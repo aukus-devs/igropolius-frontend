@@ -129,6 +129,7 @@ const useTrainsStore = create<{
             })
             .then(async () => {
               train.model.position.copy(train.startPosition);
+              usePlayerStore.getState().updateMyPlayerSectorId(destinationSector.id);
               try {
                 await usePlayerStore.getState().setNextTurnState({
                   prevSectorId: myPlayer.sector_id,
@@ -136,7 +137,6 @@ const useTrainsStore = create<{
               } finally {
                 usePlayerStore.setState({ isPlayerMoving: false });
               }
-              usePlayerStore.getState().updateMyPlayerSectorId(destinationSector.id);
             });
         },
       });

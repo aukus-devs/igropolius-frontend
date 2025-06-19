@@ -210,7 +210,8 @@ export type PlayerTurnState =
   | "using-street-tax-bonuses"
   | "entering-prison"
   | "stealing-bonus-card"
-  | "choosing-building-sector";
+  | "choosing-building-sector"
+  | "using-map-tax-bonuses-after-train-ride";
 
 export type PlayerStateAction = "skip-bonus" | "skip-prison" | "drop-game" | "reroll-game";
 

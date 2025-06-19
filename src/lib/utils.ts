@@ -154,6 +154,16 @@ export function getNextTurnState({
   const hasDiceCards =
     bonusCardsSet.has("adjust-roll-by1") || bonusCardsSet.has("choose-1-die");
 
+  const statesToStop: PlayerTurnState[] = [
+    "rolling-dice",
+    "rolling-bonus-card",
+    "filling-game-review",
+    "entering-prison",
+    "choosing-train-ride",
+    "choosing-building-sector",
+    "stealing-bonus-card",
+  ];
+
   let maxLoops = 10;
   let state = currentState;
   console.log("current state:", currentState);
@@ -169,12 +179,14 @@ export function getNextTurnState({
       hasDiceCards,
       action,
     });
-    console.log("next state:", iteration.nextState);
-
-    if (iteration.stop) {
-      return iteration.nextState; // Stop condition met, return next state
+    console.log("next state:", iteration);
+    if (iteration === "stop") {
+      return state; // No further state change, return current state
     }
-    state = iteration.nextState; // Update state for next iteration
+    if (statesToStop.includes(iteration)) {
+      return iteration;
+    }
+    state = iteration; // Update state for next iteration
   }
   throw new Error("Infinite loop detected in getNextTurnState");
 }
@@ -191,10 +203,7 @@ type GetNextStateParams = {
   hasDiceCards: boolean;
 };
 
-type StateCycle = {
-  stop: boolean;
-  nextState: PlayerTurnState;
-};
+type StateCycle = "stop" | PlayerTurnState;
 
 function getNextState({
   currentState,
@@ -211,74 +220,79 @@ function getNextState({
 
   switch (currentState) {
     case "rolling-dice":
-      return { stop: false, nextState: "using-dice-bonuses" };
+      return "using-dice-bonuses";
     case "using-dice-bonuses":
       if (hasDiceCards && !skip) {
-        return { stop: true, nextState: "using-dice-bonuses" };
+        return "stop";
       }
-      return { stop: false, nextState: "using-map-tax-bonuses" };
+      return "using-map-tax-bonuses";
     case "using-map-tax-bonuses":
       if (mapCompleted && hasMapTaxCard && !skip) {
-        return { stop: true, nextState: "using-map-tax-bonuses" };
+        return "stop";
       }
-      return { stop: false, nextState: "using-street-tax-bonuses" };
+      return "using-street-tax-bonuses";
     case "using-street-tax-bonuses":
       if (
         (sector.type === "property" || sector.type === "railroad") &&
         hasStreetTaxCard &&
         !skip
       ) {
-        return { stop: true, nextState: "using-street-tax-bonuses" };
+        return "stop";
       }
-      return { stop: false, nextState: "using-prison-bonuses" };
+      return "using-prison-bonuses";
     case "using-prison-bonuses":
       if (sector.type === "prison" && hasPrisonCard && !skip) {
         if (action === "skip-prison") {
-          return { stop: true, nextState: "filling-game-review" };
+          return "filling-game-review";
         }
-        return { stop: true, nextState: "using-prison-bonuses" };
+        return "stop";
       }
-      return { stop: false, nextState: "using-reroll-bonuses" };
+      return "using-reroll-bonuses";
     case "using-reroll-bonuses":
       if (hasRerollCard && !skip) {
-        return { stop: true, nextState: "using-reroll-bonuses" };
+        return "stop";
       }
-      return { stop: true, nextState: "filling-game-review" };
+      return "filling-game-review";
     case "filling-game-review":
       if (action === "drop-game") {
-        return { stop: false, nextState: "using-prison-bonuses" };
+        return "using-prison-bonuses";
       }
       if (action === "reroll-game") {
-        return { stop: false, nextState: "using-reroll-bonuses" };
+        return "using-reroll-bonuses";
       }
       switch (sector.type) {
         case "railroad":
-          return { stop: true, nextState: "choosing-train-ride" };
+          return "choosing-train-ride";
         case "bonus":
-          return { stop: true, nextState: "rolling-bonus-card" };
+          return "rolling-bonus-card";
         case "property":
-          return { stop: true, nextState: "rolling-dice" };
+          return "rolling-dice";
         case "prison":
-          return { stop: true, nextState: "entering-prison" };
+          return "entering-prison";
         case "parking":
-          return { stop: true, nextState: "stealing-bonus-card" };
+          return "stealing-bonus-card";
         case "start-corner":
-          return { stop: true, nextState: "choosing-building-sector" };
+          return "choosing-building-sector";
         default: {
           const sectorType: never = sector.type;
           throw new Error(`Unsupported sector type: ${sectorType}`);
         }
       }
     case "rolling-bonus-card":
-      return { stop: true, nextState: "rolling-dice" };
+      return "rolling-dice";
     case "choosing-train-ride":
-      return { stop: true, nextState: "rolling-dice" };
+      if (mapCompleted && hasMapTaxCard) {
+        return "using-map-tax-bonuses-after-train-ride";
+      }
+      return "rolling-dice";
     case "entering-prison":
-      return { stop: false, nextState: "using-prison-bonuses" };
+      return "using-prison-bonuses";
     case "stealing-bonus-card":
-      return { stop: true, nextState: "rolling-dice" };
+      return "rolling-dice";
     case "choosing-building-sector":
-      return { stop: true, nextState: "rolling-dice" };
+      return "rolling-dice";
+    case "using-map-tax-bonuses-after-train-ride":
+      return "rolling-dice";
     default: {
       const state: never = currentState;
       throw new Error(`Unsupported turn state: ${state}`);
