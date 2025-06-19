@@ -73,7 +73,7 @@ function GameReview({ game }: Props) {
         </div>
         <div className="text-muted-foreground">
           {(duration && length) && (
-            <div className="flex gap-2 mb-2.5">
+            <div className="flex flex-wrap gap-2 mb-2.5">
               <Badge className="bg-white/20 text-white/70 font-semibold">
                 <p> Время — {formatMs(duration * 60 * 60)}</p>
               </Badge>
@@ -83,16 +83,18 @@ function GameReview({ game }: Props) {
             </div>
           )}
           {isVodsOpen ? (
-            vod_links?.split(",")?.map((vod) => (
-              <a
-                key={vod}
-                href={vod}
-                target="_blank"
-                className="hover:underline underline-offset-4"
-              >
-                {vod}
-              </a>
-            ))
+            <div className="flex flex-col">
+              {vod_links?.split(",")?.map((vod) => (
+                <a
+                  key={vod}
+                  href={vod}
+                  target="_blank"
+                  className="hover:underline underline-offset-4 break-all"
+                >
+                  {vod}
+                </a>
+              ))}
+            </div>
           ) : (
             <p> {rating} / 10 — {review} </p>
           )}

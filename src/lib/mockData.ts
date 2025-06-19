@@ -699,7 +699,7 @@ export const playersData: BackendPlayerData[] = [
         rating: 2,
         review: "Не понравилась, слишком скучная.",
         status: "completed",
-        vod_links: "https://www.twitch.tv/videos/1234567890",
+        vod_links: "https://www.twitch.tv/videos/1234567890, https://www.twitch.tv/videos/1234567891, https://www.twitch.tv/videos/1234567892",
       },
     ],
     bonus_cards: [

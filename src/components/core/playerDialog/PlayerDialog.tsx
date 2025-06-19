@@ -1,9 +1,10 @@
 import { PlayerData } from "@/lib/types";
-import { MapPinIcon } from "lucide-react";
+import { ArrowLeftIcon, MapPinIcon } from "lucide-react";
 import useCameraStore from "@/stores/cameraStore";
-import { Button } from "../../ui/button";
+import { Button, buttonVariants } from "../../ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -13,6 +14,7 @@ import PlayerDialogTrigger from "./PlayerDialogTrigger";
 import PlayerDialogTabs from "./tabs/PlayerDialogTabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PlayerDialogHeader from "./PlayerDialogHeader";
+import { cn } from "@/lib/utils";
 
 type Props = {
   player: PlayerData;
@@ -34,10 +36,16 @@ function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
           />
         </DialogTrigger>
         <DialogContent
-          className="flex flex-col gap-8 md:h-[660px] h-[calc(100vh_-_74px)] bottom-0 top-auto left-0 translate-0 md:bottom-auto w-screen md:w-[600px] p-0 overflow-hidden"
+          className="flex flex-col gap-8 md:h-[660px] h-dvh w-screen md:w-[600px] p-0 overflow-hidden"
           aria-describedby=""
         >
           <ScrollArea className="flex h-full">
+            <div className="w-full items-center flex md:hidden">
+              <DialogClose className={cn(buttonVariants(), "rounded-[10px] h-11 mt-[15px] mx-auto")}>
+                <ArrowLeftIcon />
+                <span>Назад к списку</span>
+              </DialogClose>
+            </div>
             <DialogHeader>
               <DialogTitle className="hidden" />
               <PlayerDialogHeader player={player} />

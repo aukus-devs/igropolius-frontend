@@ -13,9 +13,10 @@ function MobilePlayersList() {
     })),
   );
   const [isOpened, setIsOpened] = useState(false);
+
   const PlayersList = useMemo(() => {
     return (
-      <div className="group-data-[opened=false]:pointer-events-none space-y-2">
+      <div className="space-y-2">
         {players.map((player, idx) => {
           const isCurrentPlayer = myPlayer?.id === player.id;
           return (
@@ -33,19 +34,18 @@ function MobilePlayersList() {
 
   return players.length > 0 &&
     (
-      <ScrollArea className="group data-[opened=true]:bg-background bg-gradient-to-t from-50% from-background translate-y-[calc(100%_-_14rem)] data-[opened=true]:translate-y-0 transition-all duration-300 h-full" data-opened={isOpened}>
-        <div
-          className="pt-[15px] h-full group-data-[opened=true]:pt-[110px] pb-6 transition-all duration-300"
-        >
-          <div className="w-full px-4 mx-auto">
-            <Button
-              className="mb-5 p-0 text-[32px] font-wide-black bg-transparent hover:bg-transparent"
-              onClick={() => setIsOpened(!isOpened)}
-            >
-              Игроки
-            </Button>
-            {PlayersList}
-          </div>
+      <ScrollArea
+        className="group data-[opened=true]:bg-background bg-gradient-to-t from-50% from-background translate-y-[calc(100%_-_20rem)] data-[opened=true]:translate-y-0 transition-all duration-300 data-[opened=false]:pointer-events-none h-dvh data-[opened=false]:[&_[data-slot='scroll-area-viewport']]:!overflow-hidden"
+        data-opened={isOpened}
+      >
+        <div className="w-full px-4 mx-auto pt-[110px] h-full pb-6">
+          <Button
+            className="mb-5 p-0 text-[32px] font-wide-black bg-transparent hover:bg-transparent group-data-[opened=false]:pointer-events-auto"
+            onClick={() => setIsOpened(!isOpened)}
+          >
+            Игроки
+          </Button>
+          {PlayersList}
         </div>
       </ScrollArea>
     )
