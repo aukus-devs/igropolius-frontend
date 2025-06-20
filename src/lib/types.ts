@@ -107,6 +107,7 @@ export type BackendPlayerData = {
   sector_id: number;
   games: PlayerGame[];
   bonus_cards: ActiveBonusCard[];
+  maps_completed: number;
 };
 
 export type PlayerFrontendData = {
@@ -210,7 +211,8 @@ export type PlayerTurnState =
   | "using-street-tax-bonuses"
   | "entering-prison"
   | "stealing-bonus-card"
-  | "choosing-building-sector";
+  | "choosing-building-sector"
+  | "using-map-tax-bonuses-after-train-ride";
 
 export type PlayerStateAction = "skip-bonus" | "skip-prison" | "drop-game" | "reroll-game";
 
