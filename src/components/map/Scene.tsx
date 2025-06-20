@@ -5,6 +5,7 @@ import GameBoard from "./GameBoard";
 import { Railroad } from "./Railroad";
 import { colors } from "@/lib/types";
 import Skybox from "./Skybox";
+import TestModels from "./models/TestModels";
 
 function Scene() {
   const gridConfig = {
@@ -74,6 +75,7 @@ function Scene() {
 
       <CustomCameraControls />
 
+      <TestModels />
       <GameBoard />
       <Railroad />
       <Floor />
