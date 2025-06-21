@@ -24,7 +24,7 @@ function PlayerSocials({ player }: { player: PlayerData }) {
             >
               <a href={href} target="_blank" className="flex items-center gap-[5px]">
                 {Icon}
-                <span style={{ textBoxTrim: "trim-end" }}>{title}</span>
+                <span className="text-box-trim-end">{title}</span>
               </a>
             </Button>
           ),
@@ -45,14 +45,14 @@ function PlayerDialogHeader({ player }: { player: PlayerData }) {
             </AvatarFallback>
           </Avatar>
           {player.is_online && (
-            <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm leading-[17px] bg-red-500 px-2 rounded-[2px] font-bold"
-            >
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm leading-[17px] bg-red-500 px-2 rounded-[2px] font-bold">
               LIVE
             </div>
           )}
         </div>
-        <div className="font-wide-black text-4xl text-center" style={{ textBoxTrim: "trim-end" }}>{player.username}</div>
+        <div className="font-wide-black text-4xl text-center text-box-trim-end">
+          {player.username}
+        </div>
       </div>
       <PlayerSocials player={player} />
     </div>

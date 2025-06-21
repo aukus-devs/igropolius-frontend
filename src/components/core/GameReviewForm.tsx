@@ -12,6 +12,7 @@ import usePlayerStore from "@/stores/playerStore";
 import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 import { ArrowRight } from "../icons";
 import { searchGames, IGDBGame } from "@/lib/api";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const mockPoster = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
 
@@ -209,6 +210,7 @@ function HLTBLink() {
 
 function GameReviewForm() {
   const [open, setOpen] = useState(false);
+  const [showScoreDetails, setShowScoreDetails] = useState(false);
 
   const { setNextTurnState } = usePlayerStore(
     useShallow((state) => ({
@@ -220,12 +222,12 @@ function GameReviewForm() {
   const rating = useReviewFormStore((state) => state.rating);
   const sendReview = useReviewFormStore((state) => state.sendReview);
   const gameStatus = useReviewFormStore((state) => state.gameStatus);
-  const scores = useReviewFormStore((state) => state.getReviewScores());
+  const scores = useReviewFormStore(useShallow((state) => state.getReviewScores()));
 
   let buttonText = "Заполни форму";
   switch (gameStatus) {
     case "completed":
-      buttonText = `Получить ${scores} очков`;
+      buttonText = `Получить ${scores.total} очков`;
       break;
     case "drop":
       buttonText = "Дропнуть игру";
@@ -252,7 +254,7 @@ function GameReviewForm() {
   const selectedGame = useReviewFormStore((state) => state.selectedGame);
 
   const onConfirm = async () => {
-    await sendReview(scores);
+    await sendReview(scores.total);
     let turnParams = {};
     switch (gameStatus) {
       case "drop":
@@ -299,14 +301,24 @@ function GameReviewForm() {
             <GameReview />
           </div>
         </div>
-        <Button
-          size="sm"
-          className="justify-self-end"
-          disabled={isSendButtonDisabled}
-          onClick={onConfirm}
-        >
-          {buttonText}
-        </Button>
+        <Popover open={showScoreDetails} onOpenChange={setShowScoreDetails}>
+          <PopoverTrigger asChild>
+            <Button
+              size="sm"
+              className="justify-self-end"
+              disabled={isSendButtonDisabled}
+              onClick={onConfirm}
+              onMouseEnter={() => setShowScoreDetails(true)}
+              onMouseLeave={() => setShowScoreDetails(false)}
+            >
+              {buttonText}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга
+            ({scores.mapCompletionBonus})
+          </PopoverContent>
+        </Popover>
       </DialogContent>
     </Dialog>
   );

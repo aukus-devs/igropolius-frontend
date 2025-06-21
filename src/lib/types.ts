@@ -233,3 +233,10 @@ export type RulesVersion = {
   content: string;
   created_at: number;
 };
+
+export type ScoreDetails = {
+  base: number;
+  sectorMultiplier: number;
+  mapCompletionBonus: number;
+  total: number;
+};

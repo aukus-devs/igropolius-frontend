@@ -1,6 +1,6 @@
 import { saveGameReview, IGDBGame } from "@/lib/api";
 import { ScoreByGameLength, SectorScoreMultiplier } from "@/lib/constants";
-import { GameLength, GameStatusType } from "@/lib/types";
+import { GameLength, GameStatusType, ScoreDetails } from "@/lib/types";
 import { create } from "zustand";
 import usePlayerStore from "./playerStore";
 import { SectorsById } from "@/lib/mockData";
@@ -19,7 +19,7 @@ const useReviewFormStore = create<{
   setGameReview: (value: string) => void;
   setSelectedGame: (game: IGDBGame | null) => void;
   sendReview: (scores: number) => Promise<void>;
-  getReviewScores: () => number;
+  getReviewScores: () => ScoreDetails;
 }>((set, get) => ({
   rating: 0,
   gameTitle: "",
@@ -70,23 +70,43 @@ const useReviewFormStore = create<{
     const myPlayer = usePlayerStore.getState().myPlayer;
     const currentSectorId = myPlayer?.sector_id;
     if (!currentSectorId) {
-      return 0;
+      return {
+        base: 0,
+        sectorMultiplier: 0,
+        total: 0,
+        mapCompletionBonus: 0,
+      };
     }
 
     const mapCompletionBonus = myPlayer.maps_completed * 5;
 
     const sector = SectorsById[currentSectorId];
+    const sectorMultiplier = SectorScoreMultiplier[sector.type] || 1;
 
     if (gameStatus === "completed" && gameTime) {
-      const baseScores = ScoreByGameLength[gameTime];
-      const multiliper = SectorScoreMultiplier[sector.type] || 1;
-      const scores = baseScores * multiliper;
-      return scores + mapCompletionBonus;
+      const base = ScoreByGameLength[gameTime];
+      const total = base * sectorMultiplier + mapCompletionBonus;
+      return {
+        base,
+        sectorMultiplier,
+        total,
+        mapCompletionBonus,
+      };
     }
     if (gameStatus === "drop") {
-      return 0;
+      return {
+        base: 0,
+        total: 0,
+        sectorMultiplier,
+        mapCompletionBonus,
+      };
     }
-    return 0;
+    return {
+      base: 0,
+      sectorMultiplier: 0,
+      total: 0,
+      mapCompletionBonus,
+    };
   },
 }));
 

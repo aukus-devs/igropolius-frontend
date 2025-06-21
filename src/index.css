@@ -166,3 +166,7 @@
   overflow-y: auto;
   height: 350px;
 }
+
+.text-box-trim-end {
+  text-box-trim: trim-end;
+}
