@@ -232,3 +232,12 @@ export type RulesVersion = {
   content: string;
   created_at: number;
 };
+
+export type Notification = {
+  text: string;
+  type: "success" | "error" | "info";
+  id: string;
+  timeout?: number;
+};
+
+

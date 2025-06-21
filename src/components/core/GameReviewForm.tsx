@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import useReviewFormStore from "@/stores/reviewFormStore";
@@ -11,6 +11,7 @@ import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
 import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 import { ArrowRight } from "../icons";
+import { searchGames, IGDBGame } from "@/lib/api";
 
 type StatesOption = {
   title: string;
@@ -99,17 +100,94 @@ function GameReview() {
 function GameTitle() {
   const gameTitle = useReviewFormStore((state) => state.gameTitle);
   const setGameTitle = useReviewFormStore((state) => state.setGameTitle);
+  const setSelectedGame = useReviewFormStore((state) => state.setSelectedGame);
+  const selectedGame = useReviewFormStore((state) => state.selectedGame);
+  
+  const [searchResults, setSearchResults] = useState<IGDBGame[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+
+  useEffect(() => {
+    const searchGamesWithDelay = async () => {
+      if (gameTitle.length < 2) {
+        setSearchResults([]);
+        setShowResults(false);
+        return;
+      }
+
+      if (selectedGame && selectedGame.name === gameTitle) {
+        return;
+      }
+
+      setIsSearching(true);
+      try {
+        const response = await searchGames(gameTitle);
+        setSearchResults(response.games);
+        setShowResults(true);
+      } catch (error) {
+        console.error("Failed to search games:", error);
+        setSearchResults([]);
+      }
+      setIsSearching(false);
+    };
+
+    const debounceTimer = setTimeout(searchGamesWithDelay, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [gameTitle, selectedGame]);
+
+  const handleGameSelect = (game: IGDBGame) => {
+    setGameTitle(game.name);
+    setSelectedGame(game);
+    setShowResults(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGameTitle(e.target.value);
+    setSelectedGame(null);
+  };
 
   return (
-    <Input
-      id="game-name"
-      type="text"
-      placeholder="Название игры"
-      className="font-roboto-wide-semibold bg-white/15 border-transparent"
-      value={gameTitle}
-      onKeyDown={(e) => e.stopPropagation()}
-      onChange={(e) => setGameTitle(e.target.value)}
-    />
+    <div className="relative">
+      <Input
+        id="game-name"
+        type="text"
+        placeholder="Название игры"
+        className="font-roboto-wide-semibold bg-white/15 border-transparent"
+        value={gameTitle}
+        onKeyDown={(e) => e.stopPropagation()}
+        onChange={handleInputChange}
+        onBlur={() => setTimeout(() => setShowResults(false), 150)}
+        onFocus={() => searchResults.length > 0 && setShowResults(true)}
+      />
+      
+      {showResults && searchResults.length > 0 && (
+        <div className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+          {searchResults.map((game) => (
+            <div
+              key={game.id}
+              className="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleGameSelect(game)}
+            >
+              <img
+                src={game.cover}
+                alt={game.name}
+                className="w-10 h-14 object-cover rounded"
+              />
+              <div className="flex-1">
+                <div className="font-semibold text-gray-900">{game.name}</div>
+                <div className="text-sm text-gray-600">{game.release_year}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {isSearching && (
+        <div className="absolute right-2 top-1/2 -translate-y-1/2">
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -169,7 +247,8 @@ function GameReviewForm() {
     return true;
   });
 
-  const mockPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
+  const selectedGame = useReviewFormStore((state) => state.selectedGame);
+  const mockPoster = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
 
   const onConfirm = async () => {
     await sendReview(scores);
@@ -200,7 +279,7 @@ function GameReviewForm() {
 
         <div className="flex gap-4">
           <div className="flex flex-col gap-3">
-            <GamePoster src={mockPoster} />
+            <GamePoster src={selectedGame?.cover || mockPoster} />
           </div>
 
           <div className="flex flex-col gap-2 w-full">

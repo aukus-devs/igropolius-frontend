@@ -262,6 +262,7 @@ type GameReviewRequest = {
   rating: number;
   length: GameLengthWithDrop;
   scores: number;
+  game_id: number | null;
 };
 
 export async function saveGameReview(request: GameReviewRequest): Promise<void> {
@@ -292,4 +293,49 @@ export async function payTaxes(taxType: TaxType): Promise<void> {
     method: "POST",
     body: JSON.stringify({ tax_type: taxType }),
   });
+}
+
+export type IGDBGame = {
+  id: number;
+  name: string;
+  cover: string;
+  release_year: number;
+};
+
+type SearchGamesResponse = {
+  games: IGDBGame[];
+};
+
+export async function searchGames(query: string, limit: number = 20): Promise<SearchGamesResponse> {
+  if (MOCK_API) {
+    const mockGames: IGDBGame[] = [
+      {
+        id: 1,
+        name: "The Witcher 3: Wild Hunt",
+        cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1wyy.webp",
+        release_year: 2015,
+      },
+      {
+        id: 2,
+        name: "Cyberpunk 2077",
+        cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co7497.webp",
+        release_year: 2020,
+      },
+      {
+        id: 3,
+        name: "Elden Ring",
+        cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.webp",
+        release_year: 2022,
+      },
+    ];
+    
+    const filteredGames = mockGames.filter(game => 
+      game.name.toLowerCase().includes(query.toLowerCase())
+    );
+    
+    return Promise.resolve({ games: filteredGames });
+  }
+  
+  const response = await apiRequest(`/api/igdb/games/search?query=${encodeURIComponent(query)}&limit=${limit}`);
+  return response.json();
 }

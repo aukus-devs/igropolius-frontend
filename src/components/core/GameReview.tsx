@@ -40,7 +40,7 @@ function GameReview({ game }: Props) {
 
   const [isVodsOpen, setIsVodsOpen] = useState(false);
 
-  const fallbackPoster = "https://images.igdb.com/igdb/image/upload/t_cover_big/co9gpd.webp";
+  const fallbackPoster = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
   const formattedDate = new Intl.DateTimeFormat("ru-RU", {
     day: "numeric",
     month: "long",

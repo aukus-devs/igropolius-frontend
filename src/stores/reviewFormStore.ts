@@ -1,4 +1,4 @@
-import { saveGameReview } from "@/lib/api";
+import { saveGameReview, IGDBGame } from "@/lib/api";
 import { ScoreByGameLength, SectorScoreMultiplier } from "@/lib/constants";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { create } from "zustand";
@@ -11,11 +11,13 @@ const useReviewFormStore = create<{
   gameTime: GameLength | null;
   gameStatus: GameStatusType | null;
   gameReview: string;
+  selectedGame: IGDBGame | null;
   setRating: (value: number) => void;
   setGameTitle: (value: string) => void;
   setGameTime: (value: GameLength) => void;
   setGameStatus: (value: GameStatusType) => void;
   setGameReview: (value: string) => void;
+  setSelectedGame: (game: IGDBGame | null) => void;
   sendReview: (scores: number) => Promise<void>;
   getReviewScores: () => number;
 }>((set, get) => ({
@@ -24,14 +26,16 @@ const useReviewFormStore = create<{
   gameTime: null,
   gameStatus: null,
   gameReview: "",
+  selectedGame: null,
 
   setRating: (value) => set({ rating: value }),
   setGameTitle: (value) => set({ gameTitle: value }),
   setGameTime: (value) => set({ gameTime: value }),
   setGameStatus: (value) => set({ gameStatus: value }),
   setGameReview: (value) => set({ gameReview: value }),
+  setSelectedGame: (game) => set({ selectedGame: game }),
   sendReview: async (scores: number) => {
-    const { rating, gameTitle, gameTime, gameStatus, gameReview } = get();
+    const { rating, gameTitle, gameTime, gameStatus, gameReview, selectedGame } = get();
 
     if (!gameStatus) {
       throw new Error("Game status is required");
@@ -49,6 +53,7 @@ const useReviewFormStore = create<{
       review: gameReview,
       length,
       scores,
+      game_id: selectedGame?.id || null,
     });
 
     set({
@@ -57,6 +62,7 @@ const useReviewFormStore = create<{
       gameTime: null,
       gameStatus: null,
       gameReview: "",
+      selectedGame: null,
     });
   },
   getReviewScores: () => {
