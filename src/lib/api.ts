@@ -320,6 +320,12 @@ export async function searchGames(
         cover: null,
         release_year: 2022,
       },
+      {
+        id: 4,
+        name: "Outlast: Whistleblower",
+        cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2jjc.webp",
+        release_year: 2014,
+      },
     ];
 
     const filteredGames = mockGames.filter((game) =>
