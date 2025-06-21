@@ -54,7 +54,7 @@ function DesktopUI() {
         #{position} ход: {turnState}
       </div>
     </div>
-  )
+  );
 }
 
 function MobileUI() {
@@ -63,7 +63,7 @@ function MobileUI() {
       <MobileTabs />
       <MobilePlayersList />
     </div>
-  )
+  );
 }
 
 function UI() {

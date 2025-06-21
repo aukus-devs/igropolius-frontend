@@ -5,10 +5,11 @@ import { useShallow } from "zustand/shallow";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./Collapsible";
 
 function PlayersList() {
-  const { players, myPlayer } = usePlayerStore(
+  const { players, myPlayer, turnState } = usePlayerStore(
     useShallow((state) => ({
       players: state.players,
       myPlayer: state.myPlayer,
+      turnState: state.turnState,
     })),
   );
 
@@ -16,8 +17,10 @@ function PlayersList() {
   const nonCollapsiblePlayers = players.slice(0, nonCollapsiblePlayersCount);
   const collapsiblePlayers = players.slice(nonCollapsiblePlayersCount);
 
-  return players.length > 0 &&
-    (
+  const showCards = turnState === "stealing-bonus-card";
+
+  return (
+    players.length > 0 && (
       <div className="w-[268px]">
         <Collapsible>
           <div className="flex w-full justify-between items-center">
@@ -35,6 +38,7 @@ function PlayersList() {
                   player={player}
                   isCurrentPlayer={isCurrentPlayer}
                   placement={idx + 1}
+                  showCards={showCards}
                 />
               );
             })}
@@ -48,6 +52,7 @@ function PlayersList() {
                   player={player}
                   isCurrentPlayer={isCurrentPlayer}
                   placement={idx + 1}
+                  showCards={showCards}
                 />
               );
             })}
@@ -55,6 +60,7 @@ function PlayersList() {
         </Collapsible>
       </div>
     )
+  );
 }
 
 export default PlayersList;

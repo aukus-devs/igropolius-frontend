@@ -3,14 +3,16 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PlayerData } from "@/lib/types";
 import { Share } from "@/components/icons";
+import PlayerCards from "./PlayerCards";
 
 type Props = {
   player: PlayerData;
   placement: number;
   isCurrentPlayer: boolean;
+  showCards?: boolean;
 };
 
-function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
+function PlayerDialogTrigger({ player, placement, isCurrentPlayer, showCards }: Props) {
   const points = player.total_score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
   return (
@@ -39,10 +41,14 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
             {points} <Share />
           </div>
         </div>
-        <div className="flex text-sm text-muted-foreground  font-semibold group-data-[highlighted=true]:text-primary w-full leading-[17px]">
-          <span className="w-full text-start whitespace-break-spaces">Проводит аукцион</span>
-          <span className="text-white/20 self-end">#{placement}</span>
-        </div>
+        {showCards ? (
+          <PlayerCards player={player} />
+        ) : (
+          <div className="flex text-sm text-muted-foreground  font-semibold group-data-[highlighted=true]:text-primary w-full leading-[17px]">
+            <span className="w-full text-start whitespace-break-spaces">Проводит аукцион</span>
+            <span className="text-white/20 self-end">#{placement}</span>
+          </div>
+        )}
       </div>
     </div>
   );

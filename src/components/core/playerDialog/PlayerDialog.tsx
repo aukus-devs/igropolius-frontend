@@ -20,9 +20,10 @@ type Props = {
   player: PlayerData;
   placement: number;
   isCurrentPlayer: boolean;
+  showCards?: boolean;
 };
 
-function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
+function PlayerDialog({ player, placement, isCurrentPlayer, showCards }: Props) {
   const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
 
   return (
@@ -33,13 +34,19 @@ function PlayerDialog({ player, placement, isCurrentPlayer }: Props) {
             player={player}
             placement={placement}
             isCurrentPlayer={isCurrentPlayer}
+            showCards={showCards}
           />
         </DialogTrigger>
         <DialogContent
           className="flex flex-col gap-8 md:h-[660px] left-0 bottom-0 h-[calc(100dvh_-_74px)] w-screen md:w-[600px] p-0"
           aria-describedby=""
         >
-          <DialogClose className={cn(buttonVariants(), "absolute -top-[74px] left-[15px] rounded-[10px] h-11 mt-[15px] mx-auto md:hidden")}>
+          <DialogClose
+            className={cn(
+              buttonVariants(),
+              "absolute -top-[74px] left-[15px] rounded-[10px] h-11 mt-[15px] mx-auto md:hidden",
+            )}
+          >
             <ArrowLeft />
             <span>Назад к списку</span>
           </DialogClose>

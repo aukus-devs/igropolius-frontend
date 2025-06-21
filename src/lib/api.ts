@@ -275,16 +275,6 @@ export async function saveGameReview(request: GameReviewRequest): Promise<void> 
   });
 }
 
-export async function giveBonusCard(bonusType: BonusCardType): Promise<void> {
-  if (MOCK_API) {
-    return Promise.resolve();
-  }
-  await apiRequest(`/api/players/current/bonus-cards`, {
-    method: "POST",
-    body: JSON.stringify({ bonus_type: bonusType }),
-  });
-}
-
 export async function payTaxes(taxType: TaxType): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
@@ -328,14 +318,37 @@ export async function searchGames(query: string, limit: number = 20): Promise<Se
         release_year: 2022,
       },
     ];
-    
-    const filteredGames = mockGames.filter(game => 
+
+    const filteredGames = mockGames.filter(game =>
       game.name.toLowerCase().includes(query.toLowerCase())
     );
-    
+
     return Promise.resolve({ games: filteredGames });
   }
-  
+
   const response = await apiRequest(`/api/igdb/games/search?query=${encodeURIComponent(query)}&limit=${limit}`);
   return response.json();
+
+
+export async function giveBonusCard(bonusType: BonusCardType): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest(`/api/bonus-cards`, {
+    method: "POST",
+    body: JSON.stringify({ bonus_type: bonusType }),
+  });
+}
+
+export async function stealBonusCard(
+  playerId: number,
+  bonusType: BonusCardType,
+): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest(`/api/bonus-cards/steal`, {
+    method: "POST",
+    body: JSON.stringify({ bonus_type: bonusType, player_id: playerId }),
+  });
 }

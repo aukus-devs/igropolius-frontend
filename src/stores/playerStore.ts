@@ -16,7 +16,13 @@ import { calculatePlayerPosition, getSectorRotation } from "@/components/map/uti
 import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
 import { getNextTurnState } from "@/lib/utils";
-import { giveBonusCard, makePlayerMove, payTaxes, saveTurnState } from "@/lib/api";
+import {
+  giveBonusCard,
+  makePlayerMove,
+  payTaxes,
+  saveTurnState,
+  stealBonusCard,
+} from "@/lib/api";
 import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 
 const usePlayerStore = create<{
@@ -36,6 +42,7 @@ const usePlayerStore = create<{
     action?: PlayerStateAction;
   }) => Promise<void>;
   receiveBonusCard: (type: BonusCardType) => void;
+  stealBonusCard: (player: PlayerData, card: BonusCardType) => Promise<void>;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -233,6 +240,12 @@ const usePlayerStore = create<{
   receiveBonusCard: async (type: BonusCardType) => {
     const { setNextTurnState } = get();
     await giveBonusCard(type);
+    await setNextTurnState({});
+  },
+
+  stealBonusCard: async (player: PlayerData, card: BonusCardType) => {
+    const { setNextTurnState } = get();
+    await stealBonusCard(player.id, card);
     await setNextTurnState({});
   },
 }));
