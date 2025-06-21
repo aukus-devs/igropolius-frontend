@@ -45,7 +45,9 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer, showCards }: 
           <PlayerCards player={player} />
         ) : (
           <div className="flex text-sm text-muted-foreground  font-semibold group-data-[highlighted=true]:text-primary w-full leading-[17px]">
-            <span className="w-full text-start whitespace-break-spaces">Проводит аукцион</span>
+            <span className="w-full text-start whitespace-break-spaces">
+              {player.current_game || "Проводит аукцион"}
+            </span>
             <span className="text-white/20 self-end">#{placement}</span>
           </div>
         )}
