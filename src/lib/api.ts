@@ -298,7 +298,7 @@ type SearchGamesResponse = {
 
 export async function searchGames(
   query: string,
-  limit: number = 20,
+  limit: number = 100,
 ): Promise<SearchGamesResponse> {
   if (MOCK_API) {
     const mockGames: IGDBGame[] = [
