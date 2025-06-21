@@ -370,6 +370,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Отличная игра, мне понравилось!",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/123456789",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -381,6 +383,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Очень интересная игра, много стратегий!",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/987654321",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -392,6 +396,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Хорошая игра, но есть недочеты.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/1122334455",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -403,6 +409,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Неплохая игра, но не моя любимая.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/5566778899",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -414,6 +422,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Средняя игра, есть лучше.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/9988776655",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -425,6 +435,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не очень понравилась, слишком простая.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/2233445566",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -436,6 +448,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не понравилась, слишком скучная.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/6677889900",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -447,6 +461,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не смог пройти, игра не зашла.",
         status: "drop",
         vod_links: null,
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
     ],
     bonus_cards: [],
@@ -485,6 +501,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Прекрасная игра, очень понравилась!",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/123456789",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 2,
@@ -496,6 +514,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Неплохая игра, но есть недочеты.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/987654321",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -507,6 +527,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Очень интересная игра, много стратегий!",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/1122334455",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -518,6 +540,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Хорошая игра, но есть недочеты.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/5566778899",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -529,6 +553,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Отличная игра, мне понравилось!",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/9988776655",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -540,6 +566,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Средняя игра, есть лучше.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/2233445566",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -551,6 +579,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не очень понравилась, слишком простая.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/6677889900",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -562,6 +592,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не понравилась, слишком скучная.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/1234567890",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -573,6 +605,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не смог пройти, игра не зашла.",
         status: "drop",
         vod_links: null,
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
     ],
     bonus_cards: [
@@ -618,6 +652,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Средняя игра, есть лучше.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/2233445566",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
       {
         sector_id: 5,
@@ -629,6 +665,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не очень понравилась, слишком простая.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/6677889900",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
     ],
     bonus_cards: [],
@@ -668,6 +706,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не смог пройти, игра не зашла.",
         status: "drop",
         vod_links: null,
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
     ],
     bonus_cards: [],
@@ -707,6 +747,8 @@ export const playersData: BackendPlayerData[] = [
         status: "completed",
         vod_links:
           "https://www.twitch.tv/videos/1234567890, https://www.twitch.tv/videos/1234567891, https://www.twitch.tv/videos/1234567892",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
     ],
     bonus_cards: [
@@ -751,6 +793,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Неплохая игра, но есть недочеты.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/5566778899",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
     ],
     bonus_cards: [
@@ -795,6 +839,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Хорошая игра, но есть недочеты.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/9988776655",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
     ],
     bonus_cards: [
@@ -839,6 +885,8 @@ export const playersData: BackendPlayerData[] = [
         review: "Не очень понравилась, слишком простая.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/2233445566",
+        cover:
+          "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
       },
     ],
     bonus_cards: [
