@@ -1,12 +1,13 @@
 import { Input } from "@/components/ui/input";
-import { PlayerGame } from "@/lib/types";
+import { PlayerData } from "@/lib/types";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
 import GameReview from "../../GameReview";
+import CurrentGame from "../../CurrentGame";
 
-function ReviewsTab({ games }: { games: PlayerGame[] }) {
+function ReviewsTab({ player }: { player: PlayerData }) {
   const [searchText, setSearchText] = useState("");
-  const filteredGames = games.filter((game) =>
+  const filteredGames = player.games.filter((game) =>
     game.title.toLowerCase().includes(searchText.toLowerCase()),
   );
 
@@ -27,6 +28,7 @@ function ReviewsTab({ games }: { games: PlayerGame[] }) {
         />
       </div>
       <div className="flex flex-col gap-8 py-8">
+        <CurrentGame player={player} />
         {filteredGames.map((game, idx) => (
           <GameReview key={idx} game={game} />
         ))}

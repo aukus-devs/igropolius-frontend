@@ -10,7 +10,7 @@ type Props = {
 
 function PlayerDialogTabs({ player }: Props) {
   const tabs = [
-    { name: "Игры", value: "games", content: <GamesTab games={player.games} /> },
+    { name: "Игры", value: "games", content: <GamesTab player={player} /> },
     { name: "Карточки", value: "cards", content: <CardsTab cards={player.bonus_cards} /> },
     { name: "Действия", value: "actions", content: <EventsTab player={player} /> },
   ];
