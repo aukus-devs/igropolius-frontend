@@ -62,7 +62,7 @@ function getEventMoveInfo(event: PlayerEventMove) {
 
   return {
     title,
-    description: `С ${event.sector_id} клетки на ${event.sector_to}`,
+    description: `С ${event.sector_from} клетки на ${event.sector_to}`,
   };
 }
 

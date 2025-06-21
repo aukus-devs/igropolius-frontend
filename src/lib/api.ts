@@ -59,7 +59,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           timestamp: new Date("04 30 2025 17:40").getTime(),
           adjusted_roll: 5,
           subtype: "dice-roll",
-          sector_id: 10,
+          sector_from: 10,
           sector_to: 15,
           completed_map: false,
         },

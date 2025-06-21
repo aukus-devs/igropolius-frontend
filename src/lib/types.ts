@@ -149,7 +149,6 @@ type EventType = "game" | "bonus-card" | "player-move" | "score-change";
 export type PlayerEventBase = {
   event_type: EventType;
   timestamp: number;
-  sector_id: number;
 };
 
 export type PlayerEventGame = PlayerEventBase & {
@@ -159,6 +158,7 @@ export type PlayerEventGame = PlayerEventBase & {
   game_review: string;
   game_score: number;
   duration: number;
+  sector_id: number;
 };
 
 export type BonusCardType =
@@ -174,11 +174,13 @@ export type PlayerEventBonusCard = PlayerEventBase & {
   event_type: "bonus-card";
   subtype: "received" | "used" | "lost";
   bonus_type: BonusCardType;
+  sector_id: number;
 };
 
 export type PlayerEventMove = PlayerEventBase & {
   event_type: "player-move";
   subtype: "dice-roll" | "train-ride";
+  sector_from: number;
   sector_to: number;
   adjusted_roll: number;
   dice_roll?: number[];
@@ -192,6 +194,7 @@ export type PlayerEventScoreChange = PlayerEventBase & {
   subtype: TaxType | "game-completed" | "game-dropped";
   amount: number;
   tax_player_id?: number;
+  sector_id: number;
 };
 
 export type PlayerEvent =
