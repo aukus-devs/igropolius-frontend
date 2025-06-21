@@ -296,7 +296,10 @@ type SearchGamesResponse = {
   games: IGDBGame[];
 };
 
-export async function searchGames(query: string, limit: number = 20): Promise<SearchGamesResponse> {
+export async function searchGames(
+  query: string,
+  limit: number = 20,
+): Promise<SearchGamesResponse> {
   if (MOCK_API) {
     const mockGames: IGDBGame[] = [
       {
@@ -319,16 +322,18 @@ export async function searchGames(query: string, limit: number = 20): Promise<Se
       },
     ];
 
-    const filteredGames = mockGames.filter(game =>
-      game.name.toLowerCase().includes(query.toLowerCase())
+    const filteredGames = mockGames.filter((game) =>
+      game.name.toLowerCase().includes(query.toLowerCase()),
     );
 
     return Promise.resolve({ games: filteredGames });
   }
 
-  const response = await apiRequest(`/api/igdb/games/search?query=${encodeURIComponent(query)}&limit=${limit}`);
+  const response = await apiRequest(
+    `/api/igdb/games/search?query=${encodeURIComponent(query)}&limit=${limit}`,
+  );
   return response.json();
-
+}
 
 export async function giveBonusCard(bonusType: BonusCardType): Promise<void> {
   if (MOCK_API) {

@@ -21,7 +21,7 @@ import {
   makePlayerMove,
   payTaxes,
   saveTurnState,
-  stealBonusCard,
+  stealBonusCard as stealBonusCardApi,
 } from "@/lib/api";
 import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 
@@ -245,7 +245,7 @@ const usePlayerStore = create<{
 
   stealBonusCard: async (player: PlayerData, card: BonusCardType) => {
     const { setNextTurnState } = get();
-    await stealBonusCard(player.id, card);
+    await stealBonusCardApi(player.id, card);
     await setNextTurnState({});
   },
 }));
