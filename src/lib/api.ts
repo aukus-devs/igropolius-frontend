@@ -288,7 +288,7 @@ export async function payTaxes(taxType: TaxType): Promise<void> {
 export type IGDBGame = {
   id: number;
   name: string;
-  cover: string;
+  cover: string | null;
   release_year: number;
 };
 
@@ -317,7 +317,7 @@ export async function searchGames(
       {
         id: 3,
         name: "Elden Ring",
-        cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.webp",
+        cover: null,
         release_year: 2022,
       },
     ];

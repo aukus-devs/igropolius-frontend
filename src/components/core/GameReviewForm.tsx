@@ -13,6 +13,8 @@ import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 import { ArrowRight } from "../icons";
 import { searchGames, IGDBGame } from "@/lib/api";
 
+const mockPoster = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
+
 type StatesOption = {
   title: string;
   value: GameStatusType;
@@ -169,7 +171,7 @@ function GameTitle() {
               onClick={() => handleGameSelect(game)}
             >
               <img
-                src={game.cover}
+                src={game.cover || mockPoster}
                 alt={game.name}
                 className="w-10 h-14 object-cover rounded"
               />
@@ -248,7 +250,6 @@ function GameReviewForm() {
   });
 
   const selectedGame = useReviewFormStore((state) => state.selectedGame);
-  const mockPoster = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
 
   const onConfirm = async () => {
     await sendReview(scores);
