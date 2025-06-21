@@ -82,6 +82,7 @@ export type PlayerGame = {
   rating: number;
   duration: number | null;
   vod_links: string | null;
+  cover: string | null;
 };
 
 export type BackendPlayerData = {
