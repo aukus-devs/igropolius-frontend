@@ -227,11 +227,16 @@ function GameReviewForm() {
     })),
   );
 
-  const setRating = useReviewFormStore((state) => state.setRating);
-  const rating = useReviewFormStore((state) => state.rating);
-  const sendReview = useReviewFormStore((state) => state.sendReview);
-  const gameStatus = useReviewFormStore((state) => state.gameStatus);
-  const scores = useReviewFormStore(useShallow((state) => state.getReviewScores()));
+  const { setRating, rating, sendReview, getReviewScores, gameStatus } = useReviewFormStore(
+    useShallow((state) => ({
+      setRating: state.setRating,
+      rating: state.rating,
+      getReviewScores: state.getReviewScores,
+      sendReview: state.sendReview,
+      gameStatus: state.gameStatus,
+    })),
+  );
+  const scores = getReviewScores();
 
   let buttonText = "Заполни форму";
   switch (gameStatus) {
