@@ -39,7 +39,7 @@ function PlayerDialogHeader({ player }: { player: PlayerData }) {
       <div className="flex gap-2 justify-center items-center mb-5">
         <div className="relative">
           <Avatar className="w-[54px] h-[54px] overflow-auto">
-            <AvatarImage src={player.avatar_link} />
+            <AvatarImage src={player.avatar_link ?? "https://github.com/shadcn.png"} />
             <AvatarFallback className="uppercase">
               {player.username.slice(0, 2)}
             </AvatarFallback>

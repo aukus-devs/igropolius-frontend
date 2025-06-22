@@ -25,7 +25,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer, showCards }: 
     >
       <div className="relative">
         <Avatar className="md:w-7 md:h-7 w-[41px] h-[41px]">
-          <AvatarImage src={player.avatar_link} />
+          <AvatarImage src={player.avatar_link ?? "https://github.com/shadcn.png"} />
           <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
         </Avatar>
         {player.is_online ? (
