@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Button } from "../ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import useReviewFormStore from "@/stores/reviewFormStore";
@@ -9,12 +9,15 @@ import Rating from "./Rating";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
-import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
+import { queryKeys, resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 import { ArrowRight, X } from "../icons";
 import { searchGames, IGDBGame } from "@/lib/api";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "@/hooks/useDebounce";
 
-const mockPoster = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
+const mockPoster =
+  "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
 
 type StatesOption = {
   title: string;
@@ -101,42 +104,28 @@ function GameReview() {
 }
 
 function GameTitle() {
-  const gameTitle = useReviewFormStore((state) => state.gameTitle);
-  const setGameTitle = useReviewFormStore((state) => state.setGameTitle);
-  const setSelectedGame = useReviewFormStore((state) => state.setSelectedGame);
-  const selectedGame = useReviewFormStore((state) => state.selectedGame);
-  
-  const [searchResults, setSearchResults] = useState<IGDBGame[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
+  const { gameTitle, setGameTitle, selectedGame, setSelectedGame } = useReviewFormStore(
+    useShallow((state) => ({
+      gameTitle: state.gameTitle,
+      setGameTitle: state.setGameTitle,
+      selectedGame: state.selectedGame,
+      setSelectedGame: state.setSelectedGame,
+    })),
+  );
   const [showResults, setShowResults] = useState(false);
 
-  useEffect(() => {
-    const searchGamesWithDelay = async () => {
-      if (gameTitle.length < 2) {
-        setSearchResults([]);
-        setShowResults(false);
-        return;
-      }
+  const gameAlreadySelected = selectedGame && selectedGame.name === gameTitle;
 
-      if (selectedGame && selectedGame.name === gameTitle) {
-        return;
-      }
+  const gameTitleDebounced = useDebounce(gameTitle, 400);
 
-      setIsSearching(true);
-      try {
-        const response = await searchGames(gameTitle);
-        setSearchResults(response.games);
-        setShowResults(true);
-      } catch (error) {
-        console.error("Failed to search games:", error);
-        setSearchResults([]);
-      }
-      setIsSearching(false);
-    };
+  const { data: gamesSearchData, isFetching: isSearching } = useQuery({
+    queryKey: queryKeys.searchGames(gameTitleDebounced),
+    queryFn: () => searchGames(gameTitleDebounced),
+    enabled: gameTitleDebounced.length >= 2 && !gameAlreadySelected,
+    initialData: { games: [] },
+  });
 
-    const debounceTimer = setTimeout(searchGamesWithDelay, 300);
-    return () => clearTimeout(debounceTimer);
-  }, [gameTitle, selectedGame]);
+  const searchResults = gamesSearchData.games;
 
   const handleGameSelect = (game: IGDBGame) => {
     setGameTitle(game.name);
@@ -152,7 +141,6 @@ function GameTitle() {
   const handleClearInput = () => {
     setGameTitle("");
     setSelectedGame(null);
-    setSearchResults([]);
     setShowResults(false);
   };
 
@@ -169,9 +157,9 @@ function GameTitle() {
         onBlur={() => setTimeout(() => setShowResults(false), 150)}
         onFocus={() => searchResults.length > 0 && setShowResults(true)}
       />
-      
+
       {showResults && searchResults.length > 0 && (
-        <div 
+        <div
           className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
           onMouseDown={(e) => e.preventDefault()}
         >
@@ -194,7 +182,7 @@ function GameTitle() {
           ))}
         </div>
       )}
-      
+
       {gameTitle && (
         <div className="absolute right-2 top-1/2 -translate-y-1/2">
           {isSearching ? (

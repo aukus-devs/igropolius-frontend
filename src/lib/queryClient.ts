@@ -8,6 +8,7 @@ export const queryKeys = {
   playerEvents: (playerId: number) => ["player-events", playerId],
   currentRulesVersion: ["current-rules-version"],
   allRulesVersions: ["all-rules-versions"],
+  searchGames: (title: string) => ["search-games", title],
 } as const;
 
 export const resetCurrentPlayerQuery = () => {
