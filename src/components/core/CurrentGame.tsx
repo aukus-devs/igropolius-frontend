@@ -33,7 +33,7 @@ function CurrentGame({ player }: Props) {
         <div className="text-muted-foreground">
           <div className="flex flex-wrap gap-2 mb-2.5">
             <Badge className="bg-white/20 text-white/70 font-semibold">
-              <p>Играет уже — {formatMs(playDuration * 1000)}</p>
+              <p>Играет уже — {formatMs(playDuration * 60 * 60)}</p>
             </Badge>
           </div>
         </div>
