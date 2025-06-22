@@ -155,7 +155,7 @@ function GameTitle() {
         onKeyDown={(e) => e.stopPropagation()}
         onChange={handleInputChange}
         onBlur={() => setTimeout(() => setShowResults(false), 150)}
-        onFocus={() => searchResults.length > 0 && setShowResults(true)}
+        onFocus={() => setShowResults(true)}
       />
 
       {showResults && searchResults.length > 0 && (
