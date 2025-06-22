@@ -91,6 +91,7 @@ export type BackendPlayerData = {
   username: string;
   first_name: string;
   is_online: boolean;
+  avatar_link: string | null;
 
   current_game: string | null;
   current_game_updated_at: number | null;
@@ -115,7 +116,6 @@ export type BackendPlayerData = {
 };
 
 export type PlayerFrontendData = {
-  avatar_link: string;
   color: PlayerColorValue;
 };
 

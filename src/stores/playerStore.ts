@@ -103,7 +103,6 @@ const usePlayerStore = create<{
     const buildings: Record<number, BuildingData[]> = {};
     const players: PlayerData[] = playersData.map((playerData) => {
       const frontendData = playersFrontendData[playerData.username] ?? {
-        avatar_link: "",
         color: "white",
       };
 

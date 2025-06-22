@@ -342,6 +342,7 @@ export const playersData: BackendPlayerData[] = [
     first_name: "Денис",
     is_online: true,
     sector_id: 1,
+    avatar_link: "https://github.com/shadcn.png",
 
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
@@ -475,8 +476,9 @@ export const playersData: BackendPlayerData[] = [
     sector_id: 5,
     username: "Player-2",
     first_name: "Илья",
-
     is_online: false,
+    avatar_link: "https://github.com/shadcn.png",
+
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
@@ -627,10 +629,9 @@ export const playersData: BackendPlayerData[] = [
     id: 3,
     sector_id: 5,
     username: "Player-3",
-
     first_name: "Илья",
-
     is_online: true,
+    avatar_link: "https://github.com/shadcn.png",
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
@@ -684,10 +685,9 @@ export const playersData: BackendPlayerData[] = [
     id: 4,
     sector_id: 5,
     username: "Player-4",
-
     first_name: "Илья",
-
     is_online: false,
+    avatar_link: "https://github.com/shadcn.png",
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
@@ -728,10 +728,9 @@ export const playersData: BackendPlayerData[] = [
     id: 5,
     sector_id: 5,
     username: "Player-5",
-
     first_name: "Илья",
-
     is_online: false,
+    avatar_link: "https://github.com/shadcn.png",
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
@@ -778,10 +777,9 @@ export const playersData: BackendPlayerData[] = [
     id: 6,
     sector_id: 5,
     username: "Player-6",
-
     first_name: "Илья",
-
     is_online: true,
+    avatar_link: "https://github.com/shadcn.png",
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
@@ -827,10 +825,9 @@ export const playersData: BackendPlayerData[] = [
     id: 7,
     sector_id: 5,
     username: "Player-7",
-
     first_name: "Илья",
-
     is_online: true,
+    avatar_link: "https://github.com/shadcn.png",
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
@@ -876,10 +873,10 @@ export const playersData: BackendPlayerData[] = [
     id: 8,
     sector_id: 5,
     username: "Player-8",
-
     first_name: "Илья",
-
     is_online: true,
+    avatar_link: "https://github.com/shadcn.png",
+
     current_game: null,
     current_game_updated_at: null,
     current_game_cover: null,
@@ -1007,34 +1004,26 @@ export const mockReviews: GameReviewType[] = [
 export const playersFrontendData: Record<string, PlayerFrontendData> = {
   Praden: {
     color: playerColors.red,
-    avatar_link: "https://github.com/shadcn.png",
   },
   "Player-2": {
     color: playerColors.orange,
-    avatar_link: "https://github.com/shadcn.png",
   },
   "Player-3": {
     color: playerColors.yellow,
-    avatar_link: "https://github.com/shadcn.png",
   },
   "Player-4": {
     color: playerColors.green,
-    avatar_link: "https://github.com/shadcn.png",
   },
   "Player-5": {
     color: playerColors.lightBlue,
-    avatar_link: "https://github.com/shadcn.png",
   },
   "Player-6": {
     color: playerColors.blue,
-    avatar_link: "https://github.com/shadcn.png",
   },
   "Player-7": {
     color: playerColors.darkBlue,
-    avatar_link: "https://github.com/shadcn.png",
   },
   "Player-8": {
     color: playerColors.purple,
-    avatar_link: "https://github.com/shadcn.png",
   },
 };
