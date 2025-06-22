@@ -38,6 +38,7 @@ function App() {
   const { data: playersData, isLoading } = useQuery({
     queryKey: queryKeys.players,
     queryFn: fetchPlayers,
+    refetchInterval: 60 * 1000,
   });
 
   const { setPlayers, setMyPlayerId, setTurnState } = usePlayerStore(
