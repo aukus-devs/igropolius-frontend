@@ -75,7 +75,7 @@ function GameReview({ game }: Props) {
           {(duration && length) && (
             <div className="flex flex-wrap gap-2 mb-2.5">
               <Badge className="bg-white/20 text-white/70 font-semibold">
-                <p> Время — {formatMs(duration * 60 * 60)}</p>
+                <p> Время — {formatMs(duration * 1000)}</p>
               </Badge>
               <Badge className="bg-white/20 text-white/70 font-semibold">
                 <p> По HLTB — {length}ч</p>

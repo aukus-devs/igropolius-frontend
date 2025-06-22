@@ -95,6 +95,7 @@ export type BackendPlayerData = {
   current_game: string | null;
   current_game_updated_at: number | null;
   current_game_cover: string | null;
+  current_game_duration: number | null;
   online_count: number | null;
   current_auc_total_sum: number | null;
   current_auc_started_at: number | null;

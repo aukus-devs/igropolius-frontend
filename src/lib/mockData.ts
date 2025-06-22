@@ -345,6 +345,7 @@ export const playersData: BackendPlayerData[] = [
 
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
+    current_game_duration: 3600,
     current_game_cover:
       "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
     online_count: 50,
@@ -478,6 +479,7 @@ export const playersData: BackendPlayerData[] = [
     is_online: false,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
+    current_game_duration: 60,
     current_game_cover:
       "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
     online_count: 50,
@@ -631,6 +633,7 @@ export const playersData: BackendPlayerData[] = [
     is_online: true,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
+    current_game_duration: 60,
     current_game_cover:
       "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
     online_count: 50,
@@ -687,6 +690,7 @@ export const playersData: BackendPlayerData[] = [
     is_online: false,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
+    current_game_duration: 60,
     current_game_cover:
       "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
     online_count: 50,
@@ -730,6 +734,7 @@ export const playersData: BackendPlayerData[] = [
     is_online: false,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
+    current_game_duration: 60,
     current_game_cover:
       "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
     online_count: 50,
@@ -779,6 +784,7 @@ export const playersData: BackendPlayerData[] = [
     is_online: true,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
+    current_game_duration: 60,
     current_game_cover:
       "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
     online_count: 50,
@@ -827,6 +833,7 @@ export const playersData: BackendPlayerData[] = [
     is_online: true,
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
+    current_game_duration: 60,
     current_game_cover:
       "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png",
     online_count: 50,
@@ -878,6 +885,7 @@ export const playersData: BackendPlayerData[] = [
     current_game_cover: null,
     online_count: 50,
     current_auc_started_at: Math.ceil(Date.now() / 1000),
+    current_game_duration: 60,
     current_auc_total_sum: null,
     pointauc_token: "abc",
 

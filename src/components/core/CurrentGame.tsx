@@ -7,16 +7,13 @@ type Props = {
 };
 
 function CurrentGame({ player }: Props) {
-  const { current_game, current_game_updated_at, current_game_cover } = player;
+  const { current_game, current_game_duration, current_game_cover } = player;
 
-  if (!current_game || !current_game_updated_at) {
+  if (!current_game || !current_game_duration) {
     return null;
   }
 
   const fallbackPoster = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
-  
-  const currentTime = Math.floor(Date.now() / 1000);
-  const playDuration = currentTime - current_game_updated_at;
 
   return (
     <div className="font-semibold">
@@ -33,7 +30,7 @@ function CurrentGame({ player }: Props) {
         <div className="text-muted-foreground">
           <div className="flex flex-wrap gap-2 mb-2.5">
             <Badge className="bg-white/20 text-white/70 font-semibold">
-              <p>Играет уже — {formatMs(playDuration * 60 * 60)}</p>
+              <p>Играет уже — {formatMs(current_game_duration * 1000)}</p>
             </Badge>
           </div>
         </div>
