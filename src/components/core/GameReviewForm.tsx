@@ -156,6 +156,7 @@ function GameTitle() {
         onChange={handleInputChange}
         onBlur={() => setTimeout(() => setShowResults(false), 150)}
         onFocus={() => setShowResults(true)}
+        autoComplete="off"
       />
 
       {showResults && searchResults.length > 0 && (
