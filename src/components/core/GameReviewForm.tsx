@@ -1,17 +1,5 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Button } from "../ui/button";
 import { useState, useEffect, useRef } from "react";
 import { Input } from "../ui/input";
@@ -21,11 +9,7 @@ import Rating from "./Rating";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
-import {
-  queryKeys,
-  resetCurrentPlayerQuery,
-  resetPlayersQuery,
-} from "@/lib/queryClient";
+import { queryKeys, resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
 import { ArrowRight, X } from "../icons";
 import { searchGames, IGDBGame } from "@/lib/api";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -124,15 +108,14 @@ function GameTitle({
   inputRef: React.RefObject<HTMLInputElement | null>;
   open: boolean;
 }) {
-  const { gameTitle, setGameTitle, selectedGame, setSelectedGame } =
-    useReviewFormStore(
-      useShallow((state) => ({
-        gameTitle: state.gameTitle,
-        setGameTitle: state.setGameTitle,
-        selectedGame: state.selectedGame,
-        setSelectedGame: state.setSelectedGame,
-      }))
-    );
+  const { gameTitle, setGameTitle, selectedGame, setSelectedGame } = useReviewFormStore(
+    useShallow((state) => ({
+      gameTitle: state.gameTitle,
+      setGameTitle: state.setGameTitle,
+      selectedGame: state.selectedGame,
+      setSelectedGame: state.setSelectedGame,
+    })),
+  );
   const myPlayer = usePlayerStore((state) => state.myPlayer);
   const [showResults, setShowResults] = useState(false);
   const [wasCleared, setWasCleared] = useState(false);
@@ -146,22 +129,11 @@ function GameTitle({
   }, [open]);
 
   useEffect(() => {
-    if (
-      !gameTitle &&
-      myPlayer?.current_game &&
-      !wasCleared &&
-      !wasInitialized
-    ) {
+    if (!gameTitle && myPlayer?.current_game && !wasCleared && !wasInitialized) {
       setGameTitle(myPlayer.current_game);
       setWasInitialized(true);
     }
-  }, [
-    myPlayer?.current_game,
-    gameTitle,
-    setGameTitle,
-    wasCleared,
-    wasInitialized,
-  ]);
+  }, [myPlayer?.current_game, gameTitle, setGameTitle, wasCleared, wasInitialized]);
 
   const gameAlreadySelected = selectedGame && selectedGame.name === gameTitle;
 
@@ -239,12 +211,8 @@ function GameTitle({
                     className="w-10 h-14 object-cover rounded"
                   />
                   <div className="flex-1">
-                    <div className="font-semibold text-gray-900">
-                      {game.name}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      {game.release_year}
-                    </div>
+                    <div className="font-semibold text-gray-900">{game.name}</div>
+                    <div className="text-sm text-gray-600">{game.release_year}</div>
                   </div>
                 </div>
               ))
@@ -289,7 +257,7 @@ function GameReviewForm() {
   const { setNextTurnState } = usePlayerStore(
     useShallow((state) => ({
       setNextTurnState: state.setNextTurnState,
-    }))
+    })),
   );
 
   const {
@@ -301,6 +269,7 @@ function GameReviewForm() {
     error,
     clearError,
     isSubmitting,
+    selectedGame,
   } = useReviewFormStore(
     useShallow((state) => ({
       setRating: state.setRating,
@@ -311,7 +280,8 @@ function GameReviewForm() {
       error: state.error,
       clearError: state.clearError,
       isSubmitting: state.isSubmitting,
-    }))
+      selectedGame: state.selectedGame,
+    })),
   );
   const scores = getReviewScores();
 
@@ -341,8 +311,6 @@ function GameReviewForm() {
     if (state.gameTime) return false;
     return true;
   });
-
-  const selectedGame = useReviewFormStore((state) => state.selectedGame);
 
   useEffect(() => {
     if (open && !selectedGame) {
@@ -408,11 +376,7 @@ function GameReviewForm() {
         </div>
 
         <div className="flex items-center gap-3">
-          {error && (
-            <span className="text-sm text-destructive font-medium">
-              {error}
-            </span>
-          )}
+          {error && <span className="text-sm text-destructive font-medium">{error}</span>}
 
           <Popover open={showScoreDetails} onOpenChange={setShowScoreDetails}>
             <PopoverTrigger asChild>
@@ -428,9 +392,8 @@ function GameReviewForm() {
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              Длина игры ({scores.base}) * тип сектора (
-              {scores.sectorMultiplier}) + бонус круга (
-              {scores.mapCompletionBonus})
+              Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус
+              круга ({scores.mapCompletionBonus})
             </PopoverContent>
           </Popover>
         </div>
