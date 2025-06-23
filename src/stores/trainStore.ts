@@ -39,9 +39,7 @@ const useTrainsStore = create<{
     await makePlayerMove({
       type: "train-ride",
       bonuses_used: [],
-      dice_roll_id: 0,
       selected_die: null,
-      tmp_roll_result: 10,
     });
 
     usePlayerStore.setState({ isPlayerMoving: true });

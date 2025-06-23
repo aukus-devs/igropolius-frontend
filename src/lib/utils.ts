@@ -1,4 +1,5 @@
 import {
+  BonusCardType,
   PlayerData,
   PlayerEvent,
   PlayerEventBonusCard,
@@ -109,6 +110,27 @@ function getEventBonusCardInfo(event: PlayerEventBonusCard) {
     title,
     description: event.bonus_type,
   };
+}
+
+export function getBonusCardName(bonusType: BonusCardType): string {
+  switch (bonusType) {
+    case "adjust-roll-by1":
+      return "Изменить бросок на ±1";
+    case "choose-1-die":
+      return "Выбрать 1 кубик";
+    case "skip-prison-day":
+      return "Пропустить день в тюрьме";
+    case "reroll-game":
+      return "Реролл игры";
+    case "evade-street-tax":
+      return "Уклониться от налога на клетке";
+    case "evade-map-tax":
+      return "Уклониться от налога за круг";
+    case "game-help-allowed":
+      return "Помощь в игре разрешена";
+    default:
+      return bonusType;
+  }
 }
 
 export function getEventDescription(event: PlayerEvent) {

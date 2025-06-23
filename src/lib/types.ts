@@ -162,6 +162,7 @@ export type PlayerEventGame = PlayerEventBase & {
   game_score: number;
   duration: number;
   sector_id: number;
+  bonuses_used?: BonusCardType[];
 };
 
 export type BonusCardType =
@@ -195,6 +196,7 @@ export type PlayerEventMove = PlayerEventBase & {
   dice_roll?: number[];
   dice_roll_json?: DiceRollJson;
   completed_map: boolean;
+  bonuses_used?: BonusCardType[];
 };
 
 export type TaxType = "street-tax" | "map-tax";
@@ -205,6 +207,7 @@ export type PlayerEventScoreChange = PlayerEventBase & {
   amount: number;
   tax_player_id?: number;
   sector_id: number;
+  bonuses_used?: BonusCardType[];
 };
 
 export type PlayerEvent =

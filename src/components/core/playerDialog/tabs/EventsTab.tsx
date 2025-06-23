@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { fetchPlayerEvents } from "@/lib/api";
 import { queryKeys } from "@/lib/queryClient";
 import { PlayerData, PlayerEvent, PlayerEventMove, DiceRollJson } from "@/lib/types";
-import { getEventDescription } from "@/lib/utils";
+import { getEventDescription, getBonusCardName } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
 
@@ -70,6 +70,8 @@ function Event({ event }: { event: PlayerEvent }) {
   const isMoveEvent = event.event_type === "player-move";
   const moveEvent = isMoveEvent ? (event as PlayerEventMove) : null;
   const hasDiceRollData = moveEvent?.dice_roll_json && moveEvent.subtype === "dice-roll";
+  
+  const bonusesUsed = (event as any).bonuses_used || [];
 
   const EventContent = () => (
     <div>
@@ -78,6 +80,16 @@ function Event({ event }: { event: PlayerEvent }) {
       <p className={`text-muted-foreground text-sm font-semibold`}>
         {description} {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
       </p>
+      {bonusesUsed.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          <span className="text-xs text-muted-foreground mr-1">Использованы карты:</span>
+          {bonusesUsed.map((bonus: string, index: number) => (
+            <Badge key={index} variant="secondary" className="text-xs">
+              {getBonusCardName(bonus as any)}
+            </Badge>
+          ))}
+        </div>
+      )}
       {hasDiceRollData && (
         <p className="text-xs text-blue-500 mt-1">Нажмите для просмотра деталей броска</p>
       )}
