@@ -353,13 +353,16 @@ export function formatMs(diffMs: number) {
   const minutesPadded = String(minutes).padStart(2, "0");
   const secondsPadded = String(seconds).padStart(2, "0");
 
+  if (days > 0) {
+    if (hours === 0) {
+      return `${days}д ${minutesPadded}м`;
+    }
+    return `${days}д ${hoursPadded}ч`;
+  }
+
   if (hours === 0) {
     return `${minutesPadded}м ${secondsPadded}с`;
   }
 
-  if (days === 0) {
-    return `${hoursPadded}ч ${minutesPadded}м`;
-  }
-
-  return `${days}д ${hoursPadded}ч`;
+  return `${hoursPadded}ч ${minutesPadded}м`;
 }

@@ -348,7 +348,7 @@ export const playersData: BackendPlayerData[] = [
 
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
-    current_game_duration: 3600,
+    current_game_duration: 86976,
     current_game_cover: FALLBACK_GAME_POSTER,
     online_count: 50,
     current_auc_started_at: Math.ceil(Date.now() / 1000),
