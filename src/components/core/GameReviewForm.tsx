@@ -325,22 +325,24 @@ function GameReviewForm() {
     clearError();
     try {
       await sendReview(scores.total);
-      let turnParams = {};
-      switch (gameStatus) {
-        case "drop":
-          turnParams = { action: "drop-game" };
-          break;
-        case "reroll":
-          turnParams = { action: "reroll-game" };
-          break;
-      }
-      await setNextTurnState(turnParams);
-      setOpen(false);
-      resetPlayersQuery();
-      resetCurrentPlayerQuery();
     } catch (error) {
       console.error("Failed to submit review:", error);
+      return;
     }
+
+    let turnParams = {};
+    switch (gameStatus) {
+      case "drop":
+        turnParams = { action: "drop-game" };
+        break;
+      case "reroll":
+        turnParams = { action: "reroll-game" };
+        break;
+    }
+    await setNextTurnState(turnParams);
+    setOpen(false);
+    resetPlayersQuery();
+    resetCurrentPlayerQuery();
   };
 
   return (
