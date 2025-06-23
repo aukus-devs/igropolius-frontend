@@ -21,7 +21,7 @@ import {
 } from "@/lib/types";
 import { getEventDescription, getBonusCardName } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 type Props = {
   player: PlayerData;
@@ -147,11 +147,18 @@ function Event({ event }: { event: PlayerEvent }) {
 
 type EventsTabFilterOption = {
   title: string;
-  value: PlayerEvent["event_type"];
+  value: PlayerEvent["event_type"] | "all";
 };
 
-function EventsTabFilter() {
+function EventsTabFilter({
+  selectedFilter,
+  onFilterChange,
+}: {
+  selectedFilter: string;
+  onFilterChange: (value: string) => void;
+}) {
   const options: EventsTabFilterOption[] = [
+    { title: "Все", value: "all" },
     { title: "Карточки", value: "bonus-card" },
     { title: "Налоги", value: "score-change" },
     { title: "Игры", value: "game" },
@@ -161,7 +168,7 @@ function EventsTabFilter() {
   return (
     <div className="flex items-center gap-2.5 justify-self-end">
       <span className="font-semibold text-muted-foreground">Фильтр</span>
-      <Select>
+      <Select value={selectedFilter} onValueChange={onFilterChange}>
         <SelectTrigger className="w-[140px] rounded-lg bg-foreground/10">
           <SelectValue placeholder="Все" />
         </SelectTrigger>
@@ -181,6 +188,8 @@ function EventsTabFilter() {
 }
 
 export default function EventsTab({ player }: Props) {
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
+
   const {
     data: eventsData,
     isLoading,
@@ -220,11 +229,19 @@ export default function EventsTab({ player }: Props) {
   const events = eventsData?.events || [];
   events.sort((a, b) => (a.timestamp >= b.timestamp ? -1 : 1));
 
-  const eventsByDate = getEventsByDate(events);
+  const filteredEvents =
+    selectedFilter === "all"
+      ? events
+      : events.filter((event) => event.event_type === selectedFilter);
+
+  const eventsByDate = getEventsByDate(filteredEvents);
 
   return (
     <div>
-      <EventsTabFilter />
+      <EventsTabFilter
+        selectedFilter={selectedFilter}
+        onFilterChange={setSelectedFilter}
+      />
       <div className="flex flex-col gap-7.5 mb-5">
         {Object.entries(eventsByDate || {}).map(([date, events]) => {
           const { month, day } = getFormattedTime(

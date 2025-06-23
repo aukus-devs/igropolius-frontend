@@ -58,7 +58,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         },
         {
           event_type: "game",
-          timestamp: Math.floor(new Date("04 30 2025 18:22").getTime() / 1000),
+          timestamp: Math.floor(new Date("04 30 2025 18:20").getTime() / 1000),
           subtype: "completed",
           game_title: "Witcher 5",
           game_cover: null,
@@ -70,7 +70,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         },
         {
           event_type: "game",
-          timestamp: Math.floor(new Date("04 30 2025 18:22").getTime() / 1000),
+          timestamp: Math.floor(new Date("04 30 2025 18:19").getTime() / 1000),
           subtype: "completed",
           game_title: "Witcher 5",
           game_cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1wyy.webp",
