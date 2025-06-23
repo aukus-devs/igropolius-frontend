@@ -46,7 +46,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
       events: [
         {
           event_type: "game",
-          timestamp: "1750661642",
+          timestamp: 1750661642,
           subtype: "completed",
           game_title: "Witcher 5",
           game_cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1wyy.webp",

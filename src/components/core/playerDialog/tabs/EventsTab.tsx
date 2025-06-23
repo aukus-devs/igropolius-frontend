@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { LoaderCircleIcon } from "lucide-react";
 import { fetchPlayerEvents } from "@/lib/api";
 import { queryKeys } from "@/lib/queryClient";
 import {
@@ -179,11 +181,41 @@ function EventsTabFilter() {
 }
 
 export default function EventsTab({ player }: Props) {
-  const { data: eventsData } = useQuery({
+  const {
+    data: eventsData,
+    isLoading,
+    error,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: queryKeys.playerEvents(player.id),
     queryFn: () => fetchPlayerEvents(player.id),
     refetchInterval: 30 * 1000,
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <LoaderCircleIcon className="animate-spin text-primary" size={54} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 gap-4">
+        <p className="text-muted-foreground text-center">
+          Произошла ошибка при загрузке событий
+        </p>
+        <p className="text-sm text-red-500 text-center">
+          {error instanceof Error ? error.message : "Неизвестная ошибка"}
+        </p>
+        <Button onClick={() => refetch()} variant="outline">
+          Повторить
+        </Button>
+      </div>
+    );
+  }
 
   const events = eventsData?.events || [];
   events.sort((a, b) => (a.timestamp >= b.timestamp ? -1 : 1));
