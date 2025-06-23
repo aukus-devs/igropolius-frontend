@@ -77,7 +77,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           game_review: "good",
           game_score: 9.5,
           sector_id: 10,
-          duration: 200
+          duration: 200,
         },
         {
           event_type: "player-move",
@@ -90,8 +90,9 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           bonuses_used: ["adjust-roll-by1", "choose-1-die"],
           dice_roll_json: {
             is_random_org_result: true,
-            random_org_check_form: "https://api.random.org/signatures/form?format=json&random=eyJtZXRob2QiOiJnZW5lcmF0ZVNpZ25lZEludGVnZXJzIiwiaGFzaGVkQXBpS2V5Ijoib2Y0T1c3MXQ3alFnNXZJb0pFdFBPUmVPNTA4UFNzZnpNL0x2ZlZwTmFIUDFCNjJ4NzgyWFBxR3ZLV0ZiTXhwYlRqcUNHbENEUS9oVldzRmFFT3Y3RFE9PSIsIm4iOjIsIm1pbiI6MSwibWF4Ijo4LCJyZXBsYWNlbWVudCI6dHJ1ZSwiYmFzZSI6MTAsInByZWdlbmVyYXRlZFJhbmRvbWl6YXRpb24iOnsiaWQiOiJwbGF5ZXJfaWQ9MSZ0aW1lc3RhbXA9MTc1MDY2MDc4MSJ9LCJkYXRhIjpbMyw3XSwibGljZW5zZSI6eyJ0eXBlIjoiZGV2ZWxvcGVyIiwidGV4dCI6IlJhbmRvbSB2YWx1ZXMgbGljZW5zZWQgc3RyaWN0bHkgZm9yIGRldmVsb3BtZW50IGFuZCB0ZXN0aW5nIG9ubHkiLCJpbmZvVXJsIjpudWxsfSwibGljZW5zZURhdGEiOm51bGwsInVzZXJEYXRhIjpudWxsLCJ0aWNrZXREYXRhIjpudWxsLCJjb21wbGV0aW9uVGltZSI6IjIwMjUtMDYtMjMgMDY6NDA6NTFaIiwic2VyaWFsTnVtYmVyIjo3NH0%3D&signature=WPlkelEz7Yx9WUneqcaO0MzFmkuA%2ByTlhMrZFPuIaxZ8UK%2Fv%2BxWP%2FLtCR3P5fCapAtwaHfccYKLsT%2B1k4blg4AhLfxbt7RrUTshDf%2ByTUuBXsOrVoO1jjmbLg43cikwMHcyhJIyT2bMGknvPGfb9B6YCDwoWvV1R8V2v8fU9WPXf5rsfdhT1E30LrPWbnzKMjaOgBHSHFTRokoOObh4AgYiAnCkxcZhaBZKMkqFp4r%2BmCheYf977CkgCfXBsepVlWXrZFEosgnJHVGdCxEYyhaPMl2GTetD07CnAK69SqILvMnUJ5ooOG0gz0cvzW5ZQzLtiYmFyPhneAahWIeQ1g9MdAh%2Fit4YA%2Bm6vLeVeYFyShSFq7%2B2jznv0UL77S7sCWFR0fi0qMuUr7JtfgENWOYSHO813qnsjfl0eqyPe9XxTg4e7CifE5ZOoet7pjKrj3VfPPKa%2BAMw89y5HKHXdjGqIrzdtVaM%2B7ZRdGhBwIRyrSwhXy8XTo%2BaOYdz8rLsdN35Bdf2LxSHJexbhrYD5QyMRUgmYWjvwzau3oMczmRR5wbJyJR67vmUedPxpEOlfScJzMqWc8de4pMV1llEtKjzjg9%2Fbd%2BQTtk%2F%2BGkIMQdEO0aJiblkJw1T8CiHd9pe3ep%2FH9e9uC4ou54UtR9T4ssXg6wrc9I90RNI5D%2BnHDKk%3D",
-            data: [3, 7]
+            random_org_check_form:
+              "https://api.random.org/signatures/form?format=json&random=eyJtZXRob2QiOiJnZW5lcmF0ZVNpZ25lZEludGVnZXJzIiwiaGFzaGVkQXBpS2V5Ijoib2Y0T1c3MXQ3alFnNXZJb0pFdFBPUmVPNTA4UFNzZnpNL0x2ZlZwTmFIUDFCNjJ4NzgyWFBxR3ZLV0ZiTXhwYlRqcUNHbENEUS9oVldzRmFFT3Y3RFE9PSIsIm4iOjIsIm1pbiI6MSwibWF4Ijo4LCJyZXBsYWNlbWVudCI6dHJ1ZSwiYmFzZSI6MTAsInByZWdlbmVyYXRlZFJhbmRvbWl6YXRpb24iOnsiaWQiOiJwbGF5ZXJfaWQ9MSZ0aW1lc3RhbXA9MTc1MDY2MDc4MSJ9LCJkYXRhIjpbMyw3XSwibGljZW5zZSI6eyJ0eXBlIjoiZGV2ZWxvcGVyIiwidGV4dCI6IlJhbmRvbSB2YWx1ZXMgbGljZW5zZWQgc3RyaWN0bHkgZm9yIGRldmVsb3BtZW50IGFuZCB0ZXN0aW5nIG9ubHkiLCJpbmZvVXJsIjpudWxsfSwibGljZW5zZURhdGEiOm51bGwsInVzZXJEYXRhIjpudWxsLCJ0aWNrZXREYXRhIjpudWxsLCJjb21wbGV0aW9uVGltZSI6IjIwMjUtMDYtMjMgMDY6NDA6NTFaIiwic2VyaWFsTnVtYmVyIjo3NH0%3D&signature=WPlkelEz7Yx9WUneqcaO0MzFmkuA%2ByTlhMrZFPuIaxZ8UK%2Fv%2BxWP%2FLtCR3P5fCapAtwaHfccYKLsT%2B1k4blg4AhLfxbt7RrUTshDf%2ByTUuBXsOrVoO1jjmbLg43cikwMHcyhJIyT2bMGknvPGfb9B6YCDwoWvV1R8V2v8fU9WPXf5rsfdhT1E30LrPWbnzKMjaOgBHSHFTRokoOObh4AgYiAnCkxcZhaBZKMkqFp4r%2BmCheYf977CkgCfXBsepVlWXrZFEosgnJHVGdCxEYyhaPMl2GTetD07CnAK69SqILvMnUJ5ooOG0gz0cvzW5ZQzLtiYmFyPhneAahWIeQ1g9MdAh%2Fit4YA%2Bm6vLeVeYFyShSFq7%2B2jznv0UL77S7sCWFR0fi0qMuUr7JtfgENWOYSHO813qnsjfl0eqyPe9XxTg4e7CifE5ZOoet7pjKrj3VfPPKa%2BAMw89y5HKHXdjGqIrzdtVaM%2B7ZRdGhBwIRyrSwhXy8XTo%2BaOYdz8rLsdN35Bdf2LxSHJexbhrYD5QyMRUgmYWjvwzau3oMczmRR5wbJyJR67vmUedPxpEOlfScJzMqWc8de4pMV1llEtKjzjg9%2Fbd%2BQTtk%2F%2BGkIMQdEO0aJiblkJw1T8CiHd9pe3ep%2FH9e9uC4ou54UtR9T4ssXg6wrc9I90RNI5D%2BnHDKk%3D",
+            data: [3, 7],
           },
         },
         {
@@ -260,7 +261,7 @@ export async function logout(): Promise<void> {
 }
 
 type PlayerMoveRequest = {
-  type: "dice-roll" | "train-ride";
+  type: "dice-roll" | "train-ride" | "drop-to-prison";
   bonuses_used: string[];
   selected_die: number | null;
 };

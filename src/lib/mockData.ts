@@ -337,6 +337,8 @@ export const SectorsById: Record<number, SectorData> = Object.fromEntries(
   sectorsData.map((sector) => [sector.id, sector]),
 );
 
+export const PrisonSectors = sectorsData.filter((s) => s.type === "prison");
+
 export const playersData: BackendPlayerData[] = [
   {
     id: 1,
@@ -573,8 +575,7 @@ export const playersData: BackendPlayerData[] = [
         review: "Не очень понравилась, слишком простая.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/6677889900",
-        cover:
-          FALLBACK_GAME_POSTER,
+        cover: FALLBACK_GAME_POSTER,
       },
       {
         sector_id: 5,
@@ -657,8 +658,7 @@ export const playersData: BackendPlayerData[] = [
         review: "Не очень понравилась, слишком простая.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/6677889900",
-        cover: FALLBACK_GAME_POSTER
-        ,
+        cover: FALLBACK_GAME_POSTER,
       },
     ],
     bonus_cards: [],
@@ -673,8 +673,7 @@ export const playersData: BackendPlayerData[] = [
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
-    current_game_cover: FALLBACK_GAME_POSTER
-    ,
+    current_game_cover: FALLBACK_GAME_POSTER,
     online_count: 50,
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
@@ -700,8 +699,7 @@ export const playersData: BackendPlayerData[] = [
         review: "Не смог пройти, игра не зашла.",
         status: "drop",
         vod_links: null,
-        cover: FALLBACK_GAME_POSTER
-        ,
+        cover: FALLBACK_GAME_POSTER,
       },
     ],
     bonus_cards: [],
@@ -716,8 +714,7 @@ export const playersData: BackendPlayerData[] = [
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
-    current_game_cover: FALLBACK_GAME_POSTER
-    ,
+    current_game_cover: FALLBACK_GAME_POSTER,
     online_count: 50,
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
@@ -743,8 +740,7 @@ export const playersData: BackendPlayerData[] = [
         status: "completed",
         vod_links:
           "https://www.twitch.tv/videos/1234567890, https://www.twitch.tv/videos/1234567891, https://www.twitch.tv/videos/1234567892",
-        cover: FALLBACK_GAME_POSTER
-        ,
+        cover: FALLBACK_GAME_POSTER,
       },
     ],
     bonus_cards: [
@@ -765,8 +761,7 @@ export const playersData: BackendPlayerData[] = [
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
-    current_game_cover: FALLBACK_GAME_POSTER
-    ,
+    current_game_cover: FALLBACK_GAME_POSTER,
     online_count: 50,
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
@@ -791,8 +786,7 @@ export const playersData: BackendPlayerData[] = [
         review: "Неплохая игра, но есть недочеты.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/5566778899",
-        cover: FALLBACK_GAME_POSTER
-        ,
+        cover: FALLBACK_GAME_POSTER,
       },
     ],
     bonus_cards: [
@@ -813,8 +807,7 @@ export const playersData: BackendPlayerData[] = [
     current_game: "Gothic",
     current_game_updated_at: Math.ceil(Date.now() / 1000),
     current_game_duration: 60,
-    current_game_cover: FALLBACK_GAME_POSTER
-    ,
+    current_game_cover: FALLBACK_GAME_POSTER,
     online_count: 50,
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
@@ -839,8 +832,7 @@ export const playersData: BackendPlayerData[] = [
         review: "Хорошая игра, но есть недочеты.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/9988776655",
-        cover: FALLBACK_GAME_POSTER
-        ,
+        cover: FALLBACK_GAME_POSTER,
       },
     ],
     bonus_cards: [
@@ -887,8 +879,7 @@ export const playersData: BackendPlayerData[] = [
         review: "Не очень понравилась, слишком простая.",
         status: "completed",
         vod_links: "https://www.twitch.tv/videos/2233445566",
-        cover: FALLBACK_GAME_POSTER
-        ,
+        cover: FALLBACK_GAME_POSTER,
       },
     ],
     bonus_cards: [

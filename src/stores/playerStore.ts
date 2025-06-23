@@ -13,7 +13,7 @@ import useModelsStore from "./modelsStore";
 import useDiceStore from "./diceStore";
 import useCameraStore from "./cameraStore";
 import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
-import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
+import { playersFrontendData, PrisonSectors, SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
 import { getNextTurnState } from "@/lib/utils";
 import {
@@ -234,8 +234,7 @@ const usePlayerStore = create<{
     const { myPlayer, animatePlayerMovement, setNextTurnState } = get();
     const originalSector = myPlayer?.sector_id;
 
-    const rolledNumber = IS_DEV ? MOCK_DICE_ROLL : await useDiceStore.getState().rollDice();
-
+    const rolledNumber = await useDiceStore.getState().rollDice();
     await makePlayerMove({
       type: "dice-roll",
       bonuses_used: [],
@@ -244,6 +243,14 @@ const usePlayerStore = create<{
 
     await animatePlayerMovement({ steps: rolledNumber });
     setNextTurnState({ prevSectorId: originalSector });
+  },
+
+  moveMyPlayerToPrison: async (sectorId: number) => {
+    const { myPlayer, animatePlayerMovement } = get();
+    if (!myPlayer) return;
+
+    const steps = sectorId - myPlayer.sector_id;
+    await animatePlayerMovement({ steps });
   },
 
   setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),
