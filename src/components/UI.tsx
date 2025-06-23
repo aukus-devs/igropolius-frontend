@@ -29,7 +29,7 @@ function DesktopUI() {
       turnState: state.turnState,
       position: state.myPlayer?.sector_id,
       isPlayerMoving: state.isPlayerMoving,
-    })),
+    }))
   );
 
   return (
@@ -48,8 +48,11 @@ function DesktopUI() {
       </div>
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        <GameReviewForm />
         {turnState === "rolling-dice" && !isPlayerMoving && <MoveButton />}
-        {turnState === "choosing-train-ride" && !isPlayerMoving && <TrainMoveDialog />}
+        {turnState === "choosing-train-ride" && !isPlayerMoving && (
+          <TrainMoveDialog />
+        )}
         {turnState === "filling-game-review" && <GameReviewForm />}
         {turnState === "rolling-bonus-card" && <RollBonusCard />}
       </div>

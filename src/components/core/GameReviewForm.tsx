@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import useReviewFormStore from "@/stores/reviewFormStore";
@@ -117,7 +117,11 @@ function GameReview() {
   );
 }
 
-function GameTitle() {
+function GameTitle({
+  inputRef,
+}: {
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}) {
   const { gameTitle, setGameTitle, selectedGame, setSelectedGame } =
     useReviewFormStore(
       useShallow((state) => ({
@@ -127,7 +131,15 @@ function GameTitle() {
         setSelectedGame: state.setSelectedGame,
       }))
     );
+  const myPlayer = usePlayerStore((state) => state.myPlayer);
   const [showResults, setShowResults] = useState(false);
+  const [wasCleared, setWasCleared] = useState(false);
+
+  useEffect(() => {
+    if (!gameTitle && myPlayer?.current_game && !wasCleared) {
+      setGameTitle(myPlayer.current_game);
+    }
+  }, [myPlayer?.current_game, gameTitle, setGameTitle, wasCleared]);
 
   const gameAlreadySelected = selectedGame && selectedGame.name === gameTitle;
 
@@ -151,17 +163,22 @@ function GameTitle() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGameTitle(e.target.value);
     setSelectedGame(null);
+    if (wasCleared) {
+      setWasCleared(false);
+    }
   };
 
   const handleClearInput = () => {
     setGameTitle("");
     setSelectedGame(null);
     setShowResults(false);
+    setWasCleared(true);
   };
 
   return (
     <div className="relative">
       <Input
+        ref={inputRef}
         id="game-name"
         type="text"
         placeholder="Название игры"
@@ -235,6 +252,7 @@ function HLTBLink() {
 function GameReviewForm() {
   const [open, setOpen] = useState(false);
   const [showScoreDetails, setShowScoreDetails] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { setNextTurnState } = usePlayerStore(
     useShallow((state) => ({
@@ -294,6 +312,15 @@ function GameReviewForm() {
 
   const selectedGame = useReviewFormStore((state) => state.selectedGame);
 
+  useEffect(() => {
+    if (open && !selectedGame) {
+      const timeoutId = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [open, selectedGame]);
+
   const onConfirm = async () => {
     clearError();
     try {
@@ -333,7 +360,7 @@ function GameReviewForm() {
 
           <div className="flex flex-col gap-2 w-full">
             <div>
-              <GameTitle />
+              <GameTitle inputRef={inputRef} />
             </div>
 
             <div className="flex gap-2 w-full">

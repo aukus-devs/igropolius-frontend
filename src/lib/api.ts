@@ -356,6 +356,12 @@ export async function searchGames(
         cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2jjc.webp",
         release_year: 2014,
       },
+      {
+        id: 4,
+        name: "Gothic",
+        cover: "https://images.igdb.com/igdb/image/upload/t_cover_big/co25r2.webp",
+        release_year: 2001,
+      },
     ];
 
     const filteredGames = mockGames.filter((game) =>
