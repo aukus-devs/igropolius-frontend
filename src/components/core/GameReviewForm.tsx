@@ -119,8 +119,10 @@ function GameReview() {
 
 function GameTitle({
   inputRef,
+  open,
 }: {
   inputRef: React.RefObject<HTMLInputElement | null>;
+  open: boolean;
 }) {
   const { gameTitle, setGameTitle, selectedGame, setSelectedGame } =
     useReviewFormStore(
@@ -134,12 +136,32 @@ function GameTitle({
   const myPlayer = usePlayerStore((state) => state.myPlayer);
   const [showResults, setShowResults] = useState(false);
   const [wasCleared, setWasCleared] = useState(false);
+  const [wasInitialized, setWasInitialized] = useState(false);
 
   useEffect(() => {
-    if (!gameTitle && myPlayer?.current_game && !wasCleared) {
-      setGameTitle(myPlayer.current_game);
+    if (open) {
+      setWasInitialized(false);
+      setWasCleared(false);
     }
-  }, [myPlayer?.current_game, gameTitle, setGameTitle, wasCleared]);
+  }, [open]);
+
+  useEffect(() => {
+    if (
+      !gameTitle &&
+      myPlayer?.current_game &&
+      !wasCleared &&
+      !wasInitialized
+    ) {
+      setGameTitle(myPlayer.current_game);
+      setWasInitialized(true);
+    }
+  }, [
+    myPlayer?.current_game,
+    gameTitle,
+    setGameTitle,
+    wasCleared,
+    wasInitialized,
+  ]);
 
   const gameAlreadySelected = selectedGame && selectedGame.name === gameTitle;
 
@@ -196,7 +218,7 @@ function GameTitle({
         (searchResults.length > 0 || isSearching) &&
         gameTitleDebounced.length >= 2 && (
           <div
-            className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
+            className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
             onMouseDown={(e) => e.preventDefault()}
           >
             {isSearching && searchResults.length === 0 ? (
@@ -232,17 +254,13 @@ function GameTitle({
 
       {gameTitle && (
         <div className="absolute right-2 top-1/2 -translate-y-1/2">
-          {isSearching ? (
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
-          ) : (
-            <button
-              type="button"
-              onClick={handleClearInput}
-              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <X className="h-3 w-3 text-gray-500" />
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleClearInput}
+            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X className="h-3 w-3 text-gray-500" />
+          </button>
         </div>
       )}
     </div>
@@ -374,7 +392,7 @@ function GameReviewForm() {
 
           <div className="flex flex-col gap-2 w-full">
             <div>
-              <GameTitle inputRef={inputRef} />
+              <GameTitle inputRef={inputRef} open={open} />
             </div>
 
             <div className="flex gap-2 w-full">
