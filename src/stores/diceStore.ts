@@ -35,12 +35,15 @@ const useDiceStore = create<{
 
     set({ isRolling: true, error: null });
 
-    try {
-      animateDice(diceModel);
-      await sleep(2000);
+    const animationStartTime = Date.now();
+    animateDice(diceModel);
 
+    try {
       const rollResult = await rollDiceAPI();
-      const totalValue = rollResult.data[0] + rollResult.data[1];
+      const totalValue = rollResult.data.reduce((sum, die) => sum + die, 0);
+
+      const elapsed = Date.now() - animationStartTime;
+      await sleep(2000 - elapsed);
 
       set({
         rolledNumber: totalValue,
@@ -49,8 +52,9 @@ const useDiceStore = create<{
         randomOrgCheckForm: rollResult.random_org_check_form || null,
       });
 
+      // reset data to close the dice popup
       await sleep(2000);
-      set({ 
+      set({
         rolledNumber: null,
         rollId: null,
         isRandomOrgResult: false,
@@ -59,8 +63,8 @@ const useDiceStore = create<{
 
       return totalValue;
     } catch (error) {
-      console.error('Dice roll failed:', error);
-      set({ error: 'Не удалось выполнить бросок кубика. Попробуйте еще раз.' });
+      console.error("Dice roll failed:", error);
+      set({ error: "Не удалось выполнить бросок кубика. Попробуйте еще раз." });
       throw error;
     } finally {
       set({ isRolling: false });
@@ -68,12 +72,12 @@ const useDiceStore = create<{
   },
 }));
 
-function animateDice(model: Group) {
+async function animateDice(model: Group) {
   const xRotation = randInt(70, 100);
   const yRotation = randInt(70, 100);
   const zRotation = randInt(70, 100);
 
-  createTimeline()
+  const tl = createTimeline()
     .add(model.scale, {
       x: 1,
       y: 1,
@@ -95,8 +99,11 @@ function animateDice(model: Group) {
       delay: 400,
       duration: 300,
       easing: "easeInOutCubic",
-    })
-    .play();
+    });
+
+  await new Promise((resolve) => {
+    tl.play().then(resolve);
+  });
 }
 
 export default useDiceStore;
