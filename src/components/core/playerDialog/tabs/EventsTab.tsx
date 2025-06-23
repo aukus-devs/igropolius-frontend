@@ -21,7 +21,7 @@ import {
 } from "@/lib/types";
 import { getEventDescription, getBonusCardName } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useMemo } from "react";
 
 type Props = {
   player: PlayerData;
@@ -145,17 +145,19 @@ function Event({ event }: { event: PlayerEvent }) {
   return <EventContent />;
 }
 
+type FilterValue = PlayerEvent["event_type"] | "all";
+
 type EventsTabFilterOption = {
   title: string;
-  value: PlayerEvent["event_type"] | "all";
+  value: FilterValue;
 };
 
 function EventsTabFilter({
   selectedFilter,
   onFilterChange,
 }: {
-  selectedFilter: string;
-  onFilterChange: (value: string) => void;
+  selectedFilter: FilterValue;
+  onFilterChange: (value: FilterValue) => void;
 }) {
   const options: EventsTabFilterOption[] = [
     { title: "Все", value: "all" },
@@ -168,7 +170,10 @@ function EventsTabFilter({
   return (
     <div className="flex items-center gap-2.5 justify-self-end">
       <span className="font-semibold text-muted-foreground">Фильтр</span>
-      <Select value={selectedFilter} onValueChange={onFilterChange}>
+      <Select
+        value={selectedFilter}
+        onValueChange={(value) => onFilterChange(value as FilterValue)}
+      >
         <SelectTrigger className="w-[140px] rounded-lg bg-foreground/10">
           <SelectValue placeholder="Все" />
         </SelectTrigger>
@@ -188,7 +193,7 @@ function EventsTabFilter({
 }
 
 export default function EventsTab({ player }: Props) {
-  const [selectedFilter, setSelectedFilter] = useState<string>("all");
+  const [selectedFilter, setSelectedFilter] = useState<FilterValue>("all");
 
   const {
     data: eventsData,
@@ -201,6 +206,23 @@ export default function EventsTab({ player }: Props) {
     queryFn: () => fetchPlayerEvents(player.id),
     refetchInterval: 30 * 1000,
   });
+
+  const events = eventsData?.events || [];
+
+  const sortedEvents = useMemo(() => {
+    return [...events].sort((a, b) => b.timestamp - a.timestamp);
+  }, [events]);
+
+  const filteredEvents = useMemo(() => {
+    if (selectedFilter === "all") {
+      return sortedEvents;
+    }
+    return sortedEvents.filter((event) => event.event_type === selectedFilter);
+  }, [sortedEvents, selectedFilter]);
+
+  const eventsByDate = useMemo(() => {
+    return getEventsByDate(filteredEvents);
+  }, [filteredEvents]);
 
   if (isLoading) {
     return (
@@ -226,17 +248,6 @@ export default function EventsTab({ player }: Props) {
     );
   }
 
-  const events = eventsData?.events || [];
-
-  const sortedEvents = [...events].sort((a, b) => b.timestamp - a.timestamp);
-
-  const filteredEvents =
-    selectedFilter === "all"
-      ? sortedEvents
-      : sortedEvents.filter((event) => event.event_type === selectedFilter);
-
-  const eventsByDate = getEventsByDate(filteredEvents);
-
   return (
     <div>
       <EventsTabFilter
@@ -244,24 +255,35 @@ export default function EventsTab({ player }: Props) {
         onFilterChange={setSelectedFilter}
       />
       <div className="flex flex-col gap-7.5 mb-5">
-        {Object.entries(eventsByDate || {}).map(([date, events]) => {
-          const { month, day } = getFormattedTime(
-            new Date(date).getTime() / 1000
-          );
+        {Object.keys(eventsByDate || {}).length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            {selectedFilter === "all"
+              ? "Нет событий"
+              : `Нет событий типа "${selectedFilter}"`}
+          </div>
+        ) : (
+          Object.entries(eventsByDate || {}).map(([date, events]) => {
+            const { month, day } = getFormattedTime(
+              new Date(date).getTime() / 1000
+            );
 
-          return (
-            <div key={date}>
-              <div className="mb-2.5 w-full text-center text-muted-foreground font-wide-semibold text-xs">
-                {`${day} ${month}`}
+            return (
+              <div key={date}>
+                <div className="mb-2.5 w-full text-center text-muted-foreground font-wide-semibold text-xs">
+                  {`${day} ${month}`}
+                </div>
+                <div className="flex flex-col gap-5">
+                  {events.map((event, index) => (
+                    <Event
+                      key={`${event.timestamp}-${event.event_type}-${index}`}
+                      event={event}
+                    />
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-col gap-5">
-                {events.map((event) => (
-                  <Event key={event.timestamp} event={event} />
-                ))}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </div>
   );
