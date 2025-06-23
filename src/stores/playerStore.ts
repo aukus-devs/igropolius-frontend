@@ -35,6 +35,7 @@ const usePlayerStore = create<{
   setMyPlayerId: (id?: number) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: BackendPlayerData[]) => void;
+  animatePlayerMovement: ({ steps }: { steps: number }) => Promise<number>;
   moveMyPlayer: () => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
   setNextTurnState: (params: {
@@ -147,7 +148,7 @@ const usePlayerStore = create<{
     set({ players, buildingsPerSector: buildings });
   },
 
-  moveMyPlayer: async () => {
+  animatePlayerMovement: async ({ steps }: { steps: number }) => {
     const { myPlayer } = get();
     if (!myPlayer) throw new Error(`Player not found.`);
 
@@ -163,25 +164,13 @@ const usePlayerStore = create<{
     const { isOrthographic, cameraToPlayer, moveToPlayer, rotateAroundPlayer } =
       useCameraStore.getState();
 
-    if (!isOrthographic) await cameraToPlayer(myPlayer.id);
-
-    let rolledNumber: number;
-    try {
-      rolledNumber = IS_DEV ? MOCK_DICE_ROLL : await useDiceStore.getState().rollDice();
-    } catch (error) {
-      set({ isPlayerMoving: false });
-      return;
+    if (!isOrthographic) {
+      await cameraToPlayer(myPlayer.id);
     }
-
-    await makePlayerMove({
-      type: "dice-roll",
-      bonuses_used: [],
-      selected_die: null,
-    });
 
     const tl = createTimeline();
 
-    for (let i = 0; i < rolledNumber; i++) {
+    for (let i = 0; i < steps; i++) {
       const nextSectorId = currentSectorId + 1 > sectorsData.length ? 1 : currentSectorId + 1;
       const nextSector = sectorsData.find((sector) => sector.id === nextSectorId);
       if (!nextSector)
@@ -230,12 +219,31 @@ const usePlayerStore = create<{
       currentSector = nextSector;
     }
 
-    tl.play().then(() => {
-      set({ isPlayerMoving: false });
-      const { updateMyPlayerSectorId, setNextTurnState } = get();
-      updateMyPlayerSectorId(currentSectorId);
-      setNextTurnState({ prevSectorId: myPlayer.sector_id });
+    await new Promise((resolve) => {
+      tl.play().then(() => {
+        set({ isPlayerMoving: false });
+        const { updateMyPlayerSectorId } = get();
+        updateMyPlayerSectorId(currentSectorId);
+        resolve(true);
+      });
     });
+    return currentSectorId;
+  },
+
+  moveMyPlayer: async () => {
+    const { myPlayer, animatePlayerMovement, setNextTurnState } = get();
+    const originalSector = myPlayer?.sector_id;
+
+    const rolledNumber = IS_DEV ? MOCK_DICE_ROLL : await useDiceStore.getState().rollDice();
+
+    await makePlayerMove({
+      type: "dice-roll",
+      bonuses_used: [],
+      selected_die: null,
+    });
+
+    await animatePlayerMovement({ steps: rolledNumber });
+    setNextTurnState({ prevSectorId: originalSector });
   },
 
   setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),
