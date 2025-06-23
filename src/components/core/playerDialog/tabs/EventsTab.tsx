@@ -227,12 +227,13 @@ export default function EventsTab({ player }: Props) {
   }
 
   const events = eventsData?.events || [];
-  events.sort((a, b) => (a.timestamp >= b.timestamp ? -1 : 1));
+
+  const sortedEvents = [...events].sort((a, b) => b.timestamp - a.timestamp);
 
   const filteredEvents =
     selectedFilter === "all"
-      ? events
-      : events.filter((event) => event.event_type === selectedFilter);
+      ? sortedEvents
+      : sortedEvents.filter((event) => event.event_type === selectedFilter);
 
   const eventsByDate = getEventsByDate(filteredEvents);
 
@@ -299,9 +300,12 @@ function getEventsByDate(events: PlayerEvent[]) {
     return acc;
   }, {} as Record<string, PlayerEvent[]>);
 
-  for (const events of Object.values(eventsByDate)) {
-    events.sort((a, b) => b.timestamp - a.timestamp);
+  const sortedEventsByDate: Record<string, PlayerEvent[]> = {};
+  for (const [date, dateEvents] of Object.entries(eventsByDate)) {
+    sortedEventsByDate[date] = [...dateEvents].sort(
+      (a, b) => b.timestamp - a.timestamp
+    );
   }
 
-  return eventsByDate;
+  return sortedEventsByDate;
 }
