@@ -12,6 +12,8 @@ const useReviewFormStore = create<{
   gameStatus: GameStatusType | null;
   gameReview: string;
   selectedGame: IGDBGame | null;
+  error: string | null;
+  isSubmitting: boolean;
   setRating: (value: number) => void;
   setGameTitle: (value: string) => void;
   setGameTime: (value: GameLength) => void;
@@ -20,6 +22,8 @@ const useReviewFormStore = create<{
   setSelectedGame: (game: IGDBGame | null) => void;
   sendReview: (scores: number) => Promise<void>;
   getReviewScores: () => ScoreDetails;
+  clearError: () => void;
+  retrySubmit: () => Promise<void>;
 }>((set, get) => ({
   rating: 0,
   gameTitle: "",
@@ -27,6 +31,8 @@ const useReviewFormStore = create<{
   gameStatus: null,
   gameReview: "",
   selectedGame: null,
+  error: null,
+  isSubmitting: false,
 
   setRating: (value) => set({ rating: value }),
   setGameTitle: (value) => set({ gameTitle: value }),
@@ -34,6 +40,7 @@ const useReviewFormStore = create<{
   setGameStatus: (value) => set({ gameStatus: value }),
   setGameReview: (value) => set({ gameReview: value }),
   setSelectedGame: (game) => set({ selectedGame: game }),
+  clearError: () => set({ error: null }),
   sendReview: async (scores: number) => {
     const { rating, gameTitle, gameTime, gameStatus, gameReview, selectedGame } = get();
 
@@ -46,24 +53,41 @@ const useReviewFormStore = create<{
       throw new Error("Game length is required");
     }
 
-    await saveGameReview({
-      title: gameTitle,
-      status: gameStatus,
-      rating,
-      review: gameReview,
-      length,
-      scores,
-      game_id: selectedGame?.id || null,
-    });
+    set({ isSubmitting: true, error: null });
 
-    set({
-      rating: 0,
-      gameTitle: "",
-      gameTime: null,
-      gameStatus: null,
-      gameReview: "",
-      selectedGame: null,
-    });
+    try {
+      await saveGameReview({
+        title: gameTitle,
+        status: gameStatus,
+        rating,
+        review: gameReview,
+        length,
+        scores,
+        game_id: selectedGame?.id || null,
+      });
+
+      set({
+        rating: 0,
+        gameTitle: "",
+        gameTime: null,
+        gameStatus: null,
+        gameReview: "",
+        selectedGame: null,
+        error: null,
+      });
+    } catch (error) {
+      console.error('Review submission failed:', error);
+      set({ error: 'Не удалось отправить отзыв. Попробуйте еще раз.' });
+      throw error;
+    } finally {
+      set({ isSubmitting: false });
+    }
+  },
+
+  retrySubmit: async () => {
+    const state = get();
+    const scores = state.getReviewScores().total;
+    await state.sendReview(scores);
   },
   getReviewScores: () => {
     const { gameStatus, gameTime } = get();

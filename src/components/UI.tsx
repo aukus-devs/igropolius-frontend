@@ -10,6 +10,7 @@ import TrainMoveDialog from "./core/TrainMoveDialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileTabs from "./core/mobile/MobileTabs";
 import MobilePlayersList from "./core/mobile/MobilePlayerList";
+import DiceErrorNotification from "./core/DiceErrorNotification";
 
 function MoveButton() {
   const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
@@ -39,6 +40,9 @@ function DesktopUI() {
       <div className="absolute right-4 top-3 w-[15rem]">
         <div className="mb-[50px]">
           <QuickMenu />
+        </div>
+        <div className="mb-3">
+          <DiceErrorNotification />
         </div>
         <Notifications />
       </div>

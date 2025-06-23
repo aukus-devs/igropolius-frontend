@@ -7,9 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { fetchPlayerEvents } from "@/lib/api";
 import { queryKeys } from "@/lib/queryClient";
-import { PlayerData, PlayerEvent } from "@/lib/types";
+import { PlayerData, PlayerEvent, PlayerEventMove, DiceRollJson } from "@/lib/types";
 import { getEventDescription } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
@@ -18,20 +20,86 @@ type Props = {
   player: PlayerData;
 };
 
+function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <h4 className="font-semibold">Результат броска кубиков</h4>
+        <Badge variant={diceRollJson.is_random_org_result ? "default" : "secondary"}>
+          {diceRollJson.is_random_org_result ? "Random.org" : "Локальный"}
+        </Badge>
+      </div>
+      
+      <div className="space-y-2">
+        <p className="text-sm">
+          <span className="font-semibold">Кубики:</span> {diceRollJson.data.join(", ")}
+        </p>
+        <p className="text-sm">
+          <span className="font-semibold">Сумма:</span> {diceRollJson.data[0] + diceRollJson.data[1]}
+        </p>
+        
+        {diceRollJson.is_random_org_result && (
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-green-600">
+              ✓ Результат подтвержден Random.org
+            </p>
+            {diceRollJson.random_org_check_form && (
+              <div>
+                <p className="text-sm font-semibold">Проверочная форма:</p>
+                <a 
+                  href={diceRollJson.random_org_check_form}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:text-blue-700 text-sm break-all underline"
+                >
+                  Открыть проверочную форму Random.org
+                </a>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Event({ event }: { event: PlayerEvent }) {
   const { title, description } = getEventDescription(event);
   const { hours, minutes } = getFormattedTime(event.timestamp);
   const isScoreChangeEvent = event.event_type === "score-change";
+  const isMoveEvent = event.event_type === "player-move";
+  const moveEvent = isMoveEvent ? (event as PlayerEventMove) : null;
+  const hasDiceRollData = moveEvent?.dice_roll_json && moveEvent.subtype === "dice-roll";
 
-  return (
+  const EventContent = () => (
     <div>
       <div className="text-muted-foreground text-sm font-semibold">{`${hours}:${minutes}`}</div>
       <h3 className="font-wide-medium">{title}</h3>
       <p className={`text-muted-foreground text-sm font-semibold`}>
         {description} {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
       </p>
+      {hasDiceRollData && (
+        <p className="text-xs text-blue-500 mt-1">Нажмите для просмотра деталей броска</p>
+      )}
     </div>
   );
+
+  if (hasDiceRollData) {
+    return (
+      <Dialog>
+        <DialogTrigger asChild>
+          <div className="cursor-pointer hover:bg-foreground/5 rounded transition-colors">
+            <EventContent />
+          </div>
+        </DialogTrigger>
+        <DialogContent className="max-w-md">
+          <DiceRollDetails diceRollJson={moveEvent.dice_roll_json!} />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return <EventContent />;
 }
 
 type EventsTabFilterOption = {

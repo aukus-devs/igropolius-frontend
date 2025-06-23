@@ -173,6 +173,12 @@ export type BonusCardType =
   | "evade-map-tax"
   | "game-help-allowed";
 
+export type DiceRollJson = {
+  is_random_org_result: boolean;
+  random_org_check_form?: string;
+  data: [number, number];
+};
+
 export type PlayerEventBonusCard = PlayerEventBase & {
   event_type: "bonus-card";
   subtype: "received" | "used" | "lost";
@@ -187,6 +193,7 @@ export type PlayerEventMove = PlayerEventBase & {
   sector_to: number;
   adjusted_roll: number;
   dice_roll?: number[];
+  dice_roll_json?: DiceRollJson;
   completed_map: boolean;
 };
 

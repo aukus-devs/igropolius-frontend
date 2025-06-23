@@ -227,13 +227,25 @@ function GameReviewForm() {
     })),
   );
 
-  const { setRating, rating, sendReview, getReviewScores, gameStatus } = useReviewFormStore(
+  const { 
+    setRating, 
+    rating, 
+    sendReview, 
+    getReviewScores, 
+    gameStatus, 
+    error, 
+    clearError, 
+    isSubmitting 
+  } = useReviewFormStore(
     useShallow((state) => ({
       setRating: state.setRating,
       rating: state.rating,
       getReviewScores: state.getReviewScores,
       sendReview: state.sendReview,
       gameStatus: state.gameStatus,
+      error: state.error,
+      clearError: state.clearError,
+      isSubmitting: state.isSubmitting,
     })),
   );
   const scores = getReviewScores();
@@ -268,21 +280,28 @@ function GameReviewForm() {
   const selectedGame = useReviewFormStore((state) => state.selectedGame);
 
   const onConfirm = async () => {
-    await sendReview(scores.total);
-    let turnParams = {};
-    switch (gameStatus) {
-      case "drop":
-        turnParams = { action: "drop-game" };
-        break;
-      case "reroll":
-        turnParams = { action: "reroll-game" };
-        break;
+    clearError();
+    try {
+      await sendReview(scores.total);
+      let turnParams = {};
+      switch (gameStatus) {
+        case "drop":
+          turnParams = { action: "drop-game" };
+          break;
+        case "reroll":
+          turnParams = { action: "reroll-game" };
+          break;
+      }
+      await setNextTurnState(turnParams);
+      setOpen(false);
+      resetPlayersQuery();
+      resetCurrentPlayerQuery();
+    } catch (error) {
+      console.error('Failed to submit review:', error);
     }
-    await setNextTurnState(turnParams);
-    setOpen(false);
-    resetPlayersQuery();
-    resetCurrentPlayerQuery();
   };
+
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -315,24 +334,31 @@ function GameReviewForm() {
             <GameReview />
           </div>
         </div>
-        <Popover open={showScoreDetails} onOpenChange={setShowScoreDetails}>
-          <PopoverTrigger asChild>
-            <Button
-              size="sm"
-              className="justify-self-end"
-              disabled={isSendButtonDisabled}
-              onClick={onConfirm}
-              onMouseEnter={() => setShowScoreDetails(true)}
-              onMouseLeave={() => setShowScoreDetails(false)}
-            >
-              {buttonText}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга
-            ({scores.mapCompletionBonus})
-          </PopoverContent>
-        </Popover>
+        
+        <div className="flex items-center gap-3">
+          {error && (
+            <span className="text-sm text-destructive font-medium">{error}</span>
+          )}
+          
+          <Popover open={showScoreDetails} onOpenChange={setShowScoreDetails}>
+            <PopoverTrigger asChild>
+              <Button
+                size="sm"
+                className="ml-auto"
+                disabled={isSendButtonDisabled || isSubmitting}
+                onClick={onConfirm}
+                onMouseEnter={() => setShowScoreDetails(true)}
+                onMouseLeave={() => setShowScoreDetails(false)}
+              >
+                {isSubmitting ? "Отправка..." : buttonText}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга
+              ({scores.mapCompletionBonus})
+            </PopoverContent>
+          </Popover>
+        </div>
       </DialogContent>
     </Dialog>
   );

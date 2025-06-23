@@ -165,14 +165,18 @@ const usePlayerStore = create<{
 
     if (!isOrthographic) await cameraToPlayer(myPlayer.id);
 
-    const rolledNumber = IS_DEV ? MOCK_DICE_ROLL : await useDiceStore.getState().rollDice();
+    let rolledNumber: number;
+    try {
+      rolledNumber = IS_DEV ? MOCK_DICE_ROLL : await useDiceStore.getState().rollDice();
+    } catch (error) {
+      set({ isPlayerMoving: false });
+      return;
+    }
 
     await makePlayerMove({
       type: "dice-roll",
       bonuses_used: [],
-      dice_roll_id: 0,
       selected_die: null,
-      tmp_roll_result: rolledNumber,
     });
 
     const tl = createTimeline();
