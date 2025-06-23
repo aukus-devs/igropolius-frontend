@@ -85,10 +85,16 @@ function GameReview({ game }: Props) {
           />
         </div>
         <div className="text-muted-foreground">
-          {duration && length && (
+          {length && (
             <div className="flex flex-wrap gap-2 mb-2.5">
               <Badge className="bg-white/20 text-white/70 font-semibold">
-                <p> Время — {formatMs(duration * 1000)}</p>
+                <p>
+                  {" "}
+                  Время —{" "}
+                  {duration && duration > 0
+                    ? formatMs(duration * 1000)
+                    : "[Н/Д]"}
+                </p>
               </Badge>
               <Badge className="bg-white/20 text-white/70 font-semibold">
                 <p> По HLTB — {length}ч</p>

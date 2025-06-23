@@ -370,7 +370,7 @@ export const playersData: BackendPlayerData[] = [
         created_at: Math.ceil(Date.now() / 1000),
         length: "2-5",
         title: "Haste",
-        duration: 3600,
+        duration: 0,
         rating: 5,
         review: "Отличная игра, мне понравилось!",
         status: "completed",
