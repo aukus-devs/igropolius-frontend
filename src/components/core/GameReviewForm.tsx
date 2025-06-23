@@ -158,6 +158,7 @@ function GameTitle({
     setGameTitle(game.name);
     setSelectedGame(game);
     setShowResults(false);
+    inputRef.current?.blur();
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,30 +192,43 @@ function GameTitle({
         autoComplete="off"
       />
 
-      {showResults && searchResults.length > 0 && (
-        <div
-          className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
-          onMouseDown={(e) => e.preventDefault()}
-        >
-          {searchResults.map((game) => (
-            <div
-              key={game.id}
-              className="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer"
-              onClick={() => handleGameSelect(game)}
-            >
-              <img
-                src={game.cover || FALLBACK_GAME_POSTER}
-                alt={game.name}
-                className="w-10 h-14 object-cover rounded"
-              />
-              <div className="flex-1">
-                <div className="font-semibold text-gray-900">{game.name}</div>
-                <div className="text-sm text-gray-600">{game.release_year}</div>
+      {showResults &&
+        (searchResults.length > 0 || isSearching) &&
+        gameTitleDebounced.length >= 2 && (
+          <div
+            className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {isSearching && searchResults.length === 0 ? (
+              <div className="flex items-center justify-center p-4">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 mr-2"></div>
+                Поиск...
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ) : (
+              searchResults.map((game) => (
+                <div
+                  key={game.id}
+                  className="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleGameSelect(game)}
+                >
+                  <img
+                    src={game.cover || FALLBACK_GAME_POSTER}
+                    alt={game.name}
+                    className="w-10 h-14 object-cover rounded"
+                  />
+                  <div className="flex-1">
+                    <div className="font-semibold text-gray-900">
+                      {game.name}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      {game.release_year}
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
 
       {gameTitle && (
         <div className="absolute right-2 top-1/2 -translate-y-1/2">
