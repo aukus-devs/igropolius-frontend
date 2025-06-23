@@ -160,6 +160,7 @@ export type PlayerEventGame = PlayerEventBase & {
   game_title: string;
   game_review: string;
   game_score: number;
+  game_cover: string | null;
   duration: number;
   sector_id: number;
   bonuses_used?: BonusCardType[];

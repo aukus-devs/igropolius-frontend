@@ -4,6 +4,7 @@ import { formatMs } from "@/lib/utils";
 import { useState } from "react";
 import { Toggle } from "../ui/toggle";
 import { VideoCircle } from "../icons";
+import { FALLBACK_GAME_POSTER } from "@/lib/constants";
 
 type Props = {
   game: PlayerGame;
@@ -36,11 +37,20 @@ function getStatusData(status: GameStatusType) {
 }
 
 function GameReview({ game }: Props) {
-  const { title, review, vod_links, duration, length, rating, status, created_at, cover } = game;
+  const {
+    title,
+    review,
+    vod_links,
+    duration,
+    length,
+    rating,
+    status,
+    created_at,
+    cover,
+  } = game;
 
   const [isVodsOpen, setIsVodsOpen] = useState(false);
 
-  const fallbackPoster = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
   const formattedDate = new Intl.DateTimeFormat("ru-RU", {
     day: "numeric",
     month: "long",
@@ -69,10 +79,13 @@ function GameReview({ game }: Props) {
       <h3 className="text-2xl mb-2 font-wide-semibold">{title}</h3>
       <div className="flex gap-2.5">
         <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
-          <img className="h-full object-cover" src={cover || fallbackPoster} />
+          <img
+            className="h-full object-cover"
+            src={cover || FALLBACK_GAME_POSTER}
+          />
         </div>
         <div className="text-muted-foreground">
-          {(duration && length) && (
+          {duration && length && (
             <div className="flex flex-wrap gap-2 mb-2.5">
               <Badge className="bg-white/20 text-white/70 font-semibold">
                 <p> Время — {formatMs(duration * 1000)}</p>
@@ -96,7 +109,10 @@ function GameReview({ game }: Props) {
               ))}
             </div>
           ) : (
-            <p> {rating} / 10 — {review} </p>
+            <p>
+              {" "}
+              {rating} / 10 — {review}{" "}
+            </p>
           )}
         </div>
       </div>

@@ -13,6 +13,7 @@ import {
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { SectorsById } from "./mockData";
+import { FALLBACK_GAME_POSTER } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -42,10 +43,10 @@ function getEventGameInfo(event: PlayerEventGame) {
       title = "Реролл игры";
       break;
   }
-
   return {
     title,
     description: event.game_title,
+    gameCover: event.game_cover || FALLBACK_GAME_POSTER,
   };
 }
 
@@ -139,15 +140,15 @@ export function getEventDescription(event: PlayerEvent) {
   }
 
   if (event.event_type === "bonus-card") {
-    return getEventBonusCardInfo(event);
+    return { ...getEventBonusCardInfo(event), gameCover: null };
   }
 
   if (event.event_type === "player-move") {
-    return getEventMoveInfo(event);
+    return { ...getEventMoveInfo(event), gameCover: null };
   }
 
   if (event.event_type === "score-change") {
-    return getEventScoreChangeInfo(event);
+    return { ...getEventScoreChangeInfo(event), gameCover: null };
   }
 
   throw new Error(`Unsupported event type`);

@@ -11,7 +11,12 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { fetchPlayerEvents } from "@/lib/api";
 import { queryKeys } from "@/lib/queryClient";
-import { PlayerData, PlayerEvent, PlayerEventMove, DiceRollJson } from "@/lib/types";
+import {
+  PlayerData,
+  PlayerEvent,
+  PlayerEventMove,
+  DiceRollJson,
+} from "@/lib/types";
 import { getEventDescription, getBonusCardName } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
@@ -25,19 +30,23 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <h4 className="font-semibold">Результат броска кубиков</h4>
-        <Badge variant={diceRollJson.is_random_org_result ? "default" : "secondary"}>
+        <Badge
+          variant={diceRollJson.is_random_org_result ? "default" : "secondary"}
+        >
           {diceRollJson.is_random_org_result ? "Random.org" : "Локальный"}
         </Badge>
       </div>
-      
+
       <div className="space-y-2">
         <p className="text-sm">
-          <span className="font-semibold">Кубики:</span> {diceRollJson.data.join(", ")}
+          <span className="font-semibold">Кубики:</span>{" "}
+          {diceRollJson.data.join(", ")}
         </p>
         <p className="text-sm">
-          <span className="font-semibold">Сумма:</span> {diceRollJson.data[0] + diceRollJson.data[1]}
+          <span className="font-semibold">Сумма:</span>{" "}
+          {diceRollJson.data[0] + diceRollJson.data[1]}
         </p>
-        
+
         {diceRollJson.is_random_org_result && (
           <div className="space-y-2">
             <p className="text-sm font-semibold text-green-600">
@@ -46,7 +55,7 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
             {diceRollJson.random_org_check_form && (
               <div>
                 <p className="text-sm font-semibold">Проверочная форма:</p>
-                <a 
+                <a
                   href={diceRollJson.random_org_check_form}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -64,35 +73,55 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
 }
 
 function Event({ event }: { event: PlayerEvent }) {
-  const { title, description } = getEventDescription(event);
+  const { title, description, gameCover } = getEventDescription(event);
   const { hours, minutes } = getFormattedTime(event.timestamp);
   const isScoreChangeEvent = event.event_type === "score-change";
   const isMoveEvent = event.event_type === "player-move";
   const moveEvent = isMoveEvent ? (event as PlayerEventMove) : null;
-  const hasDiceRollData = moveEvent?.dice_roll_json && moveEvent.subtype === "dice-roll";
-  
+  const hasDiceRollData =
+    moveEvent?.dice_roll_json && moveEvent.subtype === "dice-roll";
+
   const bonusesUsed = (event as any).bonuses_used || [];
 
   const EventContent = () => (
-    <div>
-      <div className="text-muted-foreground text-sm font-semibold">{`${hours}:${minutes}`}</div>
-      <h3 className="font-wide-medium">{title}</h3>
-      <p className={`text-muted-foreground text-sm font-semibold`}>
-        {description} {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
-      </p>
-      {bonusesUsed.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1">
-          <span className="text-xs text-muted-foreground mr-1">Использованы карты:</span>
-          {bonusesUsed.map((bonus: string, index: number) => (
-            <Badge key={index} variant="secondary" className="text-xs">
-              {getBonusCardName(bonus as any)}
-            </Badge>
-          ))}
+    <div className={gameCover ? "flex gap-2" : ""}>
+      {gameCover && (
+        <div className="flex-shrink-0">
+          <div className="text-muted-foreground text-sm font-semibold mb-1">{`${hours}:${minutes}`}</div>
+          <img
+            src={gameCover}
+            alt={description}
+            className="w-10 h-[53px] rounded-sm object-cover"
+          />
         </div>
       )}
-      {hasDiceRollData && (
-        <p className="text-xs text-blue-500 mt-1">Нажмите для просмотра деталей броска</p>
-      )}
+      <div className={gameCover ? "flex-1 pt-6" : ""}>
+        {!gameCover && (
+          <div className="text-muted-foreground text-sm font-semibold">{`${hours}:${minutes}`}</div>
+        )}
+        <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
+        <p className="text-muted-foreground text-sm font-semibold mt-1">
+          {description}{" "}
+          {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
+        </p>
+        {bonusesUsed.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            <span className="text-xs text-muted-foreground mr-1">
+              Использованы карты:
+            </span>
+            {bonusesUsed.map((bonus: string, index: number) => (
+              <Badge key={index} variant="secondary" className="text-xs">
+                {getBonusCardName(bonus as any)}
+              </Badge>
+            ))}
+          </div>
+        )}
+        {hasDiceRollData && (
+          <p className="text-xs text-blue-500 mt-1">
+            Нажмите для просмотра деталей броска
+          </p>
+        )}
+      </div>
     </div>
   );
 
@@ -166,7 +195,9 @@ export default function EventsTab({ player }: Props) {
       <EventsTabFilter />
       <div className="flex flex-col gap-7.5 mb-5">
         {Object.entries(eventsByDate || {}).map(([date, events]) => {
-          const { month, day } = getFormattedTime(new Date(date).getTime());
+          const { month, day } = getFormattedTime(
+            new Date(date).getTime() / 1000
+          );
 
           return (
             <div key={date}>
@@ -202,7 +233,7 @@ const months = [
 ];
 
 function getFormattedTime(ts: number) {
-  const date = new Date(ts);
+  const date = new Date(ts * 1000);
 
   return {
     month: months[date.getMonth()],
@@ -213,14 +244,11 @@ function getFormattedTime(ts: number) {
 }
 
 function getEventsByDate(events: PlayerEvent[]) {
-  const eventsByDate = events.reduce(
-    (acc, cur) => {
-      const date = new Date(cur.timestamp).toDateString();
-      (acc[date] = acc[date] || []).push(cur);
-      return acc;
-    },
-    {} as Record<string, PlayerEvent[]>,
-  );
+  const eventsByDate = events.reduce((acc, cur) => {
+    const date = new Date(cur.timestamp * 1000).toDateString();
+    (acc[date] = acc[date] || []).push(cur);
+    return acc;
+  }, {} as Record<string, PlayerEvent[]>);
 
   for (const events of Object.values(eventsByDate)) {
     events.sort((a, b) => b.timestamp - a.timestamp);

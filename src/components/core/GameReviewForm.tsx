@@ -1,5 +1,17 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Input } from "../ui/input";
@@ -9,15 +21,17 @@ import Rating from "./Rating";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
-import { queryKeys, resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
+import {
+  queryKeys,
+  resetCurrentPlayerQuery,
+  resetPlayersQuery,
+} from "@/lib/queryClient";
 import { ArrowRight, X } from "../icons";
 import { searchGames, IGDBGame } from "@/lib/api";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/hooks/useDebounce";
-
-const mockPoster =
-  "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
+import { FALLBACK_GAME_POSTER } from "@/lib/constants";
 
 type StatesOption = {
   title: string;
@@ -104,14 +118,15 @@ function GameReview() {
 }
 
 function GameTitle() {
-  const { gameTitle, setGameTitle, selectedGame, setSelectedGame } = useReviewFormStore(
-    useShallow((state) => ({
-      gameTitle: state.gameTitle,
-      setGameTitle: state.setGameTitle,
-      selectedGame: state.selectedGame,
-      setSelectedGame: state.setSelectedGame,
-    })),
-  );
+  const { gameTitle, setGameTitle, selectedGame, setSelectedGame } =
+    useReviewFormStore(
+      useShallow((state) => ({
+        gameTitle: state.gameTitle,
+        setGameTitle: state.setGameTitle,
+        selectedGame: state.selectedGame,
+        setSelectedGame: state.setSelectedGame,
+      }))
+    );
   const [showResults, setShowResults] = useState(false);
 
   const gameAlreadySelected = selectedGame && selectedGame.name === gameTitle;
@@ -171,7 +186,7 @@ function GameTitle() {
               onClick={() => handleGameSelect(game)}
             >
               <img
-                src={game.cover || mockPoster}
+                src={game.cover || FALLBACK_GAME_POSTER}
                 alt={game.name}
                 className="w-10 h-14 object-cover rounded"
               />
@@ -224,18 +239,18 @@ function GameReviewForm() {
   const { setNextTurnState } = usePlayerStore(
     useShallow((state) => ({
       setNextTurnState: state.setNextTurnState,
-    })),
+    }))
   );
 
-  const { 
-    setRating, 
-    rating, 
-    sendReview, 
-    getReviewScores, 
-    gameStatus, 
-    error, 
-    clearError, 
-    isSubmitting 
+  const {
+    setRating,
+    rating,
+    sendReview,
+    getReviewScores,
+    gameStatus,
+    error,
+    clearError,
+    isSubmitting,
   } = useReviewFormStore(
     useShallow((state) => ({
       setRating: state.setRating,
@@ -246,7 +261,7 @@ function GameReviewForm() {
       error: state.error,
       clearError: state.clearError,
       isSubmitting: state.isSubmitting,
-    })),
+    }))
   );
   const scores = getReviewScores();
 
@@ -297,11 +312,9 @@ function GameReviewForm() {
       resetPlayersQuery();
       resetCurrentPlayerQuery();
     } catch (error) {
-      console.error('Failed to submit review:', error);
+      console.error("Failed to submit review:", error);
     }
   };
-
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -315,7 +328,7 @@ function GameReviewForm() {
 
         <div className="flex gap-4">
           <div className="flex flex-col gap-3">
-            <GamePoster src={selectedGame?.cover || mockPoster} />
+            <GamePoster src={selectedGame?.cover || FALLBACK_GAME_POSTER} />
           </div>
 
           <div className="flex flex-col gap-2 w-full">
@@ -334,12 +347,14 @@ function GameReviewForm() {
             <GameReview />
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3">
           {error && (
-            <span className="text-sm text-destructive font-medium">{error}</span>
+            <span className="text-sm text-destructive font-medium">
+              {error}
+            </span>
           )}
-          
+
           <Popover open={showScoreDetails} onOpenChange={setShowScoreDetails}>
             <PopoverTrigger asChild>
               <Button
@@ -354,8 +369,9 @@ function GameReviewForm() {
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга
-              ({scores.mapCompletionBonus})
+              Длина игры ({scores.base}) * тип сектора (
+              {scores.sectorMultiplier}) + бонус круга (
+              {scores.mapCompletionBonus})
             </PopoverContent>
           </Popover>
         </div>
