@@ -18,6 +18,7 @@ import {
   PlayerEvent,
   PlayerEventMove,
   DiceRollJson,
+  BonusCardType,
 } from "@/lib/types";
 import { getEventDescription, getBonusCardName } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -32,17 +33,14 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <h4 className="font-semibold">Результат броска кубиков</h4>
-        <Badge
-          variant={diceRollJson.is_random_org_result ? "default" : "secondary"}
-        >
+        <Badge variant={diceRollJson.is_random_org_result ? "default" : "secondary"}>
           {diceRollJson.is_random_org_result ? "Random.org" : "Локальный"}
         </Badge>
       </div>
 
       <div className="space-y-2">
         <p className="text-sm">
-          <span className="font-semibold">Кубики:</span>{" "}
-          {diceRollJson.data.join(", ")}
+          <span className="font-semibold">Кубики:</span> {diceRollJson.data.join(", ")}
         </p>
         <p className="text-sm">
           <span className="font-semibold">Сумма:</span>{" "}
@@ -80,10 +78,12 @@ function Event({ event }: { event: PlayerEvent }) {
   const isScoreChangeEvent = event.event_type === "score-change";
   const isMoveEvent = event.event_type === "player-move";
   const moveEvent = isMoveEvent ? (event as PlayerEventMove) : null;
-  const hasDiceRollData =
-    moveEvent?.dice_roll_json && moveEvent.subtype === "dice-roll";
+  const hasDiceRollData = moveEvent?.dice_roll_json && moveEvent.subtype === "dice-roll";
 
-  const bonusesUsed = (event as any).bonuses_used || [];
+  let bonusesUsed: BonusCardType[] = [];
+  if (event.event_type === "player-move") {
+    bonusesUsed = event.bonuses_used;
+  }
 
   const EventContent = () => (
     <div className={gameCover ? "flex gap-2" : ""}>
@@ -103,25 +103,20 @@ function Event({ event }: { event: PlayerEvent }) {
         )}
         <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
         <p className="text-muted-foreground text-sm font-semibold mt-1">
-          {description}{" "}
-          {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
+          {description} {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
         </p>
         {bonusesUsed.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1">
-            <span className="text-xs text-muted-foreground mr-1">
-              Использованы карты:
-            </span>
-            {bonusesUsed.map((bonus: string, index: number) => (
+            <span className="text-xs text-muted-foreground mr-1">Использованы карты:</span>
+            {bonusesUsed.map((bonus, index) => (
               <Badge key={index} variant="secondary" className="text-xs">
-                {getBonusCardName(bonus as any)}
+                {getBonusCardName(bonus)}
               </Badge>
             ))}
           </div>
         )}
         {hasDiceRollData && (
-          <p className="text-xs text-blue-500 mt-1">
-            Нажмите для просмотра деталей броска
-          </p>
+          <p className="text-xs text-blue-500 mt-1">Нажмите для просмотра деталей броска</p>
         )}
       </div>
     </div>
@@ -250,22 +245,15 @@ export default function EventsTab({ player }: Props) {
 
   return (
     <div>
-      <EventsTabFilter
-        selectedFilter={selectedFilter}
-        onFilterChange={setSelectedFilter}
-      />
+      <EventsTabFilter selectedFilter={selectedFilter} onFilterChange={setSelectedFilter} />
       <div className="flex flex-col gap-7.5 mb-5">
         {Object.keys(eventsByDate || {}).length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            {selectedFilter === "all"
-              ? "Нет событий"
-              : `Нет событий типа "${selectedFilter}"`}
+            {selectedFilter === "all" ? "Нет событий" : `Нет событий типа "${selectedFilter}"`}
           </div>
         ) : (
           Object.entries(eventsByDate || {}).map(([date, events]) => {
-            const { month, day } = getFormattedTime(
-              new Date(date).getTime() / 1000
-            );
+            const { month, day } = getFormattedTime(new Date(date).getTime() / 1000);
 
             return (
               <div key={date}>
@@ -316,17 +304,18 @@ function getFormattedTime(ts: number) {
 }
 
 function getEventsByDate(events: PlayerEvent[]) {
-  const eventsByDate = events.reduce((acc, cur) => {
-    const date = new Date(cur.timestamp * 1000).toDateString();
-    (acc[date] = acc[date] || []).push(cur);
-    return acc;
-  }, {} as Record<string, PlayerEvent[]>);
+  const eventsByDate = events.reduce(
+    (acc, cur) => {
+      const date = new Date(cur.timestamp * 1000).toDateString();
+      (acc[date] = acc[date] || []).push(cur);
+      return acc;
+    },
+    {} as Record<string, PlayerEvent[]>,
+  );
 
   const sortedEventsByDate: Record<string, PlayerEvent[]> = {};
   for (const [date, dateEvents] of Object.entries(eventsByDate)) {
-    sortedEventsByDate[date] = [...dateEvents].sort(
-      (a, b) => b.timestamp - a.timestamp
-    );
+    sortedEventsByDate[date] = [...dateEvents].sort((a, b) => b.timestamp - a.timestamp);
   }
 
   return sortedEventsByDate;

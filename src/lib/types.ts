@@ -197,7 +197,7 @@ export type PlayerEventMove = PlayerEventBase & {
   dice_roll?: number[];
   dice_roll_json?: DiceRollJson;
   completed_map: boolean;
-  bonuses_used?: BonusCardType[];
+  bonuses_used: BonusCardType[];
 };
 
 export type TaxType = "street-tax" | "map-tax";
