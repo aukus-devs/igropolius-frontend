@@ -384,6 +384,7 @@ export async function rollDice(): Promise<DiceRollResponse> {
   }
   const response = await apiRequest("/api/dice/roll", {
     method: "POST",
+    body: JSON.stringify({ num: 2, min: 1, max: 8 }),
   });
   return response.json();
 }
