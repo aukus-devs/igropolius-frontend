@@ -1,4 +1,4 @@
-import { GameLengthToBuildingType, IS_DEV, MOCK_DICE_ROLL } from "@/lib/constants";
+import { GameLengthToBuildingType, IS_DEV } from "@/lib/constants";
 import {
   BackendPlayerData,
   BonusCardType,

@@ -9,7 +9,7 @@ import {
   TaxType,
 } from "@/lib/types";
 import { playersData } from "./mockData";
-import { IS_DEV, NO_MOCKS } from "./constants";
+import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS } from "./constants";
 
 const MOCK_API = NO_MOCKS ? false : IS_DEV;
 
@@ -420,7 +420,8 @@ export async function rollDice(): Promise<DiceRollResponse> {
     return Promise.resolve({
       roll_id: 1,
       is_random_org_result: false,
-      data: [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1],
+      data: MOCK_DICE_ROLL,
+      // data: [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1],
     });
   }
   const response = await apiRequest("/api/dice/roll", {

@@ -72,7 +72,7 @@ export const TrainsConfig: Record<number, TrainData> = {
   },
 };
 
-export const MOCK_DICE_ROLL = 5;
+export const MOCK_DICE_ROLL: [number, number] = [3, 5];
 export const IS_DEV = import.meta.env.MODE === "development";
 export const NO_MOCKS = Boolean(import.meta.env.VITE_NO_MOCKS);
 
@@ -101,4 +101,5 @@ export const SectorScoreMultiplier: { [key in SectorData["type"]]: number } = {
   railroad: 1,
 };
 
-export const FALLBACK_GAME_POSTER = "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
+export const FALLBACK_GAME_POSTER =
+  "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
