@@ -257,3 +257,9 @@ export type ScoreDetails = {
   mapCompletionBonus: number;
   total: number;
 };
+
+export type EventDescription = {
+  title: string;
+  description: string;
+  gameCover?: string;
+};

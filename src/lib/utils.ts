@@ -1,5 +1,6 @@
 import {
   BonusCardType,
+  EventDescription,
   PlayerData,
   PlayerEvent,
   PlayerEventBonusCard,
@@ -42,6 +43,10 @@ function getEventGameInfo(event: PlayerEventGame) {
     case "reroll":
       title = "Реролл игры";
       break;
+    default: {
+      const subtype: never = event.subtype;
+      throw new Error(`Unsupported game event subtype: ${subtype}`);
+    }
   }
   return {
     title,
@@ -60,6 +65,10 @@ function getEventMoveInfo(event: PlayerEventMove) {
     case "dice-roll":
       title = "Ход на карте";
       break;
+    default: {
+      const error: never = event.subtype;
+      throw new Error(`Unsupported move event subtype: ${error}`);
+    }
   }
 
   return {
@@ -84,6 +93,10 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
     case "game-dropped":
       title = "Потерял очки за дроп игры";
       break;
+    default: {
+      const subtype: never = event.subtype;
+      throw new Error(`Unsupported score change event subtype: ${subtype}`);
+    }
   }
 
   return {
@@ -105,6 +118,10 @@ function getEventBonusCardInfo(event: PlayerEventBonusCard) {
     case "lost":
       title = "Потерял карточку";
       break;
+    default: {
+      const subtype: never = event.subtype;
+      throw new Error(`Unsupported bonus card event subtype: ${subtype}`);
+    }
   }
 
   return {
@@ -129,29 +146,29 @@ export function getBonusCardName(bonusType: BonusCardType): string {
       return "Уклониться от налога за круг";
     case "game-help-allowed":
       return "Помощь в игре разрешена";
-    default:
-      return bonusType;
+    default: {
+      const error: never = bonusType;
+      throw new Error(`Unsupported bonus card type: ${error}`);
+    }
   }
 }
 
-export function getEventDescription(event: PlayerEvent) {
-  if (event.event_type === "game") {
-    return getEventGameInfo(event);
+export function getEventDescription(event: PlayerEvent): EventDescription {
+  const eventType = event.event_type;
+  switch (eventType) {
+    case "game":
+      return getEventGameInfo(event);
+    case "bonus-card":
+      return getEventBonusCardInfo(event);
+    case "player-move":
+      return getEventMoveInfo(event);
+    case "score-change":
+      return getEventScoreChangeInfo(event);
+    default: {
+      const error: never = eventType;
+      throw new Error(`Unsupported event type: ${error}`);
+    }
   }
-
-  if (event.event_type === "bonus-card") {
-    return { ...getEventBonusCardInfo(event), gameCover: null };
-  }
-
-  if (event.event_type === "player-move") {
-    return { ...getEventMoveInfo(event), gameCover: null };
-  }
-
-  if (event.event_type === "score-change") {
-    return { ...getEventScoreChangeInfo(event), gameCover: null };
-  }
-
-  throw new Error(`Unsupported event type`);
 }
 
 type NextTurnStateParams = {
@@ -187,10 +204,10 @@ export function getNextTurnState({
     "stealing-bonus-card",
   ];
 
-  let maxLoops = 10;
+  let maxIterations = 10;
   let state = currentState;
   console.log("current state:", currentState);
-  while (maxLoops--) {
+  while (maxIterations--) {
     const iteration = getNextState({
       currentState: state,
       sector,
