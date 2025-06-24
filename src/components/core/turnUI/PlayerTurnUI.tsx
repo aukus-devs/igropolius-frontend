@@ -4,6 +4,7 @@ import TrainMoveDialog from "./TrainMoveDialog";
 import GameReviewForm from "./GameReviewForm";
 import RollBonusCard from "./RollBonusCard";
 import { Button } from "../../ui/button";
+import DiceBonusesDialog from "./DiceBonusesDialog";
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving } = usePlayerStore(
@@ -30,7 +31,7 @@ export default function PlayerTurnUI() {
     case "rolling-bonus-card":
       return <RollBonusCard />;
     case "using-dice-bonuses":
-      return null;
+      return <DiceBonusesDialog />;
     case "using-street-tax-bonuses":
       return null;
     case "using-reroll-bonuses":
