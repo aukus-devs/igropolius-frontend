@@ -296,14 +296,21 @@ type GameReviewRequest = {
   game_id: number | null;
 };
 
-export async function saveGameReview(request: GameReviewRequest): Promise<void> {
+type GameReviewResponse = {
+  new_sector_id: number;
+};
+
+export async function saveGameReview(request: GameReviewRequest): Promise<GameReviewResponse> {
   if (MOCK_API) {
-    return Promise.resolve();
+    return Promise.resolve({
+      new_sector_id: 11,
+    });
   }
-  await apiRequest("/api/player-games", {
+  const response = await apiRequest("/api/player-games", {
     method: "POST",
     body: JSON.stringify(request),
   });
+  return response.json();
 }
 
 export async function payTaxes(taxType: TaxType): Promise<void> {

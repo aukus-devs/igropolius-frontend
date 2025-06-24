@@ -22,7 +22,7 @@ import {
 } from "@/lib/types";
 import { getEventDescription, getBonusCardName } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Fragment, useState, useMemo } from "react";
+import { Fragment, useState } from "react";
 
 type Props = {
   player: PlayerData;
@@ -200,24 +200,18 @@ export default function EventsTab({ player }: Props) {
     queryKey: queryKeys.playerEvents(player.id),
     queryFn: () => fetchPlayerEvents(player.id),
     refetchInterval: 30 * 1000,
+    initialData: { events: [] },
   });
 
-  const events = eventsData?.events || [];
+  const events = eventsData.events;
+  const sortedEvents = events.sort((a, b) => b.timestamp - a.timestamp);
 
-  const sortedEvents = useMemo(() => {
-    return [...events].sort((a, b) => b.timestamp - a.timestamp);
-  }, [events]);
+  const filteredEvents =
+    selectedFilter === "all"
+      ? sortedEvents
+      : sortedEvents.filter((event) => event.event_type === selectedFilter);
 
-  const filteredEvents = useMemo(() => {
-    if (selectedFilter === "all") {
-      return sortedEvents;
-    }
-    return sortedEvents.filter((event) => event.event_type === selectedFilter);
-  }, [sortedEvents, selectedFilter]);
-
-  const eventsByDate = useMemo(() => {
-    return getEventsByDate(filteredEvents);
-  }, [filteredEvents]);
+  const eventsByDate = getEventsByDate(filteredEvents);
 
   if (isLoading) {
     return (
@@ -247,12 +241,12 @@ export default function EventsTab({ player }: Props) {
     <div>
       <EventsTabFilter selectedFilter={selectedFilter} onFilterChange={setSelectedFilter} />
       <div className="flex flex-col gap-7.5 mb-5">
-        {Object.keys(eventsByDate || {}).length === 0 ? (
+        {Object.keys(eventsByDate).length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             {selectedFilter === "all" ? "Нет событий" : `Нет событий типа "${selectedFilter}"`}
           </div>
         ) : (
-          Object.entries(eventsByDate || {}).map(([date, events]) => {
+          Object.entries(eventsByDate).map(([date, events]) => {
             const { month, day } = getFormattedTime(new Date(date).getTime() / 1000);
 
             return (

@@ -13,7 +13,7 @@ import useModelsStore from "./modelsStore";
 import useDiceStore from "./diceStore";
 import useCameraStore from "./cameraStore";
 import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
-import { playersFrontendData, PrisonSectors, SectorsById, sectorsData } from "@/lib/mockData";
+import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
 import { Euler, Quaternion } from "three";
 import { getNextTurnState } from "@/lib/utils";
 import {
@@ -44,6 +44,7 @@ const usePlayerStore = create<{
   }) => Promise<void>;
   receiveBonusCard: (type: BonusCardType) => void;
   stealBonusCard: (player: PlayerData, card: BonusCardType) => Promise<void>;
+  moveMyPlayerToPrison: (sectorId: number) => Promise<void>;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -170,8 +171,11 @@ const usePlayerStore = create<{
 
     const tl = createTimeline();
 
-    for (let i = 0; i < steps; i++) {
-      const nextSectorId = currentSectorId + 1 > sectorsData.length ? 1 : currentSectorId + 1;
+    const backward = steps < 0;
+
+    for (let i = 0; i < Math.abs(steps); i++) {
+      const nextSectorIdRaw = backward ? currentSectorId - 1 : currentSectorId + 1;
+      const nextSectorId = nextSectorIdRaw > sectorsData.length ? 1 : nextSectorIdRaw;
       const nextSector = sectorsData.find((sector) => sector.id === nextSectorId);
       if (!nextSector)
         throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
