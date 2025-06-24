@@ -1,6 +1,6 @@
 import useTrainsStore from "@/stores/trainStore";
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
+import { Button } from "../../ui/button";
+import { Card } from "../../ui/card";
 import usePlayerStore from "@/stores/playerStore";
 import { SectorsById } from "@/lib/mockData";
 import { useShallow } from "zustand/shallow";

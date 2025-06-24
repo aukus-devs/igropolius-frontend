@@ -3,7 +3,7 @@ import { useShallow } from "zustand/shallow";
 import TrainMoveDialog from "./TrainMoveDialog";
 import GameReviewForm from "./GameReviewForm";
 import RollBonusCard from "./RollBonusCard";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving } = usePlayerStore(

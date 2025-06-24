@@ -7,7 +7,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import MobileTabs from "./core/mobile/MobileTabs";
 import MobilePlayersList from "./core/mobile/MobilePlayerList";
 import DiceErrorNotification from "./core/DiceErrorNotification";
-import PlayerTurnUI from "./core/PlayerTurnUI";
+import PlayerTurnUI from "./core/turnUI/PlayerTurnUI";
 
 function DesktopUI() {
   const { turnState, position } = usePlayerStore(

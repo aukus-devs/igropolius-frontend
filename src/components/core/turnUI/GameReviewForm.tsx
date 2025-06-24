@@ -1,18 +1,30 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../ui/select";
+import { Button } from "../../ui/button";
 import { useState, useEffect, useRef } from "react";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+import { Input } from "../../ui/input";
+import { Textarea } from "../../ui/textarea";
 import useReviewFormStore from "@/stores/reviewFormStore";
-import Rating from "./Rating";
+import Rating from "../Rating";
 import { GameLength, GameStatusType } from "@/lib/types";
 import { useShallow } from "zustand/shallow";
 import usePlayerStore from "@/stores/playerStore";
 import { queryKeys, resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
-import { ArrowRight, X } from "../icons";
+import { ArrowRight, X } from "../../icons";
 import { searchGames, IGDBGame } from "@/lib/api";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@/hooks/useDebounce";
 import { FALLBACK_GAME_POSTER } from "@/lib/constants";

@@ -5,11 +5,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
+} from "../../ui/dialog";
+import { Button } from "../../ui/button";
 import { useRef, useState } from "react";
 import { frontendCardsData } from "@/lib/mockData";
-import { Card, CardFooter } from "../ui/card";
+import { Card, CardFooter } from "../../ui/card";
 import { BonusCardType } from "@/lib/types";
 import usePlayerStore from "@/stores/playerStore";
 import { useShallow } from "zustand/shallow";
