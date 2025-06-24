@@ -19,6 +19,13 @@ export default function DiceBonusesDialog() {
     bonusCards.some((card) => card.bonus_type === "adjust-roll-by1") || true;
   const hasChooseDie = bonusCards.some((card) => card.bonus_type === "choose-1-die") || true;
 
+  const adjustBy1Used = adjustBy1 !== null;
+  const chooseDieUsed = selectedDie !== null;
+
+  const handleSubmit = () => {
+    console.log(adjustBy1Used, chooseDieUsed);
+  };
+
   return (
     <Dialog open={true}>
       <DialogContent className="w-[400px]">
@@ -29,7 +36,7 @@ export default function DiceBonusesDialog() {
         <div>Новый результат: {adjustedRoll}</div>
         {hasChooseDie && (
           <div className="mt-2">
-            <div>Выбрать один кубик (используя карточку)</div>
+            <div>Выбрать один кубик (потратит карточку)</div>
             <NumberToggle
               options={rollResult.map((num) => ({
                 value: num,
@@ -44,7 +51,7 @@ export default function DiceBonusesDialog() {
         )}
         {hasAdjustBy1 && (
           <div className="mt-2">
-            <div>Увеличить или уменьшить результат на 1 (используя карточку)</div>
+            <div>Увеличить или уменьшить результат на 1 (потратит карточку)</div>
             <NumberToggle
               options={[
                 { value: 1, label: "+1" },
@@ -60,10 +67,7 @@ export default function DiceBonusesDialog() {
         <div className="mt-4">
           <button
             type="button"
-            onClick={() => {
-              // Here you would handle the final roll with the adjustedRoll value
-              console.log("Final roll:", adjustedRoll);
-            }}
+            onClick={handleSubmit}
             className="w-full bg-primary text-primary-foreground rounded-md py-2 hover:bg-primary/90 transition-colors"
           >
             Готово
