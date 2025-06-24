@@ -200,10 +200,9 @@ export default function EventsTab({ player }: Props) {
     queryKey: queryKeys.playerEvents(player.id),
     queryFn: () => fetchPlayerEvents(player.id),
     refetchInterval: 30 * 1000,
-    initialData: { events: [] },
   });
 
-  const events = eventsData.events;
+  const events = eventsData?.events || [];
   const sortedEvents = events.sort((a, b) => b.timestamp - a.timestamp);
 
   const filteredEvents =
