@@ -19,6 +19,8 @@ export default function PlayerTurnUI() {
   }
 
   switch (turnState) {
+    case null:
+      return null;
     case "rolling-dice":
       return <MoveButton />;
     case "choosing-train-ride":
@@ -27,8 +29,26 @@ export default function PlayerTurnUI() {
       return <GameReviewForm />;
     case "rolling-bonus-card":
       return <RollBonusCard />;
+    case "using-dice-bonuses":
+      return null;
+    case "using-street-tax-bonuses":
+      return null;
+    case "using-reroll-bonuses":
+      return null;
+    case "using-prison-bonuses":
+      return null;
+    case "using-map-tax-bonuses":
+      return null;
+    case "stealing-bonus-card":
+      return null; // No UI for stealing bonus card, handled in PlayerCards
+    case "using-map-tax-bonuses-after-train-ride":
+      return null;
+    case "choosing-building-sector":
+      return null;
+    case "entering-prison":
+      return null;
     default: {
-      const error = turnState;
+      const error: never = turnState;
       throw new Error(`Unknown turn state: ${error}`);
     }
   }
