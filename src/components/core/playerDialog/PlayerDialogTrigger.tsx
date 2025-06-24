@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { PlayerData } from "@/lib/types";
 import { Share } from "@/components/icons";
 import PlayerCards from "./PlayerCards";
+import { FALLBACK_AVATAR_URL } from "@/lib/constants";
 
 type Props = {
   player: PlayerData;
@@ -25,7 +26,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer, showCards }: 
     >
       <div className="relative">
         <Avatar className="md:w-7 md:h-7 w-[41px] h-[41px]">
-          <AvatarImage src={player.avatar_link ?? "https://github.com/shadcn.png"} />
+          <AvatarImage src={player.avatar_link ?? FALLBACK_AVATAR_URL} />
           <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
         </Avatar>
         {player.is_online ? (

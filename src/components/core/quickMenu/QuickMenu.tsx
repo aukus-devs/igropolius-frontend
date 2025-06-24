@@ -12,17 +12,20 @@ import LoginDialog from "./options/LoginDialog";
 import { LogoutButton } from "./options/LogoutButton";
 import { Separator } from "@/components/ui/separator";
 import { Sort } from "@/components/icons";
+import { FALLBACK_AVATAR_URL } from "@/lib/constants";
 
-const buttonStyle = "justify-start bg-transparent font-semibold text-base w-full rounded-none border-none";
-const groupStyle = "flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]"
+const buttonStyle =
+  "justify-start bg-transparent font-semibold text-base w-full rounded-none border-none";
+const groupStyle =
+  "flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]";
 
-function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerData | null; }) {
+function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerData | null }) {
   return (
     <>
       {myPlayer ? (
         <div className="flex gap-2 items-center font-bold text-base">
           <Avatar className="w-6 h-6">
-            <AvatarImage src={myPlayer.avatar_link} />
+            <AvatarImage src={myPlayer.avatar_link || FALLBACK_AVATAR_URL} />
             <AvatarFallback className="bg-primary-foreground uppercase">
               {myPlayer.username.slice(0, 2)}
             </AvatarFallback>
@@ -35,7 +38,6 @@ function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerData | null; }) {
           Быстрый доступ
         </div>
       )}
-
     </>
   );
 }
@@ -66,10 +68,11 @@ function QuickMenu() {
         </div>
 
         <div className={groupStyle}>
-          {myPlayer
-            ? <LogoutButton className={buttonStyle} />
-            : <LoginDialog className={buttonStyle} />
-          }
+          {myPlayer ? (
+            <LogoutButton className={buttonStyle} />
+          ) : (
+            <LoginDialog className={buttonStyle} />
+          )}
         </div>
       </CollapsibleContent>
     </Collapsible>

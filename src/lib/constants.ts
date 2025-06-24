@@ -103,3 +103,5 @@ export const SectorScoreMultiplier: { [key in SectorData["type"]]: number } = {
 
 export const FALLBACK_GAME_POSTER =
   "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
+
+export const FALLBACK_AVATAR_URL = "https://github.com/shadcn.png";

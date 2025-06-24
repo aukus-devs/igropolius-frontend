@@ -1,6 +1,7 @@
 import { Donationalerts, Telegram, Twitch, VkVideoLive } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { FALLBACK_AVATAR_URL } from "@/lib/constants";
 import { PlayerData } from "@/lib/types";
 
 function PlayerSocials({ player }: { player: PlayerData }) {
@@ -39,7 +40,7 @@ function PlayerDialogHeader({ player }: { player: PlayerData }) {
       <div className="flex gap-2 justify-center items-center mb-5">
         <div className="relative">
           <Avatar className="w-[54px] h-[54px] overflow-auto">
-            <AvatarImage src={player.avatar_link ?? "https://github.com/shadcn.png"} />
+            <AvatarImage src={player.avatar_link ?? FALLBACK_AVATAR_URL} />
             <AvatarFallback className="uppercase">
               {player.username.slice(0, 2)}
             </AvatarFallback>
