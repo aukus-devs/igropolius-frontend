@@ -25,23 +25,21 @@ export function CustomCameraControls() {
     if (myPlayerId) {
       setTimeout(() => {
         cameraToPlayer(myPlayerId);
-      }, 700)
+      }, 700);
     }
   }, [myPlayerId, cameraToPlayer]);
 
   useEffect(() => {
     const newCamera = isOrthographic
       ? new OrthographicCamera(
-        window.innerWidth / -2,
-        window.innerWidth / 2,
-        window.innerHeight / 2,
-        window.innerHeight / -2,
-        0.1,
-        1000
-      )
-      : new PerspectiveCamera(
-        45, window.innerWidth / window.innerHeight, 0.1, 1000
-      );
+          window.innerWidth / -2,
+          window.innerWidth / 2,
+          window.innerHeight / 2,
+          window.innerHeight / -2,
+          0.1,
+          1000,
+        )
+      : new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     newCamera.zoom = isOrthographic ? 7 : 1;
     newCamera.position.set(0, 120, isOrthographic ? -0.1 : -100);
@@ -78,6 +76,15 @@ export function CustomCameraControls() {
     setCameraControls(controls);
   }
 
+  const anglePrams = isOrthographic
+    ? {
+        maxPolarAngle: -Math.PI,
+        minPolarAngle: -Math.PI,
+      }
+    : {
+        maxPolarAngle: Math.PI / 2,
+      };
+
   return (
     <>
       <CameraControlsComponent
@@ -85,10 +92,10 @@ export function CustomCameraControls() {
         dollySpeed={0.75}
         maxDistance={225}
         maxZoom={225}
-        maxPolarAngle={Math.PI / 2}
         smoothTime={0.2}
-        enabled={!isOrthographic}
+        // enabled={!isOrthographic}
         onUpdate={onCameraControlsUpdate}
+        {...anglePrams}
       />
     </>
   );
