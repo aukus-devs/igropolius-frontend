@@ -166,9 +166,10 @@ export type PlayerEventGame = PlayerEventBase & {
   bonuses_used?: BonusCardType[];
 };
 
+export type RollBonusType = "adjust-roll-by1" | "choose-1-die";
+
 export type BonusCardType =
-  | "adjust-roll-by1"
-  | "choose-1-die"
+  | RollBonusType
   | "skip-prison-day"
   | "reroll-game"
   | "evade-street-tax"
@@ -262,4 +263,11 @@ export type EventDescription = {
   title: string;
   description: string;
   gameCover?: string;
+};
+
+export type MoveMyPlayerParams = {
+  totalRoll: number;
+  bonusesUsed: RollBonusType[];
+  selectedDie: number | null;
+  adjustBy1: 1 | -1 | null;
 };

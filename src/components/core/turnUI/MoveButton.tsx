@@ -1,12 +1,44 @@
 import { Button } from "@/components/ui/button";
+import useDiceStore from "@/stores/diceStore";
 import usePlayerStore from "@/stores/playerStore";
+import { useShallow } from "zustand/shallow";
 
 export function MoveButton() {
-  const moveMyPlayer = usePlayerStore((state) => state.moveMyPlayer);
-  const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
+  const { isPlayerMoving, moveMyPlayer, myPlayer, setNextTurnState } = usePlayerStore(
+    useShallow((state) => ({
+      isPlayerMoving: state.isPlayerMoving,
+      moveMyPlayer: state.moveMyPlayer,
+      myPlayer: state.myPlayer,
+      setNextTurnState: state.setNextTurnState,
+    })),
+  );
+  const rollDice = useDiceStore((state) => state.rollDice);
+
+  const playerCards = myPlayer?.bonus_cards || [];
+  const hasRollCards = playerCards.some(
+    (card) => card.bonus_type === "adjust-roll-by1" || card.bonus_type === "choose-1-die",
+  );
+
+  const handleClick = async () => {
+    const roll = await rollDice();
+    if (hasRollCards) {
+      setNextTurnState({
+        prevSectorId: myPlayer?.sector_id,
+      });
+      return;
+    }
+
+    const total = roll.reduce((sum, value) => sum + value, 0);
+    moveMyPlayer({
+      totalRoll: total,
+      bonusesUsed: [],
+      adjustBy1: null,
+      selectedDie: null,
+    });
+  };
 
   return (
-    <Button variant="outline" onClick={moveMyPlayer} disabled={isPlayerMoving}>
+    <Button variant="outline" onClick={handleClick} disabled={isPlayerMoving}>
       Бросить кубик и ходить
     </Button>
   );

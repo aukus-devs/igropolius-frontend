@@ -264,6 +264,7 @@ type PlayerMoveRequest = {
   type: "dice-roll" | "train-ride" | "drop-to-prison";
   bonuses_used: string[];
   selected_die: number | null;
+  adjust_by_1: 1 | -1 | null;
 };
 
 export async function makePlayerMove(request: PlayerMoveRequest): Promise<void> {

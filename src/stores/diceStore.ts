@@ -13,7 +13,7 @@ const useDiceStore = create<{
   randomOrgCheckForm: string | null;
   isRolling: boolean;
   error: string | null;
-  rollDice: () => Promise<number>;
+  rollDice: () => Promise<[number, number]>;
   setDiceModel: (object3D: Group) => void;
   clearError: () => void;
 }>((set, get) => ({
@@ -61,7 +61,7 @@ const useDiceStore = create<{
         randomOrgCheckForm: null,
       });
 
-      return totalValue;
+      return rollResult.data;
     } catch (error) {
       console.error("Dice roll failed:", error);
       set({ error: "Не удалось выполнить бросок кубика. Попробуйте еще раз." });

@@ -40,6 +40,7 @@ const useTrainsStore = create<{
       type: "train-ride",
       bonuses_used: [],
       selected_die: null,
+      adjust_by_1: null,
     });
 
     usePlayerStore.setState({ isPlayerMoving: true });

@@ -3,6 +3,7 @@ import {
   BackendPlayerData,
   BonusCardType,
   BuildingData,
+  MoveMyPlayerParams,
   PlayerData,
   PlayerStateAction,
   PlayerTurnState,
@@ -10,7 +11,6 @@ import {
 import { createTimeline } from "animejs";
 import { create } from "zustand";
 import useModelsStore from "./modelsStore";
-import useDiceStore from "./diceStore";
 import useCameraStore from "./cameraStore";
 import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
 import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
@@ -36,7 +36,7 @@ const usePlayerStore = create<{
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: BackendPlayerData[]) => void;
   animatePlayerMovement: ({ steps }: { steps: number }) => Promise<number>;
-  moveMyPlayer: () => Promise<void>;
+  moveMyPlayer: (params: MoveMyPlayerParams) => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
   setNextTurnState: (params: {
     prevSectorId?: number;
@@ -234,18 +234,17 @@ const usePlayerStore = create<{
     return currentSectorId;
   },
 
-  moveMyPlayer: async () => {
+  moveMyPlayer: async (params: MoveMyPlayerParams) => {
     const { myPlayer, animatePlayerMovement, setNextTurnState } = get();
     const originalSector = myPlayer?.sector_id;
-
-    const rolledNumber = await useDiceStore.getState().rollDice();
     await makePlayerMove({
       type: "dice-roll",
-      bonuses_used: [],
-      selected_die: null,
+      bonuses_used: params.bonusesUsed,
+      selected_die: params.selectedDie,
+      adjust_by_1: params.adjustBy1,
     });
 
-    await animatePlayerMovement({ steps: rolledNumber });
+    await animatePlayerMovement({ steps: params.totalRoll });
     setNextTurnState({ prevSectorId: originalSector });
   },
 
