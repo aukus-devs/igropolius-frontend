@@ -7,7 +7,8 @@ import { rollDice as rollDiceAPI } from "@/lib/api";
 
 const useDiceStore = create<{
   diceModel: Group | null;
-  rolledNumber: number | null;
+  rollResult: number[];
+  rollSum: () => number;
   rollId: number | null;
   isRandomOrgResult: boolean;
   randomOrgCheckForm: string | null;
@@ -19,13 +20,18 @@ const useDiceStore = create<{
   showRoll: boolean;
 }>((set, get) => ({
   diceModel: null,
-  rolledNumber: null,
+  rollResult: [],
   rollId: null,
   isRandomOrgResult: false,
   randomOrgCheckForm: null,
   isRolling: false,
   error: null,
   showRoll: false,
+
+  rollSum: () => {
+    const rollResult = get().rollResult;
+    return rollResult.reduce((sum, die) => sum + die, 0);
+  },
 
   setDiceModel: (object3D) => set({ diceModel: object3D }),
   clearError: () => set({ error: null }),
@@ -42,13 +48,11 @@ const useDiceStore = create<{
 
     try {
       const rollResult = await rollDiceAPI();
-      const totalValue = rollResult.data.reduce((sum, die) => sum + die, 0);
-
       const elapsed = Date.now() - animationStartTime;
       await sleep(2000 - elapsed);
 
       set({
-        rolledNumber: totalValue,
+        rollResult: rollResult.data,
         rollId: rollResult.roll_id,
         isRandomOrgResult: rollResult.is_random_org_result,
         randomOrgCheckForm: rollResult.random_org_check_form || null,
