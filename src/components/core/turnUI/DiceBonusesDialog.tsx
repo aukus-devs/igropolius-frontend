@@ -1,6 +1,8 @@
+import { RollBonusType } from "@/lib/types";
 import useDiceStore from "@/stores/diceStore";
 import usePlayerStore from "@/stores/playerStore";
 import { useState } from "react";
+import { useShallow } from "zustand/shallow";
 
 export default function DiceBonusesDialog() {
   const [selectedDie, setSelectedDie] = useState<number | null>(null);
@@ -12,7 +14,9 @@ export default function DiceBonusesDialog() {
   const adjustedRoll =
     selectedDie !== null ? selectedDie + (adjustBy1 || 0) : rollResultSum + (adjustBy1 || 0);
 
-  const myPlayer = usePlayerStore((state) => state.myPlayer);
+  const { myPlayer, moveMyPlayer } = usePlayerStore(
+    useShallow((state) => ({ myPlayer: state.myPlayer, moveMyPlayer: state.moveMyPlayer })),
+  );
   const bonusCards = myPlayer?.bonus_cards || [];
 
   const hasAdjustBy1 =
@@ -23,7 +27,32 @@ export default function DiceBonusesDialog() {
   const chooseDieUsed = selectedDie !== null;
 
   const handleSubmit = () => {
-    console.log(adjustBy1Used, chooseDieUsed);
+    const bonusesUsed: RollBonusType[] = [];
+    if (adjustBy1Used) {
+      bonusesUsed.push("adjust-roll-by1");
+    }
+    if (chooseDieUsed) {
+      bonusesUsed.push("choose-1-die");
+    }
+
+    let adjustBy1Typed = null;
+    switch (adjustBy1) {
+      case 1:
+        adjustBy1Typed = 1 as const;
+        break;
+      case -1:
+        adjustBy1Typed = -1 as const;
+        break;
+      default:
+        adjustBy1Typed = null;
+    }
+
+    moveMyPlayer({
+      totalRoll: adjustedRoll,
+      adjustBy1: adjustBy1Typed,
+      selectedDie,
+      bonusesUsed,
+    });
   };
 
   return (
