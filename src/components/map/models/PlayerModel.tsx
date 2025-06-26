@@ -6,7 +6,7 @@ import { Group, Mesh } from "three";
 import DiceModel from "./DiceModel";
 import usePlayerStore from "@/stores/playerStore";
 import { Gltf } from "@react-three/drei";
-import MovesCounter from "../MovesCounter";
+import DiceRollDisplay from "../DiceRollDisplay.tsx";
 import PlayerInfo from "../PlayerInfo";
 
 const ModelsUrls: Record<string, string> = {
@@ -30,7 +30,7 @@ type Props = {
 function MyPlayerComponents() {
   return (
     <group position={[0, PLAYER_HEIGHT + 3, 0]}>
-      <MovesCounter />
+      <DiceRollDisplay />
       <DiceModel />
     </group>
   );

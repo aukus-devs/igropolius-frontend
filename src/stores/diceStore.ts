@@ -16,6 +16,7 @@ const useDiceStore = create<{
   rollDice: () => Promise<[number, number]>;
   setDiceModel: (object3D: Group) => void;
   clearError: () => void;
+  showRoll: boolean;
 }>((set, get) => ({
   diceModel: null,
   rolledNumber: null,
@@ -24,6 +25,7 @@ const useDiceStore = create<{
   randomOrgCheckForm: null,
   isRolling: false,
   error: null,
+  showRoll: false,
 
   setDiceModel: (object3D) => set({ diceModel: object3D }),
   clearError: () => set({ error: null }),
@@ -50,15 +52,13 @@ const useDiceStore = create<{
         rollId: rollResult.roll_id,
         isRandomOrgResult: rollResult.is_random_org_result,
         randomOrgCheckForm: rollResult.random_org_check_form || null,
+        showRoll: true,
       });
 
       // reset data to close the dice popup
       await sleep(2000);
       set({
-        rolledNumber: null,
-        rollId: null,
-        isRandomOrgResult: false,
-        randomOrgCheckForm: null,
+        showRoll: false,
       });
 
       return rollResult.data;
@@ -67,7 +67,7 @@ const useDiceStore = create<{
       set({ error: "Не удалось выполнить бросок кубика. Попробуйте еще раз." });
       throw error;
     } finally {
-      set({ isRolling: false });
+      set({ isRolling: false, showRoll: false });
     }
   },
 }));
