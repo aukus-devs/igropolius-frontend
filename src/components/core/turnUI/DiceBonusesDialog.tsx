@@ -1,4 +1,3 @@
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import usePlayerStore from "@/stores/playerStore";
 import { useState } from "react";
 
@@ -27,9 +26,9 @@ export default function DiceBonusesDialog() {
   };
 
   return (
-    <Dialog open={true}>
-      <DialogContent className="w-[400px]">
-        <DialogTitle>Какие бонусы использовать?</DialogTitle>
+    <div className="backdrop-blur-[1.5rem] bg-card/70 border-none rounded-xl p-4">
+      <div className="w-[400px]">
+        <div>Какие бонусы использовать?</div>
         <div>
           Бросок кубика: {rollResultSum} ({rollResult.join(" и ")})
         </div>
@@ -73,8 +72,8 @@ export default function DiceBonusesDialog() {
             Готово
           </button>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }
 
