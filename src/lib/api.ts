@@ -131,6 +131,7 @@ type CurrentPlayerResponse = {
   nickname: string;
   url_handle: string;
   turn_state: PlayerTurnState;
+  last_roll_result: number[];
 };
 
 export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
@@ -140,6 +141,7 @@ export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
       nickname: "Praden",
       url_handle: "praden",
       turn_state: "rolling-dice",
+      last_roll_result: MOCK_DICE_ROLL,
     });
   }
   const response = await apiRequest("/api/players/current");

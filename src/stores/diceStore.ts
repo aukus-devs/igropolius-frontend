@@ -16,6 +16,7 @@ const useDiceStore = create<{
   error: string | null;
   rollDice: () => Promise<[number, number]>;
   setDiceModel: (object3D: Group) => void;
+  setRollResult: (roll: number[]) => void;
   clearError: () => void;
   showRoll: boolean;
 }>((set, get) => ({
@@ -36,12 +37,14 @@ const useDiceStore = create<{
   setDiceModel: (object3D) => set({ diceModel: object3D }),
   clearError: () => set({ error: null }),
 
+  setRollResult: (roll) => set({ rollResult: roll }),
+
   rollDice: async () => {
     const diceModel = get().diceModel;
 
     if (!diceModel) throw new Error(`Dice model not found.`);
 
-    set({ isRolling: true, error: null });
+    set({ isRolling: true, error: null, rollResult: [] });
 
     const animationStartTime = Date.now();
     animateDice(diceModel);

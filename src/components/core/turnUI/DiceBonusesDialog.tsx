@@ -1,3 +1,4 @@
+import useDiceStore from "@/stores/diceStore";
 import usePlayerStore from "@/stores/playerStore";
 import { useState } from "react";
 
@@ -5,7 +6,7 @@ export default function DiceBonusesDialog() {
   const [selectedDie, setSelectedDie] = useState<number | null>(null);
   const [adjustBy1, setAdjustBy1] = useState<number | null>(null);
 
-  const rollResult = [3, 5];
+  const rollResult = useDiceStore((state) => state.rollResult);
   const rollResultSum = rollResult.reduce((a, b) => a + b, 0);
 
   const adjustedRoll =
@@ -91,9 +92,9 @@ type NumberToggleProps = {
 export function NumberToggle({ options, value, onChange }: NumberToggleProps) {
   return (
     <div className="flex gap-4">
-      {options.map((num) => (
+      {options.map((num, idx) => (
         <button
-          key={num.value}
+          key={idx}
           type="button"
           onClick={() => onChange(num.value)}
           className={`w-12 h-12 flex items-center justify-center rounded-md border-2 transition

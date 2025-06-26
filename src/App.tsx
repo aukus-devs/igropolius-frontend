@@ -13,6 +13,7 @@ import LoadingModal from "./components/core/loadng/LoadingModal";
 import { queryKeys } from "./lib/queryClient";
 import CanvasTooltip from "./components/map/canvasTooltip/CanvasTooltip";
 import SceneLoader from "./components/map/SceneLoader";
+import useDiceStore from "./stores/diceStore";
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -48,6 +49,17 @@ function App() {
       setTurnState: state.setTurnState,
     })),
   );
+
+  const setRollResult = useDiceStore((state) => state.setRollResult);
+
+  useEffect(() => {
+    if (
+      currentPlayerData?.last_roll_result &&
+      currentPlayerData?.last_roll_result.length > 0
+    ) {
+      setRollResult(currentPlayerData.last_roll_result);
+    }
+  }, [currentPlayerData?.last_roll_result, setRollResult]);
 
   useEffect(() => {
     if (currentPlayerDataError) {
