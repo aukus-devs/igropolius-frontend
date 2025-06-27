@@ -244,8 +244,26 @@ const usePlayerStore = create<{
       adjust_by_1: params.adjustBy1,
     });
 
+    // remove used cards from player
+    set((state) => ({
+      myPlayer: state.myPlayer
+        ? {
+            ...state.myPlayer,
+            bonus_cards: state.myPlayer.bonus_cards.filter((card) => {
+              if (card.bonus_type === "adjust-roll-by1") {
+                return !params.bonusesUsed.includes(card.bonus_type);
+              }
+              if (card.bonus_type === "choose-1-die") {
+                return !params.bonusesUsed.includes(card.bonus_type);
+              }
+              return true;
+            }),
+          }
+        : null,
+    }));
+
     await animatePlayerMovement({ steps: params.totalRoll });
-    setNextTurnState({ prevSectorId: originalSector });
+    await setNextTurnState({ prevSectorId: originalSector });
   },
 
   moveMyPlayerToPrison: async (sectorId: number) => {
@@ -260,7 +278,14 @@ const usePlayerStore = create<{
 
   receiveBonusCard: async (type: BonusCardType) => {
     const { setNextTurnState } = get();
-    await giveBonusCard(type);
+    const newCard = await giveBonusCard(type);
+
+    // add card to player before updating turn state
+    set((state) => ({
+      myPlayer: state.myPlayer
+        ? { ...state.myPlayer, bonus_cards: [...state.myPlayer.bonus_cards, newCard] }
+        : null,
+    }));
     await setNextTurnState({});
   },
 

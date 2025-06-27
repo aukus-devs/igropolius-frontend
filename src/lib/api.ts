@@ -1,4 +1,5 @@
 import {
+  ActiveBonusCard,
   BackendPlayerData,
   BonusCardType,
   GameLengthWithDrop,
@@ -388,14 +389,19 @@ export async function searchGames(
   return response.json();
 }
 
-export async function giveBonusCard(bonusType: BonusCardType): Promise<void> {
+export async function giveBonusCard(bonusType: BonusCardType): Promise<ActiveBonusCard> {
   if (MOCK_API) {
-    return Promise.resolve();
+    return Promise.resolve({
+      bonus_type: bonusType,
+      received_at: Math.floor(Date.now() / 1000),
+      received_on_sector: 1,
+    });
   }
-  await apiRequest(`/api/bonus-cards`, {
+  const response = await apiRequest(`/api/bonus-cards`, {
     method: "POST",
     body: JSON.stringify({ bonus_type: bonusType }),
   });
+  return response.json();
 }
 
 export async function stealBonusCard(
