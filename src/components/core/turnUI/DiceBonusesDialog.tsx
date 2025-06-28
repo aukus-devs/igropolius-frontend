@@ -1,27 +1,26 @@
-import { RollBonusType } from "@/lib/types";
-import useDiceStore from "@/stores/diceStore";
-import usePlayerStore from "@/stores/playerStore";
-import { useState } from "react";
-import { useShallow } from "zustand/shallow";
+import { RollBonusType } from '@/lib/types';
+import useDiceStore from '@/stores/diceStore';
+import usePlayerStore from '@/stores/playerStore';
+import { useState } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 export default function DiceBonusesDialog() {
   const [selectedDie, setSelectedDie] = useState<number | null>(null);
   const [adjustBy1, setAdjustBy1] = useState<number | null>(null);
 
-  const rollResult = useDiceStore((state) => state.rollResult);
+  const rollResult = useDiceStore(state => state.rollResult);
   const rollResultSum = rollResult.reduce((a, b) => a + b, 0);
 
   const adjustedRoll =
     selectedDie !== null ? selectedDie + (adjustBy1 || 0) : rollResultSum + (adjustBy1 || 0);
 
   const { myPlayer, moveMyPlayer } = usePlayerStore(
-    useShallow((state) => ({ myPlayer: state.myPlayer, moveMyPlayer: state.moveMyPlayer })),
+    useShallow(state => ({ myPlayer: state.myPlayer, moveMyPlayer: state.moveMyPlayer }))
   );
   const bonusCards = myPlayer?.bonus_cards || [];
 
-  const hasAdjustBy1 =
-    bonusCards.some((card) => card.bonus_type === "adjust-roll-by1") || true;
-  const hasChooseDie = bonusCards.some((card) => card.bonus_type === "choose-1-die") || true;
+  const hasAdjustBy1 = bonusCards.some(card => card.bonus_type === 'adjust-roll-by1');
+  const hasChooseDie = bonusCards.some(card => card.bonus_type === 'choose-1-die');
 
   const adjustBy1Used = adjustBy1 !== null;
   const chooseDieUsed = selectedDie !== null;
@@ -29,10 +28,10 @@ export default function DiceBonusesDialog() {
   const handleSubmit = () => {
     const bonusesUsed: RollBonusType[] = [];
     if (adjustBy1Used) {
-      bonusesUsed.push("adjust-roll-by1");
+      bonusesUsed.push('adjust-roll-by1');
     }
     if (chooseDieUsed) {
-      bonusesUsed.push("choose-1-die");
+      bonusesUsed.push('choose-1-die');
     }
 
     let adjustBy1Typed = null;
@@ -60,20 +59,20 @@ export default function DiceBonusesDialog() {
       <div className="w-[400px]">
         <div>Какие бонусы использовать?</div>
         <div>
-          Бросок кубика: {rollResultSum} ({rollResult.join(" и ")})
+          Бросок кубика: {rollResultSum} ({rollResult.join(' и ')})
         </div>
         <div>Новый результат: {adjustedRoll}</div>
         {hasChooseDie && (
           <div className="mt-2">
             <div>Выбрать один кубик (потратит карточку)</div>
             <NumberToggle
-              options={rollResult.map((num) => ({
+              options={rollResult.map(num => ({
                 value: num,
                 label: num.toString(),
               }))}
               value={selectedDie}
-              onChange={(value) => {
-                setSelectedDie((prev) => (prev === value ? null : value));
+              onChange={value => {
+                setSelectedDie(prev => (prev === value ? null : value));
               }}
             />
           </div>
@@ -83,12 +82,12 @@ export default function DiceBonusesDialog() {
             <div>Увеличить или уменьшить результат на 1 (потратит карточку)</div>
             <NumberToggle
               options={[
-                { value: 1, label: "+1" },
-                { value: -1, label: "-1" },
+                { value: 1, label: '+1' },
+                { value: -1, label: '-1' },
               ]}
               value={adjustBy1}
-              onChange={(value) => {
-                setAdjustBy1((prev) => (prev === value ? null : value));
+              onChange={value => {
+                setAdjustBy1(prev => (prev === value ? null : value));
               }}
             />
           </div>
@@ -129,8 +128,8 @@ export function NumberToggle({ options, value, onChange }: NumberToggleProps) {
           className={`w-12 h-12 flex items-center justify-center rounded-md border-2 transition
             ${
               value === num.value
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-muted text-muted-foreground border-muted"
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'bg-muted text-muted-foreground border-muted'
             }
             focus:outline-none focus:ring-2 focus:ring-primary`}
         >

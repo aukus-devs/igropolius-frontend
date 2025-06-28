@@ -235,7 +235,6 @@ const usePlayerStore = create<{
     const originalSector = myPlayer?.sector_id;
     await makePlayerMove({
       type: 'dice-roll',
-      bonuses_used: params.bonusesUsed,
       selected_die: params.selectedDie,
       adjust_by_1: params.adjustBy1,
     });
@@ -246,11 +245,11 @@ const usePlayerStore = create<{
         ? {
             ...state.myPlayer,
             bonus_cards: state.myPlayer.bonus_cards.filter(card => {
-              if (card.bonus_type === 'adjust-roll-by1') {
-                return !params.bonusesUsed.includes(card.bonus_type);
+              if (params.adjustBy1 !== null && card.bonus_type === 'adjust-roll-by1') {
+                return false;
               }
-              if (card.bonus_type === 'choose-1-die') {
-                return !params.bonusesUsed.includes(card.bonus_type);
+              if (params.selectedDie !== null && card.bonus_type === 'choose-1-die') {
+                return false;
               }
               return true;
             }),
