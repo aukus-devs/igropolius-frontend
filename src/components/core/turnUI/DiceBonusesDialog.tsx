@@ -1,4 +1,3 @@
-import { RollBonusType } from '@/lib/types';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useState } from 'react';
@@ -26,14 +25,6 @@ export default function DiceBonusesDialog() {
   const chooseDieUsed = selectedDie !== null;
 
   const handleSubmit = () => {
-    const bonusesUsed: RollBonusType[] = [];
-    if (adjustBy1Used) {
-      bonusesUsed.push('adjust-roll-by1');
-    }
-    if (chooseDieUsed) {
-      bonusesUsed.push('choose-1-die');
-    }
-
     let adjustBy1Typed = null;
     switch (adjustBy1) {
       case 1:
@@ -50,7 +41,7 @@ export default function DiceBonusesDialog() {
       totalRoll: adjustedRoll,
       adjustBy1: adjustBy1Typed,
       selectedDie,
-      bonusesUsed,
+      action: 'skip-bonus',
     });
   };
 

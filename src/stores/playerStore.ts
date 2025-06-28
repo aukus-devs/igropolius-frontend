@@ -258,7 +258,7 @@ const usePlayerStore = create<{
     }));
 
     await animatePlayerMovement({ steps: params.totalRoll });
-    await setNextTurnState({ prevSectorId: originalSector });
+    await setNextTurnState({ prevSectorId: originalSector, action: params.action });
   },
 
   moveMyPlayerToPrison: async (sectorId: number) => {

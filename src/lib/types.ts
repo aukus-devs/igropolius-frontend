@@ -1,12 +1,12 @@
-const ColorBrown = "#AC8E68";
-const ColorLightBlue = "#64D2FF";
-const ColorPink = "#BF5AF2";
-const ColorOrange = "#FF9F0A";
-const ColorRed = "#FF453A";
-const ColorYellow = "#FFD60A";
-const ColorGreen = "#30D158";
-const ColorBlue = "#0A84FF";
-const ColorPastelGreen = "#AAD4A3";
+const ColorBrown = '#AC8E68';
+const ColorLightBlue = '#64D2FF';
+const ColorPink = '#BF5AF2';
+const ColorOrange = '#FF9F0A';
+const ColorRed = '#FF453A';
+const ColorYellow = '#FFD60A';
+const ColorGreen = '#30D158';
+const ColorBlue = '#0A84FF';
+const ColorPastelGreen = '#AAD4A3';
 
 export const colors = {
   brown: ColorBrown,
@@ -27,22 +27,22 @@ export type ColorName = keyof typeof colors;
 export type CellColor = (typeof colors)[ColorName];
 
 export const playerColors = {
-  red: "#FF453A",
-  orange: "#FF9F0A",
-  yellow: "#FFD60A",
-  green: "#30D158",
-  lightBlue: "#64D2FF",
-  blue: "#0A84FF",
-  darkBlue: "#5E5CE6",
-  purple: "#BF5AF2",
-  pink: "#FF375F",
-  brown: "#AC8E68",
+  red: '#FF453A',
+  orange: '#FF9F0A',
+  yellow: '#FFD60A',
+  green: '#30D158',
+  lightBlue: '#64D2FF',
+  blue: '#0A84FF',
+  darkBlue: '#5E5CE6',
+  purple: '#BF5AF2',
+  pink: '#FF375F',
+  brown: '#AC8E68',
 } as const;
 
 export type PlayerColor = keyof typeof playerColors;
 export type PlayerColorValue = (typeof playerColors)[PlayerColor];
 
-export type CellRollType = "auc" | "steam" | "voting";
+export type CellRollType = 'auc' | 'steam' | 'voting';
 
 type Position = {
   x: number;
@@ -51,17 +51,17 @@ type Position = {
 
 export type SectorData = {
   id: number;
-  type: "prison" | "property" | "railroad" | "bonus" | "start-corner" | "parking";
+  type: 'prison' | 'property' | 'railroad' | 'bonus' | 'start-corner' | 'parking';
   name: string;
   position: Position;
   color: ColorName;
   rollType: CellRollType;
 };
 
-export type GameLength = "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
-export type GameLengthWithDrop = GameLength | "drop";
+export type GameLength = '2-5' | '5-10' | '10-15' | '15-20' | '20-25' | '25+';
+export type GameLengthWithDrop = GameLength | 'drop';
 
-export type GameStatusType = "drop" | "completed" | "reroll";
+export type GameStatusType = 'drop' | 'completed' | 'reroll';
 export type GameReviewType = {
   gameTitle: string;
   description: string;
@@ -124,21 +124,21 @@ export type PlayerData = BackendPlayerData & PlayerFrontendData;
 export type Vector3Array = [number, number, number];
 
 export type BuildingType =
-  | "ruins"
+  | 'ruins'
   // | "small"
-  | "large"
-  | "skyscraperD"
-  | "skyscraperF"
-  | "skyscraperA"
-  | "skyscraperE"
-  | "skyscraperX";
+  | 'large'
+  | 'skyscraperD'
+  | 'skyscraperF'
+  | 'skyscraperA'
+  | 'skyscraperE'
+  | 'skyscraperX';
 
 export type BuildingData = {
   type: BuildingType;
   owner: PlayerData;
   sectorId: number;
   createdAt: number;
-  gameLength: GameLength | "drop";
+  gameLength: GameLength | 'drop';
   gameTitle: string;
 };
 
@@ -147,7 +147,7 @@ export type TrainData = {
   sectorTo: number;
 };
 
-type EventType = "game" | "bonus-card" | "player-move" | "score-change";
+type EventType = 'game' | 'bonus-card' | 'player-move' | 'score-change';
 
 export type PlayerEventBase = {
   event_type: EventType;
@@ -155,7 +155,7 @@ export type PlayerEventBase = {
 };
 
 export type PlayerEventGame = PlayerEventBase & {
-  event_type: "game";
+  event_type: 'game';
   subtype: GameStatusType;
   game_title: string;
   game_review: string;
@@ -166,15 +166,15 @@ export type PlayerEventGame = PlayerEventBase & {
   bonuses_used?: BonusCardType[];
 };
 
-export type RollBonusType = "adjust-roll-by1" | "choose-1-die";
+export type RollBonusType = 'adjust-roll-by1' | 'choose-1-die';
 
 export type BonusCardType =
   | RollBonusType
-  | "skip-prison-day"
-  | "reroll-game"
-  | "evade-street-tax"
-  | "evade-map-tax"
-  | "game-help-allowed";
+  | 'skip-prison-day'
+  | 'reroll-game'
+  | 'evade-street-tax'
+  | 'evade-map-tax'
+  | 'game-help-allowed';
 
 export type DiceRollJson = {
   is_random_org_result: boolean;
@@ -183,15 +183,15 @@ export type DiceRollJson = {
 };
 
 export type PlayerEventBonusCard = PlayerEventBase & {
-  event_type: "bonus-card";
-  subtype: "received" | "used" | "lost";
+  event_type: 'bonus-card';
+  subtype: 'received' | 'used' | 'lost';
   bonus_type: BonusCardType;
   sector_id: number;
 };
 
 export type PlayerEventMove = PlayerEventBase & {
-  event_type: "player-move";
-  subtype: "dice-roll" | "train-ride";
+  event_type: 'player-move';
+  subtype: 'dice-roll' | 'train-ride';
   sector_from: number;
   sector_to: number;
   adjusted_roll: number;
@@ -201,11 +201,11 @@ export type PlayerEventMove = PlayerEventBase & {
   bonuses_used: BonusCardType[];
 };
 
-export type TaxType = "street-tax" | "map-tax";
+export type TaxType = 'street-tax' | 'map-tax';
 
 export type PlayerEventScoreChange = PlayerEventBase & {
-  event_type: "score-change";
-  subtype: TaxType | "game-completed" | "game-dropped";
+  event_type: 'score-change';
+  subtype: TaxType | 'game-completed' | 'game-dropped';
   amount: number;
   tax_player_id?: number;
   sector_id: number;
@@ -219,21 +219,21 @@ export type PlayerEvent =
   | PlayerEventBonusCard;
 
 export type PlayerTurnState =
-  | "rolling-dice"
-  | "using-dice-bonuses"
-  | "using-prison-bonuses"
-  | "rolling-bonus-card"
-  | "using-reroll-bonuses"
-  | "filling-game-review"
-  | "choosing-train-ride"
-  | "using-map-tax-bonuses"
-  | "using-street-tax-bonuses"
-  | "entering-prison"
-  | "stealing-bonus-card"
-  | "choosing-building-sector"
-  | "using-map-tax-bonuses-after-train-ride";
+  | 'rolling-dice'
+  | 'using-dice-bonuses'
+  | 'using-prison-bonuses'
+  | 'rolling-bonus-card'
+  | 'using-reroll-bonuses'
+  | 'filling-game-review'
+  | 'choosing-train-ride'
+  | 'using-map-tax-bonuses'
+  | 'using-street-tax-bonuses'
+  | 'entering-prison'
+  | 'stealing-bonus-card'
+  | 'choosing-building-sector'
+  | 'using-map-tax-bonuses-after-train-ride';
 
-export type PlayerStateAction = "skip-bonus" | "skip-prison" | "drop-game" | "reroll-game";
+export type PlayerStateAction = 'skip-bonus' | 'skip-prison' | 'drop-game' | 'reroll-game';
 
 export type ActiveBonusCard = {
   bonus_type: BonusCardType;
@@ -267,7 +267,8 @@ export type EventDescription = {
 
 export type MoveMyPlayerParams = {
   totalRoll: number;
-  bonusesUsed: RollBonusType[];
+  // bonusesUsed: RollBonusType[];
   selectedDie: number | null;
   adjustBy1: 1 | -1 | null;
+  action?: PlayerStateAction;
 };
