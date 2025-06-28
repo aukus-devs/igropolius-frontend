@@ -112,11 +112,13 @@ const usePlayerStore = create<{
     const buildings: Record<number, BuildingData[]> = {};
     const taxPerSector: Record<number, TaxData> = {};
     for (const sector of sectorsData) {
-      buildings[sector.id] = [];
-      taxPerSector[sector.id] = {
-        taxAmount: 0,
-        playerIncomes: {},
-      };
+      if (sector.type === 'property' || sector.type === 'railroad') {
+        buildings[sector.id] = [];
+        taxPerSector[sector.id] = {
+          taxAmount: 0,
+          playerIncomes: {},
+        };
+      }
     }
 
     const players: PlayerData[] = playersData.map(playerData => {
@@ -138,6 +140,11 @@ const usePlayerStore = create<{
 
     for (const player of players) {
       for (const building of player.games) {
+        const sector = SectorsById[building.sector_id];
+        if (!sector || (sector.type !== 'property' && sector.type !== 'railroad')) {
+          continue;
+        }
+
         const buildingData = {
           type: GameLengthToBuildingType[building.length],
           owner: player,
