@@ -147,6 +147,11 @@ export type TrainData = {
   sectorTo: number;
 };
 
+export type TaxData = {
+  taxAmount: number;
+  playerIncomes: Record<number, number>;
+};
+
 type EventType = 'game' | 'bonus-card' | 'player-move' | 'score-change';
 
 export type PlayerEventBase = {

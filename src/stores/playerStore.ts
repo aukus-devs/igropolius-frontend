@@ -1,4 +1,10 @@
-import { GameLengthToBuildingType, IS_DEV } from '@/lib/constants';
+import {
+  GameLengthToBuildingType,
+  IncomeScoreMultiplier,
+  IS_DEV,
+  ScoreByGameLength,
+  TaxScoreMultiplier,
+} from '@/lib/constants';
 import {
   BackendPlayerData,
   BonusCardType,
@@ -7,6 +13,7 @@ import {
   PlayerData,
   PlayerStateAction,
   PlayerTurnState,
+  TaxData,
 } from '@/lib/types';
 import { createTimeline } from 'animejs';
 import { create } from 'zustand';
@@ -31,6 +38,7 @@ const usePlayerStore = create<{
   isPlayerMoving: boolean;
   players: PlayerData[];
   buildingsPerSector: Record<number, BuildingData[]>;
+  taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
   setMyPlayerId: (id?: number) => void;
   updateMyPlayerSectorId: (id: number) => void;
@@ -51,6 +59,7 @@ const usePlayerStore = create<{
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
+  taxPerSector: {},
   turnState: null,
 
   setMyPlayerId: (id?: number) => {
@@ -101,6 +110,15 @@ const usePlayerStore = create<{
 
   setPlayers: (playersData: BackendPlayerData[]) => {
     const buildings: Record<number, BuildingData[]> = {};
+    const taxPerSector: Record<number, TaxData> = {};
+    for (const sector of sectorsData) {
+      buildings[sector.id] = [];
+      taxPerSector[sector.id] = {
+        taxAmount: 0,
+        playerIncomes: {},
+      };
+    }
+
     const players: PlayerData[] = playersData.map(playerData => {
       const frontendData = playersFrontendData[playerData.username] ?? {
         color: 'white',
@@ -112,20 +130,38 @@ const usePlayerStore = create<{
       };
     });
 
+    const { myPlayer, myPlayerId } = get();
+    if (myPlayer?.id !== myPlayerId) {
+      const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
+      set({ myPlayer: myPlayerNew });
+    }
+
     for (const player of players) {
       for (const building of player.games) {
-        if (!buildings[building.sector_id]) {
-          buildings[building.sector_id] = [];
-        }
-
-        buildings[building.sector_id].push({
+        const buildingData = {
           type: GameLengthToBuildingType[building.length],
           owner: player,
           sectorId: building.sector_id,
           createdAt: building.created_at,
           gameLength: building.length,
           gameTitle: building.title,
-        });
+        };
+
+        buildings[building.sector_id].push(buildingData);
+
+        if (buildingData.gameLength === 'drop' || player.id === myPlayerId) {
+          continue;
+        }
+
+        // Calculate tax data for sectors
+        const taxData = taxPerSector[buildingData.sectorId];
+        const playerIncomes = taxData.playerIncomes;
+        if (!playerIncomes[player.id]) {
+          playerIncomes[player.id] = 0;
+        }
+        const income = ScoreByGameLength[buildingData.gameLength] * IncomeScoreMultiplier;
+        playerIncomes[player.id] += income;
+        taxData.taxAmount += income * TaxScoreMultiplier;
       }
     }
 
@@ -134,17 +170,11 @@ const usePlayerStore = create<{
       building.sort((a, b) => a.createdAt - b.createdAt);
     }
 
-    const { myPlayer, myPlayerId } = get();
-    if (myPlayer?.id !== myPlayerId) {
-      const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
-      set({ myPlayer: myPlayerNew });
-    }
-
     players.sort((a, b) => {
       return b.total_score - a.total_score;
     });
 
-    set({ players, buildingsPerSector: buildings });
+    set({ players, buildingsPerSector: buildings, taxPerSector });
   },
 
   animatePlayerMovement: async ({ steps }: { steps: number }) => {

@@ -1,13 +1,13 @@
-import { create } from "zustand";
-import { Euler, Group, Quaternion, Vector3 } from "three";
-import { createTimeline } from "animejs";
-import useModelsStore from "./modelsStore";
-import usePlayerStore from "./playerStore";
-import { HALF_BOARD, TrainsConfig } from "@/lib/constants";
-import { SectorsById } from "@/lib/mockData";
-import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
-import useCameraStore from "./cameraStore";
-import { makePlayerMove } from "@/lib/api";
+import { create } from 'zustand';
+import { Euler, Group, Quaternion, Vector3 } from 'three';
+import { createTimeline } from 'animejs';
+import useModelsStore from './modelsStore';
+import usePlayerStore from './playerStore';
+import { HALF_BOARD, TrainsConfig } from '@/lib/constants';
+import { SectorsById } from '@/lib/mockData';
+import { calculatePlayerPosition, getSectorRotation } from '@/components/map/utils';
+import useCameraStore from './cameraStore';
+import { makePlayerMove } from '@/lib/api';
 
 type TrainConfig = {
   id: number;
@@ -24,7 +24,7 @@ const useTrainsStore = create<{
   trains: {},
 
   addTrain: (id: number, startPosition: Vector3, endPosition: Vector3, model: Group) =>
-    set((state) => ({
+    set(state => ({
       trains: { ...state.trains, [id]: { id, startPosition, endPosition, model } },
     })),
 
@@ -37,8 +37,7 @@ const useTrainsStore = create<{
     if (!myPlayerId) throw new Error(`My player not found`);
 
     await makePlayerMove({
-      type: "train-ride",
-      bonuses_used: [],
+      type: 'train-ride',
       selected_die: null,
       adjust_by_1: null,
     });
@@ -47,7 +46,7 @@ const useTrainsStore = create<{
 
     const playerModel = useModelsStore.getState().getPlayerModel(myPlayerId);
     const playerMesh = playerModel.children[0];
-    const carriageModel = train.model.getObjectByName("carriage");
+    const carriageModel = train.model.getObjectByName('carriage');
 
     const carriageWorldPosition = new Vector3();
     const initialPlayerRotation = new Quaternion().setFromEuler(new Euler(0, Math.PI / 4, 0));
@@ -59,17 +58,15 @@ const useTrainsStore = create<{
     const destinationSector = SectorsById[TrainsConfig[trainId].sectorTo];
     const destinationSectorPlayers = usePlayerStore
       .getState()
-      .players.filter((player) => player.sector_id === destinationSector.id);
+      .players.filter(player => player.sector_id === destinationSector.id);
     const destinationPosition = calculatePlayerPosition(
       destinationSectorPlayers.length,
       destinationSectorPlayers.length,
-      destinationSector,
+      destinationSector
     );
     const destinationRotation = getSectorRotation(destinationSector.position);
-    const playerGroupQuat = new Quaternion().setFromEuler(
-      new Euler(...destinationRotation, "XYZ"),
-    );
-    const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, "XYZ"));
+    const playerGroupQuat = new Quaternion().setFromEuler(new Euler(...destinationRotation, 'XYZ'));
+    const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, 'XYZ'));
     const { moveToPlayer } = useCameraStore.getState();
 
     createTimeline({
@@ -95,7 +92,7 @@ const useTrainsStore = create<{
         x: train.endPosition.x,
         y: train.endPosition.y,
         z: train.endPosition.z,
-        ease: "linear",
+        ease: 'linear',
         duration: 3000,
         onUpdate: () => {
           carriageModel?.getWorldPosition(carriageWorldPosition);

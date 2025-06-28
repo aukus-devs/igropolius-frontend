@@ -1,9 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SectorData } from "@/lib/types";
-import usePlayerStore from "@/stores/playerStore";
-import { IncomeScoreMultiplier, ScoreByGameLength, TaxScoreMultiplier } from "@/lib/constants";
-import { useShallow } from "zustand/shallow";
-import { Share } from "@/components/icons";
+import { Share } from '@/components/icons';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SectorData } from '@/lib/types';
+import usePlayerStore from '@/stores/playerStore';
 
 type Props = {
   sector: SectorData;
@@ -12,22 +10,8 @@ type Props = {
 function SectorInfo({ sector }: Props) {
   const { id, name, type, rollType } = sector;
 
-  const taxBuildings = usePlayerStore(
-    useShallow((state) => {
-      const buildings = state.buildingsPerSector[sector.id] || [];
-      return buildings.filter((b) => b.type !== "ruins" && b.owner.id !== state.myPlayer?.id);
-    }),
-  );
-
-  const totalTaxValue =
-    taxBuildings.reduce((sum, building) => {
-      if (building.gameLength === "drop") {
-        return sum;
-      }
-      return sum + ScoreByGameLength[building.gameLength] * IncomeScoreMultiplier;
-    }, 0) * TaxScoreMultiplier;
-
-  const showTax = sector.type === "railroad" || sector.type === "property";
+  const taxInfo = usePlayerStore(state => state.taxPerSector[id]);
+  const showTax = sector.type === 'railroad' || sector.type === 'property';
 
   return (
     <Card className="w-52 pointer-events-none">
@@ -40,7 +24,7 @@ function SectorInfo({ sector }: Props) {
         <p className="text-sm">Ролл игры: {rollType}</p>
         {showTax && (
           <div className="flex items-center">
-            <p className="text-sm">Налог: {totalTaxValue}</p>
+            <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
             <Share className="w-4 h-4" />
           </div>
         )}

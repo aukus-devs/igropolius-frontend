@@ -1,17 +1,18 @@
-import usePlayerStore from "@/stores/playerStore";
-import { useShallow } from "zustand/shallow";
-import TrainMoveDialog from "./TrainMoveDialog";
-import GameReviewForm from "./GameReviewForm";
-import RollBonusCard from "./RollBonusCard";
-import DiceBonusesDialog from "./DiceBonusesDialog";
-import { MoveButton } from "./MoveButton";
+import usePlayerStore from '@/stores/playerStore';
+import { useShallow } from 'zustand/shallow';
+import TrainMoveDialog from './TrainMoveDialog';
+import GameReviewForm from './GameReviewForm';
+import RollBonusCard from './RollBonusCard';
+import DiceBonusesDialog from './DiceBonusesDialog';
+import { MoveButton } from './MoveButton';
+import SkipTaxDialog from './SkipTaxDialog';
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving } = usePlayerStore(
-    useShallow((state) => ({
+    useShallow(state => ({
       turnState: state.turnState,
       isPlayerMoving: state.isPlayerMoving,
-    })),
+    }))
   );
 
   const disableUI = isPlayerMoving;
@@ -22,31 +23,31 @@ export default function PlayerTurnUI() {
   switch (turnState) {
     case null:
       return null;
-    case "rolling-dice":
+    case 'rolling-dice':
       return <MoveButton />;
-    case "choosing-train-ride":
+    case 'choosing-train-ride':
       return <TrainMoveDialog />;
-    case "filling-game-review":
+    case 'filling-game-review':
       return <GameReviewForm />;
-    case "rolling-bonus-card":
+    case 'rolling-bonus-card':
       return <RollBonusCard />;
-    case "using-dice-bonuses":
+    case 'using-dice-bonuses':
       return <DiceBonusesDialog />;
-    case "using-street-tax-bonuses":
+    case 'using-street-tax-bonuses':
+      return <SkipTaxDialog />;
+    case 'using-reroll-bonuses':
       return null;
-    case "using-reroll-bonuses":
+    case 'using-prison-bonuses':
       return null;
-    case "using-prison-bonuses":
+    case 'using-map-tax-bonuses':
       return null;
-    case "using-map-tax-bonuses":
-      return null;
-    case "stealing-bonus-card":
+    case 'stealing-bonus-card':
       return null; // No UI for stealing bonus card, handled in PlayerCards
-    case "using-map-tax-bonuses-after-train-ride":
+    case 'using-map-tax-bonuses-after-train-ride':
       return null;
-    case "choosing-building-sector":
+    case 'choosing-building-sector':
       return null;
-    case "entering-prison":
+    case 'entering-prison':
       return null;
     default: {
       const error: never = turnState;
