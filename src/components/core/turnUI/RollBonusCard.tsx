@@ -195,7 +195,6 @@ export default function RollBonusCard() {
       setWinnerIndex(index);
       setHeaderText(`Карточка «${cardInfo.name}»: ${cardInfo.description}`);
       setRollPhase('finished');
-      receiveBonusCard(winnerCard);
       animationRef.current = null;
     }
     animationRef.current = requestAnimationFrame(animate);
@@ -288,20 +287,32 @@ export default function RollBonusCard() {
             })}
           </div>
         </div>
-
         {rollPhase === 'idle' && (
           <Button className="z-20 rounded-xl" onClick={handleRollClick}>
             Gamba
           </Button>
         )}
-
-        <Button
-          className="absolute w-[300px] rounded-xl bottom-[25%]"
-          onClick={() => handleOpenChange(false)}
-          disabled={rollPhase === 'rolling'}
-        >
-          Закрыть
-        </Button>
+        {rollPhase === 'idle' && (
+          <Button
+            className="absolute w-[300px] rounded-xl bottom-[25%]"
+            onClick={() => handleOpenChange(false)}
+          >
+            Закрыть
+          </Button>
+        )}
+        {rollPhase === 'finished' && (
+          <Button
+            className="absolute w-[300px] rounded-xl bottom-[25%]"
+            onClick={() => {
+              if (winnerIndex !== null) {
+                receiveBonusCard(cardList[winnerIndex]);
+              }
+              handleOpenChange(false);
+            }}
+          >
+            Получить карточку
+          </Button>
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -1,4 +1,4 @@
-import { GameLengthToBuildingType, IS_DEV } from "@/lib/constants";
+import { GameLengthToBuildingType, IS_DEV } from '@/lib/constants';
 import {
   BackendPlayerData,
   BonusCardType,
@@ -7,23 +7,23 @@ import {
   PlayerData,
   PlayerStateAction,
   PlayerTurnState,
-} from "@/lib/types";
-import { createTimeline } from "animejs";
-import { create } from "zustand";
-import useModelsStore from "./modelsStore";
-import useCameraStore from "./cameraStore";
-import { calculatePlayerPosition, getSectorRotation } from "@/components/map/utils";
-import { playersFrontendData, SectorsById, sectorsData } from "@/lib/mockData";
-import { Euler, Quaternion } from "three";
-import { getNextTurnState } from "@/lib/utils";
+} from '@/lib/types';
+import { createTimeline } from 'animejs';
+import { create } from 'zustand';
+import useModelsStore from './modelsStore';
+import useCameraStore from './cameraStore';
+import { calculatePlayerPosition, getSectorRotation } from '@/components/map/utils';
+import { playersFrontendData, SectorsById, sectorsData } from '@/lib/mockData';
+import { Euler, Quaternion } from 'three';
+import { getNextTurnState } from '@/lib/utils';
 import {
   giveBonusCard,
   makePlayerMove,
   payTaxes,
   saveTurnState,
   stealBonusCard as stealBonusCardApi,
-} from "@/lib/api";
-import { resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
+} from '@/lib/api';
+import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -56,7 +56,7 @@ const usePlayerStore = create<{
   setMyPlayerId: (id?: number) => {
     const { players, myPlayer } = get();
     if (myPlayer?.id !== id) {
-      const myPlayerNew = players.find((player) => player.id === id) ?? null;
+      const myPlayerNew = players.find(player => player.id === id) ?? null;
       set({ myPlayer: myPlayerNew });
     }
     set({ myPlayerId: id });
@@ -66,9 +66,7 @@ const usePlayerStore = create<{
     const { myPlayer, turnState } = get();
     if (!myPlayer || !turnState) return;
 
-    const mapCompleted = Boolean(
-      params.prevSectorId && myPlayer.sector_id < params.prevSectorId,
-    );
+    const mapCompleted = Boolean(params.prevSectorId && myPlayer.sector_id < params.prevSectorId);
 
     const nextTurnState = getNextTurnState({
       player: myPlayer,
@@ -78,13 +76,13 @@ const usePlayerStore = create<{
     });
 
     if (mapCompleted) {
-      await payTaxes("map-tax");
+      await payTaxes('map-tax');
     }
 
-    if (turnState === "rolling-dice" && nextTurnState === "filling-game-review") {
+    if (turnState === 'rolling-dice' && nextTurnState === 'filling-game-review') {
       const currentSector = SectorsById[myPlayer.sector_id];
-      if (currentSector.type === "property" || currentSector.type === "railroad") {
-        await payTaxes("street-tax");
+      if (currentSector.type === 'property' || currentSector.type === 'railroad') {
+        await payTaxes('street-tax');
       }
     }
     await saveTurnState(nextTurnState);
@@ -96,16 +94,16 @@ const usePlayerStore = create<{
     const currentSector = SectorsById[id];
     if (!currentSector) return;
 
-    set((state) => ({
+    set(state => ({
       myPlayer: state.myPlayer ? { ...state.myPlayer, sector_id: id } : null,
     }));
   },
 
   setPlayers: (playersData: BackendPlayerData[]) => {
     const buildings: Record<number, BuildingData[]> = {};
-    const players: PlayerData[] = playersData.map((playerData) => {
+    const players: PlayerData[] = playersData.map(playerData => {
       const frontendData = playersFrontendData[playerData.username] ?? {
-        color: "white",
+        color: 'white',
       };
 
       return {
@@ -138,7 +136,7 @@ const usePlayerStore = create<{
 
     const { myPlayer, myPlayerId } = get();
     if (myPlayer?.id !== myPlayerId) {
-      const myPlayerNew = players.find((player) => player.id === myPlayerId) ?? null;
+      const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
       set({ myPlayer: myPlayerNew });
     }
 
@@ -176,17 +174,15 @@ const usePlayerStore = create<{
     for (let i = 0; i < Math.abs(steps); i++) {
       const nextSectorIdRaw = backward ? currentSectorId - 1 : currentSectorId + 1;
       const nextSectorId = nextSectorIdRaw > sectorsData.length ? 1 : nextSectorIdRaw;
-      const nextSector = sectorsData.find((sector) => sector.id === nextSectorId);
+      const nextSector = sectorsData.find(sector => sector.id === nextSectorId);
       if (!nextSector)
         throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
 
-      const nextSectorPlayers = get().players.filter(
-        (player) => player.sector_id === nextSectorId,
-      );
+      const nextSectorPlayers = get().players.filter(player => player.sector_id === nextSectorId);
       const nextPosition = calculatePlayerPosition(
         nextSectorPlayers.length,
         nextSectorPlayers.length,
-        nextSector,
+        nextSector
       );
       const currentRotation = getSectorRotation(currentSector.position);
       const nextRotation = getSectorRotation(nextSector.position);
@@ -195,7 +191,7 @@ const usePlayerStore = create<{
         x: nextPosition[0],
         y: [myPlayerModel.position.y, myPlayerModel.position.y + 3, myPlayerModel.position.y],
         z: nextPosition[2],
-        ease: "inOutSine",
+        ease: 'inOutSine',
         duration: IS_DEV ? 100 : 500,
         onUpdate: () => {
           moveToPlayer(myPlayerModel, false);
@@ -203,19 +199,19 @@ const usePlayerStore = create<{
       });
 
       if (!currentRotation.every((value, index) => value === nextRotation[index])) {
-        const targetQuat = new Quaternion().setFromEuler(new Euler(...nextRotation, "XYZ"));
+        const targetQuat = new Quaternion().setFromEuler(new Euler(...nextRotation, 'XYZ'));
 
         tl.add(
           { t: 0 },
           {
             t: 1,
             duration: 300,
-            ease: "linear",
-            onUpdate: (self) => {
+            ease: 'linear',
+            onUpdate: self => {
               rotateAroundPlayer(myPlayerModel, false);
               myPlayerModel.quaternion.rotateTowards(targetQuat, self.progress);
             },
-          },
+          }
         );
       }
 
@@ -223,7 +219,7 @@ const usePlayerStore = create<{
       currentSector = nextSector;
     }
 
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
       tl.play().then(() => {
         set({ isPlayerMoving: false });
         const { updateMyPlayerSectorId } = get();
@@ -238,22 +234,22 @@ const usePlayerStore = create<{
     const { myPlayer, animatePlayerMovement, setNextTurnState } = get();
     const originalSector = myPlayer?.sector_id;
     await makePlayerMove({
-      type: "dice-roll",
+      type: 'dice-roll',
       bonuses_used: params.bonusesUsed,
       selected_die: params.selectedDie,
       adjust_by_1: params.adjustBy1,
     });
 
     // remove used cards from player
-    set((state) => ({
+    set(state => ({
       myPlayer: state.myPlayer
         ? {
             ...state.myPlayer,
-            bonus_cards: state.myPlayer.bonus_cards.filter((card) => {
-              if (card.bonus_type === "adjust-roll-by1") {
+            bonus_cards: state.myPlayer.bonus_cards.filter(card => {
+              if (card.bonus_type === 'adjust-roll-by1') {
                 return !params.bonusesUsed.includes(card.bonus_type);
               }
-              if (card.bonus_type === "choose-1-die") {
+              if (card.bonus_type === 'choose-1-die') {
                 return !params.bonusesUsed.includes(card.bonus_type);
               }
               return true;
@@ -281,11 +277,12 @@ const usePlayerStore = create<{
     const newCard = await giveBonusCard(type);
 
     // add card to player before updating turn state
-    set((state) => ({
+    set(state => ({
       myPlayer: state.myPlayer
         ? { ...state.myPlayer, bonus_cards: [...state.myPlayer.bonus_cards, newCard] }
         : null,
     }));
+    resetPlayersQuery();
     await setNextTurnState({});
   },
 
