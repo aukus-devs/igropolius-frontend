@@ -4,16 +4,16 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
-import { frontendCardsData } from "@/lib/mockData";
-import { Card, CardFooter } from "../../ui/card";
-import { BonusCardType } from "@/lib/types";
-import usePlayerStore from "@/stores/playerStore";
-import { useShallow } from "zustand/shallow";
-import BezierEasing from "bezier-easing";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { useEffect, useRef, useState } from 'react';
+import { frontendCardsData } from '@/lib/mockData';
+import { Card, CardFooter } from '../../ui/card';
+import { BonusCardType } from '@/lib/types';
+import usePlayerStore from '@/stores/playerStore';
+import { useShallow } from 'zustand/shallow';
+import BezierEasing from 'bezier-easing';
+import { cn } from '@/lib/utils';
 
 const MIN_SPIN_DURATION = 12000; // ms
 const BACKSWING_DURATION = 600; // ms
@@ -30,7 +30,7 @@ const MIN_CARD_IN_ROLL = 75;
 
 function generateList<T>(len: number, options: T[]): T[] {
   if (options.length === 0) {
-    throw new Error("Need at least 2 options for neighbor constraint.");
+    throw new Error('Need at least 2 options for neighbor constraint.');
   }
   if (options.length === 1) {
     return Array(len).fill(options[0]);
@@ -38,10 +38,9 @@ function generateList<T>(len: number, options: T[]): T[] {
   const result: T[] = [];
   for (let i = 0; i < len; i++) {
     // Filter out the previous item to avoid duplicates
-    const available =
-      i === 0 ? options : options.filter((opt) => opt !== result[i - 1]);
+    const available = i === 0 ? options : options.filter(opt => opt !== result[i - 1]);
     if (available.length === 0) {
-      throw new Error("No valid options to choose from at position " + i);
+      throw new Error('No valid options to choose from at position ' + i);
     }
     // Pick a random option from available
     const choice = available[Math.floor(Math.random() * available.length)];
@@ -52,13 +51,13 @@ function generateList<T>(len: number, options: T[]): T[] {
 
 function getRandomExcept<T>(options: T[], exclude: T): T {
   if (options.length === 0) {
-    throw new Error("Need at least 1 option");
+    throw new Error('Need at least 1 option');
   }
 
-  const available = options.filter((opt) => exclude !== opt);
+  const available = options.filter(opt => exclude !== opt);
 
   if (available.length === 0) {
-    throw new Error("No valid options to choose after excluding");
+    throw new Error('No valid options to choose after excluding');
   }
 
   return available[Math.floor(Math.random() * available.length)];
@@ -73,28 +72,22 @@ export default function RollBonusCard() {
 
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [rollPhase, setRollPhase] = useState<"idle" | "rolling" | "finished">(
-    "idle"
-  );
+  const [rollPhase, setRollPhase] = useState<'idle' | 'rolling' | 'finished'>('idle');
   const [cardList, setCardList] = useState<BonusCardType[]>([]);
-  const [headerText, setHeaderText] = useState("Роллим бонусную карточку");
+  const [headerText, setHeaderText] = useState('Роллим бонусную карточку');
 
   const { receiveBonusCard, myPlayer } = usePlayerStore(
-    useShallow((state) => ({
+    useShallow(state => ({
       receiveBonusCard: state.receiveBonusCard,
       myPlayer: state.myPlayer,
     }))
   );
 
   const myCurrentCards = myPlayer?.bonus_cards ?? [];
-  const myCurrentCardsTypes = myCurrentCards.map(
-    (card) => card.bonus_type
-  ) as BonusCardType[];
+  const myCurrentCardsTypes = myCurrentCards.map(card => card.bonus_type) as BonusCardType[];
 
   const allCardTypes = Object.keys(frontendCardsData) as BonusCardType[];
-  const cardTypesForRoll = allCardTypes.filter(
-    (cardType) => !myCurrentCardsTypes.includes(cardType)
-  );
+  const cardTypesForRoll = allCardTypes.filter(cardType => !myCurrentCardsTypes.includes(cardType));
 
   function updateTransform() {
     if (rouletteRef.current) {
@@ -108,21 +101,15 @@ export default function RollBonusCard() {
     offsetRef.current += speed * direction;
     updateTransform();
 
-    if (
-      -Math.floor(offsetRef.current / CARD_FULL_WIDTH) !==
-      centerIndexRef.current
-    ) {
+    if (-Math.floor(offsetRef.current / CARD_FULL_WIDTH) !== centerIndexRef.current) {
       if (direction < 0) {
-        setCardList((prev) => [
+        setCardList(prev => [
           ...prev.slice(1),
           getRandomExcept(cardTypesForRoll, prev[prev.length - 1]),
         ]);
         offsetRef.current += CARD_FULL_WIDTH;
       } else {
-        setCardList((prev) => [
-          getRandomExcept(cardTypesForRoll, prev[0]),
-          ...prev.slice(0, -1),
-        ]);
+        setCardList(prev => [getRandomExcept(cardTypesForRoll, prev[0]), ...prev.slice(0, -1)]);
         offsetRef.current -= CARD_FULL_WIDTH;
       }
     }
@@ -145,7 +132,7 @@ export default function RollBonusCard() {
 
     const isOnGap = randomOffset > CARD_WIDTH;
 
-    let phase: "backswing" | "spin" | "settle" = "backswing";
+    let phase: 'backswing' | 'spin' | 'settle' = 'backswing';
     let animationStartTime = 0;
 
     function animate(now: number) {
@@ -155,7 +142,7 @@ export default function RollBonusCard() {
 
       const elapsed = now - animationStartTime;
 
-      if (phase === "backswing") {
+      if (phase === 'backswing') {
         const progress = Math.min(elapsed / BACKSWING_DURATION, 1);
         const eased = easeBackswing(progress);
 
@@ -164,30 +151,29 @@ export default function RollBonusCard() {
         updateTransform();
 
         if (progress >= 1) {
-          phase = "spin";
+          phase = 'spin';
           animationStartTime = now;
           startPosition += BACKSWING_OFFSET;
         }
         animationRef.current = requestAnimationFrame(animate);
-      } else if (phase === "spin") {
+      } else if (phase === 'spin') {
         const progress = Math.min(elapsed / spinDuration, 1);
         const eased = easeSpin(progress);
 
-        offsetRef.current =
-          startPosition + (endPosition - startPosition) * eased;
+        offsetRef.current = startPosition + (endPosition - startPosition) * eased;
 
         updateTransform();
 
         if (progress >= 1) {
           if (isOnGap) {
-            phase = "settle";
+            phase = 'settle';
             animationStartTime = now;
           } else {
             finishAnimation();
           }
         }
         animationRef.current = requestAnimationFrame(animate);
-      } else if (phase === "settle") {
+      } else if (phase === 'settle') {
         const progress = Math.min(elapsed / SETTLE_DURATION, 1);
         const eased = easeSettle(progress);
 
@@ -208,7 +194,7 @@ export default function RollBonusCard() {
 
       setWinnerIndex(index);
       setHeaderText(`Карточка «${cardInfo.name}»: ${cardInfo.description}`);
-      setRollPhase("finished");
+      setRollPhase('finished');
       receiveBonusCard(winnerCard);
       animationRef.current = null;
     }
@@ -219,13 +205,10 @@ export default function RollBonusCard() {
     if (isOpen) {
       const randomCards = generateList(IDLE_CARD_COUNT, cardTypesForRoll);
       setCardList(randomCards);
-      setRollPhase("idle");
+      setRollPhase('idle');
       centerIndexRef.current = Math.floor(IDLE_CARD_COUNT / 2);
-      offsetRef.current = -(
-        (centerIndexRef.current - 1) * CARD_FULL_WIDTH +
-        CARD_WIDTH / 2
-      );
-      setHeaderText("Роллим бонусную карточку");
+      offsetRef.current = -((centerIndexRef.current - 1) * CARD_FULL_WIDTH + CARD_WIDTH / 2);
+      setHeaderText('Роллим бонусную карточку');
     } else {
       if (animationRef.current !== null) {
         cancelAnimationFrame(animationRef.current);
@@ -238,22 +221,22 @@ export default function RollBonusCard() {
   };
 
   useEffect(() => {
-    if (rollPhase === "idle" && cardList.length > 0) {
+    if (rollPhase === 'idle' && cardList.length > 0) {
       if (!isIdleRunningRef.current) {
         isIdleRunningRef.current = true;
         animationRef.current = requestAnimationFrame(idleAnimate);
       }
     }
-    if (rollPhase === "rolling" && cardList.length > IDLE_CARD_COUNT) {
+    if (rollPhase === 'rolling' && cardList.length > IDLE_CARD_COUNT) {
       startRollingAnimation();
     }
   }, [cardList, rollPhase]);
 
   const handleRollClick = () => {
-    setRollPhase("rolling");
+    setRollPhase('rolling');
 
     const randomCards = generateList(150, cardTypesForRoll);
-    setCardList((prev) => [...prev, ...randomCards]);
+    setCardList(prev => [...prev, ...randomCards]);
 
     if (animationRef.current !== null) {
       cancelAnimationFrame(animationRef.current);
@@ -267,25 +250,19 @@ export default function RollBonusCard() {
       </DialogTrigger>
       <DialogContent
         className="flex flex-col items-center justify-center w-full min-w-full h-screen md:backdrop-blur-none md:rounded-none m-0 p-0 md:bg-transparent overflow-hidden"
-        onEscapeKeyDown={(e) => {
-          if (rollPhase === "rolling") {
+        onEscapeKeyDown={e => {
+          if (rollPhase === 'rolling') {
             e.preventDefault();
           }
         }}
       >
         <DialogHeader className="absolute bottom-[70%] max-w-4xl ">
-          <DialogTitle className="font-wide-black text-3xl text-center">
-            {headerText}
-          </DialogTitle>
+          <DialogTitle className="font-wide-black text-3xl text-center">{headerText}</DialogTitle>
         </DialogHeader>
         <div className="absolute left-1/2">
           <div className="absolute z-20 top-0 -translate-x-1/2 -translate-y-1/2 border-l-[18px] border-r-[18px] border-t-[18px] border-l-transparent border-r-transparent border-primary" />
-          <div className="absolute z-20 bottom-0 -translate-x-1/2 translate-y-1/2 border-l-[18px] border-r-[18px] border-b-[18px] border-l-transparent border-r-transparent border-primary" />{" "}
-          <div
-            ref={rouletteRef}
-            style={{ gap: `${GAP}px` }}
-            className=" flex items-center"
-          >
+          <div className="absolute z-20 bottom-0 -translate-x-1/2 translate-y-1/2 border-l-[18px] border-r-[18px] border-b-[18px] border-l-transparent border-r-transparent border-primary" />{' '}
+          <div ref={rouletteRef} style={{ gap: `${GAP}px` }} className=" flex items-center">
             {cardList.map((item, idx) => {
               const cardData = frontendCardsData[item];
               const isWinner = idx === winnerIndex;
@@ -293,19 +270,14 @@ export default function RollBonusCard() {
                 <Card
                   key={idx}
                   style={{
-                    height: isWinner
-                      ? `${CARD_HEIGHT * 1.25}px`
-                      : `${CARD_HEIGHT}px`,
-                    width: isWinner
-                      ? `${CARD_WIDTH * 1.25}px`
-                      : `${CARD_WIDTH}px`,
-                    transition: "all 0.4s ease",
+                    height: isWinner ? `${CARD_HEIGHT * 1.25}px` : `${CARD_HEIGHT}px`,
+                    width: isWinner ? `${CARD_WIDTH * 1.25}px` : `${CARD_WIDTH}px`,
+                    transition: 'all 0.4s ease',
                   }}
                   className={cn(
-                    "overflow-hidden shadow-none relative transition-all duration-300 ease-in-out",
+                    'overflow-hidden shadow-none relative transition-all duration-300 ease-in-out',
                     {
-                      "opacity-95 brightness-50":
-                        rollPhase === "finished" && !isWinner,
+                      'opacity-95 brightness-50': rollPhase === 'finished' && !isWinner,
                     }
                   )}
                 >
@@ -317,7 +289,7 @@ export default function RollBonusCard() {
           </div>
         </div>
 
-        {rollPhase === "idle" && (
+        {rollPhase === 'idle' && (
           <Button className="z-20 rounded-xl" onClick={handleRollClick}>
             Gamba
           </Button>
@@ -326,7 +298,7 @@ export default function RollBonusCard() {
         <Button
           className="absolute w-[300px] rounded-xl bottom-[25%]"
           onClick={() => handleOpenChange(false)}
-          disabled={rollPhase === "rolling"}
+          disabled={rollPhase === 'rolling'}
         >
           Закрыть
         </Button>
