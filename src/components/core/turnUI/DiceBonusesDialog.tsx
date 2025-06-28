@@ -21,8 +21,8 @@ export default function DiceBonusesDialog() {
   const hasAdjustBy1 = bonusCards.some(card => card.bonus_type === 'adjust-roll-by1');
   const hasChooseDie = bonusCards.some(card => card.bonus_type === 'choose-1-die');
 
-  const adjustBy1Used = adjustBy1 !== null;
-  const chooseDieUsed = selectedDie !== null;
+  // const adjustBy1Used = adjustBy1 !== null;
+  // const chooseDieUsed = selectedDie !== null;
 
   const handleSubmit = () => {
     let adjustBy1Typed = null;
