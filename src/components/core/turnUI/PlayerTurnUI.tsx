@@ -73,7 +73,7 @@ function NoCardsDialog() {
   const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
   return (
     <Card className="p-4">
-      <span className="font-wide-semibold">У игроков нет карточек для воровства</span>
+      <span className="font-wide-semibold">Сейчас у игроков нет карточек для воровства</span>
       <div className="flex justify-evenly mt-2 gap-2">
         <Button
           variant="outline"
