@@ -69,7 +69,7 @@ export default function AdminPanel() {
         </Select>
       </div>
       <div>
-        <Button onClick={handleResetDb} disabled={isPending}>
+        <Button onClick={handleResetDb} disabled={isPending} className="bg-red-700">
           Обнулить бд
         </Button>
       </div>
