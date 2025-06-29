@@ -7,6 +7,7 @@ import DiceBonusesDialog from './DiceBonusesDialog';
 import { MoveButton } from './MoveButton';
 import SkipStreetTaxDialog from './SkipStreetTaxDialog';
 import SkipMapTaxDialog from './SkipMapTaxDialog';
+import SkipPrisonDialog from './SkipPrisonDialog';
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving } = usePlayerStore(
@@ -39,7 +40,7 @@ export default function PlayerTurnUI() {
     case 'using-reroll-bonuses':
       return null;
     case 'using-prison-bonuses':
-      return null;
+      return <SkipPrisonDialog />;
     case 'using-map-tax-bonuses':
       return <SkipMapTaxDialog />;
     case 'using-map-tax-bonuses-after-train-ride':

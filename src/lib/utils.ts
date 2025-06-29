@@ -286,7 +286,7 @@ function getNextState({
     case 'using-prison-bonuses':
       if (sector.type === 'prison' && hasPrisonCard && !skipBonus) {
         if (action === 'skip-prison') {
-          return 'filling-game-review';
+          return 'rolling-dice';
         }
         return 'stop';
       }
@@ -298,7 +298,7 @@ function getNextState({
       return 'filling-game-review';
     case 'filling-game-review':
       if (action === 'drop-game') {
-        return 'using-prison-bonuses';
+        return 'entering-prison';
       }
       if (action === 'reroll-game') {
         return 'using-reroll-bonuses';
