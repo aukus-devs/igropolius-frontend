@@ -291,15 +291,19 @@ function GameReviewForm() {
   const scores = useReviewFormStore(useShallow(state => state.getReviewScores()));
 
   let buttonText = 'Заполни форму';
+  let buttonColor = 'bg-primary';
   switch (gameStatus) {
     case 'completed':
       buttonText = `Получить ${scores.total} очков`;
+      buttonColor = 'bg-green-800';
       break;
     case 'drop':
       buttonText = 'Дропнуть игру и отправиться в тюрьму';
+      buttonColor = 'bg-red-800';
       break;
     case 'reroll':
       buttonText = 'Рерольнуть';
+      buttonColor = 'bg-yellow-800';
       break;
   }
 
@@ -389,7 +393,7 @@ function GameReviewForm() {
             <PopoverTrigger asChild>
               <Button
                 size="sm"
-                className="ml-auto"
+                className={`ml-auto ${buttonColor}`}
                 disabled={isSendButtonDisabled || isSubmitting}
                 onClick={onConfirm}
                 onMouseEnter={() => setShowScoreDetails(true)}
