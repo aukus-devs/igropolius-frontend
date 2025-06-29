@@ -296,7 +296,7 @@ function GameReviewForm() {
       buttonText = `Получить ${scores.total} очков`;
       break;
     case 'drop':
-      buttonText = 'Дропнуть игру';
+      buttonText = 'Дропнуть игру и отправиться в тюрьму';
       break;
     case 'reroll':
       buttonText = 'Рерольнуть';
@@ -398,10 +398,12 @@ function GameReviewForm() {
                 {isSubmitting ? 'Отправка...' : buttonText}
               </Button>
             </PopoverTrigger>
-            <PopoverContent>
-              Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга (
-              {scores.mapCompletionBonus})
-            </PopoverContent>
+            {gameStatus === 'completed' && (
+              <PopoverContent>
+                Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга (
+                {scores.mapCompletionBonus})
+              </PopoverContent>
+            )}
           </Popover>
         </div>
       </DialogContent>
