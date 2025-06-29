@@ -1,33 +1,36 @@
-import {
-  CameraControls as CameraControlsComponent,
-  useKeyboardControls,
-} from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
-import CameraControls from "camera-controls";
-import { Box3, OrthographicCamera, PerspectiveCamera, Vector3 } from "three";
-import { BOARD_SIZE, SECTOR_DEPTH, SECTOR_HEIGHT } from "@/lib/constants";
-import useCameraStore from "@/stores/cameraStore";
-import usePlayerStore from "@/stores/playerStore";
+import { CameraControls as CameraControlsComponent, useKeyboardControls } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
+import CameraControls from 'camera-controls';
+import { Box3, OrthographicCamera, PerspectiveCamera, Vector3 } from 'three';
+import { BOARD_SIZE, SECTOR_DEPTH, SECTOR_HEIGHT } from '@/lib/constants';
+import useCameraStore from '@/stores/cameraStore';
+import usePlayerStore from '@/stores/playerStore';
+import useAdminStore from '@/stores/adminStore';
 
 export function CustomCameraControls() {
   const [_, getKeys] = useKeyboardControls();
   const { set } = useThree(({ set }) => ({ set }));
-  const setCameraControls = useCameraStore((state) => state.setCameraControls);
-  const isOrthographic = useCameraStore((state) => state.isOrthographic);
-  const cameraToPlayer = useCameraStore((state) => state.cameraToPlayer);
-  const myPlayerId = usePlayerStore((state) => state.myPlayerId);
+  const setCameraControls = useCameraStore(state => state.setCameraControls);
+  const isOrthographic = useCameraStore(state => state.isOrthographic);
+  const cameraToPlayer = useCameraStore(state => state.cameraToPlayer);
+  const myPlayerId = usePlayerStore(state => state.myPlayerId);
   const cameraControls = useRef<CameraControlsComponent | null>(null);
+
+  const isActing = useAdminStore(state => state.actingUserId !== null);
 
   const keysMovespeed = 10;
 
   useEffect(() => {
     if (myPlayerId) {
-      setTimeout(() => {
-        cameraToPlayer(myPlayerId);
-      }, 700);
+      setTimeout(
+        () => {
+          cameraToPlayer(myPlayerId);
+        },
+        isActing ? 0 : 700
+      );
     }
-  }, [myPlayerId, cameraToPlayer]);
+  }, [myPlayerId, cameraToPlayer, isActing]);
 
   useEffect(() => {
     const newCamera = isOrthographic
@@ -37,7 +40,7 @@ export function CustomCameraControls() {
           window.innerHeight / 2,
           window.innerHeight / -2,
           0.1,
-          1000,
+          1000
         )
       : new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -66,7 +69,7 @@ export function CustomCameraControls() {
     const boundarySize = BOARD_SIZE / 2 + SECTOR_DEPTH;
     const bb = new Box3(
       new Vector3(-boundarySize, SECTOR_HEIGHT, -boundarySize),
-      new Vector3(boundarySize, boundarySize, boundarySize),
+      new Vector3(boundarySize, boundarySize, boundarySize)
     );
     // const helper = new Box3Helper(bb, 0xffff00);
     // scene.add(helper);
