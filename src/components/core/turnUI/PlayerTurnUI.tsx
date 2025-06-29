@@ -8,13 +8,21 @@ import { MoveButton } from './MoveButton';
 import SkipStreetTaxDialog from './SkipStreetTaxDialog';
 import SkipMapTaxDialog from './SkipMapTaxDialog';
 import SkipPrisonDialog from './SkipPrisonDialog';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export default function PlayerTurnUI() {
-  const { turnState, isPlayerMoving } = usePlayerStore(
-    useShallow(state => ({
-      turnState: state.turnState,
-      isPlayerMoving: state.isPlayerMoving,
-    }))
+  const { turnState, isPlayerMoving, playersHaveNoCards } = usePlayerStore(
+    useShallow(state => {
+      const hasAnyCards = state.players.some(
+        player => player.id !== state.myPlayerId && player.bonus_cards.length > 0
+      );
+      return {
+        turnState: state.turnState,
+        isPlayerMoving: state.isPlayerMoving,
+        playersHaveNoCards: !hasAnyCards,
+      };
+    })
   );
 
   const disableUI = isPlayerMoving;
@@ -46,6 +54,9 @@ export default function PlayerTurnUI() {
     case 'using-map-tax-bonuses-after-train-ride':
       return <SkipMapTaxDialog />;
     case 'stealing-bonus-card':
+      if (playersHaveNoCards) {
+        return <NoCardsDialog />;
+      }
       return null; // No UI for stealing bonus card, handled in PlayerCards
     case 'choosing-building-sector':
       return null;
@@ -56,4 +67,22 @@ export default function PlayerTurnUI() {
       throw new Error(`Unknown turn state: ${error}`);
     }
   }
+}
+
+function NoCardsDialog() {
+  const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
+  return (
+    <Card className="p-4">
+      <span className="font-wide-semibold">У игроков нет карточек для воровства</span>
+      <div className="flex justify-evenly mt-2 gap-2">
+        <Button
+          variant="outline"
+          className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
+          onClick={() => setNextTurnState({})}
+        >
+          Продолжить
+        </Button>
+      </div>
+    </Card>
+  );
 }
