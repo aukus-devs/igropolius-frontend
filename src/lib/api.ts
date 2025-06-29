@@ -11,18 +11,27 @@ import {
 } from '@/lib/types';
 import { playersData } from './mockData';
 import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS } from './constants';
+import useAdminStore from '@/stores/adminStore';
 
 const MOCK_API = NO_MOCKS ? false : IS_DEV;
 
 const API_HOST = IS_DEV ? 'http://localhost:8000' : 'https://igropolius.ru';
 
 async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<Response> {
+  let actingUserId = null;
+  if (!endpoint.includes('/api/login')) {
+    actingUserId = useAdminStore.getState().actingUserId;
+  }
+
+  // console.log({ actingUserId });
+
   const token = localStorage.getItem('access-token') ?? '';
   const response = await fetch(`${API_HOST}${endpoint}`, {
     ...params,
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
+      ...(actingUserId ? { 'X-Acting-User-Id': String(actingUserId) } : {}),
     },
   });
   if (!response.ok) {

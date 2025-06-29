@@ -1,16 +1,22 @@
-import { UserIcon } from "lucide-react";
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { login } from "@/lib/api";
-import { resetCurrentPlayerQuery } from "@/lib/queryClient";
-import { cn } from "@/lib/utils";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { buttonVariants, Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { UserIcon } from 'lucide-react';
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { login } from '@/lib/api';
+import { resetCurrentPlayerQuery } from '@/lib/queryClient';
+import { cn } from '@/lib/utils';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { buttonVariants, Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 export default function LoginDialog({ className }: { className?: string }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [open, setOpen] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
@@ -23,16 +29,16 @@ export default function LoginDialog({ className }: { className?: string }) {
 
   const handleLogin = () => {
     loginRequest({ user: username, pass: password })
-      .then((res) => {
-        localStorage.setItem("access-token", res.token);
+      .then(res => {
+        localStorage.setItem('access-token', res.token);
         resetCurrentPlayerQuery();
         setOpen(false);
       })
-      .catch((err) => {
+      .catch(err => {
         if (err.body) {
           setError(JSON.stringify(err.body));
         } else {
-          setError(err.message || "Неизвестная ошибка");
+          setError(err.message || 'Неизвестная ошибка');
         }
       });
   };
@@ -40,7 +46,7 @@ export default function LoginDialog({ className }: { className?: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        className={cn(buttonVariants({ variant: "outline" }), className)}
+        className={cn(buttonVariants({ variant: 'outline' }), className)}
         onClick={() => setOpen(true)}
       >
         <UserIcon className="h-4 w-4" />
@@ -57,14 +63,16 @@ export default function LoginDialog({ className }: { className?: string }) {
         <div className="mt-7">
           <Input
             type="text"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={e => setUsername(e.target.value)}
+            onKeyDown={e => e.stopPropagation()}
             value={username}
             placeholder="Введите логин"
             className="w-full"
           />
           <Input
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
+            onKeyDown={e => e.stopPropagation()}
             placeholder="Введите пароль"
             type="password"
             className="w-full mt-2"

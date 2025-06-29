@@ -1,33 +1,34 @@
-import "./index.css";
-import { Canvas } from "@react-three/fiber";
-import { Suspense, useEffect, useMemo } from "react";
-import { KeyboardControls, KeyboardControlsEntry } from "@react-three/drei";
-import { useShallow } from "zustand/shallow";
-import { Controls } from "./lib/constants";
-import Scene from "./components/map/Scene";
-import UI from "./components/UI";
-import usePlayerStore from "./stores/playerStore";
-import { fetchCurrentPlayer, fetchPlayers } from "./lib/api";
-import { useQuery } from "@tanstack/react-query";
-import LoadingModal from "./components/core/loadng/LoadingModal";
-import { queryKeys } from "./lib/queryClient";
-import CanvasTooltip from "./components/map/canvasTooltip/CanvasTooltip";
-import SceneLoader from "./components/map/SceneLoader";
-import useDiceStore from "./stores/diceStore";
+import './index.css';
+import { Canvas } from '@react-three/fiber';
+import { Suspense, useEffect, useMemo } from 'react';
+import { KeyboardControls, KeyboardControlsEntry } from '@react-three/drei';
+import { useShallow } from 'zustand/shallow';
+import { Controls } from './lib/constants';
+import Scene from './components/map/Scene';
+import UI from './components/UI';
+import usePlayerStore from './stores/playerStore';
+import { fetchCurrentPlayer, fetchPlayers } from './lib/api';
+import { useQuery } from '@tanstack/react-query';
+import LoadingModal from './components/core/loadng/LoadingModal';
+import { queryKeys } from './lib/queryClient';
+import CanvasTooltip from './components/map/canvasTooltip/CanvasTooltip';
+import SceneLoader from './components/map/SceneLoader';
+import useDiceStore from './stores/diceStore';
+import useAdminStore from './stores/adminStore';
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
     () => [
-      { name: Controls.forward, keys: ["ArrowUp", "KeyW"] },
-      { name: Controls.backward, keys: ["ArrowDown", "KeyS"] },
-      { name: Controls.left, keys: ["ArrowLeft", "KeyA"] },
-      { name: Controls.right, keys: ["ArrowRight", "KeyD"] },
-      { name: Controls.up, keys: ["Space"] },
-      { name: Controls.down, keys: ["KeyC"] },
-      { name: Controls.turnLeft, keys: ["KeyQ"] },
-      { name: Controls.turnRight, keys: ["KeyE"] },
+      { name: Controls.forward, keys: ['ArrowUp', 'KeyW'] },
+      { name: Controls.backward, keys: ['ArrowDown', 'KeyS'] },
+      { name: Controls.left, keys: ['ArrowLeft', 'KeyA'] },
+      { name: Controls.right, keys: ['ArrowRight', 'KeyD'] },
+      { name: Controls.up, keys: ['Space'] },
+      { name: Controls.down, keys: ['KeyC'] },
+      { name: Controls.turnLeft, keys: ['KeyQ'] },
+      { name: Controls.turnRight, keys: ['KeyE'] },
     ],
-    [],
+    []
   );
 
   const { data: currentPlayerData, isError: currentPlayerDataError } = useQuery({
@@ -42,21 +43,19 @@ function App() {
     refetchInterval: 60 * 1000,
   });
 
-  const { setPlayers, setMyPlayerId, setTurnState } = usePlayerStore(
-    useShallow((state) => ({
+  const { setPlayers, setMyPlayerId, setTurnState, myPlayer } = usePlayerStore(
+    useShallow(state => ({
       setPlayers: state.setPlayers,
       setMyPlayerId: state.setMyPlayerId,
       setTurnState: state.setTurnState,
-    })),
+      myPlayer: state.myPlayer,
+    }))
   );
 
-  const setRollResult = useDiceStore((state) => state.setRollResult);
+  const setRollResult = useDiceStore(state => state.setRollResult);
 
   useEffect(() => {
-    if (
-      currentPlayerData?.last_roll_result &&
-      currentPlayerData?.last_roll_result.length > 0
-    ) {
+    if (currentPlayerData?.last_roll_result && currentPlayerData?.last_roll_result.length > 0) {
       setRollResult(currentPlayerData.last_roll_result);
     }
   }, [currentPlayerData?.last_roll_result, setRollResult]);
@@ -76,6 +75,14 @@ function App() {
     setTurnState,
     currentPlayerDataError,
   ]);
+
+  const setShowAdminPanel = useAdminStore(state => state.setShowAdminPanel);
+
+  useEffect(() => {
+    if (myPlayer?.username.toLowerCase() === 'praden') {
+      setShowAdminPanel(true);
+    }
+  }, [myPlayer?.username, setShowAdminPanel]);
 
   useEffect(() => {
     setPlayers(playersData?.players ?? []);

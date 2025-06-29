@@ -1,21 +1,25 @@
-import usePlayerStore from "@/stores/playerStore";
-import PlayersList from "./core/PlayersList";
-import QuickMenu from "./core/quickMenu/QuickMenu";
-import Notifications from "./core/Notifications";
-import { useShallow } from "zustand/shallow";
-import { useIsMobile } from "@/hooks/use-mobile";
-import MobileTabs from "./core/mobile/MobileTabs";
-import MobilePlayersList from "./core/mobile/MobilePlayerList";
-import DiceErrorNotification from "./core/DiceErrorNotification";
-import PlayerTurnUI from "./core/turnUI/PlayerTurnUI";
+import usePlayerStore from '@/stores/playerStore';
+import PlayersList from './core/PlayersList';
+import QuickMenu from './core/quickMenu/QuickMenu';
+import Notifications from './core/Notifications';
+import { useShallow } from 'zustand/shallow';
+import { useIsMobile } from '@/hooks/use-mobile';
+import MobileTabs from './core/mobile/MobileTabs';
+import MobilePlayersList from './core/mobile/MobilePlayerList';
+import DiceErrorNotification from './core/DiceErrorNotification';
+import PlayerTurnUI from './core/turnUI/PlayerTurnUI';
+import useAdminStore from '@/stores/adminStore';
+import AdminPanel from './core/AdminPanel';
 
 function DesktopUI() {
   const { turnState, position } = usePlayerStore(
-    useShallow((state) => ({
+    useShallow(state => ({
       turnState: state.turnState,
       position: state.myPlayer?.sector_id,
-    })),
+    }))
   );
+
+  const showAdminPanel = useAdminStore(state => state.showAdminPanel);
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:block hidden">
@@ -35,6 +39,11 @@ function DesktopUI() {
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         <PlayerTurnUI />
       </div>
+      {showAdminPanel && (
+        <div className="absolute bottom-30 left-4">
+          <AdminPanel />
+        </div>
+      )}
 
       <div className="absolute bottom-4 right-4">
         #{position} ход: {turnState}

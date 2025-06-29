@@ -312,7 +312,7 @@ function getNextState({
         case 'property':
           return 'rolling-dice';
         case 'prison':
-          return 'entering-prison';
+          return 'rolling-dice';
         case 'parking':
           return 'stealing-bonus-card';
         case 'start-corner':
