@@ -19,7 +19,7 @@ const API_HOST = IS_DEV ? 'http://localhost:8000' : 'https://igropolius.ru';
 
 async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<Response> {
   let actingUserId = null;
-  if (!endpoint.includes('/api/login')) {
+  if (!endpoint.includes('/api/login') && !endpoint.includes('/api/internal')) {
     actingUserId = useAdminStore.getState().actingUserId;
   }
 
@@ -454,4 +454,14 @@ export async function rollDice(): Promise<DiceRollResponse> {
     body: JSON.stringify({ num: 2, min: 1, max: 8 }),
   });
   return response.json();
+}
+
+export async function resetDb(): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  const response = await apiRequest('/api/internal/reset-db', { method: 'POST' });
+  if (!response.ok) {
+    return Promise.reject('Failed to reset database');
+  }
 }

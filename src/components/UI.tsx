@@ -40,7 +40,7 @@ function DesktopUI() {
         <PlayerTurnUI />
       </div>
       {showAdminPanel && (
-        <div className="absolute bottom-30 left-4">
+        <div className="absolute bottom-20 left-4">
           <AdminPanel />
         </div>
       )}

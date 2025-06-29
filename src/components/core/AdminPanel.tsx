@@ -3,7 +3,10 @@ import { Card } from '../ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import usePlayerStore from '@/stores/playerStore';
 import useAdminStore from '@/stores/adminStore';
-import { resetCurrentPlayerQuery } from '@/lib/queryClient';
+import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
+import { Button } from '../ui/button';
+import { resetDb } from '@/lib/api';
+import { useMutation } from '@tanstack/react-query';
 
 export default function AdminPanel() {
   const { myPlayer, players } = usePlayerStore(
@@ -31,6 +34,16 @@ export default function AdminPanel() {
     resetCurrentPlayerQuery();
   };
 
+  const { mutateAsync: doReset, isPending } = useMutation({
+    mutationFn: resetDb,
+  });
+
+  const handleResetDb = async () => {
+    await doReset();
+    resetPlayersQuery();
+    resetCurrentPlayerQuery();
+  };
+
   const defaultValue = myPlayer ? String(myPlayer.id) : undefined;
 
   return (
@@ -54,6 +67,11 @@ export default function AdminPanel() {
             ))}
           </SelectContent>
         </Select>
+      </div>
+      <div>
+        <Button onClick={handleResetDb} disabled={isPending}>
+          Обнулить бд
+        </Button>
       </div>
     </Card>
   );
