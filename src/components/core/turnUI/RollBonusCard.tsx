@@ -14,6 +14,8 @@ import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import BezierEasing from 'bezier-easing';
 import { cn } from '@/lib/utils';
+import { useMutation } from '@tanstack/react-query';
+import { LoaderCircleIcon } from 'lucide-react';
 
 const MIN_SPIN_DURATION = 12000; // ms
 const BACKSWING_DURATION = 600; // ms
@@ -82,6 +84,12 @@ export default function RollBonusCard() {
       myPlayer: state.myPlayer,
     }))
   );
+
+  const { mutateAsync: doReceiveBonusCard, isPending: isLoading } = useMutation({
+    mutationFn: async (cardType: BonusCardType) => {
+      return receiveBonusCard(cardType);
+    },
+  });
 
   const myCurrentCards = myPlayer?.bonus_cards ?? [];
   const myCurrentCardsTypes = myCurrentCards.map(card => card.bonus_type) as BonusCardType[];
@@ -303,14 +311,18 @@ export default function RollBonusCard() {
         {rollPhase === 'finished' && (
           <Button
             className="absolute w-[300px] rounded-xl bottom-[25%]"
-            onClick={() => {
+            disabled={isLoading}
+            onClick={async () => {
               if (winnerIndex !== null) {
-                receiveBonusCard(cardList[winnerIndex]);
+                await doReceiveBonusCard(cardList[winnerIndex]);
               }
               handleOpenChange(false);
             }}
           >
-            Получить карточку
+            Получить карточку{' '}
+            {isLoading && (
+              <LoaderCircleIcon color="white" className="animate-spin text-primary" size={24} />
+            )}
           </Button>
         )}
       </DialogContent>
