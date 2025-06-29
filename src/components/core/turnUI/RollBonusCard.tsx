@@ -132,7 +132,7 @@ export default function RollBonusCard() {
 
     const spinDuration = MIN_SPIN_DURATION + Math.random() * 2000;
 
-    var startPosition = offsetRef.current;
+    let startPosition = offsetRef.current;
 
     const randomOffset = Math.floor(Math.random() * (CARD_WIDTH + GAP / 2));
     const cardOffset = MIN_CARD_IN_ROLL + Math.floor(Math.random() * 5);
