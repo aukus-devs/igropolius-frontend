@@ -1,21 +1,15 @@
-import {
-  BuildingType,
-  GameLength,
-  GameLengthWithDrop,
-  SectorData,
-  TrainData,
-} from "@/lib/types";
-import { Color } from "three";
+import { BuildingType, GameLength, GameLengthWithDrop, SectorData, TrainData } from '@/lib/types';
+import { Color } from 'three';
 
 export enum Controls {
-  forward = "forward",
-  backward = "backward",
-  left = "left",
-  right = "right",
-  up = "up",
-  down = "down",
-  turnLeft = "turnLeft",
-  turnRight = "turnRight",
+  forward = 'forward',
+  backward = 'backward',
+  left = 'left',
+  right = 'right',
+  up = 'up',
+  down = 'down',
+  turnLeft = 'turnLeft',
+  turnRight = 'turnRight',
 }
 
 export const SECTORS_PER_SIDE = 9;
@@ -34,17 +28,17 @@ export const PLAYER_HEIGHT = 1;
 export const PLAYER_DEPTH = 1.25;
 export const PLAYER_ELEVATION = SECTOR_HEIGHT / 2;
 
-export const EMISSION_FULL = new Color("white");
-export const EMISSION_NONE = new Color("black");
+export const EMISSION_FULL = new Color('white');
+export const EMISSION_NONE = new Color('black');
 
 export const GameLengthToBuildingType: { [key in GameLengthWithDrop]: BuildingType } = {
-  drop: "ruins",
-  "2-5": "large",
-  "5-10": "skyscraperD",
-  "10-15": "skyscraperF",
-  "15-20": "skyscraperA",
-  "20-25": "skyscraperE",
-  "25+": "skyscraperX",
+  drop: 'ruins',
+  '2-5': 'large',
+  '5-10': 'skyscraperD',
+  '10-15': 'skyscraperF',
+  '15-20': 'skyscraperA',
+  '20-25': 'skyscraperE',
+  '25+': 'skyscraperX',
   // "2-5": "small",
   // "5-10": "large",
   // "10-15": "skyscraperD",
@@ -73,7 +67,7 @@ export const TrainsConfig: Record<number, TrainData> = {
 };
 
 export const MOCK_DICE_ROLL: [number, number] = [3, 5];
-export const IS_DEV = import.meta.env.MODE === "development";
+export const IS_DEV = import.meta.env.MODE === 'development';
 export const NO_MOCKS = Boolean(import.meta.env.VITE_NO_MOCKS);
 
 export const STORAGE_BASE_URL = IS_DEV
@@ -81,19 +75,20 @@ export const STORAGE_BASE_URL = IS_DEV
   : `https://storage.yandexcloud.net/monopoly2025/assets`;
 
 export const ScoreByGameLength: { [key in GameLength]: number } = {
-  "2-5": 10,
-  "5-10": 20,
-  "10-15": 30,
-  "15-20": 40,
-  "20-25": 50,
-  "25+": 60,
+  '2-5': 10,
+  '5-10': 20,
+  '10-15': 30,
+  '15-20': 40,
+  '20-25': 50,
+  '25+': 60,
 };
 
 export const IncomeScoreMultiplier = 0.4;
 export const TaxScoreMultiplier = 0.5;
+export const MapTaxPercent = 0.05; // 5%
 
-export const SectorScoreMultiplier: { [key in SectorData["type"]]: number } = {
-  "start-corner": 1.5,
+export const SectorScoreMultiplier: { [key in SectorData['type']]: number } = {
+  'start-corner': 1.5,
   parking: 1.5,
   bonus: 1.5,
   prison: 1,
@@ -102,6 +97,6 @@ export const SectorScoreMultiplier: { [key in SectorData["type"]]: number } = {
 };
 
 export const FALLBACK_GAME_POSTER =
-  "https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png";
+  'https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png';
 
-export const FALLBACK_AVATAR_URL = "https://github.com/shadcn.png";
+export const FALLBACK_AVATAR_URL = 'https://github.com/shadcn.png';

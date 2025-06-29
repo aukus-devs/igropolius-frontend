@@ -86,7 +86,11 @@ const usePlayerStore = create<{
       action: params.action,
     });
 
-    if (mapCompleted) {
+    if (
+      mapCompleted &&
+      nextTurnState !== 'using-map-tax-bonuses' &&
+      nextTurnState !== 'using-map-tax-bonuses-after-train-ride'
+    ) {
       await payTaxes('map-tax');
     }
 

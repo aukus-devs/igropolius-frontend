@@ -6,7 +6,7 @@ import { TaxData } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 
-export default function SkipTaxDialog() {
+export default function SkipStreetTaxDialog() {
   const { taxInfo, players, payTaxes, setNextTurnState } = usePlayerStore(
     useShallow(state => {
       const myPlayer = state.myPlayer;

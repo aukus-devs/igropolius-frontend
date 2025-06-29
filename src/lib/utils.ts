@@ -207,6 +207,7 @@ export function getNextTurnState({
 
   let maxIterations = 10;
   let state = currentState;
+  let currentAction = action;
   console.log('current state:', currentState, action);
   while (maxIterations--) {
     const iteration = getNextState({
@@ -218,9 +219,10 @@ export function getNextTurnState({
       hasPrisonCard,
       hasRerollCard,
       hasDiceCards,
-      action,
+      action: currentAction,
     });
-    console.log('next state:', iteration);
+    currentAction = undefined; // Reset action after first iteration
+    console.log('next state:', iteration, currentAction);
     if (iteration === 'stop') {
       return state; // No further state change, return current state
     }

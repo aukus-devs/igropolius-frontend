@@ -5,7 +5,8 @@ import GameReviewForm from './GameReviewForm';
 import RollBonusCard from './RollBonusCard';
 import DiceBonusesDialog from './DiceBonusesDialog';
 import { MoveButton } from './MoveButton';
-import SkipTaxDialog from './SkipTaxDialog';
+import SkipStreetTaxDialog from './SkipStreetTaxDialog';
+import SkipMapTaxDialog from './SkipMapTaxDialog';
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving } = usePlayerStore(
@@ -34,17 +35,17 @@ export default function PlayerTurnUI() {
     case 'using-dice-bonuses':
       return <DiceBonusesDialog />;
     case 'using-street-tax-bonuses':
-      return <SkipTaxDialog />;
+      return <SkipStreetTaxDialog />;
     case 'using-reroll-bonuses':
       return null;
     case 'using-prison-bonuses':
       return null;
     case 'using-map-tax-bonuses':
-      return null;
+      return <SkipMapTaxDialog />;
+    case 'using-map-tax-bonuses-after-train-ride':
+      return <SkipMapTaxDialog />;
     case 'stealing-bonus-card':
       return null; // No UI for stealing bonus card, handled in PlayerCards
-    case 'using-map-tax-bonuses-after-train-ride':
-      return null;
     case 'choosing-building-sector':
       return null;
     case 'entering-prison':
