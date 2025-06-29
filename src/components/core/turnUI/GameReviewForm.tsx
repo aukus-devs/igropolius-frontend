@@ -1,33 +1,21 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
-import { Button } from "../../ui/button";
-import { useState, useEffect, useRef } from "react";
-import { Input } from "../../ui/input";
-import { Textarea } from "../../ui/textarea";
-import useReviewFormStore from "@/stores/reviewFormStore";
-import Rating from "../Rating";
-import { GameLength, GameStatusType } from "@/lib/types";
-import { useShallow } from "zustand/shallow";
-import usePlayerStore from "@/stores/playerStore";
-import { queryKeys, resetCurrentPlayerQuery, resetPlayersQuery } from "@/lib/queryClient";
-import { ArrowRight, X } from "../../icons";
-import { searchGames, IGDBGame } from "@/lib/api";
-import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
-import { useQuery } from "@tanstack/react-query";
-import { useDebounce } from "@/hooks/useDebounce";
-import { FALLBACK_GAME_POSTER } from "@/lib/constants";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { Button } from '../../ui/button';
+import { useState, useEffect, useRef } from 'react';
+import { Input } from '../../ui/input';
+import { Textarea } from '../../ui/textarea';
+import useReviewFormStore from '@/stores/reviewFormStore';
+import Rating from '../Rating';
+import { GameLength, GameStatusType } from '@/lib/types';
+import { useShallow } from 'zustand/shallow';
+import usePlayerStore from '@/stores/playerStore';
+import { queryKeys, resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
+import { ArrowRight, X } from '../../icons';
+import { searchGames, IGDBGame } from '@/lib/api';
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
+import { useQuery } from '@tanstack/react-query';
+import { useDebounce } from '@/hooks/useDebounce';
+import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 
 type StatesOption = {
   title: string;
@@ -35,15 +23,17 @@ type StatesOption = {
 };
 
 function GameStatus() {
-  const setGameStatus = useReviewFormStore((state) => state.setGameStatus);
+  const { setGameStatus, gameStatus } = useReviewFormStore(
+    useShallow(state => ({ setGameStatus: state.setGameStatus, gameStatus: state.gameStatus }))
+  );
   const options: StatesOption[] = [
-    { title: "Прошел", value: "completed" },
-    { title: "Дропнул", value: "drop" },
-    { title: "Реролл", value: "reroll" },
+    { title: 'Прошел', value: 'completed' },
+    { title: 'Дропнул', value: 'drop' },
+    { title: 'Реролл', value: 'reroll' },
   ];
 
   return (
-    <Select onValueChange={setGameStatus}>
+    <Select onValueChange={setGameStatus} defaultValue={gameStatus ?? undefined}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Выберите исход" />
       </SelectTrigger>
@@ -72,18 +62,20 @@ type GameTimeOption = {
 };
 
 function GameTime() {
-  const setGameTime = useReviewFormStore((state) => state.setGameTime);
+  const { setGameTime, gameTime } = useReviewFormStore(
+    useShallow(state => ({ setGameTime: state.setGameTime, gameTime: state.gameTime }))
+  );
   const options: GameTimeOption[] = [
-    { title: "2-5 ч.", value: "2-5" },
-    { title: "6-10 ч.", value: "5-10" },
-    { title: "11-15 ч.", value: "10-15" },
-    { title: "16-20 ч.", value: "15-20" },
-    { title: "21-25 ч.", value: "20-25" },
-    { title: "26+ ч.", value: "25+" },
+    { title: '2-5 ч.', value: '2-5' },
+    { title: '6-10 ч.', value: '5-10' },
+    { title: '11-15 ч.', value: '10-15' },
+    { title: '16-20 ч.', value: '15-20' },
+    { title: '21-25 ч.', value: '20-25' },
+    { title: '26+ ч.', value: '25+' },
   ];
 
   return (
-    <Select onValueChange={setGameTime}>
+    <Select onValueChange={setGameTime} defaultValue={gameTime ?? undefined}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Время по HLTB" />
       </SelectTrigger>
@@ -99,16 +91,18 @@ function GameTime() {
 }
 
 function GameReview() {
-  const gameReview = useReviewFormStore((state) => state.gameReview);
-  const setGameReview = useReviewFormStore((state) => state.setGameReview);
+  const gameReview = useReviewFormStore(state => state.gameReview);
+  const setGameReview = useReviewFormStore(state => state.setGameReview);
+
+  console.log('review', gameReview);
 
   return (
     <Textarea
       className="resize-none h-full"
       placeholder="Комментарий"
       value={gameReview}
-      onKeyDown={(e) => e.stopPropagation()}
-      onChange={(e) => setGameReview(e.target.value)}
+      onKeyDown={e => e.stopPropagation()}
+      onChange={e => setGameReview(e.target.value)}
     />
   );
 }
@@ -121,14 +115,14 @@ function GameTitle({
   open: boolean;
 }) {
   const { gameTitle, setGameTitle, selectedGame, setSelectedGame } = useReviewFormStore(
-    useShallow((state) => ({
+    useShallow(state => ({
       gameTitle: state.gameTitle,
       setGameTitle: state.setGameTitle,
       selectedGame: state.selectedGame,
       setSelectedGame: state.setSelectedGame,
-    })),
+    }))
   );
-  const myPlayer = usePlayerStore((state) => state.myPlayer);
+  const myPlayer = usePlayerStore(state => state.myPlayer);
   const [showResults, setShowResults] = useState(false);
   const [wasCleared, setWasCleared] = useState(false);
   const [wasInitialized, setWasInitialized] = useState(false);
@@ -176,7 +170,7 @@ function GameTitle({
   };
 
   const handleClearInput = () => {
-    setGameTitle("");
+    setGameTitle('');
     setSelectedGame(null);
     setShowResults(false);
     setWasCleared(true);
@@ -191,7 +185,7 @@ function GameTitle({
         placeholder="Название игры"
         className="font-roboto-wide-semibold bg-white/15 border-transparent"
         value={gameTitle}
-        onKeyDown={(e) => e.stopPropagation()}
+        onKeyDown={e => e.stopPropagation()}
         onChange={handleInputChange}
         onBlur={() => setTimeout(() => setShowResults(false), 150)}
         onFocus={() => setShowResults(true)}
@@ -203,7 +197,7 @@ function GameTitle({
         gameTitleDebounced.length >= 2 && (
           <div
             className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
-            onMouseDown={(e) => e.preventDefault()}
+            onMouseDown={e => e.preventDefault()}
           >
             {isSearching && searchResults.length === 0 ? (
               <div className="flex items-center justify-center p-4">
@@ -211,7 +205,7 @@ function GameTitle({
                 Поиск...
               </div>
             ) : (
-              searchResults.map((game) => (
+              searchResults.map(game => (
                 <div
                   key={game.id}
                   className="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer"
@@ -267,57 +261,56 @@ function GameReviewForm() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { setNextTurnState } = usePlayerStore(
-    useShallow((state) => ({
+    useShallow(state => ({
       setNextTurnState: state.setNextTurnState,
-    })),
+    }))
   );
 
   const {
     setRating,
     rating,
     sendReview,
-    getReviewScores,
     gameStatus,
     error,
     clearError,
     isSubmitting,
     selectedGame,
   } = useReviewFormStore(
-    useShallow((state) => ({
+    useShallow(state => ({
       setRating: state.setRating,
       rating: state.rating,
-      getReviewScores: state.getReviewScores,
       sendReview: state.sendReview,
       gameStatus: state.gameStatus,
       error: state.error,
       clearError: state.clearError,
       isSubmitting: state.isSubmitting,
       selectedGame: state.selectedGame,
-    })),
+    }))
   );
-  const scores = getReviewScores();
 
-  let buttonText = "Заполни форму";
+  const scores = useReviewFormStore(useShallow(state => state.getReviewScores()));
+
+  let buttonText = 'Заполни форму';
   switch (gameStatus) {
-    case "completed":
+    case 'completed':
       buttonText = `Получить ${scores.total} очков`;
       break;
-    case "drop":
-      buttonText = "Дропнуть игру";
+    case 'drop':
+      buttonText = 'Дропнуть игру';
       break;
-    case "reroll":
-      buttonText = "Рерольнуть";
+    case 'reroll':
+      buttonText = 'Рерольнуть';
       break;
   }
 
-  const isSendButtonDisabled = useReviewFormStore((state) => {
+  const isSendButtonDisabled = useReviewFormStore(state => {
     if (!state.gameTitle) return true;
     if (!state.gameStatus) return true;
     if (state.gameReview.length === 0) return true;
     if (state.rating === 0) return true;
 
-    if (state.gameStatus === "reroll") return false;
-    if (state.gameStatus === "drop") return false;
+    if (state.gameStatus === 'reroll') return false;
+    if (state.gameStatus === 'drop') return false;
 
     // completed
     if (state.gameTime) return false;
@@ -338,17 +331,17 @@ function GameReviewForm() {
     try {
       await sendReview(scores.total);
     } catch (error) {
-      console.error("Failed to submit review:", error);
+      console.error('Failed to submit review:', error);
       return;
     }
 
     let turnParams = {};
     switch (gameStatus) {
-      case "drop":
-        turnParams = { action: "drop-game" };
+      case 'drop':
+        turnParams = { action: 'drop-game' };
         break;
-      case "reroll":
-        turnParams = { action: "reroll-game" };
+      case 'reroll':
+        turnParams = { action: 'reroll-game' };
         break;
     }
     await setNextTurnState(turnParams);
@@ -384,7 +377,7 @@ function GameReviewForm() {
             </div>
 
             <div className="font-roboto-wide-semibold">Оценка — {rating}</div>
-            <Rating onChange={setRating} />
+            <Rating onChange={setRating} initialValue={rating} />
             <GameReview />
           </div>
         </div>
@@ -402,12 +395,12 @@ function GameReviewForm() {
                 onMouseEnter={() => setShowScoreDetails(true)}
                 onMouseLeave={() => setShowScoreDetails(false)}
               >
-                {isSubmitting ? "Отправка..." : buttonText}
+                {isSubmitting ? 'Отправка...' : buttonText}
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус
-              круга ({scores.mapCompletionBonus})
+              Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга (
+              {scores.mapCompletionBonus})
             </PopoverContent>
           </Popover>
         </div>
