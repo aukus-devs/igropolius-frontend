@@ -14,6 +14,7 @@ import {
   PlayerStateAction,
   PlayerTurnState,
   TaxData,
+  TaxType,
 } from '@/lib/types';
 import { createTimeline } from 'animejs';
 import { create } from 'zustand';
@@ -53,6 +54,7 @@ const usePlayerStore = create<{
   receiveBonusCard: (type: BonusCardType) => void;
   stealBonusCard: (player: PlayerData, card: BonusCardType) => Promise<void>;
   moveMyPlayerToPrison: (sectorId: number) => Promise<void>;
+  payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -94,6 +96,7 @@ const usePlayerStore = create<{
         await payTaxes('street-tax');
       }
     }
+
     await saveTurnState(nextTurnState);
     resetCurrentPlayerQuery();
     resetPlayersQuery();
@@ -277,22 +280,22 @@ const usePlayerStore = create<{
     });
 
     // remove used cards from player
-    set(state => ({
-      myPlayer: state.myPlayer
-        ? {
-            ...state.myPlayer,
-            bonus_cards: state.myPlayer.bonus_cards.filter(card => {
-              if (params.adjustBy1 !== null && card.bonus_type === 'adjust-roll-by1') {
-                return false;
-              }
-              if (params.selectedDie !== null && card.bonus_type === 'choose-1-die') {
-                return false;
-              }
-              return true;
-            }),
-          }
-        : null,
-    }));
+    // set(state => ({
+    //   myPlayer: state.myPlayer
+    //     ? {
+    //         ...state.myPlayer,
+    //         bonus_cards: state.myPlayer.bonus_cards.filter(card => {
+    //           if (params.adjustBy1 !== null && card.bonus_type === 'adjust-roll-by1') {
+    //             return false;
+    //           }
+    //           if (params.selectedDie !== null && card.bonus_type === 'choose-1-die') {
+    //             return false;
+    //           }
+    //           return true;
+    //         }),
+    //       }
+    //     : null,
+    // }));
 
     await animatePlayerMovement({ steps: params.totalRoll });
     await setNextTurnState({ prevSectorId: originalSector, action: params.action });
@@ -326,6 +329,12 @@ const usePlayerStore = create<{
     const { setNextTurnState } = get();
     await stealBonusCardApi(player.id, card);
     await setNextTurnState({});
+  },
+
+  payTaxesAndSwitchState: async (type: TaxType) => {
+    await payTaxes(type);
+    const { setNextTurnState } = get();
+    setNextTurnState({ action: 'skip-bonus' });
   },
 }));
 

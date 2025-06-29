@@ -404,6 +404,16 @@ export async function giveBonusCard(bonusType: BonusCardType): Promise<ActiveBon
   return response.json();
 }
 
+export async function applyBonusCard(bonusType: BonusCardType): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest(`/api/bonus-cards/use`, {
+    method: 'POST',
+    body: JSON.stringify({ bonus_type: bonusType }),
+  });
+}
+
 export async function stealBonusCard(playerId: number, bonusType: BonusCardType): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
