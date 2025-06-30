@@ -79,10 +79,10 @@ function App() {
   const setShowAdminPanel = useAdminStore(state => state.setShowAdminPanel);
 
   useEffect(() => {
-    if (myPlayer?.username.toLowerCase() === 'praden') {
+    if (myPlayer?.role === 'admin') {
       setShowAdminPanel(true);
     }
-  }, [myPlayer?.username, setShowAdminPanel]);
+  }, [myPlayer?.role, setShowAdminPanel]);
 
   useEffect(() => {
     setPlayers(playersData?.players ?? []);

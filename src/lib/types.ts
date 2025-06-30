@@ -92,6 +92,7 @@ export type BackendPlayerData = {
   first_name: string;
   is_online: boolean;
   avatar_link: string | null;
+  role: UserRole;
 
   current_game: string | null;
   current_game_updated_at: number | null;
@@ -114,6 +115,8 @@ export type BackendPlayerData = {
   bonus_cards: ActiveBonusCard[];
   maps_completed: number;
 };
+
+export type UserRole = 'player' | 'admin' | 'moder';
 
 export type PlayerFrontendData = {
   color: PlayerColorValue;
