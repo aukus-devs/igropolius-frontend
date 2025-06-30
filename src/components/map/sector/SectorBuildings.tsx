@@ -1,11 +1,11 @@
-import { NO_MOCKS, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from "@/lib/constants";
-import { BuildingType, GameLength, playerColors, Vector3Array } from "@/lib/types";
+import { NO_MOCKS, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from '@/lib/constants';
+import { BuildingType, GameLength, playerColors, Vector3Array } from '@/lib/types';
 // import usePlayerStore from "@/stores/playerStore";
-import { playersData } from "@/lib/mockData";
-import BuildingModel from "../models/BuildingModel";
-import { InstanceProps } from "@react-three/fiber";
-import { useMemo } from "react";
-import usePlayerStore from "@/stores/playerStore";
+import { playersData } from '@/lib/mockData';
+import BuildingModel from '../models/BuildingModel';
+import { InstanceProps } from '@react-three/fiber';
+import { useMemo } from 'react';
+import usePlayerStore from '@/stores/playerStore';
 
 type Props = {
   sectorId: number;
@@ -30,41 +30,40 @@ function getBuildingPosition(index: number): Vector3Array {
   return [x, SECTOR_CONTENT_ELEVATION, z];
 }
 
-function getMaxGames(sectorId: number) {
+function getDemoBuildings(sectorId: number) {
+  return [];
   const maxGames = 16;
 
   const types: BuildingType[] = [
-    "ruins",
+    'ruins',
     // "small",
-    "large",
-    "skyscraperA",
-    "skyscraperD",
-    "skyscraperE",
-    "skyscraperF",
-    "skyscraperX",
+    'large',
+    'skyscraperA',
+    'skyscraperD',
+    'skyscraperE',
+    'skyscraperF',
+    'skyscraperX',
   ];
-  const lengths: GameLength[] = ["2-5", "5-10", "10-15", "15-20", "20-25", "25+"];
+  const lengths: GameLength[] = ['2-5', '5-10', '10-15', '15-20', '20-25', '25+'];
 
   return Array.from({ length: maxGames }, () => ({
     type: types[Math.floor(Math.random() * types.length)],
     owner: {
       ...playersData[Math.floor(Math.random() * playersData.length)],
       color:
-        Object.values(playerColors)[
-        Math.floor(Math.random() * Object.values(playerColors).length)
-        ],
-      avatar_link: "https://github.com/shadcn.png",
+        Object.values(playerColors)[Math.floor(Math.random() * Object.values(playerColors).length)],
+      avatar_link: 'https://github.com/shadcn.png',
     },
     sectorId,
     createdAt: 1,
     gameLength: lengths[Math.floor(Math.random() * lengths.length)],
-    gameTitle: "Haste",
+    gameTitle: 'Haste',
   }));
 }
 
 function SectorBuildings({ sectorId, models }: Props) {
-  const playerBuildings = usePlayerStore((state) => state.buildingsPerSector[sectorId]) || [];
-  const demoBuildings = useMemo(() => getMaxGames(sectorId), [sectorId]);
+  const playerBuildings = usePlayerStore(state => state.buildingsPerSector[sectorId]) || [];
+  const demoBuildings = useMemo(() => getDemoBuildings(sectorId), [sectorId]);
   const buildings = NO_MOCKS ? playerBuildings : demoBuildings;
 
   return (
