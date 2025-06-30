@@ -139,11 +139,9 @@ const usePlayerStore = create<{
       };
     });
 
-    const { myPlayer, myPlayerId } = get();
-    if (myPlayer?.id !== myPlayerId) {
-      const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
-      set({ myPlayer: myPlayerNew });
-    }
+    const { myPlayerId } = get();
+    const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
+    set({ myPlayer: myPlayerNew });
 
     for (const player of players) {
       for (const building of player.games) {
