@@ -55,7 +55,6 @@ const usePlayerStore = create<{
   stealBonusCard: (player: PlayerData, card: BonusCardType) => Promise<void>;
   moveMyPlayerToPrison: (sectorId: number) => Promise<void>;
   payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
-  myPlayerForced: () => PlayerData;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -140,11 +139,9 @@ const usePlayerStore = create<{
       };
     });
 
-    const { myPlayer, myPlayerId } = get();
-    if (myPlayer?.id !== myPlayerId) {
-      const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
-      set({ myPlayer: myPlayerNew });
-    }
+    const { myPlayerId } = get();
+    const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
+    set({ myPlayer: myPlayerNew });
 
     for (const player of players) {
       for (const building of player.games) {
@@ -340,14 +337,6 @@ const usePlayerStore = create<{
     await payTaxes(type);
     const { setNextTurnState } = get();
     setNextTurnState({ action: 'skip-bonus' });
-  },
-
-  myPlayerForced: () => {
-    const { myPlayer } = get();
-    if (myPlayer === null) {
-      throw new Error(`My player is not set`);
-    }
-    return myPlayer;
   },
 }));
 

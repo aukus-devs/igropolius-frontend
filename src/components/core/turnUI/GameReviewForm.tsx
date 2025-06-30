@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
+import { calculateGameCompletionScore } from '@/lib/utils';
 
 type StatesOption = {
   title: string;
@@ -263,7 +264,7 @@ function GameReviewForm() {
   const { setNextTurnState, myPlayer } = usePlayerStore(
     useShallow(state => ({
       setNextTurnState: state.setNextTurnState,
-      myPlayer: state.myPlayerForced(),
+      myPlayer: state.myPlayer,
     }))
   );
 
@@ -276,6 +277,7 @@ function GameReviewForm() {
     clearError,
     isSubmitting,
     selectedGame,
+    gameLength,
   } = useReviewFormStore(
     useShallow(state => ({
       setRating: state.setRating,
@@ -286,14 +288,24 @@ function GameReviewForm() {
       clearError: state.clearError,
       isSubmitting: state.isSubmitting,
       selectedGame: state.selectedGame,
+      gameLength: state.gameTime,
     }))
   );
 
-  const getScores = useReviewFormStore(useShallow(state => state.getReviewScores));
-  const scores = getScores({
-    sectorId: myPlayer.sector_id,
-    mapsCompleted: myPlayer.maps_completed,
-  });
+  const scores =
+    myPlayer && gameStatus
+      ? calculateGameCompletionScore({
+          gameLength,
+          gameStatus,
+          sectorId: myPlayer.sector_id,
+          mapsCompleted: myPlayer.maps_completed,
+        })
+      : {
+          total: 0,
+          base: 0,
+          sectorMultiplier: 1,
+          mapCompletionBonus: 0,
+        };
 
   let buttonText = 'Заполни форму';
   let buttonColor = 'bg-primary';

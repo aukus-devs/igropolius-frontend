@@ -1,6 +1,8 @@
 import {
   BonusCardType,
   EventDescription,
+  GameLength,
+  GameStatusType,
   PlayerData,
   PlayerEvent,
   PlayerEventBonusCard,
@@ -14,7 +16,7 @@ import {
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { SectorsById } from './mockData';
-import { FALLBACK_GAME_POSTER } from './constants';
+import { FALLBACK_GAME_POSTER, ScoreByGameLength, SectorScoreMultiplier } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -386,4 +388,48 @@ export function formatMs(diffMs: number) {
   }
 
   return `${hoursPadded}ч ${minutesPadded}м`;
+}
+
+type CompletionScoreParams = {
+  gameStatus: GameStatusType;
+  gameLength: GameLength | null;
+  mapsCompleted: number;
+  sectorId: number;
+};
+
+export function calculateGameCompletionScore({
+  gameStatus,
+  gameLength,
+  mapsCompleted,
+  sectorId,
+}: CompletionScoreParams) {
+  const mapCompletionBonus = mapsCompleted * 5;
+
+  const sector = SectorsById[sectorId];
+  const sectorMultiplier = SectorScoreMultiplier[sector.type] || 1;
+
+  if (gameStatus === 'completed' && gameLength) {
+    const base = ScoreByGameLength[gameLength];
+    const total = base * sectorMultiplier + mapCompletionBonus;
+    return {
+      base,
+      sectorMultiplier,
+      total,
+      mapCompletionBonus,
+    };
+  }
+  if (gameStatus === 'drop') {
+    return {
+      base: 0,
+      total: 0,
+      sectorMultiplier,
+      mapCompletionBonus,
+    };
+  }
+  return {
+    base: 0,
+    sectorMultiplier: 0,
+    total: 0,
+    mapCompletionBonus,
+  };
 }
