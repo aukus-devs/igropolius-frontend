@@ -92,7 +92,6 @@ export type BackendPlayerData = {
   first_name: string;
   is_online: boolean;
   avatar_link: string | null;
-  role: UserRole;
 
   current_game: string | null;
   current_game_updated_at: number | null;
