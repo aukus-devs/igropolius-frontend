@@ -115,6 +115,8 @@ export type BackendPlayerData = {
   maps_completed: number;
 };
 
+export type UserRole = 'player' | 'admin' | 'moder';
+
 export type PlayerFrontendData = {
   color: PlayerColorValue;
 };

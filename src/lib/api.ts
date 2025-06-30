@@ -8,6 +8,7 @@ import {
   PlayerTurnState,
   RulesVersion,
   TaxType,
+  UserRole,
 } from '@/lib/types';
 import { playersData } from './mockData';
 import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS } from './constants';
@@ -142,6 +143,7 @@ type CurrentPlayerResponse = {
   url_handle: string;
   turn_state: PlayerTurnState;
   last_roll_result: number[];
+  role: UserRole;
 };
 
 export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
@@ -151,6 +153,7 @@ export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
       nickname: 'Praden',
       url_handle: 'praden',
       turn_state: 'rolling-dice',
+      role: 'admin',
       last_roll_result: MOCK_DICE_ROLL,
     });
   }
