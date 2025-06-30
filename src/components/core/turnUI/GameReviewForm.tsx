@@ -260,9 +260,10 @@ function GameReviewForm() {
   const [showScoreDetails, setShowScoreDetails] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { setNextTurnState } = usePlayerStore(
+  const { setNextTurnState, myPlayer } = usePlayerStore(
     useShallow(state => ({
       setNextTurnState: state.setNextTurnState,
+      myPlayer: state.myPlayerForced(),
     }))
   );
 
@@ -288,7 +289,11 @@ function GameReviewForm() {
     }))
   );
 
-  const scores = useReviewFormStore(useShallow(state => state.getReviewScores()));
+  const getScores = useReviewFormStore(useShallow(state => state.getReviewScores));
+  const scores = getScores({
+    sectorId: myPlayer.sector_id,
+    mapsCompleted: myPlayer.maps_completed,
+  });
 
   let buttonText = 'Заполни форму';
   let buttonColor = 'bg-primary';
