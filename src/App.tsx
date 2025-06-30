@@ -43,12 +43,11 @@ function App() {
     refetchInterval: 60 * 1000,
   });
 
-  const { setPlayers, setMyPlayerId, setTurnState, myPlayer } = usePlayerStore(
+  const { setPlayers, setMyPlayerId, setTurnState } = usePlayerStore(
     useShallow(state => ({
       setPlayers: state.setPlayers,
       setMyPlayerId: state.setMyPlayerId,
       setTurnState: state.setTurnState,
-      myPlayer: state.myPlayer,
     }))
   );
 
