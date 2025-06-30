@@ -1,10 +1,8 @@
-import { NO_MOCKS, SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from '@/lib/constants';
+import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from '@/lib/constants';
 import { BuildingType, GameLength, playerColors, Vector3Array } from '@/lib/types';
-// import usePlayerStore from "@/stores/playerStore";
 import { playersData } from '@/lib/mockData';
 import BuildingModel from '../models/BuildingModel';
 import { InstanceProps } from '@react-three/fiber';
-import { useMemo } from 'react';
 import usePlayerStore from '@/stores/playerStore';
 
 type Props = {
@@ -31,7 +29,6 @@ function getBuildingPosition(index: number): Vector3Array {
 }
 
 function getDemoBuildings(sectorId: number) {
-  return [];
   const maxGames = 16;
 
   const types: BuildingType[] = [
@@ -63,8 +60,8 @@ function getDemoBuildings(sectorId: number) {
 
 function SectorBuildings({ sectorId, models }: Props) {
   const playerBuildings = usePlayerStore(state => state.buildingsPerSector[sectorId]) || [];
-  const demoBuildings = useMemo(() => getDemoBuildings(sectorId), [sectorId]);
-  const buildings = NO_MOCKS ? playerBuildings : demoBuildings;
+  // const demoBuildings = useMemo(() => getDemoBuildings(sectorId), [sectorId]);
+  const buildings = playerBuildings;
 
   return (
     <group position={[POSITION_X, 0, POSITION_Z]}>
