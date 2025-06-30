@@ -100,3 +100,14 @@ export const FALLBACK_GAME_POSTER =
   'https://www.igdb.com/assets/no_cover_show-ef1e36c00e101c2fb23d15bb80edd9667bbf604a12fc0267a66033afea320c65.png';
 
 export const FALLBACK_AVATAR_URL = 'https://github.com/shadcn.png';
+
+export const PlayerModelsUrls: Record<string, string> = {
+  praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
+  'player-2': `${STORAGE_BASE_URL}/models/players/cars/delivery2.glb`,
+  'player-3': `${STORAGE_BASE_URL}/models/players/cars/race-future1.glb`,
+  'player-4': `${STORAGE_BASE_URL}/models/players/cars/sedan-sports2.glb`,
+  'player-5': `${STORAGE_BASE_URL}/models/players/cars/tractor2.glb`,
+  'player-6': `${STORAGE_BASE_URL}/models/players/cars/delivery-flat2.glb`,
+  'player-7': `${STORAGE_BASE_URL}/models/players/cars/truck1.glb`,
+  'player-8': `${STORAGE_BASE_URL}/models/players/cars/van1.glb`,
+};

@@ -1,24 +1,13 @@
-import { PLAYER_HEIGHT, STORAGE_BASE_URL } from "@/lib/constants";
-import useModelsStore from "@/stores/modelsStore";
-import { PlayerData, Vector3Array } from "@/lib/types";
-import { ThreeEvent } from "@react-three/fiber";
-import { Group, Mesh } from "three";
-import DiceModel from "./DiceModel";
-import usePlayerStore from "@/stores/playerStore";
-import { Gltf } from "@react-three/drei";
-import DiceRollDisplay from "../DiceRollDisplay.tsx";
-import PlayerInfo from "../PlayerInfo";
-
-const ModelsUrls: Record<string, string> = {
-  praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
-  "player-2": `${STORAGE_BASE_URL}/models/players/cars/delivery2.glb`,
-  "player-3": `${STORAGE_BASE_URL}/models/players/cars/race-future1.glb`,
-  "player-4": `${STORAGE_BASE_URL}/models/players/cars/sedan-sports2.glb`,
-  "player-5": `${STORAGE_BASE_URL}/models/players/cars/tractor2.glb`,
-  "player-6": `${STORAGE_BASE_URL}/models/players/cars/delivery-flat2.glb`,
-  "player-7": `${STORAGE_BASE_URL}/models/players/cars/truck1.glb`,
-  "player-8": `${STORAGE_BASE_URL}/models/players/cars/van1.glb`,
-};
+import { PLAYER_HEIGHT, PlayerModelsUrls } from '@/lib/constants';
+import useModelsStore from '@/stores/modelsStore';
+import { PlayerData, Vector3Array } from '@/lib/types';
+import { ThreeEvent } from '@react-three/fiber';
+import { Group, Mesh } from 'three';
+import DiceModel from './DiceModel';
+import usePlayerStore from '@/stores/playerStore';
+import { Gltf } from '@react-three/drei';
+import DiceRollDisplay from '../DiceRollDisplay.tsx';
+import PlayerInfo from '../PlayerInfo';
 
 type Props = {
   player: PlayerData;
@@ -37,15 +26,15 @@ function MyPlayerComponents() {
 }
 
 function PlayerModel({ player, position, rotation, onClick }: Props) {
-  const addPlayerModel = useModelsStore((state) => state.addPlayerModel);
-  const isPlayerMoving = usePlayerStore((state) => state.isPlayerMoving);
-  const isMyPlayer = usePlayerStore((state) => state.myPlayer?.id === player.id);
-  const modelUrl = ModelsUrls[player.username.toLowerCase()];
+  const addPlayerModel = useModelsStore(state => state.addPlayerModel);
+  const isPlayerMoving = usePlayerStore(state => state.isPlayerMoving);
+  const isMyPlayer = usePlayerStore(state => state.myPlayer?.id === player.id);
+  const modelUrl = PlayerModelsUrls[player.username.toLowerCase()];
 
   const onGroupRender = (group: Group | null) => {
     if (!group) return;
 
-    group.traverse((child) => {
+    group.traverse(child => {
       if (child instanceof Mesh) {
         child.material.emissiveIntensity = 0.25;
       }
@@ -57,9 +46,9 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
   const onModelRender = (model: Group | null) => {
     if (!model) return;
 
-    model.traverse((child) => {
+    model.traverse(child => {
       if (child instanceof Mesh) {
-        if (child.name === "body001") {
+        if (child.name === 'body001') {
           child.material.color.set(player.color);
         }
       }
@@ -67,16 +56,11 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
   };
 
   return (
-    <group
-      ref={onGroupRender}
-      name={`player_${player.id}`}
-      position={position}
-      rotation={rotation}
-    >
+    <group ref={onGroupRender} name={`player_${player.id}`} position={position} rotation={rotation}>
       <Gltf
         ref={onModelRender}
         src={modelUrl}
-        onClick={(e) => (e.stopPropagation(), onClick?.(e))}
+        onClick={e => (e.stopPropagation(), onClick?.(e))}
         castShadow
         receiveShadow
         rotation={[0, Math.PI / 2, 0]}
