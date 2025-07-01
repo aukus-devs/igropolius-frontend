@@ -40,7 +40,7 @@ export default function SkipPrisonDialog() {
           className="bg-[#30D158] hover:bg-[#30D158]/70 w-full flex-1"
           onClick={handleUseCard}
         >
-          Использовать карточку
+          Сбежать
         </Button>
       </div>
     </Card>

@@ -297,7 +297,7 @@ export default function RollBonusCard() {
         </div>
         {rollPhase === 'idle' && (
           <Button className="z-20 rounded-xl" onClick={handleRollClick}>
-            Gamba
+            Заролить
           </Button>
         )}
         {rollPhase === 'idle' && (

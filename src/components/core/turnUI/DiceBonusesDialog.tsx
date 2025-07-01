@@ -46,21 +46,24 @@ export default function DiceBonusesDialog() {
   };
 
   return (
-    <div className="backdrop-blur-[1.5rem] bg-card/70 border-none rounded-xl p-4">
+    <div className="backdrop-blur-[1.5rem] bg-card/70 border-none rounded-xl p-4 font-semibold">
       <div className="w-[400px]">
-        <div>Какие бонусы использовать?</div>
-        <div>
-          Бросок кубика: {rollResultSum} ({rollResult.join(' и ')})
+        <div className="text-xl font-wide-semibold">Применить карточки?</div>
+        <div className="mt-[20px]">
+          На кубиках: {rollResultSum} ({rollResult.join(' и ')})
         </div>
-        <div>Новый результат: {adjustedRoll}</div>
+
         {hasChooseDie && (
-          <div className="mt-2">
-            <div>Выбрать один кубик (потратит карточку)</div>
+          <div className="mt-[20px]">
+            <div className="mb-[15px]">Выбрать один кубик?</div>
             <NumberToggle
-              options={rollResult.map(num => ({
-                value: num,
-                label: num.toString(),
-              }))}
+              options={[
+                { value: null, label: 'Нет' },
+                ...rollResult.map(num => ({
+                  value: num,
+                  label: num.toString(),
+                })),
+              ]}
               value={selectedDie}
               onChange={value => {
                 setSelectedDie(prev => (prev === value ? null : value));
@@ -69,10 +72,11 @@ export default function DiceBonusesDialog() {
           </div>
         )}
         {hasAdjustBy1 && (
-          <div className="mt-2">
-            <div>Увеличить или уменьшить результат на 1 (потратит карточку)</div>
+          <div className="mt-[20px]">
+            <div className="mb-[15px]">Изменить результат на 1?</div>
             <NumberToggle
               options={[
+                { value: null, label: 'Нет' },
                 { value: 1, label: '+1' },
                 { value: -1, label: '-1' },
               ]}
@@ -83,13 +87,13 @@ export default function DiceBonusesDialog() {
             />
           </div>
         )}
-        <div className="mt-4">
+        <div className="mt-[50px]">
           <button
             type="button"
             onClick={handleSubmit}
-            className="w-full bg-primary text-primary-foreground rounded-md py-2 hover:bg-primary/90 transition-colors"
+            className="w-full font-bold bg-primary text-primary-foreground rounded-md py-2 hover:bg-primary/90 transition-colors"
           >
-            Готово
+            Применить с результатом: {adjustedRoll}
           </button>
         </div>
       </div>
@@ -98,14 +102,14 @@ export default function DiceBonusesDialog() {
 }
 
 type ToggleOption = {
-  value: number;
+  value: number | null;
   label: string;
 };
 
 type NumberToggleProps = {
   options: ToggleOption[];
   value: number | null;
-  onChange: (value: number) => void;
+  onChange: (value: number | null) => void;
 };
 
 export function NumberToggle({ options, value, onChange }: NumberToggleProps) {
@@ -116,15 +120,15 @@ export function NumberToggle({ options, value, onChange }: NumberToggleProps) {
           key={idx}
           type="button"
           onClick={() => onChange(num.value)}
-          className={`w-12 h-12 flex items-center justify-center rounded-md border-2 transition
+          className={`w-full items-center justify-center rounded-md p-[6px]
             ${
               value === num.value
                 ? 'bg-primary text-primary-foreground border-primary'
                 : 'bg-muted text-muted-foreground border-muted'
             }
-            focus:outline-none focus:ring-2 focus:ring-primary`}
+            `}
         >
-          <span className="text-xl font-bold">{num.label}</span>
+          <span className="">{num.label}</span>
         </button>
       ))}
     </div>
