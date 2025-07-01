@@ -1,140 +1,204 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./Collapsible";
-import { Button } from "../ui/button";
-import { useState } from "react";
-import { ScrollArea } from "../ui/scroll-area";
-import { Notification, Share, X } from "../icons";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './Collapsible';
+import { Button } from '../ui/button';
+import { useEffect, useState } from 'react';
+import { ScrollArea } from '../ui/scroll-area';
+import { Notification, Share, X } from '../icons';
+import { fetchNotifications, markNotificationsSeen } from '@/lib/api';
+import { NotificationItem, BackendPlayerData } from '@/lib/types';
+import usePlayerStore from '@/stores/playerStore';
+import { useShallow } from 'zustand/shallow';
+import { formatMs } from '@/lib/utils';
 
-type NotificationType = {
-  date: string;
-  text: string;
-  points: number;
-  type: "positive" | "negative";
+function formatNotificationText(
+  notification: NotificationItem,
+  players: BackendPlayerData[]
+): string {
+  const {
+    event_type,
+    other_player_id,
+    scores,
+    game_title,
+    card_name,
+    message_text,
+    sector_id,
+    event_end_time,
+  } = notification;
+
+  if (message_text) {
+    return message_text;
+  }
+
+  const otherPlayer = other_player_id ? players.find(p => p.id === other_player_id) : null;
+  const otherPlayerName = otherPlayer?.username || 'Игрок';
+
+  switch (event_type) {
+    case 'game-completed':
+      return `Получено ${scores || 0} очков за прохождение "${game_title}"`;
+    case 'game-reroll':
+      return `Рерольнул "${game_title}"`;
+    case 'game-drop':
+      return `Дропнул "${game_title}" и попал в тюрьму`;
+    case 'pay-sector-tax':
+      return `Заплатил налог ${scores} на секторе ${sector_id}`;
+    case 'building-income':
+      return `Доход ${scores} от ${otherPlayerName} на секторе ${sector_id}`;
+    case 'pay-map-tax':
+      return `Заплатил налог ${scores} за прохождение круга`;
+    case 'bonus-increase':
+      return `Бонус за прохождение игр стал +${scores} очков`;
+    case 'card-stolen':
+      return `Украдена карточка "${card_name}" у ${otherPlayerName}`;
+    case 'card-lost':
+      return `${otherPlayerName} украл твою карточку "${card_name}"`;
+    case 'event-ending-soon':
+      if (event_end_time) {
+        const timeLeftMs = event_end_time * 1000 - Date.now();
+        if (timeLeftMs > 0) {
+          return `До конца ивента — ${formatMs(timeLeftMs)}`;
+        } else {
+          return 'Ивент завершен';
+        }
+      }
+      return 'Ивент скоро закончится';
+    default:
+      return 'Неизвестное уведомление';
+  }
 }
 
-const mockNotifications: NotificationType[] = [
-  {
-    date: "12 января 17:12",
-    text: "Вы ступили на поле игрока Honeymad",
-    points: 325,
-    type: "negative",
-  },
-  {
-    date: "12 января 13:11",
-    text: "Melharucos ступил на ваше поле",
-    points: 154,
-    type: "positive",
-  },
-  {
-    date: "11 января 10:42",
-    text: "Вы ступили на поле игрока Honeymad",
-    points: 113,
-    type: "negative",
-  },
-  {
-    date: "12 января 17:12",
-    text: "Вы ступили на поле игрока Honeymad",
-    points: 325,
-    type: "negative",
-  },
-  {
-    date: "12 января 13:11",
-    text: "Melharucos ступил на ваше поле",
-    points: 154,
-    type: "positive",
-  },
-  {
-    date: "11 января 10:42",
-    text: "Вы ступили на поле игрока Honeymad",
-    points: 113,
-    type: "negative",
-  },
-  {
-    date: "12 января 17:12",
-    text: "Вы ступили на поле игрока Honeymad",
-    points: 325,
-    type: "negative",
-  },
-  {
-    date: "12 января 13:11",
-    text: "Melharucos ступил на ваше поле",
-    points: 154,
-    type: "positive",
-  },
-  {
-    date: "11 января 10:42",
-    text: "Вы ступили на поле игрока Honeymad",
-    points: 113,
-    type: "negative",
-  },
-];
+function formatNotificationDate(timestamp: number): string {
+  const date = new Date(timestamp * 1000);
+  const now = new Date();
+  const isToday = date.toDateString() === now.toDateString();
+
+  if (isToday) {
+    return date.toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  } else {
+    return date.toLocaleDateString('ru-RU', {
+      day: 'numeric',
+      month: 'long',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+}
 
 type NotificationCardProps = {
-  notification: NotificationType;
+  notification: NotificationItem;
+  players: BackendPlayerData[];
   isLast?: boolean;
-}
+};
 
-function NotificationCard({ notification, isLast = false }: NotificationCardProps) {
-  const { type, date, text, points } = notification;
-  const color = type === "positive" ? "text-green-500" : "text-red-500";
-  const symbol = type === "positive" ? "+" : "-";
+function NotificationCard({ notification, players, isLast = false }: NotificationCardProps) {
+  const { scores, event_type, notification_type } = notification;
+
+  const isImportant = notification_type === 'important';
+  const isPositive =
+    event_type === 'building-income' ||
+    event_type === 'bonus-increase' ||
+    event_type === 'game-completed';
+  const color = isPositive ? 'text-green-500' : 'text-red-500';
+  const symbol = isPositive ? '+' : '-';
+
+  const text = formatNotificationText(notification, players);
+  const date = formatNotificationDate(notification.created_at);
 
   return (
-    <Card className="p-2 gap-0.5 font-semibold">
+    <Card
+      className="p-2 gap-0.5 font-semibold data-[important=true]:bg-[oklch(0.38_0.02_135.11/0.7)]"
+      data-important={isImportant}
+    >
       <CardHeader className="px-0 gap-0.5">
-        <CardDescription className="text-sm">{isLast ? "Последнее" : date}</CardDescription>
+        <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
         <CardTitle className="text-base">{text}</CardTitle>
       </CardHeader>
-      <CardContent
-        className={`px-0 text-base flex items-center ${color}`}
-      >
-        {`${symbol} ${points}`} <Share className="w-4 h-4" />
-      </CardContent>
+      {scores !== undefined && (
+        <CardContent className={`px-0 text-base flex items-center ${color}`}>
+          {`${symbol} ${Math.abs(scores)}`} <Share className="w-4 h-4" />
+        </CardContent>
+      )}
     </Card>
-  )
+  );
 }
 
 function Notifications() {
-  const [notifications, setNotifications] = useState(mockNotifications);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const players = usePlayerStore(useShallow(state => state.players));
+
+  useEffect(() => {
+    loadNotifications();
+  }, []);
+
+  async function loadNotifications() {
+    try {
+      setLoading(true);
+      const response = await fetchNotifications();
+      setNotifications(response.notifications);
+    } catch (error) {
+      console.error('Failed to load notifications:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function dismissAllNotifications() {
+    if (notifications.length === 0) return;
+
+    try {
+      const notificationIds = notifications.map(n => n.id);
+      await markNotificationsSeen(notificationIds);
+      setNotifications([]);
+    } catch (error) {
+      console.error('Failed to mark notifications as seen:', error);
+    }
+  }
+
+  if (loading) {
+    return null;
+  }
+
   const lastNotification = notifications[0];
   const collapsibleNotifications = notifications.slice(1);
 
-  function dismissAllNotifications() {
-    setNotifications([]);
-  }
+  return (
+    notifications.length > 0 && (
+      <Collapsible>
+        <div className="flex gap-[5px]">
+          <CollapsibleTrigger className="!pr-[5px] font-semibold text-sm text-muted-foreground">
+            <Notification />
+            Уведомления
+          </CollapsibleTrigger>
 
-  return notifications.length > 0 && (
-    <Collapsible>
-      <div className="flex gap-[5px]">
-        <CollapsibleTrigger className="!pr-[5px] font-semibold text-sm text-muted-foreground">
-          <Notification />
-          Уведомления
-        </CollapsibleTrigger>
-
-        <Button
-          variant="outline"
-          className="w-full shrink rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 text-muted-foreground border-none"
-          onClick={dismissAllNotifications}
-        >
-          <X style={{ width: "23px", height: "23px" }} />
-        </Button>
-      </div>
-
-      <ScrollArea className="h-[400px]">
-        <div className="mt-[5px]">
-          <NotificationCard notification={lastNotification} isLast />
+          <Button
+            variant="outline"
+            className="w-full shrink rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 text-muted-foreground border-none"
+            onClick={dismissAllNotifications}
+          >
+            <X style={{ width: '23px', height: '23px' }} />
+          </Button>
         </div>
 
-        <CollapsibleContent>
-          {collapsibleNotifications.map((notification, idx) => (
-            <div key={idx} className="first:mt-[5px]">
-              <NotificationCard notification={notification} />
-            </div>
-          ))}
-        </CollapsibleContent>
-      </ScrollArea>
-    </Collapsible>
-  )
+        <ScrollArea className="h-[400px]">
+          <div className="mt-[5px]">
+            <NotificationCard notification={lastNotification} players={players} isLast />
+          </div>
+
+          <CollapsibleContent>
+            {collapsibleNotifications.map(notification => (
+              <div key={notification.id} className="first:mt-[5px]">
+                <NotificationCard notification={notification} players={players} />
+              </div>
+            ))}
+          </CollapsibleContent>
+        </ScrollArea>
+      </Collapsible>
+    )
+  );
 }
 
 export default Notifications;

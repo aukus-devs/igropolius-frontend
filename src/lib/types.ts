@@ -279,3 +279,36 @@ export type MoveMyPlayerParams = {
   adjustBy1: 1 | -1 | null;
   action?: PlayerStateAction;
 };
+
+export type NotificationType = 'important' | 'standard';
+
+export type NotificationEventType =
+  | 'game-completed'
+  | 'game-reroll'
+  | 'game-drop'
+  | 'pay-sector-tax'
+  | 'building-income'
+  | 'pay-map-tax'
+  | 'bonus-increase'
+  | 'card-stolen'
+  | 'card-lost'
+  | 'event-ending-soon'
+  | 'message';
+
+export type NotificationItem = {
+  id: number;
+  notification_type: NotificationType;
+  event_type: NotificationEventType;
+  created_at: number;
+  other_player_id?: number;
+  scores?: number;
+  sector_id?: number;
+  game_title?: string;
+  card_name?: string;
+  event_end_time?: number;
+  message_text?: string;
+};
+
+export type NotificationsResponse = {
+  notifications: NotificationItem[];
+};

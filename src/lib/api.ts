@@ -4,6 +4,7 @@ import {
   BonusCardType,
   GameLengthWithDrop,
   GameStatusType,
+  NotificationsResponse,
   PlayerEvent,
   PlayerTurnState,
   RulesVersion,
@@ -469,4 +470,109 @@ export async function resetDb(): Promise<void> {
   if (!response.ok) {
     return Promise.reject('Failed to reset database');
   }
+}
+
+export async function fetchNotifications(): Promise<NotificationsResponse> {
+  if (MOCK_API) {
+    const now = Math.floor(Date.now() / 1000);
+    return Promise.resolve({
+      notifications: [
+        {
+          id: 1,
+          notification_type: 'important',
+          event_type: 'building-income',
+          created_at: now - 900,
+          other_player_id: 2,
+          scores: 325,
+          sector_id: 15,
+        },
+        {
+          id: 2,
+          notification_type: 'standard',
+          event_type: 'game-completed',
+          created_at: now - 3600,
+          scores: 89,
+          game_title: 'The Witcher 3: Wild Hunt',
+        },
+        {
+          id: 3,
+          notification_type: 'important',
+          event_type: 'card-lost',
+          created_at: now - 5400,
+          other_player_id: 3,
+          card_name: 'Выбор одного кубика',
+        },
+        {
+          id: 4,
+          notification_type: 'important',
+          event_type: 'pay-sector-tax',
+          created_at: now - 7200,
+          scores: -150,
+          sector_id: 24,
+        },
+        {
+          id: 5,
+          notification_type: 'standard',
+          event_type: 'game-reroll',
+          created_at: now - 10800,
+          game_title: 'Cyberpunk 2077',
+        },
+        {
+          id: 6,
+          notification_type: 'important',
+          event_type: 'pay-map-tax',
+          created_at: now - 14400,
+          scores: -200,
+        },
+        {
+          id: 7,
+          notification_type: 'important',
+          event_type: 'bonus-increase',
+          created_at: now - 18000,
+          scores: 50,
+        },
+        {
+          id: 8,
+          notification_type: 'standard',
+          event_type: 'card-stolen',
+          created_at: now - 21600,
+          other_player_id: 4,
+          card_name: 'Пропуск тюрьмы',
+        },
+        {
+          id: 9,
+          notification_type: 'important',
+          event_type: 'event-ending-soon',
+          created_at: now - 25200,
+          event_end_time: now + 86400,
+        },
+        {
+          id: 10,
+          notification_type: 'standard',
+          event_type: 'game-drop',
+          created_at: now - 28800,
+          game_title: 'Elden Ring',
+        },
+        {
+          id: 11,
+          notification_type: 'standard',
+          event_type: 'message',
+          created_at: now - 28800,
+          message_text: '4Header',
+        },
+      ],
+    });
+  }
+  const response = await apiRequest('/api/notifications');
+  return response.json();
+}
+
+export async function markNotificationsSeen(notificationIds: number[]): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest('/api/notifications/seen', {
+    method: 'POST',
+    body: JSON.stringify({ notification_ids: notificationIds }),
+  });
 }
