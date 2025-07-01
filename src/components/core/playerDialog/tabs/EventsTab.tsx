@@ -157,7 +157,7 @@ function EventsTabFilter({
   const options: EventsTabFilterOption[] = [
     { title: "Все", value: "all" },
     { title: "Карточки", value: "bonus-card" },
-    { title: "Налоги", value: "score-change" },
+    { title: "Очки", value: "score-change" },
     { title: "Игры", value: "game" },
     { title: "Ходы", value: "player-move" },
   ];
