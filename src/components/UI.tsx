@@ -45,9 +45,11 @@ function DesktopUI() {
         </div>
       )}
 
-      <div className="absolute bottom-4 right-4">
-        #{position} ход: {turnState}
-      </div>
+      {position && (
+        <div className="absolute bottom-4 right-4">
+          #{position} ход: {turnState}
+        </div>
+      )}
     </div>
   );
 }
