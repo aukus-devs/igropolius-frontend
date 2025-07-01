@@ -41,9 +41,10 @@ const usePlayerStore = create<{
   buildingsPerSector: Record<number, BuildingData[]>;
   taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
+  eventEndTime: number | null;
   setMyPlayerId: (id?: number) => void;
   updateMyPlayerSectorId: (id: number) => void;
-  setPlayers: (players: BackendPlayerData[]) => void;
+  setPlayers: (players: BackendPlayerData[], eventEndTime?: number) => void;
   animatePlayerMovement: ({ steps }: { steps: number }) => Promise<number>;
   moveMyPlayer: (params: MoveMyPlayerParams) => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
@@ -63,6 +64,7 @@ const usePlayerStore = create<{
   buildingsPerSector: {},
   taxPerSector: {},
   turnState: null,
+  eventEndTime: null,
 
   setMyPlayerId: (id?: number) => {
     const { players, myPlayer } = get();
@@ -115,7 +117,7 @@ const usePlayerStore = create<{
     }));
   },
 
-  setPlayers: (playersData: BackendPlayerData[]) => {
+  setPlayers: (playersData: BackendPlayerData[], eventEndTime?: number) => {
     const buildings: Record<number, BuildingData[]> = {};
     const taxPerSector: Record<number, TaxData> = {};
     for (const sector of sectorsData) {
@@ -186,7 +188,7 @@ const usePlayerStore = create<{
       return b.total_score - a.total_score;
     });
 
-    set({ players, buildingsPerSector: buildings, taxPerSector });
+    set({ players, buildingsPerSector: buildings, taxPerSector, eventEndTime: eventEndTime ?? null });
   },
 
   animatePlayerMovement: async ({ steps }: { steps: number }) => {

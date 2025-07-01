@@ -163,12 +163,14 @@ export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
 
 type PlayersResponse = {
   players: BackendPlayerData[];
+  event_end_time?: number;
 };
 
 export async function fetchPlayers(): Promise<PlayersResponse> {
   if (MOCK_API) {
     return Promise.resolve({
       players: playersData,
+      event_end_time: 1754013556,
     });
   }
   const response = await apiRequest('/api/players');

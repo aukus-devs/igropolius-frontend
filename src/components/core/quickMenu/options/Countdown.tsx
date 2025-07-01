@@ -1,5 +1,6 @@
-import { formatMs } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { formatMs } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import usePlayerStore from '@/stores/playerStore';
 
 type Props = {
   className?: string;
@@ -7,6 +8,7 @@ type Props = {
 
 export default function Countdown({ className }: Props) {
   const [time, setTime] = useState(() => Date.now());
+  const eventEndTime = usePlayerStore(state => state.eventEndTime);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -15,10 +17,13 @@ export default function Countdown({ className }: Props) {
     return () => clearInterval(interval);
   }, []);
 
-  const targetTime = new Date("2025-07-01T00:00:00+03:00").getTime();
+  if (!eventEndTime) {
+    return <div className={className}>Загрузка...</div>;
+  }
 
+  const targetTime = eventEndTime * 1000;
   const diff = targetTime - time;
-  const message = diff > 0 ? `До конца — ${formatMs(diff)}` : "Ивент завершен";
+  const message = diff > 0 ? `До конца — ${formatMs(diff)}` : 'Ивент завершен';
 
   return <div className={className}>{message}</div>;
 }

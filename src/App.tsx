@@ -84,7 +84,7 @@ function App() {
   }, [currentPlayerData?.role, setShowAdminPanel]);
 
   useEffect(() => {
-    setPlayers(playersData?.players ?? []);
+    setPlayers(playersData?.players ?? [], playersData?.event_end_time);
   }, [setPlayers, playersData]);
 
   if (isLoading) {
