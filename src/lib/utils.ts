@@ -87,7 +87,7 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
       title = `${event.amount > 0 ? 'Получил' : 'Заплатил'} налог на клетке ${event.sector_id}`;
       break;
     case 'map-tax':
-      title = 'Получил налог за круг';
+      title = 'Заплатил налог за круг';
       break;
     case 'game-completed':
       title = 'Получил очки за игру';
