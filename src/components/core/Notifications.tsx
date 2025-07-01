@@ -159,7 +159,7 @@ function Notifications() {
 
   return (
     notifications.length > 0 && (
-      <Collapsible>
+      <Collapsible key={lastNotification?.id}>
         <div className="flex gap-[5px]">
           <CollapsibleTrigger className="!pr-[5px] font-semibold text-sm text-muted-foreground">
             <Notification />
