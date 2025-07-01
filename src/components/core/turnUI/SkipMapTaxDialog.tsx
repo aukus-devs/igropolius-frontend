@@ -2,6 +2,7 @@ import { Share } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { applyBonusCard } from '@/lib/api';
+import { resetNotificationsQuery } from '@/lib/queryClient';
 import { MapTaxPercent } from '@/lib/constants';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
@@ -28,6 +29,7 @@ export default function SkipMapTaxDialog() {
 
   const handleUseCard = async () => {
     await applyBonusCard('evade-map-tax');
+    resetNotificationsQuery();
     await setNextTurnState({ action: 'skip-bonus' });
   };
 

@@ -31,7 +31,7 @@ import {
   saveTurnState,
   stealBonusCard as stealBonusCardApi,
 } from '@/lib/api';
-import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
+import { resetCurrentPlayerQuery, resetPlayersQuery, resetNotificationsQuery } from '@/lib/queryClient';
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -303,6 +303,7 @@ const usePlayerStore = create<{
 
     await animatePlayerMovement({ steps: params.totalRoll });
     await setNextTurnState({ prevSectorId: originalSector, action: params.action });
+    resetNotificationsQuery();
   },
 
   moveMyPlayerToPrison: async (sectorId: number) => {
@@ -326,17 +327,20 @@ const usePlayerStore = create<{
         : null,
     }));
     resetPlayersQuery();
+    resetNotificationsQuery();
     await setNextTurnState({});
   },
 
   stealBonusCard: async (player: PlayerData, card: BonusCardType) => {
     const { setNextTurnState } = get();
     await stealBonusCardApi(player.id, card);
+    resetNotificationsQuery();
     await setNextTurnState({});
   },
 
   payTaxesAndSwitchState: async (type: TaxType) => {
     await payTaxes(type);
+    resetNotificationsQuery();
     const { setNextTurnState } = get();
     setNextTurnState({ action: 'skip-bonus' });
   },

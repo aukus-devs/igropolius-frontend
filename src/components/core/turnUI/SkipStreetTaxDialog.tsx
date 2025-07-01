@@ -2,6 +2,7 @@ import { Share } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { applyBonusCard } from '@/lib/api';
+import { resetNotificationsQuery } from '@/lib/queryClient';
 import { TaxData } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
@@ -32,6 +33,7 @@ export default function SkipStreetTaxDialog() {
 
   const handleUseCard = async () => {
     await applyBonusCard('evade-street-tax');
+    resetNotificationsQuery();
     await setNextTurnState({ action: 'skip-bonus' });
   };
 

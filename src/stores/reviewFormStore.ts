@@ -4,6 +4,7 @@ import { GameLength, GameStatusType, ScoreDetails } from '@/lib/types';
 import { create } from 'zustand';
 import usePlayerStore from './playerStore';
 import { SectorsById } from '@/lib/mockData';
+import { resetNotificationsQuery } from '@/lib/queryClient';
 
 const useReviewFormStore = create<{
   rating: number;
@@ -66,6 +67,8 @@ const useReviewFormStore = create<{
         scores,
         game_id: selectedGame?.id || null,
       });
+
+      resetNotificationsQuery();
 
       set({
         rating: 0,

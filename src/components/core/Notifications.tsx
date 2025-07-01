@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './Collapsible';
 import { Button } from '../ui/button';
-import { useEffect, useState } from 'react';
+
 import { ScrollArea } from '../ui/scroll-area';
 import { Notification, Share, X } from '../icons';
 import { fetchNotifications, markNotificationsSeen } from '@/lib/api';
@@ -9,6 +9,8 @@ import { NotificationItem, BackendPlayerData } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import { formatMs } from '@/lib/utils';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib/queryClient';
 
 function formatNotificationText(
   notification: NotificationItem,
@@ -24,10 +26,6 @@ function formatNotificationText(
     sector_id,
     event_end_time,
   } = notification;
-
-  if (message_text) {
-    return message_text;
-  }
 
   const otherPlayer = other_player_id ? players.find(p => p.id === other_player_id) : null;
   const otherPlayerName = otherPlayer?.username || 'Игрок';
@@ -61,8 +59,12 @@ function formatNotificationText(
         }
       }
       return 'Ивент скоро закончится';
-    default:
-      return 'Неизвестное уведомление';
+    case 'message':
+      return message_text || 'Сообщение';
+    default: {
+      const subtype: never = event_type;
+      throw new Error(`Unsupported notification event type: ${subtype}`);
+    }
   }
 }
 
@@ -125,26 +127,16 @@ function NotificationCard({ notification, players, isLast = false }: Notificatio
 }
 
 function Notifications() {
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const players = usePlayerStore(useShallow(state => state.players));
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    loadNotifications();
-  }, []);
+  const { data: notificationsData, isLoading: loading } = useQuery({
+    queryKey: queryKeys.notifications,
+    queryFn: fetchNotifications,
+    refetchInterval: 30 * 1000,
+  });
 
-  async function loadNotifications() {
-    try {
-      setLoading(true);
-      const response = await fetchNotifications();
-      setNotifications(response.notifications);
-    } catch (error) {
-      console.error('Failed to load notifications:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const notifications = notificationsData?.notifications || [];
 
   async function dismissAllNotifications() {
     if (notifications.length === 0) return;
@@ -152,7 +144,7 @@ function Notifications() {
     try {
       const notificationIds = notifications.map(n => n.id);
       await markNotificationsSeen(notificationIds);
-      setNotifications([]);
+      queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
     } catch (error) {
       console.error('Failed to mark notifications as seen:', error);
     }

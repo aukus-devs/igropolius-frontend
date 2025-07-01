@@ -4,6 +4,7 @@ import { Group } from "three";
 import { randInt } from "three/src/math/MathUtils.js";
 import { sleep } from "@/lib/utils";
 import { rollDice as rollDiceAPI } from "@/lib/api";
+import { resetNotificationsQuery } from "@/lib/queryClient";
 
 const useDiceStore = create<{
   diceModel: Group | null;
@@ -51,6 +52,7 @@ const useDiceStore = create<{
 
     try {
       const rollResult = await rollDiceAPI();
+      resetNotificationsQuery();
       const elapsed = Date.now() - animationStartTime;
       await sleep(2000 - elapsed);
 

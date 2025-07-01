@@ -8,6 +8,7 @@ import { SectorsById } from '@/lib/mockData';
 import { calculatePlayerPosition, getSectorRotation } from '@/components/map/utils';
 import useCameraStore from './cameraStore';
 import { makePlayerMove } from '@/lib/api';
+import { resetNotificationsQuery } from '@/lib/queryClient';
 
 type TrainConfig = {
   id: number;
@@ -42,6 +43,7 @@ const useTrainsStore = create<{
       adjust_by_1: null,
     });
 
+    resetNotificationsQuery();
     usePlayerStore.setState({ isPlayerMoving: true });
 
     const playerModel = useModelsStore.getState().getPlayerModel(myPlayerId);

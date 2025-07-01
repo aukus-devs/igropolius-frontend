@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { applyBonusCard } from '@/lib/api';
+import { resetNotificationsQuery } from '@/lib/queryClient';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 
@@ -19,6 +20,7 @@ export default function SkipPrisonDialog() {
 
   const handleUseCard = async () => {
     await applyBonusCard('skip-prison-day');
+    resetNotificationsQuery();
     await setNextTurnState({ action: 'skip-prison' });
   };
 
