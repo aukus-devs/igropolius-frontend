@@ -9,7 +9,6 @@ export default function PrisonModel() {
       src={modelUrl}
       rotation={[0, -Math.PI / 2, 0]}
       position={[0, SECTOR_CONTENT_ELEVATION + 0.01, 0]}
-      scale={[0.75, 1, 0.75]}
     />
   );
 }

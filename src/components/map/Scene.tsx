@@ -1,11 +1,10 @@
 import CustomCameraControls from "./CustomCameraControls";
 import Floor from "./Floor";
-import { Grid, Stats } from "@react-three/drei";
+import { Environment, Grid, Stats } from "@react-three/drei";
 import GameBoard from "./GameBoard";
 import { Railroad } from "./Railroad";
 import { colors } from "@/lib/types";
-import Skybox from "./Skybox";
-import TestModels from "./models/TestModels";
+import { STORAGE_BASE_URL } from "@/lib/constants";
 
 function Scene() {
   const gridConfig = {
@@ -75,15 +74,17 @@ function Scene() {
 
       <CustomCameraControls />
 
-      <TestModels />
       <GameBoard />
       <Railroad />
       <Floor />
+      <Environment
+        files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`}
+        background="only"
+      />
 
       {/* origin position marker */}
       <Grid position={[0, 1, 0]} args={[1, 1]} {...gridConfig} />
       <Stats className="fps-meter" />
-      <Skybox />
     </>
   );
 }
