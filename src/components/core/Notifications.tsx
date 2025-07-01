@@ -32,7 +32,7 @@ function formatNotificationText(
 
   switch (event_type) {
     case 'game-completed':
-      return `Получено ${scores || 0} очков за прохождение "${game_title}"`;
+      return `Получено ${scores} очков за прохождение "${game_title}"`;
     case 'game-reroll':
       return `Рерольнул "${game_title}"`;
     case 'game-drop':
@@ -117,7 +117,7 @@ function NotificationCard({ notification, players, isLast = false }: Notificatio
         <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
         <CardTitle className="text-base">{text}</CardTitle>
       </CardHeader>
-      {scores !== undefined && (
+      {scores != null && (
         <CardContent className={`px-0 text-base flex items-center ${color}`}>
           {`${symbol} ${Math.abs(scores)}`} <Share className="w-4 h-4" />
         </CardContent>
