@@ -127,13 +127,16 @@ function NotificationCard({ notification, players, isLast = false }: Notificatio
 }
 
 function Notifications() {
-  const players = usePlayerStore(useShallow(state => state.players));
+  const { players, myPlayer } = usePlayerStore(
+    useShallow(state => ({ players: state.players, myPlayer: state.myPlayer }))
+  );
   const queryClient = useQueryClient();
 
   const { data: notificationsData, isLoading: loading } = useQuery({
     queryKey: queryKeys.notifications,
     queryFn: fetchNotifications,
     refetchInterval: 30 * 1000,
+    enabled: Boolean(myPlayer),
   });
 
   const notifications = notificationsData?.notifications || [];
@@ -141,13 +144,9 @@ function Notifications() {
   async function dismissAllNotifications() {
     if (notifications.length === 0) return;
 
-    try {
-      const notificationIds = notifications.map(n => n.id);
-      await markNotificationsSeen(notificationIds);
-      queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
-    } catch (error) {
-      console.error('Failed to mark notifications as seen:', error);
-    }
+    const notificationIds = notifications.map(n => n.id);
+    await markNotificationsSeen(notificationIds);
+    queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
   }
 
   if (loading) {
