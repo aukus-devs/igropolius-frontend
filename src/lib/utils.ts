@@ -84,7 +84,7 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
 
   switch (event.subtype) {
     case 'street-tax':
-      title = `${event.amount > 0 ? 'Получил' : 'Заплатил'} налог на клетке ${event.sector_id}`;
+      title = `Заплатил налог на клетке ${event.sector_id}`;
       break;
     case 'map-tax':
       title = 'Заплатил налог за круг';
@@ -94,6 +94,9 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
       break;
     case 'game-dropped':
       title = 'Потерял очки за дроп игры';
+      break;
+    case 'street-income':
+      title = `Получил доход с сектора: ${event.sector_id}`;
       break;
     default: {
       const subtype: never = event.subtype;

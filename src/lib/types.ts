@@ -212,7 +212,7 @@ export type TaxType = 'street-tax' | 'map-tax';
 
 export type PlayerEventScoreChange = PlayerEventBase & {
   event_type: 'score-change';
-  subtype: TaxType | 'game-completed' | 'game-dropped';
+  subtype: TaxType | 'game-completed' | 'game-dropped' | 'street-income';
   amount: number;
   tax_player_id?: number;
   sector_id: number;
