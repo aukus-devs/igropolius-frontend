@@ -439,6 +439,16 @@ export async function stealBonusCard(playerId: number, bonusType: BonusCardType)
   });
 }
 
+export async function loseBonusCard(bonusType: BonusCardType): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest(`/api/bonus-cards/lose`, {
+    method: 'POST',
+    body: JSON.stringify({ bonus_type: bonusType }),
+  });
+}
+
 type DiceRollResponse = {
   roll_id: number;
   is_random_org_result: boolean;

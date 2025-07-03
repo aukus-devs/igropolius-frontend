@@ -206,6 +206,7 @@ export function getNextTurnState({
     'filling-game-review',
     // temporaly disable until implemented
     // 'entering-prison',
+    'drop-random-card',
     'choosing-train-ride',
     'choosing-building-sector',
     'stealing-bonus-card',
@@ -304,7 +305,7 @@ function getNextState({
       return 'filling-game-review';
     case 'filling-game-review':
       if (action === 'drop-game') {
-        return 'entering-prison';
+        return 'drop-random-card';
       }
       if (action === 'reroll-game') {
         return 'using-reroll-bonuses';
@@ -334,6 +335,8 @@ function getNextState({
         return 'using-map-tax-bonuses-after-train-ride';
       }
       return 'rolling-dice';
+    case 'drop-random-card':
+      return 'entering-prison';
     case 'entering-prison':
       return 'using-prison-bonuses';
     case 'stealing-bonus-card':

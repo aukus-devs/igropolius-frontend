@@ -235,6 +235,7 @@ export type PlayerTurnState =
   | 'choosing-train-ride'
   | 'using-map-tax-bonuses'
   | 'using-street-tax-bonuses'
+  | 'drop-random-card'
   | 'entering-prison'
   | 'stealing-bonus-card'
   | 'choosing-building-sector'

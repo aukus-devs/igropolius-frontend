@@ -10,6 +10,7 @@ import SkipMapTaxDialog from './SkipMapTaxDialog';
 import SkipPrisonDialog from './SkipPrisonDialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import LoseCardOnDropDialog from './LoseCardOnDropDialog';
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving, playersHaveNoCards } = usePlayerStore(
@@ -62,6 +63,8 @@ export default function PlayerTurnUI() {
       return null;
     case 'entering-prison':
       return null;
+    case 'drop-random-card':
+      return <LoseCardOnDropDialog />;
     default: {
       const error: never = turnState;
       throw new Error(`Unknown turn state: ${error}`);
