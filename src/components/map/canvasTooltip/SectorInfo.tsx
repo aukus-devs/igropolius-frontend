@@ -20,7 +20,7 @@ function SectorInfo({ sector }: Props) {
         <p className="text-xs text-muted-foreground">#{id}</p>
       </CardHeader>
       <CardContent>
-        <p className="text-sm">Тип: {type}</p>
+        <p className="text-sm">Тип: {SectorTypeLabes[type]}</p>
         <p className="text-sm">Ролл игры: {rollType}</p>
         {showTax && (
           <div className="flex items-center">
@@ -34,3 +34,12 @@ function SectorInfo({ sector }: Props) {
 }
 
 export default SectorInfo;
+
+const SectorTypeLabes: Record<SectorData['type'], string> = {
+  bonus: 'бонусный',
+  parking: 'парковка',
+  prison: 'тюрьма',
+  property: 'строительный',
+  railroad: 'вокзал',
+  'start-corner': 'старт',
+};

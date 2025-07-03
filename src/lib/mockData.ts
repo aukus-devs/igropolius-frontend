@@ -13,7 +13,7 @@ import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 export const sectorsData: SectorData[] = [
   {
     id: 1,
-    name: 'GO',
+    name: 'Улица Базовая',
     position: { x: 0, y: 0 },
     type: 'start-corner',
     color: 'pastelgreen',
@@ -21,7 +21,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 2,
-    name: 'Mediterranean Avenue',
+    name: 'Переулок Пепеговский',
     position: { x: 1, y: 0 },
     type: 'property',
     color: 'brown',
@@ -29,7 +29,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 3,
-    name: 'Community Chest 1',
+    name: 'Улица Дурки',
     position: { x: 2, y: 0 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -37,7 +37,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 4,
-    name: 'Baltic Avenue',
+    name: 'Улица Донатная',
     position: { x: 3, y: 0 },
     type: 'property',
     color: 'brown',
@@ -45,7 +45,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 5,
-    name: 'Income Tax',
+    name: 'Улица Идейная',
     position: { x: 4, y: 0 },
     type: 'property',
     color: 'brown',
@@ -53,7 +53,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 6,
-    name: 'Reading Railroad',
+    name: 'Улица Тихого Дэна',
     position: { x: 5, y: 0 },
     type: 'railroad',
     color: 'pastelgreen',
@@ -61,7 +61,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 7,
-    name: 'Oriental Avenue',
+    name: 'Улица Рандомная',
     position: { x: 6, y: 0 },
     type: 'property',
     color: 'lightblue',
@@ -69,7 +69,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 8,
-    name: 'Chance 1',
+    name: 'Улица Колескина',
     position: { x: 7, y: 0 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -77,7 +77,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 9,
-    name: 'Vermont Avenue',
+    name: 'Улица Ауково',
     position: { x: 8, y: 0 },
     type: 'property',
     color: 'lightblue',
@@ -85,7 +85,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 10,
-    name: 'Connecticut Avenue',
+    name: 'Переулок Таа',
     position: { x: 9, y: 0 },
     type: 'property',
     color: 'lightblue',
@@ -93,7 +93,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 11,
-    name: 'Jail / Just Visiting',
+    name: 'Тюрьма 1',
     position: { x: 10, y: 0 },
     type: 'prison',
     color: 'pastelgreen',
@@ -101,7 +101,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 12,
-    name: 'St. Charles Place',
+    name: 'Улица Паст',
     position: { x: 10, y: 1 },
     type: 'property',
     color: 'pink',
@@ -109,7 +109,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 13,
-    name: 'Electric Company',
+    name: 'Улица Бана',
     position: { x: 10, y: 2 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -117,7 +117,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 14,
-    name: 'States Avenue',
+    name: 'Улица Жокерге',
     position: { x: 10, y: 3 },
     type: 'property',
     color: 'pink',
@@ -125,7 +125,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 15,
-    name: 'Virginia Avenue',
+    name: 'Улица кинотетр Синема"',
     position: { x: 10, y: 4 },
     type: 'property',
     color: 'pink',
@@ -133,7 +133,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 16,
-    name: 'Pennsylvania Railroad',
+    name: 'Улица 1984 года',
     position: { x: 10, y: 5 },
     type: 'railroad',
     color: 'pastelgreen',
@@ -141,7 +141,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 17,
-    name: 'St. James Place',
+    name: 'Улица Красивская',
     position: { x: 10, y: 6 },
     type: 'property',
     color: 'orange',
@@ -149,7 +149,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 18,
-    name: 'Community Chest 2',
+    name: 'Переулок Чатовский',
     position: { x: 10, y: 7 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -157,7 +157,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 19,
-    name: 'Tennessee Avenue',
+    name: 'Улица Кубическая',
     position: { x: 10, y: 8 },
     type: 'property',
     color: 'orange',
@@ -165,7 +165,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 20,
-    name: 'New York Avenue',
+    name: 'Переулок Дропа',
     position: { x: 10, y: 9 },
     type: 'property',
     color: 'orange',
@@ -173,7 +173,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 21,
-    name: 'Free Parking',
+    name: 'Парковка',
     position: { x: 10, y: 10 },
     type: 'parking',
     color: 'pastelgreen',
@@ -181,7 +181,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 22,
-    name: 'Kentucky Avenue',
+    name: 'Переулок Бредикова',
     position: { x: 9, y: 10 },
     type: 'property',
     color: 'red',
@@ -189,7 +189,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 23,
-    name: 'Chance 2',
+    name: 'Улица имени Кала Засто',
     position: { x: 8, y: 10 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -197,7 +197,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 24,
-    name: 'Indiana Avenue',
+    name: 'Улица Стимовская',
     position: { x: 7, y: 10 },
     type: 'property',
     color: 'red',
@@ -205,7 +205,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 25,
-    name: 'Illinois Avenue',
+    name: 'Переулок Арольфина',
     position: { x: 6, y: 10 },
     type: 'property',
     color: 'red',
@@ -213,7 +213,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 26,
-    name: 'B. & O. Railroad',
+    name: 'Улица Хуховая',
     position: { x: 5, y: 10 },
     type: 'railroad',
     color: 'pastelgreen',
@@ -221,7 +221,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 27,
-    name: 'Atlantic Avenue',
+    name: 'Переулок Ауковый',
     position: { x: 4, y: 10 },
     type: 'property',
     color: 'yellow',
@@ -229,7 +229,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 28,
-    name: 'Ventnor Avenue',
+    name: 'Улица Форсена',
     position: { x: 3, y: 10 },
     type: 'property',
     color: 'yellow',
@@ -237,7 +237,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 29,
-    name: 'Water Works',
+    name: 'Переулок Чомик',
     position: { x: 2, y: 10 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -245,7 +245,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 30,
-    name: 'Marvin Gardens',
+    name: 'Улица Паст',
     position: { x: 1, y: 10 },
     type: 'property',
     color: 'yellow',
@@ -253,7 +253,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 31,
-    name: 'Go To Jail',
+    name: 'Тюрьма 2',
     position: { x: 0, y: 10 },
     type: 'prison',
     color: 'pastelgreen',
@@ -261,7 +261,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 32,
-    name: 'Pacific Avenue',
+    name: 'Улица Уродская',
     position: { x: 0, y: 9 },
     type: 'property',
     color: 'green',
@@ -269,7 +269,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 33,
-    name: 'North Carolina Avenue',
+    name: 'Переулок 40-разовый',
     position: { x: 0, y: 8 },
     type: 'property',
     color: 'green',
@@ -277,7 +277,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 34,
-    name: 'Community Chest 3',
+    name: 'Улица Сратьная',
     position: { x: 0, y: 7 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -285,7 +285,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 35,
-    name: 'Pennsylvania Avenue',
+    name: 'Улица Соточно-каловая',
     position: { x: 0, y: 6 },
     type: 'property',
     color: 'green',
@@ -293,7 +293,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 36,
-    name: 'Short Line',
+    name: 'Улица Вихарькова',
     position: { x: 0, y: 5 },
     type: 'railroad',
     color: 'pastelgreen',
@@ -301,7 +301,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 37,
-    name: 'Chance 3',
+    name: 'Переулок Пепеговский',
     position: { x: 0, y: 4 },
     type: 'property',
     color: 'blue',
@@ -309,7 +309,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 38,
-    name: 'Park Place',
+    name: 'Переулок Кэнникэта',
     position: { x: 0, y: 3 },
     type: 'property',
     color: 'blue',
@@ -317,7 +317,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 39,
-    name: 'Luxury Tax',
+    name: 'Улица Кубическая',
     position: { x: 0, y: 2 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -325,7 +325,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 40,
-    name: 'Boardwalk',
+    name: 'Переулок Чатовский',
     position: { x: 0, y: 1 },
     type: 'property',
     color: 'blue',
