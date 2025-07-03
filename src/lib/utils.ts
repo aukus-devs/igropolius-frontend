@@ -204,8 +204,7 @@ export function getNextTurnState({
     'rolling-dice',
     'rolling-bonus-card',
     'filling-game-review',
-    // temporaly disable until implemented
-    // 'entering-prison',
+    'entering-prison',
     'drop-random-card',
     'choosing-train-ride',
     'choosing-building-sector',

@@ -11,6 +11,9 @@ import SkipPrisonDialog from './SkipPrisonDialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import LoseCardOnDropDialog from './LoseCardOnDropDialog';
+import PrisonEnterCardRoll from './PrisonEnterCardRoll';
+import GameRerollDialog from './GameRerollDialog';
+import SelectBuildingSectorDialog from './SelectingBuildingSectorDialog';
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving, playersHaveNoCards } = usePlayerStore(
@@ -47,7 +50,7 @@ export default function PlayerTurnUI() {
     case 'using-street-tax-bonuses':
       return <SkipStreetTaxDialog />;
     case 'using-reroll-bonuses':
-      return null;
+      return <GameRerollDialog />;
     case 'using-prison-bonuses':
       return <SkipPrisonDialog />;
     case 'using-map-tax-bonuses':
@@ -60,9 +63,9 @@ export default function PlayerTurnUI() {
       }
       return null; // No UI for stealing bonus card, handled in PlayerCards
     case 'choosing-building-sector':
-      return null;
+      return <SelectBuildingSectorDialog />;
     case 'entering-prison':
-      return null;
+      return <PrisonEnterCardRoll />;
     case 'drop-random-card':
       return <LoseCardOnDropDialog />;
     default: {
