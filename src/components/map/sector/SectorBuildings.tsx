@@ -4,6 +4,7 @@ import { playersData } from '@/lib/mockData';
 import BuildingModel from '../models/BuildingModel';
 import { InstanceProps } from '@react-three/fiber';
 import usePlayerStore from '@/stores/playerStore';
+import { useMemo } from 'react';
 
 type Props = {
   sectorId: number;
@@ -33,12 +34,11 @@ function getDemoBuildings(sectorId: number) {
 
   const types: BuildingType[] = [
     'ruins',
-    // "small",
-    'large',
+    'small_buildingD',
     'skyscraperA',
     'skyscraperD',
     'skyscraperE',
-    'skyscraperF',
+    'skyscraperB',
     'skyscraperX',
   ];
   const lengths: GameLength[] = ['2-5', '5-10', '10-15', '15-20', '20-25', '25+'];
@@ -60,12 +60,11 @@ function getDemoBuildings(sectorId: number) {
 
 function SectorBuildings({ sectorId, models }: Props) {
   const playerBuildings = usePlayerStore(state => state.buildingsPerSector[sectorId]) || [];
-  // const demoBuildings = useMemo(() => getDemoBuildings(sectorId), [sectorId]);
-  const buildings = playerBuildings;
+  // const playerBuildings = useMemo(() => getDemoBuildings(sectorId), [sectorId]);
 
   return (
     <group position={[POSITION_X, 0, POSITION_Z]}>
-      {buildings.map((building, index) => {
+      {playerBuildings.map((building, index) => {
         const position = getBuildingPosition(index);
 
         return (

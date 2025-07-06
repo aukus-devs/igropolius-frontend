@@ -33,18 +33,12 @@ export const EMISSION_NONE = new Color('black');
 
 export const GameLengthToBuildingType: { [key in GameLengthWithDrop]: BuildingType } = {
   drop: 'ruins',
-  '2-5': 'large',
+  '2-5': 'small_buildingD',
   '5-10': 'skyscraperE',
   '10-15': 'skyscraperA',
-  '15-20': 'skyscraperF',
+  '15-20': 'skyscraperB',
   '20-25': 'skyscraperD',
   '25+': 'skyscraperX',
-  // "2-5": "small",
-  // "5-10": "large",
-  // "10-15": "skyscraperD",
-  // "15-20": "skyscraperF",
-  // "20-25": "skyscraperA",
-  // "25+": "skyscraperE",
 };
 
 export const TrainsConfig: Record<number, TrainData> = {

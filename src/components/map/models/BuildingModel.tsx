@@ -64,11 +64,7 @@ function BuildingModel({ building, position, models }: Props) {
   }
 
   return (
-    <group
-      ref={groupRef}
-      position={position}
-      rotation={[0, Math.PI, 0]}
-    >
+    <group ref={groupRef} position={position}>
       <ColoredPart color={owner.color} />
       <StaticPart />
       <OutlinePart
