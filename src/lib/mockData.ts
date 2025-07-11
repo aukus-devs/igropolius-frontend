@@ -45,7 +45,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 5,
-    name: 'Улица Идейная',
+    name: 'Переулок Чомик',
     position: { x: 4, y: 0 },
     type: 'property',
     color: 'brown',
@@ -237,7 +237,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 29,
-    name: 'Переулок Чомик',
+    name: 'Улица Идейная',
     position: { x: 2, y: 10 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -293,7 +293,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 36,
-    name: 'Улица Вихарькова',
+    name: 'Переулок Агуш',
     position: { x: 0, y: 5 },
     type: 'railroad',
     color: 'pastelgreen',
@@ -301,7 +301,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 37,
-    name: 'Переулок Агуш',
+    name: 'Улица Вихарькова',
     position: { x: 0, y: 4 },
     type: 'property',
     color: 'blue',
