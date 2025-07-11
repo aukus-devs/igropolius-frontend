@@ -101,7 +101,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 12,
-    name: 'Улица Паст',
+    name: 'Переулок Аниме',
     position: { x: 10, y: 1 },
     type: 'property',
     color: 'pink',
@@ -245,7 +245,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 30,
-    name: 'Улица Паст',
+    name: 'Переулок Сужающихся Домов',
     position: { x: 1, y: 10 },
     type: 'property',
     color: 'yellow',
@@ -301,7 +301,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 37,
-    name: 'Переулок Пепеговский',
+    name: 'Переулок Агуш',
     position: { x: 0, y: 4 },
     type: 'property',
     color: 'blue',
@@ -317,7 +317,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 39,
-    name: 'Улица Кубическая',
+    name: 'Улица Паст',
     position: { x: 0, y: 2 },
     type: 'bonus',
     color: 'pastelgreen',
@@ -325,13 +325,21 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 40,
-    name: 'Переулок Чатовский',
+    name: 'Переулок Ган Дона',
     position: { x: 0, y: 1 },
     type: 'property',
     color: 'blue',
     rollType: 'auc',
   },
 ];
+
+const streetNames = new Set();
+for (const sector of sectorsData) {
+  if (streetNames.has(sector.name)) {
+    console.log('duplicate: ', sector.name, sector.id);
+  }
+  streetNames.add(sector.name);
+}
 
 export const SectorsById: Record<number, SectorData> = Object.fromEntries(
   sectorsData.map(sector => [sector.id, sector])
