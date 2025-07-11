@@ -333,13 +333,13 @@ export const sectorsData: SectorData[] = [
   },
 ];
 
-const streetNames = new Set();
-for (const sector of sectorsData) {
-  if (streetNames.has(sector.name)) {
-    console.log('duplicate: ', sector.name, sector.id);
-  }
-  streetNames.add(sector.name);
-}
+// const streetNames = new Set();
+// for (const sector of sectorsData) {
+//   if (streetNames.has(sector.name)) {
+//     console.log('duplicate: ', sector.name, sector.id);
+//   }
+//   streetNames.add(sector.name);
+// }
 
 export const SectorsById: Record<number, SectorData> = Object.fromEntries(
   sectorsData.map(sector => [sector.id, sector])
