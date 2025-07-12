@@ -16,36 +16,24 @@ export default function LoseCardOnDropDialog() {
   const options: WeightedOption<BonusCardType>[] = useMemo(() => {
     return playerCards.map(card => ({
       label: frontendCardsData[card.bonus_type].name,
+      imageUrl: frontendCardsData[card.bonus_type].picture,
       value: card.bonus_type,
       weight: 1,
     }));
   }, [playerCards]);
 
-  const imagesMap = useMemo(
-    () =>
-      Object.entries(frontendCardsData).reduce(
-        (acc, [cardType, card]) => {
-          acc[cardType] = card.picture;
-          return acc;
-        },
-        {} as Record<string, string>
-      ),
-    []
-  );
-
-  const getWinnerText = (option: BonusCardType) => {
-    return `Карточка "${frontendCardsData[option].name}" сгорает`;
+  const getWinnerText = (option: WeightedOption<BonusCardType>) => {
+    return `Карточка "${frontendCardsData[option.value].name}" сгорает`;
   };
 
-  const handleFinished = async (option: BonusCardType) => {
-    loseBonusCard(option);
+  const handleFinished = async (option: WeightedOption<BonusCardType>) => {
+    loseBonusCard(option.value);
   };
 
   return (
     <GenericRoller<BonusCardType>
       header="Потеря карточки в тюрьме"
       options={options}
-      imagesMap={imagesMap}
       getWinnerText={getWinnerText}
       onFinished={handleFinished}
     />

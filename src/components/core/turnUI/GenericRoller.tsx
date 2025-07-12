@@ -24,27 +24,27 @@ const BACKSWING_OFFSET = 60; // px
 const IDLE_CARD_COUNT = 21;
 const MIN_CARD_IN_ROLL = 75;
 
-export type WeightedOption<T> = { value: T; weight: number; label: string };
+export type WeightedOption<T> = { value: T; weight: number; label: string; imageUrl: string };
 
-function weightedRandom<T>(options: WeightedOption<T>[]): T {
+function weightedRandom<T>(options: WeightedOption<T>[]): WeightedOption<T> {
   const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
   let r = Math.random() * totalWeight;
   for (const opt of options) {
-    if (r < opt.weight) return opt.value;
+    if (r < opt.weight) return opt;
     r -= opt.weight;
   }
   // Fallback, should not happen if weights > 0
-  return options[options.length - 1].value;
+  return options[options.length - 1];
 }
 
-function generateList<T>(len: number, options: WeightedOption<T>[]): T[] {
+function generateList<T>(len: number, options: WeightedOption<T>[]): WeightedOption<T>[] {
   if (options.length === 0) {
     throw new Error('Need at least 2 options for neighbor constraint.');
   }
   if (options.length === 1) {
-    return Array(len).fill(options[0].value);
+    return Array(len).fill(options[0]);
   }
-  const result: T[] = [];
+  const result: WeightedOption<T>[] = [];
   for (let i = 0; i < len; i++) {
     // Filter out the previous item to avoid duplicates
     const available = i === 0 ? options : options.filter(opt => opt.value !== result[i - 1]);
@@ -58,26 +58,28 @@ function generateList<T>(len: number, options: WeightedOption<T>[]): T[] {
   return result;
 }
 
-function getRandomExcept<T>(options: WeightedOption<T>[], exclude: T): T {
+function getRandomExcept<T>(
+  options: WeightedOption<T>[],
+  exclude: WeightedOption<T>
+): WeightedOption<T> {
   if (options.length === 0) {
     throw new Error('Need at least 1 option');
   }
 
-  const available = options.filter(opt => exclude !== opt.value);
+  const available = options.filter(opt => exclude.value !== opt.value);
 
   if (available.length === 0) {
     throw new Error('No valid options to choose after excluding');
   }
 
-  return available[Math.floor(Math.random() * available.length)].value;
+  return available[Math.floor(Math.random() * available.length)];
 }
 
 type Props<T> = {
   options: WeightedOption<T>[];
-  imagesMap: Record<string, string>;
   header: string;
-  onFinished: (option: T) => Promise<void>;
-  getWinnerText: (option: T) => string;
+  onFinished: (option: WeightedOption<T>) => Promise<void>;
+  getWinnerText: (option: WeightedOption<T>) => string;
 };
 
 export default function GenericRoller<T>({
@@ -85,7 +87,6 @@ export default function GenericRoller<T>({
   header,
   getWinnerText,
   onFinished,
-  imagesMap,
 }: Props<T>) {
   const rouletteRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
@@ -96,7 +97,7 @@ export default function GenericRoller<T>({
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [rollPhase, setRollPhase] = useState<'idle' | 'rolling' | 'finished'>('idle');
-  const [cardList, setCardList] = useState<T[]>([]);
+  const [cardList, setCardList] = useState<WeightedOption<T>[]>([]);
 
   let headerText = header;
   if (winnerIndex !== null) {
@@ -272,7 +273,6 @@ export default function GenericRoller<T>({
           <div className="absolute z-20 bottom-0 -translate-x-1/2 translate-y-1/2 border-l-[18px] border-r-[18px] border-b-[18px] border-l-transparent border-r-transparent border-primary" />{' '}
           <div ref={rouletteRef} style={{ gap: `${GAP}px` }} className=" flex items-center">
             {cardList.map((item, idx) => {
-              const picture = imagesMap[String(item)] ?? '';
               const isWinner = idx === winnerIndex;
               return (
                 <Card
@@ -289,7 +289,7 @@ export default function GenericRoller<T>({
                     }
                   )}
                 >
-                  <img src={picture} className="absolute top-0" />
+                  <img src={item.imageUrl} className="absolute top-0" />
                   <CardFooter className="z-10">{String(item)}</CardFooter>
                 </Card>
               );

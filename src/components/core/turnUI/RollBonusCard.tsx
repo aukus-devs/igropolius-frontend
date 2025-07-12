@@ -4,7 +4,6 @@ import usePlayerStore from '@/stores/playerStore';
 import { useMutation } from '@tanstack/react-query';
 import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
-import { useMemo } from 'react';
 
 export default function RollBonusCard() {
   const { receiveBonusCard, myPlayer } = usePlayerStore(
@@ -20,12 +19,12 @@ export default function RollBonusCard() {
     },
   });
 
-  const handleFinished = async (option: BonusCardType) => {
-    await doReceiveBonusCard(option);
+  const handleFinished = async (option: WeightedOption<BonusCardType>) => {
+    await doReceiveBonusCard(option.value);
   };
 
-  const getWinnerText = (option: BonusCardType) => {
-    return `Вы выиграли карточку "${frontendCardsData[option].name}"`;
+  const getWinnerText = (option: WeightedOption<BonusCardType>) => {
+    return `Вы выиграли карточку "${frontendCardsData[option.value].name}"`;
   };
 
   const myCurrentCards = myPlayer?.bonus_cards ?? [];
@@ -39,21 +38,10 @@ export default function RollBonusCard() {
       value: cardType,
       label: frontendCardsData[cardType].name,
       weight: 1,
+      imageUrl: frontendCardsData[cardType].picture,
     });
     return acc;
   }, [] as WeightedOption<BonusCardType>[]);
-
-  const imagesMap = useMemo(
-    () =>
-      Object.entries(frontendCardsData).reduce(
-        (acc, [cardType, card]) => {
-          acc[cardType] = card.picture;
-          return acc;
-        },
-        {} as Record<string, string>
-      ),
-    []
-  );
 
   return (
     <GenericRoller<BonusCardType>
@@ -61,7 +49,6 @@ export default function RollBonusCard() {
       header={'Ролим бонусную карточку'}
       onFinished={handleFinished}
       getWinnerText={getWinnerText}
-      imagesMap={imagesMap}
     />
   );
 }

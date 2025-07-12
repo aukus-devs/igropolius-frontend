@@ -47,6 +47,7 @@ const usePlayerStore = create<{
   taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
   eventEndTime: number | null;
+  prisonCards: BonusCardType[];
   setMyPlayerId: (id?: number) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: BackendPlayerData[], eventEndTime?: number) => void;
@@ -71,6 +72,7 @@ const usePlayerStore = create<{
   taxPerSector: {},
   turnState: null,
   eventEndTime: null,
+  prisonCards: [],
 
   setMyPlayerId: (id?: number) => {
     const { players, myPlayer } = get();
