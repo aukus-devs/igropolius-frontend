@@ -4,11 +4,13 @@ import { useMemo } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
-import { loseBonusCard } from '@/lib/api';
 
 export default function LoseCardOnDropDialog() {
-  const { playerCards } = usePlayerStore(
-    useShallow(state => ({ playerCards: state.myPlayer?.bonus_cards || [] }))
+  const { playerCards, loseBonusCard } = usePlayerStore(
+    useShallow(state => ({
+      playerCards: state.myPlayer?.bonus_cards || [],
+      loseBonusCard: state.loseBonusCard,
+    }))
   );
 
   const options: WeightedOption<BonusCardType>[] = useMemo(() => {
@@ -41,7 +43,7 @@ export default function LoseCardOnDropDialog() {
 
   return (
     <GenericRoller<BonusCardType>
-      header="Потеря карточки из-за дропа"
+      header="Потеря карточки в тюрьме"
       options={options}
       imagesMap={imagesMap}
       getWinnerText={getWinnerText}

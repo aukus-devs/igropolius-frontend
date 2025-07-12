@@ -26,12 +26,17 @@ import { Euler, Quaternion } from 'three';
 import { getNextTurnState } from '@/lib/utils';
 import {
   giveBonusCard,
+  loseBonusCard as loseBonusCardApi,
   makePlayerMove,
   payTaxes,
   saveTurnState,
   stealBonusCard as stealBonusCardApi,
 } from '@/lib/api';
-import { resetCurrentPlayerQuery, resetPlayersQuery, resetNotificationsQuery } from '@/lib/queryClient';
+import {
+  resetCurrentPlayerQuery,
+  resetPlayersQuery,
+  resetNotificationsQuery,
+} from '@/lib/queryClient';
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -56,6 +61,7 @@ const usePlayerStore = create<{
   stealBonusCard: (player: PlayerData, card: BonusCardType) => Promise<void>;
   moveMyPlayerToPrison: (sectorId: number) => Promise<void>;
   payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
+  loseBonusCard: (type: BonusCardType) => Promise<void>;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -188,7 +194,12 @@ const usePlayerStore = create<{
       return b.total_score - a.total_score;
     });
 
-    set({ players, buildingsPerSector: buildings, taxPerSector, eventEndTime: eventEndTime ?? null });
+    set({
+      players,
+      buildingsPerSector: buildings,
+      taxPerSector,
+      eventEndTime: eventEndTime ?? null,
+    });
   },
 
   animatePlayerMovement: async ({ steps }: { steps: number }) => {
@@ -343,6 +354,13 @@ const usePlayerStore = create<{
     resetNotificationsQuery();
     const { setNextTurnState } = get();
     setNextTurnState({ action: 'skip-bonus' });
+  },
+
+  loseBonusCard: async (type: BonusCardType) => {
+    await loseBonusCardApi(type);
+    resetPlayersQuery();
+    const { setNextTurnState } = get();
+    setNextTurnState({});
   },
 }));
 
