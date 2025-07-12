@@ -6,6 +6,7 @@ import {
   TaxScoreMultiplier,
 } from '@/lib/constants';
 import {
+  ActiveBonusCard,
   BackendPlayerData,
   BonusCardType,
   BuildingData,
@@ -47,7 +48,7 @@ const usePlayerStore = create<{
   taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
   eventEndTime: number | null;
-  prisonCards: BonusCardType[];
+  prisonCards: ActiveBonusCard[];
   setMyPlayerId: (id?: number) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: BackendPlayerData[], eventEndTime?: number) => void;
@@ -137,8 +138,8 @@ const usePlayerStore = create<{
         };
       }
     }
-
-    const players: PlayerData[] = playersData.map(playerData => {
+    const activePlayers = playersData.filter(p => p.role === 'admin' || p.role == 'player');
+    const players: PlayerData[] = activePlayers.map(playerData => {
       const frontendData = playersFrontendData[playerData.username] ?? {
         color: 'white',
       };
@@ -196,11 +197,14 @@ const usePlayerStore = create<{
       return b.total_score - a.total_score;
     });
 
+    const prisonPlayer = playersData.find(p => p.role === 'prison');
+
     set({
       players,
       buildingsPerSector: buildings,
       taxPerSector,
       eventEndTime: eventEndTime ?? null,
+      prisonCards: prisonPlayer?.bonus_cards ?? [],
     });
   },
 

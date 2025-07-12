@@ -355,6 +355,7 @@ export const playersData: BackendPlayerData[] = [
     is_online: true,
     sector_id: 1,
     avatar_link: 'https://github.com/shadcn.png',
+    role: 'admin',
 
     current_game: 'Gothic',
     current_game_updated_at: Math.ceil(Date.now() / 1000),
@@ -481,6 +482,7 @@ export const playersData: BackendPlayerData[] = [
     first_name: 'Илья',
     is_online: false,
     avatar_link: 'https://github.com/shadcn.png',
+    role: 'player',
 
     current_game: 'Gothic',
     current_game_updated_at: Math.ceil(Date.now() / 1000),
@@ -633,6 +635,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
     pointauc_token: 'abc',
+    role: 'player',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -686,6 +689,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
     pointauc_token: 'abc',
+    role: 'player',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -727,6 +731,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
     pointauc_token: 'abc',
+    role: 'player',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -774,6 +779,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
     pointauc_token: 'abc',
+    role: 'player',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -820,6 +826,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
     pointauc_token: 'abc',
+    role: 'player',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -866,6 +873,7 @@ export const playersData: BackendPlayerData[] = [
     current_game_duration: 60,
     current_auc_total_sum: null,
     pointauc_token: 'abc',
+    role: 'player',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',

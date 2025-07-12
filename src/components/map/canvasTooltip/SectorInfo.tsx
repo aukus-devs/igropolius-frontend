@@ -1,7 +1,9 @@
 import { Share } from '@/components/icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { frontendCardsData } from '@/lib/mockData';
 import { SectorData } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
+import { useShallow } from 'zustand/shallow';
 
 type Props = {
   sector: SectorData;
@@ -10,8 +12,16 @@ type Props = {
 function SectorInfo({ sector }: Props) {
   const { id, name, type, rollType } = sector;
 
-  const taxInfo = usePlayerStore(state => state.taxPerSector[id]);
+  const { taxInfo, prisonCards } = usePlayerStore(
+    useShallow(state => ({
+      taxInfo: state.taxPerSector[id],
+      prisonCards: sector.type === 'prison' ? state.prisonCards : null,
+    }))
+  );
   const showTax = sector.type === 'railroad' || sector.type === 'property';
+
+  const showPrisonCards = sector.type === 'prison';
+  const prisonCardsList = prisonCards ?? [];
 
   return (
     <Card className="w-52 pointer-events-none">
@@ -26,6 +36,16 @@ function SectorInfo({ sector }: Props) {
           <div className="flex items-center">
             <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
             <Share className="w-4 h-4" />
+          </div>
+        )}
+        {showPrisonCards && (
+          <div>
+            <div className="text-sm">Хранилище:</div>
+            <div className="flex gap-1">
+              {prisonCardsList.map(c => (
+                <img className="w-5 h-10" src={frontendCardsData[c.bonus_type].picture} />
+              ))}
+            </div>
           </div>
         )}
       </CardContent>

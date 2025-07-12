@@ -71,11 +71,11 @@ export default function PrisonEnterCardRoll() {
         result.push({
           value: {
             action: 'receive-card',
-            card,
+            card: card.bonus_type,
           },
-          label: `Получить ${frontendCardsData[card].name}`,
+          label: `Получить ${frontendCardsData[card.bonus_type].name}`,
           weight: prisonCardWeight,
-          imageUrl: frontendCardsData[card].picture,
+          imageUrl: frontendCardsData[card.bonus_type].picture,
         });
       });
     } else {

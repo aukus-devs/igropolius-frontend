@@ -1,10 +1,8 @@
 import { SECTOR_CONTENT_ELEVATION, SECTOR_DEPTH } from '@/lib/constants';
-import { BuildingType, GameLength, playerColors, Vector3Array } from '@/lib/types';
-import { playersData } from '@/lib/mockData';
+import { Vector3Array } from '@/lib/types';
 import BuildingModel from '../models/BuildingModel';
 import { InstanceProps } from '@react-three/fiber';
 import usePlayerStore from '@/stores/playerStore';
-import { useMemo } from 'react';
 
 type Props = {
   sectorId: number;
@@ -27,35 +25,6 @@ function getBuildingPosition(index: number): Vector3Array {
   const z = row * SIZE_WITH_GAP - (ROWS - 1) * SIZE_WITH_GAP;
 
   return [x, SECTOR_CONTENT_ELEVATION, z];
-}
-
-function getDemoBuildings(sectorId: number) {
-  const maxGames = 16;
-
-  const types: BuildingType[] = [
-    'ruins',
-    'small_buildingD',
-    'skyscraperA',
-    'skyscraperD',
-    'skyscraperE',
-    'skyscraperB',
-    'skyscraperX',
-  ];
-  const lengths: GameLength[] = ['2-5', '5-10', '10-15', '15-20', '20-25', '25+'];
-
-  return Array.from({ length: maxGames }, () => ({
-    type: types[Math.floor(Math.random() * types.length)],
-    owner: {
-      ...playersData[Math.floor(Math.random() * playersData.length)],
-      color:
-        Object.values(playerColors)[Math.floor(Math.random() * Object.values(playerColors).length)],
-      avatar_link: 'https://github.com/shadcn.png',
-    },
-    sectorId,
-    createdAt: 1,
-    gameLength: lengths[Math.floor(Math.random() * lengths.length)],
-    gameTitle: 'Haste',
-  }));
 }
 
 function SectorBuildings({ sectorId, models }: Props) {
