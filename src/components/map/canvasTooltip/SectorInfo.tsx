@@ -42,8 +42,8 @@ function SectorInfo({ sector }: Props) {
           <div>
             <div className="text-sm">Хранилище:</div>
             <div className="flex gap-1">
-              {prisonCardsList.map(c => (
-                <img className="w-5 h-10" src={frontendCardsData[c.bonus_type].picture} />
+              {prisonCardsList.map((c, id) => (
+                <img key={id} className="w-5 h-10" src={frontendCardsData[c.bonus_type].picture} />
               ))}
             </div>
           </div>
