@@ -288,7 +288,10 @@ function getNextState({
       ) {
         return 'stop';
       }
-      return 'using-prison-bonuses';
+      if (sector.type === 'prison') {
+        return 'entering-prison';
+      }
+      return 'using-reroll-bonuses';
     case 'using-prison-bonuses':
       if (sector.type === 'prison' && hasPrisonCard && !skipBonus) {
         if (action === 'skip-prison') {
