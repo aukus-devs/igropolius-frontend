@@ -72,10 +72,7 @@ export default function PlayerTurnUI() {
         return <NoCardsForPrisonDialog />;
       }
       return <PrisonEnterCardRoll />;
-    case 'drop-random-card-in-prison':
-      return <LoseCardOnDropDialog />;
-    case 'receive-card-from-prison':
-      return <RollBonusCard />;
+
     case 'drop-random-card':
       return <LoseCardOnDropDialog />;
     default: {

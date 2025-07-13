@@ -47,7 +47,7 @@ function generateList<T>(len: number, options: WeightedOption<T>[]): WeightedOpt
   const result: WeightedOption<T>[] = [];
   for (let i = 0; i < len; i++) {
     // Filter out the previous item to avoid duplicates
-    const available = i === 0 ? options : options.filter(opt => opt.value !== result[i - 1]);
+    const available = i === 0 ? options : options.filter(opt => opt.value !== result[i - 1].value);
     if (available.length === 0) {
       throw new Error('No valid options to choose from at position ' + i);
     }
@@ -78,6 +78,8 @@ function getRandomExcept<T>(
 type Props<T> = {
   options: WeightedOption<T>[];
   header: string;
+  openButtonText: string;
+  finishButtonText: string;
   onFinished: (option: WeightedOption<T>) => Promise<void>;
   getWinnerText: (option: WeightedOption<T>) => string;
 };
@@ -85,6 +87,8 @@ type Props<T> = {
 export default function GenericRoller<T>({
   options: rollOptions,
   header,
+  openButtonText,
+  finishButtonText,
   getWinnerText,
   onFinished,
 }: Props<T>) {
@@ -255,7 +259,7 @@ export default function GenericRoller<T>({
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">Зароллить карточку</Button>
+        <Button variant="outline">{openButtonText}</Button>
       </DialogTrigger>
       <DialogContent
         className="flex flex-col items-center justify-center w-full min-w-full h-screen md:backdrop-blur-none md:rounded-none m-0 p-0 md:bg-transparent overflow-hidden"
@@ -290,7 +294,7 @@ export default function GenericRoller<T>({
                   )}
                 >
                   <img src={item.imageUrl} className="absolute top-0" />
-                  <CardFooter className="z-10">{String(item)}</CardFooter>
+                  <CardFooter className="z-10">{String(item.label)}</CardFooter>
                 </Card>
               );
             })}
@@ -320,7 +324,7 @@ export default function GenericRoller<T>({
               handleOpenChange(false);
             }}
           >
-            Готово
+            {finishButtonText}
             {/* {isLoading && (
               <LoaderCircleIcon color="white" className="animate-spin text-primary" size={24} />
             )} */}

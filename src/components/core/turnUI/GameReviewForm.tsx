@@ -9,7 +9,7 @@ import Rating from '../Rating';
 import { GameLength, GameStatusType } from '@/lib/types';
 import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
-import { queryKeys, resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
+import { queryKeys } from '@/lib/queryClient';
 import { ArrowRight, X } from '../../icons';
 import { searchGames, IGDBGame } from '@/lib/api';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
@@ -367,8 +367,6 @@ function GameReviewForm() {
     }
     await setNextTurnState(turnParams);
     setOpen(false);
-    resetPlayersQuery();
-    resetCurrentPlayerQuery();
   };
 
   return (

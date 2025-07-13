@@ -18,13 +18,16 @@ type ReceiveCard = {
 type RollOptionType = 'nothing' | LoseCard | ReceiveCard;
 
 export default function PrisonEnterCardRoll() {
-  const { setNextTurnState, playerCards, prisonCards } = usePlayerStore(
-    useShallow(state => ({
-      setNextTurnState: state.setNextTurnState,
-      playerCards: state.myPlayer?.bonus_cards ?? [],
-      prisonCards: state.prisonCards,
-    }))
-  );
+  const { setNextTurnState, playerCards, prisonCards, receiveBonusCard, dropBonusCard } =
+    usePlayerStore(
+      useShallow(state => ({
+        setNextTurnState: state.setNextTurnState,
+        playerCards: state.myPlayer?.bonus_cards ?? [],
+        prisonCards: state.prisonCards,
+        receiveBonusCard: state.receiveBonusCard,
+        dropBonusCard: state.dropBonusCard,
+      }))
+    );
 
   const getWinnerText = (option: WeightedOption<RollOptionType>) => {
     if (option.value === 'nothing') {
@@ -46,11 +49,11 @@ export default function PrisonEnterCardRoll() {
       return;
     }
     if (option.value.action === 'lose-card') {
-      setNextTurnState({ action: 'drop-card' });
+      await dropBonusCard(option.value.card);
       return;
     }
     if (option.value.action === 'receive-card') {
-      setNextTurnState({ action: 'receive-card' });
+      await receiveBonusCard(option.value.card);
       return;
     }
   };
@@ -107,6 +110,8 @@ export default function PrisonEnterCardRoll() {
   return (
     <GenericRoller<RollOptionType>
       header="Потеря карточки в тюрьме"
+      openButtonText="Войти в тюрьму"
+      finishButtonText="Готово"
       options={options}
       getWinnerText={getWinnerText}
       onFinished={handleFinished}

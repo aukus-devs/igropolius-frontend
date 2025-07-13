@@ -46,7 +46,9 @@ export default function RollBonusCard() {
   return (
     <GenericRoller<BonusCardType>
       options={weightedOptions}
-      header={'Ролим бонусную карточку'}
+      header="Ролим бонусную карточку"
+      openButtonText="Получить карточку"
+      finishButtonText="Получить карточку"
       onFinished={handleFinished}
       getWinnerText={getWinnerText}
     />

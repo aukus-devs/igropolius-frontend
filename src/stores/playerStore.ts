@@ -27,7 +27,7 @@ import { Euler, Quaternion } from 'three';
 import { getNextTurnState } from '@/lib/utils';
 import {
   giveBonusCard,
-  loseBonusCard as loseBonusCardApi,
+  loseBonusCard,
   makePlayerMove,
   payTaxes,
   saveTurnState,
@@ -59,11 +59,11 @@ const usePlayerStore = create<{
     prevSectorId?: number;
     action?: PlayerStateAction;
   }) => Promise<void>;
-  receiveBonusCard: (type: BonusCardType) => void;
+  receiveBonusCard: (type: BonusCardType) => Promise<void>;
+  dropBonusCard: (type: BonusCardType) => Promise<void>;
   stealBonusCard: (player: PlayerData, card: BonusCardType) => Promise<void>;
-  moveMyPlayerToPrison: (sectorId: number) => Promise<void>;
+  moveMyPlayerToPrison: () => Promise<void>;
   payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
-  loseBonusCard: (type: BonusCardType) => Promise<void>;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -323,9 +323,16 @@ const usePlayerStore = create<{
     resetNotificationsQuery();
   },
 
-  moveMyPlayerToPrison: async (sectorId: number) => {
+  moveMyPlayerToPrison: async () => {
     const { myPlayer, animatePlayerMovement } = get();
     if (!myPlayer) return;
+
+    // if (!sectorId) {
+    const prisonSectors = [11, 31];
+    const sectorId = prisonSectors.reduce((prev, curr) =>
+      Math.abs(curr - myPlayer.sector_id) < Math.abs(prev - myPlayer.sector_id) ? curr : prev
+    );
+    // }
 
     const steps = sectorId - myPlayer.sector_id;
     await animatePlayerMovement({ steps });
@@ -348,6 +355,24 @@ const usePlayerStore = create<{
     await setNextTurnState({});
   },
 
+  dropBonusCard: async (type: BonusCardType) => {
+    const { setNextTurnState } = get();
+    await loseBonusCard(type);
+
+    // remove card from player before updating turn state
+    set(state => ({
+      myPlayer: state.myPlayer
+        ? {
+            ...state.myPlayer,
+            bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
+          }
+        : null,
+    }));
+    resetPlayersQuery();
+    resetNotificationsQuery();
+    await setNextTurnState({});
+  },
+
   stealBonusCard: async (player: PlayerData, card: BonusCardType) => {
     const { setNextTurnState } = get();
     await stealBonusCardApi(player.id, card);
@@ -362,12 +387,12 @@ const usePlayerStore = create<{
     setNextTurnState({ action: 'skip-bonus' });
   },
 
-  loseBonusCard: async (type: BonusCardType) => {
-    await loseBonusCardApi(type);
-    resetPlayersQuery();
-    const { setNextTurnState } = get();
-    setNextTurnState({});
-  },
+  // loseBonusCard: async (type: BonusCardType) => {
+  //   await loseBonusCardApi(type);
+  //   resetPlayersQuery();
+  //   const { setNextTurnState } = get();
+  //   setNextTurnState({});
+  // },
 }));
 
 export default usePlayerStore;

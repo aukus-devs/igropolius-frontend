@@ -337,16 +337,6 @@ function getNextState({
     case 'drop-random-card':
       return 'entering-prison';
     case 'entering-prison':
-      if (action === 'drop-card') {
-        return 'drop-random-card-in-prison';
-      }
-      if (action === 'receive-card') {
-        return 'receive-card-from-prison';
-      }
-      return 'using-prison-bonuses';
-    case 'drop-random-card-in-prison':
-      return 'using-prison-bonuses';
-    case 'receive-card-from-prison':
       return 'using-prison-bonuses';
     case 'stealing-bonus-card':
       return 'rolling-dice';

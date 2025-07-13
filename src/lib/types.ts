@@ -237,19 +237,11 @@ export type PlayerTurnState =
   | 'using-street-tax-bonuses'
   | 'drop-random-card'
   | 'entering-prison'
-  | 'drop-random-card-in-prison'
-  | 'receive-card-from-prison'
   | 'stealing-bonus-card'
   | 'choosing-building-sector'
   | 'using-map-tax-bonuses-after-train-ride';
 
-export type PlayerStateAction =
-  | 'skip-bonus'
-  | 'skip-prison'
-  | 'drop-game'
-  | 'reroll-game'
-  | 'drop-card'
-  | 'receive-card';
+export type PlayerStateAction = 'skip-bonus' | 'skip-prison' | 'drop-game' | 'reroll-game';
 
 export type ActiveBonusCard = {
   bonus_type: BonusCardType;

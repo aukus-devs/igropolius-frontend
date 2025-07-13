@@ -4,12 +4,15 @@ import { useMemo } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
+import { loseBonusCard } from '@/lib/api';
+import { resetPlayersQuery } from '@/lib/queryClient';
 
 export default function LoseCardOnDropDialog() {
-  const { playerCards, loseBonusCard } = usePlayerStore(
+  const { playerCards, moveToPrison, setNextTurnState } = usePlayerStore(
     useShallow(state => ({
       playerCards: state.myPlayer?.bonus_cards || [],
-      loseBonusCard: state.loseBonusCard,
+      moveToPrison: state.moveMyPlayerToPrison,
+      setNextTurnState: state.setNextTurnState,
     }))
   );
 
@@ -27,12 +30,17 @@ export default function LoseCardOnDropDialog() {
   };
 
   const handleFinished = async (option: WeightedOption<BonusCardType>) => {
-    loseBonusCard(option.value);
+    await loseBonusCard(option.value);
+    await moveToPrison();
+    await setNextTurnState({});
+    resetPlayersQuery();
   };
 
   return (
     <GenericRoller<BonusCardType>
-      header="Потеря карточки в тюрьме"
+      header="Потеря карточки за дроп"
+      openButtonText="Дропнуть карточку"
+      finishButtonText="Дропнуть и пойти в тюрьму"
       options={options}
       getWinnerText={getWinnerText}
       onFinished={handleFinished}

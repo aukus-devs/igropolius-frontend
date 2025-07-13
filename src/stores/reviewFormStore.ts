@@ -2,7 +2,6 @@ import { saveGameReview, IGDBGame } from '@/lib/api';
 import { ScoreByGameLength, SectorScoreMultiplier } from '@/lib/constants';
 import { GameLength, GameStatusType, ScoreDetails } from '@/lib/types';
 import { create } from 'zustand';
-import usePlayerStore from './playerStore';
 import { SectorsById } from '@/lib/mockData';
 import { resetNotificationsQuery } from '@/lib/queryClient';
 
@@ -44,7 +43,6 @@ const useReviewFormStore = create<{
   clearError: () => set({ error: null }),
   sendReview: async (scores: number) => {
     const { rating, gameTitle, gameTime, gameStatus, gameReview, selectedGame } = get();
-    const { moveMyPlayerToPrison } = usePlayerStore.getState();
 
     if (!gameStatus) {
       throw new Error('Game status is required');
@@ -58,7 +56,7 @@ const useReviewFormStore = create<{
     set({ isSubmitting: true, error: null });
 
     try {
-      const response = await saveGameReview({
+      await saveGameReview({
         title: gameTitle,
         status: gameStatus,
         rating,
@@ -79,10 +77,6 @@ const useReviewFormStore = create<{
         selectedGame: null,
         error: null,
       });
-
-      if (gameStatus === 'drop') {
-        await moveMyPlayerToPrison(response.new_sector_id);
-      }
     } catch (error) {
       console.error('Review submission failed:', error);
       set({ error: 'Не удалось отправить отзыв. Попробуйте еще раз.' });
