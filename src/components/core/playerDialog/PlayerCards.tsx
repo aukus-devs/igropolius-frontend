@@ -1,8 +1,7 @@
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { frontendCardsData } from "@/lib/mockData";
 import { ActiveBonusCard, PlayerData } from "@/lib/types";
 import usePlayerStore from "@/stores/playerStore";
-import { useState } from "react";
 
 type Props = {
   player: PlayerData;
@@ -16,7 +15,7 @@ export default function PlayerCards({ player }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex gap-2">
       {player.bonus_cards.map((card, index) => (
         <PlayerCard
           key={index}
@@ -31,28 +30,25 @@ export default function PlayerCards({ player }: Props) {
 }
 
 function PlayerCard({ card, onSelect }: { card: ActiveBonusCard; onSelect: () => void }) {
-  const [open, setOpen] = useState(false);
-
   const cardData = frontendCardsData[card.bonus_type];
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <div
-          className="w-[32px] h-[45px] rounded-lg"
-          onMouseEnter={() => setOpen(true)}
-          onMouseLeave={() => setOpen(false)}
-          onClick={(e) => {
-            onSelect();
-            e.stopPropagation();
-          }}
-        >
-          <img src={cardData.picture} />
-        </div>
-      </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-3">
-        <div>{cardData.description}</div>
-      </PopoverContent>
-    </Popover>
+    <Tooltip delayDuration={0}>
+      <TooltipTrigger
+        className="flex w-[32px] h-[45px] rounded-sm overflow-hidden"
+        onClick={() => onSelect()}
+      >
+        <img src={cardData.picture} />
+      </TooltipTrigger>
+      <TooltipContent
+        className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3"
+        side="bottom"
+        align="start"
+        sideOffset={8}
+      >
+        <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
+        <div className="text-base font-semibold text-muted-foreground">{cardData.description}</div>
+      </TooltipContent>
+    </Tooltip>
   );
 }

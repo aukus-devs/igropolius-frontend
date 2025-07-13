@@ -15,6 +15,7 @@ import CanvasTooltip from './components/map/canvasTooltip/CanvasTooltip';
 import SceneLoader from './components/map/SceneLoader';
 import useDiceStore from './stores/diceStore';
 import useAdminStore from './stores/adminStore';
+import { TooltipProvider } from './components/ui/tooltip';
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -95,7 +96,9 @@ function App() {
     <KeyboardControls map={map}>
       <div className="h-screen">
         <CanvasTooltip />
-        <UI />
+        <TooltipProvider>
+          <UI />
+        </TooltipProvider>
         <Canvas>
           <Suspense fallback={<SceneLoader />}>
             <Scene />
