@@ -74,6 +74,9 @@ export default function PlayerTurnUI() {
       return <PrisonEnterCardRoll />;
 
     case 'drop-random-card':
+      if (myPlayerHasNoCards) {
+        return <NoCardsForDropDialog />;
+      }
       return <LoseCardOnDropDialog />;
     default: {
       const error: never = turnState;
@@ -105,6 +108,24 @@ function NoCardsForPrisonDialog() {
   return (
     <Card className="p-4">
       <span className="font-wide-semibold">Нет карточек для ролла в тюрьме</span>
+      <div className="flex justify-evenly mt-2 gap-2">
+        <Button
+          variant="outline"
+          className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
+          onClick={() => setNextTurnState({})}
+        >
+          Продолжить
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
+function NoCardsForDropDialog() {
+  const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
+  return (
+    <Card className="p-4">
+      <span className="font-wide-semibold">Нет карточек для дропа</span>
       <div className="flex justify-evenly mt-2 gap-2">
         <Button
           variant="outline"
