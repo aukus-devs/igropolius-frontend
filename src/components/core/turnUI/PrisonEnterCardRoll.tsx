@@ -109,7 +109,7 @@ export default function PrisonEnterCardRoll() {
 
   return (
     <GenericRoller<RollOptionType>
-      header="Потеря карточки в тюрьме"
+      header="Вход в тюрьму"
       openButtonText="Войти в тюрьму"
       finishButtonText="Готово"
       options={options}
