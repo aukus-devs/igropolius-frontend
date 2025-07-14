@@ -10,12 +10,14 @@ import DiceErrorNotification from './core/DiceErrorNotification';
 import PlayerTurnUI from './core/turnUI/PlayerTurnUI';
 import useAdminStore from '@/stores/adminStore';
 import AdminPanel from './core/AdminPanel';
+import MyCards from './core/MyCards';
 
 function DesktopUI() {
-  const { turnState, position } = usePlayerStore(
+  const { turnState, position, loggedIn } = usePlayerStore(
     useShallow(state => ({
       turnState: state.turnState,
       position: state.myPlayer?.sector_id,
+      loggedIn: !!state.myPlayer,
     }))
   );
 
@@ -42,6 +44,11 @@ function DesktopUI() {
       {showAdminPanel && (
         <div className="absolute top-3 right-70">
           <AdminPanel />
+        </div>
+      )}
+      {loggedIn && (
+        <div className="absolute left-4 bottom-20">
+          <MyCards />
         </div>
       )}
 
