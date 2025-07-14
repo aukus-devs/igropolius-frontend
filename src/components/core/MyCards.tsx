@@ -12,10 +12,10 @@ export default function MyCards() {
     <Card className="p-2 gap-2" style={{ width: '300px' }}>
       <span>Мои карточки</span>
       <div className="flex flex-wrap gap-2 ">
-        {cards.map(card => {
+        {cards.map((card, idx) => {
           const cardData = frontendCardsData[card.bonus_type];
           return (
-            <Tooltip delayDuration={0}>
+            <Tooltip delayDuration={0} key={idx}>
               <TooltipTrigger className="flex w-[32px] h-[45px] rounded-sm overflow-hidden">
                 <img src={cardData.picture} />
               </TooltipTrigger>

@@ -14,6 +14,7 @@ import LoseCardOnDropDialog from './LoseCardOnDropDialog';
 import PrisonEnterCardRoll from './PrisonEnterCardRoll';
 import GameRerollDialog from './GameRerollDialog';
 import SelectBuildingSectorDialog from './SelectingBuildingSectorDialog';
+import { makePlayerMove } from '@/lib/api';
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving, hasCardsToSteal, prisonHasNoCards, myPlayerHasNoCards } =
@@ -128,7 +129,12 @@ function NoCardsForPrisonDialog() {
 }
 
 function NoCardsForDropDialog() {
-  const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
+  const { setNextTurnState, moveMyPlayerToPrison } = usePlayerStore(
+    useShallow(state => ({
+      setNextTurnState: state.setNextTurnState,
+      moveMyPlayerToPrison: state.moveMyPlayerToPrison,
+    }))
+  );
   return (
     <Card className="p-4">
       <span className="font-wide-semibold">Нет карточек для дропа</span>
@@ -136,7 +142,11 @@ function NoCardsForDropDialog() {
         <Button
           variant="outline"
           className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
-          onClick={() => setNextTurnState({})}
+          onClick={async () => {
+            await makePlayerMove({ type: 'drop-to-prison', selected_die: null, adjust_by_1: null });
+            await moveMyPlayerToPrison();
+            await setNextTurnState({});
+          }}
         >
           Продолжить
         </Button>

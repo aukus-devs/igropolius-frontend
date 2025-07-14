@@ -95,8 +95,6 @@ function GameReview() {
   const gameReview = useReviewFormStore(state => state.gameReview);
   const setGameReview = useReviewFormStore(state => state.setGameReview);
 
-  console.log('review', gameReview);
-
   return (
     <Textarea
       className="resize-none h-full"
