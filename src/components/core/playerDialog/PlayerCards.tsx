@@ -10,10 +10,10 @@ type Props = {
 };
 
 export default function PlayerCards({ player }: Props) {
-  const { stealBonusCard, isMyPlayer } = usePlayerStore(
+  const { stealBonusCard, myCards } = usePlayerStore(
     useShallow(state => ({
       stealBonusCard: state.stealBonusCard,
-      isMyPlayer: state.myPlayerId === player.id,
+      myCards: state.myPlayer?.bonus_cards || [],
     }))
   );
 
@@ -23,16 +23,19 @@ export default function PlayerCards({ player }: Props) {
 
   return (
     <div className="flex gap-2">
-      {player.bonus_cards.map((card, index) => (
-        <PlayerCard
-          key={index}
-          card={card}
-          isMyPlayer={isMyPlayer}
-          onSelect={() => {
-            stealBonusCard(player, card.bonus_type);
-          }}
-        />
-      ))}
+      {player.bonus_cards.map((card, index) => {
+        const canSteal = !myCards.some(myCard => myCard.bonus_type === card.bonus_type);
+        return (
+          <PlayerCard
+            key={index}
+            card={card}
+            canBeStolen={canSteal}
+            onSelect={() => {
+              stealBonusCard(player, card.bonus_type);
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -40,11 +43,11 @@ export default function PlayerCards({ player }: Props) {
 function PlayerCard({
   card,
   onSelect,
-  isMyPlayer,
+  canBeStolen,
 }: {
   card: ActiveBonusCard;
   onSelect: () => void;
-  isMyPlayer: boolean;
+  canBeStolen: boolean;
 }) {
   const cardData = frontendCardsData[card.bonus_type];
 
@@ -61,7 +64,7 @@ function PlayerCard({
       >
         <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
         <div className="text-base font-semibold text-muted-foreground">{cardData.description}</div>
-        {!isMyPlayer && (
+        {canBeStolen && (
           <div className="mt-2 w-full">
             <Button className="w-full" onClick={() => onSelect()}>
               Своровать

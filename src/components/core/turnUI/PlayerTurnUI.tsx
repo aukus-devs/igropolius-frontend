@@ -16,16 +16,18 @@ import GameRerollDialog from './GameRerollDialog';
 import SelectBuildingSectorDialog from './SelectingBuildingSectorDialog';
 
 export default function PlayerTurnUI() {
-  const { turnState, isPlayerMoving, playersHaveNoCards, prisonHasNoCards, myPlayerHasNoCards } =
+  const { turnState, isPlayerMoving, hasCardsToSteal, prisonHasNoCards, myPlayerHasNoCards } =
     usePlayerStore(
       useShallow(state => {
-        const hasAnyCards = state.players.some(
-          player => player.id !== state.myPlayerId && player.bonus_cards.length > 0
+        const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
+        const otherPlayers = state.players.filter(player => player.id !== state.myPlayerId);
+        const cardsToSteal = otherPlayers.flatMap(player =>
+          player.bonus_cards.filter(card => !myCardsSet.has(card.bonus_type))
         );
         return {
           turnState: state.turnState,
           isPlayerMoving: state.isPlayerMoving,
-          playersHaveNoCards: !hasAnyCards,
+          hasCardsToSteal: cardsToSteal.length > 0,
           myPlayerHasNoCards: (state.myPlayer?.bonus_cards.length ?? 0) === 0,
           prisonHasNoCards: state.prisonCards.length === 0,
         };
@@ -61,7 +63,7 @@ export default function PlayerTurnUI() {
     case 'using-map-tax-bonuses-after-train-ride':
       return <SkipMapTaxDialog />;
     case 'stealing-bonus-card':
-      if (playersHaveNoCards) {
+      if (!hasCardsToSteal) {
         return <NoCardsToStealDialog />;
       }
       return null; // No UI for stealing bonus card, handled in PlayerCards
@@ -89,7 +91,11 @@ function NoCardsToStealDialog() {
   const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
   return (
     <Card className="p-4">
-      <span className="font-wide-semibold">Сейчас у игроков нет карточек для воровства</span>
+      <span className="font-wide-semibold">
+        Сейчас у игроков нет карточек
+        <br />
+        которые можно своровать
+      </span>
       <div className="flex justify-evenly mt-2 gap-2">
         <Button
           variant="outline"
