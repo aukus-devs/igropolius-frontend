@@ -15,6 +15,7 @@ import PrisonEnterCardRoll from './PrisonEnterCardRoll';
 import GameRerollDialog from './GameRerollDialog';
 import SelectBuildingSectorDialog from './SelectingBuildingSectorDialog';
 import { makePlayerMove } from '@/lib/api';
+import RollWithInstantCards from './RollWithInstantCards';
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving, hasCardsToSteal, prisonHasNoCards, myPlayerHasNoCards } =
@@ -48,7 +49,12 @@ export default function PlayerTurnUI() {
     case 'choosing-train-ride':
       return <TrainMoveDialog />;
     case 'filling-game-review':
-      return <GameReviewForm />;
+      return (
+        <div className="flex gap-4">
+          <RollWithInstantCards />
+          <GameReviewForm />
+        </div>
+      );
     case 'rolling-bonus-card':
       return <RollBonusCard />;
     case 'using-dice-bonuses':

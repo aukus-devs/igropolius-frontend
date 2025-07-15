@@ -6,6 +6,7 @@ import {
   PlayerFrontendData,
   BackendPlayerData,
   BonusCardType,
+  InstantCardType,
 } from '@/lib/types';
 
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
@@ -948,6 +949,69 @@ export const frontendCardsData: Record<BonusCardType, FrontendCardData> = {
     picture: 'https://placehold.co/744x1039/FF9F0A/FF9F0A',
     description:
       'Можно попросить помощи у друзей - позволяет в любой момент игры попросить помощи у других игроков, которые могут помочь с деньгами или бонусами.',
+  },
+};
+
+export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData> = {
+  'receive-1-percent-from-all': {
+    name: '1% от всех',
+    picture: 'https://placehold.co/744x1039/FF2D55/FF2D55',
+    description: 'Получить 1% от всех игроков - позволяет получить 1% от всех игроков в игре.',
+  },
+  'receive-scores-for-place': {
+    name: 'Очки за место',
+    picture: 'https://placehold.co/744x1039/FF9500/FF9500',
+    description: 'Получить процент очков равный месту.',
+  },
+  'receive-5-percent-or-reroll': {
+    name: '5% или реролл',
+    picture: 'https://placehold.co/744x1039/FFCC00/FFCC00',
+    description: 'Получить 5% очков если находишься в нижней части таблицы, иначе реролл.',
+  },
+  'receive-3-percent': {
+    name: 'получить 3%',
+    picture: 'https://placehold.co/744x1039/4CD964/4CD964',
+    description: 'Получить 3% очков.',
+  },
+  'leaders-lose-percents': {
+    name: 'Лидеры теряют',
+    picture: 'https://placehold.co/744x1039/5AC8FA/5AC8FA',
+    description: 'Топ 3 места теряют 3%, 2% и 1% очков соответственно.',
+  },
+  'receive-1-percent-plus-20': {
+    name: '1% плюс 20',
+    picture: 'https://placehold.co/744x1039/FF375F/FF375F',
+    description: 'Получить 1% плюс 20 очков.',
+  },
+  'lose-2-percents': {
+    name: 'Потерять 2%',
+    picture: 'https://placehold.co/744x1039/FF3B30/FF3B30',
+    description: 'Потерять 2% очков.',
+  },
+  reroll: {
+    name: 'Реролл',
+    picture: 'https://placehold.co/744x1039/FF9500/FF9500',
+    description: 'Реролл карточки.',
+  },
+  'reroll-and-roll': {
+    name: 'Двойной ролл',
+    picture: 'https://placehold.co/744x1039/FFCC00/FFCC00',
+    description: 'Реролл этого колеса 2 раза.',
+  },
+  'lose-card-or-3-percent': {
+    name: 'Потерять карточку или 3%',
+    picture: 'https://placehold.co/744x1039/4CD964/4CD964',
+    description: 'Потерять одну карточку или 3% очков если карточек нет.',
+  },
+  'upgrade-next-building': {
+    name: 'Улучшить следующее здание',
+    picture: 'https://placehold.co/744x1039/5AC8FA/5AC8FA',
+    description: 'Улучшить следующее здание на карте.',
+  },
+  'downgrade-next-building': {
+    name: 'Понизить следующее здание',
+    picture: 'https://placehold.co/744x1039/FF2D55/FF2D55',
+    description: 'Понизить следующее здание на карте.',
   },
 };
 

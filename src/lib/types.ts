@@ -183,6 +183,22 @@ export type BonusCardType =
   | 'evade-map-tax'
   | 'game-help-allowed';
 
+export type InstantCardType =
+  | 'receive-1-percent-from-all'
+  | 'receive-scores-for-place'
+  | 'receive-5-percent-or-reroll'
+  | 'receive-3-percent'
+  | 'leaders-lose-percents'
+  | 'receive-1-percent-plus-20'
+  | 'upgrade-next-building'
+  | 'downgrade-next-building'
+  | 'lose-2-percents'
+  | 'reroll'
+  | 'reroll-and-roll'
+  | 'lose-card-or-3-percent';
+
+export type AllCardsType = BonusCardType | InstantCardType;
+
 export type DiceRollJson = {
   is_random_org_result: boolean;
   random_org_check_form?: string;

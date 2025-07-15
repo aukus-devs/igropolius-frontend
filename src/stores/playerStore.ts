@@ -59,7 +59,7 @@ const usePlayerStore = create<{
     prevSectorId?: number;
     action?: PlayerStateAction;
   }) => Promise<void>;
-  receiveBonusCard: (type: BonusCardType) => Promise<void>;
+  receiveBonusCard: (type: BonusCardType, switchState?: boolean) => Promise<void>;
   dropBonusCard: (type: BonusCardType) => Promise<void>;
   stealBonusCard: (player: PlayerData, card: BonusCardType) => Promise<void>;
   moveMyPlayerToPrison: () => Promise<void>;
@@ -340,7 +340,7 @@ const usePlayerStore = create<{
 
   setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),
 
-  receiveBonusCard: async (type: BonusCardType) => {
+  receiveBonusCard: async (type: BonusCardType, switchState: boolean = true) => {
     const { setNextTurnState } = get();
     const newCard = await giveBonusCard(type);
 
@@ -352,7 +352,10 @@ const usePlayerStore = create<{
     }));
     resetPlayersQuery();
     resetNotificationsQuery();
-    await setNextTurnState({});
+
+    if (switchState) {
+      await setNextTurnState({});
+    }
   },
 
   dropBonusCard: async (type: BonusCardType) => {

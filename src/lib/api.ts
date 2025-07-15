@@ -4,6 +4,7 @@ import {
   BonusCardType,
   GameLengthWithDrop,
   GameStatusType,
+  InstantCardType,
   NotificationsResponse,
   PlayerEvent,
   PlayerTurnState,
@@ -585,4 +586,15 @@ export async function markNotificationsSeen(notificationIds: number[]): Promise<
     method: 'POST',
     body: JSON.stringify({ notification_ids: notificationIds }),
   });
+}
+
+export async function activateInstantCard(cardType: InstantCardType): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  const response = await apiRequest(`/api/bonus-cards/instant`, {
+    method: 'POST',
+    body: JSON.stringify({ card_type: cardType }),
+  });
+  return response.json();
 }
