@@ -11,6 +11,7 @@ import {
   BonusCardType,
   BuildingData,
   MoveMyPlayerParams,
+  MyPlayerData,
   PlayerData,
   PlayerStateAction,
   PlayerTurnState,
@@ -42,6 +43,8 @@ import {
 const usePlayerStore = create<{
   myPlayerId: number | null;
   myPlayer: PlayerData | null;
+  hasUpgradeBonus: boolean;
+  hasDowngradeBonus: boolean;
   isPlayerMoving: boolean;
   players: PlayerData[];
   buildingsPerSector: Record<number, BuildingData[]>;
@@ -49,7 +52,7 @@ const usePlayerStore = create<{
   turnState: PlayerTurnState | null;
   eventEndTime: number | null;
   prisonCards: ActiveBonusCard[];
-  setMyPlayerId: (id?: number) => void;
+  setMyPlayer: (data?: MyPlayerData) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: BackendPlayerData[], eventEndTime?: number) => void;
   animatePlayerMovement: ({ steps }: { steps: number }) => Promise<number>;
@@ -67,6 +70,8 @@ const usePlayerStore = create<{
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
+  hasUpgradeBonus: false,
+  hasDowngradeBonus: false,
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
@@ -75,13 +80,28 @@ const usePlayerStore = create<{
   eventEndTime: null,
   prisonCards: [],
 
-  setMyPlayerId: (id?: number) => {
+  setMyPlayer: (data?: MyPlayerData) => {
+    if (!data) {
+      set({
+        myPlayerId: null,
+        myPlayer: null,
+        hasUpgradeBonus: false,
+        hasDowngradeBonus: false,
+        turnState: null,
+      });
+      return;
+    }
+
     const { players, myPlayer } = get();
-    if (myPlayer?.id !== id) {
-      const myPlayerNew = players.find(player => player.id === id) ?? null;
+    if (myPlayer?.id !== data.id) {
+      const myPlayerNew = players.find(player => player.id === data.id) ?? null;
       set({ myPlayer: myPlayerNew });
     }
-    set({ myPlayerId: id });
+    set({
+      myPlayerId: data.id,
+      hasUpgradeBonus: data.has_upgrade_bonus,
+      hasDowngradeBonus: data.has_downgrade_bonus,
+    });
   },
 
   setNextTurnState: async (params: { prevSectorId?: number; action?: PlayerStateAction }) => {

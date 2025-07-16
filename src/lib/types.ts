@@ -329,3 +329,14 @@ export type NotificationItem = {
 export type NotificationsResponse = {
   notifications: NotificationItem[];
 };
+
+export type MyPlayerData = {
+  id: number;
+  nickname: string;
+  url_handle: string;
+  turn_state: PlayerTurnState;
+  last_roll_result: number[];
+  role: UserRole;
+  has_upgrade_bonus: boolean;
+  has_downgrade_bonus: boolean;
+};

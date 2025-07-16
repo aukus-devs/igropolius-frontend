@@ -44,10 +44,10 @@ function App() {
     refetchInterval: 60 * 1000,
   });
 
-  const { setPlayers, setMyPlayerId, setTurnState } = usePlayerStore(
+  const { setPlayers, setMyPlayer, setTurnState } = usePlayerStore(
     useShallow(state => ({
       setPlayers: state.setPlayers,
-      setMyPlayerId: state.setMyPlayerId,
+      setMyPlayer: state.setMyPlayer,
       setTurnState: state.setTurnState,
     }))
   );
@@ -62,19 +62,13 @@ function App() {
 
   useEffect(() => {
     if (currentPlayerDataError) {
-      setMyPlayerId(undefined);
+      setMyPlayer(undefined);
       setTurnState(null);
       return;
     }
-    setMyPlayerId(currentPlayerData?.id);
+    setMyPlayer(currentPlayerData);
     setTurnState(currentPlayerData?.turn_state ?? null);
-  }, [
-    currentPlayerData?.id,
-    currentPlayerData?.turn_state,
-    setMyPlayerId,
-    setTurnState,
-    currentPlayerDataError,
-  ]);
+  }, [currentPlayerData, setMyPlayer, setTurnState, currentPlayerDataError]);
 
   const setShowAdminPanel = useAdminStore(state => state.setShowAdminPanel);
 

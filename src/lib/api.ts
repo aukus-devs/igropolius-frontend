@@ -5,12 +5,12 @@ import {
   GameLengthWithDrop,
   GameStatusType,
   InstantCardType,
+  MyPlayerData,
   NotificationsResponse,
   PlayerEvent,
   PlayerTurnState,
   RulesVersion,
   TaxType,
-  UserRole,
 } from '@/lib/types';
 import { playersData } from './mockData';
 import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS } from './constants';
@@ -139,16 +139,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
   return response.json();
 }
 
-type CurrentPlayerResponse = {
-  id: number;
-  nickname: string;
-  url_handle: string;
-  turn_state: PlayerTurnState;
-  last_roll_result: number[];
-  role: UserRole;
-};
-
-export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
+export async function fetchCurrentPlayer(): Promise<MyPlayerData> {
   if (MOCK_API) {
     return Promise.resolve({
       id: 1,
@@ -157,6 +148,8 @@ export async function fetchCurrentPlayer(): Promise<CurrentPlayerResponse> {
       turn_state: 'rolling-dice',
       role: 'admin',
       last_roll_result: MOCK_DICE_ROLL,
+      has_downgrade_bonus: false,
+      has_upgrade_bonus: false,
     });
   }
   const response = await apiRequest('/api/players/current');
