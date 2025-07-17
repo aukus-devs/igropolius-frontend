@@ -14,7 +14,7 @@ import LoseCardOnDropDialog from './LoseCardOnDropDialog';
 import PrisonEnterCardRoll from './PrisonEnterCardRoll';
 import GameRerollDialog from './GameRerollDialog';
 import SelectBuildingSectorDialog from './SelectingBuildingSectorDialog';
-import { makePlayerMove } from '@/lib/api';
+import { activateInstantCard, makePlayerMove } from '@/lib/api';
 import RollWithInstantCards from './RollWithInstantCards';
 
 export default function PlayerTurnUI() {
@@ -82,9 +82,14 @@ export default function PlayerTurnUI() {
       }
       return <PrisonEnterCardRoll />;
 
-    case 'drop-random-card':
+    case 'dropping-card-after-game-drop':
       if (myPlayerHasNoCards) {
         return <NoCardsForDropDialog />;
+      }
+      return <LoseCardOnDropDialog />;
+    case 'dropping-card-after-instant-roll':
+      if (myPlayerHasNoCards) {
+        return <NoCardsForInstantDropDialog />;
       }
       return <LoseCardOnDropDialog />;
     default: {
@@ -155,6 +160,27 @@ function NoCardsForDropDialog() {
           }}
         >
           Продолжить
+        </Button>
+      </div>
+    </Card>
+  );
+}
+
+function NoCardsForInstantDropDialog() {
+  const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
+  return (
+    <Card className="p-4">
+      <span className="font-wide-semibold">Нет карточек для дропа</span>
+      <div className="flex justify-evenly mt-2 gap-2">
+        <Button
+          variant="outline"
+          className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
+          onClick={async () => {
+            await activateInstantCard('lose-card-or-3-percent');
+            await setNextTurnState({});
+          }}
+        >
+          Потерять 3% очков
         </Button>
       </div>
     </Card>

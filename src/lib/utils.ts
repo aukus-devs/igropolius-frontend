@@ -192,12 +192,6 @@ export function getNextTurnState({
   const sector = SectorsById[player.sector_id];
   const bonusCardsSet = new Set(player.bonus_cards.map(card => card.bonus_type));
 
-  const hasStreetTaxCard = bonusCardsSet.has('evade-street-tax');
-  const hasMapTaxCard = bonusCardsSet.has('evade-map-tax');
-  const hasPrisonCard = bonusCardsSet.has('skip-prison-day');
-  const hasRerollCard = bonusCardsSet.has('reroll-game');
-  const hasDiceCards = bonusCardsSet.has('adjust-roll-by1') || bonusCardsSet.has('choose-1-die');
-
   console.log('current cards', bonusCardsSet);
 
   const statesToStop: PlayerTurnState[] = [
@@ -205,7 +199,7 @@ export function getNextTurnState({
     'rolling-bonus-card',
     'filling-game-review',
     'entering-prison',
-    'drop-random-card',
+    'dropping-card-after-game-drop',
     'choosing-train-ride',
     'choosing-building-sector',
     'stealing-bonus-card',
@@ -220,11 +214,7 @@ export function getNextTurnState({
       currentState: state,
       sector,
       mapCompleted,
-      hasStreetTaxCard,
-      hasMapTaxCard,
-      hasPrisonCard,
-      hasRerollCard,
-      hasDiceCards,
+      bonusCardsSet,
       action: currentAction,
     });
     currentAction = undefined; // Reset action after first iteration
@@ -245,11 +235,7 @@ type GetNextStateParams = {
   action?: PlayerStateAction;
   sector: SectorData;
   mapCompleted?: boolean;
-  hasStreetTaxCard: boolean;
-  hasMapTaxCard: boolean;
-  hasPrisonCard: boolean;
-  hasRerollCard: boolean;
-  hasDiceCards: boolean;
+  bonusCardsSet: Set<BonusCardType>;
 };
 
 type StateCycle = 'stop' | PlayerTurnState;
@@ -259,12 +245,14 @@ function getNextState({
   action,
   sector,
   mapCompleted,
-  hasStreetTaxCard,
-  hasMapTaxCard,
-  hasPrisonCard,
-  hasRerollCard,
-  hasDiceCards,
+  bonusCardsSet,
 }: GetNextStateParams): StateCycle {
+  const hasStreetTaxCard = bonusCardsSet.has('evade-street-tax');
+  const hasMapTaxCard = bonusCardsSet.has('evade-map-tax');
+  const hasPrisonCard = bonusCardsSet.has('skip-prison-day');
+  const hasRerollCard = bonusCardsSet.has('reroll-game');
+  const hasDiceCards = bonusCardsSet.has('adjust-roll-by1') || bonusCardsSet.has('choose-1-die');
+
   const skipBonus = action === 'skip-bonus';
 
   switch (currentState) {
@@ -307,7 +295,7 @@ function getNextState({
       return 'filling-game-review';
     case 'filling-game-review':
       if (action === 'drop-game') {
-        return 'drop-random-card';
+        return 'dropping-card-after-game-drop';
       }
       if (action === 'reroll-game') {
         return 'using-reroll-bonuses';
@@ -337,7 +325,7 @@ function getNextState({
         return 'using-map-tax-bonuses-after-train-ride';
       }
       return 'rolling-dice';
-    case 'drop-random-card':
+    case 'dropping-card-after-game-drop':
       return 'entering-prison';
     case 'entering-prison':
       return 'using-prison-bonuses';
@@ -346,6 +334,8 @@ function getNextState({
     case 'choosing-building-sector':
       return 'rolling-dice';
     case 'using-map-tax-bonuses-after-train-ride':
+      return 'rolling-dice';
+    case 'dropping-card-after-instant-roll':
       return 'rolling-dice';
     default: {
       const state: never = currentState;

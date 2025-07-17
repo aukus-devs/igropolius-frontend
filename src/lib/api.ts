@@ -581,13 +581,16 @@ export async function markNotificationsSeen(notificationIds: number[]): Promise<
   });
 }
 
-export async function activateInstantCard(cardType: InstantCardType): Promise<void> {
+export async function activateInstantCard(
+  cardType: InstantCardType,
+  cardToLose: BonusCardType | null = null
+): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
   }
   const response = await apiRequest(`/api/bonus-cards/instant`, {
     method: 'POST',
-    body: JSON.stringify({ card_type: cardType }),
+    body: JSON.stringify({ card_type: cardType, card_to_lose: cardToLose }),
   });
   return response.json();
 }
