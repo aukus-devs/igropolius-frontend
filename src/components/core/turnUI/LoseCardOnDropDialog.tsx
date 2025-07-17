@@ -4,15 +4,15 @@ import { useMemo } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
-import { loseBonusCard } from '@/lib/api';
-import { resetPlayersQuery } from '@/lib/queryClient';
+import { activateInstantCard, loseBonusCard } from '@/lib/api';
 
 export default function LoseCardOnDropDialog() {
-  const { playerCards, moveToPrison, setNextTurnState } = usePlayerStore(
+  const { playerCards, moveToPrison, setNextTurnState, goToPrison } = usePlayerStore(
     useShallow(state => ({
       playerCards: state.myPlayer?.bonus_cards || [],
       moveToPrison: state.moveMyPlayerToPrison,
       setNextTurnState: state.setNextTurnState,
+      goToPrison: state.turnState === 'dropping-card-after-game-drop',
     }))
   );
 
@@ -30,17 +30,22 @@ export default function LoseCardOnDropDialog() {
   };
 
   const handleFinished = async (option: WeightedOption<BonusCardType>) => {
-    await loseBonusCard(option.value);
-    await moveToPrison();
+    if (goToPrison) {
+      await loseBonusCard(option.value);
+      await moveToPrison();
+    } else {
+      await activateInstantCard('lose-card-or-3-percent', option.value);
+    }
     await setNextTurnState({});
-    resetPlayersQuery();
   };
+
+  const buttonText = goToPrison ? 'Дропнуть и пойти в тюрьму' : 'Дропнуть карточку';
 
   return (
     <GenericRoller<BonusCardType>
       header="Потеря карточки за дроп"
       openButtonText="Дропнуть карточку"
-      finishButtonText="Дропнуть и пойти в тюрьму"
+      finishButtonText={buttonText}
       options={options}
       getWinnerText={getWinnerText}
       onFinished={handleFinished}
