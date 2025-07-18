@@ -24,7 +24,7 @@ export default function RollBonusCard() {
   };
 
   const getWinnerText = (option: WeightedOption<BonusCardType>) => {
-    return `Вы выиграли карточку "${frontendCardsData[option.value].name}"`;
+    return frontendCardsData[option.value].name;
   };
 
   const myCurrentCards = myPlayer?.bonus_cards ?? [];
