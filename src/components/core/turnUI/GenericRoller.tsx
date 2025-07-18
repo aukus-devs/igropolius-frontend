@@ -82,6 +82,7 @@ type Props<T> = {
   finishButtonText: string;
   onFinished: (option: WeightedOption<T>) => Promise<void>;
   getWinnerText: (option: WeightedOption<T>) => string;
+  getSecondaryText?: (option: WeightedOption<T>) => string | undefined;
 };
 
 export default function GenericRoller<T>({
@@ -91,6 +92,7 @@ export default function GenericRoller<T>({
   finishButtonText,
   getWinnerText,
   onFinished,
+  getSecondaryText,
 }: Props<T>) {
   const rouletteRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
@@ -104,8 +106,10 @@ export default function GenericRoller<T>({
   const [cardList, setCardList] = useState<WeightedOption<T>[]>([]);
 
   let headerText = header;
+  let secondaryText: string | undefined = undefined;
   if (winnerIndex !== null) {
     headerText = getWinnerText(cardList[winnerIndex]);
+    secondaryText = getSecondaryText?.(cardList[winnerIndex]);
   }
 
   function updateTransform() {
@@ -314,21 +318,24 @@ export default function GenericRoller<T>({
           </Button>
         )}
         {rollPhase === 'finished' && (
-          <Button
-            className="absolute w-[300px] rounded-xl bottom-[25%]"
-            // disabled={isLoading}
-            onClick={async () => {
-              if (winnerIndex !== null) {
-                await onFinished(cardList[winnerIndex]);
-              }
-              handleOpenChange(false);
-            }}
-          >
-            {finishButtonText}
-            {/* {isLoading && (
+          <div className="absolute bottom-[20%] flex flex-col items-center justify-center gap-4">
+            {secondaryText && <div className="text-base font-semibold ">{secondaryText}</div>}
+            <Button
+              className="w-[300px] rounded-xl"
+              // disabled={isLoading}
+              onClick={async () => {
+                if (winnerIndex !== null) {
+                  await onFinished(cardList[winnerIndex]);
+                }
+                handleOpenChange(false);
+              }}
+            >
+              {finishButtonText}
+              {/* {isLoading && (
               <LoaderCircleIcon color="white" className="animate-spin text-primary" size={24} />
             )} */}
-          </Button>
+            </Button>
+          </div>
         )}
       </DialogContent>
     </Dialog>

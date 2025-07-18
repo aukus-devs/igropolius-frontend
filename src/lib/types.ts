@@ -341,3 +341,10 @@ export type MyPlayerData = {
   has_upgrade_bonus: boolean;
   has_downgrade_bonus: boolean;
 };
+
+export type InstantCardResult =
+  | 'default'
+  | 'reroll'
+  | 'card-lost'
+  | 'score-received'
+  | 'score-lost';

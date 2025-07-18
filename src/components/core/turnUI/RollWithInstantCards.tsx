@@ -1,10 +1,10 @@
 import { frontendCardsData, frontendInstantCardsData } from '@/lib/mockData';
-import { BonusCardType, InstantCardType } from '@/lib/types';
+import { BonusCardType, InstantCardResult, InstantCardType } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { activateInstantCard } from '@/lib/api';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
 
 type InstantCard = {
@@ -25,9 +25,12 @@ export default function RollWithInstantCards() {
     }))
   );
 
+  const [activationResult, setActivationResult] = useState<InstantCardResult | null>(null);
+
   const handleFinished = async (option: WeightedOption<OptionType>) => {
     if (isInstantCard(option.value)) {
-      await activateInstantCard(option.value.instant);
+      const response = await activateInstantCard(option.value.instant);
+      setActivationResult(response.result ?? 'default');
       resetCurrentPlayerQuery();
       resetPlayersQuery();
     } else if (isBonusCard(option.value)) {
@@ -37,10 +40,10 @@ export default function RollWithInstantCards() {
 
   const getWinnerText = (option: WeightedOption<OptionType>) => {
     if (isInstantCard(option.value)) {
-      return `Срабатывает карточка "${frontendInstantCardsData[option.value.instant].name}"`;
+      return frontendInstantCardsData[option.value.instant].description;
     }
     if (isBonusCard(option.value)) {
-      return `Выпала карточка "${frontendCardsData[option.value.card].name}"`;
+      return frontendCardsData[option.value.card].name;
     }
     return 'Неизвестный тип карточки' as never;
   };
@@ -86,6 +89,12 @@ export default function RollWithInstantCards() {
       finishButtonText="Готово"
       onFinished={handleFinished}
       getWinnerText={getWinnerText}
+      getSecondaryText={(option: WeightedOption<OptionType>) => {
+        if (isInstantCard(option.value)) {
+          return getSecondaryText(option.value.instant, activationResult);
+        }
+        return undefined;
+      }}
     />
   );
 }
@@ -96,4 +105,26 @@ function isInstantCard(option: OptionType): option is InstantCard {
 
 function isBonusCard(option: OptionType): option is BonusCard {
   return 'card' in option;
+}
+
+function getSecondaryText(cardType: InstantCardType, result: InstantCardResult | null) {
+  switch (cardType) {
+    case 'lose-card-or-3-percent':
+      switch (result) {
+        case 'card-lost':
+          return 'Карточка потеряна';
+        case 'score-lost':
+          return 'Потеряно 3% очков';
+      }
+      break;
+    case 'receive-5-percent-or-reroll':
+      switch (result) {
+        case 'reroll':
+          return 'Реролл колеса';
+        case 'score-received':
+          return 'Получено 5% очков';
+      }
+      break;
+  }
+  return undefined;
 }
