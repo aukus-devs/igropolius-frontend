@@ -5,6 +5,7 @@ import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { activateInstantCard } from '@/lib/api';
 import { useMemo } from 'react';
+import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
 
 type InstantCard = {
   instant: InstantCardType;
@@ -27,6 +28,8 @@ export default function RollWithInstantCards() {
   const handleFinished = async (option: WeightedOption<OptionType>) => {
     if (isInstantCard(option.value)) {
       await activateInstantCard(option.value.instant);
+      resetCurrentPlayerQuery();
+      resetPlayersQuery();
     } else if (isBonusCard(option.value)) {
       await receiveBonusCard(option.value.card, false);
     }
