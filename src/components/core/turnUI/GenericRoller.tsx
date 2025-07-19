@@ -80,7 +80,8 @@ type Props<T> = {
   header: string;
   openButtonText: string;
   finishButtonText: string;
-  onFinished: (option: WeightedOption<T>) => Promise<void>;
+  onRollFinish: (option: WeightedOption<T>) => Promise<void>;
+  onClose?: (option: WeightedOption<T>) => Promise<void>;
   getWinnerText: (option: WeightedOption<T>) => string;
   getSecondaryText?: (option: WeightedOption<T>) => string | undefined;
 };
@@ -91,7 +92,8 @@ export default function GenericRoller<T>({
   openButtonText,
   finishButtonText,
   getWinnerText,
-  onFinished,
+  onRollFinish,
+  onClose,
   getSecondaryText,
 }: Props<T>) {
   const rouletteRef = useRef<HTMLDivElement>(null);
@@ -105,11 +107,13 @@ export default function GenericRoller<T>({
   const [rollPhase, setRollPhase] = useState<'idle' | 'rolling' | 'finished'>('idle');
   const [cardList, setCardList] = useState<WeightedOption<T>[]>([]);
 
+  const winner = winnerIndex !== null ? cardList[winnerIndex] : null;
+
   let headerText = header;
   let secondaryText: string | undefined = undefined;
-  if (winnerIndex !== null) {
-    headerText = getWinnerText(cardList[winnerIndex]);
-    secondaryText = getSecondaryText?.(cardList[winnerIndex]);
+  if (winner !== null) {
+    headerText = getWinnerText(winner);
+    secondaryText = getSecondaryText?.(winner);
   }
 
   function updateTransform() {
@@ -214,6 +218,7 @@ export default function GenericRoller<T>({
       const index = Math.floor(-offsetRef.current / CARD_FULL_WIDTH);
       setWinnerIndex(index);
       setRollPhase('finished');
+      onRollFinish(cardList[index]);
       animationRef.current = null;
     }
     animationRef.current = requestAnimationFrame(animate);
@@ -324,8 +329,8 @@ export default function GenericRoller<T>({
               className="w-[300px] rounded-xl"
               // disabled={isLoading}
               onClick={async () => {
-                if (winnerIndex !== null) {
-                  await onFinished(cardList[winnerIndex]);
+                if (winner !== null && onClose) {
+                  await onClose(winner);
                 }
                 handleOpenChange(false);
               }}

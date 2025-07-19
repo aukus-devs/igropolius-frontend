@@ -1,6 +1,6 @@
-import { BonusCardType } from '@/lib/types';
+import { BonusCardType, InstantCardResult } from '@/lib/types';
 import GenericRoller, { WeightedOption } from './GenericRoller';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
@@ -15,6 +15,8 @@ export default function LoseCardOnDropDialog() {
       goToPrison: state.turnState === 'dropping-card-after-game-drop',
     }))
   );
+
+  const [dropResult, setDropResult] = useState<InstantCardResult | null>(null);
 
   const options: WeightedOption<BonusCardType>[] = useMemo(() => {
     return playerCards.map(card => ({
@@ -32,23 +34,54 @@ export default function LoseCardOnDropDialog() {
   const handleFinished = async (option: WeightedOption<BonusCardType>) => {
     if (goToPrison) {
       await loseBonusCard(option.value);
-      await moveToPrison();
     } else {
-      await activateInstantCard('lose-card-or-3-percent', option.value);
+      const result = await activateInstantCard('lose-card-or-3-percent', option.value);
+      setDropResult(result.result ?? null);
+    }
+  };
+
+  const getSecondaryText = () => {
+    if (dropResult) {
+      if (dropResult === 'card-lost') {
+        return 'Карточка потеряна';
+      } else if (dropResult === 'score-lost') {
+        return 'Потеряно 3% от общего счёта';
+      } else if (dropResult === 'reroll') {
+        return 'Реролл дропа';
+      }
+    }
+    return undefined;
+  };
+
+  const handleClose = async () => {
+    if (dropResult === 'reroll') {
+      setDropResult(null);
+      return;
+    }
+    if (goToPrison) {
+      await moveToPrison();
     }
     await setNextTurnState({});
   };
 
-  const buttonText = goToPrison ? 'Дропнуть и пойти в тюрьму' : 'Дропнуть карточку';
+  let buttonText = 'Готово';
+  if (goToPrison) {
+    buttonText = 'Пойти в тюрьму';
+  }
+  if (dropResult === 'reroll') {
+    buttonText = 'Реролл';
+  }
 
   return (
     <GenericRoller<BonusCardType>
-      header="Потеря карточки за дроп"
+      header="Потеря карточки"
       openButtonText="Дропнуть карточку"
       finishButtonText={buttonText}
       options={options}
       getWinnerText={getWinnerText}
-      onFinished={handleFinished}
+      onRollFinish={handleFinished}
+      onClose={handleClose}
+      getSecondaryText={getSecondaryText}
     />
   );
 }

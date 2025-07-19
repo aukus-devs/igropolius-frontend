@@ -300,6 +300,9 @@ function getNextState({
       if (action === 'reroll-game') {
         return 'using-reroll-bonuses';
       }
+      if (action === 'drop-card') {
+        return 'dropping-card-after-instant-roll';
+      }
       switch (sector.type) {
         case 'railroad':
           return 'choosing-train-ride';
@@ -336,7 +339,7 @@ function getNextState({
     case 'using-map-tax-bonuses-after-train-ride':
       return 'rolling-dice';
     case 'dropping-card-after-instant-roll':
-      return 'rolling-dice';
+      return 'filling-game-review';
     default: {
       const state: never = currentState;
       throw new Error(`Unsupported turn state: ${state}`);

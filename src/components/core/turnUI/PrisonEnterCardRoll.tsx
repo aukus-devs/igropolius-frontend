@@ -114,7 +114,7 @@ export default function PrisonEnterCardRoll() {
       finishButtonText="Готово"
       options={options}
       getWinnerText={getWinnerText}
-      onFinished={handleFinished}
+      onRollFinish={handleFinished}
     />
   );
 }

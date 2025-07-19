@@ -18,10 +18,11 @@ type BonusCard = {
 type OptionType = InstantCard | BonusCard;
 
 export default function RollWithInstantCards() {
-  const { receiveBonusCard, playerCards } = usePlayerStore(
+  const { receiveBonusCard, playerCards, setNextTurnState } = usePlayerStore(
     useShallow(state => ({
       receiveBonusCard: state.receiveBonusCard,
       playerCards: state.myPlayer?.bonus_cards ?? [],
+      setNextTurnState: state.setNextTurnState,
     }))
   );
 
@@ -29,6 +30,10 @@ export default function RollWithInstantCards() {
 
   const handleFinished = async (option: WeightedOption<OptionType>) => {
     if (isInstantCard(option.value)) {
+      if (option.value.instant === 'lose-card-or-3-percent') {
+        setNextTurnState({ action: 'drop-card' });
+        return;
+      }
       const response = await activateInstantCard(option.value.instant);
       setActivationResult(response.result ?? 'default');
       resetCurrentPlayerQuery();
@@ -87,7 +92,7 @@ export default function RollWithInstantCards() {
       header="Ролл карточки"
       openButtonText="Ролл за донат"
       finishButtonText="Готово"
-      onFinished={handleFinished}
+      onRollFinish={handleFinished}
       getWinnerText={getWinnerText}
       getSecondaryText={(option: WeightedOption<OptionType>) => {
         if (isInstantCard(option.value)) {

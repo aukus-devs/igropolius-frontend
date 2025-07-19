@@ -49,7 +49,7 @@ export default function RollBonusCard() {
       header="Ролим бонусную карточку"
       openButtonText="Получить карточку"
       finishButtonText="Получить карточку"
-      onFinished={handleFinished}
+      onRollFinish={handleFinished}
       getWinnerText={getWinnerText}
     />
   );

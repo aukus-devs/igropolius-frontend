@@ -258,7 +258,12 @@ export type PlayerTurnState =
   | 'choosing-building-sector'
   | 'using-map-tax-bonuses-after-train-ride';
 
-export type PlayerStateAction = 'skip-bonus' | 'skip-prison' | 'drop-game' | 'reroll-game';
+export type PlayerStateAction =
+  | 'skip-bonus'
+  | 'skip-prison'
+  | 'drop-game'
+  | 'reroll-game'
+  | 'drop-card';
 
 export type ActiveBonusCard = {
   bonus_type: BonusCardType;
