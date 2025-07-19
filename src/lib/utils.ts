@@ -17,6 +17,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { frontendCardsData, SectorsById } from './mockData';
 import { FALLBACK_GAME_POSTER, ScoreByGameLength, SectorScoreMultiplier } from './constants';
+import usePlayerStore from '@/stores/playerStore';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -118,6 +119,7 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
 
 function getEventBonusCardInfo(event: PlayerEventBonusCard) {
   let title = '';
+  const players = usePlayerStore.getState().players;
 
   switch (event.subtype) {
     case 'received':
@@ -129,6 +131,16 @@ function getEventBonusCardInfo(event: PlayerEventBonusCard) {
     case 'lost':
       title = 'Потерял карточку';
       break;
+    case 'stolen': {
+      const player = players.find(p => p.id === event.stolen_by);
+      title = `${player?.username} украл карточку`;
+      break;
+    }
+    case 'looted': {
+      const player = players.find(p => p.id === event.stolen_from_player);
+      title = `Карточка украдена у ${player?.username}`;
+      break;
+    }
     default: {
       const subtype: never = event.subtype;
       throw new Error(`Unsupported bonus card event subtype: ${subtype}`);

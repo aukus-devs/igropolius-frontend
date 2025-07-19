@@ -3,10 +3,12 @@ import { Card } from '../ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { Button } from '../ui/button';
 import { frontendCardsData } from '@/lib/mockData';
+import { useShallow } from 'zustand/shallow';
 
 export default function MyCards() {
-  const cards = usePlayerStore(state => state.myPlayer?.bonus_cards ?? []);
-  const canBeUsed = true;
+  const { cards, turnState } = usePlayerStore(
+    useShallow(state => ({ cards: state.myPlayer?.bonus_cards ?? [], turnState: state.turnState }))
+  );
 
   return (
     <Card className="p-2 gap-2" style={{ width: '300px' }}>
@@ -14,6 +16,9 @@ export default function MyCards() {
       <div className="flex flex-wrap gap-2 ">
         {cards.map((card, idx) => {
           const cardData = frontendCardsData[card.bonus_type];
+          const canBeUsed =
+            turnState === 'filling-game-review' &&
+            (card.bonus_type === 'reroll-game' || card.bonus_type === 'game-help-allowed');
           return (
             <Tooltip delayDuration={0} key={idx}>
               <TooltipTrigger className="flex w-[32px] h-[45px] rounded-sm overflow-hidden">

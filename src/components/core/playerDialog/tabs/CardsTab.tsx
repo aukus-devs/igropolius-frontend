@@ -1,3 +1,4 @@
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cardTypes, frontendCardsData } from '@/lib/mockData';
 import { ActiveBonusCard, BonusCardType } from '@/lib/types';
 
@@ -7,17 +8,29 @@ type GameCardProps = {
 };
 
 function GameCard({ type, inactive }: GameCardProps) {
-  const title = frontendCardsData[type].name;
-
+  const cardData = frontendCardsData[type];
+  
   return (
     <div
       className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] bg-primary text-primary-foreground rounded-xl data-[inactive=true]:pointer-events-none data-[inactive=true]:grayscale-100"
       data-inactive={inactive}
     >
-      <div className="text-lg font-semibold">
-        {title} <br />
-        <br /> {type}
-      </div>
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger className="flex w-[32px] h-[45px] rounded-sm overflow-hidden">
+          <img src={cardData.picture} />
+        </TooltipTrigger>
+        <TooltipContent
+          className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3"
+          side="bottom"
+          align="start"
+          sideOffset={8}
+        >
+          <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
+          <div className="text-base font-semibold text-muted-foreground">
+            {cardData.description}
+          </div>
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 }
