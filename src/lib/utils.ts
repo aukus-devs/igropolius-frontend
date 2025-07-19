@@ -15,7 +15,7 @@ import {
 } from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { SectorsById } from './mockData';
+import { frontendCardsData, SectorsById } from './mockData';
 import { FALLBACK_GAME_POSTER, ScoreByGameLength, SectorScoreMultiplier } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
@@ -98,6 +98,9 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
     case 'street-income':
       title = `Получил доход с сектора: ${event.sector_id}`;
       break;
+    case 'instant-card':
+      title = `Получено от инстантной карточки`;
+      break;
     default: {
       const subtype: never = event.subtype;
       throw new Error(`Unsupported score change event subtype: ${subtype}`);
@@ -136,26 +139,8 @@ function getEventBonusCardInfo(event: PlayerEventBonusCard) {
 }
 
 export function getBonusCardName(bonusType: BonusCardType): string {
-  switch (bonusType) {
-    case 'adjust-roll-by1':
-      return 'Изменить бросок на ±1';
-    case 'choose-1-die':
-      return 'Выбрать 1 кубик';
-    case 'skip-prison-day':
-      return 'Пропустить день в тюрьме';
-    case 'reroll-game':
-      return 'Реролл игры';
-    case 'evade-street-tax':
-      return 'Уклониться от налога на клетке';
-    case 'evade-map-tax':
-      return 'Уклониться от налога за круг';
-    case 'game-help-allowed':
-      return 'Помощь в игре разрешена';
-    default: {
-      const error: never = bonusType;
-      throw new Error(`Unsupported bonus card type: ${error}`);
-    }
-  }
+  const data = frontendCardsData[bonusType];
+  return data.name;
 }
 
 export function getEventDescription(event: PlayerEvent): EventDescription {
