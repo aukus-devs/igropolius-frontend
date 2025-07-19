@@ -115,6 +115,9 @@ export default function RollWithInstantCards() {
     if (activationResult === 'reroll') {
       return 'Выпал реролл';
     }
+    if (activationResult === 'score-received') {
+      return 'Вы получили 5% от своего счёта';
+    }
   };
 
   return (

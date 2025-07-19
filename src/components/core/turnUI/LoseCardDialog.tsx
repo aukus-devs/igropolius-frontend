@@ -5,7 +5,6 @@ import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import { activateInstantCard, loseBonusCard } from '@/lib/api';
-import { resetPlayersQuery } from '@/lib/queryClient';
 
 export default function LoseCardOnDropDialog() {
   const { playerCards, moveToPrison, setNextTurnState, goToPrison } = usePlayerStore(
