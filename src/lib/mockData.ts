@@ -1079,3 +1079,9 @@ export const playersFrontendData: Record<string, PlayerFrontendData> = {
     color: playerColors.purple,
   },
 };
+
+export const CreditsData = {
+  developers: ['mapcar', 'olegsvs', 'esouqu', 'junkratc'].sort(),
+  designers: ['лпу', 'rotvg0vne', 'naknagets', 'ksanich'].sort(),
+  ideas: ['Praden'],
+};

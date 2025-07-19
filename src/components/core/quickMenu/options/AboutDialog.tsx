@@ -11,6 +11,7 @@ import { InfoIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { CreditsData } from '@/lib/mockData';
 
 type Props = {
   className?: string;
@@ -48,9 +49,19 @@ export default function AboutDialog({ className }: Props) {
           <div className="mt-20 mb-[30px] text-3xl font-wide-semibold">
             Команда разработки Игрополиуса
           </div>
-          <div className="mt-[50px] text-xl font-wide-semibold">Программирование</div>
-          <div className="mt-[50px] text-xl font-wide-semibold">Дизайн</div>
-          <div className="mt-[50px] text-xl font-wide-semibold">Тестирование</div>
+          <div className="flex gap-2 flex-col">
+            <div className="mt-[50px] text-xl font-wide-semibold">Программирование</div>
+            {CreditsData.developers.map((dev, index) => (
+              <div key={index}>{dev}</div>
+            ))}
+          </div>
+          <div className="flex gap-2 flex-col">
+            <div className="mt-[50px] text-xl font-wide-semibold">Дизайн</div>
+            {CreditsData.designers.map((dev, index) => (
+              <div key={index}>{dev}</div>
+            ))}
+          </div>
+          {/* <div className="mt-[50px] text-xl font-wide-semibold">Тестирование</div> */}
           <div className="mt-[50px] text-xl font-wide-semibold">Идеи</div>
           <div className="mt-[10px]">Praden</div>
         </ScrollArea>
