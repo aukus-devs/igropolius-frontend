@@ -67,6 +67,9 @@ function getEventMoveInfo(event: PlayerEventMove) {
     case 'dice-roll':
       title = 'Ход на карте';
       break;
+    case 'drop-to-prison':
+      title = 'Попал в тюрьму';
+      break;
     default: {
       const error: never = event.subtype;
       throw new Error(`Unsupported move event subtype: ${error}`);
@@ -96,7 +99,7 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
       title = 'Потерял очки за дроп игры';
       break;
     case 'street-income':
-      title = `Получил доход с сектора: ${event.sector_id}`;
+      title = `Получил доход с сектора ${event.sector_id}`;
       break;
     case 'instant-card':
       title = `Получено от инстантной карточки`;
@@ -107,9 +110,14 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
     }
   }
 
+  let description = event.amount.toString();
+  if (event.amount > 0) {
+    description = `+${description}`;
+  }
+
   return {
     title,
-    description: event.amount.toString(),
+    description,
   };
 }
 

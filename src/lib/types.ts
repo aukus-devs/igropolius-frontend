@@ -214,7 +214,7 @@ export type PlayerEventBonusCard = PlayerEventBase & {
 
 export type PlayerEventMove = PlayerEventBase & {
   event_type: 'player-move';
-  subtype: 'dice-roll' | 'train-ride';
+  subtype: 'dice-roll' | 'train-ride' | 'drop-to-prison';
   sector_from: number;
   sector_to: number;
   adjusted_roll: number;
@@ -233,6 +233,8 @@ export type PlayerEventScoreChange = PlayerEventBase & {
   tax_player_id?: number;
   sector_id: number;
   bonuses_used?: BonusCardType[];
+  score_before: number;
+  score_after: number;
 };
 
 export type PlayerEvent =

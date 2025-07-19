@@ -117,6 +117,8 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           amount: -20,
           tax_player_id: 2,
           bonuses_used: ['evade-street-tax'],
+          score_before: 100,
+          score_after: 80,
         },
         {
           event_type: 'score-change',
@@ -124,6 +126,8 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           subtype: 'map-tax',
           sector_id: 15,
           amount: 100,
+          score_before: 80,
+          score_after: 180,
         },
         {
           event_type: 'score-change',
@@ -132,6 +136,8 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           sector_id: 7,
           amount: 50,
           tax_player_id: 3,
+          score_before: 180,
+          score_after: 230,
         },
       ],
     });

@@ -1,4 +1,4 @@
-import { Share } from "@/components/icons";
+import { ArrowRight, Share } from '@/components/icons';
 import {
   Select,
   SelectContent,
@@ -6,23 +6,24 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { LoaderCircleIcon } from "lucide-react";
-import { fetchPlayerEvents } from "@/lib/api";
-import { queryKeys } from "@/lib/queryClient";
+} from '@/components/ui/select';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { LoaderCircleIcon } from 'lucide-react';
+import { fetchPlayerEvents } from '@/lib/api';
+import { queryKeys } from '@/lib/queryClient';
 import {
   PlayerData,
   PlayerEvent,
   PlayerEventMove,
   DiceRollJson,
   BonusCardType,
-} from "@/lib/types";
-import { getEventDescription, getBonusCardName } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { Fragment, useState } from "react";
+  PlayerEventScoreChange,
+} from '@/lib/types';
+import { getEventDescription, getBonusCardName } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
+import { Fragment, useState } from 'react';
 
 type Props = {
   player: PlayerData;
@@ -33,17 +34,17 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <h4 className="font-semibold">Результат броска кубиков</h4>
-        <Badge variant={diceRollJson.is_random_org_result ? "default" : "secondary"}>
-          {diceRollJson.is_random_org_result ? "Random.org" : "Локальный"}
+        <Badge variant={diceRollJson.is_random_org_result ? 'default' : 'secondary'}>
+          {diceRollJson.is_random_org_result ? 'Random.org' : 'Локальный'}
         </Badge>
       </div>
 
       <div className="space-y-2">
         <p className="text-sm">
-          <span className="font-semibold">Кубики:</span> {diceRollJson.data.join(", ")}
+          <span className="font-semibold">Кубики:</span> {diceRollJson.data.join(', ')}
         </p>
         <p className="text-sm">
-          <span className="font-semibold">Сумма:</span>{" "}
+          <span className="font-semibold">Сумма:</span>{' '}
           {diceRollJson.data[0] + diceRollJson.data[1]}
         </p>
 
@@ -75,18 +76,18 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
 function Event({ event }: { event: PlayerEvent }) {
   const { title, description, gameCover } = getEventDescription(event);
   const { hours, minutes } = getFormattedTime(event.timestamp);
-  const isScoreChangeEvent = event.event_type === "score-change";
-  const isMoveEvent = event.event_type === "player-move";
+  const isScoreChangeEvent = event.event_type === 'score-change';
+  const isMoveEvent = event.event_type === 'player-move';
   const moveEvent = isMoveEvent ? (event as PlayerEventMove) : null;
-  const hasDiceRollData = moveEvent?.dice_roll_json && moveEvent.subtype === "dice-roll";
+  const hasDiceRollData = moveEvent?.dice_roll_json && moveEvent.subtype === 'dice-roll';
 
   let bonusesUsed: BonusCardType[] = [];
-  if (event.event_type === "player-move") {
+  if (event.event_type === 'player-move') {
     bonusesUsed = event.bonuses_used;
   }
 
   const EventContent = () => (
-    <div className={gameCover ? "flex gap-2" : ""}>
+    <div className={gameCover ? 'flex gap-2' : ''}>
       {gameCover && (
         <div className="flex-shrink-0">
           <div className="text-muted-foreground text-sm font-semibold mb-1">{`${hours}:${minutes}`}</div>
@@ -97,14 +98,18 @@ function Event({ event }: { event: PlayerEvent }) {
           />
         </div>
       )}
-      <div className={gameCover ? "flex-1 pt-6" : ""}>
+      <div className={gameCover ? 'flex-1 pt-6' : ''}>
         {!gameCover && (
           <div className="text-muted-foreground text-sm font-semibold">{`${hours}:${minutes}`}</div>
         )}
-        <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
-        <p className="text-muted-foreground text-sm font-semibold mt-1">
-          {description} {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
-        </p>
+        <div>
+          <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
+          {isScoreChangeEvent && <ScoreChange event={event as PlayerEventScoreChange} />}
+        </div>
+        <div className="flex gap-0 place-items-center text-muted-foreground text-sm font-semibold">
+          <p>{description}</p>
+          {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
+        </div>
         {bonusesUsed.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1">
             <span className="text-xs text-muted-foreground mr-1">Использованы карты:</span>
@@ -140,7 +145,7 @@ function Event({ event }: { event: PlayerEvent }) {
   return <EventContent />;
 }
 
-type FilterValue = PlayerEvent["event_type"] | "all";
+type FilterValue = PlayerEvent['event_type'] | 'all';
 
 type EventsTabFilterOption = {
   title: string;
@@ -155,20 +160,17 @@ function EventsTabFilter({
   onFilterChange: (value: FilterValue) => void;
 }) {
   const options: EventsTabFilterOption[] = [
-    { title: "Все", value: "all" },
-    { title: "Карточки", value: "bonus-card" },
-    { title: "Очки", value: "score-change" },
-    { title: "Игры", value: "game" },
-    { title: "Ходы", value: "player-move" },
+    { title: 'Все', value: 'all' },
+    { title: 'Карточки', value: 'bonus-card' },
+    { title: 'Очки', value: 'score-change' },
+    { title: 'Игры', value: 'game' },
+    { title: 'Ходы', value: 'player-move' },
   ];
 
   return (
     <div className="flex items-center gap-2.5 justify-self-end">
       <span className="font-semibold text-muted-foreground">Фильтр</span>
-      <Select
-        value={selectedFilter}
-        onValueChange={(value) => onFilterChange(value as FilterValue)}
-      >
+      <Select value={selectedFilter} onValueChange={value => onFilterChange(value as FilterValue)}>
         <SelectTrigger className="w-[140px] rounded-lg bg-foreground/10">
           <SelectValue placeholder="Все" />
         </SelectTrigger>
@@ -188,7 +190,7 @@ function EventsTabFilter({
 }
 
 export default function EventsTab({ player }: Props) {
-  const [selectedFilter, setSelectedFilter] = useState<FilterValue>("all");
+  const [selectedFilter, setSelectedFilter] = useState<FilterValue>('all');
 
   const {
     data: eventsData,
@@ -203,12 +205,21 @@ export default function EventsTab({ player }: Props) {
   });
 
   const events = eventsData?.events || [];
-  const sortedEvents = events.sort((a, b) => b.timestamp - a.timestamp);
+  const sortedEvents = events.sort((a, b) => {
+    if (a.timestamp === b.timestamp) {
+      // score change comes before related action
+      if (a.event_type === 'score-change') {
+        return -1;
+      }
+      return 1;
+    }
+    return b.timestamp - a.timestamp;
+  });
 
   const filteredEvents =
-    selectedFilter === "all"
+    selectedFilter === 'all'
       ? sortedEvents
-      : sortedEvents.filter((event) => event.event_type === selectedFilter);
+      : sortedEvents.filter(event => event.event_type === selectedFilter);
 
   const eventsByDate = getEventsByDate(filteredEvents);
 
@@ -223,11 +234,9 @@ export default function EventsTab({ player }: Props) {
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-4">
-        <p className="text-muted-foreground text-center">
-          Произошла ошибка при загрузке событий
-        </p>
+        <p className="text-muted-foreground text-center">Произошла ошибка при загрузке событий</p>
         <p className="text-sm text-red-500 text-center">
-          {error instanceof Error ? error.message : "Неизвестная ошибка"}
+          {error instanceof Error ? error.message : 'Неизвестная ошибка'}
         </p>
         <Button onClick={() => refetch()} variant="outline">
           Повторить
@@ -242,7 +251,7 @@ export default function EventsTab({ player }: Props) {
       <div className="flex flex-col gap-7.5 mb-5">
         {Object.keys(eventsByDate).length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            {selectedFilter === "all" ? "Нет событий" : `Нет событий типа "${selectedFilter}"`}
+            {selectedFilter === 'all' ? 'Нет событий' : `Нет событий типа "${selectedFilter}"`}
           </div>
         ) : (
           Object.entries(eventsByDate).map(([date, events]) => {
@@ -255,10 +264,7 @@ export default function EventsTab({ player }: Props) {
                 </div>
                 <div className="flex flex-col gap-5">
                   {events.map((event, index) => (
-                    <Event
-                      key={`${event.timestamp}-${event.event_type}-${index}`}
-                      event={event}
-                    />
+                    <Event key={`${event.timestamp}-${event.event_type}-${index}`} event={event} />
                   ))}
                 </div>
               </div>
@@ -271,18 +277,18 @@ export default function EventsTab({ player }: Props) {
 }
 
 const months = [
-  "января",
-  "февраля",
-  "марта",
-  "апреля",
-  "мая",
-  "июня",
-  "июля",
-  "августа",
-  "сентября",
-  "октября",
-  "ноября",
-  "декабря",
+  'января',
+  'февраля',
+  'марта',
+  'апреля',
+  'мая',
+  'июня',
+  'июля',
+  'августа',
+  'сентября',
+  'октября',
+  'ноября',
+  'декабря',
 ];
 
 function getFormattedTime(ts: number) {
@@ -290,9 +296,9 @@ function getFormattedTime(ts: number) {
 
   return {
     month: months[date.getMonth()],
-    day: String(date.getDate()).padStart(2, "0"),
-    hours: String(date.getHours()).padStart(2, "0"),
-    minutes: String(date.getMinutes()).padStart(2, "0"),
+    day: String(date.getDate()).padStart(2, '0'),
+    hours: String(date.getHours()).padStart(2, '0'),
+    minutes: String(date.getMinutes()).padStart(2, '0'),
   };
 }
 
@@ -303,7 +309,7 @@ function getEventsByDate(events: PlayerEvent[]) {
       (acc[date] = acc[date] || []).push(cur);
       return acc;
     },
-    {} as Record<string, PlayerEvent[]>,
+    {} as Record<string, PlayerEvent[]>
   );
 
   const sortedEventsByDate: Record<string, PlayerEvent[]> = {};
@@ -312,4 +318,14 @@ function getEventsByDate(events: PlayerEvent[]) {
   }
 
   return sortedEventsByDate;
+}
+
+function ScoreChange({ event }: { event: PlayerEventScoreChange }) {
+  return (
+    <div className="flex items-center gap-2">
+      {event.score_before}
+      <ArrowRight className="w-4 h-4" />
+      {event.score_after}
+    </div>
+  );
 }
