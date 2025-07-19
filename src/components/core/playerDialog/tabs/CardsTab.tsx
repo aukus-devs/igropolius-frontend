@@ -12,11 +12,11 @@ function GameCard({ type, inactive }: GameCardProps) {
   
   return (
     <div
-      className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] bg-primary text-primary-foreground rounded-xl data-[inactive=true]:pointer-events-none data-[inactive=true]:grayscale-100"
+      className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] bg-primary text-primary-foreground rounded-xl data-[inactive=true]:grayscale-100"
       data-inactive={inactive}
     >
       <Tooltip delayDuration={0}>
-        <TooltipTrigger className="flex w-[32px] h-[45px] rounded-sm overflow-hidden">
+        <TooltipTrigger className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] rounded-xl overflow-hidden">
           <img src={cardData.picture} />
         </TooltipTrigger>
         <TooltipContent
