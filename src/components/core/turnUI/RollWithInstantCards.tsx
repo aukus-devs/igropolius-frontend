@@ -4,7 +4,7 @@ import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { activateInstantCard } from '@/lib/api';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
 
 type InstantCard = {
@@ -18,37 +18,44 @@ type BonusCard = {
 type OptionType = InstantCard | BonusCard;
 
 export default function RollWithInstantCards() {
-  const { receiveBonusCard, playerCards, setNextTurnState } = usePlayerStore(
-    useShallow(state => ({
-      receiveBonusCard: state.receiveBonusCard,
-      playerCards: state.myPlayer?.bonus_cards ?? [],
-      setNextTurnState: state.setNextTurnState,
-    }))
-  );
+  const { receiveBonusCard, playerCards, setNextTurnState, hasDowngradeBonus, hasUpgradeBonus } =
+    usePlayerStore(
+      useShallow(state => ({
+        receiveBonusCard: state.receiveBonusCard,
+        playerCards: state.myPlayer?.bonus_cards ?? [],
+        setNextTurnState: state.setNextTurnState,
+        hasDowngradeBonus: state.hasDowngradeBonus,
+        hasUpgradeBonus: state.hasUpgradeBonus,
+      }))
+    );
 
   const [activationResult, setActivationResult] = useState<InstantCardResult | null>(null);
+  const [moveToCardDrop, setMoveToCardDrop] = useState<boolean>(false);
 
-  const handleFinished = async (option: WeightedOption<OptionType>) => {
-    if (isInstantCard(option.value)) {
-      if (option.value.instant === 'lose-card-or-3-percent') {
-        setNextTurnState({ action: 'drop-card' });
-        return;
+  const handleFinished = useCallback(
+    async (option: WeightedOption<OptionType>) => {
+      if (isInstantCard(option.value)) {
+        if (option.value.instant === 'lose-card-or-3-percent') {
+          setMoveToCardDrop(true);
+          return;
+        }
+        const response = await activateInstantCard(option.value.instant);
+        setActivationResult(response.result ?? 'default');
+        resetCurrentPlayerQuery();
+        resetPlayersQuery();
+      } else if (isBonusCard(option.value)) {
+        await receiveBonusCard(option.value.card, false);
       }
-      const response = await activateInstantCard(option.value.instant);
-      setActivationResult(response.result ?? 'default');
-      resetCurrentPlayerQuery();
-      resetPlayersQuery();
-    } else if (isBonusCard(option.value)) {
-      await receiveBonusCard(option.value.card, false);
-    }
-  };
+    },
+    [receiveBonusCard, setActivationResult]
+  );
 
   const getWinnerText = (option: WeightedOption<OptionType>) => {
     if (isInstantCard(option.value)) {
       return frontendInstantCardsData[option.value.instant].description;
     }
     if (isBonusCard(option.value)) {
-      return frontendCardsData[option.value.card].name;
+      return frontendCardsData[option.value.card].description;
     }
     return 'Неизвестный тип карточки' as never;
   };
@@ -74,9 +81,16 @@ export default function RollWithInstantCards() {
       }
     });
 
-    Object.entries(frontendInstantCardsData).forEach(([instantType, cardData]) => {
+    Object.entries(frontendInstantCardsData).forEach(([instantType_, cardData]) => {
+      const instantType = instantType_ as InstantCardType;
+      if (hasDowngradeBonus && instantType === 'downgrade-next-building') {
+        return; // Skip this card if downgrade bonus is active
+      }
+      if (hasUpgradeBonus && instantType === 'upgrade-next-building') {
+        return; // Skip this card if upgrade bonus is active
+      }
       result.push({
-        value: { instant: instantType as InstantCardType },
+        value: { instant: instantType },
         label: cardData.name,
         weight: 1,
         imageUrl: cardData.picture,
@@ -84,22 +98,35 @@ export default function RollWithInstantCards() {
     });
 
     return result;
-  }, [playerCards]);
+  }, [playerCards, hasDowngradeBonus, hasUpgradeBonus]);
+
+  let finishText = 'Готово';
+  if (moveToCardDrop) {
+    finishText = 'Перейти к дропу карточки';
+  }
+
+  const handleClose = async () => {
+    if (moveToCardDrop) {
+      await setNextTurnState({ action: 'drop-card' });
+    }
+  };
+
+  const getSecondaryText = () => {
+    if (activationResult === 'reroll') {
+      return 'Выпал реролл';
+    }
+  };
 
   return (
     <GenericRoller<OptionType>
       options={options}
       header="Ролл карточки"
       openButtonText="Ролл за донат"
-      finishButtonText="Готово"
+      finishButtonText={finishText}
       onRollFinish={handleFinished}
       getWinnerText={getWinnerText}
-      getSecondaryText={(option: WeightedOption<OptionType>) => {
-        if (isInstantCard(option.value)) {
-          return getSecondaryText(option.value.instant, activationResult);
-        }
-        return undefined;
-      }}
+      onClose={handleClose}
+      getSecondaryText={getSecondaryText}
     />
   );
 }
@@ -110,26 +137,4 @@ function isInstantCard(option: OptionType): option is InstantCard {
 
 function isBonusCard(option: OptionType): option is BonusCard {
   return 'card' in option;
-}
-
-function getSecondaryText(cardType: InstantCardType, result: InstantCardResult | null) {
-  switch (cardType) {
-    case 'lose-card-or-3-percent':
-      switch (result) {
-        case 'card-lost':
-          return 'Карточка потеряна';
-        case 'score-lost':
-          return 'Потеряно 3% очков';
-      }
-      break;
-    case 'receive-5-percent-or-reroll':
-      switch (result) {
-        case 'reroll':
-          return 'Реролл колеса';
-        case 'score-received':
-          return 'Получено 5% очков';
-      }
-      break;
-  }
-  return undefined;
 }

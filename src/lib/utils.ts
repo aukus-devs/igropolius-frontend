@@ -200,6 +200,7 @@ export function getNextTurnState({
     'filling-game-review',
     'entering-prison',
     'dropping-card-after-game-drop',
+    'dropping-card-after-instant-roll',
     'choosing-train-ride',
     'choosing-building-sector',
     'stealing-bonus-card',

@@ -10,7 +10,7 @@ import SkipMapTaxDialog from './SkipMapTaxDialog';
 import SkipPrisonDialog from './SkipPrisonDialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import LoseCardOnDropDialog from './LoseCardOnDropDialog';
+import LoseCardOnDropDialog from './LoseCardDialog';
 import PrisonEnterCardRoll from './PrisonEnterCardRoll';
 import GameRerollDialog from './GameRerollDialog';
 import SelectBuildingSectorDialog from './SelectingBuildingSectorDialog';

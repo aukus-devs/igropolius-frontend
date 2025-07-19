@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import BezierEasing from 'bezier-easing';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Card, CardFooter } from '../../ui/card';
 
 const MIN_SPIN_DURATION = 12000; // ms
@@ -122,7 +122,7 @@ export default function GenericRoller<T>({
     }
   }
 
-  const idleAnimate = () => {
+  const idleAnimate = useCallback(() => {
     const speed = 1;
     const direction = -1;
     offsetRef.current += speed * direction;
@@ -142,9 +142,9 @@ export default function GenericRoller<T>({
     }
 
     animationRef.current = requestAnimationFrame(idleAnimate);
-  };
+  }, [rollOptions]);
 
-  function startRollingAnimation() {
+  const startRollingAnimation = useCallback(() => {
     const easeBackswing = BezierEasing(0.38, 0.96, 0.99, 0.99);
     const easeSpin = BezierEasing(0.06, 0.65, 0.35, 1);
     const easeSettle = BezierEasing(0.4, 0.76, 0.64, 0.94);
@@ -197,6 +197,7 @@ export default function GenericRoller<T>({
             animationStartTime = now;
           } else {
             finishAnimation();
+            return;
           }
         }
         animationRef.current = requestAnimationFrame(animate);
@@ -209,8 +210,10 @@ export default function GenericRoller<T>({
 
         if (progress >= 1) {
           finishAnimation();
+          animationRef.current = null;
+        } else {
+          animationRef.current = requestAnimationFrame(animate);
         }
-        animationRef.current = requestAnimationFrame(animate);
       }
     }
 
@@ -222,7 +225,7 @@ export default function GenericRoller<T>({
       animationRef.current = null;
     }
     animationRef.current = requestAnimationFrame(animate);
-  }
+  }, [onRollFinish, cardList]);
 
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
@@ -252,7 +255,7 @@ export default function GenericRoller<T>({
     if (rollPhase === 'rolling' && cardList.length > IDLE_CARD_COUNT) {
       startRollingAnimation();
     }
-  }, [cardList, rollPhase]);
+  }, [rollPhase, cardList.length, idleAnimate, startRollingAnimation]);
 
   const handleRollClick = () => {
     setRollPhase('rolling');
