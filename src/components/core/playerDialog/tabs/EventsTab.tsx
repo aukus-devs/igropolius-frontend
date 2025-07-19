@@ -1,4 +1,4 @@
-import { ArrowRight, Share } from '@/components/icons';
+import { Share } from '@/components/icons';
 import {
   Select,
   SelectContent,
@@ -20,6 +20,7 @@ import {
   DiceRollJson,
   BonusCardType,
   PlayerEventScoreChange,
+  EventType,
 } from '@/lib/types';
 import { getEventDescription, getBonusCardName } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
@@ -104,11 +105,10 @@ function Event({ event }: { event: PlayerEvent }) {
         )}
         <div>
           <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
-          {isScoreChangeEvent && <ScoreChange event={event as PlayerEventScoreChange} />}
         </div>
         <div className="flex gap-0 place-items-center text-muted-foreground text-sm font-semibold">
           <p>{description}</p>
-          {isScoreChangeEvent && <Share className="w-3.5 h-3.5 inline" />}
+          {isScoreChangeEvent && <ScoreChangeDescription event={event as PlayerEventScoreChange} />}
         </div>
         {bonusesUsed.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1">
@@ -189,6 +189,13 @@ function EventsTabFilter({
   );
 }
 
+const EventTypeOrder: { [k in EventType]: number } = {
+  game: 1,
+  'bonus-card': 2,
+  'score-change': 3,
+  'player-move': 4,
+};
+
 export default function EventsTab({ player }: Props) {
   const [selectedFilter, setSelectedFilter] = useState<FilterValue>('all');
 
@@ -207,11 +214,7 @@ export default function EventsTab({ player }: Props) {
   const events = eventsData?.events || [];
   const sortedEvents = events.sort((a, b) => {
     if (a.timestamp === b.timestamp) {
-      // score change comes before related action
-      if (a.event_type === 'score-change') {
-        return -1;
-      }
-      return 1;
+      return EventTypeOrder[b.event_type] - EventTypeOrder[a.event_type];
     }
     return b.timestamp - a.timestamp;
   });
@@ -320,12 +323,19 @@ function getEventsByDate(events: PlayerEvent[]) {
   return sortedEventsByDate;
 }
 
-function ScoreChange({ event }: { event: PlayerEventScoreChange }) {
+function ScoreChangeDescription({ event }: { event: PlayerEventScoreChange }) {
   return (
     <div className="flex items-center gap-2">
-      {event.score_before}
-      <ArrowRight className="w-4 h-4" />
-      {event.score_after}
+      <div
+        className={`flex items-center gap-0 ${event.amount > 0 ? 'text-[#30D158]' : 'text-[#FF453A]'}`}
+      >
+        <p>
+          {event.amount > 0 && '+'}
+          {event.amount}
+        </p>
+        <Share className="w-3.5 h-3.5 inline" />
+      </div>
+      ({event.score_before}&nbsp;→&nbsp;{event.score_after})
     </div>
   );
 }

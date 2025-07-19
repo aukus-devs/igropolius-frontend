@@ -154,7 +154,7 @@ export type TaxData = {
   playerIncomes: Record<number, number>;
 };
 
-type EventType = 'game' | 'bonus-card' | 'player-move' | 'score-change';
+export type EventType = 'game' | 'bonus-card' | 'player-move' | 'score-change';
 
 export type PlayerEventBase = {
   event_type: EventType;

@@ -110,14 +110,9 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
     }
   }
 
-  let description = event.amount.toString();
-  if (event.amount > 0) {
-    description = `+${description}`;
-  }
-
   return {
     title,
-    description,
+    description: '',
   };
 }
 
