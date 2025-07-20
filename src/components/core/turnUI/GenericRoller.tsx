@@ -69,7 +69,7 @@ function getRandomExcept<T>(
   const available = options.filter(opt => exclude.value !== opt.value);
 
   if (available.length === 0) {
-    throw new Error('No valid options to choose after excluding');
+    return exclude; // If no other options, return the excluded one
   }
 
   return available[Math.floor(Math.random() * available.length)];

@@ -239,6 +239,10 @@ const usePlayerStore = create<{
     let currentSector = SectorsById[currentSectorId];
     if (!currentSector) throw new Error(`Current sector not found.`);
 
+    if (steps === 0) {
+      return currentSectorId;
+    }
+
     set({ isPlayerMoving: true });
 
     const { isOrthographic, cameraToPlayer, moveToPlayer, rotateAroundPlayer } =
