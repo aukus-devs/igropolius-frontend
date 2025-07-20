@@ -255,7 +255,7 @@ export type PlayerTurnState =
   | 'using-dice-bonuses'
   | 'using-prison-bonuses'
   | 'rolling-bonus-card'
-  | 'using-reroll-bonuses'
+  // | 'using-reroll-bonuses'
   | 'filling-game-review'
   | 'choosing-train-ride'
   | 'using-map-tax-bonuses'

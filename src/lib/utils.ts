@@ -251,7 +251,7 @@ function getNextState({
   const hasStreetTaxCard = bonusCardsSet.has('evade-street-tax');
   const hasMapTaxCard = bonusCardsSet.has('evade-map-tax');
   const hasPrisonCard = bonusCardsSet.has('skip-prison-day');
-  const hasRerollCard = bonusCardsSet.has('reroll-game');
+  // const hasRerollCard = bonusCardsSet.has('reroll-game');
   const hasDiceCards = bonusCardsSet.has('adjust-roll-by1') || bonusCardsSet.has('choose-1-die');
 
   const skipBonus = action === 'skip-bonus';
@@ -280,7 +280,7 @@ function getNextState({
       if (sector.type === 'prison') {
         return 'entering-prison';
       }
-      return 'using-reroll-bonuses';
+      return 'filling-game-review';
     case 'using-prison-bonuses':
       if (sector.type === 'prison' && hasPrisonCard && !skipBonus) {
         if (action === 'skip-prison') {
@@ -288,18 +288,18 @@ function getNextState({
         }
         return 'stop';
       }
-      return 'using-reroll-bonuses';
-    case 'using-reroll-bonuses':
-      if (hasRerollCard && !skipBonus) {
-        return 'stop';
-      }
       return 'filling-game-review';
+    // case 'using-reroll-bonuses':
+    //   if (hasRerollCard && !skipBonus) {
+    //     return 'stop';
+    //   }
+    //   return 'filling-game-review';
     case 'filling-game-review':
       if (action === 'drop-game') {
         return 'dropping-card-after-game-drop';
       }
       if (action === 'reroll-game') {
-        return 'using-reroll-bonuses';
+        return 'filling-game-review';
       }
       if (action === 'drop-card') {
         return 'dropping-card-after-instant-roll';

@@ -61,8 +61,8 @@ export default function PlayerTurnUI() {
       return <DiceBonusesDialog />;
     case 'using-street-tax-bonuses':
       return <SkipStreetTaxDialog />;
-    case 'using-reroll-bonuses':
-      return <GameRerollDialog />;
+    // case 'using-reroll-bonuses':
+    //   return <GameRerollDialog />;
     case 'using-prison-bonuses':
       return <SkipPrisonDialog />;
     case 'using-map-tax-bonuses':
