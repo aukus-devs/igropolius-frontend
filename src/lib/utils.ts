@@ -128,15 +128,15 @@ function getEventBonusCardInfo(event: PlayerEventBonusCard) {
     case 'used':
       title = 'Использовал карточку';
       break;
-    case 'lost':
+    case 'dropped':
       title = 'Потерял карточку';
       break;
-    case 'stolen': {
+    case 'stolen-from-me': {
       const player = players.find(p => p.id === event.stolen_by);
       title = `${player?.username} украл карточку`;
       break;
     }
-    case 'looted': {
+    case 'stolen-by-me': {
       const player = players.find(p => p.id === event.stolen_from_player);
       title = `Карточка украдена у ${player?.username}`;
       break;

@@ -207,7 +207,7 @@ export type DiceRollJson = {
 
 export type PlayerEventBonusCard = PlayerEventBase & {
   event_type: 'bonus-card';
-  subtype: 'received' | 'used' | 'lost' | 'stolen' | 'looted';
+  subtype: 'received' | 'used' | 'dropped' | 'stolen-by-me' | 'stolen-from-me';
   bonus_type: BonusCardType | InstantCardType;
   sector_id: number;
   used_at: number | null;
