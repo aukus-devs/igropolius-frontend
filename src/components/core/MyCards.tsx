@@ -4,9 +4,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { Button } from '../ui/button';
 import { frontendCardsData } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
-import { BonusCardType } from '@/lib/types';
+import { BonusCardType, ManualUseCard } from '@/lib/types';
 import { useState } from 'react';
-import GameRerollDialog from './turnUI/GameRerollDialog';
+import BonusCardUsedConfirmation from './turnUI/BonusCardUsedConfirmation';
+import { activateBonusCard } from '@/lib/api';
+import { resetPlayersQuery } from '@/lib/queryClient';
 
 export default function MyCards() {
   const { cards, turnState } = usePlayerStore(
@@ -16,27 +18,24 @@ export default function MyCards() {
     }))
   );
 
-  const [showRerollModal, setShowRerollModal] = useState(false);
+  const [usedCard, setUsedCard] = useState<ManualUseCard | null>(null);
 
-  const handleUseCard = (cardType: BonusCardType) => {
-    if (cardType === 'reroll-game') {
-      setShowRerollModal(true);
-      return;
-    }
-    if (cardType === 'game-help-allowed') {
-      // pass
+  const handleUseCard = async (cardType: BonusCardType) => {
+    if (cardType === 'reroll-game' || cardType === 'game-help-allowed') {
+      await activateBonusCard(cardType);
+      setUsedCard(cardType);
+      resetPlayersQuery();
       return;
     }
   };
 
   const handleDialogClose = () => {
-    setShowRerollModal(false);
-    // setNextTurnState({});
+    setUsedCard(null);
   };
 
   return (
     <>
-      <GameRerollDialog open={showRerollModal} onClose={handleDialogClose} />
+      {usedCard && <BonusCardUsedConfirmation card={usedCard} onClose={handleDialogClose} />}
       <Card className="p-2 gap-2" style={{ width: '300px' }}>
         <span>Мои карточки</span>
         <div className="flex flex-wrap gap-2 ">

@@ -362,3 +362,5 @@ export type InstantCardResult =
   | 'card-lost'
   | 'score-received'
   | 'score-lost';
+
+export type ManualUseCard = 'reroll-game' | 'game-help-allowed';

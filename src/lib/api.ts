@@ -420,7 +420,7 @@ export async function giveBonusCard(bonusType: BonusCardType): Promise<ActiveBon
   return response.json();
 }
 
-export async function applyBonusCard(bonusType: BonusCardType): Promise<void> {
+export async function activateBonusCard(bonusType: BonusCardType): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
   }
