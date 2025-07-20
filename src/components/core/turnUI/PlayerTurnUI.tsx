@@ -12,7 +12,6 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import LoseCardOnDropDialog from './LoseCardDialog';
 import PrisonEnterCardRoll from './PrisonEnterCardRoll';
-import GameRerollDialog from './GameRerollDialog';
 import SelectBuildingSectorDialog from './SelectingBuildingSectorDialog';
 import { activateInstantCard, makePlayerMove } from '@/lib/api';
 import RollWithInstantCards from './RollWithInstantCards';

@@ -9,11 +9,10 @@ import { useState } from 'react';
 import GameRerollDialog from './turnUI/GameRerollDialog';
 
 export default function MyCards() {
-  const { cards, turnState, setNextTurnState } = usePlayerStore(
+  const { cards, turnState } = usePlayerStore(
     useShallow(state => ({
       cards: state.myPlayer?.bonus_cards ?? [],
       turnState: state.turnState,
-      setNextTurnState: state.setNextTurnState,
     }))
   );
 
