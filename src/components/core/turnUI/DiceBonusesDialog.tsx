@@ -1,3 +1,5 @@
+import { TrainsConfig } from '@/lib/constants';
+import { SectorsById } from '@/lib/mockData';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useState } from 'react';
@@ -6,6 +8,7 @@ import { useShallow } from 'zustand/shallow';
 export default function DiceBonusesDialog() {
   const [selectedDie, setSelectedDie] = useState<number | null>(null);
   const [adjustBy1, setAdjustBy1] = useState<number | null>(null);
+  const [trainRide, setTrainRide] = useState<boolean>(false);
 
   const rollResult = useDiceStore(state => state.rollResult);
   const rollResultSum = rollResult.reduce((a, b) => a + b, 0);
@@ -16,13 +19,36 @@ export default function DiceBonusesDialog() {
   const { myPlayer, moveMyPlayer } = usePlayerStore(
     useShallow(state => ({ myPlayer: state.myPlayer, moveMyPlayer: state.moveMyPlayer }))
   );
-  const bonusCards = myPlayer?.bonus_cards || [];
+
+  if (!myPlayer) {
+    throw new Error('My player not found');
+  }
+
+  const bonusCards = myPlayer.bonus_cards || [];
 
   const hasAdjustBy1 = bonusCards.some(card => card.bonus_type === 'adjust-roll-by1');
   const hasChooseDie = bonusCards.some(card => card.bonus_type === 'choose-1-die');
+  const canRideTrain = Boolean(
+    myPlayer.sector_id && SectorsById[myPlayer.sector_id].type === 'railroad'
+  );
 
-  // const adjustBy1Used = adjustBy1 !== null;
-  // const chooseDieUsed = selectedDie !== null;
+  let trainDestination: number | null = null;
+  if (canRideTrain) {
+    trainDestination = TrainsConfig[myPlayer.sector_id].sectorTo;
+  }
+
+  let finalDestination = myPlayer.sector_id;
+  if (trainRide && trainDestination) {
+    finalDestination = trainDestination;
+  }
+  if (selectedDie) {
+    finalDestination += selectedDie;
+  } else {
+    finalDestination += rollResultSum;
+  }
+  if (adjustBy1) {
+    finalDestination += adjustBy1;
+  }
 
   const handleSubmit = () => {
     let adjustBy1Typed = null;
@@ -42,20 +68,39 @@ export default function DiceBonusesDialog() {
       adjustBy1: adjustBy1Typed,
       selectedDie,
       action: 'skip-bonus',
+      rideTrain: trainRide,
     });
   };
 
   return (
     <div className="backdrop-blur-[1.5rem] bg-card/70 border-none rounded-xl p-4 font-semibold">
       <div className="w-[400px]">
-        <div className="text-xl font-wide-semibold">Применить карточки?</div>
+        <div className="text-xl font-wide-semibold">Бонусы на ход</div>
         <div className="mt-[20px]">
           На кубиках: {rollResultSum} ({rollResult.join(' и ')})
         </div>
 
+        {canRideTrain && trainDestination && (
+          <div className="mt-[20px]">
+            <div className="mb-[15px]">
+              Проехать на поезде до сектора #{trainDestination} и ходить с него?
+            </div>
+            <NumberToggle
+              options={[
+                { value: 0, label: 'Нет' },
+                { value: 1, label: 'Да' },
+              ]}
+              value={trainRide ? 1 : 0}
+              onChange={value => {
+                setTrainRide(value === 1);
+              }}
+            />
+          </div>
+        )}
+
         {hasChooseDie && (
           <div className="mt-[20px]">
-            <div className="mb-[15px]">Выбрать один кубик?</div>
+            <div className="mb-[15px]">Выбрать только один кубик?</div>
             <NumberToggle
               options={[
                 { value: null, label: 'Нет' },
@@ -71,6 +116,7 @@ export default function DiceBonusesDialog() {
             />
           </div>
         )}
+
         {hasAdjustBy1 && (
           <div className="mt-[20px]">
             <div className="mb-[15px]">Изменить результат на 1?</div>
@@ -87,13 +133,14 @@ export default function DiceBonusesDialog() {
             />
           </div>
         )}
+
         <div className="mt-[50px]">
           <button
             type="button"
             onClick={handleSubmit}
             className="w-full font-bold bg-primary text-primary-foreground rounded-md py-2 hover:bg-primary/90 transition-colors"
           >
-            Применить с результатом: {adjustedRoll}
+            Применить с результатом: {adjustedRoll} (#{finalDestination})
           </button>
         </div>
       </div>

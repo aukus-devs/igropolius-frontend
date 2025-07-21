@@ -327,24 +327,6 @@ const usePlayerStore = create<{
       adjust_by_1: params.adjustBy1,
     });
 
-    // remove used cards from player
-    // set(state => ({
-    //   myPlayer: state.myPlayer
-    //     ? {
-    //         ...state.myPlayer,
-    //         bonus_cards: state.myPlayer.bonus_cards.filter(card => {
-    //           if (params.adjustBy1 !== null && card.bonus_type === 'adjust-roll-by1') {
-    //             return false;
-    //           }
-    //           if (params.selectedDie !== null && card.bonus_type === 'choose-1-die') {
-    //             return false;
-    //           }
-    //           return true;
-    //         }),
-    //       }
-    //     : null,
-    // }));
-
     await animatePlayerMovement({ steps: params.totalRoll });
     await setNextTurnState({ prevSectorId: originalSector, action: params.action });
     resetNotificationsQuery();

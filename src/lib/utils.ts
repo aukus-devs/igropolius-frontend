@@ -201,7 +201,7 @@ export function getNextTurnState({
     'entering-prison',
     'dropping-card-after-game-drop',
     'dropping-card-after-instant-roll',
-    'choosing-train-ride',
+    // 'choosing-train-ride',
     'choosing-building-sector',
     'stealing-bonus-card',
   ];
@@ -263,6 +263,9 @@ function getNextState({
       if (hasDiceCards && !skipBonus) {
         return 'stop';
       }
+      if (sector.type === 'railroad') {
+        return 'stop';
+      }
       return 'using-map-tax-bonuses';
     case 'using-map-tax-bonuses':
       if (mapCompleted && hasMapTaxCard && !skipBonus) {
@@ -306,7 +309,7 @@ function getNextState({
       }
       switch (sector.type) {
         case 'railroad':
-          return 'choosing-train-ride';
+          return 'rolling-dice';
         case 'bonus':
           return 'rolling-bonus-card';
         case 'property':
@@ -324,11 +327,11 @@ function getNextState({
       }
     case 'rolling-bonus-card':
       return 'rolling-dice';
-    case 'choosing-train-ride':
-      if (mapCompleted && hasMapTaxCard) {
-        return 'using-map-tax-bonuses-after-train-ride';
-      }
-      return 'rolling-dice';
+    // case 'choosing-train-ride':
+    //   if (mapCompleted && hasMapTaxCard) {
+    //     return 'using-map-tax-bonuses-after-train-ride';
+    //   }
+    //   return 'rolling-dice';
     case 'dropping-card-after-game-drop':
       return 'entering-prison';
     case 'entering-prison':

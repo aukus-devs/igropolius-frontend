@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { SectorsById } from '@/lib/mockData';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
@@ -18,10 +19,12 @@ export function MoveButton() {
   const hasRollCards = playerCards.some(
     card => card.bonus_type === 'adjust-roll-by1' || card.bonus_type === 'choose-1-die'
   );
+  const canRideTrain = myPlayer?.sector_id && SectorsById[myPlayer.sector_id].type === 'railroad';
+  const canModifyRoll = canRideTrain || hasRollCards;
 
   const handleClick = async () => {
     const roll = await rollDice();
-    if (hasRollCards) {
+    if (canModifyRoll) {
       setNextTurnState({
         prevSectorId: myPlayer?.sector_id,
       });

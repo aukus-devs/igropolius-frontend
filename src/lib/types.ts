@@ -258,7 +258,7 @@ export type PlayerTurnState =
   | 'rolling-bonus-card'
   // | 'using-reroll-bonuses'
   | 'filling-game-review'
-  | 'choosing-train-ride'
+  // | 'choosing-train-ride'
   | 'using-map-tax-bonuses'
   | 'using-street-tax-bonuses'
   | 'dropping-card-after-game-drop'
@@ -310,6 +310,7 @@ export type MoveMyPlayerParams = {
   // bonusesUsed: RollBonusType[];
   selectedDie: number | null;
   adjustBy1: 1 | -1 | null;
+  rideTrain?: boolean;
   action?: PlayerStateAction;
 };
 

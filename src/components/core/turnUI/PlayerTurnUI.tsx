@@ -1,6 +1,5 @@
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
-import TrainMoveDialog from './TrainMoveDialog';
 import GameReviewForm from './GameReviewForm';
 import RollBonusCard from './RollBonusCard';
 import DiceBonusesDialog from './DiceBonusesDialog';
@@ -114,8 +113,8 @@ export default function PlayerTurnUI() {
       return null;
     case 'rolling-dice':
       return <MoveButton />;
-    case 'choosing-train-ride':
-      return <TrainMoveDialog />;
+    // case 'choosing-train-ride':
+    //   return <TrainMoveDialog />;
     case 'filling-game-review':
       return (
         <div className="flex gap-4">
