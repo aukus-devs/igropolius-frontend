@@ -12,6 +12,8 @@ COPY . .
 
 RUN BUILD_DATE=$BUILD_DATE yarn build:prod
 
+RUN rm -f dist/version.json && echo "{ \"date\": \"$BUILD_DATE\" }" > dist/version.json
+
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
 
