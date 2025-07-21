@@ -21,6 +21,7 @@ export default function DiceBonusesDialog() {
   );
 
   if (!myPlayer) {
+    return null;
     throw new Error('My player not found');
   }
 
