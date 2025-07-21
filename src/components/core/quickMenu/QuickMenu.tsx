@@ -4,7 +4,6 @@ import usePlayerStore from "@/stores/playerStore";
 import AboutDialog from "./options/AboutDialog";
 import OrthographicToggle from "./options/OrthographicToggle";
 import RulesDialog from "./options/RulesDialog";
-import PointaucIntegration from "./options/PointaucIntegration";
 import Countdown from "./options/Countdown";
 import { PlayerData } from "@/lib/types";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../Collapsible";
@@ -56,8 +55,6 @@ function QuickMenu() {
         </div>
 
         <div className={groupStyle}>
-          <PointaucIntegration className={buttonStyle} />
-          <Separator />
           <RulesDialog className={buttonStyle} />
           <Separator />
           <AboutDialog className={buttonStyle} />
