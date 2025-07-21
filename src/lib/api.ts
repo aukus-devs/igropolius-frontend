@@ -626,3 +626,12 @@ export async function activateInstantCard(
   });
   return response.json();
 }
+
+export async function fetchFrontVersion(): Promise<{ date: string }> {
+  if (MOCK_API) {
+    return Promise.resolve({ date: import.meta.env.BUILD_DATE });
+  }
+  const res = await fetch('/version.json?ts=' + Date.now());
+  if (!res.ok) throw new Error('Failed to fetch version');
+  return res.json();
+}

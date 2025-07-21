@@ -1,0 +1,3 @@
+{
+  "date": "import.meta.env.BUILD_DATE"
+} 

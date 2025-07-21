@@ -11,6 +11,7 @@ import PlayerTurnUI from './core/turnUI/PlayerTurnUI';
 import useAdminStore from '@/stores/adminStore';
 import AdminPanel from './core/AdminPanel';
 import MyCards from './core/MyCards';
+import FrontVersionInfo from './FrontVersionInfo';
 
 function DesktopUI() {
   const { turnState, position, loggedIn } = usePlayerStore(
@@ -51,6 +52,7 @@ function DesktopUI() {
           <MyCards />
         </div>
       )}
+      <FrontVersionInfo />
 
       {position && (
         <div className="absolute bottom-4 right-4">

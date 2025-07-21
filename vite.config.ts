@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react";
 import { defineConfig, Plugin } from "vite";
 import serveStatic from "serve-static";
 
+const BUILD_DATE = process.env.BUILD_DATE || new Date().toISOString();
+
 // https://vite.dev/config/
 
 const base = process.env.VITE_BASE_URL || "/react-3d/";
@@ -28,6 +30,9 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins,
+    define: {
+      'import.meta.env.BUILD_DATE': JSON.stringify(BUILD_DATE),
+    },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),

@@ -123,13 +123,6 @@
     "YTUC" 712;
 } */
 
-.fps-meter {
-  position: absolute !important;
-  top: auto !important;
-  bottom: 0px !important;
-  left: 0px !important;
-}
-
 /* styles for rich editor */
 .rich-editor .ql-toolbar svg .ql-stroke,
 .rich-editor .ql-toolbar svg .ql-line {

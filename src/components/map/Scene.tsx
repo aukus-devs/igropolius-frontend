@@ -1,19 +1,21 @@
-import CustomCameraControls from "./CustomCameraControls";
-import Floor from "./Floor";
-import { Environment, Grid, Stats } from "@react-three/drei";
-import GameBoard from "./GameBoard";
-import { Railroad } from "./Railroad";
-import { colors } from "@/lib/types";
-import { STORAGE_BASE_URL } from "@/lib/constants";
+import CustomCameraControls from './CustomCameraControls';
+import Floor from './Floor';
+import { Environment, Grid, Stats } from '@react-three/drei';
+import GameBoard from './GameBoard';
+import { Railroad } from './Railroad';
+import { colors } from '@/lib/types';
+import { STORAGE_BASE_URL } from '@/lib/constants';
+import { useEffect, useRef } from 'react';
+import { fetchFrontVersion } from '@/lib/api';
 
 function Scene() {
   const gridConfig = {
     cellSize: 0.5,
     cellThickness: 1,
-    cellColor: "#6f6f6f",
+    cellColor: '#6f6f6f',
     sectionSize: 3.3,
     sectionThickness: 1.5,
-    sectionColor: "#9d4b4b",
+    sectionColor: '#9d4b4b',
     fadeDistance: 200,
     fadeStrength: 1,
     followCamera: false,
@@ -46,6 +48,20 @@ function Scene() {
   //   }
   // }, [directionalLightRef, scene]);
 
+  const currentDate = import.meta.env.BUILD_DATE;
+  const lastDateRef = useRef(currentDate);
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const data = await fetchFrontVersion();
+        if (data.date && data.date !== lastDateRef.current) {
+          window.location.href = window.location.pathname + '?reload=' + new Date().getTime();
+        }
+      } catch {}
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <ambientLight intensity={0.3} color="#D3D3D3" />
@@ -77,10 +93,7 @@ function Scene() {
       <GameBoard />
       <Railroad />
       <Floor />
-      <Environment
-        files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`}
-        background="only"
-      />
+      <Environment files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`} background="only" />
 
       {/* origin position marker */}
       <Grid position={[0, 1, 0]} args={[1, 1]} {...gridConfig} />
