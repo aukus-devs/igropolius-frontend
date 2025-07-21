@@ -10,7 +10,7 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 
-RUN yarn build:prod
+RUN BUILD_DATE=$BUILD_DATE yarn build:prod
 
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
@@ -18,8 +18,6 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 
 COPY --from=build /app/dist .
-
-RUN sed -i "s/import.meta.env.BUILD_DATE/$BUILD_DATE/g" version.json
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
