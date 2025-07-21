@@ -7,8 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { LoaderCircleIcon } from 'lucide-react';
 import { fetchPlayerEvents } from '@/lib/api';
@@ -32,44 +30,43 @@ type Props = {
 
 function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <h4 className="font-semibold">Результат броска кубиков</h4>
-        <Badge variant={diceRollJson.is_random_org_result ? 'default' : 'secondary'}>
-          {diceRollJson.is_random_org_result ? 'Random.org' : 'Локальный'}
-        </Badge>
+    <div className="space-y-2">
+      <div className="text-xs text-muted-foreground">
+        Результаты броска кубиков через Random.org
       </div>
-
-      <div className="space-y-2">
-        <p className="text-sm">
-          <span className="font-semibold">Кубики:</span> {diceRollJson.data.join(', ')}
-        </p>
-        <p className="text-sm">
-          <span className="font-semibold">Сумма:</span>{' '}
-          {diceRollJson.data[0] + diceRollJson.data[1]}
-        </p>
-
-        {diceRollJson.is_random_org_result && (
-          <div className="space-y-2">
-            <p className="text-sm font-semibold text-green-600">
-              ✓ Результат подтвержден Random.org
-            </p>
-            {diceRollJson.random_org_check_form && (
-              <div>
-                <p className="text-sm font-semibold">Проверочная форма:</p>
-                <a
-                  href={diceRollJson.random_org_check_form}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:text-blue-700 text-sm break-all underline"
-                >
-                  Открыть проверочную форму Random.org
-                </a>
-              </div>
-            )}
-          </div>
-        )}
+      <div className="text-xs text-muted-foreground">Кубики: {diceRollJson.data.join(', ')}</div>
+      <div className="text-xs text-muted-foreground">
+        Сумма: {diceRollJson.data[0] + diceRollJson.data[1]}
       </div>
+      {diceRollJson.is_random_org_result && (
+        <div className="flex items-center gap-2 mt-1">
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 17 17"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.5013 1.4165C4.59839 1.4165 1.41797 4.59692 1.41797 8.49984C1.41797 12.4028 4.59839 15.5832 8.5013 15.5832C12.4042 15.5832 15.5846 12.4028 15.5846 8.49984C15.5846 4.59692 12.4042 1.4165 8.5013 1.4165ZM11.8871 6.87067L7.87088 10.8869C7.77172 10.9861 7.63714 11.0428 7.49547 11.0428C7.3538 11.0428 7.21922 10.9861 7.12005 10.8869L5.11547 8.88234C4.91005 8.67692 4.91005 8.33692 5.11547 8.1315C5.32089 7.92609 5.66089 7.92609 5.8663 8.1315L7.49547 9.76067L11.1363 6.11984C11.3417 5.91442 11.6817 5.91442 11.8871 6.11984C12.0926 6.32525 12.0926 6.65817 11.8871 6.87067Z"
+              fill="#30D158"
+            />
+          </svg>
+          <span className="text-[#30D158] text-xs">Результат подтвержден Random.org</span>
+        </div>
+      )}
+      {diceRollJson.random_org_check_form && (
+        <div className="mt-1">
+          <a
+            href={diceRollJson.random_org_check_form}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#268AFF] hover:text-blue-700 text-xs underline"
+          >
+            Открыть проверочную форму
+          </a>
+        </div>
+      )}
     </div>
   );
 }
@@ -86,6 +83,8 @@ function Event({ event }: { event: PlayerEvent }) {
   if (event.event_type === 'player-move') {
     bonusesUsed = event.bonuses_used;
   }
+
+  const [showDetails, setShowDetails] = useState(false);
 
   const EventContent = () => (
     <div className={gameCover ? 'flex gap-2' : ''}>
@@ -107,40 +106,60 @@ function Event({ event }: { event: PlayerEvent }) {
           <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
         </div>
         <div className="flex gap-0 place-items-center text-muted-foreground text-sm font-semibold">
-          <p>{description}</p>
-          {isScoreChangeEvent && <ScoreChangeDescription event={event as PlayerEventScoreChange} />}
+          <div className="flex flex-row items-center justify-between w-full">
+            <div className="flex gap-0 place-items-center">
+              <p>{description}</p>
+              {isScoreChangeEvent && (
+                <ScoreChangeDescription event={event as PlayerEventScoreChange} />
+              )}
+            </div>
+            {hasDiceRollData && (
+              <button
+                type="button"
+                onClick={() => setShowDetails(v => !v)}
+                className={`flex items-center gap-1 px-3 h-[23px] rounded-[5px] ml-2 transition-colors
+                  ${
+                    showDetails
+                      ? 'bg-[#81A671] text-white'
+                      : 'bg-white/20 text-white/70 hover:bg-white/30'
+                  }
+                `}
+                style={{ fontSize: 14, fontWeight: 500 }}
+              >
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 17 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.3333 1.4165H5.66667C3.1875 1.4165 2.125 2.83317 2.125 4.95817V12.0415C2.125 14.1665 3.1875 15.5832 5.66667 15.5832H11.3333C13.8125 15.5832 14.875 14.1665 14.875 12.0415V4.95817C14.875 2.83317 13.8125 1.4165 11.3333 1.4165ZM5.66667 8.67692H8.5C8.79042 8.67692 9.03125 8.91775 9.03125 9.20817C9.03125 9.49859 8.79042 9.73942 8.5 9.73942H5.66667C5.37625 9.73942 5.13542 9.49859 5.13542 9.20817C5.13542 8.91775 5.37625 8.67692 5.66667 8.67692ZM11.3333 12.5728H5.66667C5.37625 12.5728 5.13542 12.3319 5.13542 12.0415C5.13542 11.7511 5.37625 11.5103 5.66667 11.5103H11.3333C11.6237 11.5103 11.8646 11.7511 11.8646 12.0415C11.8646 12.3319 11.6237 12.5728 11.3333 12.5728ZM13.1042 6.55192H11.6875C10.6108 6.55192 9.73958 5.68067 9.73958 4.604V3.18734C9.73958 2.89692 9.98042 2.65609 10.2708 2.65609C10.5612 2.65609 10.8021 2.89692 10.8021 3.18734V4.604C10.8021 5.09275 11.1987 5.48942 11.6875 5.48942H13.1042C13.3946 5.48942 13.6354 5.73025 13.6354 6.02067C13.6354 6.31109 13.3946 6.55192 13.1042 6.55192Z"
+                    fill="white"
+                    fill-opacity="0.7"
+                  />
+                </svg>
+                <span style={{ lineHeight: 1 }}>Детали</span>
+              </button>
+            )}
+          </div>
         </div>
         {bonusesUsed.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1">
-            <span className="text-xs text-muted-foreground mr-1">Использованы карты:</span>
-            {bonusesUsed.map((bonus, index) => (
-              <Badge key={index} variant="secondary" className="text-xs">
-                {getBonusCardName(bonus)}
-              </Badge>
-            ))}
+          <div className="mt-2 flex flex-wrap gap-1 items-center">
+            <span className="text-xs text-muted-foreground mr-1">Примененные карточки:</span>
+            <span className="text-xs text-muted-foreground">
+              {bonusesUsed.map((bonus, _) => getBonusCardName(bonus)).join(', ')}
+            </span>
           </div>
         )}
-        {hasDiceRollData && (
-          <p className="text-xs text-blue-500 mt-1">Нажмите для просмотра деталей броска</p>
+        {hasDiceRollData && showDetails && (
+          <div className="mt-2">
+            <DiceRollDetails diceRollJson={moveEvent.dice_roll_json!} />
+          </div>
         )}
       </div>
     </div>
   );
-
-  if (hasDiceRollData) {
-    return (
-      <Dialog>
-        <DialogTrigger asChild>
-          <div className="cursor-pointer hover:bg-foreground/5 rounded transition-colors">
-            <EventContent />
-          </div>
-        </DialogTrigger>
-        <DialogContent className="max-w-md">
-          <DiceRollDetails diceRollJson={moveEvent.dice_roll_json!} />
-        </DialogContent>
-      </Dialog>
-    );
-  }
 
   return <EventContent />;
 }
