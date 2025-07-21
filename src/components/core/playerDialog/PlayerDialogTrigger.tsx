@@ -1,9 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { PlayerData } from "@/lib/types";
-import { Share } from "@/components/icons";
-import { FALLBACK_AVATAR_URL } from "@/lib/constants";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { PlayerData } from '@/lib/types';
+import { Share } from '@/components/icons';
+import { FALLBACK_AVATAR_URL } from '@/lib/constants';
 
 type Props = {
   player: PlayerData;
@@ -12,13 +12,13 @@ type Props = {
 };
 
 function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
-  const points = player.total_score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const points = player.total_score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
   return (
     <div
       className={cn(
-        buttonVariants({ variant: "outline" }),
-        `group relative z-20 flex items-start flex-row gap-2 rounded-xl md:p-2 p-2.5 w-full h-auto select-none cursor-pointer text-base text-foreground font-semibold backdrop-blur-[1.5rem] bg-card/70 border-none data-[highlighted=true]:bg-[oklch(0.38_0.02_135.11/0.7)]`,
+        buttonVariants({ variant: 'outline' }),
+        `group relative z-20 flex items-start flex-row gap-2 rounded-xl md:p-2 p-2.5 w-full h-auto select-none cursor-pointer text-base text-foreground font-semibold backdrop-blur-[1.5rem] bg-card/70 border-none data-[highlighted=true]:bg-[oklch(0.38_0.02_135.11/0.7)]`
       )}
       data-highlighted={isCurrentPlayer}
     >
@@ -42,7 +42,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
         </div>
         <div className="flex text-sm text-muted-foreground  font-semibold group-data-[highlighted=true]:text-primary w-full leading-[17px]">
           <span className="w-full text-start whitespace-break-spaces">
-            {player.current_game || "Проводит аукцион"}
+            {player.current_game || 'Выбирает игру...'}
           </span>
           <span className="text-white/20 self-end">#{placement}</span>
         </div>
