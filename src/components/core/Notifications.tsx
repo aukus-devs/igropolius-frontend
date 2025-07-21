@@ -5,17 +5,14 @@ import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { Notification, Share, X } from '../icons';
 import { fetchNotifications, markNotificationsSeen } from '@/lib/api';
-import { NotificationItem, BackendPlayerData } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import { formatMs } from '@/lib/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/queryClient';
+import { NotificationItem, PlayerDetails } from '@/lib/api-types-generated';
 
-function formatNotificationText(
-  notification: NotificationItem,
-  players: BackendPlayerData[]
-): string {
+function formatNotificationText(notification: NotificationItem, players: PlayerDetails[]): string {
   const {
     event_type,
     other_player_id,
@@ -90,7 +87,7 @@ function formatNotificationDate(timestamp: number): string {
 
 type NotificationCardProps = {
   notification: NotificationItem;
-  players: BackendPlayerData[];
+  players: PlayerDetails[];
   isLast?: boolean;
 };
 
@@ -145,7 +142,7 @@ function Notifications() {
     if (notifications.length === 0) return;
 
     const notificationIds = notifications.map(n => n.id);
-    await markNotificationsSeen(notificationIds);
+    await markNotificationsSeen({ notification_ids: notificationIds });
     queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
   }
 

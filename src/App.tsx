@@ -81,8 +81,8 @@ function App() {
   useEffect(() => {
     setPlayers(
       playersData?.players ?? [],
-      playersData?.event_end_time,
-      playersData?.event_start_time
+      playersData?.event_end_time ?? undefined,
+      playersData?.event_start_time ?? undefined
     );
   }, [setPlayers, playersData]);
 

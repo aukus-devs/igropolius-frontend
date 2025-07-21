@@ -32,7 +32,7 @@ export default function SkipStreetTaxDialog() {
   };
 
   const handleUseCard = async () => {
-    await activateBonusCard('evade-street-tax');
+    await activateBonusCard({ bonus_type: 'evade-street-tax' });
     resetNotificationsQuery();
     await setNextTurnState({ action: 'skip-bonus' });
   };

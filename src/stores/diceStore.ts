@@ -1,10 +1,10 @@
-import { createTimeline } from "animejs";
-import { create } from "zustand";
-import { Group } from "three";
-import { randInt } from "three/src/math/MathUtils.js";
-import { sleep } from "@/lib/utils";
-import { rollDice as rollDiceAPI } from "@/lib/api";
-import { resetNotificationsQuery } from "@/lib/queryClient";
+import { createTimeline } from 'animejs';
+import { create } from 'zustand';
+import { Group } from 'three';
+import { randInt } from 'three/src/math/MathUtils.js';
+import { sleep } from '@/lib/utils';
+import { rollDice as rollDiceAPI } from '@/lib/api';
+import { resetNotificationsQuery } from '@/lib/queryClient';
 
 const useDiceStore = create<{
   diceModel: Group | null;
@@ -37,10 +37,10 @@ const useDiceStore = create<{
     return rollResult.reduce((sum, die) => sum + die, 0);
   },
 
-  setDiceModel: (object3D) => set({ diceModel: object3D }),
+  setDiceModel: object3D => set({ diceModel: object3D }),
   clearError: () => set({ error: null }),
 
-  setRollResult: (roll) => set({ rollResult: roll }),
+  setRollResult: roll => set({ rollResult: roll }),
 
   rollDice: async () => {
     const diceModel = get().diceModel;
@@ -73,10 +73,10 @@ const useDiceStore = create<{
         showRoll: false,
       });
 
-      return rollResult.data;
+      return rollResult.data as [number, number];
     } catch (error) {
-      console.error("Dice roll failed:", error);
-      set({ error: "Не удалось выполнить бросок кубика. Попробуйте еще раз." });
+      console.error('Dice roll failed:', error);
+      set({ error: 'Не удалось выполнить бросок кубика. Попробуйте еще раз.' });
       throw error;
     } finally {
       set({ isRolling: false, showRoll: false });
@@ -95,14 +95,14 @@ async function animateDice(model: Group) {
       y: 1,
       z: 1,
       duration: 300,
-      easing: "easeInOutCubic",
+      easing: 'easeInOutCubic',
     })
     .add(model.rotation, {
       x: [0, xRotation],
       y: [0, yRotation],
       z: [0, zRotation],
       duration: 1000,
-      easing: "easeInOutQuad",
+      easing: 'easeInOutQuad',
     })
     .add(model.scale, {
       x: 0,
@@ -110,10 +110,10 @@ async function animateDice(model: Group) {
       z: 0,
       delay: 400,
       duration: 300,
-      easing: "easeInOutCubic",
+      easing: 'easeInOutCubic',
     });
 
-  await new Promise((resolve) => {
+  await new Promise(resolve => {
     tl.play().then(resolve);
   });
 }

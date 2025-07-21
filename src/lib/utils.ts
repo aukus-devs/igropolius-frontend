@@ -1,16 +1,9 @@
 import {
-  BonusCardType,
   EventDescription,
   GameLength,
   GameStatusType,
   PlayerData,
-  PlayerEvent,
-  PlayerEventBonusCard,
-  PlayerEventGame,
-  PlayerEventMove,
-  PlayerEventScoreChange,
   PlayerStateAction,
-  PlayerTurnState,
   SectorData,
 } from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
@@ -18,6 +11,16 @@ import { twMerge } from 'tailwind-merge';
 import { frontendCardsData, SectorsById } from './mockData';
 import { FALLBACK_GAME_POSTER, ScoreByGameLength, SectorScoreMultiplier } from './constants';
 import usePlayerStore from '@/stores/playerStore';
+import {
+  BonusCardEvent,
+  BonusCardType,
+  Events,
+  GameEvent,
+  MainBonusCardType,
+  MoveEvent,
+  PlayerTurnState,
+  ScoreChangeEvent,
+} from './api-types-generated';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,7 +36,7 @@ export function getShortestRotationDelta(current: number, target: number) {
   return ((delta + Math.PI) % (2 * Math.PI)) - Math.PI;
 }
 
-function getEventGameInfo(event: PlayerEventGame) {
+function getEventGameInfo(event: GameEvent) {
   let title = '';
 
   switch (event.subtype) {
@@ -58,7 +61,7 @@ function getEventGameInfo(event: PlayerEventGame) {
   };
 }
 
-function getEventMoveInfo(event: PlayerEventMove) {
+function getEventMoveInfo(event: MoveEvent) {
   let title = '';
 
   switch (event.subtype) {
@@ -83,7 +86,7 @@ function getEventMoveInfo(event: PlayerEventMove) {
   };
 }
 
-function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
+function getEventScoreChangeInfo(event: ScoreChangeEvent) {
   let title = '';
 
   switch (event.subtype) {
@@ -117,7 +120,7 @@ function getEventScoreChangeInfo(event: PlayerEventScoreChange) {
   };
 }
 
-function getEventBonusCardInfo(event: PlayerEventBonusCard) {
+function getEventBonusCardInfo(event: BonusCardEvent) {
   let title = '';
   const players = usePlayerStore.getState().players;
 
@@ -153,12 +156,12 @@ function getEventBonusCardInfo(event: PlayerEventBonusCard) {
   };
 }
 
-export function getBonusCardName(bonusType: BonusCardType): string {
+export function getBonusCardName(bonusType: MainBonusCardType): string {
   const data = frontendCardsData[bonusType];
   return data.name;
 }
 
-export function getEventDescription(event: PlayerEvent): EventDescription {
+export function getEventDescription(event: Events[0]): EventDescription {
   const eventType = event.event_type;
   switch (eventType) {
     case 'game':
@@ -201,7 +204,6 @@ export function getNextTurnState({
     'entering-prison',
     'dropping-card-after-game-drop',
     'dropping-card-after-instant-roll',
-    // 'choosing-train-ride',
     'choosing-building-sector',
     'stealing-bonus-card',
   ];

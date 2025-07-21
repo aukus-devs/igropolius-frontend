@@ -1,9 +1,9 @@
 import { frontendCardsData } from '@/lib/mockData';
-import { BonusCardType } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
 import { useMutation } from '@tanstack/react-query';
 import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
+import { MainBonusCardType } from '@/lib/api-types-generated';
 
 export default function RollBonusCard() {
   const { receiveBonusCard, myPlayer } = usePlayerStore(
@@ -14,23 +14,23 @@ export default function RollBonusCard() {
   );
 
   const { mutateAsync: doReceiveBonusCard } = useMutation({
-    mutationFn: async (cardType: BonusCardType) => {
+    mutationFn: async (cardType: MainBonusCardType) => {
       return receiveBonusCard(cardType);
     },
   });
 
-  const handleFinished = async (option: WeightedOption<BonusCardType>) => {
+  const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
     await doReceiveBonusCard(option.value);
   };
 
-  const getWinnerText = (option: WeightedOption<BonusCardType>) => {
+  const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
     return frontendCardsData[option.value].name;
   };
 
   const myCurrentCards = myPlayer?.bonus_cards ?? [];
-  const myCurrentCardsTypes = myCurrentCards.map(card => card.bonus_type) as BonusCardType[];
+  const myCurrentCardsTypes = myCurrentCards.map(card => card.bonus_type);
 
-  const allCardTypes = Object.keys(frontendCardsData) as BonusCardType[];
+  const allCardTypes = Object.keys(frontendCardsData) as MainBonusCardType[];
   const cardTypesForRoll = allCardTypes.filter(cardType => !myCurrentCardsTypes.includes(cardType));
 
   const weightedOptions = cardTypesForRoll.reduce((acc, cardType) => {
@@ -41,10 +41,10 @@ export default function RollBonusCard() {
       imageUrl: frontendCardsData[cardType].picture,
     });
     return acc;
-  }, [] as WeightedOption<BonusCardType>[]);
+  }, [] as WeightedOption<MainBonusCardType>[]);
 
   return (
-    <GenericRoller<BonusCardType>
+    <GenericRoller<MainBonusCardType>
       options={weightedOptions}
       header="Ролим бонусную карточку"
       openButtonText="Получить карточку"

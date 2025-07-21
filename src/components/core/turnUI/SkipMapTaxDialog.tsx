@@ -28,7 +28,7 @@ export default function SkipMapTaxDialog() {
   };
 
   const handleUseCard = async () => {
-    await activateBonusCard('evade-map-tax');
+    await activateBonusCard({ bonus_type: 'evade-map-tax' });
     resetNotificationsQuery();
     await setNextTurnState({ action: 'skip-bonus' });
   };

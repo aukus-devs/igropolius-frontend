@@ -1,15 +1,15 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { ActiveBonusCard, MainBonusCardType } from '@/lib/api-types-generated';
 import { cardTypes, frontendCardsData } from '@/lib/mockData';
-import { ActiveBonusCard, BonusCardType } from '@/lib/types';
 
 type GameCardProps = {
-  type: BonusCardType;
+  type: MainBonusCardType;
   inactive?: boolean;
 };
 
 function GameCard({ type, inactive }: GameCardProps) {
   const cardData = frontendCardsData[type];
-  
+
   return (
     <div
       className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] bg-primary text-primary-foreground rounded-xl data-[inactive=true]:grayscale-100"

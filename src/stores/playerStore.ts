@@ -6,17 +6,11 @@ import {
   TaxScoreMultiplier,
 } from '@/lib/constants';
 import {
-  ActiveBonusCard,
-  BackendPlayerData,
-  BonusCardType,
   BuildingData,
   MoveMyPlayerParams,
-  MyPlayerData,
   PlayerData,
   PlayerStateAction,
-  PlayerTurnState,
   TaxData,
-  TaxType,
 } from '@/lib/types';
 import { createTimeline } from 'animejs';
 import { create } from 'zustand';
@@ -28,7 +22,7 @@ import { Euler, Quaternion } from 'three';
 import { getNextTurnState } from '@/lib/utils';
 import {
   giveBonusCard,
-  loseBonusCard,
+  dropBonusCard,
   makePlayerMove,
   payTaxes,
   saveTurnState,
@@ -39,6 +33,14 @@ import {
   resetPlayersQuery,
   resetNotificationsQuery,
 } from '@/lib/queryClient';
+import {
+  ActiveBonusCard,
+  CurrentUserResponse,
+  MainBonusCardType,
+  PlayerDetails,
+  PlayerTurnState,
+  TaxType,
+} from '@/lib/api-types-generated';
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -53,9 +55,9 @@ const usePlayerStore = create<{
   eventEndTime: number | null;
   eventStartTime: number | null;
   prisonCards: ActiveBonusCard[];
-  setMyPlayer: (data?: MyPlayerData) => void;
+  setMyPlayer: (data?: CurrentUserResponse) => void;
   updateMyPlayerSectorId: (id: number) => void;
-  setPlayers: (players: BackendPlayerData[], eventEndTime?: number, eventStartTime?: number) => void;
+  setPlayers: (players: PlayerDetails[], eventEndTime?: number, eventStartTime?: number) => void;
   animatePlayerMovement: ({ steps }: { steps: number }) => Promise<number>;
   moveMyPlayer: (params: MoveMyPlayerParams) => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
@@ -63,9 +65,9 @@ const usePlayerStore = create<{
     prevSectorId?: number;
     action?: PlayerStateAction;
   }) => Promise<void>;
-  receiveBonusCard: (type: BonusCardType, switchState?: boolean) => Promise<void>;
-  dropBonusCard: (type: BonusCardType) => Promise<void>;
-  stealBonusCard: (player: PlayerData, card: BonusCardType) => Promise<void>;
+  receiveBonusCard: (type: MainBonusCardType, switchState?: boolean) => Promise<void>;
+  dropBonusCard: (type: MainBonusCardType) => Promise<void>;
+  stealBonusCard: (player: PlayerData, card: MainBonusCardType) => Promise<void>;
   moveMyPlayerToPrison: () => Promise<void>;
   payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
 }>((set, get) => ({
@@ -82,7 +84,7 @@ const usePlayerStore = create<{
   eventStartTime: null,
   prisonCards: [],
 
-  setMyPlayer: (data?: MyPlayerData) => {
+  setMyPlayer: (data?: CurrentUserResponse) => {
     if (!data) {
       set({
         myPlayerId: null,
@@ -124,17 +126,17 @@ const usePlayerStore = create<{
       nextTurnState !== 'using-map-tax-bonuses' &&
       nextTurnState !== 'using-map-tax-bonuses-after-train-ride'
     ) {
-      await payTaxes('map-tax');
+      await payTaxes({ tax_type: 'map-tax' });
     }
 
     if (turnState === 'rolling-dice' && nextTurnState === 'filling-game-review') {
       const currentSector = SectorsById[myPlayer.sector_id];
       if (currentSector.type === 'property' || currentSector.type === 'railroad') {
-        await payTaxes('street-tax');
+        await payTaxes({ tax_type: 'street-tax' });
       }
     }
 
-    await saveTurnState(nextTurnState);
+    await saveTurnState({ turn_state: nextTurnState });
     resetCurrentPlayerQuery();
     resetPlayersQuery();
   },
@@ -148,7 +150,7 @@ const usePlayerStore = create<{
     }));
   },
 
-  setPlayers: (playersData: BackendPlayerData[], eventEndTime?: number, eventStartTime?: number) => {
+  setPlayers: (playersData: PlayerDetails[], eventEndTime?: number, eventStartTime?: number) => {
     const buildings: Record<number, BuildingData[]> = {};
     const taxPerSector: Record<number, TaxData> = {};
     for (const sector of sectorsData) {
@@ -349,9 +351,9 @@ const usePlayerStore = create<{
 
   setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),
 
-  receiveBonusCard: async (type: BonusCardType, switchState: boolean = true) => {
+  receiveBonusCard: async (type: MainBonusCardType, switchState: boolean = true) => {
     const { setNextTurnState } = get();
-    const newCard = await giveBonusCard(type);
+    const newCard = await giveBonusCard({ bonus_type: type });
 
     // add card to player before updating turn state
     set(state => ({
@@ -367,9 +369,9 @@ const usePlayerStore = create<{
     }
   },
 
-  dropBonusCard: async (type: BonusCardType) => {
+  dropBonusCard: async (type: MainBonusCardType) => {
     const { setNextTurnState } = get();
-    await loseBonusCard(type);
+    await dropBonusCard({ bonus_type: type });
 
     // remove card from player before updating turn state
     set(state => ({
@@ -385,15 +387,15 @@ const usePlayerStore = create<{
     await setNextTurnState({});
   },
 
-  stealBonusCard: async (player: PlayerData, card: BonusCardType) => {
+  stealBonusCard: async (player: PlayerData, card: MainBonusCardType) => {
     const { setNextTurnState } = get();
-    await stealBonusCardApi(player.id, card);
+    await stealBonusCardApi({ player_id: player.id, bonus_type: card });
     resetNotificationsQuery();
     await setNextTurnState({});
   },
 
   payTaxesAndSwitchState: async (type: TaxType) => {
-    await payTaxes(type);
+    await payTaxes({ tax_type: type });
     resetNotificationsQuery();
     const { setNextTurnState } = get();
     setNextTurnState({ action: 'skip-bonus' });

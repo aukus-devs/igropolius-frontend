@@ -1,18 +1,18 @@
 import usePlayerStore from '@/stores/playerStore';
 import GenericRoller, { WeightedOption } from './GenericRoller';
-import { BonusCardType } from '@/lib/types';
 import { useMemo } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
+import { MainBonusCardType } from '@/lib/api-types-generated';
 
 type LoseCard = {
   action: 'lose-card';
-  card: BonusCardType;
+  card: MainBonusCardType;
 };
 
 type ReceiveCard = {
   action: 'receive-card';
-  card: BonusCardType;
+  card: MainBonusCardType;
 };
 
 type RollOptionType = 'nothing' | LoseCard | ReceiveCard;

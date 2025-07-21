@@ -22,13 +22,13 @@ export default function LoginDialog({ className }: { className?: string }) {
   const [error, setError] = useState<string | null>(null);
 
   const { mutateAsync: loginRequest } = useMutation({
-    mutationFn: async ({ user, pass }: { user: string; pass: string }) => {
-      return login(user, pass);
+    mutationFn: async ({ username, password }: { username: string; password: string }) => {
+      return login({ username, password });
     },
   });
 
   const handleLogin = () => {
-    loginRequest({ user: username, pass: password })
+    loginRequest({ username, password })
       .then(res => {
         localStorage.setItem('access-token', res.token);
         resetCurrentPlayerQuery();

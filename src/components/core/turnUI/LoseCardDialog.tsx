@@ -1,10 +1,10 @@
-import { BonusCardType, InstantCardResult } from '@/lib/types';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { useMemo, useState } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
-import { activateInstantCard, loseBonusCard } from '@/lib/api';
+import { activateInstantCard, dropBonusCard } from '@/lib/api';
+import { InstantCardResult, MainBonusCardType } from '@/lib/api-types-generated';
 
 export default function LoseCardOnDropDialog() {
   const { playerCards, moveToPrison, setNextTurnState, goToPrison } = usePlayerStore(
@@ -18,7 +18,7 @@ export default function LoseCardOnDropDialog() {
 
   const [dropResult, setDropResult] = useState<InstantCardResult | null>(null);
 
-  const options: WeightedOption<BonusCardType>[] = useMemo(() => {
+  const options: WeightedOption<MainBonusCardType>[] = useMemo(() => {
     return playerCards.map(card => ({
       label: frontendCardsData[card.bonus_type].name,
       imageUrl: frontendCardsData[card.bonus_type].picture,
@@ -27,15 +27,18 @@ export default function LoseCardOnDropDialog() {
     }));
   }, [playerCards]);
 
-  const getWinnerText = (option: WeightedOption<BonusCardType>) => {
+  const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
     return `Карточка "${frontendCardsData[option.value].name}" сгорает`;
   };
 
-  const handleFinished = async (option: WeightedOption<BonusCardType>) => {
+  const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
     if (goToPrison) {
-      await loseBonusCard(option.value);
+      await dropBonusCard({ bonus_type: option.value });
     } else {
-      const result = await activateInstantCard('lose-card-or-3-percent', option.value);
+      const result = await activateInstantCard({
+        card_type: 'lose-card-or-3-percent',
+        card_to_lose: option.value,
+      });
       setDropResult(result.result ?? null);
     }
   };
@@ -44,7 +47,7 @@ export default function LoseCardOnDropDialog() {
     if (dropResult) {
       if (dropResult === 'card-lost') {
         return 'Карточка потеряна';
-      } else if (dropResult === 'score-lost') {
+      } else if (dropResult === 'scores-lost') {
         return 'Потеряно 3% от общего счёта';
       } else if (dropResult === 'reroll') {
         return 'Реролл дропа';
@@ -73,7 +76,7 @@ export default function LoseCardOnDropDialog() {
   }
 
   return (
-    <GenericRoller<BonusCardType>
+    <GenericRoller<MainBonusCardType>
       header="Потеря карточки"
       openButtonText="Дропнуть карточку"
       finishButtonText={buttonText}

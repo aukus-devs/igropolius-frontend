@@ -11,12 +11,13 @@ import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
 import { ArrowRight, X } from '../../icons';
-import { searchGames, IGDBGame } from '@/lib/api';
+import { searchGames } from '@/lib/api';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { calculateGameCompletionScore } from '@/lib/utils';
+import { IgdbGameSummary } from '@/lib/api-types-generated';
 
 type StatesOption = {
   title: string;
@@ -153,7 +154,7 @@ function GameTitle({
 
   const searchResults = gamesSearchData.games;
 
-  const handleGameSelect = (game: IGDBGame) => {
+  const handleGameSelect = (game: IgdbGameSummary) => {
     setGameTitle(game.name);
     setSelectedGame(game);
     setShowResults(false);

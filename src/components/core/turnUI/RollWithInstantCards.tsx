@@ -1,18 +1,18 @@
 import { frontendCardsData, frontendInstantCardsData } from '@/lib/mockData';
-import { BonusCardType, InstantCardResult, InstantCardType } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { activateInstantCard } from '@/lib/api';
 import { useCallback, useMemo, useState } from 'react';
 import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
+import { InstantCardResult, InstantCardType, MainBonusCardType } from '@/lib/api-types-generated';
 
 type InstantCard = {
   instant: InstantCardType;
 };
 
 type BonusCard = {
-  card: BonusCardType;
+  card: MainBonusCardType;
 };
 
 type OptionType = InstantCard | BonusCard;
@@ -39,8 +39,8 @@ export default function RollWithInstantCards() {
           setMoveToCardDrop(true);
           return;
         }
-        const response = await activateInstantCard(option.value.instant);
-        setActivationResult(response.result ?? 'default');
+        const response = await activateInstantCard({ card_type: option.value.instant });
+        setActivationResult(response.result ?? null);
         resetCurrentPlayerQuery();
         resetPlayersQuery();
       } else if (isBonusCard(option.value)) {
@@ -63,9 +63,9 @@ export default function RollWithInstantCards() {
   const options = useMemo(() => {
     const result: WeightedOption<OptionType>[] = [];
 
-    const myCurrentCardsTypes = playerCards.map(card => card.bonus_type) as BonusCardType[];
+    const myCurrentCardsTypes = playerCards.map(card => card.bonus_type);
 
-    const allCardTypes = Object.keys(frontendCardsData) as BonusCardType[];
+    const allCardTypes = Object.keys(frontendCardsData) as MainBonusCardType[];
     const cardTypesForRoll = allCardTypes.filter(
       cardType => !myCurrentCardsTypes.includes(cardType)
     );

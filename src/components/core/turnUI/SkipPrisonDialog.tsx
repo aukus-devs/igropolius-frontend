@@ -19,7 +19,7 @@ export default function SkipPrisonDialog() {
   };
 
   const handleUseCard = async () => {
-    await activateBonusCard('skip-prison-day');
+    await activateBonusCard({ bonus_type: 'skip-prison-day' });
     resetNotificationsQuery();
     await setNextTurnState({ action: 'skip-prison' });
   };

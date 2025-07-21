@@ -57,7 +57,9 @@ function Scene() {
         if (data.date && data.date !== lastDateRef.current) {
           window.location.href = window.location.pathname + '?reload=' + new Date().getTime();
         }
-      } catch {}
+      } catch {
+        console.error('Failed to fetch front version');
+      }
     }, 60000);
     return () => clearInterval(interval);
   }, []);

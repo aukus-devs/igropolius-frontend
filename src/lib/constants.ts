@@ -1,5 +1,6 @@
-import { BuildingType, GameLength, GameLengthWithDrop, SectorData, TrainData } from '@/lib/types';
+import { BuildingType, SectorData, TrainData } from '@/lib/types';
 import { Color } from 'three';
+import { GameLength } from './api-types-generated';
 
 export enum Controls {
   forward = 'forward',
@@ -31,7 +32,7 @@ export const PLAYER_ELEVATION = SECTOR_HEIGHT / 2;
 export const EMISSION_FULL = new Color('white');
 export const EMISSION_NONE = new Color('black');
 
-export const GameLengthToBuildingType: { [key in GameLengthWithDrop]: BuildingType } = {
+export const GameLengthToBuildingType: { [key in GameLength]: BuildingType } = {
   drop: 'ruins',
   '2-5': 'small_buildingD',
   '5-10': 'skyscraperE',
@@ -69,6 +70,7 @@ export const STORAGE_BASE_URL = IS_DEV
   : `https://storage.yandexcloud.net/monopoly2025/assets`;
 
 export const ScoreByGameLength: { [key in GameLength]: number } = {
+  drop: 0,
   '2-5': 10,
   '5-10': 20,
   '10-15': 30,

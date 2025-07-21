@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { RichTextDiff } from "./RichText";
-import { fetchAllRules } from "@/lib/api";
-import { RulesVersion } from "@/lib/types";
-import { queryKeys } from "@/lib/queryClient";
-import { formatTsToFullDate } from "@/lib/utils";
+import { useQuery } from '@tanstack/react-query';
+import { RichTextDiff } from './RichText';
+import { fetchAllRules } from '@/lib/api';
+import { queryKeys } from '@/lib/queryClient';
+import { formatTsToFullDate } from '@/lib/utils';
+import { RulesVersion } from '@/lib/api-types-generated';
 
 export default function RulesChanges() {
   const { data: rulesData } = useQuery({

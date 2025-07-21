@@ -1,9 +1,10 @@
-import { saveGameReview, IGDBGame } from '@/lib/api';
+import { saveGameReview } from '@/lib/api';
 import { ScoreByGameLength, SectorScoreMultiplier } from '@/lib/constants';
 import { GameLength, GameStatusType, ScoreDetails } from '@/lib/types';
 import { create } from 'zustand';
 import { SectorsById } from '@/lib/mockData';
 import { resetNotificationsQuery } from '@/lib/queryClient';
+import { IgdbGameSummary } from '@/lib/api-types-generated';
 
 const useReviewFormStore = create<{
   rating: number;
@@ -11,7 +12,7 @@ const useReviewFormStore = create<{
   gameTime: GameLength | null;
   gameStatus: GameStatusType | null;
   gameReview: string;
-  selectedGame: IGDBGame | null;
+  selectedGame: IgdbGameSummary | null;
   error: string | null;
   isSubmitting: boolean;
   setRating: (value: number) => void;
@@ -19,7 +20,7 @@ const useReviewFormStore = create<{
   setGameTime: (value: GameLength) => void;
   setGameStatus: (value: GameStatusType) => void;
   setGameReview: (value: string) => void;
-  setSelectedGame: (game: IGDBGame | null) => void;
+  setSelectedGame: (game: IgdbGameSummary | null) => void;
   sendReview: (scores: number) => Promise<void>;
   getReviewScores: (params: { sectorId: number; mapsCompleted: number }) => ScoreDetails;
   clearError: () => void;

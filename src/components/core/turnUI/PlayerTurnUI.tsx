@@ -53,15 +53,15 @@ export default function PlayerTurnUI() {
 
   const eventNotStarted = eventStartTime && now < eventStartTime * 1000;
   const eventEnded = eventEndTime && now > eventEndTime * 1000;
-  const timeLeft = eventStartTime ? eventStartTime * 1000 - now : 0;
-  const formatTime = (ms: number) => {
-    if (ms <= 0) return 'Скоро';
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    if (minutes > 0) return `${minutes} мин ${seconds} сек`;
-    return `${seconds} сек`;
-  };
+  // const timeLeft = eventStartTime ? eventStartTime * 1000 - now : 0;
+  // const formatTime = (ms: number) => {
+  //   if (ms <= 0) return 'Скоро';
+  //   const totalSeconds = Math.floor(ms / 1000);
+  //   const minutes = Math.floor(totalSeconds / 60);
+  //   const seconds = totalSeconds % 60;
+  //   if (minutes > 0) return `${minutes} мин ${seconds} сек`;
+  //   return `${seconds} сек`;
+  // };
 
   const formatDateTime = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
@@ -243,7 +243,9 @@ function NoCardsForInstantDropDialog() {
           variant="outline"
           className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
           onClick={async () => {
-            await activateInstantCard('lose-card-or-3-percent');
+            await activateInstantCard({
+              card_type: 'lose-card-or-3-percent',
+            });
             await setNextTurnState({});
           }}
         >

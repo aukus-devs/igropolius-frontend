@@ -4,11 +4,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { Button } from '../ui/button';
 import { frontendCardsData } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
-import { BonusCardType, ManualUseCard } from '@/lib/types';
+import { ManualUseCard } from '@/lib/types';
 import { useState } from 'react';
 import BonusCardUsedConfirmation from './turnUI/BonusCardUsedConfirmation';
 import { activateBonusCard } from '@/lib/api';
 import { resetPlayersQuery } from '@/lib/queryClient';
+import { MainBonusCardType } from '@/lib/api-types-generated';
 
 export default function MyCards() {
   const { cards, turnState } = usePlayerStore(
@@ -20,9 +21,9 @@ export default function MyCards() {
 
   const [usedCard, setUsedCard] = useState<ManualUseCard | null>(null);
 
-  const handleUseCard = async (cardType: BonusCardType) => {
+  const handleUseCard = async (cardType: MainBonusCardType) => {
     if (cardType === 'reroll-game' || cardType === 'game-help-allowed') {
-      await activateBonusCard(cardType);
+      await activateBonusCard({ bonus_type: cardType });
       setUsedCard(cardType);
       resetPlayersQuery();
       return;

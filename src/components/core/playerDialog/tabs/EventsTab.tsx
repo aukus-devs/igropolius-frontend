@@ -11,24 +11,23 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircleIcon } from 'lucide-react';
 import { fetchPlayerEvents } from '@/lib/api';
 import { queryKeys } from '@/lib/queryClient';
-import {
-  PlayerData,
-  PlayerEvent,
-  PlayerEventMove,
-  DiceRollJson,
-  BonusCardType,
-  PlayerEventScoreChange,
-  EventType,
-} from '@/lib/types';
+import { PlayerData } from '@/lib/types';
 import { getEventDescription, getBonusCardName } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
+import {
+  DiceRollDetails as DiceRollDetailsType,
+  Events,
+  MainBonusCardType,
+  MoveEvent,
+  ScoreChangeEvent,
+} from '@/lib/api-types-generated';
 
 type Props = {
   player: PlayerData;
 };
 
-function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
+function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollDetailsType }) {
   return (
     <div className="space-y-2">
       <div className="text-xs text-muted-foreground">
@@ -73,15 +72,15 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
   );
 }
 
-function Event({ event }: { event: PlayerEvent }) {
+function Event({ event }: { event: Events[0] }) {
   const { title, description, gameCover } = getEventDescription(event);
   const { hours, minutes } = getFormattedTime(event.timestamp);
   const isScoreChangeEvent = event.event_type === 'score-change';
   const isMoveEvent = event.event_type === 'player-move';
-  const moveEvent = isMoveEvent ? (event as PlayerEventMove) : null;
+  const moveEvent = isMoveEvent ? (event as MoveEvent) : null;
   const hasDiceRollData = moveEvent?.dice_roll_json && moveEvent.subtype === 'dice-roll';
 
-  let bonusesUsed: BonusCardType[] = [];
+  let bonusesUsed: MainBonusCardType[] = [];
   if (event.event_type === 'player-move') {
     bonusesUsed = event.bonuses_used;
   }
@@ -111,9 +110,7 @@ function Event({ event }: { event: PlayerEvent }) {
           <div className="flex flex-row items-center justify-between w-full">
             <div className="flex gap-0 place-items-center">
               <p>{description}</p>
-              {isScoreChangeEvent && (
-                <ScoreChangeDescription event={event as PlayerEventScoreChange} />
-              )}
+              {isScoreChangeEvent && <ScoreChangeDescription event={event as ScoreChangeEvent} />}
             </div>
             {hasDiceRollData && (
               <button
@@ -166,7 +163,7 @@ function Event({ event }: { event: PlayerEvent }) {
   return <EventContent />;
 }
 
-type FilterValue = PlayerEvent['event_type'] | 'all';
+type FilterValue = Events[0]['event_type'] | 'all';
 
 type EventsTabFilterOption = {
   title: string;
@@ -210,7 +207,7 @@ function EventsTabFilter({
   );
 }
 
-const EventTypeOrder: { [k in EventType]: number } = {
+const EventTypeOrder: { [k in Events[0]['event_type']]: number } = {
   game: 1,
   'bonus-card': 2,
   'score-change': 3,
@@ -326,17 +323,17 @@ function getFormattedTime(ts: number) {
   };
 }
 
-function getEventsByDate(events: PlayerEvent[]) {
+function getEventsByDate(events: Events) {
   const eventsByDate = events.reduce(
     (acc, cur) => {
       const date = new Date(cur.timestamp * 1000).toDateString();
       (acc[date] = acc[date] || []).push(cur);
       return acc;
     },
-    {} as Record<string, PlayerEvent[]>
+    {} as Record<string, Events>
   );
 
-  const sortedEventsByDate: Record<string, PlayerEvent[]> = {};
+  const sortedEventsByDate: Record<string, Events> = {};
   for (const [date, dateEvents] of Object.entries(eventsByDate)) {
     sortedEventsByDate[date] = [...dateEvents].sort((a, b) => b.timestamp - a.timestamp);
   }
@@ -344,7 +341,7 @@ function getEventsByDate(events: PlayerEvent[]) {
   return sortedEventsByDate;
 }
 
-function ScoreChangeDescription({ event }: { event: PlayerEventScoreChange }) {
+function ScoreChangeDescription({ event }: { event: ScoreChangeEvent }) {
   return (
     <div className="flex items-center gap-2">
       <div

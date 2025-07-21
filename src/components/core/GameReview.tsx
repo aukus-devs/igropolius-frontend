@@ -1,10 +1,11 @@
-import { GameStatusType, PlayerGame } from "@/lib/types";
-import { Badge } from "../ui/badge";
-import { formatMs } from "@/lib/utils";
-import { useState } from "react";
-import { Toggle } from "../ui/toggle";
-import { VideoCircle } from "../icons";
-import { FALLBACK_GAME_POSTER } from "@/lib/constants";
+import { GameStatusType } from '@/lib/types';
+import { Badge } from '../ui/badge';
+import { formatMs } from '@/lib/utils';
+import { useState } from 'react';
+import { Toggle } from '../ui/toggle';
+import { VideoCircle } from '../icons';
+import { FALLBACK_GAME_POSTER } from '@/lib/constants';
+import { PlayerGame } from '@/lib/api-types-generated';
 
 type Props = {
   game: PlayerGame;
@@ -12,48 +13,38 @@ type Props = {
 
 function getStatusData(status: GameStatusType) {
   switch (status) {
-    case "drop":
+    case 'drop':
       return {
-        statusText: "Дропнул",
-        color: "text-red-500",
+        statusText: 'Дропнул',
+        color: 'text-red-500',
       };
-    case "completed":
+    case 'completed':
       return {
-        statusText: "Прошел",
-        color: "text-green-500",
+        statusText: 'Прошел',
+        color: 'text-green-500',
       };
-    case "reroll":
+    case 'reroll':
       return {
-        statusText: "Реролл",
-        color: "text-blue-500",
+        statusText: 'Реролл',
+        color: 'text-blue-500',
       };
     default: {
       return {
-        statusText: "",
-        color: "",
+        statusText: '',
+        color: '',
       };
     }
   }
 }
 
 function GameReview({ game }: Props) {
-  const {
-    title,
-    review,
-    vod_links,
-    duration,
-    length,
-    rating,
-    status,
-    created_at,
-    cover,
-  } = game;
+  const { title, review, vod_links, duration, length, rating, status, created_at, cover } = game;
 
   const [isVodsOpen, setIsVodsOpen] = useState(false);
 
-  const formattedDate = new Intl.DateTimeFormat("ru-RU", {
-    day: "numeric",
-    month: "long",
+  const formattedDate = new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long',
   }).format(new Date(created_at * 1000));
   const { color, statusText } = getStatusData(status);
 
@@ -79,22 +70,13 @@ function GameReview({ game }: Props) {
       <h3 className="text-2xl mb-2 font-wide-semibold">{title}</h3>
       <div className="flex gap-2.5">
         <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
-          <img
-            className="h-full object-cover"
-            src={cover || FALLBACK_GAME_POSTER}
-          />
+          <img className="h-full object-cover" src={cover || FALLBACK_GAME_POSTER} />
         </div>
         <div className="text-muted-foreground">
           {length && (
             <div className="flex flex-wrap gap-2 mb-2.5">
               <Badge className="bg-white/20 text-white/70 font-semibold">
-                <p>
-                  {" "}
-                  Время —{" "}
-                  {duration && duration > 0
-                    ? formatMs(duration * 1000)
-                    : "[Н/Д]"}
-                </p>
+                <p> Время — {duration && duration > 0 ? formatMs(duration * 1000) : '[Н/Д]'}</p>
               </Badge>
               <Badge className="bg-white/20 text-white/70 font-semibold">
                 <p> По HLTB — {length}ч</p>
@@ -103,7 +85,7 @@ function GameReview({ game }: Props) {
           )}
           {isVodsOpen ? (
             <div className="flex flex-col">
-              {vod_links?.split(",")?.map((vod) => (
+              {vod_links?.split(',')?.map(vod => (
                 <a
                   key={vod}
                   href={vod}
@@ -116,8 +98,8 @@ function GameReview({ game }: Props) {
             </div>
           ) : (
             <p>
-              {" "}
-              {rating} / 10 — {review}{" "}
+              {' '}
+              {rating} / 10 — {review}{' '}
             </p>
           )}
         </div>

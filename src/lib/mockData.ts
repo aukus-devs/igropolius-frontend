@@ -4,12 +4,10 @@ import {
   SectorData,
   playerColors,
   PlayerFrontendData,
-  BackendPlayerData,
-  BonusCardType,
-  InstantCardType,
 } from '@/lib/types';
 
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
+import { InstantCardType, MainBonusCardType, PlayerDetails } from './api-types-generated';
 
 export const sectorsData: SectorData[] = [
   {
@@ -348,7 +346,7 @@ export const SectorsById: Record<number, SectorData> = Object.fromEntries(
 
 export const PrisonSectors = sectorsData.filter(s => s.type === 'prison');
 
-export const playersData: BackendPlayerData[] = [
+export const playersData: PlayerDetails[] = [
   {
     id: 1,
     username: 'Praden',
@@ -357,6 +355,7 @@ export const playersData: BackendPlayerData[] = [
     sector_id: 1,
     avatar_link: 'https://github.com/shadcn.png',
     role: 'admin',
+    url_handle: 'praden',
 
     current_game: 'Gothic',
     current_game_updated_at: Math.ceil(Date.now() / 1000),
@@ -484,6 +483,7 @@ export const playersData: BackendPlayerData[] = [
     is_online: false,
     avatar_link: 'https://github.com/shadcn.png',
     role: 'player',
+    url_handle: 'player-2',
 
     current_game: 'Gothic',
     current_game_updated_at: Math.ceil(Date.now() / 1000),
@@ -637,6 +637,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     role: 'player',
+    url_handle: 'player-3',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -691,6 +692,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     role: 'player',
+    url_handle: 'player-4',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -733,6 +735,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     role: 'player',
+    url_handle: 'player-5',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -781,6 +784,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     role: 'player',
+    url_handle: 'player-6',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -828,6 +832,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     role: 'player',
+    url_handle: 'player-7',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -875,6 +880,7 @@ export const playersData: BackendPlayerData[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     role: 'player',
+    url_handle: 'player-8',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -908,7 +914,7 @@ export const playersData: BackendPlayerData[] = [
   },
 ];
 
-export const frontendCardsData: Record<BonusCardType, FrontendCardData> = {
+export const frontendCardsData: Record<MainBonusCardType, FrontendCardData> = {
   'adjust-roll-by1': {
     name: 'Плюс один или минус один',
     picture: 'https://placehold.co/744x1039/FF453A/FF453A',
@@ -1015,7 +1021,7 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
   },
 };
 
-export const cardTypes = Object.keys(frontendCardsData) as BonusCardType[];
+export const cardTypes = Object.keys(frontendCardsData) as MainBonusCardType[];
 
 export const mockReviews: GameReviewType[] = [
   {

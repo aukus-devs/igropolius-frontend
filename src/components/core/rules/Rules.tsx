@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { RichTextEditor } from "./RichText";
-import { Button } from "@/components/ui/button";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { fetchCurrentRules, saveRulesVersion } from "@/lib/api";
-import RichDisplay from "./RichDisplay";
-import { queryKeys, resetCurrentRulesQuery } from "@/lib/queryClient";
-import { formatTsToFullDate } from "@/lib/utils";
-import LoadingSpinner from "../loadng/LoadingSpinner";
+import { useState } from 'react';
+import { RichTextEditor } from './RichText';
+import { Button } from '@/components/ui/button';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { fetchCurrentRules, saveRulesVersion } from '@/lib/api';
+import RichDisplay from './RichDisplay';
+import { queryKeys, resetCurrentRulesQuery } from '@/lib/queryClient';
+import { formatTsToFullDate } from '@/lib/utils';
+import LoadingSpinner from '../loadng/LoadingSpinner';
 
 export default function Rules() {
-  const [editValue, setEditValue] = useState<string>("");
+  const [editValue, setEditValue] = useState<string>('');
 
   const [editing, setEditing] = useState(false);
   const canEdit = true;
@@ -27,7 +27,7 @@ export default function Rules() {
 
   const handleSave = () => {
     setEditing(false);
-    saveRules(editValue).then(() => {
+    saveRules({ content: editValue }).then(() => {
       resetCurrentRulesQuery();
     });
   };
@@ -52,7 +52,7 @@ export default function Rules() {
           </div>
           <RichTextEditor
             initialValue={version.content}
-            onTextChange={(value) => {
+            onTextChange={value => {
               setEditValue(value);
             }}
           />
