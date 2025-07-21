@@ -51,10 +51,11 @@ const usePlayerStore = create<{
   taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
   eventEndTime: number | null;
+  eventStartTime: number | null;
   prisonCards: ActiveBonusCard[];
   setMyPlayer: (data?: MyPlayerData) => void;
   updateMyPlayerSectorId: (id: number) => void;
-  setPlayers: (players: BackendPlayerData[], eventEndTime?: number) => void;
+  setPlayers: (players: BackendPlayerData[], eventEndTime?: number, eventStartTime?: number) => void;
   animatePlayerMovement: ({ steps }: { steps: number }) => Promise<number>;
   moveMyPlayer: (params: MoveMyPlayerParams) => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
@@ -78,6 +79,7 @@ const usePlayerStore = create<{
   taxPerSector: {},
   turnState: null,
   eventEndTime: null,
+  eventStartTime: null,
   prisonCards: [],
 
   setMyPlayer: (data?: MyPlayerData) => {
@@ -146,7 +148,7 @@ const usePlayerStore = create<{
     }));
   },
 
-  setPlayers: (playersData: BackendPlayerData[], eventEndTime?: number) => {
+  setPlayers: (playersData: BackendPlayerData[], eventEndTime?: number, eventStartTime?: number) => {
     const buildings: Record<number, BuildingData[]> = {};
     const taxPerSector: Record<number, TaxData> = {};
     for (const sector of sectorsData) {
@@ -224,6 +226,7 @@ const usePlayerStore = create<{
       buildingsPerSector: buildings,
       taxPerSector,
       eventEndTime: eventEndTime ?? null,
+      eventStartTime: eventStartTime ?? null,
       prisonCards: prisonPlayer?.bonus_cards ?? [],
     });
   },
