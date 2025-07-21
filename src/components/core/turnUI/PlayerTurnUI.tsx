@@ -26,6 +26,7 @@ export default function PlayerTurnUI() {
     prisonHasNoCards,
     myPlayerHasNoCards,
     eventStartTime,
+    eventEndTime,
   } = usePlayerStore(
     useShallow(state => {
       const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
@@ -40,6 +41,7 @@ export default function PlayerTurnUI() {
         myPlayerHasNoCards: (state.myPlayer?.bonus_cards.length ?? 0) === 0,
         prisonHasNoCards: state.prisonCards.length === 0,
         eventStartTime: state.eventStartTime,
+        eventEndTime: state.eventEndTime,
       };
     })
   );
@@ -51,6 +53,7 @@ export default function PlayerTurnUI() {
   }, []);
 
   const eventNotStarted = eventStartTime && now < eventStartTime * 1000;
+  const eventEnded = eventEndTime && now > eventEndTime * 1000;
   const timeLeft = eventStartTime ? eventStartTime * 1000 - now : 0;
   const formatTime = (ms: number) => {
     if (ms <= 0) return 'Скоро';
@@ -71,22 +74,39 @@ export default function PlayerTurnUI() {
     return `${day}.${month}.${year}, ${hours}:${minutes}`;
   };
 
-  const disableUI = isPlayerMoving || eventNotStarted;
+  const disableUI = isPlayerMoving || eventNotStarted || eventEnded;
   if (disableUI) {
-    return eventNotStarted ? (
-      <Tooltip delayDuration={0}>
-        <TooltipTrigger asChild>
-          <div className="pointer-events-auto">
-            <Button variant="outline" disabled>
-              Действия будут доступны с {eventStartTime ? formatDateTime(eventStartTime) : ''}
-            </Button>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="top">
-          Ивент начнётся {eventStartTime ? formatDateTime(eventStartTime) : ''}
-        </TooltipContent>
-      </Tooltip>
-    ) : null;
+    if (eventNotStarted) {
+      return (
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+            <div className="pointer-events-auto">
+              <Button variant="outline" disabled>
+                Действия будут доступны с {eventStartTime ? formatDateTime(eventStartTime) : ''}
+              </Button>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            Ивент начнётся {eventStartTime ? formatDateTime(eventStartTime) : ''}
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+    if (eventEnded) {
+      return (
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+            <div className="pointer-events-auto">
+              <Button variant="outline" disabled>
+                Ивент завершён
+              </Button>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top">Ивент завершён</TooltipContent>
+        </Tooltip>
+      );
+    }
+    return null;
   }
 
   switch (turnState) {
