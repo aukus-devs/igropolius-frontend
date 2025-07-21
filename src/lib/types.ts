@@ -202,6 +202,7 @@ export type AllCardsType = BonusCardType | InstantCardType;
 export type DiceRollJson = {
   is_random_org_result: boolean;
   random_org_check_form?: string;
+  random_org_fail_reason?: string;
   data: [number, number];
 };
 

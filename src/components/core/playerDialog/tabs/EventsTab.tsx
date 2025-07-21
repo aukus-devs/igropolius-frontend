@@ -32,7 +32,9 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollJson }) {
   return (
     <div className="space-y-2">
       <div className="text-xs text-muted-foreground">
-        Результаты броска кубиков через Random.org
+        {diceRollJson.is_random_org_result
+          ? 'Результаты броска кубиков через Random.org'
+          : `Результаты броска кубиков (локальный бросок, причина: ${diceRollJson.random_org_fail_reason})`}
       </div>
       <div className="text-xs text-muted-foreground">Кубики: {diceRollJson.data.join(', ')}</div>
       <div className="text-xs text-muted-foreground">

@@ -110,6 +110,22 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           },
         },
         {
+          event_type: 'player-move',
+          timestamp: Math.floor(new Date('04 30 2025 17:40').getTime() / 1000),
+          adjusted_roll: 5,
+          subtype: 'dice-roll',
+          sector_from: 10,
+          sector_to: 15,
+          completed_map: false,
+          bonuses_used: ['adjust-roll-by1', 'choose-1-die'],
+          dice_roll_json: {
+            is_random_org_result: false,
+            random_org_check_form: null,
+            data: [3, 7],
+            random_org_fail_reason: 'test',
+          },
+        },
+        {
           event_type: 'score-change',
           timestamp: Math.floor(new Date('04 29 2025 07:07').getTime() / 1000),
           subtype: 'street-tax',
@@ -454,6 +470,7 @@ type DiceRollResponse = {
   roll_id: number;
   is_random_org_result: boolean;
   random_org_check_form?: string;
+  random_org_fail_reason?: string;
   data: [number, number];
 };
 

@@ -13,6 +13,7 @@ const useDiceStore = create<{
   rollId: number | null;
   isRandomOrgResult: boolean;
   randomOrgCheckForm: string | null;
+  randomOrgFailReason: string | null;
   isRolling: boolean;
   error: string | null;
   rollDice: () => Promise<[number, number]>;
@@ -26,6 +27,7 @@ const useDiceStore = create<{
   rollId: null,
   isRandomOrgResult: false,
   randomOrgCheckForm: null,
+  randomOrgFailReason: null,
   isRolling: false,
   error: null,
   showRoll: false,
@@ -61,6 +63,7 @@ const useDiceStore = create<{
         rollId: rollResult.roll_id,
         isRandomOrgResult: rollResult.is_random_org_result,
         randomOrgCheckForm: rollResult.random_org_check_form || null,
+        randomOrgFailReason: rollResult.random_org_fail_reason || null,
         showRoll: true,
       });
 
