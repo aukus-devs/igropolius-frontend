@@ -11,19 +11,20 @@ import { ThreeEvent, useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { Mesh, MeshStandardMaterial } from "three";
 import useCanvasTooltipStore from "@/stores/canvasTooltipStore";
+import { useShallow } from "zustand/shallow";
 
 type Props = {
   id: number;
   sector: SectorData;
   shape: Vector3Array;
-  color: ColorName;
+  color?: ColorName;
   showColorGroup: boolean;
   isCorner: boolean;
 };
 
 const cornerTexture = `${import.meta.env.BASE_URL}assets/sectors/textures/corner.png`;
 
-function getSectorTexture(color: ColorName) {
+function getSectorTexture(color?: ColorName) {
   switch (color) {
     case "brown":
       return `${import.meta.env.BASE_URL}assets/sectors/textures/brown.png`;
@@ -41,14 +42,17 @@ function getSectorTexture(color: ColorName) {
       return `${import.meta.env.BASE_URL}assets/sectors/textures/green.png`;
     case "blue":
       return `${import.meta.env.BASE_URL}assets/sectors/textures/blue.png`;
-    case "pastelgreen":
+    default:
       return `${import.meta.env.BASE_URL}assets/sectors/textures/pastelgreen.png`;
   }
 }
 
 function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
-  const setData = useCanvasTooltipStore((state) => state.setData);
-  const dismiss = useCanvasTooltipStore((state) => state.dismiss);
+  const { setData, dismiss, pin } = useCanvasTooltipStore(useShallow((state) => ({
+    setData: state.setData,
+    dismiss: state.dismiss,
+    pin: state.pin,
+  })));
   const [isHovered, setIsHovered] = useState(false);
   const meshRef = useRef<Mesh>(null);
   const texture = useTexture(isCorner ? cornerTexture : getSectorTexture(color));
@@ -81,6 +85,11 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
     setIsHovered(false);
   }
 
+  function onClick(e: ThreeEvent<MouseEvent>) {
+    e.stopPropagation();
+    pin();
+  }
+
   return (
     <mesh
       ref={meshRef}
@@ -88,6 +97,7 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
       receiveShadow
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
+      onClick={onClick}
     >
       <boxGeometry args={finalShape} />
       <meshStandardMaterial

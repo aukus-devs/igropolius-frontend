@@ -8,8 +8,8 @@ const SvgDonationalerts = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     {...props}
   >
-    <g id="Dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-      <g id="Brand" transform="translate(-536.000000, -275.000000)" fill="currentColor" fill-rule="nonzero">
+    <g id="Dashboard" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+      <g id="Brand" transform="translate(-536.000000, -275.000000)" fill="currentColor" fillRule="nonzero">
         <g id="Logos" transform="translate(390.000000, 120.000000)">
           <g id="1" transform="translate(0.000000, 120.000000)">
             <g id="DA_Alert" transform="translate(146.000000, 35.000000)">

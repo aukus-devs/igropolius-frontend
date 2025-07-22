@@ -22,13 +22,31 @@ type TooltipData =
 
 const useCanvasTooltipStore = create<{
   data: TooltipData | null;
+  isPinned: boolean;
   setData: (data: TooltipData) => void;
   dismiss: () => void;
-}>((set) => ({
+  pin: () => void;
+  unpin: () => void;
+  togglePin: () => void;
+}>((set, get) => ({
   data: null,
+  isPinned: false,
 
-  setData: (data: TooltipData) => set({ data }),
-  dismiss: () => set({ data: null })
+  setData: (data: TooltipData) => {
+    const isPinned = get().isPinned;
+
+    if (isPinned) return;
+    set({ data });
+  },
+  dismiss: () => {
+    const isPinned = get().isPinned;
+
+    if (isPinned) return;
+    set({ data: null })
+  },
+  pin: () => set({ isPinned: true }),
+  unpin: () => set({ isPinned: false }),
+  togglePin: () => set({ isPinned: !get().isPinned }),
 }));
 
 export default useCanvasTooltipStore;

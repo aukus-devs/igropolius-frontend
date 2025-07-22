@@ -16,6 +16,7 @@ import SceneLoader from './components/map/SceneLoader';
 import useDiceStore from './stores/diceStore';
 import useAdminStore from './stores/adminStore';
 import { TooltipProvider } from './components/ui/tooltip';
+import useCanvasTooltipStore from './stores/canvasTooltipStore';
 
 function App() {
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
@@ -43,6 +44,9 @@ function App() {
     queryFn: fetchPlayers,
     refetchInterval: 60 * 1000,
   });
+
+  const dismiss = useCanvasTooltipStore(state => state.dismiss);
+  const unpin = useCanvasTooltipStore(state => state.unpin);
 
   const { setPlayers, setMyPlayer, setTurnState } = usePlayerStore(
     useShallow(state => ({
@@ -86,6 +90,11 @@ function App() {
     );
   }, [setPlayers, playersData]);
 
+  function onPointerMissed() {
+    unpin();
+    dismiss();
+  }
+
   if (isLoading) {
     return <LoadingModal />;
   }
@@ -97,7 +106,7 @@ function App() {
         <TooltipProvider>
           <UI />
         </TooltipProvider>
-        <Canvas>
+        <Canvas onPointerMissed={onPointerMissed}>
           <Suspense fallback={<SceneLoader />}>
             <Scene />
           </Suspense>

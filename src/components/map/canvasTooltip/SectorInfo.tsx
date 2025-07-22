@@ -1,7 +1,9 @@
 import { Share } from '@/components/icons';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { frontendCardsData } from '@/lib/mockData';
 import { SectorData } from '@/lib/types';
+import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 
@@ -12,6 +14,8 @@ type Props = {
 function SectorInfo({ sector }: Props) {
   const { id, name, type, rollType } = sector;
 
+  const unpin = useCanvasTooltipStore((state) => state.unpin);
+  const dismiss = useCanvasTooltipStore((state) => state.dismiss);
   const { taxInfo, prisonCards } = usePlayerStore(
     useShallow(state => ({
       taxInfo: state.taxPerSector[id],
@@ -23,31 +27,47 @@ function SectorInfo({ sector }: Props) {
   const showPrisonCards = sector.type === 'prison';
   const prisonCardsList = prisonCards ?? [];
 
+  function build() {
+    console.log('Build');
+    unpin();
+    dismiss();
+  }
+
   return (
-    <Card className="w-52 pointer-events-none">
+    <Card className="w-[260px]">
       <CardHeader>
+        <div className="flex justify-between">
+          <div className="w-[50px] h-[17px] bg-muted rounded" style={{ backgroundColor: sector.color }}></div>
+          <p className="text-sm font-bold text-muted-foreground">#{id}</p>
+        </div>
         <CardTitle>{name}</CardTitle>
-        <p className="text-xs text-muted-foreground">#{id}</p>
       </CardHeader>
       <CardContent>
-        <p className="text-sm">Тип: {SectorTypeLabes[type]}</p>
-        <p className="text-sm">Ролл игры: {rollType}</p>
-        {showTax && (
-          <div className="flex items-center">
-            <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
-            <Share className="w-4 h-4" />
-          </div>
-        )}
-        {showPrisonCards && (
-          <div>
-            <div className="text-sm">Хранилище:</div>
-            <div className="flex gap-1">
-              {prisonCardsList.map((c, id) => (
-                <img key={id} className="w-5 h-10" src={frontendCardsData[c.bonus_type].picture} />
-              ))}
+        <div className="text-sm text-muted-foreground font-semibold">
+          <p>Тип: {SectorTypeLabes[type]}</p>
+          <p>Ролл игры: {rollType}</p>
+          {showTax && (
+            <div className="flex items-center">
+              <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
+              <Share className="w-4 h-4" />
             </div>
-          </div>
-        )}
+          )}
+          {showPrisonCards && prisonCardsList.length > 0 && (
+            <div>
+              <div>Хранилище:</div>
+              <div className="flex gap-1">
+                {prisonCardsList.map((c, id) => (
+                  <img key={id} className="w-5 h-10" src={frontendCardsData[c.bonus_type].picture} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* if build mode */}
+        <Button className="bg-green-500 w-full mt-4 hover:bg-green-600" onClick={build}>
+          Построить
+        </Button>
       </CardContent>
     </Card>
   );

@@ -15,7 +15,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Базовая',
     position: { x: 0, y: 0 },
     type: 'start-corner',
-    color: 'pastelgreen',
     rollType: 'voting',
   },
   {
@@ -31,7 +30,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Дурки',
     position: { x: 2, y: 0 },
     type: 'bonus',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -55,7 +53,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Тихого Дэна',
     position: { x: 5, y: 0 },
     type: 'railroad',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -71,7 +68,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Колескина',
     position: { x: 7, y: 0 },
     type: 'bonus',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -95,7 +91,6 @@ export const sectorsData: SectorData[] = [
     name: 'Тюрьма 1',
     position: { x: 10, y: 0 },
     type: 'prison',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -111,7 +106,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Бана',
     position: { x: 10, y: 2 },
     type: 'bonus',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -135,7 +129,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица 1984 года',
     position: { x: 10, y: 5 },
     type: 'railroad',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -151,7 +144,6 @@ export const sectorsData: SectorData[] = [
     name: 'Переулок Чатовский',
     position: { x: 10, y: 7 },
     type: 'bonus',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -175,7 +167,6 @@ export const sectorsData: SectorData[] = [
     name: 'Парковка',
     position: { x: 10, y: 10 },
     type: 'parking',
-    color: 'pastelgreen',
     rollType: 'voting',
   },
   {
@@ -191,7 +182,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица имени Кала Засто',
     position: { x: 8, y: 10 },
     type: 'bonus',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -215,7 +205,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Хуховая',
     position: { x: 5, y: 10 },
     type: 'railroad',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -239,7 +228,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Идейная',
     position: { x: 2, y: 10 },
     type: 'bonus',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -255,7 +243,6 @@ export const sectorsData: SectorData[] = [
     name: 'Тюрьма 2',
     position: { x: 0, y: 10 },
     type: 'prison',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -279,7 +266,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Сратьная',
     position: { x: 0, y: 7 },
     type: 'bonus',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -295,7 +281,6 @@ export const sectorsData: SectorData[] = [
     name: 'Переулок Агуш',
     position: { x: 0, y: 5 },
     type: 'railroad',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {
@@ -319,7 +304,6 @@ export const sectorsData: SectorData[] = [
     name: 'Улица Паст',
     position: { x: 0, y: 2 },
     type: 'bonus',
-    color: 'pastelgreen',
     rollType: 'steam',
   },
   {

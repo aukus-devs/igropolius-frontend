@@ -6,15 +6,17 @@ import BuildingInfo from './BuildingInfo';
 function CanvasTooltip() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const storeData = useCanvasTooltipStore((state) => state.data);
+  const isPinned = useCanvasTooltipStore((state) => state.isPinned);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      if (isPinned) return
       setPosition({ x: e.clientX + 25, y: e.clientY - 25 })
     }
 
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+  }, [isPinned])
 
   return (
     <div
@@ -22,7 +24,6 @@ function CanvasTooltip() {
         position: 'fixed',
         left: `${position.x}px`,
         top: `${position.y}px`,
-        pointerEvents: 'none',
         opacity: storeData ? 1 : 0,
         zIndex: 999,
       }}
