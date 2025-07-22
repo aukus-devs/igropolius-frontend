@@ -134,8 +134,6 @@ export default function PlayerTurnUI() {
       return <SkipPrisonDialog />;
     case 'using-map-tax-bonuses':
       return <SkipMapTaxDialog />;
-    case 'using-map-tax-bonuses-after-train-ride':
-      return <SkipMapTaxDialog />;
     case 'stealing-bonus-card':
       if (!hasCardsToSteal) {
         return <NoCardsToStealDialog />;

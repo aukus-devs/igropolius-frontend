@@ -7,8 +7,6 @@ import { HALF_BOARD, TrainsConfig } from '@/lib/constants';
 import { SectorsById } from '@/lib/mockData';
 import { calculatePlayerPosition, getSectorRotation } from '@/components/map/utils';
 import useCameraStore from './cameraStore';
-import { makePlayerMove } from '@/lib/api';
-import { resetNotificationsQuery } from '@/lib/queryClient';
 
 type TrainConfig = {
   id: number;
@@ -20,7 +18,7 @@ type TrainConfig = {
 const useTrainsStore = create<{
   trains: { [key: number]: TrainConfig };
   addTrain: (id: number, startPosition: Vector3, endPosition: Vector3, model: Group) => void;
-  rideTrain: (id: number) => void;
+  rideTrain: (id: number) => Promise<number>;
 }>((set, get) => ({
   trains: {},
 
@@ -36,15 +34,6 @@ const useTrainsStore = create<{
     const myPlayer = usePlayerStore.getState().myPlayer;
     const myPlayerId = myPlayer?.id;
     if (!myPlayerId) throw new Error(`My player not found`);
-
-    await makePlayerMove({
-      type: 'train-ride',
-      selected_die: null,
-      adjust_by_1: null,
-    });
-
-    resetNotificationsQuery();
-    usePlayerStore.setState({ isPlayerMoving: true });
 
     const playerModel = useModelsStore.getState().getPlayerModel(myPlayerId);
     const playerMesh = playerModel.children[0];
@@ -71,73 +60,68 @@ const useTrainsStore = create<{
     const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, 'XYZ'));
     const { moveToPlayer } = useCameraStore.getState();
 
-    createTimeline({
-      onUpdate: () => moveToPlayer(playerModel, false),
-    })
-      .add(playerModel.position, {
-        y: playerModel.position.y + 3,
-        duration: 300,
+    return new Promise<number>(resolve => {
+      createTimeline({
+        onUpdate: () => moveToPlayer(playerModel, false),
       })
-      .add(playerModel.position, {
-        x: carriageWorldPosition.x,
-        z: carriageWorldPosition.z,
-        duration: 500,
-        onUpdate: ({ progress }) => {
-          playerMesh.quaternion.rotateTowards(initialPlayerRotation, progress);
-        },
-      })
-      .add(playerModel.position, {
-        y: playerModel.position.y + 0.4,
-        duration: 300,
-      })
-      .add(train.model.position, {
-        x: train.endPosition.x,
-        y: train.endPosition.y,
-        z: train.endPosition.z,
-        ease: 'linear',
-        duration: 3000,
-        onUpdate: () => {
-          carriageModel?.getWorldPosition(carriageWorldPosition);
-          carriageWorldPosition.x += HALF_BOARD;
-          carriageWorldPosition.z += HALF_BOARD;
+        .add(playerModel.position, {
+          y: playerModel.position.y + 3,
+          duration: 300,
+        })
+        .add(playerModel.position, {
+          x: carriageWorldPosition.x,
+          z: carriageWorldPosition.z,
+          duration: 500,
+          onUpdate: ({ progress }) => {
+            playerMesh.quaternion.rotateTowards(initialPlayerRotation, progress);
+          },
+        })
+        .add(playerModel.position, {
+          y: playerModel.position.y + 0.4,
+          duration: 300,
+        })
+        .add(train.model.position, {
+          x: train.endPosition.x,
+          y: train.endPosition.y,
+          z: train.endPosition.z,
+          ease: 'linear',
+          duration: 3000,
+          onUpdate: () => {
+            carriageModel?.getWorldPosition(carriageWorldPosition);
+            carriageWorldPosition.x += HALF_BOARD;
+            carriageWorldPosition.z += HALF_BOARD;
 
-          playerModel.position.x = carriageWorldPosition.x;
-          playerModel.position.z = carriageWorldPosition.z;
-        },
-        onComplete: () => {
-          createTimeline({
-            onUpdate: () => moveToPlayer(playerModel, false),
-          })
-            .add(playerModel.position, {
-              y: playerModel.position.y + 3,
-              duration: 300,
+            playerModel.position.x = carriageWorldPosition.x;
+            playerModel.position.z = carriageWorldPosition.z;
+          },
+          onComplete: () => {
+            createTimeline({
+              onUpdate: () => moveToPlayer(playerModel, false),
             })
-            .add(playerModel.position, {
-              x: destinationPosition[0],
-              z: destinationPosition[2],
-              duration: 500,
-              onUpdate: ({ progress }) => {
-                playerModel.quaternion.rotateTowards(playerGroupQuat, progress);
-                playerMesh.quaternion.rotateTowards(playerMeshQuat, progress);
-              },
-            })
-            .add(playerModel.position, {
-              y: playerModel.position.y - 0.4,
-              duration: 300,
-            })
-            .then(async () => {
-              train.model.position.copy(train.startPosition);
-              usePlayerStore.getState().updateMyPlayerSectorId(destinationSector.id);
-              try {
-                await usePlayerStore.getState().setNextTurnState({
-                  prevSectorId: myPlayer.sector_id,
-                });
-              } finally {
-                usePlayerStore.setState({ isPlayerMoving: false });
-              }
-            });
-        },
-      });
+              .add(playerModel.position, {
+                y: playerModel.position.y + 3,
+                duration: 300,
+              })
+              .add(playerModel.position, {
+                x: destinationPosition[0],
+                z: destinationPosition[2],
+                duration: 500,
+                onUpdate: ({ progress }) => {
+                  playerModel.quaternion.rotateTowards(playerGroupQuat, progress);
+                  playerMesh.quaternion.rotateTowards(playerMeshQuat, progress);
+                },
+              })
+              .add(playerModel.position, {
+                y: playerModel.position.y - 0.4,
+                duration: 300,
+              })
+              .then(() => {
+                train.model.position.copy(train.startPosition);
+                resolve(destinationSector.id); // ✅ signal that animation sequence is done
+              });
+          },
+        });
+    });
   },
 }));
 

@@ -41,6 +41,7 @@ import {
   PlayerTurnState,
   TaxType,
 } from '@/lib/api-types-generated';
+import useTrainsStore from './trainStore';
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
@@ -121,11 +122,7 @@ const usePlayerStore = create<{
       action: params.action,
     });
 
-    if (
-      mapCompleted &&
-      nextTurnState !== 'using-map-tax-bonuses' &&
-      nextTurnState !== 'using-map-tax-bonuses-after-train-ride'
-    ) {
+    if (mapCompleted && nextTurnState !== 'using-map-tax-bonuses') {
       await payTaxes({ tax_type: 'map-tax' });
     }
 
@@ -248,8 +245,6 @@ const usePlayerStore = create<{
       return currentSectorId;
     }
 
-    set({ isPlayerMoving: true });
-
     const { isOrthographic, cameraToPlayer, moveToPlayer, rotateAroundPlayer } =
       useCameraStore.getState();
 
@@ -311,7 +306,6 @@ const usePlayerStore = create<{
 
     await new Promise(resolve => {
       tl.play().then(() => {
-        set({ isPlayerMoving: false });
         const { updateMyPlayerSectorId } = get();
         updateMyPlayerSectorId(currentSectorId);
         resolve(true);
@@ -322,14 +316,30 @@ const usePlayerStore = create<{
 
   moveMyPlayer: async (params: MoveMyPlayerParams) => {
     const { myPlayer, animatePlayerMovement, setNextTurnState } = get();
-    const originalSector = myPlayer?.sector_id;
+    if (!myPlayer) {
+      throw new Error('My player not found.');
+    }
+
+    const originalSector = myPlayer.sector_id;
+
+    set({ isPlayerMoving: true });
     await makePlayerMove({
       type: 'dice-roll',
       selected_die: params.selectedDie,
       adjust_by_1: params.adjustBy1,
+      ride_train: params.rideTrain,
     });
 
+    if (params.rideTrain) {
+      const destination = await useTrainsStore.getState().rideTrain(myPlayer.sector_id);
+      set(state => ({
+        myPlayer: state.myPlayer ? { ...state.myPlayer, sector_id: destination } : null,
+      }));
+    }
+
     await animatePlayerMovement({ steps: params.totalRoll });
+    set({ isPlayerMoving: false });
+
     await setNextTurnState({ prevSectorId: originalSector, action: params.action });
     resetNotificationsQuery();
   },

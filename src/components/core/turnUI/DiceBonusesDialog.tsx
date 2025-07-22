@@ -8,7 +8,7 @@ import { useShallow } from 'zustand/shallow';
 export default function DiceBonusesDialog() {
   const [selectedDie, setSelectedDie] = useState<number | null>(null);
   const [adjustBy1, setAdjustBy1] = useState<number | null>(null);
-  const [trainRide, setTrainRide] = useState<boolean>(false);
+  const [rideTrain, setRideTrain] = useState<boolean>(false);
 
   const rollResult = useDiceStore(state => state.rollResult);
   const rollResultSum = rollResult.reduce((a, b) => a + b, 0);
@@ -22,7 +22,6 @@ export default function DiceBonusesDialog() {
 
   if (!myPlayer) {
     return null;
-    throw new Error('My player not found');
   }
 
   const bonusCards = myPlayer.bonus_cards || [];
@@ -39,7 +38,7 @@ export default function DiceBonusesDialog() {
   }
 
   let finalDestination = myPlayer.sector_id;
-  if (trainRide && trainDestination) {
+  if (rideTrain && trainDestination) {
     finalDestination = trainDestination;
   }
   if (selectedDie) {
@@ -69,7 +68,7 @@ export default function DiceBonusesDialog() {
       adjustBy1: adjustBy1Typed,
       selectedDie,
       action: 'skip-bonus',
-      rideTrain: trainRide,
+      rideTrain,
     });
   };
 
@@ -91,9 +90,9 @@ export default function DiceBonusesDialog() {
                 { value: 0, label: 'Нет' },
                 { value: 1, label: 'Да' },
               ]}
-              value={trainRide ? 1 : 0}
+              value={rideTrain ? 1 : 0}
               onChange={value => {
-                setTrainRide(value === 1);
+                setRideTrain(value === 1);
               }}
             />
           </div>

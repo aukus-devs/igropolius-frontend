@@ -10,64 +10,69 @@
  * via the `definition` "MainBonusCardType".
  */
 export type MainBonusCardType =
-  | "adjust-roll-by1"
-  | "choose-1-die"
-  | "skip-prison-day"
-  | "reroll-game"
-  | "evade-street-tax"
-  | "evade-map-tax"
-  | "game-help-allowed";
+  | 'adjust-roll-by1'
+  | 'choose-1-die'
+  | 'skip-prison-day'
+  | 'reroll-game'
+  | 'evade-street-tax'
+  | 'evade-map-tax'
+  | 'game-help-allowed';
 export type ReceivedAt = number;
 export type ReceivedOnSector = number;
 export type Timestamp = number;
-export type EventType = "bonus-card";
+export type EventType = 'bonus-card';
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "BonusCardEventType".
  */
-export type BonusCardEventType = "received" | "used" | "dropped" | "stolen-from-me" | "stolen-by-me";
+export type BonusCardEventType =
+  | 'received'
+  | 'used'
+  | 'dropped'
+  | 'stolen-from-me'
+  | 'stolen-by-me';
 export type BonusType = BonusCardType | InstantCardType;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "BonusCardType".
  */
 export type BonusCardType =
-  | "adjust-roll-by1"
-  | "choose-1-die"
-  | "skip-prison-day"
-  | "reroll-game"
-  | "evade-street-tax"
-  | "evade-map-tax"
-  | "game-help-allowed"
-  | "receive-1-percent-from-all"
-  | "receive-scores-for-place"
-  | "receive-5-percent-or-reroll"
-  | "receive-3-percent"
-  | "leaders-lose-percents"
-  | "receive-1-percent-plus-20"
-  | "upgrade-next-building"
-  | "downgrade-next-building"
-  | "lose-2-percents"
-  | "reroll"
-  | "reroll-and-roll"
-  | "lose-card-or-3-percent";
+  | 'adjust-roll-by1'
+  | 'choose-1-die'
+  | 'skip-prison-day'
+  | 'reroll-game'
+  | 'evade-street-tax'
+  | 'evade-map-tax'
+  | 'game-help-allowed'
+  | 'receive-1-percent-from-all'
+  | 'receive-scores-for-place'
+  | 'receive-5-percent-or-reroll'
+  | 'receive-3-percent'
+  | 'leaders-lose-percents'
+  | 'receive-1-percent-plus-20'
+  | 'upgrade-next-building'
+  | 'downgrade-next-building'
+  | 'lose-2-percents'
+  | 'reroll'
+  | 'reroll-and-roll'
+  | 'lose-card-or-3-percent';
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "InstantCardType".
  */
 export type InstantCardType =
-  | "receive-1-percent-from-all"
-  | "receive-scores-for-place"
-  | "receive-5-percent-or-reroll"
-  | "receive-3-percent"
-  | "leaders-lose-percents"
-  | "receive-1-percent-plus-20"
-  | "upgrade-next-building"
-  | "downgrade-next-building"
-  | "lose-2-percents"
-  | "reroll"
-  | "reroll-and-roll"
-  | "lose-card-or-3-percent";
+  | 'receive-1-percent-from-all'
+  | 'receive-scores-for-place'
+  | 'receive-5-percent-or-reroll'
+  | 'receive-3-percent'
+  | 'leaders-lose-percents'
+  | 'receive-1-percent-plus-20'
+  | 'upgrade-next-building'
+  | 'downgrade-next-building'
+  | 'lose-2-percents'
+  | 'reroll'
+  | 'reroll-and-roll'
+  | 'lose-card-or-3-percent';
 export type SectorId = number;
 export type UsedAt = number | null;
 export type UsedOnSector = number | null;
@@ -80,23 +85,23 @@ export type StolenBy = number | null;
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "NotificationType".
  */
-export type NotificationType = "important" | "standard";
+export type NotificationType = 'important' | 'standard';
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "NotificationEventType".
  */
 export type NotificationEventType =
-  | "game-completed"
-  | "game-reroll"
-  | "game-drop"
-  | "pay-sector-tax"
-  | "building-income"
-  | "pay-map-tax"
-  | "bonus-increase"
-  | "card-stolen"
-  | "card-lost"
-  | "event-ending-soon"
-  | "message";
+  | 'game-completed'
+  | 'game-reroll'
+  | 'game-drop'
+  | 'pay-sector-tax'
+  | 'building-income'
+  | 'pay-map-tax'
+  | 'bonus-increase'
+  | 'card-stolen'
+  | 'card-lost'
+  | 'event-ending-soon'
+  | 'message';
 export type OtherPlayerId = number | null;
 export type Scores = number | null;
 export type SectorId1 = number | null;
@@ -125,7 +130,7 @@ export type Username = string;
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "Role".
  */
-export type Role = "player" | "moder" | "admin" | "prison";
+export type Role = 'player' | 'moder' | 'admin' | 'prison';
 export type ModerFor = number | null;
 export type SectorId3 = number;
 export type TotalScore = number;
@@ -134,19 +139,18 @@ export type TotalScore = number;
  * via the `definition` "PlayerTurnState".
  */
 export type PlayerTurnState =
-  | "rolling-dice"
-  | "using-dice-bonuses"
-  | "using-prison-bonuses"
-  | "rolling-bonus-card"
-  | "filling-game-review"
-  | "using-map-tax-bonuses"
-  | "using-street-tax-bonuses"
-  | "dropping-card-after-game-drop"
-  | "dropping-card-after-instant-roll"
-  | "entering-prison"
-  | "stealing-bonus-card"
-  | "choosing-building-sector"
-  | "using-map-tax-bonuses-after-train-ride";
+  | 'rolling-dice'
+  | 'using-dice-bonuses'
+  | 'using-prison-bonuses'
+  | 'rolling-bonus-card'
+  | 'filling-game-review'
+  | 'using-map-tax-bonuses'
+  | 'using-street-tax-bonuses'
+  | 'dropping-card-after-game-drop'
+  | 'dropping-card-after-instant-roll'
+  | 'entering-prison'
+  | 'stealing-bonus-card'
+  | 'choosing-building-sector';
 export type MapsCompleted = number;
 export type LastRollResult = number[];
 export type HasUpgradeBonus = boolean;
@@ -165,9 +169,9 @@ export type VodLinks = string | null;
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "GameCompletionType".
  */
-export type GameCompletionType = "completed" | "drop" | "reroll";
+export type GameCompletionType = 'completed' | 'drop' | 'reroll';
 export type Timestamp1 = number;
-export type EventType1 = "game";
+export type EventType1 = 'game';
 export type GameTitle3 = string;
 export type GameCover = string | null;
 export type SectorId4 = number;
@@ -175,7 +179,7 @@ export type SectorId4 = number;
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "GameLength".
  */
-export type GameLength = "drop" | "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
+export type GameLength = 'drop' | '2-5' | '5-10' | '10-15' | '15-20' | '20-25' | '25+';
 export type ReceivedAt1 = number;
 export type ReceivedOnSector1 = number;
 export type Id1 = number;
@@ -189,18 +193,18 @@ export type Limit = number;
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "InstantCardResult".
  */
-export type InstantCardResult = "reroll" | "card-lost" | "score-received" | "scores-lost";
+export type InstantCardResult = 'reroll' | 'card-lost' | 'score-received' | 'scores-lost';
 export type Username1 = string;
 export type Password = string;
 export type Token = string;
 export type NotificationIds = number[];
 export type Timestamp2 = number;
-export type EventType2 = "player-move";
+export type EventType2 = 'player-move';
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "PlayerMoveType".
  */
-export type PlayerMoveType = "dice-roll" | "train-ride" | "drop-to-prison";
+export type PlayerMoveType = 'dice-roll' | 'train-ride' | 'drop-to-prison';
 export type SectorFrom = number;
 export type SectorTo = number;
 export type AdjustedRoll = number;
@@ -223,7 +227,7 @@ export type Notifications = NotificationItem[];
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "TaxType".
  */
-export type TaxType = "street-tax" | "map-tax";
+export type TaxType = 'street-tax' | 'map-tax';
 export type Id3 = number;
 export type Username2 = string;
 export type FirstName = string;
@@ -237,7 +241,7 @@ export type OnlineCount = number;
 export type CurrentAucTotalSum = number | null;
 export type CurrentAucStartedAt = number | null;
 export type PointaucToken = string | null;
-export type StreamPlatform = "twitch" | "vk" | "kick" | "none";
+export type StreamPlatform = 'twitch' | 'vk' | 'kick' | 'none';
 export type TwitchStreamLink = string | null;
 export type VkStreamLink = string | null;
 export type KickStreamLink = string | null;
@@ -261,18 +265,18 @@ export type Games1 = PlayerGame[];
 export type BonusCards = ActiveBonusCard[];
 export type Timestamp3 = number;
 export type Timestamp4 = number;
-export type EventType3 = "score-change";
+export type EventType3 = 'score-change';
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "ScoreChangeType".
  */
 export type ScoreChangeType =
-  | "game-completed"
-  | "game-dropped"
-  | "street-tax"
-  | "street-income"
-  | "map-tax"
-  | "instant-card";
+  | 'game-completed'
+  | 'game-dropped'
+  | 'street-tax'
+  | 'street-income'
+  | 'map-tax'
+  | 'instant-card';
 export type Amount = number;
 export type Reason = string;
 export type SectorId8 = number;
@@ -284,6 +288,7 @@ export type EventEndTime4 = number | null;
 export type EventStartTime = number | null;
 export type SelectedDie = number | null;
 export type AdjustBy1 = number | null;
+export type RideTrain = boolean;
 export type Num = number;
 export type Min = number;
 export type Max = number;
@@ -310,7 +315,7 @@ export type Success1 = boolean;
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "StreamPlatform".
  */
-export type StreamPlatform1 = "twitch" | "vk" | "kick" | "none";
+export type StreamPlatform1 = 'twitch' | 'vk' | 'kick' | 'none';
 
 export interface ApiSchema {
   [k: string]: unknown;
@@ -682,6 +687,7 @@ export interface PlayerMoveRequest {
   type: PlayerMoveType;
   selected_die?: SelectedDie;
   adjust_by_1?: AdjustBy1;
+  ride_train?: RideTrain;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

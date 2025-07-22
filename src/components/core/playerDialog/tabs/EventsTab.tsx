@@ -232,6 +232,14 @@ export default function EventsTab({ player }: Props) {
   const events = eventsData?.events || [];
   const sortedEvents = events.sort((a, b) => {
     if (a.timestamp === b.timestamp) {
+      if (a.event_type === 'player-move' && b.event_type === 'player-move') {
+        if (a.subtype === 'train-ride') {
+          return 1; // 'train-ride' events should come last
+        }
+        if (b.subtype === 'train-ride') {
+          return -1; // 'train-ride' events should come last
+        }
+      }
       return EventTypeOrder[b.event_type] - EventTypeOrder[a.event_type];
     }
     return b.timestamp - a.timestamp;

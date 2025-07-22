@@ -329,11 +329,6 @@ function getNextState({
       }
     case 'rolling-bonus-card':
       return 'rolling-dice';
-    // case 'choosing-train-ride':
-    //   if (mapCompleted && hasMapTaxCard) {
-    //     return 'using-map-tax-bonuses-after-train-ride';
-    //   }
-    //   return 'rolling-dice';
     case 'dropping-card-after-game-drop':
       return 'entering-prison';
     case 'entering-prison':
@@ -341,8 +336,6 @@ function getNextState({
     case 'stealing-bonus-card':
       return 'rolling-dice';
     case 'choosing-building-sector':
-      return 'rolling-dice';
-    case 'using-map-tax-bonuses-after-train-ride':
       return 'rolling-dice';
     case 'dropping-card-after-instant-roll':
       return 'filling-game-review';
