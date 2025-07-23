@@ -131,7 +131,7 @@ const usePlayerStore = create<{
       await payTaxes({ tax_type: 'map-tax' });
     }
 
-    if (turnState === 'rolling-dice' && nextTurnState === 'filling-game-review') {
+    if (turnState === 'using-dice-bonuses' && nextTurnState === 'filling-game-review') {
       const currentSector = SectorsById[myPlayer.sector_id];
       if (canBuildOnSector(currentSector.type)) {
         await payTaxes({ tax_type: 'street-tax' });

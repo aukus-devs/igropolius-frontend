@@ -103,9 +103,13 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent) {
     case 'game-dropped':
       title = 'Потерял очки за дроп игры';
       break;
-    case 'street-income':
-      title = `Получил доход с сектора ${event.sector_id}`;
+    case 'street-income': {
+      const incomePlayer = usePlayerStore
+        .getState()
+        .players.find(p => p.id === event.income_from_player);
+      title = `Получил доход с сектора ${event.sector_id} от ${incomePlayer?.username}`;
       break;
+    }
     case 'instant-card':
       title = `Получено от инстантной карточки`;
       break;

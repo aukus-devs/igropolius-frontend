@@ -271,6 +271,7 @@ export type Reason = string;
 export type SectorId8 = number;
 export type ScoreBefore = number;
 export type ScoreAfter = number;
+export type IncomeFromPlayer = number | null;
 export type Events = (GameEvent | BonusCardEvent | ScoreChangeEvent | MoveEvent)[];
 export type Players = PlayerDetails[];
 export type EventEndTime4 = number | null;
@@ -654,6 +655,7 @@ export interface ScoreChangeEvent {
   sector_id: SectorId8;
   score_before: ScoreBefore;
   score_after: ScoreAfter;
+  income_from_player?: IncomeFromPlayer;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
