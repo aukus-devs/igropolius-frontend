@@ -5,7 +5,6 @@ import GameBoard from './GameBoard';
 import { Railroad } from './Railroad';
 import { colors } from '@/lib/types';
 import { STORAGE_BASE_URL } from '@/lib/constants';
-import { useEffect, useRef, useState } from 'react';
 
 function Scene() {
   const gridConfig = {

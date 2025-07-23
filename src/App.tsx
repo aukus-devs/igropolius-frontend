@@ -1,6 +1,6 @@
 import './index.css';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo } from 'react';
 import { KeyboardControls, KeyboardControlsEntry } from '@react-three/drei';
 import { useShallow } from 'zustand/shallow';
 import { Controls } from './lib/constants';
