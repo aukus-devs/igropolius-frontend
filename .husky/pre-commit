@@ -1,0 +1,2 @@
+yarn run bump-version
+git add package.json 
