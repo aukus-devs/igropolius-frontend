@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export default function Clock() {
   const [time, setTime] = useState(() => Date.now());
@@ -16,9 +16,10 @@ export default function Clock() {
 function formatTime(timeMs: number) {
   const date = new Date(timeMs);
   const options: Intl.DateTimeFormatOptions = {
-    hour: "2-digit",
-    minute: "2-digit",
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Europe/Moscow',
   };
-  const formattedTime = date.toLocaleTimeString("ru-RU", options);
+  const formattedTime = date.toLocaleTimeString('ru-RU', options);
   return formattedTime;
 }
