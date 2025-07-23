@@ -115,8 +115,6 @@ export default function PlayerTurnUI() {
       return null;
     case 'rolling-dice':
       return <MoveButton />;
-    // case 'choosing-train-ride':
-    //   return <TrainMoveDialog />;
     case 'filling-game-review':
       if (canSelectBuildingSector()) {
         return (

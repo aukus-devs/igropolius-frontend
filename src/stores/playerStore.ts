@@ -343,9 +343,9 @@ const usePlayerStore = create<{
     }
 
     await animatePlayerMovement({ steps: params.totalRoll });
+    await setNextTurnState({ prevSectorId: originalSector, action: params.action });
     set({ isPlayerMoving: false });
 
-    await setNextTurnState({ prevSectorId: originalSector, action: params.action });
     resetNotificationsQuery();
   },
 

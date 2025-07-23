@@ -25,17 +25,22 @@ export function MoveButton() {
   const handleClick = async () => {
     const roll = await rollDice();
     if (canModifyRoll) {
-      setNextTurnState({
+      await setNextTurnState({
         prevSectorId: myPlayer?.sector_id,
       });
       return;
     }
+
+    await setNextTurnState({
+      prevSectorId: myPlayer?.sector_id,
+    });
 
     const total = roll.reduce((sum, value) => sum + value, 0);
     moveMyPlayer({
       totalRoll: total,
       adjustBy1: null,
       selectedDie: null,
+      action: 'skip-bonus',
     });
   };
 

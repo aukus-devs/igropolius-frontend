@@ -94,6 +94,7 @@ function App() {
     queryKey: ['frontVersion'],
     queryFn: fetchFrontVersion,
     refetchInterval: 60000,
+    retry: false,
   });
 
   useEffect(() => {

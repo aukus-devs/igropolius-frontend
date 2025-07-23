@@ -200,6 +200,7 @@ export function getNextTurnState({
 
   const statesToStop: PlayerTurnState[] = [
     'rolling-dice',
+    'using-dice-bonuses',
     'rolling-bonus-card',
     'filling-game-review',
     'entering-prison',
@@ -253,7 +254,6 @@ function getNextState({
   const hasStreetTaxCard = bonusCardsSet.has('evade-street-tax');
   const hasMapTaxCard = bonusCardsSet.has('evade-map-tax');
   const hasPrisonCard = bonusCardsSet.has('skip-prison-day');
-  // const hasRerollCard = bonusCardsSet.has('reroll-game');
   const hasDiceCards = bonusCardsSet.has('adjust-roll-by1') || bonusCardsSet.has('choose-1-die');
 
   const skipBonus = action === 'skip-bonus';
@@ -265,7 +265,7 @@ function getNextState({
       if (hasDiceCards && !skipBonus) {
         return 'stop';
       }
-      if (sector.type === 'railroad') {
+      if (sector.type === 'railroad' && !skipBonus) {
         return 'stop';
       }
       return 'using-map-tax-bonuses';
@@ -290,11 +290,6 @@ function getNextState({
         return 'stop';
       }
       return 'filling-game-review';
-    // case 'using-reroll-bonuses':
-    //   if (hasRerollCard && !skipBonus) {
-    //     return 'stop';
-    //   }
-    //   return 'filling-game-review';
     case 'filling-game-review':
       if (action === 'drop-game') {
         return 'dropping-card-after-game-drop';
