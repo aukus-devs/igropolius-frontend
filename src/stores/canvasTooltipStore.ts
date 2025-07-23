@@ -1,27 +1,26 @@
-import { BuildingData, SectorData } from "@/lib/types";
-import { create } from "zustand";
+import { BuildingData, SectorData } from '@/lib/types';
+import { create } from 'zustand';
 
-type TooltipDataType = "building" | "sector";
+type TooltipDataType = 'building' | 'sector';
 
 type TooltipDataBase = {
   type: TooltipDataType;
 };
 
 type TooltipBuildingData = TooltipDataBase & {
-  type: "building";
+  type: 'building';
   payload: BuildingData;
 };
 type TooltipSectorData = TooltipDataBase & {
-  type: "sector";
+  type: 'sector';
   payload: SectorData;
 };
 
-type TooltipData =
-  | TooltipBuildingData
-  | TooltipSectorData;
+type TooltipData = TooltipBuildingData | TooltipSectorData;
 
 const useCanvasTooltipStore = create<{
   data: TooltipData | null;
+  previousData: TooltipData | null;
   isPinned: boolean;
   setData: (data: TooltipData) => void;
   dismiss: () => void;
@@ -30,19 +29,20 @@ const useCanvasTooltipStore = create<{
   togglePin: () => void;
 }>((set, get) => ({
   data: null,
+  previousData: null,
   isPinned: false,
 
   setData: (data: TooltipData) => {
-    const isPinned = get().isPinned;
+    const { isPinned, data: previousData } = get();
 
     if (isPinned) return;
-    set({ data });
+    set({ data, previousData });
   },
   dismiss: () => {
-    const isPinned = get().isPinned;
+    const { isPinned, data: previousData } = get();
 
     if (isPinned) return;
-    set({ data: null })
+    set({ data: null, previousData });
   },
   pin: () => set({ isPinned: true }),
   unpin: () => set({ isPinned: false }),

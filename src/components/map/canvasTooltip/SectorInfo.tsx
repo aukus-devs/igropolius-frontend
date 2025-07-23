@@ -14,12 +14,13 @@ type Props = {
 function SectorInfo({ sector }: Props) {
   const { id, name, type, rollType } = sector;
 
-  const unpin = useCanvasTooltipStore((state) => state.unpin);
-  const dismiss = useCanvasTooltipStore((state) => state.dismiss);
-  const { taxInfo, prisonCards } = usePlayerStore(
+  const unpin = useCanvasTooltipStore(state => state.unpin);
+  const dismiss = useCanvasTooltipStore(state => state.dismiss);
+  const { taxInfo, prisonCards, canBuild } = usePlayerStore(
     useShallow(state => ({
       taxInfo: state.taxPerSector[id],
       prisonCards: sector.type === 'prison' ? state.prisonCards : null,
+      canBuild: state.turnState === 'choosing-building-sector' || true,
     }))
   );
   const showTax = sector.type === 'railroad' || sector.type === 'property';
@@ -37,7 +38,10 @@ function SectorInfo({ sector }: Props) {
     <Card className="w-[260px]">
       <CardHeader>
         <div className="flex justify-between">
-          <div className="w-[50px] h-[17px] bg-muted rounded" style={{ backgroundColor: sector.color }}></div>
+          <div
+            className="w-[50px] h-[17px] bg-muted rounded"
+            style={{ backgroundColor: sector.color }}
+          ></div>
           <p className="text-sm font-bold text-muted-foreground">#{id}</p>
         </div>
         <CardTitle>{name}</CardTitle>
@@ -57,17 +61,22 @@ function SectorInfo({ sector }: Props) {
               <div>Хранилище:</div>
               <div className="flex gap-1">
                 {prisonCardsList.map((c, id) => (
-                  <img key={id} className="w-5 h-10" src={frontendCardsData[c.bonus_type].picture} />
+                  <img
+                    key={id}
+                    className="w-5 h-10"
+                    src={frontendCardsData[c.bonus_type].picture}
+                  />
                 ))}
               </div>
             </div>
           )}
         </div>
 
-        {/* if build mode */}
-        <Button className="bg-green-500 w-full mt-4 hover:bg-green-600" onClick={build}>
-          Построить
-        </Button>
+        {canBuild && (
+          <Button className="bg-green-500 w-full mt-4 hover:bg-green-600" onClick={build}>
+            Построить
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

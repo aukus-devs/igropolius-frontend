@@ -4,14 +4,14 @@ import {
   SECTOR_DEPTH,
   EMISSION_FULL,
   EMISSION_NONE,
-} from "@/lib/constants";
-import { ColorName, SectorData, Vector3Array } from "@/lib/types";
-import { useTexture } from "@react-three/drei";
-import { ThreeEvent, useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
-import { Mesh, MeshStandardMaterial } from "three";
-import useCanvasTooltipStore from "@/stores/canvasTooltipStore";
-import { useShallow } from "zustand/shallow";
+} from '@/lib/constants';
+import { ColorName, SectorData, Vector3Array } from '@/lib/types';
+import { useTexture } from '@react-three/drei';
+import { ThreeEvent, useFrame } from '@react-three/fiber';
+import { useEffect, useRef, useState } from 'react';
+import { Mesh, MeshStandardMaterial } from 'three';
+import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
+import { useShallow } from 'zustand/shallow';
 
 type Props = {
   id: number;
@@ -26,21 +26,21 @@ const cornerTexture = `${import.meta.env.BASE_URL}assets/sectors/textures/corner
 
 function getSectorTexture(color?: ColorName) {
   switch (color) {
-    case "brown":
+    case 'brown':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/brown.png`;
-    case "lightblue":
+    case 'lightblue':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/lightblue.png`;
-    case "pink":
+    case 'pink':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/pink.png`;
-    case "orange":
+    case 'orange':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/orange.png`;
-    case "red":
+    case 'red':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/red.png`;
-    case "yellow":
+    case 'yellow':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/yellow.png`;
-    case "green":
+    case 'green':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/green.png`;
-    case "blue":
+    case 'blue':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/blue.png`;
     default:
       return `${import.meta.env.BASE_URL}assets/sectors/textures/pastelgreen.png`;
@@ -48,11 +48,23 @@ function getSectorTexture(color?: ColorName) {
 }
 
 function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
-  const { setData, dismiss, pin } = useCanvasTooltipStore(useShallow((state) => ({
-    setData: state.setData,
-    dismiss: state.dismiss,
-    pin: state.pin,
-  })));
+  const {
+    setData,
+    dismiss,
+    pin,
+    isPinned,
+    data: tooltipData,
+    previousData: tooltipPrevData,
+  } = useCanvasTooltipStore(
+    useShallow(state => ({
+      data: state.data,
+      previousData: state.previousData,
+      setData: state.setData,
+      dismiss: state.dismiss,
+      pin: state.pin,
+      isPinned: state.isPinned,
+    }))
+  );
   const [isHovered, setIsHovered] = useState(false);
   const meshRef = useRef<Mesh>(null);
   const texture = useTexture(isCorner ? cornerTexture : getSectorTexture(color));
@@ -76,18 +88,36 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
 
     setData({ type: 'sector', payload: sector });
     setIsHovered(true);
+    document.body.style.cursor = 'pointer';
   }
 
   function onPointerLeave(e: ThreeEvent<PointerEvent>) {
     e.stopPropagation();
 
     dismiss();
-    setIsHovered(false);
+
+    const pinnedOnCurrentSector =
+      isPinned && tooltipData?.type === 'sector' && tooltipData.payload.id === sector.id;
+
+    if (!pinnedOnCurrentSector) {
+      setIsHovered(false);
+    }
+    document.body.style.cursor = 'default';
   }
+
+  const tooltipWasOnCurrentSector =
+    tooltipPrevData?.type === 'sector' && tooltipPrevData.payload.id === sector.id;
+
+  useEffect(() => {
+    if (!isPinned && isHovered && tooltipWasOnCurrentSector) {
+      setIsHovered(false);
+    }
+  }, [isPinned, isHovered, tooltipWasOnCurrentSector]);
 
   function onClick(e: ThreeEvent<MouseEvent>) {
     e.stopPropagation();
     pin();
+    setIsHovered(true);
   }
 
   return (
@@ -100,12 +130,7 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
       onClick={onClick}
     >
       <boxGeometry args={finalShape} />
-      <meshStandardMaterial
-        color="white"
-        roughness={0.75}
-        map={texture}
-        emissiveIntensity={0.25}
-      />
+      <meshStandardMaterial color="white" roughness={0.75} map={texture} emissiveIntensity={0.25} />
     </mesh>
   );
 }
