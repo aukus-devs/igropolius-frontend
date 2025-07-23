@@ -69,11 +69,6 @@ export type InstantCardType =
   | "reroll-and-roll"
   | "lose-card-or-3-percent";
 export type SectorId = number;
-export type UsedAt = number | null;
-export type UsedOnSector = number | null;
-export type LostAt = number | null;
-export type LostOnSector = number | null;
-export type StolenAt = number | null;
 export type StolenFromPlayer = number | null;
 export type StolenBy = number | null;
 /**
@@ -334,11 +329,6 @@ export interface BonusCardEvent {
   subtype: BonusCardEventType;
   bonus_type: BonusType;
   sector_id: SectorId;
-  used_at?: UsedAt;
-  used_on_sector?: UsedOnSector;
-  lost_at?: LostAt;
-  lost_on_sector?: LostOnSector;
-  stolen_at?: StolenAt;
   stolen_from_player?: StolenFromPlayer;
   stolen_by?: StolenBy;
 }
