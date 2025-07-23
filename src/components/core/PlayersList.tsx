@@ -13,11 +13,10 @@ function PlayersList() {
     })),
   );
 
-  const nonCollapsiblePlayersCount = 3;
-  const nonCollapsiblePlayers = players.slice(0, nonCollapsiblePlayersCount);
-  const collapsiblePlayers = players.slice(nonCollapsiblePlayersCount);
-
   const showCards = turnState === "stealing-bonus-card";
+  const nonCollapsiblePlayersCount = 3;
+  const nonCollapsiblePlayers = showCards ? players : players.slice(0, nonCollapsiblePlayersCount);
+  const collapsiblePlayers = players.slice(nonCollapsiblePlayersCount);
 
   return (
     players.length > 0 && (
@@ -43,20 +42,22 @@ function PlayersList() {
               );
             })}
           </div>
-          <CollapsibleContent>
-            {collapsiblePlayers.map((player, idx) => {
-              const isCurrentPlayer = myPlayer?.id === player.id;
-              return (
-                <PlayerDialog
-                  key={player.id}
-                  player={player}
-                  isCurrentPlayer={isCurrentPlayer}
-                  placement={idx + 1}
-                  showCards={showCards}
-                />
-              );
-            })}
-          </CollapsibleContent>
+          {!showCards && (
+            <CollapsibleContent>
+              {collapsiblePlayers.map((player, idx) => {
+                const isCurrentPlayer = myPlayer?.id === player.id;
+                return (
+                  <PlayerDialog
+                    key={player.id}
+                    player={player}
+                    isCurrentPlayer={isCurrentPlayer}
+                    placement={idx + 1}
+                    showCards={showCards}
+                  />
+                );
+              })}
+            </CollapsibleContent>
+          )}
         </Collapsible>
       </div>
     )

@@ -27,10 +27,8 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
           <AvatarImage src={player.avatar_link ?? FALLBACK_AVATAR_URL} />
           <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
         </Avatar>
-        {player.is_online ? (
+        {player.is_online && (
           <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500" />
-        ) : (
-          <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-red-500" />
         )}
       </div>
       <div className="flex flex-col w-full md:gap-[3px] gap-[5px]">

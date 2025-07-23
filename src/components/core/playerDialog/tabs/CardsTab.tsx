@@ -42,7 +42,7 @@ function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
   return (
     <div className="flex flex-col my-5">
       {availableCards.length > 0 && (
-        <div className="flex flex-wrap gap-y-2.5 gap-x-2 mb-[50px] justify-center">
+        <div className="flex flex-wrap gap-y-2.5 gap-x-2 mb-[50px]">
           {availableCards.map(type => (
             <GameCard key={type} type={type} />
           ))}
@@ -54,7 +54,7 @@ function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
           <p className="text-center text-xs font-wide-semibold text-muted-foreground mb-5">
             Не полученые
           </p>
-          <div className="flex flex-wrap gap-y-2.5 gap-x-2 justify-center">
+          <div className="flex flex-wrap gap-y-2.5 gap-x-2">
             {unavailableCards.map(type => (
               <GameCard key={type} type={type} inactive />
             ))}
