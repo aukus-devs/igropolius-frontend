@@ -1,13 +1,13 @@
 import './index.css';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useMemo } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { KeyboardControls, KeyboardControlsEntry } from '@react-three/drei';
 import { useShallow } from 'zustand/shallow';
 import { Controls } from './lib/constants';
 import Scene from './components/map/Scene';
 import UI from './components/UI';
 import usePlayerStore from './stores/playerStore';
-import { fetchCurrentPlayer, fetchPlayers } from './lib/api';
+import { fetchCurrentPlayer, fetchPlayers, fetchFrontVersion } from './lib/api';
 import { useQuery } from '@tanstack/react-query';
 import LoadingModal from './components/core/loadng/LoadingModal';
 import { queryKeys } from './lib/queryClient';
@@ -89,6 +89,19 @@ function App() {
       playersData?.event_start_time ?? undefined
     );
   }, [setPlayers, playersData]);
+
+  const { data: frontVersionData } = useQuery({
+    queryKey: ['frontVersion'],
+    queryFn: fetchFrontVersion,
+    refetchInterval: 60000,
+  });
+
+  useEffect(() => {
+    if (!frontVersionData?.version) return;
+    if (frontVersionData.version !== import.meta.env.PACKAGE_VERSION) {
+      window.location.href = window.location.pathname + '?reload=' + new Date().getTime();
+    }
+  }, [frontVersionData]);
 
   function onPointerMissed() {
     unpin();

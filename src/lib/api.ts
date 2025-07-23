@@ -583,11 +583,10 @@ export async function activateInstantCard(
   return response.json();
 }
 
-export async function fetchFrontVersion(): Promise<{ date: string }> {
+export async function fetchFrontVersion(): Promise<{ version: string }> {
   if (MOCK_API) {
-    return Promise.resolve({ date: import.meta.env.BUILD_DATE });
+    return Promise.resolve({ version: import.meta.env.PACKAGE_VERSION });
   }
-  const res = await fetch('/version.json?ts=' + Date.now());
-  if (!res.ok) throw new Error('Failed to fetch version');
-  return res.json();
+  const response = await apiRequest('/version.json?ts=' + Date.now());
+  return response.json();
 }

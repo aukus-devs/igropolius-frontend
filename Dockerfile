@@ -1,18 +1,17 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-ARG BUILD_DATE
-ENV BUILD_DATE=$BUILD_DATE
-
 COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
 COPY . .
 
-RUN BUILD_DATE=$BUILD_DATE yarn build:prod
+RUN yarn build:prod
 
-RUN rm -f dist/version.json && echo "{ \"date\": \"$BUILD_DATE\" }" > dist/version.json
+RUN rm -f dist/version.json && \
+    VERSION=$(node -p "require('./package.json').version") && \
+    echo "{ \"version\": \"$VERSION\" }" > dist/version.json
 
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html

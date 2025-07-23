@@ -5,8 +5,7 @@ import GameBoard from './GameBoard';
 import { Railroad } from './Railroad';
 import { colors } from '@/lib/types';
 import { STORAGE_BASE_URL } from '@/lib/constants';
-import { useEffect, useRef } from 'react';
-import { fetchFrontVersion } from '@/lib/api';
+import { useEffect, useRef, useState } from 'react';
 
 function Scene() {
   const gridConfig = {
@@ -47,22 +46,6 @@ function Scene() {
   //     scene.add(shadowCameraHelper)
   //   }
   // }, [directionalLightRef, scene]);
-
-  const currentDate = import.meta.env.BUILD_DATE;
-  const lastDateRef = useRef(currentDate);
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      try {
-        const data = await fetchFrontVersion();
-        if (data.date && data.date !== lastDateRef.current) {
-          window.location.href = window.location.pathname + '?reload=' + new Date().getTime();
-        }
-      } catch {
-        console.error('Failed to fetch front version');
-      }
-    }, 60000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <>

@@ -3,8 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, Plugin } from "vite";
 import serveStatic from "serve-static";
-
-const BUILD_DATE = process.env.BUILD_DATE || new Date().toISOString();
+import pkg from './package.json'
 
 // https://vite.dev/config/
 
@@ -31,7 +30,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins,
     define: {
-      'import.meta.env.BUILD_DATE': JSON.stringify(BUILD_DATE),
+      'import.meta.env.PACKAGE_VERSION': JSON.stringify(pkg.version),
     },
     resolve: {
       alias: {
