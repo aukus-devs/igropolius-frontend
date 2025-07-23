@@ -255,8 +255,7 @@ function HLTBLink() {
   );
 }
 
-function GameReviewForm() {
-  const [open, setOpen] = useState(false);
+function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
   const [showScoreDetails, setShowScoreDetails] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -268,6 +267,8 @@ function GameReviewForm() {
   );
 
   const {
+    open,
+    setOpen,
     setRating,
     rating,
     sendReview,
@@ -277,8 +278,11 @@ function GameReviewForm() {
     isSubmitting,
     selectedGame,
     gameLength,
+    targetSectorId,
   } = useReviewFormStore(
     useShallow(state => ({
+      open: state.open,
+      setOpen: state.setOpen,
       setRating: state.setRating,
       rating: state.rating,
       sendReview: state.sendReview,
@@ -288,6 +292,7 @@ function GameReviewForm() {
       isSubmitting: state.isSubmitting,
       selectedGame: state.selectedGame,
       gameLength: state.gameTime,
+      targetSectorId: state.targetSectorId,
     }))
   );
 
@@ -310,7 +315,10 @@ function GameReviewForm() {
   let buttonColor = 'bg-primary';
   switch (gameStatus) {
     case 'completed':
-      buttonText = `Получить ${scores.total} очков`;
+      buttonText = `Построить и получить ${scores.total} очков`;
+      if (targetSectorId) {
+        buttonText = `Построить на секторе #${targetSectorId} и получить ${scores.total} очков`;
+      }
       buttonColor = 'bg-green-800';
       break;
     case 'drop':
@@ -348,6 +356,7 @@ function GameReviewForm() {
 
   const onConfirm = async () => {
     clearError();
+
     try {
       await sendReview(scores.total);
     } catch (error) {
@@ -364,15 +373,18 @@ function GameReviewForm() {
         turnParams = { action: 'reroll-game' };
         break;
     }
+
     await setNextTurnState(turnParams);
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Оценка игры</Button>
-      </DialogTrigger>
+      {showTrigger && (
+        <DialogTrigger asChild>
+          <Button variant="outline">Оценка игры</Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[790px] p-2.5" aria-describedby="">
         <DialogHeader className="hidden">
           <DialogTitle />

@@ -24,6 +24,10 @@ const useReviewFormStore = create<{
   sendReview: (scores: number) => Promise<void>;
   getReviewScores: (params: { sectorId: number; mapsCompleted: number }) => ScoreDetails;
   clearError: () => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  targetSectorId: number | null;
+  setTargetSectorId: (sectorId: number | null) => void;
   // retrySubmit: () => Promise<void>;
 }>((set, get) => ({
   rating: 0,
@@ -34,7 +38,10 @@ const useReviewFormStore = create<{
   selectedGame: null,
   error: null,
   isSubmitting: false,
-
+  open: false,
+  targetSectorId: null,
+  setOpen: open => set({ open }),
+  setTargetSectorId: sectorId => set({ targetSectorId: sectorId }),
   setRating: value => set({ rating: value }),
   setGameTitle: value => set({ gameTitle: value }),
   setGameTime: value => set({ gameTime: value }),
@@ -43,7 +50,8 @@ const useReviewFormStore = create<{
   setSelectedGame: game => set({ selectedGame: game }),
   clearError: () => set({ error: null }),
   sendReview: async (scores: number) => {
-    const { rating, gameTitle, gameTime, gameStatus, gameReview, selectedGame } = get();
+    const { rating, gameTitle, gameTime, gameStatus, gameReview, selectedGame, targetSectorId } =
+      get();
 
     if (!gameStatus) {
       throw new Error('Game status is required');
@@ -65,6 +73,7 @@ const useReviewFormStore = create<{
         length,
         scores,
         game_id: selectedGame?.id || null,
+        target_sector: targetSectorId || null,
       });
 
       resetNotificationsQuery();
@@ -77,6 +86,8 @@ const useReviewFormStore = create<{
         gameReview: '',
         selectedGame: null,
         error: null,
+        targetSectorId: null,
+        open: false,
       });
     } catch (error) {
       console.error('Review submission failed:', error);

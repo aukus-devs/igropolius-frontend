@@ -16,7 +16,11 @@ import { createTimeline } from 'animejs';
 import { create } from 'zustand';
 import useModelsStore from './modelsStore';
 import useCameraStore from './cameraStore';
-import { calculatePlayerPosition, getSectorRotation } from '@/components/map/utils';
+import {
+  calculatePlayerPosition,
+  canBuildOnSector,
+  getSectorRotation,
+} from '@/components/map/utils';
 import { playersFrontendData, SectorsById, sectorsData } from '@/lib/mockData';
 import { Euler, Quaternion } from 'three';
 import { getNextTurnState } from '@/lib/utils';
@@ -71,6 +75,7 @@ const usePlayerStore = create<{
   stealBonusCard: (player: PlayerData, card: MainBonusCardType) => Promise<void>;
   moveMyPlayerToPrison: () => Promise<void>;
   payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
+  canSelectBuildingSector: () => boolean;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -128,7 +133,7 @@ const usePlayerStore = create<{
 
     if (turnState === 'rolling-dice' && nextTurnState === 'filling-game-review') {
       const currentSector = SectorsById[myPlayer.sector_id];
-      if (currentSector.type === 'property' || currentSector.type === 'railroad') {
+      if (canBuildOnSector(currentSector.type)) {
         await payTaxes({ tax_type: 'street-tax' });
       }
     }
@@ -151,7 +156,7 @@ const usePlayerStore = create<{
     const buildings: Record<number, BuildingData[]> = {};
     const taxPerSector: Record<number, TaxData> = {};
     for (const sector of sectorsData) {
-      if (sector.type === 'property' || sector.type === 'railroad') {
+      if (canBuildOnSector(sector.type)) {
         buildings[sector.id] = [];
         taxPerSector[sector.id] = {
           taxAmount: 0,
@@ -411,12 +416,10 @@ const usePlayerStore = create<{
     setNextTurnState({ action: 'skip-bonus' });
   },
 
-  // loseBonusCard: async (type: BonusCardType) => {
-  //   await loseBonusCardApi(type);
-  //   resetPlayersQuery();
-  //   const { setNextTurnState } = get();
-  //   setNextTurnState({});
-  // },
+  canSelectBuildingSector: () => {
+    const { turnState, myPlayer } = get();
+    return turnState === 'filling-game-review' && myPlayer?.sector_id === 1;
+  },
 }));
 
 export default usePlayerStore;

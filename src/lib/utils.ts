@@ -21,6 +21,7 @@ import {
   PlayerTurnState,
   ScoreChangeEvent,
 } from './api-types-generated';
+import { canBuildOnSector } from '@/components/map/utils';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -204,7 +205,6 @@ export function getNextTurnState({
     'entering-prison',
     'dropping-card-after-game-drop',
     'dropping-card-after-instant-roll',
-    'choosing-building-sector',
     'stealing-bonus-card',
   ];
 
@@ -275,11 +275,7 @@ function getNextState({
       }
       return 'using-street-tax-bonuses';
     case 'using-street-tax-bonuses':
-      if (
-        (sector.type === 'property' || sector.type === 'railroad') &&
-        hasStreetTaxCard &&
-        !skipBonus
-      ) {
+      if (canBuildOnSector(sector.type) && hasStreetTaxCard && !skipBonus) {
         return 'stop';
       }
       if (sector.type === 'prison') {
@@ -310,18 +306,18 @@ function getNextState({
         return 'dropping-card-after-instant-roll';
       }
       switch (sector.type) {
-        case 'railroad':
-          return 'rolling-dice';
         case 'bonus':
           return 'rolling-bonus-card';
+        case 'parking':
+          return 'stealing-bonus-card';
+        case 'railroad':
+          return 'rolling-dice';
         case 'property':
           return 'rolling-dice';
         case 'prison':
           return 'rolling-dice';
-        case 'parking':
-          return 'stealing-bonus-card';
         case 'start-corner':
-          return 'choosing-building-sector';
+          return 'rolling-dice';
         default: {
           const sectorType: never = sector.type;
           throw new Error(`Unsupported sector type: ${sectorType}`);
@@ -334,8 +330,6 @@ function getNextState({
     case 'entering-prison':
       return 'using-prison-bonuses';
     case 'stealing-bonus-card':
-      return 'rolling-dice';
-    case 'choosing-building-sector':
       return 'rolling-dice';
     case 'dropping-card-after-instant-roll':
       return 'filling-game-review';

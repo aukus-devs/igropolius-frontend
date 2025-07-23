@@ -1,3 +1,4 @@
+import GameReviewForm from '@/components/core/turnUI/GameReviewForm';
 import { Share } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,7 +6,9 @@ import { frontendCardsData } from '@/lib/mockData';
 import { SectorData } from '@/lib/types';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import usePlayerStore from '@/stores/playerStore';
+import useReviewFormStore from '@/stores/reviewFormStore';
 import { useShallow } from 'zustand/shallow';
+import { canBuildOnSector } from '../utils';
 
 type Props = {
   sector: SectorData;
@@ -16,23 +19,33 @@ function SectorInfo({ sector }: Props) {
 
   const unpin = useCanvasTooltipStore(state => state.unpin);
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
-  const { taxInfo, prisonCards, canBuild } = usePlayerStore(
+  const { taxInfo, prisonCards, canSelectBuildingSector } = usePlayerStore(
     useShallow(state => ({
       taxInfo: state.taxPerSector[id],
       prisonCards: sector.type === 'prison' ? state.prisonCards : null,
-      canBuild: state.turnState === 'choosing-building-sector' || true,
+      canSelectBuildingSector: state.canSelectBuildingSector,
     }))
   );
-  const showTax = sector.type === 'railroad' || sector.type === 'property';
+  const showTax = canBuildOnSector(sector.type);
 
   const showPrisonCards = sector.type === 'prison';
   const prisonCardsList = prisonCards ?? [];
 
-  function build() {
-    console.log('Build');
+  const { openReviewForm, setTargetSectorId } = useReviewFormStore(
+    useShallow(state => ({
+      openReviewForm: state.setOpen,
+      setTargetSectorId: state.setTargetSectorId,
+    }))
+  );
+
+  const canBuild = canSelectBuildingSector() && canBuildOnSector(sector.type);
+
+  const build = () => {
     unpin();
     dismiss();
-  }
+    setTargetSectorId(id);
+    openReviewForm(true);
+  };
 
   return (
     <Card className="w-[260px]">

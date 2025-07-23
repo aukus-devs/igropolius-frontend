@@ -5,18 +5,18 @@ import {
   SECTOR_DEPTH,
   PLAYER_WIDTH,
   PLAYER_DEPTH,
-} from "@/lib/constants";
-import { SectorData, Vector3Array } from "@/lib/types";
+} from '@/lib/constants';
+import { SectorData, Vector3Array } from '@/lib/types';
 
 export type SectorPosition =
-  | "bottom"
-  | "top"
-  | "left"
-  | "right"
-  | "bottom-left"
-  | "bottom-right"
-  | "top-left"
-  | "top-right";
+  | 'bottom'
+  | 'top'
+  | 'left'
+  | 'right'
+  | 'bottom-left'
+  | 'bottom-right'
+  | 'top-left'
+  | 'top-right';
 
 export function calculateSectorPosition(sector: SectorData): Vector3Array {
   const offset = (SECTOR_DEPTH - SECTOR_WIDTH) / 2;
@@ -50,7 +50,7 @@ const OFFSET_FROM_TOP = SECTOR_DEPTH / 2.5;
 export function calculatePlayerPosition(
   idx: number,
   totalPlayers: number,
-  sector: SectorData,
+  sector: SectorData
 ): Vector3Array {
   const { rowOffset, columnOffset } = calculateGridOffsets(idx, totalPlayers);
   const { x: baseX, z: baseZ } = calculateBasePosition(sector);
@@ -58,7 +58,7 @@ export function calculatePlayerPosition(
     rowOffset,
     columnOffset,
     sector,
-    totalPlayers,
+    totalPlayers
   );
 
   return [
@@ -120,7 +120,7 @@ function calculatePlayerOffsets(
   rowOffset: number,
   columnOffset: number,
   sector: SectorData,
-  totalPlayers: number,
+  totalPlayers: number
 ) {
   const { x: sectorX, y: sectorY } = sector.position;
   let offsetX = 0;
@@ -147,7 +147,7 @@ function calculatePlayerOffsets(
   return { offsetX, offsetZ };
 }
 
-export function getSectorRotation(position: SectorData["position"]): Vector3Array {
+export function getSectorRotation(position: SectorData['position']): Vector3Array {
   const { x, y } = position;
 
   if (x === 0 && y === 0) return [0, 0, 0]; // bottom-left
@@ -159,10 +159,14 @@ export function getSectorRotation(position: SectorData["position"]): Vector3Arra
   if (y === 0) return [0, 0, 0]; // bottom
   if (y === 10) return [0, Math.PI, 0]; // top
 
-  throw new Error("Sector position not found");
+  throw new Error('Sector position not found');
 }
 
 export function calculateTrainPosition(sector: SectorData): Vector3Array {
   const pos = calculateSectorPosition(sector);
   return [pos[0], SECTOR_CONTENT_ELEVATION, pos[2] + 7];
+}
+
+export function canBuildOnSector(sectorType: SectorData['type']) {
+  return sectorType === 'property' || sectorType === 'railroad';
 }

@@ -11,7 +11,6 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import LoseCardOnDropDialog from './LoseCardDialog';
 import PrisonEnterCardRoll from './PrisonEnterCardRoll';
-import SelectBuildingSectorDialog from './SelectingBuildingSectorDialog';
 import { activateInstantCard, makePlayerMove } from '@/lib/api';
 import RollWithInstantCards from './RollWithInstantCards';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
@@ -26,6 +25,7 @@ export default function PlayerTurnUI() {
     myPlayerHasNoCards,
     eventStartTime,
     eventEndTime,
+    canSelectBuildingSector,
   } = usePlayerStore(
     useShallow(state => {
       const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
@@ -41,6 +41,8 @@ export default function PlayerTurnUI() {
         prisonHasNoCards: state.prisonCards.length === 0,
         eventStartTime: state.eventStartTime,
         eventEndTime: state.eventEndTime,
+        myPlayerSectorId: state.myPlayer?.sector_id ?? null,
+        canSelectBuildingSector: state.canSelectBuildingSector,
       };
     })
   );
@@ -116,10 +118,21 @@ export default function PlayerTurnUI() {
     // case 'choosing-train-ride':
     //   return <TrainMoveDialog />;
     case 'filling-game-review':
+      if (canSelectBuildingSector()) {
+        return (
+          <div className="flex gap-4">
+            <GameReviewForm />
+            <RollWithInstantCards />
+            <Card className="p-4">
+              <span>Выбери сектор для строительства</span>
+            </Card>
+          </div>
+        );
+      }
       return (
         <div className="flex gap-4">
           <RollWithInstantCards />
-          <GameReviewForm />
+          <GameReviewForm showTrigger />
         </div>
       );
     case 'rolling-bonus-card':
@@ -139,8 +152,7 @@ export default function PlayerTurnUI() {
         return <NoCardsToStealDialog />;
       }
       return null; // No UI for stealing bonus card, handled in PlayerCards
-    case 'choosing-building-sector':
-      return <SelectBuildingSectorDialog />;
+
     case 'entering-prison':
       if (myPlayerHasNoCards && prisonHasNoCards) {
         return <NoCardsForPrisonDialog />;
