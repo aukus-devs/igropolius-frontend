@@ -21,23 +21,26 @@ type TooltipData = TooltipBuildingData | TooltipSectorData;
 const useCanvasTooltipStore = create<{
   data: TooltipData | null;
   previousData: TooltipData | null;
+  pinPosition: { x: number; y: number } | null;
   isPinned: boolean;
-  setData: (data: TooltipData) => void;
+  setData: (data: TooltipData, force?: boolean) => void;
   dismiss: () => void;
   pin: () => void;
   unpin: () => void;
-  togglePin: () => void;
+  setPinPosition: (x: number, y: number) => void;
 }>((set, get) => ({
   data: null,
   previousData: null,
   isPinned: false,
+  pinPosition: null,
 
-  setData: (data: TooltipData) => {
+  setData: (data: TooltipData, force?: boolean) => {
     const { isPinned, data: previousData } = get();
 
-    if (isPinned) return;
+    if (isPinned && !force) return;
     set({ data, previousData });
   },
+
   dismiss: () => {
     const { isPinned, data: previousData } = get();
 
@@ -45,8 +48,11 @@ const useCanvasTooltipStore = create<{
     set({ data: null, previousData });
   },
   pin: () => set({ isPinned: true }),
-  unpin: () => set({ isPinned: false }),
-  togglePin: () => set({ isPinned: !get().isPinned }),
+  unpin: () => set({ isPinned: false, pinPosition: null }),
+
+  setPinPosition: (x: number, y: number) => {
+    set({ pinPosition: { x, y } });
+  },
 }));
 
 export default useCanvasTooltipStore;

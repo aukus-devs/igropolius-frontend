@@ -55,6 +55,7 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
     isPinned,
     data: tooltipData,
     previousData: tooltipPrevData,
+    setPinPosition,
   } = useCanvasTooltipStore(
     useShallow(state => ({
       data: state.data,
@@ -63,6 +64,7 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
       dismiss: state.dismiss,
       pin: state.pin,
       isPinned: state.isPinned,
+      setPinPosition: state.setPinPosition,
     }))
   );
   const [isHovered, setIsHovered] = useState(false);
@@ -108,14 +110,24 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
   const tooltipWasOnCurrentSector =
     tooltipPrevData?.type === 'sector' && tooltipPrevData.payload.id === sector.id;
 
+  const tooltipIsOnAnotherSector =
+    tooltipData?.type === 'sector' && tooltipData?.payload.id !== sector.id;
+
   useEffect(() => {
     if (!isPinned && isHovered && tooltipWasOnCurrentSector) {
       setIsHovered(false);
     }
-  }, [isPinned, isHovered, tooltipWasOnCurrentSector]);
+    if (isPinned && isHovered && tooltipIsOnAnotherSector) {
+      setIsHovered(false);
+    }
+  }, [isPinned, isHovered, tooltipWasOnCurrentSector, tooltipIsOnAnotherSector]);
 
   function onClick(e: ThreeEvent<MouseEvent>) {
     e.stopPropagation();
+    if (isPinned) {
+      setData({ type: 'sector', payload: sector }, true);
+      setPinPosition(e.clientX, e.clientY);
+    }
     pin();
     setIsHovered(true);
   }
