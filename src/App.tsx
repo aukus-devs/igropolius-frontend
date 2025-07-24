@@ -17,8 +17,11 @@ import useDiceStore from './stores/diceStore';
 import useAdminStore from './stores/adminStore';
 import { TooltipProvider } from './components/ui/tooltip';
 import useCanvasTooltipStore from './stores/canvasTooltipStore';
+import { useUserActivity } from './hooks/useUserActivity';
 
 function App() {
+  const { isInactive } = useUserActivity();
+
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
     () => [
       { name: Controls.forward, keys: ['ArrowUp', 'KeyW'] },
@@ -99,10 +102,10 @@ function App() {
 
   useEffect(() => {
     if (!frontVersionData?.version) return;
-    if (frontVersionData.version !== import.meta.env.PACKAGE_VERSION) {
+    if (frontVersionData.version !== import.meta.env.PACKAGE_VERSION && isInactive) {
       window.location.href = window.location.pathname + '?reload=' + new Date().getTime();
     }
-  }, [frontVersionData]);
+  }, [frontVersionData, isInactive]);
 
   function onPointerMissed() {
     unpin();
