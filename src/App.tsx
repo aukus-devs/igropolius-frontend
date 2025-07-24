@@ -19,6 +19,7 @@ import useAdminStore from './stores/adminStore';
 import { TooltipProvider } from './components/ui/tooltip';
 import useCanvasTooltipStore from './stores/canvasTooltipStore';
 import { useUserActivity } from './hooks/useUserActivity';
+import { MetrikaCounter } from 'react-metrika';
 
 function App() {
   const { isInactive } = useUserActivity();
@@ -123,24 +124,32 @@ function App() {
     dismiss();
   }
 
-  if (isLoading) {
-    return <LoadingModal />;
-  }
-
   return (
-    <KeyboardControls map={map}>
-      <div className="h-screen">
-        <CanvasTooltip />
-        <TooltipProvider>
-          <UI />
-        </TooltipProvider>
-        <Canvas onPointerMissed={onPointerMissed}>
-          <Suspense fallback={<SceneLoader />}>
-            <Scene />
-          </Suspense>
-        </Canvas>
-      </div>
-    </KeyboardControls>
+    <>
+      <MetrikaCounter
+        id={103476492}
+        options={{
+          trackHash: true,
+          webvisor: false,
+        }}
+      />
+      {isLoading && <LoadingModal />}
+      {!isLoading && (
+        <KeyboardControls map={map}>
+          <div className="h-screen">
+            <CanvasTooltip />
+            <TooltipProvider>
+              <UI />
+            </TooltipProvider>
+            <Canvas onPointerMissed={onPointerMissed}>
+              <Suspense fallback={<SceneLoader />}>
+                <Scene />
+              </Suspense>
+            </Canvas>
+          </div>
+        </KeyboardControls>
+      )}
+    </>
   );
 }
 
