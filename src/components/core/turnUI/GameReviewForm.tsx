@@ -424,11 +424,19 @@ function GameTitle({
 }
 
 function HLTBLink() {
+  const gameTitle = useReviewFormStore(state => state.gameTitle);
+
+  const cleanGameTitle = gameTitle ? gameTitle.replace(/\s*\(\d{4}\)\s*$/, '').trim() : '';
+
+  const hltbUrl = cleanGameTitle
+    ? `https://howlongtobeat.com/?q=${encodeURIComponent(cleanGameTitle)}`
+    : 'https://howlongtobeat.com/';
+
   return (
     <Button className="font-semibold border-none py-0 px-9 rounded-md">
       <a
         className="flex gap-1 size-full items-center justify-center"
-        href="https://howlongtobeat.com/"
+        href={hltbUrl}
         target="_blank"
       >
         На HLTB <ArrowRight />
