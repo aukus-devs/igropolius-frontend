@@ -11,6 +11,7 @@ export { default as Edit } from "./Edit";
 export { default as Grid4 } from "./Grid4";
 export { default as Heart } from "./Heart";
 export { default as Home } from "./Home";
+export { default as Kick } from "./Kick";
 export { default as Location } from "./Location";
 export { default as Notification } from "./Notification";
 export { default as PictureFrame } from "./PictureFrame";
