@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function parseEmotesInText(
   text: string,
@@ -22,7 +22,9 @@ function parseEmotesInText(
         src={match[1]}
         alt="emote"
         className={`inline-block h-6 mx-1 align-middle ${
-          insideSpoiler ? 'opacity-0 group-hover:opacity-100 transition-opacity' : ''
+          insideSpoiler
+            ? 'opacity-0 group-hover:opacity-100 group-data-[revealed=true]:opacity-100 transition-opacity'
+            : ''
         }`}
       />
     );
@@ -36,6 +38,33 @@ function parseEmotesInText(
 
   return parts.length > 0 ? parts : [text];
 }
+
+const SpoilerSpan = ({
+  children,
+  spoilerKey,
+}: {
+  children: React.ReactNode[];
+  spoilerKey: string;
+}) => {
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  const handleClick = () => {
+    setIsRevealed(!isRevealed);
+  };
+
+  return (
+    <span
+      key={spoilerKey}
+      className={`bg-white/5 transition-colors cursor-pointer px-1 rounded inline-block break-words max-w-full group ${
+        isRevealed ? 'text-current' : 'text-transparent hover:text-current'
+      }`}
+      data-revealed={isRevealed}
+      onClick={handleClick}
+    >
+      {children}
+    </span>
+  );
+};
 
 export function parseReview(text: string) {
   const lines = text.split('\n');
@@ -58,12 +87,12 @@ export function parseReview(text: string) {
       const spoilerParts = parseEmotesInText(spoilerContent, lineIndex, parts.length, true);
 
       parts.push(
-        <span
+        <SpoilerSpan
           key={`spoiler-${lineIndex}-${parts.length}`}
-          className="bg-white/5 text-transparent hover:text-current transition-colors cursor-pointer px-1 rounded inline-block break-words max-w-full group"
+          spoilerKey={`spoiler-${lineIndex}-${parts.length}`}
         >
           {spoilerParts}
-        </span>
+        </SpoilerSpan>
       );
 
       lastIndex = spoilerMatch.index + spoilerMatch[0].length;
