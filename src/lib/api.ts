@@ -590,3 +590,21 @@ export async function fetchFrontVersion(): Promise<{ version: string }> {
   const response = await apiRequest('/version.json?ts=' + Date.now());
   return response.json();
 }
+
+interface EmoteSearchResponse {
+  emotes: string[];
+}
+
+export async function searchEmotes(query: string): Promise<EmoteSearchResponse> {
+  if (!query.trim()) {
+    return { emotes: [] };
+  }
+
+  const response = await fetch(
+    `https://api4.rhhhhhhh.live/search_emotes/${encodeURIComponent(query)}`
+  );
+  if (!response.ok) {
+    throw new Error('Failed to search emotes');
+  }
+  return response.json();
+}
