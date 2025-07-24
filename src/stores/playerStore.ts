@@ -61,7 +61,7 @@ const usePlayerStore = create<{
   setMyPlayer: (data?: CurrentUserResponse) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: PlayerDetails[]) => void;
-  animatePlayerMovement: ({ steps }: { steps: number }) => Promise<number>;
+  animatePlayerMovement: (playerId: number, steps: number) => Promise<number>;
   moveMyPlayer: (params: MoveMyPlayerParams) => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
   setNextTurnState: (params: {
@@ -148,7 +148,7 @@ const usePlayerStore = create<{
     }));
   },
 
-  setPlayers: (playersData: PlayerDetails[]) => {
+  setPlayers: async (playersData: PlayerDetails[]) => {
     const buildings: Record<number, BuildingData[]> = {};
     const taxPerSector: Record<number, TaxData> = {};
     for (const sector of sectorsData) {
@@ -221,6 +221,20 @@ const usePlayerStore = create<{
 
     const prisonPlayer = playersData.find(p => p.role === 'prison');
 
+    await Promise.all(
+      players.map(async (player) => {
+        const prevPlayer = get().players.find((p) => p.id === player.id);
+
+        if (prevPlayer && player.sector_id !== prevPlayer.sector_id) {
+          const mapLength = sectorsData.length;
+          const positionDiff = player.sector_id - prevPlayer.sector_id;
+          const steps = (positionDiff + mapLength) % mapLength;
+
+          await get().animatePlayerMovement(player.id, steps);
+        }
+      })
+    );
+
     set({
       players,
       buildingsPerSector: buildings,
@@ -229,14 +243,14 @@ const usePlayerStore = create<{
     });
   },
 
-  animatePlayerMovement: async ({ steps }: { steps: number }) => {
-    const { myPlayer } = get();
-    if (!myPlayer) throw new Error(`Player not found.`);
+  animatePlayerMovement: async (playerId, steps) => {
+    const player = get().players.find(p => p.id === playerId);
+    if (!player) throw new Error(`Player not found.`);
 
-    const myPlayerModel = useModelsStore.getState().getPlayerModel(myPlayer.id);
-    if (!myPlayerModel) throw new Error(`Player model not found.`);
+    const playerModel = useModelsStore.getState().getPlayerModel(player.id);
+    if (!playerModel) throw new Error(`Player model not found.`);
 
-    let currentSectorId = myPlayer.sector_id;
+    let currentSectorId = player.sector_id;
     let currentSector = SectorsById[currentSectorId];
     if (!currentSector) throw new Error(`Current sector not found.`);
 
@@ -247,8 +261,8 @@ const usePlayerStore = create<{
     const { isOrthographic, cameraToPlayer, moveToPlayer, rotateAroundPlayer } =
       useCameraStore.getState();
 
-    if (!isOrthographic) {
-      await cameraToPlayer(myPlayer.id);
+    if (!isOrthographic && playerId === get().myPlayer?.id) {
+      await cameraToPlayer(player.id);
     }
 
     const tl = createTimeline();
@@ -271,14 +285,14 @@ const usePlayerStore = create<{
       const currentRotation = getSectorRotation(currentSector.position);
       const nextRotation = getSectorRotation(nextSector.position);
 
-      tl.add(myPlayerModel.position, {
+      tl.add(playerModel.position, {
         x: nextPosition[0],
-        y: [myPlayerModel.position.y, myPlayerModel.position.y + 3, myPlayerModel.position.y],
+        y: [playerModel.position.y, playerModel.position.y + 3, playerModel.position.y],
         z: nextPosition[2],
         ease: 'inOutSine',
         duration: IS_DEV ? 100 : 500,
         onUpdate: () => {
-          moveToPlayer(myPlayerModel, false);
+          moveToPlayer(playerModel, false);
         },
       });
 
@@ -292,8 +306,8 @@ const usePlayerStore = create<{
             duration: 300,
             ease: 'linear',
             onUpdate: self => {
-              rotateAroundPlayer(myPlayerModel, false);
-              myPlayerModel.quaternion.rotateTowards(targetQuat, self.progress);
+              rotateAroundPlayer(playerModel, false);
+              playerModel.quaternion.rotateTowards(targetQuat, self.progress);
             },
           }
         );
@@ -304,11 +318,7 @@ const usePlayerStore = create<{
     }
 
     await new Promise(resolve => {
-      tl.play().then(() => {
-        const { updateMyPlayerSectorId } = get();
-        updateMyPlayerSectorId(currentSectorId);
-        resolve(true);
-      });
+      tl.play().then(() => resolve(true));
     });
     return currentSectorId;
   },
@@ -336,7 +346,8 @@ const usePlayerStore = create<{
       }));
     }
 
-    await animatePlayerMovement({ steps: params.totalRoll });
+    await animatePlayerMovement(myPlayer.id, params.totalRoll);
+    get().updateMyPlayerSectorId(originalSector + params.totalRoll);
     await setNextTurnState({ prevSectorId: originalSector, action: params.action });
     set({ isPlayerMoving: false });
 
@@ -347,15 +358,14 @@ const usePlayerStore = create<{
     const { myPlayer, animatePlayerMovement } = get();
     if (!myPlayer) return;
 
-    // if (!sectorId) {
     const prisonSectors = [11, 31];
     const sectorId = prisonSectors.reduce((prev, curr) =>
       Math.abs(curr - myPlayer.sector_id) < Math.abs(prev - myPlayer.sector_id) ? curr : prev
     );
-    // }
 
     const steps = sectorId - myPlayer.sector_id;
-    await animatePlayerMovement({ steps });
+    await animatePlayerMovement(myPlayer.id, steps);
+    get().updateMyPlayerSectorId(sectorId);
   },
 
   setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),

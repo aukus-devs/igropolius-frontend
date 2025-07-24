@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Mesh, MeshStandardMaterial } from 'three';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import { useShallow } from 'zustand/shallow';
+import usePlayerStore from '@/stores/playerStore';
 
 type Props = {
   id: number;
@@ -67,6 +68,7 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
       setPinPosition: state.setPinPosition,
     }))
   );
+  const canSelectBuildingSector = usePlayerStore(state => state.canSelectBuildingSector);
   const [isHovered, setIsHovered] = useState(false);
   const meshRef = useRef<Mesh>(null);
   const texture = useTexture(isCorner ? cornerTexture : getSectorTexture(color));
@@ -77,35 +79,6 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
   const position: Vector3Array = showColorGroup
     ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
     : [0, 0, 0];
-
-  useFrame(() => {
-    if (!meshRef.current) return;
-
-    const material = meshRef.current.material as MeshStandardMaterial;
-    material.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
-  });
-
-  function onPointerEnter(e: ThreeEvent<PointerEvent>) {
-    e.stopPropagation();
-
-    setData({ type: 'sector', payload: sector });
-    setIsHovered(true);
-    document.body.style.cursor = 'pointer';
-  }
-
-  function onPointerLeave(e: ThreeEvent<PointerEvent>) {
-    e.stopPropagation();
-
-    dismiss();
-
-    const pinnedOnCurrentSector =
-      isPinned && tooltipData?.type === 'sector' && tooltipData.payload.id === sector.id;
-
-    if (!pinnedOnCurrentSector) {
-      setIsHovered(false);
-    }
-    document.body.style.cursor = 'default';
-  }
 
   const tooltipWasOnCurrentSector =
     tooltipPrevData?.type === 'sector' && tooltipPrevData.payload.id === sector.id;
@@ -122,8 +95,43 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
     }
   }, [isPinned, isHovered, tooltipWasOnCurrentSector, tooltipIsOnAnotherSector]);
 
+  useFrame(() => {
+    if (!meshRef.current) return;
+
+    const material = meshRef.current.material as MeshStandardMaterial;
+    material.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
+  });
+
+  function onPointerEnter(e: ThreeEvent<PointerEvent>) {
+    e.stopPropagation();
+
+    setData({ type: 'sector', payload: sector });
+    setIsHovered(true);
+
+    if (canSelectBuildingSector()) {
+      document.body.style.cursor = 'pointer';
+    }
+  }
+
+  function onPointerLeave(e: ThreeEvent<PointerEvent>) {
+    e.stopPropagation();
+
+    dismiss();
+
+    const pinnedOnCurrentSector =
+      isPinned && tooltipData?.type === 'sector' && tooltipData.payload.id === sector.id;
+
+    if (!pinnedOnCurrentSector) {
+      setIsHovered(false);
+    }
+    document.body.style.cursor = 'default';
+  }
+
   function onClick(e: ThreeEvent<MouseEvent>) {
     e.stopPropagation();
+
+    if (!canSelectBuildingSector()) return;
+
     if (isPinned) {
       setData({ type: 'sector', payload: sector }, true);
       setPinPosition(e.clientX, e.clientY);
