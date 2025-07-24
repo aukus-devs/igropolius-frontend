@@ -1,5 +1,5 @@
 import { playersData } from './mockData';
-import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS } from './constants';
+import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS, EMOTES_SEARCH_API_URL } from './constants';
 import useAdminStore from '@/stores/adminStore';
 import {
   CurrentUserResponse,
@@ -601,7 +601,7 @@ export async function searchEmotes(query: string): Promise<EmoteSearchResponse> 
   }
 
   const response = await fetch(
-    `https://api4.rhhhhhhh.live/search_emotes/${encodeURIComponent(query)}`
+    `${EMOTES_SEARCH_API_URL}/${encodeURIComponent(query)}`
   );
   if (!response.ok) {
     throw new Error('Failed to search emotes');

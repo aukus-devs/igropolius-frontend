@@ -15,11 +15,10 @@ export default function EmotePanel({ onEmoteSelect, className = '' }: EmotePanel
 
   const debouncedQuery = useDebounce(searchQuery, 300);
 
-  const { data: emoteData, isLoading } = useQuery({
+  const { data: emoteData, isFetching } = useQuery({
     queryKey: ['emotes', debouncedQuery],
     queryFn: () => searchEmotes(debouncedQuery),
     enabled: debouncedQuery.length >= 2,
-    initialData: { emotes: [] },
   });
 
   useEffect(() => {
@@ -32,7 +31,7 @@ export default function EmotePanel({ onEmoteSelect, className = '' }: EmotePanel
 
   return (
     <div
-      className={`w-[236px] h-[171px] bg-white/15 backdrop-blur-[50px] rounded-lg p-1 ${className}`}
+      className={`w-[236px] h-[171px] bg-white/15 backdrop-blur-[50px] rounded-lg p-1 overflow-visible ${className}`}
     >
       <div className="w-full h-7 bg-white/15 rounded-[5px] mb-1">
         <Input
@@ -46,23 +45,23 @@ export default function EmotePanel({ onEmoteSelect, className = '' }: EmotePanel
         />
       </div>
 
-      <div className="flex-1 h-32 overflow-y-auto">
-        {isLoading && debouncedQuery.length >= 2 ? (
+      <div className="flex-1 h-32 overflow-visible">
+        {isFetching && debouncedQuery.length >= 2 ? (
           <div className="flex items-center justify-center h-full">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white/70"></div>
           </div>
-        ) : emoteData.emotes.length > 0 ? (
-          <div className="grid grid-cols-7 gap-1 p-1">
-            {emoteData.emotes.map((emoteUrl, index) => (
+        ) : emoteData?.emotes && emoteData.emotes.length > 0 ? (
+          <div className="grid grid-cols-7 gap-1 p-1 overflow-visible">
+            {emoteData?.emotes?.map((emoteUrl, index) => (
               <button
                 key={index}
                 onClick={() => handleEmoteClick(emoteUrl)}
-                className="w-7 h-7 rounded hover:bg-white/20 transition-colors flex items-center justify-center"
+                className="w-7 h-7 rounded hover:bg-white/20 transition-colors flex items-center justify-center group relative hover:z-10"
               >
                 <img
                   src={emoteUrl}
                   alt="emote"
-                  className="w-6 h-6 object-contain"
+                  className="w-6 h-6 object-contain transition-transform duration-50 group-hover:scale-300"
                   onError={e => {
                     e.currentTarget.style.display = 'none';
                   }}

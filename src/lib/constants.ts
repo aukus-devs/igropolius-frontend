@@ -107,3 +107,5 @@ export const PlayerModelsUrls: Record<string, string> = {
   'player-7': `${STORAGE_BASE_URL}/models/players/cars/truck1.glb`,
   'player-8': `${STORAGE_BASE_URL}/models/players/cars/van1.glb`,
 };
+
+export const EMOTES_SEARCH_API_URL = 'https://api4.rhhhhhhh.live/search_emotes';
