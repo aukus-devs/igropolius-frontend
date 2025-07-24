@@ -38,6 +38,15 @@ function App() {
     []
   );
 
+  const { setPlayers, setMyPlayer, setTurnState, isPlayerMoving } = usePlayerStore(
+    useShallow(state => ({
+      setPlayers: state.setPlayers,
+      setMyPlayer: state.setMyPlayer,
+      setTurnState: state.setTurnState,
+      isPlayerMoving: state.isPlayerMoving,
+    }))
+  );
+
   const { data: currentPlayerData, isError: currentPlayerDataError } = useQuery({
     queryKey: queryKeys.currentPlayer,
     queryFn: fetchCurrentPlayer,
@@ -48,6 +57,7 @@ function App() {
     queryKey: queryKeys.players,
     queryFn: fetchPlayers,
     refetchInterval: 60 * 1000,
+    enabled: !isPlayerMoving, // Only fetch players when not moving
   });
 
   const { data: eventSettingsData } = useQuery({
@@ -59,16 +69,7 @@ function App() {
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const unpin = useCanvasTooltipStore(state => state.unpin);
 
-  const { setPlayers, setMyPlayer, setTurnState } = usePlayerStore(
-    useShallow(state => ({
-      setPlayers: state.setPlayers,
-      setMyPlayer: state.setMyPlayer,
-      setTurnState: state.setTurnState,
-    }))
-  );
-
   const setEventSettings = useEventStore(state => state.setEventSettings);
-
   const setRollResult = useDiceStore(state => state.setRollResult);
 
   useEffect(() => {
