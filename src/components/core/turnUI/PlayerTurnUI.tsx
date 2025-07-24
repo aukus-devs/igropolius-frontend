@@ -57,6 +57,7 @@ export default function PlayerTurnUI() {
     return () => clearInterval(interval);
   }, []);
 
+  const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
   const eventNotStarted = eventStartTime && now < eventStartTime * 1000;
   const eventEnded = eventEndTime && now > eventEndTime * 1000;
   // const timeLeft = eventStartTime ? eventStartTime * 1000 - now : 0;
@@ -79,8 +80,17 @@ export default function PlayerTurnUI() {
     return `${day}.${month}.${year}, ${hours}:${minutes}`;
   };
 
-  const disableUI = isPlayerMoving || eventNotStarted || eventEnded;
+  const disableUI = isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded;
   if (disableUI) {
+    if (eventSettingsNotLoaded) {
+      return (
+        <div className="pointer-events-auto">
+          <Button variant="outline" disabled>
+            Загрузка...
+          </Button>
+        </div>
+      );
+    }
     if (eventNotStarted) {
       return (
         <Tooltip delayDuration={0}>
