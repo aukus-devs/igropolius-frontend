@@ -4,6 +4,7 @@ import { Button } from '../../ui/button';
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
+import { Tooltip, TooltipTrigger, TooltipContent } from '../../ui/tooltip';
 import useReviewFormStore from '@/stores/reviewFormStore';
 import Rating from '../Rating';
 import { GameLength, GameStatusType } from '@/lib/types';
@@ -19,6 +20,7 @@ import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { calculateGameCompletionScore } from '@/lib/utils';
 import { IgdbGameSummary } from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
+import { parseReview } from '@/lib/textParsing';
 
 type StatesOption = {
   title: string;
@@ -97,6 +99,7 @@ function GameReview() {
   const gameReview = useReviewFormStore(state => state.gameReview);
   const setGameReview = useReviewFormStore(state => state.setGameReview);
   const [showEmotePanel, setShowEmotePanel] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleEmoteSelect = (emoteUrl: string) => {
@@ -107,60 +110,181 @@ function GameReview() {
     const end = textarea.selectionEnd;
     const currentValue = gameReview;
 
-    const newValue = currentValue.slice(0, start) + ` ${emoteUrl} ` + currentValue.slice(end);
+    const newValue =
+      currentValue.slice(0, start) + `[7tv]${emoteUrl}[/7tv]` + currentValue.slice(end);
     setGameReview(newValue);
 
     setShowEmotePanel(false);
 
     setTimeout(() => {
       textarea.focus();
-      const newCursorPos = start + emoteUrl.length + 2;
+      const newCursorPos = start + `[7tv]${emoteUrl}[/7tv]`.length;
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+    }, 0);
+  };
+
+  const handleSpoilerTag = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const currentValue = gameReview;
+    const selectedText = currentValue.slice(start, end);
+
+    let newValue: string;
+    let newCursorPos: number;
+
+    if (selectedText) {
+      newValue =
+        currentValue.slice(0, start) +
+        `[spoiler]${selectedText}[/spoiler]` +
+        currentValue.slice(end);
+      newCursorPos = start + `[spoiler]${selectedText}[/spoiler]`.length;
+    } else {
+      newValue = currentValue.slice(0, start) + '[spoiler][/spoiler]' + currentValue.slice(end);
+      newCursorPos = start + '[spoiler]'.length;
+    }
+
+    setGameReview(newValue);
+
+    setTimeout(() => {
+      textarea.focus();
       textarea.setSelectionRange(newCursorPos, newCursorPos);
     }, 0);
   };
 
   return (
-    <div className="relative">
-      <Textarea
-        ref={textareaRef}
-        className="resize-none h-24 pr-10"
-        placeholder="Комментарий"
-        value={gameReview}
-        onKeyDown={e => e.stopPropagation()}
-        onChange={e => setGameReview(e.target.value)}
-      />
+    <div>
+      <div className="relative">
+        {showPreview ? (
+          <div className="min-h-24 p-3 bg-white/10 rounded-md border border-white/20 text-white">
+            {gameReview ? parseReview(gameReview) : 'Комментарий'}
+          </div>
+        ) : (
+          <Textarea
+            ref={textareaRef}
+            className="resize-none h-24"
+            placeholder="Комментарий"
+            value={gameReview}
+            onKeyDown={e => e.stopPropagation()}
+            onChange={e => setGameReview(e.target.value)}
+          />
+        )}
+      </div>
 
-      <Popover open={showEmotePanel} onOpenChange={setShowEmotePanel}>
-        <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="absolute right-3 top-1 w-9 h-9 p-0 hover:bg-white/20 z-10"
-          >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 22 22"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="text-white/70 hover:text-white scale-150"
-            >
-              <path
-                d="M14.8395 1.8335H7.15786C3.8212 1.8335 1.83203 3.82266 1.83203 7.15933V14.8318C1.83203 18.1777 3.8212 20.1668 7.15786 20.1668H14.8304C18.167 20.1668 20.1562 18.1777 20.1562 14.841V7.15933C20.1654 3.82266 18.1762 1.8335 14.8395 1.8335ZM5.92953 7.07683C6.19536 6.811 6.63536 6.811 6.9012 7.07683C7.55203 7.72766 8.61536 7.72766 9.2662 7.07683C9.53203 6.811 9.97203 6.811 10.2379 7.07683C10.5037 7.34266 10.5037 7.78266 10.2379 8.0485C9.64203 8.64433 8.86286 8.93766 8.0837 8.93766C7.30453 8.93766 6.52536 8.64433 5.92953 8.0485C5.6637 7.7735 5.6637 7.34266 5.92953 7.07683ZM10.9987 17.2152C8.53286 17.2152 6.52536 15.2077 6.52536 12.7418C6.52536 12.1002 7.04787 11.5685 7.68953 11.5685H14.2895C14.9312 11.5685 15.4537 12.091 15.4537 12.7418C15.472 15.2077 13.4645 17.2152 10.9987 17.2152ZM16.0679 8.0485C15.472 8.64433 14.6929 8.93766 13.9137 8.93766C13.1345 8.93766 12.3554 8.64433 11.7595 8.0485C11.4937 7.78266 11.4937 7.34266 11.7595 7.07683C12.0254 6.811 12.4654 6.811 12.7312 7.07683C13.382 7.72766 14.4454 7.72766 15.0962 7.07683C15.362 6.811 15.802 6.811 16.0679 7.07683C16.3337 7.34266 16.3337 7.7735 16.0679 8.0485Z"
-                fill="#F2F2F2"
-              />
-            </svg>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-auto p-0 border-none bg-transparent shadow-none"
-          align="end"
-          sideOffset={5}
-        >
-          <EmotePanel onEmoteSelect={handleEmoteSelect} />
-        </PopoverContent>
-      </Popover>
+      <div className="flex justify-end mt-2">
+        <div className="flex gap-1">
+          {!showPreview && (
+            <Popover open={showEmotePanel} onOpenChange={setShowEmotePanel}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <PopoverTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="w-6 h-6 p-0 hover:bg-white/20 z-10"
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 22 22"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="text-white/70 hover:text-white"
+                      >
+                        <path
+                          d="M14.8395 1.8335H7.15786C3.8212 1.8335 1.83203 3.82266 1.83203 7.15933V14.8318C1.83203 18.1777 3.8212 20.1668 7.15786 20.1668H14.8304C18.167 20.1668 20.1562 18.1777 20.1562 14.841V7.15933C20.1654 3.82266 18.1762 1.8335 14.8395 1.8335ZM5.92953 7.07683C6.19536 6.811 6.63536 6.811 6.9012 7.07683C7.55203 7.72766 8.61536 7.72766 9.2662 7.07683C9.53203 6.811 9.97203 6.811 10.2379 7.07683C10.5037 7.34266 10.5037 7.78266 10.2379 8.0485C9.64203 8.64433 8.86286 8.93766 8.0837 8.93766C7.30453 8.93766 6.52536 8.64433 5.92953 8.0485C5.6637 7.7735 5.6637 7.34266 5.92953 7.07683ZM10.9987 17.2152C8.53286 17.2152 6.52536 15.2077 6.52536 12.7418C6.52536 12.1002 7.04787 11.5685 7.68953 11.5685H14.2895C14.9312 11.5685 15.4537 12.091 15.4537 12.7418C15.472 15.2077 13.4645 17.2152 10.9987 17.2152ZM16.0679 8.0485C15.472 8.64433 14.6929 8.93766 13.9137 8.93766C13.1345 8.93766 12.3554 8.64433 11.7595 8.0485C11.4937 7.78266 11.4937 7.34266 11.7595 7.07683C12.0254 6.811 12.4654 6.811 12.7312 7.07683C13.382 7.72766 14.4654 7.72766 15.0962 7.07683C15.362 6.811 15.802 6.811 16.0679 7.07683C16.3337 7.34266 16.3337 7.7735 16.0679 8.0485Z"
+                          fill="#F2F2F2"
+                        />
+                      </svg>
+                    </Button>
+                  </PopoverTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Смайлы 7TV</p>
+                </TooltipContent>
+              </Tooltip>
+              <PopoverContent
+                className="w-auto p-0 border-none bg-transparent shadow-none"
+                align="end"
+                sideOffset={5}
+              >
+                <EmotePanel onEmoteSelect={handleEmoteSelect} />
+              </PopoverContent>
+            </Popover>
+          )}
+
+          {!showPreview && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="w-6 h-6 p-0 hover:bg-white/20 z-10"
+                  onClick={handleSpoilerTag}
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="text-white/70 hover:text-white"
+                  >
+                    <path
+                      d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5S21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12S9.24 7 12 7S17 9.24 17 12S14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12S10.34 15 12 15S15 13.66 15 12S13.66 9 12 9Z"
+                      fill="#F2F2F2"
+                    />
+                    <line
+                      x1="4.93"
+                      y1="4.93"
+                      x2="19.07"
+                      y2="19.07"
+                      stroke="#F2F2F2"
+                      strokeWidth="2"
+                    />
+                  </svg>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Спойлер</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-6 h-6 p-0 hover:bg-white/20 z-10"
+                onClick={() => setShowPreview(!showPreview)}
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-white/70 hover:text-white"
+                >
+                  <path
+                    d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5S21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12S9.24 7 12 7S17 9.24 17 12S14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12S10.34 15 12 15S15 13.66 15 12S13.66 9 12 9Z"
+                    fill="#F2F2F2"
+                  />
+                </svg>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Превью</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
     </div>
   );
 }

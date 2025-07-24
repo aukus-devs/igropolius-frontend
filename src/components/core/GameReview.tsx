@@ -6,6 +6,7 @@ import { Toggle } from '../ui/toggle';
 import { VideoCircle } from '../icons';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { PlayerGame } from '@/lib/api-types-generated';
+import { parseReview } from '@/lib/textParsing';
 
 type Props = {
   game: PlayerGame;
@@ -99,7 +100,7 @@ function GameReview({ game }: Props) {
           ) : (
             <p>
               {' '}
-              {rating} / 10 — {review}{' '}
+              {rating} / 10 — {parseReview(review)}{' '}
             </p>
           )}
         </div>

@@ -367,7 +367,7 @@ export const playersData: PlayerDetails[] = [
         title: 'Haste',
         duration: 0,
         rating: 5,
-        review: 'Отличная игра, мне понравилось!',
+        review: `123 а тут иконка внутри спойлера [spoiler]спойлер и иконка [7tv]https://api4.rhhhhhhh.live/api/7tv/01F753XAGR000F17N8G1S0769B/2x.webp[/7tv][/spoiler] а тут [spoiler]длинный спойлер во всю строку для проверки в отзывах продолжается продолжается продолжается продолжается [/spoiler]`,
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/123456789',
         cover: FALLBACK_GAME_POSTER,
@@ -543,7 +543,8 @@ export const playersData: PlayerDetails[] = [
         title: 'Haste',
         duration: 3600,
         rating: 5,
-        review: 'Отличная игра, мне понравилось!',
+        review: `Отличная игра, мне понравилось!
+        Отличная игра, мне понравилось!`,
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,
