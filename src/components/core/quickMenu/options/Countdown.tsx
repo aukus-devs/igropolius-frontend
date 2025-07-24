@@ -1,6 +1,6 @@
 import { formatMs } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-import usePlayerStore from '@/stores/playerStore';
+import useEventStore from '@/stores/eventStore';
 
 type Props = {
   className?: string;
@@ -8,7 +8,7 @@ type Props = {
 
 export default function Countdown({ className }: Props) {
   const [time, setTime] = useState(() => Date.now());
-  const eventEndTime = usePlayerStore(state => state.eventEndTime);
+  const eventEndTime = useEventStore(state => state.eventEndTime);
 
   useEffect(() => {
     const interval = setInterval(() => {

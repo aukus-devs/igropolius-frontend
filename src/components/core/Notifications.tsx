@@ -6,23 +6,20 @@ import { ScrollArea } from '../ui/scroll-area';
 import { Notification, Share, X } from '../icons';
 import { fetchNotifications, markNotificationsSeen } from '@/lib/api';
 import usePlayerStore from '@/stores/playerStore';
+import useEventStore from '@/stores/eventStore';
 import { useShallow } from 'zustand/shallow';
 import { formatMs } from '@/lib/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/queryClient';
 import { NotificationItem, PlayerDetails } from '@/lib/api-types-generated';
 
-function formatNotificationText(notification: NotificationItem, players: PlayerDetails[]): string {
-  const {
-    event_type,
-    other_player_id,
-    scores,
-    game_title,
-    card_name,
-    message_text,
-    sector_id,
-    event_end_time,
-  } = notification;
+function formatNotificationText(
+  notification: NotificationItem,
+  players: PlayerDetails[],
+  eventEndTime: number | null
+): string {
+  const { event_type, other_player_id, scores, game_title, card_name, message_text, sector_id } =
+    notification;
 
   const otherPlayer = other_player_id ? players.find(p => p.id === other_player_id) : null;
   const otherPlayerName = otherPlayer?.username || 'Игрок';
@@ -47,8 +44,8 @@ function formatNotificationText(notification: NotificationItem, players: PlayerD
     case 'card-lost':
       return `${otherPlayerName} украл твою карточку "${card_name}"`;
     case 'event-ending-soon':
-      if (event_end_time) {
-        const timeLeftMs = event_end_time * 1000 - Date.now();
+      if (eventEndTime) {
+        const timeLeftMs = eventEndTime * 1000 - Date.now();
         if (timeLeftMs > 0) {
           return `До конца ивента — ${formatMs(timeLeftMs)}`;
         } else {
@@ -88,10 +85,16 @@ function formatNotificationDate(timestamp: number): string {
 type NotificationCardProps = {
   notification: NotificationItem;
   players: PlayerDetails[];
+  eventEndTime: number | null;
   isLast?: boolean;
 };
 
-function NotificationCard({ notification, players, isLast = false }: NotificationCardProps) {
+function NotificationCard({
+  notification,
+  players,
+  eventEndTime,
+  isLast = false,
+}: NotificationCardProps) {
   const { scores, event_type, notification_type } = notification;
 
   const isImportant = notification_type === 'important';
@@ -102,7 +105,7 @@ function NotificationCard({ notification, players, isLast = false }: Notificatio
   const color = isPositive ? 'text-green-500' : 'text-red-500';
   const symbol = isPositive ? '+' : '-';
 
-  const text = formatNotificationText(notification, players);
+  const text = formatNotificationText(notification, players, eventEndTime);
   const date = formatNotificationDate(notification.created_at);
 
   return (
@@ -127,6 +130,7 @@ function Notifications() {
   const { players, myPlayer } = usePlayerStore(
     useShallow(state => ({ players: state.players, myPlayer: state.myPlayer }))
   );
+  const eventEndTime = useEventStore(state => state.eventEndTime);
   const queryClient = useQueryClient();
 
   const { data: notificationsData, isLoading: loading } = useQuery({
@@ -173,13 +177,22 @@ function Notifications() {
 
         <ScrollArea className="h-[400px]">
           <div className="mt-[5px]">
-            <NotificationCard notification={lastNotification} players={players} isLast />
+            <NotificationCard
+              notification={lastNotification}
+              players={players}
+              eventEndTime={eventEndTime}
+              isLast
+            />
           </div>
 
           <CollapsibleContent>
             {collapsibleNotifications.map(notification => (
               <div key={notification.id} className="first:mt-[5px]">
-                <NotificationCard notification={notification} players={players} />
+                <NotificationCard
+                  notification={notification}
+                  players={players}
+                  eventEndTime={eventEndTime}
+                />
               </div>
             ))}
           </CollapsibleContent>

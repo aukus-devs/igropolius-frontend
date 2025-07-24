@@ -2,31 +2,44 @@ import { playersData } from './mockData';
 import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS, EMOTES_SEARCH_API_URL } from './constants';
 import useAdminStore from '@/stores/adminStore';
 import {
+  ActiveBonusCard,
+  BuildingBoardResponse,
   CurrentUserResponse,
   DropBonusCardRequest,
+  FrontVersionResponse,
+  GameReviewResult,
   GiveBonusCardRequest,
   GiveBonusCardResponse,
+  HistoryResponse,
   IgdbGamesListResponse,
   IgdbGameSummary,
   LoginRequest,
   LoginResponse,
+  MainBonusCardType,
   MarkNotificationsSeenRequest,
+  MovePlayerRequest,
   NewRulesVersionRequest,
+  NotificationListResponse,
+  NotificationSeenRequest,
   NotificationsResponse,
   PayTaxRequest,
   PlayerEventsResponse,
   PlayerListResponse,
   PlayerMoveRequest,
+  PlayerTurnState,
+  RatingResponse,
   RollDiceResponse,
   RulesResponse,
   SavePlayerGameRequest,
   SavePlayerGameResponse,
   StealBonusCardRequest,
+  TaxType,
   UpdatePlayerTurnStateRequest,
   UseBonusCardRequest,
   UseInstantCardRequest,
   UseInstantCardResponse,
 } from './api-types-generated';
+import { EventSettings } from '@/stores/eventStore';
 
 const MOCK_API = NO_MOCKS ? false : IS_DEV;
 
@@ -196,8 +209,6 @@ export async function fetchPlayers(): Promise<PlayerListResponse> {
   if (MOCK_API) {
     return Promise.resolve({
       players: playersData,
-      event_start_time: 1753092244,
-      event_end_time: 1754013556,
     });
   }
   const response = await apiRequest('/api/players');
@@ -588,6 +599,19 @@ export async function fetchFrontVersion(): Promise<{ version: string }> {
     return Promise.resolve({ version: import.meta.env.PACKAGE_VERSION });
   }
   const response = await apiRequest('/version.json?ts=' + Date.now());
+  return response.json();
+}
+
+export async function fetchEventSettings(): Promise<{ settings: EventSettings }> {
+  if (MOCK_API) {
+    return Promise.resolve({
+      settings: {
+        event_start_time: "1753092244",
+        event_end_time: "1754013556",
+      }
+    });
+  }
+  const response = await apiRequest('/api/event-settings');
   return response.json();
 }
 

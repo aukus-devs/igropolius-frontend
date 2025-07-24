@@ -1,4 +1,5 @@
 import usePlayerStore from '@/stores/playerStore';
+import useEventStore from '@/stores/eventStore';
 import { useShallow } from 'zustand/shallow';
 import GameReviewForm from './GameReviewForm';
 import RollBonusCard from './RollBonusCard';
@@ -23,8 +24,6 @@ export default function PlayerTurnUI() {
     hasCardsToSteal,
     prisonHasNoCards,
     myPlayerHasNoCards,
-    eventStartTime,
-    eventEndTime,
     canSelectBuildingSector,
   } = usePlayerStore(
     useShallow(state => {
@@ -39,12 +38,17 @@ export default function PlayerTurnUI() {
         hasCardsToSteal: cardsToSteal.length > 0,
         myPlayerHasNoCards: (state.myPlayer?.bonus_cards.length ?? 0) === 0,
         prisonHasNoCards: state.prisonCards.length === 0,
-        eventStartTime: state.eventStartTime,
-        eventEndTime: state.eventEndTime,
         myPlayerSectorId: state.myPlayer?.sector_id ?? null,
         canSelectBuildingSector: state.canSelectBuildingSector,
       };
     })
+  );
+
+  const { eventStartTime, eventEndTime } = useEventStore(
+    useShallow(state => ({
+      eventStartTime: state.eventStartTime,
+      eventEndTime: state.eventEndTime,
+    }))
   );
 
   const [now, setNow] = React.useState(() => Date.now());

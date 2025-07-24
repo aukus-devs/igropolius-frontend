@@ -10,6 +10,7 @@ export const queryKeys = {
   allRulesVersions: ["all-rules-versions"],
   searchGames: (title: string) => ["search-games", title],
   notifications: ["notifications"],
+  eventSettings: ["event-settings"],
 } as const;
 
 export const resetCurrentPlayerQuery = () => {
@@ -30,4 +31,8 @@ export const resetCurrentRulesQuery = () => {
 
 export const resetNotificationsQuery = () => {
   client.invalidateQueries({ queryKey: queryKeys.notifications });
+};
+
+export const resetEventSettingsQuery = () => {
+  client.invalidateQueries({ queryKey: queryKeys.eventSettings });
 };

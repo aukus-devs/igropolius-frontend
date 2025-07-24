@@ -7,7 +7,8 @@ import { Controls } from './lib/constants';
 import Scene from './components/map/Scene';
 import UI from './components/UI';
 import usePlayerStore from './stores/playerStore';
-import { fetchCurrentPlayer, fetchPlayers, fetchFrontVersion } from './lib/api';
+import useEventStore from './stores/eventStore';
+import { fetchCurrentPlayer, fetchPlayers, fetchFrontVersion, fetchEventSettings } from './lib/api';
 import { useQuery } from '@tanstack/react-query';
 import LoadingModal from './components/core/loadng/LoadingModal';
 import { queryKeys } from './lib/queryClient';
@@ -48,6 +49,12 @@ function App() {
     refetchInterval: 60 * 1000,
   });
 
+  const { data: eventSettingsData } = useQuery({
+    queryKey: queryKeys.eventSettings,
+    queryFn: fetchEventSettings,
+    refetchInterval: 60 * 1000,
+  });
+
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const unpin = useCanvasTooltipStore(state => state.unpin);
 
@@ -58,6 +65,8 @@ function App() {
       setTurnState: state.setTurnState,
     }))
   );
+
+  const setEventSettings = useEventStore(state => state.setEventSettings);
 
   const setRollResult = useDiceStore(state => state.setRollResult);
 
@@ -86,12 +95,14 @@ function App() {
   }, [currentPlayerData?.role, setShowAdminPanel]);
 
   useEffect(() => {
-    setPlayers(
-      playersData?.players ?? [],
-      playersData?.event_end_time ?? undefined,
-      playersData?.event_start_time ?? undefined
-    );
+    setPlayers(playersData?.players ?? []);
   }, [setPlayers, playersData]);
+
+  useEffect(() => {
+    if (eventSettingsData?.settings) {
+      setEventSettings(eventSettingsData.settings);
+    }
+  }, [setEventSettings, eventSettingsData]);
 
   const { data: frontVersionData } = useQuery({
     queryKey: ['frontVersion'],

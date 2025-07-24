@@ -57,12 +57,10 @@ const usePlayerStore = create<{
   buildingsPerSector: Record<number, BuildingData[]>;
   taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
-  eventEndTime: number | null;
-  eventStartTime: number | null;
   prisonCards: ActiveBonusCard[];
   setMyPlayer: (data?: CurrentUserResponse) => void;
   updateMyPlayerSectorId: (id: number) => void;
-  setPlayers: (players: PlayerDetails[], eventEndTime?: number, eventStartTime?: number) => void;
+  setPlayers: (players: PlayerDetails[]) => void;
   animatePlayerMovement: ({ steps }: { steps: number }) => Promise<number>;
   moveMyPlayer: (params: MoveMyPlayerParams) => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
@@ -86,8 +84,6 @@ const usePlayerStore = create<{
   buildingsPerSector: {},
   taxPerSector: {},
   turnState: null,
-  eventEndTime: null,
-  eventStartTime: null,
   prisonCards: [],
 
   setMyPlayer: (data?: CurrentUserResponse) => {
@@ -152,7 +148,7 @@ const usePlayerStore = create<{
     }));
   },
 
-  setPlayers: (playersData: PlayerDetails[], eventEndTime?: number, eventStartTime?: number) => {
+  setPlayers: (playersData: PlayerDetails[]) => {
     const buildings: Record<number, BuildingData[]> = {};
     const taxPerSector: Record<number, TaxData> = {};
     for (const sector of sectorsData) {
@@ -229,8 +225,6 @@ const usePlayerStore = create<{
       players,
       buildingsPerSector: buildings,
       taxPerSector,
-      eventEndTime: eventEndTime ?? null,
-      eventStartTime: eventStartTime ?? null,
       prisonCards: prisonPlayer?.bonus_cards ?? [],
     });
   },
@@ -392,9 +386,9 @@ const usePlayerStore = create<{
     set(state => ({
       myPlayer: state.myPlayer
         ? {
-            ...state.myPlayer,
-            bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
-          }
+          ...state.myPlayer,
+          bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
+        }
         : null,
     }));
     resetPlayersQuery();
