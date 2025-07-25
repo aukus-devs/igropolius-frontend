@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo } from 'react';
 import { KeyboardControls, KeyboardControlsEntry } from '@react-three/drei';
 import { useShallow } from 'zustand/shallow';
-import { Controls } from './lib/constants';
+import { Controls, IS_DEV } from './lib/constants';
 import Scene from './components/map/Scene';
 import UI from './components/UI';
 import usePlayerStore from './stores/playerStore';
@@ -125,15 +125,19 @@ function App() {
     dismiss();
   }
 
+  const enableMetrika = !IS_DEV;
+
   return (
     <>
-      <MetrikaCounter
-        id={103476492}
-        options={{
-          trackHash: true,
-          webvisor: false,
-        }}
-      />
+      {enableMetrika && (
+        <MetrikaCounter
+          id={103476492}
+          options={{
+            trackHash: true,
+            webvisor: false,
+          }}
+        />
+      )}
       {isLoading && <LoadingModal />}
       {!isLoading && (
         <KeyboardControls map={map}>
