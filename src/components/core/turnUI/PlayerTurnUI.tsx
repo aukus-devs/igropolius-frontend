@@ -4,7 +4,7 @@ import { useShallow } from 'zustand/shallow';
 import GameReviewForm from './GameReviewForm';
 import RollBonusCard from './RollBonusCard';
 import DiceBonusesDialog from './DiceBonusesDialog';
-import { MoveButton } from './MoveButton';
+import { DiceRollButton } from './DiceRollButton';
 import SkipStreetTaxDialog from './SkipStreetTaxDialog';
 import SkipMapTaxDialog from './SkipMapTaxDialog';
 import SkipPrisonDialog from './SkipPrisonDialog';
@@ -117,7 +117,7 @@ export default function PlayerTurnUI() {
     case null:
       return null;
     case 'rolling-dice':
-      return <MoveButton />;
+      return <DiceRollButton />;
     case 'filling-game-review':
       if (canSelectBuildingSector()) {
         return (

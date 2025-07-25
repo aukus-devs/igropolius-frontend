@@ -4,7 +4,7 @@ import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 
-export function MoveButton() {
+export function DiceRollButton() {
   const { isPlayerMoving, moveMyPlayer, myPlayer, setNextTurnState } = usePlayerStore(
     useShallow(state => ({
       isPlayerMoving: state.isPlayerMoving,

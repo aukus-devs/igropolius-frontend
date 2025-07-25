@@ -2,7 +2,7 @@ import { TrainsConfig } from '@/lib/constants';
 import { SectorsById } from '@/lib/mockData';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 export default function DiceBonusesDialog() {
@@ -19,6 +19,12 @@ export default function DiceBonusesDialog() {
   const { myPlayer, moveMyPlayer } = usePlayerStore(
     useShallow(state => ({ myPlayer: state.myPlayer, moveMyPlayer: state.moveMyPlayer }))
   );
+
+  useEffect(() => {
+    if (rollResult.length === 0) {
+      usePlayerStore.getState().setTurnState('rolling-dice');
+    }
+  }, [rollResult.length]);
 
   if (!myPlayer) {
     return null;
