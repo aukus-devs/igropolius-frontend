@@ -12,6 +12,8 @@ import useAdminStore from '@/stores/adminStore';
 import AdminPanel from './core/AdminPanel';
 import MyCards from './core/MyCards';
 import FrontVersionInfo from './FrontVersionInfo';
+import useEventStore from '@/stores/eventStore';
+import { Card } from './ui/card';
 
 function DesktopUI() {
   const { turnState, position, loggedIn } = usePlayerStore(
@@ -23,6 +25,8 @@ function DesktopUI() {
   );
 
   const showAdminPanel = useAdminStore(state => state.showAdminPanel);
+
+  const mainNotification = useEventStore(state => state.mainNotification);
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:block hidden">
@@ -58,6 +62,12 @@ function DesktopUI() {
         <div className="absolute bottom-4 right-4">
           #{position} ход: {turnState}
         </div>
+      )}
+
+      {mainNotification && (
+        <Card className="absolute top-3 left-1/2 -translate-x-1/2">
+          <div className="pl-4 pr-4 rounded-md">{mainNotification.text}</div>
+        </Card>
       )}
     </div>
   );
