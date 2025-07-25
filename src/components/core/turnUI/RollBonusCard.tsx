@@ -1,26 +1,24 @@
 import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
-import { useMutation } from '@tanstack/react-query';
 import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { MainBonusCardType } from '@/lib/api-types-generated';
 
 export default function RollBonusCard() {
-  const { receiveBonusCard, myPlayer } = usePlayerStore(
+  const { receiveBonusCard, myPlayer, setNextTurnState } = usePlayerStore(
     useShallow(state => ({
       receiveBonusCard: state.receiveBonusCard,
       myPlayer: state.myPlayer,
+      setNextTurnState: state.setNextTurnState,
     }))
   );
 
-  const { mutateAsync: doReceiveBonusCard } = useMutation({
-    mutationFn: async (cardType: MainBonusCardType) => {
-      return receiveBonusCard(cardType);
-    },
-  });
+  const handleFinished = (option: WeightedOption<MainBonusCardType>) => {
+    return receiveBonusCard(option.value, false);
+  };
 
-  const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
-    await doReceiveBonusCard(option.value);
+  const handleClose = () => {
+    return setNextTurnState({});
   };
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
@@ -48,9 +46,10 @@ export default function RollBonusCard() {
       options={weightedOptions}
       header="Ролим бонусную карточку"
       openButtonText="Получить карточку"
-      finishButtonText="Получить карточку"
+      finishButtonText="Закрыть"
       onRollFinish={handleFinished}
       getWinnerText={getWinnerText}
+      onClose={handleClose}
     />
   );
 }

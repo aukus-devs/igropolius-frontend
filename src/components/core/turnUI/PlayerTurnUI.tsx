@@ -58,15 +58,16 @@ export default function PlayerTurnUI() {
     }))
   );
 
-  const [now, setNow] = React.useState(() => Date.now());
-  React.useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(interval);
-  }, []);
+  // const [now, setNow] = React.useState(() => Date.now());
+  // React.useEffect(() => {
+  //   const interval = setInterval(() => setNow(Date.now()), 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
-  const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
-  const eventNotStarted = eventStartTime && now < eventStartTime * 1000;
-  const eventEnded = eventEndTime && now > eventEndTime * 1000;
+  // const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
+  // const eventNotStarted = eventStartTime && now < eventStartTime * 1000;
+  // const eventEnded = eventEndTime && now > eventEndTime * 1000;
+
   // const timeLeft = eventStartTime ? eventStartTime * 1000 - now : 0;
   // const formatTime = (ms: number) => {
   //   if (ms <= 0) return 'Скоро';
@@ -87,49 +88,49 @@ export default function PlayerTurnUI() {
     return `${day}.${month}.${year}, ${hours}:${minutes}`;
   };
 
-  const disableUI = isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded;
-  if (disableUI) {
-    if (eventSettingsNotLoaded) {
-      return (
-        <div className="pointer-events-auto">
-          <Button variant="outline" disabled>
-            Загрузка...
-          </Button>
-        </div>
-      );
-    }
-    if (eventNotStarted) {
-      return (
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger asChild>
-            <div className="pointer-events-auto">
-              <Button variant="outline" disabled>
-                Действия будут доступны с {eventStartTime ? formatDateTime(eventStartTime) : ''}
-              </Button>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="top">
-            Ивент начнётся {eventStartTime ? formatDateTime(eventStartTime) : ''}
-          </TooltipContent>
-        </Tooltip>
-      );
-    }
-    if (eventEnded) {
-      return (
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger asChild>
-            <div className="pointer-events-auto">
-              <Button variant="outline" disabled>
-                Ивент завершён
-              </Button>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="top">Ивент завершён</TooltipContent>
-        </Tooltip>
-      );
-    }
-    return null;
-  }
+  // const disableUI = isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded;
+  // if (disableUI) {
+  //   if (eventSettingsNotLoaded) {
+  //     return (
+  //       <div className="pointer-events-auto">
+  //         <Button variant="outline" disabled>
+  //           Загрузка...
+  //         </Button>
+  //       </div>
+  //     );
+  //   }
+  //   if (eventNotStarted) {
+  //     return (
+  //       <Tooltip delayDuration={0}>
+  //         <TooltipTrigger asChild>
+  //           <div className="pointer-events-auto">
+  //             <Button variant="outline" disabled>
+  //               Действия будут доступны с {eventStartTime ? formatDateTime(eventStartTime) : ''}
+  //             </Button>
+  //           </div>
+  //         </TooltipTrigger>
+  //         <TooltipContent side="top">
+  //           Ивент начнётся {eventStartTime ? formatDateTime(eventStartTime) : ''}
+  //         </TooltipContent>
+  //       </Tooltip>
+  //     );
+  //   }
+  //   if (eventEnded) {
+  //     return (
+  //       <Tooltip delayDuration={0}>
+  //         <TooltipTrigger asChild>
+  //           <div className="pointer-events-auto">
+  //             <Button variant="outline" disabled>
+  //               Ивент завершён
+  //             </Button>
+  //           </div>
+  //         </TooltipTrigger>
+  //         <TooltipContent side="top">Ивент завершён</TooltipContent>
+  //       </Tooltip>
+  //     );
+  //   }
+  //   return null;
+  // }
 
   switch (turnState) {
     case null:

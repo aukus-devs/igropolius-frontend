@@ -389,12 +389,12 @@ const usePlayerStore = create<{
         ? { ...state.myPlayer, bonus_cards: [...state.myPlayer.bonus_cards, newCard] }
         : null,
     }));
-    resetPlayersQuery();
-    resetNotificationsQuery();
 
     if (switchState) {
       await setNextTurnState({});
     }
+    resetPlayersQuery();
+    resetNotificationsQuery();
   },
 
   dropBonusCard: async (type: MainBonusCardType) => {
