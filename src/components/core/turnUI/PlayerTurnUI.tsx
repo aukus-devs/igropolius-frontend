@@ -15,7 +15,7 @@ import PrisonEnterCardRoll from './PrisonEnterCardRoll';
 import { activateInstantCard, makePlayerMove } from '@/lib/api';
 import RollWithInstantCards from './RollWithInstantCards';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectorsById } from '@/lib/mockData';
 import PointAUCButton from './PointAUCButton';
 import GameGauntletsButton from './GameGauntletsButton';
@@ -58,13 +58,22 @@ export default function PlayerTurnUI() {
     }))
   );
 
-  // const [now, setNow] = React.useState(() => Date.now());
-  // React.useEffect(() => {
-  //   const interval = setInterval(() => setNow(Date.now()), 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
+  const [eventNotStarted, setEventNotStarted] = useState(false);
+  const [eventEnded, setEventEnded] = useState(false);
 
-  // const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!eventStartTime || !eventEndTime) {
+        return;
+      }
+      const now = Date.now();
+      setEventNotStarted(now < eventStartTime * 1000);
+      setEventEnded(now > eventEndTime * 1000);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [eventStartTime, eventEndTime]);
+
+  const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
   // const eventNotStarted = eventStartTime && now < eventStartTime * 1000;
   // const eventEnded = eventEndTime && now > eventEndTime * 1000;
 
@@ -88,49 +97,49 @@ export default function PlayerTurnUI() {
     return `${day}.${month}.${year}, ${hours}:${minutes}`;
   };
 
-  // const disableUI = isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded;
-  // if (disableUI) {
-  //   if (eventSettingsNotLoaded) {
-  //     return (
-  //       <div className="pointer-events-auto">
-  //         <Button variant="outline" disabled>
-  //           Загрузка...
-  //         </Button>
-  //       </div>
-  //     );
-  //   }
-  //   if (eventNotStarted) {
-  //     return (
-  //       <Tooltip delayDuration={0}>
-  //         <TooltipTrigger asChild>
-  //           <div className="pointer-events-auto">
-  //             <Button variant="outline" disabled>
-  //               Действия будут доступны с {eventStartTime ? formatDateTime(eventStartTime) : ''}
-  //             </Button>
-  //           </div>
-  //         </TooltipTrigger>
-  //         <TooltipContent side="top">
-  //           Ивент начнётся {eventStartTime ? formatDateTime(eventStartTime) : ''}
-  //         </TooltipContent>
-  //       </Tooltip>
-  //     );
-  //   }
-  //   if (eventEnded) {
-  //     return (
-  //       <Tooltip delayDuration={0}>
-  //         <TooltipTrigger asChild>
-  //           <div className="pointer-events-auto">
-  //             <Button variant="outline" disabled>
-  //               Ивент завершён
-  //             </Button>
-  //           </div>
-  //         </TooltipTrigger>
-  //         <TooltipContent side="top">Ивент завершён</TooltipContent>
-  //       </Tooltip>
-  //     );
-  //   }
-  //   return null;
-  // }
+  const disableUI = isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded;
+  if (disableUI) {
+    if (eventSettingsNotLoaded) {
+      return (
+        <div className="pointer-events-auto">
+          <Button variant="outline" disabled>
+            Загрузка...
+          </Button>
+        </div>
+      );
+    }
+    if (eventNotStarted) {
+      return (
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+            <div className="pointer-events-auto">
+              <Button variant="outline" disabled>
+                Действия будут доступны с {eventStartTime ? formatDateTime(eventStartTime) : ''}
+              </Button>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            Ивент начнётся {eventStartTime ? formatDateTime(eventStartTime) : ''}
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+    if (eventEnded) {
+      return (
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+            <div className="pointer-events-auto">
+              <Button variant="outline" disabled>
+                Ивент завершён
+              </Button>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top">Ивент завершён</TooltipContent>
+        </Tooltip>
+      );
+    }
+    return null;
+  }
 
   switch (turnState) {
     case null:
