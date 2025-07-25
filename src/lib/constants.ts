@@ -99,13 +99,13 @@ export const FALLBACK_AVATAR_URL = 'https://github.com/shadcn.png';
 
 export const PlayerModelsUrls: Record<string, string> = {
   praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
-  'player-2': `${STORAGE_BASE_URL}/models/players/cars/delivery2.glb`,
-  'player-3': `${STORAGE_BASE_URL}/models/players/cars/race-future1.glb`,
-  'player-4': `${STORAGE_BASE_URL}/models/players/cars/sedan-sports2.glb`,
-  'player-5': `${STORAGE_BASE_URL}/models/players/cars/tractor2.glb`,
-  'player-6': `${STORAGE_BASE_URL}/models/players/cars/delivery-flat2.glb`,
-  'player-7': `${STORAGE_BASE_URL}/models/players/cars/truck1.glb`,
-  'player-8': `${STORAGE_BASE_URL}/models/players/cars/van1.glb`,
+  'player-2': `${STORAGE_BASE_URL}/models/players/boats/boat-fishing-small.glb`,
+  'player-3': `${STORAGE_BASE_URL}/models/players/boats/boat-sail-b.glb`,
+  'player-4': `${STORAGE_BASE_URL}/models/players/boats/boat-speed-d.glb`,
+  'player-5': `${STORAGE_BASE_URL}/models/players/boats/boat-tow-a.glb`,
+  'player-6': `${STORAGE_BASE_URL}/models/players/trains/train-diesel-a.glb`,
+  'player-7': `${STORAGE_BASE_URL}/models/players/trains/train-locomotive-a.glb`,
+  'player-8': `${STORAGE_BASE_URL}/models/players/trains/train-tram-modern.glb`,
 };
 
 export const EMOTES_SEARCH_API_URL = 'https://api4.rhhhhhhh.live/search_emotes';
