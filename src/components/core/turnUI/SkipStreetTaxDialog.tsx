@@ -5,6 +5,7 @@ import { activateBonusCard } from '@/lib/api';
 import { resetNotificationsQuery } from '@/lib/queryClient';
 import { TaxData } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
+import { useEffect } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 export default function SkipStreetTaxDialog() {
@@ -26,6 +27,12 @@ export default function SkipStreetTaxDialog() {
       };
     })
   );
+
+  useEffect(() => {
+    if (taxInfo.taxAmount === 0) {
+      setNextTurnState({ action: 'skip-bonus' });
+    }
+  }, [taxInfo.taxAmount, setNextTurnState]);
 
   const handlePayTax = async () => {
     await payTaxes('street-tax');

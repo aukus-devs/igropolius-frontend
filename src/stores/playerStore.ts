@@ -315,7 +315,9 @@ const usePlayerStore = create<{
             duration: 300,
             ease: 'linear',
             onUpdate: self => {
-              rotateAroundPlayer(playerModel, false);
+              if (isMyPlayer) {
+                rotateAroundPlayer(playerModel, false);
+              }
               playerModel.quaternion.rotateTowards(targetQuat, self.progress);
             },
           }
