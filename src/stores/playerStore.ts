@@ -221,9 +221,14 @@ const usePlayerStore = create<{
 
     const prisonPlayer = playersData.find(p => p.role === 'prison');
 
+    const prevPlayers = get().players;
+
     await Promise.all(
       players.map(async player => {
-        const prevPlayer = get().players.find(p => p.id === player.id);
+        if (player.id === myPlayerId) {
+          return;
+        }
+        const prevPlayer = prevPlayers.find(p => p.id === player.id);
 
         if (prevPlayer && player.sector_id !== prevPlayer.sector_id) {
           const mapLength = sectorsData.length;
