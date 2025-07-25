@@ -9,7 +9,7 @@ type Props = {
 
 export default function GameGauntletsButton({ gameLengthRanges, className }: Props) {
   const handleClick = () => {
-    if (gameLengthRanges?.min && gameLengthRanges?.max) {
+    if (gameLengthRanges?.min !== undefined && gameLengthRanges?.max !== undefined) {
       window.open(
         `https://gamegauntlets.com/?queryFilters=true&length=${gameLengthRanges.min},${gameLengthRanges.max}#wheel`,
         '_blank'
