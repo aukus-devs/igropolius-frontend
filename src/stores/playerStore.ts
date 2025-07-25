@@ -222,8 +222,8 @@ const usePlayerStore = create<{
     const prisonPlayer = playersData.find(p => p.role === 'prison');
 
     await Promise.all(
-      players.map(async (player) => {
-        const prevPlayer = get().players.find((p) => p.id === player.id);
+      players.map(async player => {
+        const prevPlayer = get().players.find(p => p.id === player.id);
 
         if (prevPlayer && player.sector_id !== prevPlayer.sector_id) {
           const mapLength = sectorsData.length;
@@ -258,10 +258,12 @@ const usePlayerStore = create<{
       return currentSectorId;
     }
 
+    const isMyPlayer = player.id === get().myPlayerId;
+
     const { isOrthographic, cameraToPlayer, moveToPlayer, rotateAroundPlayer } =
       useCameraStore.getState();
 
-    if (!isOrthographic && playerId === get().myPlayer?.id) {
+    if (!isOrthographic && isMyPlayer) {
       await cameraToPlayer(player.id);
     }
 
@@ -292,7 +294,9 @@ const usePlayerStore = create<{
         ease: 'inOutSine',
         duration: IS_DEV ? 100 : 500,
         onUpdate: () => {
-          moveToPlayer(playerModel, false);
+          if (isMyPlayer) {
+            moveToPlayer(playerModel, false);
+          }
         },
       });
 
@@ -396,9 +400,9 @@ const usePlayerStore = create<{
     set(state => ({
       myPlayer: state.myPlayer
         ? {
-          ...state.myPlayer,
-          bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
-        }
+            ...state.myPlayer,
+            bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
+          }
         : null,
     }));
     resetPlayersQuery();
