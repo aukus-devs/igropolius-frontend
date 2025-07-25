@@ -3,20 +3,16 @@ import { GameLengthRange } from '@/lib/types';
 import { getGameLengthShortText } from '@/lib/utils';
 
 type Props = {
-  gameLengthRanges?: GameLengthRange;
+  gameLengthRanges: GameLengthRange;
   className?: string;
 };
 
 export default function GameGauntletsButton({ gameLengthRanges, className }: Props) {
   const handleClick = () => {
-    if (gameLengthRanges?.min !== undefined && gameLengthRanges?.max !== undefined) {
-      window.open(
-        `https://gamegauntlets.com/?queryFilters=true&length=${gameLengthRanges.min},${gameLengthRanges.max}#wheel`,
-        '_blank'
-      );
-    } else {
-      window.open('https://gamegauntlets.com/', '_blank');
-    }
+    window.open(
+      `https://gamegauntlets.com/?queryFilters=true&length=${gameLengthRanges.min},${gameLengthRanges.max}#wheel`,
+      '_blank'
+    );
   };
 
   return (

@@ -50,7 +50,6 @@ export default function PlayerTurnUI() {
 
   const currentSector = myPlayerSectorId ? SectorsById[myPlayerSectorId] : null;
   const showPointAUCButton = currentSector?.rollType === 'auc';
-  const showGameGauntletsButton = currentSector?.gameLengthRanges;
 
   const { eventStartTime, eventEndTime } = useEventStore(
     useShallow(state => ({
@@ -147,7 +146,7 @@ export default function PlayerTurnUI() {
               <span>Выбери сектор для строительства</span>
             </Card>
             {showPointAUCButton && <PointAUCButton />}
-            {showGameGauntletsButton && (
+            {currentSector?.gameLengthRanges && (
               <GameGauntletsButton gameLengthRanges={currentSector?.gameLengthRanges} />
             )}
           </div>
@@ -158,7 +157,7 @@ export default function PlayerTurnUI() {
           <RollWithInstantCards />
           <GameReviewForm showTrigger />
           {showPointAUCButton && <PointAUCButton />}
-          {showGameGauntletsButton && (
+          {currentSector?.gameLengthRanges && (
             <GameGauntletsButton gameLengthRanges={currentSector?.gameLengthRanges} />
           )}
         </div>

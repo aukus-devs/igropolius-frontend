@@ -52,8 +52,8 @@ type Position = {
 };
 
 export type GameLengthRange = {
-  min?: number;
-  max?: number;
+  min: number;
+  max: number;
 };
 
 export type SectorData = {
