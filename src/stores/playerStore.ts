@@ -114,6 +114,8 @@ const usePlayerStore = create<{
     const { myPlayer, turnState } = get();
     if (!myPlayer || !turnState) return;
 
+    set({ turnState: null });
+
     const mapCompleted = Boolean(params.prevSectorId && myPlayer.sector_id < params.prevSectorId);
 
     const nextTurnState = getNextTurnState({
@@ -135,6 +137,7 @@ const usePlayerStore = create<{
     }
 
     await saveTurnState({ turn_state: nextTurnState });
+
     resetCurrentPlayerQuery();
     resetPlayersQuery();
   },
