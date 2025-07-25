@@ -51,6 +51,11 @@ type Position = {
   y: number;
 };
 
+export type GameLengthRange = {
+  min?: number;
+  max?: number;
+};
+
 export type SectorData = {
   id: number;
   type: 'prison' | 'property' | 'railroad' | 'bonus' | 'start-corner' | 'parking';
@@ -58,6 +63,7 @@ export type SectorData = {
   position: Position;
   color?: ColorName;
   rollType: CellRollType;
+  gameLengthRanges?: GameLengthRange; // for roll on https://gamegauntlets.com
 };
 
 export type GameLength = '2-5' | '5-10' | '10-15' | '15-20' | '20-25' | '25+';

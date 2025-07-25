@@ -16,6 +16,9 @@ import { activateInstantCard, makePlayerMove } from '@/lib/api';
 import RollWithInstantCards from './RollWithInstantCards';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import React from 'react';
+import { SectorsById } from '@/lib/mockData';
+import PointAUCButton from './PointAUCButton';
+import GameGauntletsButton from './GameGauntletsButton';
 
 export default function PlayerTurnUI() {
   const {
@@ -25,6 +28,7 @@ export default function PlayerTurnUI() {
     prisonHasNoCards,
     myPlayerHasNoCards,
     canSelectBuildingSector,
+    myPlayerSectorId,
   } = usePlayerStore(
     useShallow(state => {
       const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
@@ -43,6 +47,10 @@ export default function PlayerTurnUI() {
       };
     })
   );
+
+  const currentSector = myPlayerSectorId ? SectorsById[myPlayerSectorId] : null;
+  const showPointAUCButton = currentSector?.rollType === 'auc';
+  const showGameGauntletsButton = currentSector?.gameLengthRanges;
 
   const { eventStartTime, eventEndTime } = useEventStore(
     useShallow(state => ({
@@ -138,6 +146,10 @@ export default function PlayerTurnUI() {
             <Card className="p-4">
               <span>Выбери сектор для строительства</span>
             </Card>
+            {showPointAUCButton && <PointAUCButton />}
+            {showGameGauntletsButton && (
+              <GameGauntletsButton gameLengthRanges={currentSector?.gameLengthRanges} />
+            )}
           </div>
         );
       }
@@ -145,6 +157,10 @@ export default function PlayerTurnUI() {
         <div className="flex gap-4">
           <RollWithInstantCards />
           <GameReviewForm showTrigger />
+          {showPointAUCButton && <PointAUCButton />}
+          {showGameGauntletsButton && (
+            <GameGauntletsButton gameLengthRanges={currentSector?.gameLengthRanges} />
+          )}
         </div>
       );
     case 'rolling-bonus-card':

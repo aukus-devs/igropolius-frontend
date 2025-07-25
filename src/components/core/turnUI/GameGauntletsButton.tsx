@@ -1,0 +1,27 @@
+import { Button } from '@/components/ui/button';
+import { GameLengthRange } from '@/lib/types';
+import { getGameLengthShortText } from '@/lib/utils';
+
+type Props = {
+  gameLengthRanges?: GameLengthRange;
+  className?: string;
+};
+
+export default function GameGauntletsButton({ gameLengthRanges, className }: Props) {
+  const handleClick = () => {
+    if (gameLengthRanges?.min && gameLengthRanges?.max) {
+      window.open(
+        `https://gamegauntlets.com/?queryFilters=true&length=${gameLengthRanges.min},${gameLengthRanges.max}#wheel`,
+        '_blank'
+      );
+    } else {
+      window.open('https://gamegauntlets.com/', '_blank');
+    }
+  };
+
+  return (
+    <Button variant="outline" className={className} onClick={handleClick}>
+      GameGauntlets {getGameLengthShortText(gameLengthRanges)}
+    </Button>
+  );
+}

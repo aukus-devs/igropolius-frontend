@@ -1,6 +1,7 @@
 import {
   EventDescription,
   GameLength,
+  GameLengthRange,
   GameStatusType,
   PlayerData,
   PlayerStateAction,
@@ -425,4 +426,30 @@ export function calculateGameCompletionScore({
     total: 0,
     mapCompletionBonus,
   };
+}
+
+export function getGameLengthShortText(gameLengthRanges: GameLengthRange | undefined): string {
+  if (!gameLengthRanges) return '';
+
+  if (gameLengthRanges.min && gameLengthRanges.max) {
+    return `${gameLengthRanges.min}-${gameLengthRanges.max}ч`;
+  } else if (gameLengthRanges.min) {
+    return `от ${gameLengthRanges.min}ч`;
+  } else if (gameLengthRanges.max) {
+    return `до ${gameLengthRanges.max}ч`;
+  }
+  return '';
+}
+
+export function getGameLengthFullText(gameLengthRanges: GameLengthRange | undefined): string {
+  if (!gameLengthRanges) return 'без ограничений';
+
+  if (gameLengthRanges.min && gameLengthRanges.max) {
+    return `${gameLengthRanges.min} - ${gameLengthRanges.max} часов`;
+  } else if (gameLengthRanges.min) {
+    return `от ${gameLengthRanges.min} часов`;
+  } else if (gameLengthRanges.max) {
+    return `до ${gameLengthRanges.max} часов`;
+  }
+  return 'без ограничений';
 }

@@ -16,6 +16,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 0, y: 0 },
     type: 'start-corner',
     rollType: 'voting',
+    gameLengthRanges: { min: 3, max: 27 },
   },
   {
     id: 2,
@@ -31,6 +32,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 2, y: 0 },
     type: 'bonus',
     rollType: 'steam',
+    gameLengthRanges: { min: 6, max: 15 },
   },
   {
     id: 4,
@@ -54,6 +56,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 5, y: 0 },
     type: 'railroad',
     rollType: 'steam',
+    gameLengthRanges: { min: 6, max: 19 },
   },
   {
     id: 7,
@@ -69,6 +72,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 7, y: 0 },
     type: 'bonus',
     rollType: 'steam',
+    gameLengthRanges: { min: 3, max: 12 },
   },
   {
     id: 9,
@@ -92,6 +96,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 10, y: 0 },
     type: 'prison',
     rollType: 'steam',
+    gameLengthRanges: { min: 0, max: 300 },
   },
   {
     id: 12,
@@ -107,6 +112,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 10, y: 2 },
     type: 'bonus',
     rollType: 'steam',
+    gameLengthRanges: { min: 6, max: 15 },
   },
   {
     id: 14,
@@ -130,6 +136,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 10, y: 5 },
     type: 'railroad',
     rollType: 'steam',
+    gameLengthRanges: { min: 3, max: 16 },
   },
   {
     id: 17,
@@ -145,6 +152,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 10, y: 7 },
     type: 'bonus',
     rollType: 'steam',
+    gameLengthRanges: { min: 3, max: 12 },
   },
   {
     id: 19,
@@ -168,6 +176,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 10, y: 10 },
     type: 'parking',
     rollType: 'voting',
+    gameLengthRanges: { min: 3, max: 22 },
   },
   {
     id: 22,
@@ -183,6 +192,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 8, y: 10 },
     type: 'bonus',
     rollType: 'steam',
+    gameLengthRanges: { min: 6, max: 15 },
   },
   {
     id: 24,
@@ -206,6 +216,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 5, y: 10 },
     type: 'railroad',
     rollType: 'steam',
+    gameLengthRanges: { min: 6, max: 19 },
   },
   {
     id: 27,
@@ -229,6 +240,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 2, y: 10 },
     type: 'bonus',
     rollType: 'steam',
+    gameLengthRanges: { min: 3, max: 12 },
   },
   {
     id: 30,
@@ -244,6 +256,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 0, y: 10 },
     type: 'prison',
     rollType: 'steam',
+    gameLengthRanges: { min: 0, max: 300 },
   },
   {
     id: 32,
@@ -267,6 +280,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 0, y: 7 },
     type: 'bonus',
     rollType: 'steam',
+    gameLengthRanges: { min: 6, max: 15 },
   },
   {
     id: 35,
@@ -282,6 +296,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 0, y: 5 },
     type: 'railroad',
     rollType: 'steam',
+    gameLengthRanges: { min: 3, max: 16 },
   },
   {
     id: 37,
@@ -305,6 +320,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 0, y: 2 },
     type: 'bonus',
     rollType: 'steam',
+    gameLengthRanges: { min: 3, max: 12 },
   },
   {
     id: 40,

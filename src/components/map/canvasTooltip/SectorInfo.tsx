@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { frontendCardsData } from '@/lib/mockData';
 import { SectorData } from '@/lib/types';
+import { getGameLengthFullText } from '@/lib/utils';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import usePlayerStore from '@/stores/playerStore';
 import useReviewFormStore from '@/stores/reviewFormStore';
@@ -14,7 +15,7 @@ type Props = {
 };
 
 function SectorInfo({ sector }: Props) {
-  const { id, name, type, rollType } = sector;
+  const { id, name, type, rollType, gameLengthRanges } = sector;
 
   const unpin = useCanvasTooltipStore(state => state.unpin);
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
@@ -62,6 +63,7 @@ function SectorInfo({ sector }: Props) {
         <div className="text-sm text-muted-foreground font-semibold">
           <p>Тип: {SectorTypeLabes[type]}</p>
           <p>Ролл игры: {rollType}</p>
+          {gameLengthRanges && <p>Длительность: {getGameLengthFullText(gameLengthRanges)}</p>}
           {showTax && (
             <div className="flex items-center">
               <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
