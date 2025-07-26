@@ -9,7 +9,8 @@ import {
 import { cn } from '@/lib/utils';
 import BezierEasing from 'bezier-easing';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Card, CardFooter } from '../../ui/card';
+import { Card } from '../../ui/card';
+import { useMutation } from '@tanstack/react-query';
 
 const MIN_SPIN_DURATION = 12000; // ms
 const BACKSWING_DURATION = 600; // ms
@@ -116,6 +117,10 @@ export default function GenericRoller<T>({
     secondaryText = getSecondaryText?.(winner);
   }
 
+  const { mutateAsync: handleRollFinish, isPending: isLoading } = useMutation({
+    mutationFn: onRollFinish,
+  });
+
   function updateTransform() {
     if (rouletteRef.current) {
       rouletteRef.current.style.transform = `translateX(${offsetRef.current}px)`;
@@ -221,11 +226,11 @@ export default function GenericRoller<T>({
       const index = Math.floor(-offsetRef.current / CARD_FULL_WIDTH);
       setWinnerIndex(index);
       setRollPhase('finished');
-      onRollFinish(cardList[index]);
+      handleRollFinish(cardList[index]);
       animationRef.current = null;
     }
     animationRef.current = requestAnimationFrame(animate);
-  }, [onRollFinish, cardList]);
+  }, [handleRollFinish, cardList]);
 
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
@@ -306,7 +311,6 @@ export default function GenericRoller<T>({
                   )}
                 >
                   <img src={item.imageUrl} className="absolute top-0" />
-                  <CardFooter className="z-10">{String(item.label)}</CardFooter>
                 </Card>
               );
             })}
@@ -330,18 +334,15 @@ export default function GenericRoller<T>({
             {secondaryText && <div className="text-base font-semibold ">{secondaryText}</div>}
             <Button
               className="w-[300px] rounded-xl"
-              // disabled={isLoading}
+              loading={isLoading}
               onClick={async () => {
+                handleOpenChange(false);
                 if (winner !== null && onClose) {
                   await onClose(winner);
                 }
-                handleOpenChange(false);
               }}
             >
               {finishButtonText}
-              {/* {isLoading && (
-              <LoaderCircleIcon color="white" className="animate-spin text-primary" size={24} />
-            )} */}
             </Button>
           </div>
         )}

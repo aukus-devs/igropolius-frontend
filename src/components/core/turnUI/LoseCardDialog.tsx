@@ -5,16 +5,19 @@ import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import { activateInstantCard, dropBonusCard } from '@/lib/api';
 import { InstantCardResult, MainBonusCardType } from '@/lib/api-types-generated';
+import { resetPlayersQuery } from '@/lib/queryClient';
 
 export default function LoseCardOnDropDialog() {
-  const { playerCards, moveToPrison, setNextTurnState, goToPrison } = usePlayerStore(
-    useShallow(state => ({
-      playerCards: state.myPlayer?.bonus_cards || [],
-      moveToPrison: state.moveMyPlayerToPrison,
-      setNextTurnState: state.setNextTurnState,
-      goToPrison: state.turnState === 'dropping-card-after-game-drop',
-    }))
-  );
+  const { playerCards, moveToPrison, setNextTurnState, goToPrison, removeCardFromState } =
+    usePlayerStore(
+      useShallow(state => ({
+        playerCards: state.myPlayer?.bonus_cards || [],
+        moveToPrison: state.moveMyPlayerToPrison,
+        setNextTurnState: state.setNextTurnState,
+        goToPrison: state.turnState === 'dropping-card-after-game-drop',
+        removeCardFromState: state.removeCardFromState,
+      }))
+    );
 
   const [dropResult, setDropResult] = useState<InstantCardResult | null>(null);
 
@@ -34,12 +37,14 @@ export default function LoseCardOnDropDialog() {
   const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
     if (goToPrison) {
       await dropBonusCard({ bonus_type: option.value });
+      await removeCardFromState(option.value);
     } else {
       const result = await activateInstantCard({
         card_type: 'lose-card-or-3-percent',
         card_to_lose: option.value,
       });
       setDropResult(result.result ?? null);
+      resetPlayersQuery();
     }
   };
 

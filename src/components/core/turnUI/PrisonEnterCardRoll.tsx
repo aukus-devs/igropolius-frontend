@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
 import { MainBonusCardType } from '@/lib/api-types-generated';
+import { dropBonusCard } from '@/lib/api';
 
 type LoseCard = {
   action: 'lose-card';
@@ -18,16 +19,25 @@ type ReceiveCard = {
 type RollOptionType = 'nothing' | LoseCard | ReceiveCard;
 
 export default function PrisonEnterCardRoll() {
-  const { setNextTurnState, playerCards, prisonCards, receiveBonusCard, dropBonusCard } =
-    usePlayerStore(
-      useShallow(state => ({
-        setNextTurnState: state.setNextTurnState,
-        playerCards: state.myPlayer?.bonus_cards ?? [],
-        prisonCards: state.prisonCards,
-        receiveBonusCard: state.receiveBonusCard,
-        dropBonusCard: state.dropBonusCard,
-      }))
-    );
+  const {
+    setNextTurnState,
+    playerCards,
+    prisonCards,
+    receiveBonusCard,
+    removeCardFromState,
+    addCardToState,
+    currentSector,
+  } = usePlayerStore(
+    useShallow(state => ({
+      setNextTurnState: state.setNextTurnState,
+      playerCards: state.myPlayer?.bonus_cards ?? [],
+      prisonCards: state.prisonCards,
+      receiveBonusCard: state.receiveBonusCard,
+      removeCardFromState: state.removeCardFromState,
+      addCardToState: state.addCardToState,
+      currentSector: state.myPlayer?.sector_id,
+    }))
+  );
 
   const getWinnerText = (option: WeightedOption<RollOptionType>) => {
     if (option.value === 'nothing') {
@@ -45,17 +55,26 @@ export default function PrisonEnterCardRoll() {
 
   const handleFinished = async (option: WeightedOption<RollOptionType>) => {
     if (option.value === 'nothing') {
-      setNextTurnState({});
       return;
     }
     if (option.value.action === 'lose-card') {
-      await dropBonusCard(option.value.card);
+      await dropBonusCard({ bonus_type: option.value.card });
+      removeCardFromState(option.value.card);
       return;
     }
     if (option.value.action === 'receive-card') {
       await receiveBonusCard(option.value.card);
+      addCardToState({
+        bonus_type: option.value.card,
+        received_at: Date.now(),
+        received_on_sector: currentSector ?? 0,
+      });
       return;
     }
+  };
+
+  const handleClose = async () => {
+    return setNextTurnState({});
   };
 
   const options: WeightedOption<RollOptionType>[] = useMemo(() => {
@@ -115,6 +134,7 @@ export default function PrisonEnterCardRoll() {
       options={options}
       getWinnerText={getWinnerText}
       onRollFinish={handleFinished}
+      onClose={handleClose}
     />
   );
 }

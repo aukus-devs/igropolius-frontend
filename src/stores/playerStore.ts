@@ -69,11 +69,13 @@ const usePlayerStore = create<{
     action?: PlayerStateAction;
   }) => Promise<void>;
   receiveBonusCard: (type: MainBonusCardType, switchState?: boolean) => Promise<void>;
-  dropBonusCard: (type: MainBonusCardType) => Promise<void>;
+  // dropBonusCard: (type: MainBonusCardType) => Promise<void>;
   stealBonusCard: (player: PlayerData, card: MainBonusCardType) => Promise<void>;
   moveMyPlayerToPrison: () => Promise<void>;
   payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
   canSelectBuildingSector: () => boolean;
+  removeCardFromState: (type: MainBonusCardType) => void;
+  addCardToState: (card: ActiveBonusCard) => void;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -402,11 +404,7 @@ const usePlayerStore = create<{
     resetNotificationsQuery();
   },
 
-  dropBonusCard: async (type: MainBonusCardType) => {
-    const { setNextTurnState } = get();
-    await dropBonusCard({ bonus_type: type });
-
-    // remove card from player before updating turn state
+  removeCardFromState: (type: MainBonusCardType) => {
     set(state => ({
       myPlayer: state.myPlayer
         ? {
@@ -415,6 +413,21 @@ const usePlayerStore = create<{
           }
         : null,
     }));
+  },
+
+  addCardToState: (card: ActiveBonusCard) => {
+    set(state => ({
+      myPlayer: state.myPlayer
+        ? { ...state.myPlayer, bonus_cards: [...state.myPlayer.bonus_cards, card] }
+        : null,
+    }));
+  },
+
+  dropBonusCard: async (type: MainBonusCardType) => {
+    const { setNextTurnState, removeCardFromState } = get();
+    await dropBonusCard({ bonus_type: type });
+
+    removeCardFromState(type);
     resetPlayersQuery();
     resetNotificationsQuery();
     await setNextTurnState({});
