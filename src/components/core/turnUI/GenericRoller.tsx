@@ -117,7 +117,11 @@ export default function GenericRoller<T>({
     secondaryText = getSecondaryText?.(winner);
   }
 
-  const { mutateAsync: handleRollFinish, isPending: isLoading } = useMutation({
+  const {
+    mutateAsync: handleRollFinish,
+    isPending: isLoading,
+    isError,
+  } = useMutation({
     mutationFn: onRollFinish,
   });
 
@@ -335,6 +339,7 @@ export default function GenericRoller<T>({
             <Button
               className="w-[300px] rounded-xl"
               loading={isLoading}
+              disabled={isError}
               onClick={async () => {
                 handleOpenChange(false);
                 if (winner !== null && onClose) {
@@ -342,7 +347,7 @@ export default function GenericRoller<T>({
                 }
               }}
             >
-              {finishButtonText}
+              {isError ? 'Ошибка' : finishButtonText}
             </Button>
           </div>
         )}

@@ -84,7 +84,7 @@ export default function PrisonEnterCardRoll() {
       value: 'nothing',
       label: 'Ничего',
       weight: 25,
-      imageUrl: '',
+      imageUrl: 'https://placehold.co/100x100?text=Nothing',
     };
 
     if (prisonCards.length > 0) {
@@ -130,7 +130,7 @@ export default function PrisonEnterCardRoll() {
     <GenericRoller<RollOptionType>
       header="Вход в тюрьму"
       openButtonText="Войти в тюрьму"
-      finishButtonText="Готово"
+      finishButtonText="Закрыть"
       options={options}
       getWinnerText={getWinnerText}
       onRollFinish={handleFinished}

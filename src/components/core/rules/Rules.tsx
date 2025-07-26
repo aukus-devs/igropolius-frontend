@@ -6,7 +6,6 @@ import { fetchCurrentRules, saveRulesVersion } from '@/lib/api';
 import RichDisplay from './RichDisplay';
 import { queryKeys, resetCurrentRulesQuery } from '@/lib/queryClient';
 import { formatTsToFullDate } from '@/lib/utils';
-import LoadingSpinner from '../loadng/LoadingSpinner';
 
 export default function Rules() {
   const [editValue, setEditValue] = useState<string>('');
@@ -35,7 +34,8 @@ export default function Rules() {
   if (isLoading || !version || isPending) {
     return (
       <div className="flex items-center justify-center h-full">
-        <LoadingSpinner text="Загрузка правил..." />
+        <LoaderCircleIcon className="animate-spin text-primary" />
+        <p>Загрузка правил...</p>
       </div>
     );
   }

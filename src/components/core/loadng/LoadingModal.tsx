@@ -1,4 +1,4 @@
-import LoadingSpinner from "./LoadingSpinner";
+import { LoaderCircleIcon } from 'lucide-react';
 
 export default function LoadingModal() {
   return (
@@ -8,7 +8,8 @@ export default function LoadingModal() {
       role="dialog"
       aria-label="Loading"
     >
-      <LoadingSpinner text="Подключаюсь к серверам..." />
+      <p>Подключаюсь к серверам...</p>
+      <LoaderCircleIcon className="animate-spin text-primary" />
     </div>
   );
 }
