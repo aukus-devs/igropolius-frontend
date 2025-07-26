@@ -60,7 +60,7 @@ function App() {
     enabled: !isPlayerMoving, // Only fetch players when not moving
   });
 
-  const { data: eventSettingsData } = useQuery({
+  const { data: eventSettingsData, isError: eventSettingsError } = useQuery({
     queryKey: queryKeys.eventSettings,
     queryFn: fetchEventSettings,
     refetchInterval: 60 * 1000,
@@ -70,6 +70,7 @@ function App() {
   const unpin = useCanvasTooltipStore(state => state.unpin);
 
   const setEventSettings = useEventStore(state => state.setEventSettings);
+  const setMainNotification = useEventStore(state => state.setMainNotification);
   const setRollResult = useDiceStore(state => state.setRollResult);
 
   useEffect(() => {
@@ -103,8 +104,19 @@ function App() {
   useEffect(() => {
     if (eventSettingsData?.settings) {
       setEventSettings(eventSettingsData.settings);
+      setMainNotification(null);
     }
-  }, [setEventSettings, eventSettingsData]);
+  }, [setEventSettings, eventSettingsData, setMainNotification]);
+
+  useEffect(() => {
+    if (eventSettingsError) {
+      setMainNotification({
+        text: 'Ошибка загрузки настроек ивента, проверьте записи event_end_time и event_start_time в БД',
+        tag: 'event-ended',
+        variant: 'error',
+      });
+    }
+  }, [eventSettingsError, setMainNotification]);
 
   const { data: frontVersionData } = useQuery({
     queryKey: ['frontVersion'],

@@ -65,7 +65,13 @@ function DesktopUI() {
       )}
 
       {mainNotification && (
-        <Card className="absolute top-3 left-1/2 -translate-x-1/2">
+        <Card
+          className={`absolute top-3 left-1/2 -translate-x-1/2 ${
+            mainNotification.variant === 'error'
+              ? 'bg-destructive/90 text-white border-destructive'
+              : ''
+          }`}
+        >
           <div className="pl-4 pr-4 rounded-md">{mainNotification.text}</div>
         </Card>
       )}
