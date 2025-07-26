@@ -25,7 +25,20 @@ type Props = {
 
 const cornerTexture = `${import.meta.env.BASE_URL}assets/sectors/textures/corner.png`;
 
+const sectorColors: { [k in ColorName]: string } = {
+  blue: '#3B82F7',
+  brown: '#A78F6D',
+  green: '#68CE67',
+  lightblue: '#81CFFA',
+  orange: '#F2A33C',
+  pink: '#EA3891',
+  red: '#EB5545',
+  yellow: '#F8D84A',
+  pastelgreen: 'white',
+};
+
 function getSectorTexture(color?: ColorName) {
+  return `${import.meta.env.BASE_URL}assets/sectors/textures/pastelgreen.png`;
   switch (color) {
     case 'brown':
       return `${import.meta.env.BASE_URL}assets/sectors/textures/brown.png`;
@@ -71,10 +84,11 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
   const canSelectBuildingSector = usePlayerStore(state => state.canSelectBuildingSector);
   const [isHovered, setIsHovered] = useState(false);
   const meshRef = useRef<Mesh>(null);
+  const colorMeshRef = useRef<Mesh>(null);
   const texture = useTexture(isCorner ? cornerTexture : getSectorTexture(color));
   texture.flipY = false;
   const finalShape: Vector3Array = showColorGroup
-    ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH]
+    ? [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH - 2]
     : shape;
   const position: Vector3Array = showColorGroup
     ? [0, 0, SECTOR_DEPTH / 2 - finalShape[2] / 2]
@@ -96,10 +110,14 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
   }, [isPinned, isHovered, tooltipWasOnCurrentSector, tooltipIsOnAnotherSector]);
 
   useFrame(() => {
-    if (!meshRef.current) return;
-
-    const material = meshRef.current.material as MeshStandardMaterial;
-    material.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
+    const material = meshRef.current?.material as MeshStandardMaterial;
+    if (material) {
+      material.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
+    }
+    const material2 = colorMeshRef.current?.material as MeshStandardMaterial;
+    if (material2) {
+      material2.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
+    }
   });
 
   function onPointerEnter(e: ThreeEvent<PointerEvent>) {
@@ -141,17 +159,27 @@ function SectorBase({ sector, color, shape, showColorGroup, isCorner }: Props) {
   }
 
   return (
-    <mesh
-      ref={meshRef}
-      position={position}
-      receiveShadow
-      onPointerEnter={onPointerEnter}
-      onPointerLeave={onPointerLeave}
-      onClick={onClick}
-    >
-      <boxGeometry args={finalShape} />
-      <meshStandardMaterial color="white" roughness={0.75} map={texture} emissiveIntensity={0.25} />
-    </mesh>
+    <group onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave} onClick={onClick}>
+      <mesh ref={meshRef} position={position} receiveShadow>
+        <boxGeometry args={finalShape} />
+        <meshStandardMaterial
+          color="white"
+          roughness={0.75}
+          map={texture}
+          emissiveIntensity={0.25}
+        />
+      </mesh>
+      {showColorGroup && (
+        <mesh ref={colorMeshRef} position={[0, 0, -SECTOR_DEPTH / 2 + 1]}>
+          <boxGeometry args={[SECTOR_WIDTH, SECTOR_HEIGHT, 2]} />
+          <meshStandardMaterial
+            color={color ? sectorColors[color] : 'white'}
+            roughness={0.75}
+            emissiveIntensity={0.25}
+          />
+        </mesh>
+      )}
+    </group>
   );
 }
 
