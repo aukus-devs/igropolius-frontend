@@ -139,6 +139,9 @@ const usePlayerStore = create<{
     }
 
     await saveTurnState({ turn_state: nextTurnState });
+    if (nextTurnState === turnState) {
+      set({ turnState: nextTurnState });
+    }
 
     resetCurrentPlayerQuery();
     resetPlayersQuery();

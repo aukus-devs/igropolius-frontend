@@ -6,6 +6,7 @@ import { fetchCurrentRules, saveRulesVersion } from '@/lib/api';
 import RichDisplay from './RichDisplay';
 import { queryKeys, resetCurrentRulesQuery } from '@/lib/queryClient';
 import { formatTsToFullDate } from '@/lib/utils';
+import { LoaderCircleIcon } from 'lucide-react';
 
 export default function Rules() {
   const [editValue, setEditValue] = useState<string>('');

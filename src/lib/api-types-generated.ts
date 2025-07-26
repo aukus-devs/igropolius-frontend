@@ -114,16 +114,7 @@ export type CardName1 = string | null;
 export type EventEndTime2 = number | null;
 export type MessageText3 = string | null;
 export type Id = number;
-export type UrlHandle = string;
-export type Username = string;
-/**
- * This interface was referenced by `ApiSchema`'s JSON-Schema
- * via the `definition` "Role".
- */
-export type Role = "player" | "moder" | "admin" | "prison";
 export type ModerFor = number | null;
-export type SectorId3 = number;
-export type TotalScore = number;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "PlayerTurnState".
@@ -141,7 +132,6 @@ export type PlayerTurnState =
   | "entering-prison"
   | "stealing-bonus-card"
   | "choosing-building-sector";
-export type MapsCompleted = number;
 export type LastRollResult = number[];
 export type HasUpgradeBonus = boolean;
 export type HasDowngradeBonus = boolean;
@@ -164,7 +154,7 @@ export type Timestamp1 = number;
 export type EventType1 = "game";
 export type GameTitle3 = string;
 export type GameCover = string | null;
-export type SectorId4 = number;
+export type SectorId3 = number;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "GameLength".
@@ -184,7 +174,7 @@ export type Limit = number;
  * via the `definition` "InstantCardResult".
  */
 export type InstantCardResult = "reroll" | "card-lost" | "score-received" | "scores-lost";
-export type Username1 = string;
+export type Username = string;
 export type Password = string;
 export type Token = string;
 export type NotificationIds = number[];
@@ -208,7 +198,7 @@ export type NotificationType1 = string;
 export type CreatedAt = number;
 export type OtherPlayerId2 = number | null;
 export type Scores2 = number | null;
-export type SectorId5 = number | null;
+export type SectorId4 = number | null;
 export type GameTitle4 = string | null;
 export type CardName2 = string | null;
 export type EventEndTime3 = number | null;
@@ -220,9 +210,9 @@ export type Notifications = NotificationItem[];
  */
 export type TaxType = "street-tax" | "map-tax";
 export type Id3 = number;
-export type Username2 = string;
+export type Username1 = string;
 export type FirstName = string;
-export type UrlHandle1 = string;
+export type UrlHandle = string;
 export type IsOnline = boolean;
 export type CurrentGame = string | null;
 export type CurrentGameCover = string | null;
@@ -240,11 +230,11 @@ export type TelegramLink = string | null;
 export type DonationLink = string | null;
 export type AvatarLink = string | null;
 export type IsActive = boolean;
-export type SectorId6 = number;
-export type TotalScore1 = number;
-export type MapsCompleted1 = number;
+export type SectorId5 = number;
+export type TotalScore = number;
+export type MapsCompleted = number;
 export type CreatedAt1 = number;
-export type SectorId7 = number;
+export type SectorId6 = number;
 export type Title = string;
 export type Review = string;
 export type Rating = number;
@@ -254,6 +244,11 @@ export type VodLinks1 = string | null;
 export type Cover1 = string | null;
 export type Games1 = PlayerGame[];
 export type BonusCards = ActiveBonusCard[];
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "Role".
+ */
+export type Role = "player" | "moder" | "admin" | "prison";
 export type Timestamp3 = number;
 export type Timestamp4 = number;
 export type EventType3 = "score-change";
@@ -270,7 +265,7 @@ export type ScoreChangeType =
   | "instant-card";
 export type Amount = number;
 export type Reason = string;
-export type SectorId8 = number;
+export type SectorId7 = number;
 export type ScoreBefore = number;
 export type ScoreAfter = number;
 export type IncomeFromPlayer = number | null;
@@ -401,14 +396,8 @@ export interface CreatePlayerNotificationRequest {
  */
 export interface CurrentUserResponse {
   id: Id;
-  url_handle: UrlHandle;
-  username: Username;
-  role: Role;
   moder_for?: ModerFor;
-  sector_id: SectorId3;
-  total_score?: TotalScore;
   turn_state: PlayerTurnState;
-  maps_completed?: MapsCompleted;
   last_roll_result: LastRollResult;
   has_upgrade_bonus?: HasUpgradeBonus;
   has_downgrade_bonus?: HasDowngradeBonus;
@@ -468,7 +457,7 @@ export interface GameEvent {
   subtype: GameCompletionType;
   game_title: GameTitle3;
   game_cover?: GameCover;
-  sector_id: SectorId4;
+  sector_id: SectorId3;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -516,7 +505,7 @@ export interface IgdbGamesSearchRequest {
  * via the `definition` "LoginRequest".
  */
 export interface LoginRequest {
-  username: Username1;
+  username: Username;
   password: Password;
 }
 /**
@@ -574,7 +563,7 @@ export interface NotificationItem {
   created_at: CreatedAt;
   other_player_id?: OtherPlayerId2;
   scores?: Scores2;
-  sector_id?: SectorId5;
+  sector_id?: SectorId4;
   game_title?: GameTitle4;
   card_name?: CardName2;
   event_end_time?: EventEndTime3;
@@ -600,9 +589,9 @@ export interface PayTaxRequest {
  */
 export interface PlayerDetails {
   id: Id3;
-  username: Username2;
+  username: Username1;
   first_name: FirstName;
-  url_handle: UrlHandle1;
+  url_handle: UrlHandle;
   is_online: IsOnline;
   current_game?: CurrentGame;
   current_game_cover?: CurrentGameCover;
@@ -620,9 +609,9 @@ export interface PlayerDetails {
   donation_link?: DonationLink;
   avatar_link?: AvatarLink;
   is_active?: IsActive;
-  sector_id: SectorId6;
-  total_score: TotalScore1;
-  maps_completed: MapsCompleted1;
+  sector_id: SectorId5;
+  total_score: TotalScore;
+  maps_completed: MapsCompleted;
   games: Games1;
   bonus_cards: BonusCards;
   role: Role;
@@ -634,7 +623,7 @@ export interface PlayerDetails {
 export interface PlayerGame {
   created_at: CreatedAt1;
   status: GameCompletionType;
-  sector_id: SectorId7;
+  sector_id: SectorId6;
   title: Title;
   review: Review;
   rating: Rating;
@@ -668,7 +657,7 @@ export interface ScoreChangeEvent {
   subtype: ScoreChangeType;
   amount: Amount;
   reason: Reason;
-  sector_id: SectorId8;
+  sector_id: SectorId7;
   score_before: ScoreBefore;
   score_after: ScoreAfter;
   income_from_player?: IncomeFromPlayer;

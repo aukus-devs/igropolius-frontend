@@ -38,12 +38,13 @@ function App() {
     []
   );
 
-  const { setPlayers, setMyPlayer, setTurnState, isPlayerMoving } = usePlayerStore(
+  const { setPlayers, setMyPlayer, setTurnState, isPlayerMoving, myRole } = usePlayerStore(
     useShallow(state => ({
       setPlayers: state.setPlayers,
       setMyPlayer: state.setMyPlayer,
       setTurnState: state.setTurnState,
       isPlayerMoving: state.isPlayerMoving,
+      myRole: state.myPlayer?.role,
     }))
   );
 
@@ -92,10 +93,10 @@ function App() {
   const setShowAdminPanel = useAdminStore(state => state.setShowAdminPanel);
 
   useEffect(() => {
-    if (currentPlayerData?.role === 'admin') {
+    if (myRole === 'admin') {
       setShowAdminPanel(true);
     }
-  }, [currentPlayerData?.role, setShowAdminPanel]);
+  }, [myRole, setShowAdminPanel]);
 
   useEffect(() => {
     setPlayers(playersData?.players ?? []);
