@@ -1,19 +1,19 @@
-import PlayerDialog from "./playerDialog/PlayerDialog";
-import usePlayerStore from "@/stores/playerStore";
-import Clock from "./Clock";
-import { useShallow } from "zustand/shallow";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./Collapsible";
+import PlayerDialog from './playerDialog/PlayerDialog';
+import usePlayerStore from '@/stores/playerStore';
+import Clock from './Clock';
+import { useShallow } from 'zustand/shallow';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './Collapsible';
 
 function PlayersList() {
   const { players, myPlayer, turnState } = usePlayerStore(
-    useShallow((state) => ({
+    useShallow(state => ({
       players: state.players,
       myPlayer: state.myPlayer,
       turnState: state.turnState,
-    })),
+    }))
   );
 
-  const showCards = turnState === "stealing-bonus-card";
+  const showCards = turnState === 'stealing-bonus-card';
   const nonCollapsiblePlayersCount = 3;
   const nonCollapsiblePlayers = showCards ? players : players.slice(0, nonCollapsiblePlayersCount);
   const collapsiblePlayers = players.slice(nonCollapsiblePlayersCount);
@@ -51,7 +51,7 @@ function PlayersList() {
                     key={player.id}
                     player={player}
                     isCurrentPlayer={isCurrentPlayer}
-                    placement={idx + 1}
+                    placement={idx + 1 + nonCollapsiblePlayersCount}
                     showCards={showCards}
                   />
                 );
