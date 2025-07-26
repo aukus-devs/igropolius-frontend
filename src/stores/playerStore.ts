@@ -274,7 +274,9 @@ const usePlayerStore = create<{
   },
 
   animatePlayerMovement: async (playerId, steps) => {
-    const player = get().players.find(p => p.id === playerId);
+    const { players, myPlayerId, myPlayer } = get();
+    const player = playerId === myPlayerId ? myPlayer : players.find(p => p.id === playerId);
+
     if (!player) throw new Error(`Player not found.`);
 
     const playerModel = useModelsStore.getState().getPlayerModel(player.id);
@@ -360,7 +362,7 @@ const usePlayerStore = create<{
   },
 
   moveMyPlayer: async (params: MoveMyPlayerParams) => {
-    const { myPlayer, animatePlayerMovement, setNextTurnState } = get();
+    const { myPlayer, setNextTurnState } = get();
     if (!myPlayer) {
       throw new Error('My player not found.');
     }
@@ -382,7 +384,7 @@ const usePlayerStore = create<{
       }));
     }
 
-    await animatePlayerMovement(myPlayer.id, params.totalRoll);
+    await get().animatePlayerMovement(myPlayer.id, params.totalRoll);
     get().updateMyPlayerSectorId(originalSector + params.totalRoll);
     await setNextTurnState({ prevSectorId: originalSector, action: params.action });
     set({ isPlayerMoving: false });
