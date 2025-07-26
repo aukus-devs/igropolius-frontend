@@ -104,10 +104,10 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         {
           event_type: 'player-move',
           timestamp: Math.floor(new Date('04 30 2025 17:40').getTime() / 1000),
-          adjusted_roll: 5,
+          adjusted_roll: 4,
           subtype: 'dice-roll',
           sector_from: 10,
-          sector_to: 15,
+          sector_to: 14,
           map_completed: false,
           bonuses_used: ['adjust-roll-by1', 'choose-1-die'],
           dice_roll: [3, 7],
@@ -121,10 +121,10 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
         {
           event_type: 'player-move',
           timestamp: Math.floor(new Date('04 30 2025 17:40').getTime() / 1000),
-          adjusted_roll: 5,
+          adjusted_roll: 4,
           subtype: 'dice-roll',
           sector_from: 10,
-          sector_to: 15,
+          sector_to: 14,
           bonuses_used: ['adjust-roll-by1', 'choose-1-die'],
           dice_roll_json: {
             is_random_org_result: false,

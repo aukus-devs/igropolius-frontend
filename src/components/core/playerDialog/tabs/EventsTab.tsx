@@ -27,7 +27,13 @@ type Props = {
   player: PlayerData;
 };
 
-function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollDetailsType }) {
+function DiceRollDetails({
+  diceRollJson,
+  adjustedRoll,
+}: {
+  diceRollJson: DiceRollDetailsType;
+  adjustedRoll: number;
+}) {
   return (
     <div className="space-y-2">
       <div className="text-xs text-muted-foreground">
@@ -37,8 +43,9 @@ function DiceRollDetails({ diceRollJson }: { diceRollJson: DiceRollDetailsType }
       </div>
       <div className="text-xs text-muted-foreground">Кубики: {diceRollJson.data.join(', ')}</div>
       <div className="text-xs text-muted-foreground">
-        Сумма: {diceRollJson.data[0] + diceRollJson.data[1]}
+        Сумма кубиков: {diceRollJson.data[0] + diceRollJson.data[1]}
       </div>
+      <div className="text-xs text-muted-foreground">Итоговый результат: {adjustedRoll}</div>
       {diceRollJson.is_random_org_result && (
         <div className="flex items-center gap-2 mt-1">
           <svg
@@ -153,7 +160,10 @@ function Event({ event }: { event: Events[0] }) {
         )}
         {hasDiceRollData && showDetails && (
           <div className="mt-2">
-            <DiceRollDetails diceRollJson={moveEvent.dice_roll_json!} />
+            <DiceRollDetails
+              diceRollJson={moveEvent.dice_roll_json!}
+              adjustedRoll={moveEvent.adjusted_roll}
+            />
           </div>
         )}
       </div>
