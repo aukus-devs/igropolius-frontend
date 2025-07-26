@@ -67,8 +67,12 @@ type GameTimeOption = {
 };
 
 function GameTime() {
-  const { setGameTime, gameTime } = useReviewFormStore(
-    useShallow(state => ({ setGameTime: state.setGameTime, gameTime: state.gameTime }))
+  const { setGameTime, gameTime, gameStatus } = useReviewFormStore(
+    useShallow(state => ({
+      setGameTime: state.setGameTime,
+      gameTime: state.gameTime,
+      gameStatus: state.gameStatus,
+    }))
   );
   const options: GameTimeOption[] = [
     { title: '2-5 ч.', value: '2-5' },
@@ -80,7 +84,11 @@ function GameTime() {
   ];
 
   return (
-    <Select onValueChange={setGameTime} defaultValue={gameTime ?? undefined}>
+    <Select
+      onValueChange={setGameTime}
+      defaultValue={gameTime ?? undefined}
+      disabled={gameStatus !== 'completed'}
+    >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Время по HLTB" />
       </SelectTrigger>
