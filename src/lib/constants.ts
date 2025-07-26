@@ -33,7 +33,7 @@ export const EMISSION_FULL = new Color('white');
 export const EMISSION_NONE = new Color('black');
 
 export const GameLengthToBuildingType: { [key in GameLength]: BuildingType } = {
-  drop: 'ruins',
+  '': 'ruins',
   '2-5': 'small_buildingD',
   '5-10': 'skyscraperE',
   '10-15': 'skyscraperA',
@@ -70,7 +70,7 @@ export const STORAGE_BASE_URL = IS_DEV
   : `https://storage.yandexcloud.net/monopoly2025/assets`;
 
 export const ScoreByGameLength: { [key in GameLength]: number } = {
-  drop: 0,
+  '': 0,
   '2-5': 10,
   '5-10': 20,
   '10-15': 30,

@@ -159,7 +159,7 @@ export type SectorId3 = number;
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "GameLength".
  */
-export type GameLength = "drop" | "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
+export type GameLength = "" | "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
 export type ReceivedAt1 = number;
 export type ReceivedOnSector1 = number;
 export type Id1 = number;

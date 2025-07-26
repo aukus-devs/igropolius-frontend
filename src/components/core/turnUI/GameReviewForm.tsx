@@ -7,7 +7,6 @@ import { Textarea } from '../../ui/textarea';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../../ui/tooltip';
 import useReviewFormStore from '@/stores/reviewFormStore';
 import Rating from '../Rating';
-import { GameLength, GameStatusType } from '@/lib/types';
 import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
@@ -18,13 +17,13 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { calculateGameCompletionScore } from '@/lib/utils';
-import { IgdbGameSummary } from '@/lib/api-types-generated';
+import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
 
 type StatesOption = {
   title: string;
-  value: GameStatusType;
+  value: GameCompletionType;
 };
 
 function GameStatus() {

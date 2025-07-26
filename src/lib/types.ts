@@ -1,4 +1,4 @@
-import { PlayerDetails } from './api-types-generated';
+import { GameCompletionType, GameLength, PlayerDetails } from './api-types-generated';
 
 const ColorBrown = '#AC8E68';
 const ColorLightBlue = '#64D2FF';
@@ -66,17 +66,13 @@ export type SectorData = {
   gameLengthRanges?: GameLengthRange; // for roll on https://gamegauntlets.com
 };
 
-export type GameLength = '2-5' | '5-10' | '10-15' | '15-20' | '20-25' | '25+';
-export type GameLengthWithDrop = GameLength | 'drop';
-
-export type GameStatusType = 'drop' | 'completed' | 'reroll';
 export type GameReviewType = {
   gameTitle: string;
   description: string;
   rating: number;
   points: number;
   poster?: string;
-  status: GameStatusType;
+  status: GameCompletionType;
   date: Date;
   duration: number | null;
 };
@@ -103,7 +99,7 @@ export type BuildingData = {
   owner: PlayerData;
   sectorId: number;
   createdAt: number;
-  gameLength: GameLength | 'drop';
+  gameLength: GameLength;
   gameTitle: string;
   income: number;
   hasGroupBonus: boolean;

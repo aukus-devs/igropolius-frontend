@@ -1,18 +1,17 @@
-import { GameStatusType } from '@/lib/types';
 import { Badge } from '../ui/badge';
 import { formatMs } from '@/lib/utils';
 import { useState } from 'react';
 import { Toggle } from '../ui/toggle';
 import { VideoCircle } from '../icons';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
-import { PlayerGame } from '@/lib/api-types-generated';
+import { GameCompletionType, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
 
 type Props = {
   game: PlayerGame;
 };
 
-function getStatusData(status: GameStatusType) {
+function getStatusData(status: GameCompletionType) {
   switch (status) {
     case 'drop':
       return {
@@ -30,10 +29,8 @@ function getStatusData(status: GameStatusType) {
         color: 'text-blue-500',
       };
     default: {
-      return {
-        statusText: '',
-        color: '',
-      };
+      const error: never = status;
+      throw new Error(`Unknown game status: ${error}`);
     }
   }
 }

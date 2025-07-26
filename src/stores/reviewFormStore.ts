@@ -1,16 +1,16 @@
 import { saveGameReview } from '@/lib/api';
 import { ScoreByGameLength, SectorScoreMultiplier } from '@/lib/constants';
-import { GameLength, GameStatusType, ScoreDetails } from '@/lib/types';
+import { ScoreDetails } from '@/lib/types';
 import { create } from 'zustand';
 import { SectorsById } from '@/lib/mockData';
 import { resetNotificationsQuery } from '@/lib/queryClient';
-import { IgdbGameSummary } from '@/lib/api-types-generated';
+import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
 
 const useReviewFormStore = create<{
   rating: number;
   gameTitle: string;
   gameTime: GameLength | null;
-  gameStatus: GameStatusType | null;
+  gameStatus: GameCompletionType | null;
   gameReview: string;
   selectedGame: IgdbGameSummary | null;
   error: string | null;
@@ -18,7 +18,7 @@ const useReviewFormStore = create<{
   setRating: (value: number) => void;
   setGameTitle: (value: string) => void;
   setGameTime: (value: GameLength) => void;
-  setGameStatus: (value: GameStatusType) => void;
+  setGameStatus: (value: GameCompletionType) => void;
   setGameReview: (value: string) => void;
   setSelectedGame: (game: IgdbGameSummary | null) => void;
   sendReview: (scores: number) => Promise<void>;
@@ -53,10 +53,7 @@ const useReviewFormStore = create<{
       throw new Error('Game status is required');
     }
 
-    const length = gameStatus === 'drop' ? 'drop' : gameTime;
-    if (!length) {
-      throw new Error('Game length is required');
-    }
+    const length = gameTime ?? '';
 
     set({ isSubmitting: true, error: null });
 

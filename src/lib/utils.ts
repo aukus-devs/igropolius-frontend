@@ -1,8 +1,6 @@
 import {
   EventDescription,
-  GameLength,
   GameLengthRange,
-  GameStatusType,
   PlayerData,
   PlayerStateAction,
   SectorData,
@@ -21,7 +19,9 @@ import {
   BonusCardEvent,
   BonusCardType,
   Events,
+  GameCompletionType,
   GameEvent,
+  GameLength,
   MainBonusCardType,
   MoveEvent,
   PlayerDetails,
@@ -394,7 +394,7 @@ export function formatMs(diffMs: number) {
 }
 
 type CompletionScoreParams = {
-  gameStatus: GameStatusType;
+  gameStatus: GameCompletionType;
   gameLength: GameLength | null;
   mapsCompleted: number;
   sectorId: number;

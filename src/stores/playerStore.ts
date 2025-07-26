@@ -191,6 +191,9 @@ const usePlayerStore = create<{
         if (!sector || (sector.type !== 'property' && sector.type !== 'railroad')) {
           continue;
         }
+        if (building.status === 'reroll') {
+          continue;
+        }
 
         // Calculate tax data for sectors
         const taxData = taxPerSector[building.sector_id];
