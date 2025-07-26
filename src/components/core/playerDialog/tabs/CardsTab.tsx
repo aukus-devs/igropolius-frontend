@@ -12,7 +12,7 @@ function GameCard({ type, inactive }: GameCardProps) {
 
   return (
     <div
-      className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] bg-primary text-primary-foreground rounded-xl data-[inactive=true]:grayscale-100"
+      className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] text-primary-foreground rounded-xl data-[inactive=true]:grayscale-100"
       data-inactive={inactive}
     >
       <Tooltip delayDuration={0}>

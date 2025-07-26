@@ -37,7 +37,7 @@ export default function MyCards() {
   return (
     <>
       {usedCard && <BonusCardUsedConfirmation card={usedCard} onClose={handleDialogClose} />}
-      <Card className="p-2 gap-2" style={{ width: '300px' }}>
+      <Card className="p-2 gap-2 w-fit">
         <span>Мои карточки</span>
         <div className="flex flex-wrap gap-2 ">
           {cards.map((card, idx) => {

@@ -924,24 +924,24 @@ export const frontendCardsData: Record<MainBonusCardType, FrontendCardData> = {
   },
   'choose-1-die': {
     name: 'Только 1 кубик',
-    picture: 'https://placehold.co/744x1039/0A84FF/0A84FF',
+    picture: `${import.meta.env.BASE_URL}assets/cards/choose-1-die.png`,
     description:
       'Возможность выбрать только один кубик из трех и сходить на данное значение - после ролла кубикова, но перед началом движения выбрать один кубик.',
   },
   'reroll-game': {
     name: 'Чето пока нехочу)))',
-    picture: 'https://placehold.co/744x1039/FF375F/FF375F',
+    picture: `${import.meta.env.BASE_URL}assets/cards/reroll-game.png`,
     description: 'Реролл игры из стима - используется после ролла игры, но до ее запуска.',
   },
   'skip-prison-day': {
     name: 'Хорошее поведение',
-    picture: 'https://placehold.co/744x1039/BF5AF2/BF5AF2',
+    picture: `${import.meta.env.BASE_URL}assets/cards/skip-prison-day.png`,
     description:
       "Минус день тюрьмы - можно использовать на клетке 'тюрьма' и 'посещение тюрьмы', как до, так и после ролла игры для того, чтобы покинуть тюрьму.",
   },
   'evade-street-tax': {
     name: 'Сквотируемся',
-    picture: 'https://placehold.co/744x1039/30D158/30D158',
+    picture: `${import.meta.env.BASE_URL}assets/cards/evade-street-tax.png`,
     description:
       "Нет 'арендной платы' на улице - Перед попаданием на клетку с чужими постройками, можно активировать карточку и не платить арендную плату.",
   },
@@ -953,7 +953,7 @@ export const frontendCardsData: Record<MainBonusCardType, FrontendCardData> = {
   },
   'game-help-allowed': {
     name: 'Лицензия на свинство',
-    picture: 'https://placehold.co/744x1039/FF9F0A/FF9F0A',
+    picture: `${import.meta.env.BASE_URL}assets/cards/game-help-allowed.png`,
     description:
       'Во время прохождения игры игроку разрешается просматривать спидраны, видеопрохождения и подсказки чата.',
   },
