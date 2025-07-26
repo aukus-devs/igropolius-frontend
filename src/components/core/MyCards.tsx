@@ -51,22 +51,29 @@ export default function MyCards() {
                   <img src={cardData.picture} />
                 </TooltipTrigger>
                 <TooltipContent
-                  className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3"
+                  className="bg-card/70 backdrop-blur-[1.5rem] p-3"
                   side="bottom"
                   align="start"
                   sideOffset={8}
                 >
-                  <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
-                  <div className="text-base font-semibold text-muted-foreground">
-                    {cardData.description}
-                  </div>
-                  {canBeUsed && (
-                    <div className="mt-2 w-full">
-                      <Button className="w-full" onClick={() => handleUseCard(card.bonus_type)}>
-                        Использовать
-                      </Button>
+                  <div className="flex gap-4">
+                    <div className="w-[200px]">
+                      <img src={cardData.picture} className="rounded-sm" />
                     </div>
-                  )}
+                    <div className="w-[200px]">
+                      <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
+                      <div className="text-base font-semibold text-muted-foreground">
+                        {cardData.description}
+                      </div>
+                      {canBeUsed && (
+                        <div className="mt-2 w-full">
+                          <Button className="w-full" onClick={() => handleUseCard(card.bonus_type)}>
+                            Использовать
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </TooltipContent>
               </Tooltip>
             );
