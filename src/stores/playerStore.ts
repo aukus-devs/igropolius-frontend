@@ -1,5 +1,6 @@
 import {
   GameLengthToBuildingType,
+  IncomeScoreGroupOwnerMultiplier,
   IncomeScoreMultiplier,
   IS_DEV,
   ScoreByGameLength,
@@ -23,7 +24,7 @@ import {
 } from '@/components/map/utils';
 import { playersFrontendData, SectorsById, sectorsData } from '@/lib/mockData';
 import { Euler, Quaternion } from 'three';
-import { getNextTurnState } from '@/lib/utils';
+import { getNextTurnState, getSectorsGroup, playerOwnsSectorsGroup } from '@/lib/utils';
 import {
   giveBonusCard,
   dropBonusCard,
@@ -191,6 +192,26 @@ const usePlayerStore = create<{
           continue;
         }
 
+        // Calculate tax data for sectors
+        const taxData = taxPerSector[building.sector_id];
+        const playerIncomes = taxData.playerIncomes;
+        if (!playerIncomes[player.id]) {
+          playerIncomes[player.id] = 0;
+        }
+
+        let incomeMultiplier = IncomeScoreMultiplier;
+        const sectorGroup = getSectorsGroup(sector.id);
+        let hasGroupBonus = false;
+        if (sectorGroup && playerOwnsSectorsGroup(player.games, sectorGroup)) {
+          // console.log('group owner', { sectorGroup, player });
+          incomeMultiplier = IncomeScoreGroupOwnerMultiplier;
+          hasGroupBonus = true;
+        }
+
+        const income = ScoreByGameLength[building.length] * incomeMultiplier;
+
+        playerIncomes[player.id] += income;
+
         const buildingData = {
           type: GameLengthToBuildingType[building.length],
           owner: player,
@@ -198,25 +219,21 @@ const usePlayerStore = create<{
           createdAt: building.created_at,
           gameLength: building.length,
           gameTitle: building.title,
+          income,
+          hasGroupBonus,
         };
 
         buildings[building.sector_id].push(buildingData);
 
-        if (buildingData.gameLength === 'drop' || player.id === myPlayerId) {
+        if (player.id === myPlayerId) {
           continue;
         }
 
-        // Calculate tax data for sectors
-        const taxData = taxPerSector[buildingData.sectorId];
-        const playerIncomes = taxData.playerIncomes;
-        if (!playerIncomes[player.id]) {
-          playerIncomes[player.id] = 0;
-        }
-        const income = ScoreByGameLength[buildingData.gameLength] * IncomeScoreMultiplier;
-        playerIncomes[player.id] += income;
         taxData.taxAmount += income * TaxScoreMultiplier;
       }
     }
+
+    console.log({ taxPerSector });
 
     // sort all buildings values by createdAt
     for (const building of Object.values(buildings)) {

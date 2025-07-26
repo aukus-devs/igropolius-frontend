@@ -22,7 +22,7 @@ export default function RollWithInstantCards() {
     usePlayerStore(
       useShallow(state => ({
         receiveBonusCard: state.receiveBonusCard,
-        playerCards: state.myPlayer?.bonus_cards ?? [],
+        playerCards: state.myPlayer?.bonus_cards,
         setNextTurnState: state.setNextTurnState,
         hasDowngradeBonus: state.hasDowngradeBonus,
         hasUpgradeBonus: state.hasUpgradeBonus,
@@ -63,7 +63,7 @@ export default function RollWithInstantCards() {
   const options = useMemo(() => {
     const result: WeightedOption<OptionType>[] = [];
 
-    const myCurrentCardsTypes = playerCards.map(card => card.bonus_type);
+    const myCurrentCardsTypes = playerCards ? playerCards.map(card => card.bonus_type) : [];
 
     const allCardTypes = Object.keys(frontendCardsData) as MainBonusCardType[];
     const cardTypesForRoll = allCardTypes.filter(

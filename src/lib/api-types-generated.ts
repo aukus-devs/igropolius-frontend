@@ -233,6 +233,7 @@ export type IsActive = boolean;
 export type SectorId5 = number;
 export type TotalScore = number;
 export type MapsCompleted = number;
+export type Id4 = number;
 export type CreatedAt1 = number;
 export type SectorId6 = number;
 export type Title = string;
@@ -621,6 +622,7 @@ export interface PlayerDetails {
  * via the `definition` "PlayerGame".
  */
 export interface PlayerGame {
+  id: Id4;
   created_at: CreatedAt1;
   status: GameCompletionType;
   sector_id: SectorId6;

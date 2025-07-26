@@ -105,6 +105,8 @@ export type BuildingData = {
   createdAt: number;
   gameLength: GameLength | 'drop';
   gameTitle: string;
+  income: number;
+  hasGroupBonus: boolean;
 };
 
 export type TrainData = {

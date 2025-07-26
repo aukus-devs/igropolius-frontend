@@ -80,6 +80,7 @@ export const ScoreByGameLength: { [key in GameLength]: number } = {
 };
 
 export const IncomeScoreMultiplier = 0.4;
+export const IncomeScoreGroupOwnerMultiplier = 0.8;
 export const TaxScoreMultiplier = 0.5;
 export const MapTaxPercent = 0.05; // 5%
 
@@ -120,3 +121,14 @@ export const PlayerModelsScales: Record<string, number> = {
 };
 
 export const EMOTES_SEARCH_API_URL = 'https://api4.rhhhhhhh.live/search_emotes';
+
+export const SECTORS_COLOR_GROUPS = [
+  [2, 4, 5],
+  [7, 9, 10],
+  [12, 14, 15],
+  [17, 19, 20],
+  [22, 24, 25],
+  [27, 28, 30],
+  [32, 33, 35],
+  [37, 38, 40],
+];

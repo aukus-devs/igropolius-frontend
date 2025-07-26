@@ -10,7 +10,12 @@ import {
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { frontendCardsData, SectorsById } from './mockData';
-import { FALLBACK_GAME_POSTER, ScoreByGameLength, SectorScoreMultiplier } from './constants';
+import {
+  FALLBACK_GAME_POSTER,
+  ScoreByGameLength,
+  SECTORS_COLOR_GROUPS,
+  SectorScoreMultiplier,
+} from './constants';
 import usePlayerStore from '@/stores/playerStore';
 import {
   BonusCardEvent,
@@ -19,6 +24,7 @@ import {
   GameEvent,
   MainBonusCardType,
   MoveEvent,
+  PlayerDetails,
   PlayerTurnState,
   ScoreChangeEvent,
 } from './api-types-generated';
@@ -455,4 +461,24 @@ export function getGameLengthFullText(gameLengthRanges: GameLengthRange | undefi
     return `до ${gameLengthRanges.max} часов`;
   }
   return 'без ограничений';
+}
+
+export function playerOwnsSectorsGroup(games: PlayerDetails['games'], group: number[]) {
+  const ownedSectors = new Set();
+  for (const sectorId of group) {
+    const game = games.find(game => game.sector_id === sectorId && game.status === 'completed');
+    if (game) {
+      ownedSectors.add(sectorId);
+    }
+  }
+  return ownedSectors.size === group.length;
+}
+
+export function getSectorsGroup(sectorId: number): number[] | null {
+  for (const group of SECTORS_COLOR_GROUPS) {
+    if (group.includes(sectorId)) {
+      return group;
+    }
+  }
+  return null;
 }

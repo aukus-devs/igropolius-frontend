@@ -377,6 +377,7 @@ export const playersData: PlayerDetails[] = [
 
     games: [
       {
+        id: 1,
         sector_id: 38,
         created_at: Math.ceil(Date.now() / 1000),
         length: '2-5',
@@ -389,6 +390,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 2,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '25+',
@@ -401,6 +403,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 3,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '20-25',
@@ -413,6 +416,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 4,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -425,6 +429,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 5,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '10-15',
@@ -437,6 +442,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 6,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '5-10',
@@ -449,6 +455,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 7,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '2-5',
@@ -461,6 +468,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 8,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: 'drop',
@@ -505,6 +513,7 @@ export const playersData: PlayerDetails[] = [
     total_score: 5000,
     games: [
       {
+        id: 9,
         sector_id: 24,
         created_at: Math.ceil(Date.now() / 1000),
         length: '25+',
@@ -517,6 +526,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 10,
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -529,6 +539,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 11,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '25+',
@@ -541,6 +552,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 12,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '20-25',
@@ -553,6 +565,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 13,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -566,6 +579,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 14,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '10-15',
@@ -578,6 +592,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 15,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '5-10',
@@ -590,6 +605,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 16,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '2-5',
@@ -602,6 +618,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 17,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: 'drop',
@@ -651,6 +668,7 @@ export const playersData: PlayerDetails[] = [
 
     games: [
       {
+        id: 18,
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
         length: '5-10',
@@ -663,6 +681,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
       {
+        id: 19,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '10-15',
@@ -706,6 +725,7 @@ export const playersData: PlayerDetails[] = [
 
     games: [
       {
+        id: 20,
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
         length: 'drop',
@@ -748,6 +768,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     games: [
       {
+        id: 21,
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
         length: '2-5',
@@ -797,6 +818,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     games: [
       {
+        id: 22,
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -845,6 +867,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     games: [
       {
+        id: 23,
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -893,6 +916,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     games: [
       {
+        id: 24,
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
         length: '5-10',
