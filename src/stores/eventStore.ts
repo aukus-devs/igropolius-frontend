@@ -3,7 +3,7 @@ import { create } from 'zustand';
 
 type MainNotification = {
   text: string;
-  tag: 'event-start-timer' | 'event-ended';
+  tag: 'event-start-timer' | 'event-ended' | 'event-settings-error';
   variant: 'info' | 'error';
 };
 

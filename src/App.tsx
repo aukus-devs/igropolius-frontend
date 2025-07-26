@@ -112,7 +112,7 @@ function App() {
     if (eventSettingsError) {
       setMainNotification({
         text: 'Ошибка загрузки настроек ивента, проверьте записи event_end_time и event_start_time в БД',
-        tag: 'event-ended',
+        tag: 'event-settings-error',
         variant: 'error',
       });
     }
