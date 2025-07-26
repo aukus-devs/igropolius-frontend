@@ -139,7 +139,8 @@ export type PlayerTurnState =
   | "dropping-card-after-game-drop"
   | "dropping-card-after-instant-roll"
   | "entering-prison"
-  | "stealing-bonus-card";
+  | "stealing-bonus-card"
+  | "choosing-building-sector";
 export type MapsCompleted = number;
 export type LastRollResult = number[];
 export type HasUpgradeBonus = boolean;
@@ -200,6 +201,7 @@ export type AdjustedRoll = number;
 export type DiceRoll = number[];
 export type MapCompleted = boolean;
 export type BonusesUsed = MainBonusCardType[];
+export type NewSectorId = number;
 export type Content = string;
 export type Id2 = number;
 export type NotificationType1 = string;
@@ -274,8 +276,6 @@ export type ScoreAfter = number;
 export type IncomeFromPlayer = number | null;
 export type Events = (GameEvent | BonusCardEvent | ScoreChangeEvent | MoveEvent)[];
 export type Players = PlayerDetails[];
-export type EventEndTime4 = number | null;
-export type EventStartTime = number | null;
 export type SelectedDie = number | null;
 export type AdjustBy1 = number | null;
 export type RideTrain = boolean;
@@ -296,10 +296,9 @@ export type Rating1 = number;
 export type VodLinks2 = string | null;
 export type Scores3 = number;
 export type GameId = number | null;
-export type TargetSector = number | null;
-export type NewSectorId = number;
-export type EventStartTime1 = number | null;
-export type EventEndTime5 = number | null;
+export type NewSectorId1 = number;
+export type EventStartTime = number | null;
+export type EventEndTime4 = number | null;
 export type PlayerId2 = number;
 export type Success1 = boolean;
 /**
@@ -451,6 +450,16 @@ export interface EditPlayerGame {
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "EventSettingsResponse".
+ */
+export interface EventSettingsResponse {
+  settings?: Settings;
+}
+export interface Settings {
+  [k: string]: string | null;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "GameEvent".
  */
 export interface GameEvent {
@@ -539,6 +548,13 @@ export interface MoveEvent {
   dice_roll_json: DiceRollDetails | null;
   map_completed: MapCompleted;
   bonuses_used: BonusesUsed;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "MovePlayerGameRequest".
+ */
+export interface MovePlayerGameRequest {
+  new_sector_id: NewSectorId;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -663,8 +679,6 @@ export interface ScoreChangeEvent {
  */
 export interface PlayerListResponse {
   players: Players;
-  event_end_time?: EventEndTime4;
-  event_start_time?: EventStartTime;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -724,22 +738,21 @@ export interface SavePlayerGameRequest {
   vod_links?: VodLinks2;
   scores: Scores3;
   game_id?: GameId;
-  target_sector?: TargetSector;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "SavePlayerGameResponse".
  */
 export interface SavePlayerGameResponse {
-  new_sector_id: NewSectorId;
+  new_sector_id: NewSectorId1;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "SetEventEndTimeRequest".
  */
 export interface SetEventEndTimeRequest {
-  event_start_time?: EventStartTime1;
-  event_end_time?: EventEndTime5;
+  event_start_time?: EventStartTime;
+  event_end_time?: EventEndTime4;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

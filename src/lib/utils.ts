@@ -212,6 +212,7 @@ export function getNextTurnState({
     'dropping-card-after-game-drop',
     'dropping-card-after-instant-roll',
     'stealing-bonus-card',
+    'choosing-building-sector',
   ];
 
   let maxIterations = 10;
@@ -317,7 +318,7 @@ function getNextState({
         case 'prison':
           return 'rolling-dice';
         case 'start-corner':
-          return 'rolling-dice';
+          return 'choosing-building-sector';
         default: {
           const sectorType: never = sector.type;
           throw new Error(`Unsupported sector type: ${sectorType}`);
@@ -333,6 +334,8 @@ function getNextState({
       return 'rolling-dice';
     case 'dropping-card-after-instant-roll':
       return 'filling-game-review';
+    case 'choosing-building-sector':
+      return 'rolling-dice';
     default: {
       const state: never = currentState;
       throw new Error(`Unsupported turn state: ${state}`);

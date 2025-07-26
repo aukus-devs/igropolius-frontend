@@ -4,6 +4,7 @@ import useAdminStore from '@/stores/adminStore';
 import {
   CurrentUserResponse,
   DropBonusCardRequest,
+  EventSettingsResponse,
   GiveBonusCardRequest,
   GiveBonusCardResponse,
   IgdbGamesListResponse,
@@ -11,6 +12,7 @@ import {
   LoginRequest,
   LoginResponse,
   MarkNotificationsSeenRequest,
+  MovePlayerGameRequest,
   NewRulesVersionRequest,
   NotificationsResponse,
   PayTaxRequest,
@@ -27,7 +29,6 @@ import {
   UseInstantCardRequest,
   UseInstantCardResponse,
 } from './api-types-generated';
-import { EventSettings } from '@/stores/eventStore';
 
 const MOCK_API = NO_MOCKS ? false : IS_DEV;
 
@@ -590,13 +591,13 @@ export async function fetchFrontVersion(): Promise<{ version: string }> {
   return response.json();
 }
 
-export async function fetchEventSettings(): Promise<{ settings: EventSettings }> {
+export async function fetchEventSettings(): Promise<EventSettingsResponse> {
   if (MOCK_API) {
     return Promise.resolve({
       settings: {
-        event_start_time: "1753092244",
-        event_end_time: "1754013556",
-      }
+        event_start_time: '1753092244',
+        event_end_time: '1754013556',
+      },
     });
   }
   const response = await apiRequest('/api/event-settings');
@@ -612,11 +613,19 @@ export async function searchEmotes(query: string): Promise<EmoteSearchResponse> 
     return { emotes: [] };
   }
 
-  const response = await fetch(
-    `${EMOTES_SEARCH_API_URL}/${encodeURIComponent(query)}`
-  );
+  const response = await fetch(`${EMOTES_SEARCH_API_URL}/${encodeURIComponent(query)}`);
   if (!response.ok) {
     throw new Error('Failed to search emotes');
   }
   return response.json();
+}
+
+export async function movePlayerGame(request: MovePlayerGameRequest): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest(`/api/player-games/move`, {
+    method: 'POST',
+    body: JSON.stringify(request),
+  });
 }

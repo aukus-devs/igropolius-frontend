@@ -6,9 +6,10 @@ import { SectorData } from '@/lib/types';
 import { getGameLengthFullText } from '@/lib/utils';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import usePlayerStore from '@/stores/playerStore';
-import useReviewFormStore from '@/stores/reviewFormStore';
 import { useShallow } from 'zustand/shallow';
 import { canBuildOnSector } from '../utils';
+import { useMutation } from '@tanstack/react-query';
+import { movePlayerGame } from '@/lib/api';
 
 type Props = {
   sector: SectorData;
@@ -31,20 +32,19 @@ function SectorInfo({ sector }: Props) {
   const showPrisonCards = sector.type === 'prison';
   const prisonCardsList = prisonCards ?? [];
 
-  const { openReviewForm, setTargetSectorId } = useReviewFormStore(
-    useShallow(state => ({
-      openReviewForm: state.setOpen,
-      setTargetSectorId: state.setTargetSectorId,
-    }))
-  );
-
   const canBuild = canSelectBuildingSector() && canBuildOnSector(sector.type);
 
-  const build = () => {
+  const { mutateAsync: moveGame, isPending: isBuilding } = useMutation({
+    mutationFn: movePlayerGame,
+  });
+
+  const build = async () => {
+    await moveGame({
+      new_sector_id: id,
+    });
+    await usePlayerStore.getState().setNextTurnState({});
     unpin();
     dismiss();
-    setTargetSectorId(id);
-    openReviewForm(true);
   };
 
   return (
@@ -87,7 +87,11 @@ function SectorInfo({ sector }: Props) {
         </div>
 
         {canBuild && (
-          <Button className="bg-green-500 w-full mt-4 hover:bg-green-600" onClick={build}>
+          <Button
+            className="bg-green-500 w-full mt-4 hover:bg-green-600"
+            onClick={build}
+            loading={isBuilding}
+          >
             Построить
           </Button>
         )}

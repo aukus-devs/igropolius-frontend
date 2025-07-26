@@ -27,7 +27,6 @@ export default function PlayerTurnUI() {
     hasCardsToSteal,
     prisonHasNoCards,
     myPlayerHasNoCards,
-    canSelectBuildingSector,
     myPlayerSectorId,
   } = usePlayerStore(
     useShallow(state => {
@@ -119,21 +118,6 @@ export default function PlayerTurnUI() {
     case 'rolling-dice':
       return <DiceRollButton />;
     case 'filling-game-review':
-      if (canSelectBuildingSector()) {
-        return (
-          <div className="flex gap-4">
-            <GameReviewForm />
-            <RollWithInstantCards />
-            <Card className="p-4">
-              <span>Выбери сектор для строительства</span>
-            </Card>
-            {showPointAUCButton && <PointAUCButton />}
-            {currentSector?.gameLengthRanges && (
-              <GameGauntletsButton gameLengthRanges={currentSector?.gameLengthRanges} />
-            )}
-          </div>
-        );
-      }
       return (
         <div className="flex gap-4">
           <RollWithInstantCards />
@@ -178,6 +162,12 @@ export default function PlayerTurnUI() {
         return <NoCardsForInstantDropDialog />;
       }
       return <LoseCardOnDropDialog />;
+    case 'choosing-building-sector':
+      return (
+        <Card className="p-4">
+          <span>Выбери сектор для строительства</span>
+        </Card>
+      );
     default: {
       const error: never = turnState;
       throw new Error(`Unknown turn state: ${error}`);

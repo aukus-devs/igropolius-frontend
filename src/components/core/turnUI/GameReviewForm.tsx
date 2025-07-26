@@ -14,7 +14,7 @@ import { queryKeys } from '@/lib/queryClient';
 import { ArrowRight, X } from '../../icons';
 import { searchGames } from '@/lib/api';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { calculateGameCompletionScore } from '@/lib/utils';
@@ -468,7 +468,6 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     isSubmitting,
     selectedGame,
     gameLength,
-    targetSectorId,
   } = useReviewFormStore(
     useShallow(state => ({
       open: state.open,
@@ -482,9 +481,12 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
       isSubmitting: state.isSubmitting,
       selectedGame: state.selectedGame,
       gameLength: state.gameTime,
-      targetSectorId: state.targetSectorId,
     }))
   );
+
+  const { mutateAsync: doSendReview, isPending: isLoading } = useMutation({
+    mutationFn: sendReview,
+  });
 
   const scores =
     myPlayer && gameStatus
@@ -506,9 +508,6 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
   switch (gameStatus) {
     case 'completed':
       buttonText = `Построить и получить ${scores.total} очков`;
-      if (targetSectorId) {
-        buttonText = `Построить на секторе #${targetSectorId} и получить ${scores.total} очков`;
-      }
       buttonColor = 'bg-green-800';
       break;
     case 'drop':
@@ -548,7 +547,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     clearError();
 
     try {
-      await sendReview(scores.total);
+      await doSendReview(scores.total);
     } catch (error) {
       console.error('Failed to submit review:', error);
       return;
@@ -616,6 +615,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
                 onClick={onConfirm}
                 onMouseEnter={() => setShowScoreDetails(true)}
                 onMouseLeave={() => setShowScoreDetails(false)}
+                loading={isLoading}
               >
                 {isSubmitting ? 'Отправка...' : buttonText}
               </Button>

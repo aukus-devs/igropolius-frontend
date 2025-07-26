@@ -1,9 +1,5 @@
+import { Settings as EventSettings } from '@/lib/api-types-generated';
 import { create } from 'zustand';
-
-export interface EventSettings {
-  event_start_time: string;
-  event_end_time: string;
-}
 
 type MainNotification = {
   text: string;
@@ -29,8 +25,10 @@ const useEventStore = create<EventStore>(set => ({
   },
 
   setEventSettings: (settings: EventSettings) => {
-    const eventStartTime = parseInt(settings.event_start_time) || null;
-    const eventEndTime = parseInt(settings.event_end_time) || null;
+    const eventStartTime = settings.event_start_time
+      ? parseInt(settings.event_start_time) || null
+      : null;
+    const eventEndTime = settings.event_end_time ? parseInt(settings.event_end_time) || null : null;
 
     set({
       eventStartTime,

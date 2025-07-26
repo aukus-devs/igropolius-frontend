@@ -436,7 +436,7 @@ const usePlayerStore = create<{
 
   canSelectBuildingSector: () => {
     const { turnState, myPlayer } = get();
-    return turnState === 'filling-game-review' && myPlayer?.sector_id === 1;
+    return turnState === 'choosing-building-sector' && myPlayer?.sector_id === 1;
   },
 }));
 
