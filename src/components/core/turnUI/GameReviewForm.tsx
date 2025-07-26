@@ -586,14 +586,16 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
           </div>
 
           <div className="flex flex-col gap-2 w-full">
-            <div>
-              <GameTitle inputRef={inputRef} open={open} />
+            <div className="flex gap-2 w-full">
+              <div className="flex-1">
+                <GameTitle inputRef={inputRef} open={open} />
+              </div>
+              <HLTBLink />
             </div>
 
             <div className="flex gap-2 w-full">
               <GameStatus />
               <GameTime />
-              <HLTBLink />
             </div>
 
             <div className="font-roboto-wide-semibold">Оценка — {rating}</div>
