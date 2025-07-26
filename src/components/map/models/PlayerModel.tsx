@@ -1,4 +1,4 @@
-import { PLAYER_HEIGHT, PlayerModelsUrls } from '@/lib/constants';
+import { PLAYER_HEIGHT, PlayerModelsScales, PlayerModelsUrls } from '@/lib/constants';
 import useModelsStore from '@/stores/modelsStore';
 import { PlayerData, Vector3Array } from '@/lib/types';
 import { ThreeEvent } from '@react-three/fiber';
@@ -55,6 +55,8 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
     });
   };
 
+  const modelScale = PlayerModelsScales[modelUrl] || 1;
+
   return (
     <group ref={onGroupRender} name={`player_${player.id}`} position={position} rotation={rotation}>
       <Gltf
@@ -64,6 +66,7 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
         castShadow
         receiveShadow
         rotation={[0, Math.PI / 2, 0]}
+        scale={modelScale}
       />
       {!isPlayerMoving && <PlayerInfo player={player} />}
       {isMyPlayer && <MyPlayerComponents />}

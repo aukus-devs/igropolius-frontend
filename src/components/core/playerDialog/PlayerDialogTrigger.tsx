@@ -12,8 +12,6 @@ type Props = {
 };
 
 function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
-  const points = player.total_score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-
   return (
     <div
       className={cn(
@@ -35,7 +33,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
         <div className="flex justify-between text-base leading-[19px]">
           <div className="font-bold">{player.username}</div>
           <div className="flex text-muted-foreground items-center font-semibold group-data-[highlighted=true]:text-primary">
-            {points} <Share />
+            {player.total_score} <Share />
           </div>
         </div>
         <div className="flex text-sm text-muted-foreground  font-semibold group-data-[highlighted=true]:text-primary w-full leading-[17px]">

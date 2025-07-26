@@ -98,14 +98,25 @@ export const FALLBACK_GAME_POSTER =
 export const FALLBACK_AVATAR_URL = 'https://github.com/shadcn.png';
 
 export const PlayerModelsUrls: Record<string, string> = {
-  praden: `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
-  'player-2': `${STORAGE_BASE_URL}/models/players/boats/boat-fishing-small.glb`,
-  'player-3': `${STORAGE_BASE_URL}/models/players/boats/boat-sail-b.glb`,
+  praden: `${STORAGE_BASE_URL}/models/players/cars/van1.glb`,
+  'player-2': `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
+  'player-3': `${STORAGE_BASE_URL}/models/players/cars/delivery-flat2.glb`,
   'player-4': `${STORAGE_BASE_URL}/models/players/boats/boat-speed-d.glb`,
   'player-5': `${STORAGE_BASE_URL}/models/players/boats/boat-tow-a.glb`,
   'player-6': `${STORAGE_BASE_URL}/models/players/trains/train-diesel-a.glb`,
   'player-7': `${STORAGE_BASE_URL}/models/players/trains/train-locomotive-a.glb`,
   'player-8': `${STORAGE_BASE_URL}/models/players/trains/train-tram-modern.glb`,
+};
+
+export const PlayerModelsScales: Record<string, number> = {
+  [`${STORAGE_BASE_URL}/models/players/boats/boat-tow-a.glb`]: 0.5,
+  [`${STORAGE_BASE_URL}/models/players/boats/boat-sail-b.glb`]: 0.7,
+  [`${STORAGE_BASE_URL}/models/players/boats/boat-speed-d.glb`]: 0.7,
+  [`${STORAGE_BASE_URL}/models/players/boats/boat-fishing-small.glb`]: 0.7,
+  [`${STORAGE_BASE_URL}/models/players/trains/train-tram-modern.glb`]: 0.9,
+  [`${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`]: 0.8,
+  [`${STORAGE_BASE_URL}/models/players/cars/delivery-flat2.glb`]: 0.9,
+  [`${STORAGE_BASE_URL}/models/players/cars/van1.glb`]: 0.9,
 };
 
 export const EMOTES_SEARCH_API_URL = 'https://api4.rhhhhhhh.live/search_emotes';
