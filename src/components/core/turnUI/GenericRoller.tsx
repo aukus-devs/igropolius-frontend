@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Card } from '../../ui/card';
 import { useMutation } from '@tanstack/react-query';
 
+const FAST_SPIN_DURATION = 2000;
 const MIN_SPIN_DURATION = 12000; // ms
 const BACKSWING_DURATION = 600; // ms
 const SETTLE_DURATION = 1200; // ms
@@ -117,6 +118,8 @@ export default function GenericRoller<T>({
     secondaryText = getSecondaryText?.(winner);
   }
 
+  const fastRoll = rollOptions.length === 1;
+
   const {
     mutateAsync: handleRollFinish,
     isPending: isLoading,
@@ -158,7 +161,7 @@ export default function GenericRoller<T>({
     const easeSpin = BezierEasing(0.06, 0.65, 0.35, 1);
     const easeSettle = BezierEasing(0.4, 0.76, 0.64, 0.94);
 
-    const spinDuration = MIN_SPIN_DURATION + Math.random() * 2000;
+    const spinDuration = fastRoll ? FAST_SPIN_DURATION : MIN_SPIN_DURATION + Math.random() * 2000;
 
     let startPosition = offsetRef.current;
 

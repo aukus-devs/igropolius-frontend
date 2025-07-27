@@ -12,7 +12,6 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import LoseCardOnDropDialog from './LoseCardDialog';
 import PrisonEnterCardRoll from './PrisonEnterCardRoll';
-import { activateInstantCard, makePlayerMove } from '@/lib/api';
 import RollWithInstantCards from './RollWithInstantCards';
 import { useEffect, useState } from 'react';
 import { SectorsById } from '@/lib/mockData';
@@ -151,16 +150,9 @@ export default function PlayerTurnUI() {
         return <NoCardsForPrisonDialog />;
       }
       return <PrisonEnterCardRoll />;
-
     case 'dropping-card-after-game-drop':
-      if (myPlayerHasNoCards) {
-        return <NoCardsForDropDialog />;
-      }
       return <LoseCardOnDropDialog />;
     case 'dropping-card-after-instant-roll':
-      if (myPlayerHasNoCards) {
-        return <NoCardsForInstantDropDialog />;
-      }
       return <LoseCardOnDropDialog />;
     case 'choosing-building-sector':
       return (
@@ -209,56 +201,6 @@ function NoCardsForPrisonDialog() {
           onClick={() => setNextTurnState({})}
         >
           Продолжить
-        </Button>
-      </div>
-    </Card>
-  );
-}
-
-function NoCardsForDropDialog() {
-  const { setNextTurnState, moveMyPlayerToPrison } = usePlayerStore(
-    useShallow(state => ({
-      setNextTurnState: state.setNextTurnState,
-      moveMyPlayerToPrison: state.moveMyPlayerToPrison,
-    }))
-  );
-  return (
-    <Card className="p-4">
-      <span className="font-wide-semibold">Нет карточек для дропа</span>
-      <div className="flex justify-evenly mt-2 gap-2">
-        <Button
-          variant="outline"
-          className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
-          onClick={async () => {
-            await makePlayerMove({ type: 'drop-to-prison', selected_die: null, adjust_by_1: null });
-            await moveMyPlayerToPrison();
-            await setNextTurnState({});
-          }}
-        >
-          Продолжить
-        </Button>
-      </div>
-    </Card>
-  );
-}
-
-function NoCardsForInstantDropDialog() {
-  const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
-  return (
-    <Card className="p-4">
-      <span className="font-wide-semibold">Нет карточек для дропа</span>
-      <div className="flex justify-evenly mt-2 gap-2">
-        <Button
-          variant="outline"
-          className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
-          onClick={async () => {
-            await activateInstantCard({
-              card_type: 'lose-card-or-3-percent',
-            });
-            await setNextTurnState({});
-          }}
-        >
-          Потерять 3% очков
         </Button>
       </div>
     </Card>
