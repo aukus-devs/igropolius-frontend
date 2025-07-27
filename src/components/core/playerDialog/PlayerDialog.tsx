@@ -64,13 +64,13 @@ function PlayerDialog({ player, placement, isCurrentPlayer, showCards }: Props) 
         {!showCards && (
           <div className="absolute z-10 right-0 top-1/2 -translate-y-1/2 translate-x-0 group-hover/player-dialog:translate-x-[calc(100%+0rem)] h-full opacity-0 group-hover/player-dialog:opacity-100 pl-2 transition-all md:block hidden">
             <Button
-              className="bg-card/70 backdrop-blur-[1.5rem] rounded-xl h-full p-2 hover:bg-accent items-center text-primary"
+              className="bg-card/70 backdrop-blur-[1.5rem] rounded-xl h-full p-2 hover:bg-accent items-center"
               onClick={(e) => (e.stopPropagation(), cameraToPlayer(player.id))}
             >
               <Location className="self-start" style={{ width: "19px", height: "19px" }} />
               <div>
                 <div className="flex items-center gap-1 font-bold">Показать на карте</div>
-                <div className="text-muted-foreground text-sm justify-self-start">
+                <div className="text-muted-foreground text-sm justify-self-start font-semibold">
                   {player.sector_id} клетка
                 </div>
               </div>

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import usePlayerStore from "@/stores/playerStore";
-import AboutDialog from "./options/AboutDialog";
+import DevelopersDialog from "./options/DevelopersDialog";
 import OrthographicToggle from "./options/OrthographicToggle";
 import RulesDialog from "./options/RulesDialog";
 import Countdown from "./options/Countdown";
@@ -12,6 +12,7 @@ import { LogoutButton } from "./options/LogoutButton";
 import { Separator } from "@/components/ui/separator";
 import { Sort } from "@/components/icons";
 import { FALLBACK_AVATAR_URL } from "@/lib/constants";
+import TutorialDialog from "./options/TutorialDialog";
 
 const buttonStyle =
   "justify-start bg-transparent font-semibold text-base w-full rounded-none border-none";
@@ -55,9 +56,10 @@ function QuickMenu() {
         </div>
 
         <div className={groupStyle}>
+          <TutorialDialog className={buttonStyle} />
           <RulesDialog className={buttonStyle} />
           <Separator />
-          <AboutDialog className={buttonStyle} />
+          <DevelopersDialog className={buttonStyle} />
         </div>
 
         <div className={groupStyle}>

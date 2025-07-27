@@ -16,7 +16,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
     <div
       className={cn(
         buttonVariants({ variant: 'outline' }),
-        `group relative z-20 flex items-start flex-row gap-2 rounded-xl md:p-2 p-2.5 w-full h-auto select-none cursor-pointer text-base text-foreground font-semibold backdrop-blur-[1.5rem] bg-card/70 border-none data-[highlighted=true]:bg-[oklch(0.38_0.02_135.11/0.7)]`
+        `group relative z-20 flex items-start flex-row gap-2 rounded-xl md:p-2 p-2.5 w-full h-auto select-none cursor-pointer text-base text-foreground font-semibold backdrop-blur-[1.5rem] bg-card/70 border-none`
       )}
       data-highlighted={isCurrentPlayer}
     >
@@ -32,11 +32,11 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
       <div className="flex flex-col w-full md:gap-[3px] gap-[5px]">
         <div className="flex justify-between text-base leading-[19px]">
           <div className="font-bold">{player.username}</div>
-          <div className="flex text-muted-foreground items-center font-semibold group-data-[highlighted=true]:text-primary">
+          <div className="flex text-muted-foreground items-center font-semibold group-data-[highlighted=true]:text-foreground">
             {player.total_score} <Share />
           </div>
         </div>
-        <div className="flex text-sm text-muted-foreground  font-semibold group-data-[highlighted=true]:text-primary w-full leading-[17px]">
+        <div className="flex text-sm text-muted-foreground  font-semibold w-full leading-[17px]">
           <span className="w-full text-start whitespace-break-spaces">
             {player.current_game || 'Выбирает игру...'}
           </span>

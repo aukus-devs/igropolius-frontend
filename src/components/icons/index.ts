@@ -25,3 +25,4 @@ export { default as Donationalerts } from "./Donationalerts";
 export { default as Telegram } from "./Telegram";
 export { default as Twitch } from "./Twitch";
 export { default as VkVideoLive } from "./VkVideoLive";
+export { default as Smile } from "./Smile";

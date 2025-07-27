@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
-import { Button } from '../../ui/button';
+import { Button, buttonVariants } from '../../ui/button';
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
@@ -10,7 +10,7 @@ import Rating from '../Rating';
 import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
-import { ArrowRight, X } from '../../icons';
+import { ArrowRight, Smile, X } from '../../icons';
 import { searchGames } from '@/lib/api';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -20,6 +20,8 @@ import { calculateGameCompletionScore } from '@/lib/utils';
 import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
+import { VariantProps } from 'class-variance-authority';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 type StatesOption = {
   title: string;
@@ -162,7 +164,7 @@ function GameReview() {
   };
 
   return (
-    <div>
+    <div className="relative">
       <div className="relative">
         {showPreview ? (
           <div className="min-h-24 p-3 bg-white/10 rounded-md border border-white/20 text-white">
@@ -181,116 +183,53 @@ function GameReview() {
       </div>
 
       <div className="flex justify-end mt-2">
-        <div className="flex gap-1">
-          {!showPreview && (
-            <Popover open={showEmotePanel} onOpenChange={setShowEmotePanel}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <PopoverTrigger asChild>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="w-6 h-6 p-0 hover:bg-white/20 z-10"
-                    >
-                      <svg
-                        width="15"
-                        height="15"
-                        viewBox="0 0 22 22"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="text-white/70 hover:text-white"
-                      >
-                        <path
-                          d="M14.8395 1.8335H7.15786C3.8212 1.8335 1.83203 3.82266 1.83203 7.15933V14.8318C1.83203 18.1777 3.8212 20.1668 7.15786 20.1668H14.8304C18.167 20.1668 20.1562 18.1777 20.1562 14.841V7.15933C20.1654 3.82266 18.1762 1.8335 14.8395 1.8335ZM5.92953 7.07683C6.19536 6.811 6.63536 6.811 6.9012 7.07683C7.55203 7.72766 8.61536 7.72766 9.2662 7.07683C9.53203 6.811 9.97203 6.811 10.2379 7.07683C10.5037 7.34266 10.5037 7.78266 10.2379 8.0485C9.64203 8.64433 8.86286 8.93766 8.0837 8.93766C7.30453 8.93766 6.52536 8.64433 5.92953 8.0485C5.6637 7.7735 5.6637 7.34266 5.92953 7.07683ZM10.9987 17.2152C8.53286 17.2152 6.52536 15.2077 6.52536 12.7418C6.52536 12.1002 7.04787 11.5685 7.68953 11.5685H14.2895C14.9312 11.5685 15.4537 12.091 15.4537 12.7418C15.472 15.2077 13.4645 17.2152 10.9987 17.2152ZM16.0679 8.0485C15.472 8.64433 14.6929 8.93766 13.9137 8.93766C13.1345 8.93766 12.3554 8.64433 11.7595 8.0485C11.4937 7.78266 11.4937 7.34266 11.7595 7.07683C12.0254 6.811 12.4654 6.811 12.7312 7.07683C13.382 7.72766 14.4654 7.72766 15.0962 7.07683C15.362 6.811 15.802 6.811 16.0679 7.07683C16.3337 7.34266 16.3337 7.7735 16.0679 8.0485Z"
-                          fill="#F2F2F2"
-                        />
-                      </svg>
-                    </Button>
-                  </PopoverTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Смайлы 7TV</p>
-                </TooltipContent>
-              </Tooltip>
-              <PopoverContent
-                className="w-auto p-0 border-none bg-transparent shadow-none"
-                align="end"
-                sideOffset={5}
-              >
-                <EmotePanel onEmoteSelect={handleEmoteSelect} />
-              </PopoverContent>
-            </Popover>
-          )}
-
-          {!showPreview && (
-            <Tooltip>
+        {!showPreview && (
+          <Popover open={showEmotePanel} onOpenChange={setShowEmotePanel}>
+            <Tooltip disableHoverableContent>
               <TooltipTrigger asChild>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="w-6 h-6 p-0 hover:bg-white/20 z-10"
-                  onClick={handleSpoilerTag}
-                >
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="text-white/70 hover:text-white"
-                  >
-                    <path
-                      d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5S21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12S9.24 7 12 7S17 9.24 17 12S14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12S10.34 15 12 15S15 13.66 15 12S13.66 9 12 9Z"
-                      fill="#F2F2F2"
-                    />
-                    <line
-                      x1="4.93"
-                      y1="4.93"
-                      x2="19.07"
-                      y2="19.07"
-                      stroke="#F2F2F2"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                </Button>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Smile className="size-[22px]" />
+                  </Button>
+                </PopoverTrigger>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Спойлер</p>
+                <p>Смайлы 7TV</p>
               </TooltipContent>
             </Tooltip>
-          )}
+            <PopoverContent
+              className="w-auto p-0 border-none bg-transparent shadow-none"
+              align="end"
+              sideOffset={5}
+            >
+              <EmotePanel onEmoteSelect={handleEmoteSelect} />
+            </PopoverContent>
+          </Popover>
+        )}
 
-          <Tooltip>
+        {!showPreview && (
+          <Tooltip disableHoverableContent>
             <TooltipTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="w-6 h-6 p-0 hover:bg-white/20 z-10"
-                onClick={() => setShowPreview(!showPreview)}
-              >
-                <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="text-white/70 hover:text-white"
-                >
-                  <path
-                    d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5S21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12S9.24 7 12 7S17 9.24 17 12S14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12S10.34 15 12 15S15 13.66 15 12S13.66 9 12 9Z"
-                    fill="#F2F2F2"
-                  />
-                </svg>
+              <Button variant="ghost" size="icon" onClick={handleSpoilerTag}>
+                <EyeOffIcon className="size-[22px]" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Превью</p>
+              <p>Спойлер</p>
             </TooltipContent>
           </Tooltip>
-        </div>
+        )}
+
+        <Tooltip disableHoverableContent>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon" onClick={() => setShowPreview(!showPreview)}>
+              <EyeIcon className="size-[22px]" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Превью</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );
@@ -453,7 +392,6 @@ function HLTBLink() {
 }
 
 function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
-  const [showScoreDetails, setShowScoreDetails] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { setNextTurnState, myPlayer } = usePlayerStore(
@@ -510,20 +448,20 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
           mapCompletionBonus: 0,
         };
 
+  const buttonVariant: VariantProps<typeof buttonVariants> = {variant: 'default'};
   let buttonText = 'Заполни форму';
-  let buttonColor = 'bg-primary';
   switch (gameStatus) {
     case 'completed':
       buttonText = `Построить и получить ${scores.total} очков`;
-      buttonColor = 'bg-green-800';
+      buttonVariant.variant = 'success'
       break;
     case 'drop':
       buttonText = 'Дропнуть игру и отправиться в тюрьму';
-      buttonColor = 'bg-red-800';
+      buttonVariant.variant = 'error'
       break;
     case 'reroll':
       buttonText = 'Рерольнуть';
-      buttonColor = 'bg-yellow-800';
+      buttonVariant.variant = 'warning'
       break;
   }
 
@@ -613,27 +551,25 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
         <div className="flex items-center gap-3">
           {error && <span className="text-sm text-destructive font-medium">{error}</span>}
 
-          <Popover open={showScoreDetails} onOpenChange={setShowScoreDetails}>
-            <PopoverTrigger asChild>
+          <Tooltip disableHoverableContent>
+            <TooltipTrigger asChild>
               <Button
-                size="sm"
-                className={`ml-auto ${buttonColor}`}
+                variant={buttonVariant.variant}
+                className="ml-auto"
                 disabled={isSendButtonDisabled || isSubmitting}
                 onClick={onConfirm}
-                onMouseEnter={() => setShowScoreDetails(true)}
-                onMouseLeave={() => setShowScoreDetails(false)}
                 loading={isLoading}
               >
                 {isSubmitting ? 'Отправка...' : buttonText}
               </Button>
-            </PopoverTrigger>
+            </TooltipTrigger>
             {gameStatus === 'completed' && (
-              <PopoverContent>
+              <TooltipContent sideOffset={8}>
                 Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга (
                 {scores.mapCompletionBonus})
-              </PopoverContent>
+              </TooltipContent>
             )}
-          </Popover>
+          </Tooltip>
         </div>
       </DialogContent>
     </Dialog>
