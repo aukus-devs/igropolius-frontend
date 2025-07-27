@@ -5,6 +5,7 @@ import { Railroad } from './Railroad';
 import { STORAGE_BASE_URL } from '@/lib/constants';
 import CenterCompModel from './models/CenterCompModel';
 import { useControls } from 'leva';
+import TestSectors from './models/TestSectors';
 
 function Scene() {
   const { lightIntensity, bgIntensity, bgBlurriness } = useControls({
@@ -32,6 +33,7 @@ function Scene() {
     <>
       <CustomCameraControls />
 
+      <TestSectors />
       <GameBoard />
       <Railroad />
       <CenterCompModel />
