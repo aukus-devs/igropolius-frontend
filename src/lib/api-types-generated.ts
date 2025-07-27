@@ -270,6 +270,7 @@ export type SectorId7 = number;
 export type ScoreBefore = number;
 export type ScoreAfter = number;
 export type IncomeFromPlayer = number | null;
+export type BonusCardOwner = number | null;
 export type Events = (GameEvent | BonusCardEvent | ScoreChangeEvent | MoveEvent)[];
 export type Players = PlayerDetails[];
 export type SelectedDie = number | null;
@@ -663,6 +664,8 @@ export interface ScoreChangeEvent {
   score_before: ScoreBefore;
   score_after: ScoreAfter;
   income_from_player?: IncomeFromPlayer;
+  bonus_card?: BonusCardType | null;
+  bonus_card_owner?: BonusCardOwner;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

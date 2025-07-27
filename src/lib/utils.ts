@@ -7,7 +7,7 @@ import {
 } from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { frontendCardsData, SectorsById } from './mockData';
+import { frontendCardsData, frontendInstantCardsData, SectorsById } from './mockData';
 import {
   FALLBACK_GAME_POSTER,
   ScoreByGameLength,
@@ -22,6 +22,7 @@ import {
   GameCompletionType,
   GameEvent,
   GameLength,
+  InstantCardType,
   MainBonusCardType,
   MoveEvent,
   PlayerDetails,
@@ -117,9 +118,23 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent) {
       title = `Получил доход с сектора ${event.sector_id} от ${incomePlayer?.username}`;
       break;
     }
-    case 'instant-card':
-      title = `Получено от инстантной карточки`;
+    case 'instant-card': {
+      const showCardOwner = usePlayerStore.getState().myPlayerId !== event.bonus_card_owner;
+      const owner = usePlayerStore.getState().players.find(p => p.id === event.bonus_card_owner);
+
+      if (event.bonus_card && event.bonus_card in frontendInstantCardsData) {
+        const card = frontendInstantCardsData[event.bonus_card as InstantCardType];
+        title = `Получено от инстантной карточки: ${card.name}`;
+      } else {
+        title = `Получено от инстантной карточки: ${event.bonus_card}`;
+      }
+
+      if (showCardOwner) {
+        title += ` (использовал ${owner?.username})`;
+      }
+
       break;
+    }
     default: {
       const subtype: never = event.subtype;
       throw new Error(`Unsupported score change event subtype: ${subtype}`);
