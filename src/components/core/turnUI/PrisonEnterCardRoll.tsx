@@ -70,12 +70,7 @@ export default function PrisonEnterCardRoll() {
       return;
     }
     if (option.value.action === 'receive-card') {
-      await receiveBonusCard(option.value.card);
-      addCardToState({
-        bonus_type: option.value.card,
-        received_at: Date.now(),
-        received_on_sector: currentSector ?? 0,
-      });
+      await receiveBonusCard(option.value.card, false);
       return;
     }
   };
@@ -95,8 +90,12 @@ export default function PrisonEnterCardRoll() {
     };
 
     if (prisonCards.length > 0) {
-      const prisonCardWeight = 25 / prisonCards.length;
-      prisonCards.forEach(card => {
+      const newPrisonCards = prisonCards.filter(
+        card => !playerCards.some(playerCard => playerCard.bonus_type === card.bonus_type)
+      );
+
+      const prisonCardWeight = 25 / newPrisonCards.length;
+      newPrisonCards.forEach(card => {
         result.push({
           value: {
             action: 'receive-card',
