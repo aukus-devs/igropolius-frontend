@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react';
 import { InstanceProps, ThreeEvent } from '@react-three/fiber';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import { Outlines } from '@react-three/drei';
-import { resetPlayersQuery } from '@/lib/queryClient';
 import usePlayerStore from '@/stores/playerStore';
 
 type Props = {
