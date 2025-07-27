@@ -942,7 +942,7 @@ export const playersData: PlayerDetails[] = [
 export const frontendCardsData: Record<MainBonusCardType, FrontendCardData> = {
   'adjust-roll-by1': {
     name: 'Плюс один или минус один',
-    picture: 'https://placehold.co/744x1039/FF453A/FF453A',
+    picture: `${import.meta.env.BASE_URL}assets/cards/adjust-roll-by1.png`,
     description:
       'Возможность добавить/убавить 1 у кубика - после ролла кубиков, но перед началом движения изменить результат кубика.',
   },
@@ -971,7 +971,7 @@ export const frontendCardsData: Record<MainBonusCardType, FrontendCardData> = {
   },
   'evade-map-tax': {
     name: 'Без налога',
-    picture: 'https://placehold.co/744x1039/FFD60A/FFD60A',
+    picture: `${import.meta.env.BASE_URL}assets/cards/evade-map-tax.png`,
     description:
       "Нет 'налога' за круг - при использовании освобождает от арендной платы после прохождения круга.",
   },
