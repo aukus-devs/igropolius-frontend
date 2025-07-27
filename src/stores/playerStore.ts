@@ -56,6 +56,7 @@ const usePlayerStore = create<{
   isPlayerMoving: boolean;
   players: PlayerData[];
   buildingsPerSector: Record<number, BuildingData[]>;
+  newBuildingsIds: number[];
   taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
   prisonCards: ActiveBonusCard[];
@@ -85,6 +86,7 @@ const usePlayerStore = create<{
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
+  newBuildingsIds: [],
   taxPerSector: {},
   turnState: null,
   prisonCards: [],
@@ -181,9 +183,19 @@ const usePlayerStore = create<{
       };
     });
 
-    const { myPlayerId } = get();
+    const { myPlayerId, buildingsPerSector } = get();
     const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
     set({ myPlayer: myPlayerNew });
+
+    const currentBuildingsIds = new Set(
+      Object.values(buildingsPerSector).flatMap(b => b.map(b => b.id))
+    );
+    const allBuildingsIds = playersData
+      .flatMap(player => player.games)
+      .filter(game => game.status !== 'reroll' && game.sector_id !== 1)
+      .map(game => game.id);
+
+    const newBuildingsIds = allBuildingsIds.filter(id => !currentBuildingsIds.has(id));
 
     for (const player of players) {
       for (const building of player.games) {
@@ -216,6 +228,7 @@ const usePlayerStore = create<{
         playerIncomes[player.id] += income;
 
         const buildingData = {
+          id: building.id,
           type: GameLengthToBuildingType[building.length],
           owner: player,
           sectorId: building.sector_id,
@@ -271,6 +284,7 @@ const usePlayerStore = create<{
     set({
       players,
       buildingsPerSector: buildings,
+      newBuildingsIds,
       taxPerSector,
       prisonCards: prisonPlayer?.bonus_cards ?? [],
     });

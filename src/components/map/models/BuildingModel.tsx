@@ -1,11 +1,13 @@
-import { BuildingData, Vector3Array } from "@/lib/types";
-import { eases } from "animejs";
-import { animate } from "animejs";
-import * as THREE from "three";
-import { useEffect, useRef, useState } from "react";
-import { InstanceProps, ThreeEvent } from "@react-three/fiber";
-import useCanvasTooltipStore from "@/stores/canvasTooltipStore";
-import { Outlines } from "@react-three/drei";
+import { BuildingData, Vector3Array } from '@/lib/types';
+import { eases } from 'animejs';
+import { animate } from 'animejs';
+import * as THREE from 'three';
+import { useEffect, useRef, useState } from 'react';
+import { InstanceProps, ThreeEvent } from '@react-three/fiber';
+import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
+import { Outlines } from '@react-three/drei';
+import { resetPlayersQuery } from '@/lib/queryClient';
+import usePlayerStore from '@/stores/playerStore';
 
 type Props = {
   building: BuildingData;
@@ -20,15 +22,20 @@ type PositionMeshProps = InstanceProps & {
   children?: React.ReactNode;
   onPointerEnter?: (e: ThreeEvent<PointerEvent>) => void;
   onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
-}
+};
 
-function animateAppearance(model: THREE.Group) {
-  model.scale.set(1, 0.01, 1)
+async function animateAppearance(model: THREE.Group) {
+  model.scale.set(1, 0.01, 1);
 
-  animate(model.scale, {
-    y: 1,
-    ease: eases.inOutCubic,
-    duration: 1500,
+  return new Promise<void>(resolve => {
+    animate(model.scale, {
+      y: 1,
+      ease: eases.inOutCubic,
+      duration: 1500,
+      onComplete: () => {
+        resolve();
+      },
+    });
   });
 }
 
@@ -38,16 +45,21 @@ function BuildingModel({ building, position, models }: Props) {
   const StaticPart = models[`${type}_1`] as React.FC<PositionMeshProps>;
   const OutlinePart = models[`${type}_outline`] as React.FC<PositionMeshProps>;
 
-  const setData = useCanvasTooltipStore((state) => state.setData);
-  const dismiss = useCanvasTooltipStore((state) => state.dismiss);
+  const setData = useCanvasTooltipStore(state => state.setData);
+  const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const [isHovered, setIsHovered] = useState(false);
   const groupRef = useRef<THREE.Group>(null);
 
+  const isNewBuilding = usePlayerStore(state => {
+    return state.newBuildingsIds.includes(building.id);
+  });
+
   useEffect(() => {
     if (!groupRef.current) return;
+    if (!isNewBuilding) return;
 
     animateAppearance(groupRef.current);
-  }, []);
+  }, [isNewBuilding]);
 
   function onPointerEnter(e: ThreeEvent<PointerEvent>) {
     e.stopPropagation();
@@ -67,10 +79,7 @@ function BuildingModel({ building, position, models }: Props) {
     <group ref={groupRef} position={position}>
       <ColoredPart color={owner.color} />
       <StaticPart />
-      <OutlinePart
-        onPointerEnter={onPointerEnter}
-        onPointerLeave={onPointerLeave}
-      >
+      <OutlinePart onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
         {isHovered && <Outlines thickness={5} color="white" />}
       </OutlinePart>
     </group>

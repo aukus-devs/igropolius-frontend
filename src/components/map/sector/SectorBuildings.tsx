@@ -37,7 +37,12 @@ function SectorBuildings({ sectorId, models }: Props) {
         const position = getBuildingPosition(index);
 
         return (
-          <BuildingModel key={index} building={building} position={position} models={models} />
+          <BuildingModel
+            key={building.id}
+            building={building}
+            position={position}
+            models={models}
+          />
         );
       })}
     </group>

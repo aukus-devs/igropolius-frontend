@@ -95,6 +95,7 @@ export type BuildingType =
   | 'skyscraperX';
 
 export type BuildingData = {
+  id: number;
   type: BuildingType;
   owner: PlayerData;
   sectorId: number;
