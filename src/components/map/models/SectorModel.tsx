@@ -26,7 +26,7 @@ function getSectorModel(isCorner: boolean, color?: ColorName) {
     case 'blue':
       return `${STORAGE_BASE_URL}/models/sectors/blue_sector.glb`;
     default:
-      return `${STORAGE_BASE_URL}/models/sectors/gray_sector.glb`;
+      return `${STORAGE_BASE_URL}/models/sectors/empty_sector.glb`;
   }
 }
 

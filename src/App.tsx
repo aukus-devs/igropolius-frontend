@@ -20,6 +20,8 @@ import { TooltipProvider } from './components/ui/tooltip';
 import useCanvasTooltipStore from './stores/canvasTooltipStore';
 import { useUserActivity } from './hooks/useUserActivity';
 import { MetrikaCounter } from 'react-metrika';
+import { useControls } from 'leva';
+import { ToneMapping } from 'three';
 
 function App() {
   const { isInactive } = useUserActivity();
@@ -140,6 +142,13 @@ function App() {
 
   const enableMetrika = !IS_DEV;
 
+  const {toneMapping}: { toneMapping: ToneMapping } = useControls({toneMapping: {
+    value: 2,
+    min: 1,
+    max: 7,
+    step: 1,
+  }});
+
   return (
     <>
       {enableMetrika && (
@@ -159,7 +168,7 @@ function App() {
             <TooltipProvider>
               <UI />
             </TooltipProvider>
-            <Canvas onPointerMissed={onPointerMissed}>
+            <Canvas onPointerMissed={onPointerMissed} gl={{toneMapping}}>
               <Suspense fallback={<SceneLoader />}>
                 <Scene />
               </Suspense>
