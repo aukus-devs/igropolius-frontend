@@ -1,10 +1,12 @@
 import usePlayerStore from '@/stores/playerStore';
 import GenericRoller, { WeightedOption } from './GenericRoller';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
 import { MainBonusCardType } from '@/lib/api-types-generated';
 import { dropBonusCard } from '@/lib/api';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 type LoseCard = {
   action: 'lose-card';
@@ -27,6 +29,7 @@ export default function PrisonEnterCardRoll() {
     removeCardFromState,
     addCardToState,
     currentSector,
+    prisonHasNoCards,
   } = usePlayerStore(
     useShallow(state => ({
       setNextTurnState: state.setNextTurnState,
@@ -36,8 +39,11 @@ export default function PrisonEnterCardRoll() {
       removeCardFromState: state.removeCardFromState,
       addCardToState: state.addCardToState,
       currentSector: state.myPlayer?.sector_id,
+      prisonHasNoCards: state.prisonCards.length === 0,
     }))
   );
+
+  const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
 
   const getWinnerText = (option: WeightedOption<RollOptionType>) => {
     if (option.value === 'nothing') {
@@ -58,6 +64,7 @@ export default function PrisonEnterCardRoll() {
       return;
     }
     if (option.value.action === 'lose-card') {
+      setCardsBeforeDrop(playerCards.map(card => card.bonus_type));
       await dropBonusCard({ bonus_type: option.value.card });
       removeCardFromState(option.value.card);
       return;
@@ -126,6 +133,10 @@ export default function PrisonEnterCardRoll() {
     return result;
   }, [playerCards, prisonCards]);
 
+  if (playerCards.length === 0 && cardsBeforeDrop.length === 0 && prisonHasNoCards) {
+    return <NoCardsForPrisonDialog />;
+  }
+
   return (
     <GenericRoller<RollOptionType>
       header="Вход в тюрьму"
@@ -136,5 +147,23 @@ export default function PrisonEnterCardRoll() {
       onRollFinish={handleFinished}
       onClose={handleClose}
     />
+  );
+}
+
+function NoCardsForPrisonDialog() {
+  const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
+  return (
+    <Card className="p-4">
+      <span className="font-wide-semibold">Нет карточек для ролла в тюрьме</span>
+      <div className="flex justify-evenly mt-2 gap-2">
+        <Button
+          variant="outline"
+          className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
+          onClick={() => setNextTurnState({})}
+        >
+          Продолжить
+        </Button>
+      </div>
+    </Card>
   );
 }
