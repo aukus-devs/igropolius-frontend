@@ -193,6 +193,11 @@ export type MapCompleted = boolean;
 export type BonusesUsed = MainBonusCardType[];
 export type NewSectorId = number;
 export type Content = string;
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "RulesCategory".
+ */
+export type RulesCategory = "general" | "gameplay" | "donations";
 export type Id2 = number;
 export type NotificationType1 = string;
 export type CreatedAt = number;
@@ -553,6 +558,7 @@ export interface MovePlayerGameRequest {
  */
 export interface NewRulesVersionRequest {
   content: Content;
+  category: RulesCategory;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -717,6 +723,7 @@ export interface RulesResponse {
  */
 export interface RulesVersion {
   content: Content1;
+  category: RulesCategory;
   created_at: CreatedAt2;
 }
 /**

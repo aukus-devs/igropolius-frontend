@@ -217,6 +217,21 @@ export async function fetchCurrentRules(): Promise<RulesResponse> {
             ],
           }),
           created_at: Math.ceil(new Date('2025-04-30').getTime() / 1000),
+          category: 'general',
+        },
+        {
+          content: JSON.stringify({
+            ops: [{ insert: 'Правила прохождения игр' }],
+          }),
+          created_at: Math.ceil(new Date('2025-04-30').getTime() / 1000),
+          category: 'gameplay',
+        },
+        {
+          content: JSON.stringify({
+            ops: [{ insert: 'Правила заказа' }],
+          }),
+          created_at: Math.ceil(new Date('2025-04-30').getTime() / 1000),
+          category: 'donations',
         },
       ],
     });
@@ -238,6 +253,7 @@ export async function fetchAllRules(): Promise<RulesResponse> {
             ],
           }),
           created_at: Math.ceil(new Date('2025-04-30').getTime() / 1000),
+          category: 'general',
         },
         {
           content: JSON.stringify({
@@ -247,11 +263,13 @@ export async function fetchAllRules(): Promise<RulesResponse> {
               { insert: 'Читы запрещены' },
             ],
           }),
+          category: 'general',
           created_at: Math.ceil(new Date('2025-04-29').getTime() / 1000),
         },
         {
           content: JSON.stringify({ ops: [{ insert: 'Первая версия правил' }] }),
           created_at: Math.ceil(new Date('2025-04-28').getTime() / 1000),
+          category: 'general',
         },
       ],
     });

@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import { RichTextEditor } from './RichText';
 import { Button } from '@/components/ui/button';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { fetchCurrentRules, saveRulesVersion } from '@/lib/api';
+import { useMutation } from '@tanstack/react-query';
+import { saveRulesVersion } from '@/lib/api';
 import RichDisplay from './RichDisplay';
-import { queryKeys, resetCurrentRulesQuery } from '@/lib/queryClient';
+import { resetCurrentRulesQuery } from '@/lib/queryClient';
 import { formatTsToFullDate } from '@/lib/utils';
-import { LoaderCircleIcon } from 'lucide-react';
+import { RulesCategory, RulesVersion } from '@/lib/api-types-generated';
 
-export default function Rules() {
+export default function Rules({
+  category,
+  rulesData,
+}: {
+  category: RulesCategory;
+  rulesData?: RulesVersion;
+}) {
   const [editValue, setEditValue] = useState<string>('');
 
   const [editing, setEditing] = useState(false);
@@ -18,35 +24,29 @@ export default function Rules() {
     mutationFn: saveRulesVersion,
   });
 
-  const { data: rulesData, isLoading } = useQuery({
-    queryKey: queryKeys.currentRulesVersion,
-    queryFn: fetchCurrentRules,
-  });
-
-  const version = rulesData?.versions[0];
-
   const handleSave = () => {
     setEditing(false);
-    saveRules({ content: editValue }).then(() => {
+    saveRules({ content: editValue, category }).then(() => {
       resetCurrentRulesQuery();
     });
   };
 
-  if (isLoading || !version || isPending) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <LoaderCircleIcon className="animate-spin text-primary" />
-        <p>Загрузка правил...</p>
-      </div>
-    );
-  }
+  const version = rulesData || {
+    content: JSON.stringify({
+      ops: [{ insert: 'Правила не найдены, нажми редактировать и сохрани новые' }],
+    }),
+    created_at: Date.now() / 1000,
+    category,
+  };
 
   return (
     <div className="my-5">
       {editing ? (
         <div>
           <div className="flex gap-4 items-center">
-            <Button onClick={handleSave}>Сохранить</Button>
+            <Button onClick={handleSave} loading={isPending}>
+              Сохранить
+            </Button>
             <Button onClick={() => setEditing(false)} variant="destructive">
               Отменить
             </Button>
