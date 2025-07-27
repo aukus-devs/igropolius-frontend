@@ -1,10 +1,10 @@
 import CustomCameraControls from './CustomCameraControls';
-import Floor from './Floor';
 import { Environment, Grid, Stats } from '@react-three/drei';
 import GameBoard from './GameBoard';
 import { Railroad } from './Railroad';
 import { colors } from '@/lib/types';
 import { STORAGE_BASE_URL } from '@/lib/constants';
+import CenterCompModel from './models/CenterCompModel';
 
 function Scene() {
   const gridConfig = {
@@ -59,7 +59,7 @@ function Scene() {
         // ref={directionalLightRef}
         color="#fcffb5"
         position={[50, 50, 50]}
-        intensity={1.5}
+        intensity={2}
         lookAt={[0, 0, 0]}
         castShadow
         shadow-mapSize-width={1024}
@@ -76,7 +76,7 @@ function Scene() {
 
       <GameBoard />
       <Railroad />
-      <Floor />
+      <CenterCompModel />
       <Environment files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`} background="only" />
 
       {/* origin position marker */}
