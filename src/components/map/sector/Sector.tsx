@@ -1,7 +1,6 @@
 import { SectorData, Vector3Array } from "@/lib/types";
 import { Group } from "three";
 import useModelsStore from "@/stores/modelsStore";
-import { SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_WIDTH } from "@/lib/constants";
 import SectorBase from "./SectorBase";
 import SectorText from "./SectorText";
 import SectorBuildings from "./SectorBuildings";
@@ -28,11 +27,6 @@ function Sector({ sector, position, rotation, models }: Props) {
 
   const isCorner = ["prison", "start-corner", "parking"].includes(sector.type);
   const canHaveBuildings = ["property", "railroad"].includes(sector.type);
-  const showColorGroup = sector.type === "property";
-  const shape: Vector3Array = isCorner
-    ? [SECTOR_DEPTH, SECTOR_HEIGHT, SECTOR_DEPTH]
-    : [SECTOR_WIDTH, SECTOR_HEIGHT, SECTOR_DEPTH];
-
   const isPrison = sector.type === "prison";
   const isStart = sector.id === 1;
   const isParking = sector.id === 21;
@@ -57,8 +51,6 @@ function Sector({ sector, position, rotation, models }: Props) {
         id={sector.id}
         sector={sector}
         color={sector.color}
-        shape={shape}
-        showColorGroup={showColorGroup}
         isCorner={isCorner}
       />
     </group>
