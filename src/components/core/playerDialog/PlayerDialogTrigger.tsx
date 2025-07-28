@@ -33,7 +33,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
         <div className="flex justify-between text-base leading-[19px]">
           <div className="font-bold">{player.username}</div>
           <div className="flex text-muted-foreground items-center font-semibold group-data-[highlighted=true]:text-foreground">
-            {player.total_score} <Share />
+            {Math.round(player.total_score)} <Share />
           </div>
         </div>
         <div className="flex text-sm text-muted-foreground  font-semibold w-full leading-[17px]">
