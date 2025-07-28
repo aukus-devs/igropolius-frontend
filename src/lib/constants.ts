@@ -122,7 +122,7 @@ export const PlayerModelsScales: Record<string, number> = {
 
 export const EMOTES_SEARCH_API_URL = 'https://api4.rhhhhhhh.live/search_emotes';
 
-export const SECTORS_COLOR_GROUPS = [
+export const SECTORS_COLOR_GROUPS: number[][] = [
   [2, 4, 5],
   [7, 9, 10],
   [12, 14, 15],
@@ -131,4 +131,5 @@ export const SECTORS_COLOR_GROUPS = [
   [27, 28, 30],
   [32, 33, 35],
   [37, 38, 40],
+  Object.keys(TrainsConfig).map(Number),
 ];
