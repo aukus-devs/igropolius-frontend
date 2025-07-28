@@ -133,3 +133,5 @@ export const SECTORS_COLOR_GROUPS: number[][] = [
   [37, 38, 40],
   Object.keys(TrainsConfig).map(Number),
 ];
+
+export const PRISON_NOTHING_CARD_IMAGE = `${import.meta.env.BASE_URL}assets/cards/prison-nothing.png`;

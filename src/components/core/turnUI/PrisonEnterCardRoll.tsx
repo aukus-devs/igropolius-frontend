@@ -7,6 +7,7 @@ import { MainBonusCardType } from '@/lib/api-types-generated';
 import { dropBonusCard } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PRISON_NOTHING_CARD_IMAGE } from '@/lib/constants';
 
 type LoseCard = {
   action: 'lose-card';
@@ -82,7 +83,7 @@ export default function PrisonEnterCardRoll() {
       value: 'nothing',
       label: 'Ничего',
       weight: 25,
-      imageUrl: 'https://placehold.co/100x100?text=Nothing',
+      imageUrl: PRISON_NOTHING_CARD_IMAGE,
     };
 
     if (prisonCards.length > 0) {
