@@ -70,18 +70,20 @@ function SectorInfo({ sector }: Props) {
               <Share className="w-4 h-4" />
             </div>
           )}
-          {showPrisonCards && prisonCardsList.length > 0 && (
+          {showPrisonCards && (
             <div>
-              <div>Хранилище:</div>
-              <div className="flex gap-1">
-                {prisonCardsList.map((c, id) => (
-                  <img
-                    key={id}
-                    className="w-5 h-10"
-                    src={frontendCardsData[c.bonus_type].picture}
-                  />
-                ))}
-              </div>
+              <div>Хранилище карточек: {prisonCardsList.length === 0 && 'пусто'}</div>
+              {prisonCardsList.length > 0 && (
+                <div className="flex gap-1">
+                  {prisonCardsList.map((c, id) => (
+                    <img
+                      key={id}
+                      className="w-5 h-10"
+                      src={frontendCardsData[c.bonus_type].picture}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
