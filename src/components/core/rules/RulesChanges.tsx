@@ -4,9 +4,10 @@ import { fetchAllRules } from '@/lib/api';
 import { queryKeys } from '@/lib/queryClient';
 import { formatTsToFullDate } from '@/lib/utils';
 import { RulesCategory, RulesVersion } from '@/lib/api-types-generated';
+import { LoaderCircleIcon } from 'lucide-react';
 
 export default function RulesChanges() {
-  const { data: rulesData } = useQuery({
+  const { data: rulesData, isPending } = useQuery({
     queryKey: queryKeys.allRulesVersions,
     queryFn: fetchAllRules,
   });
@@ -29,6 +30,14 @@ export default function RulesChanges() {
     if (oldV) {
       diffPairs.push([oldV, newV]);
     }
+  }
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center mt-20">
+        <LoaderCircleIcon className="animate-spin text-primary" size={50} />
+      </div>
+    );
   }
 
   if (diffPairs.length === 0) {
