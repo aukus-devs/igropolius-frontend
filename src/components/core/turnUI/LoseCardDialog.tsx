@@ -28,7 +28,6 @@ export default function LoseCardOnDropDialog() {
   );
 
   const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
-
   const [dropResult, setDropResult] = useState<InstantCardResult | null>(null);
 
   const options: WeightedOption<MainBonusCardType>[] = useMemo(() => {
@@ -76,8 +75,8 @@ export default function LoseCardOnDropDialog() {
 
   const handleClose = async () => {
     // TODO if page refershes before we lose context
+    setDropResult(null);
     if (dropResult === 'reroll') {
-      setDropResult(null);
       return;
     }
     if (goToPrison) {

@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
-import { Button, buttonVariants } from '../../ui/button';
+import { Button } from '../../ui/button';
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
@@ -10,7 +10,7 @@ import Rating from '../Rating';
 import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
-import { ArrowRight, Smile, X } from '../../icons';
+import { ArrowRight, Share, Smile, X } from '../../icons';
 import { searchGames } from '@/lib/api';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -20,7 +20,6 @@ import { calculateGameCompletionScore } from '@/lib/utils';
 import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
-import { VariantProps } from 'class-variance-authority';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 type StatesOption = {
@@ -448,23 +447,6 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
           mapCompletionBonus: 0,
         };
 
-  const buttonVariant: VariantProps<typeof buttonVariants> = {variant: 'default'};
-  let buttonText = 'Заполни форму';
-  switch (gameStatus) {
-    case 'completed':
-      buttonText = `Построить и получить ${scores.total} очков`;
-      buttonVariant.variant = 'success'
-      break;
-    case 'drop':
-      buttonText = 'Дропнуть игру и отправиться в тюрьму';
-      buttonVariant.variant = 'error'
-      break;
-    case 'reroll':
-      buttonText = 'Рерольнуть';
-      buttonVariant.variant = 'warning'
-      break;
-  }
-
   const isSendButtonDisabled = useReviewFormStore(state => {
     if (!state.gameTitle) return true;
     if (!state.gameStatus) return true;
@@ -539,7 +521,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
 
             <div className="flex gap-2 w-full">
               <GameStatus />
-              <GameTime />
+              {gameStatus === 'completed' && <GameTime />}
             </div>
 
             <div className="font-roboto-wide-semibold">Оценка — {rating}</div>
@@ -554,13 +536,16 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
           <Tooltip disableHoverableContent>
             <TooltipTrigger asChild>
               <Button
-                variant={buttonVariant.variant}
-                className="ml-auto"
+                className="ml-auto w-60"
                 disabled={isSendButtonDisabled || isSubmitting}
                 onClick={onConfirm}
                 loading={isLoading}
               >
-                {isSubmitting ? 'Отправка...' : buttonText}
+                {isSubmitting ? (
+                  'Отправка...'
+                ) : (
+                  <ButtonText gameStatus={gameStatus} scores={scores.total} />
+                )}
               </Button>
             </TooltipTrigger>
             {gameStatus === 'completed' && (
@@ -577,3 +562,27 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
 }
 
 export default GameReviewForm;
+
+function ButtonText({
+  gameStatus,
+  scores,
+}: {
+  gameStatus: GameCompletionType | null;
+  scores: number;
+}) {
+  switch (gameStatus) {
+    case 'completed':
+      return (
+        <div className="flex items-center">
+          Получить {scores}
+          <Share />
+        </div>
+      );
+    case 'drop':
+      return 'Дропнуть';
+    case 'reroll':
+      return 'Рерольнуть';
+    default:
+      return 'Заполни форму';
+  }
+}
