@@ -1,7 +1,12 @@
 import { EventDescription, GameLengthRange, PlayerStateAction, SectorData } from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { frontendCardsData, frontendInstantCardsData, SectorsById } from './mockData';
+import {
+  bonusCardsData,
+  frontendCardsData,
+  frontendInstantCardsData,
+  SectorsById,
+} from './mockData';
 import {
   FALLBACK_GAME_POSTER,
   ScoreByGameLength,
@@ -33,35 +38,65 @@ export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const months = [
+  'января',
+  'февраля',
+  'марта',
+  'апреля',
+  'мая',
+  'июня',
+  'июля',
+  'августа',
+  'сентября',
+  'октября',
+  'ноября',
+  'декабря',
+];
+
+export function eventTimeFormat(ts: number) {
+  const date = new Date(ts * 1000);
+
+  return {
+    month: months[date.getMonth()],
+    day: String(date.getDate()).padStart(2, '0'),
+    hours: String(date.getHours()).padStart(2, '0'),
+    minutes: String(date.getMinutes()).padStart(2, '0'),
+  };
+}
+
 export function getShortestRotationDelta(current: number, target: number) {
   const delta = target - current;
   // Normalize to [-π, π] range to get shortest path
   return ((delta + Math.PI) % (2 * Math.PI)) - Math.PI;
 }
 
-function getEventGameInfo(event: GameEvent) {
-  let title = '';
+export function getEventGameInfo(event: GameEvent) {
+  let header = '';
 
   switch (event.subtype) {
     case 'completed':
-      title = 'Прошел игру';
+      header = 'Прошел игру';
       break;
     case 'drop':
-      title = 'Дроп игры';
+      header = 'Дроп игры';
       break;
     case 'reroll':
-      title = 'Реролл игры';
+      header = 'Реролл игры';
       break;
     default: {
       const subtype: never = event.subtype;
       throw new Error(`Unsupported game event subtype: ${subtype}`);
     }
   }
+
+  const { hours, minutes } = eventTimeFormat(event.timestamp);
+
   return {
-    title,
-    description: event.game_title,
-    gameCover: event.game_cover || FALLBACK_GAME_POSTER,
-  };
+    timeHeader: `${hours}:${minutes} - ${header}`,
+    title: event.game_title,
+    description: '',
+    image: event.game_cover || FALLBACK_GAME_POSTER,
+  } as EventDescription;
 }
 
 function getEventMoveInfo(event: MoveEvent) {
@@ -171,9 +206,12 @@ function getEventBonusCardInfo(event: BonusCardEvent) {
     }
   }
 
+  const card = bonusCardsData[event.bonus_type];
+
   return {
     title,
-    description: event.bonus_type,
+    description: card.name,
+    image: card?.picture || '',
   };
 }
 

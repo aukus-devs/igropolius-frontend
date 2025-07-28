@@ -1056,7 +1056,12 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
   },
 };
 
-export const cardTypes = Object.keys(frontendCardsData) as MainBonusCardType[];
+export const bonusCardsData = {
+  ...frontendCardsData,
+  ...frontendInstantCardsData,
+};
+
+export const mainCardTypes = Object.keys(frontendCardsData) as MainBonusCardType[];
 
 export const mockReviews: GameReviewType[] = [
   {

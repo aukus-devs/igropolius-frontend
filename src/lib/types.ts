@@ -130,9 +130,10 @@ export type ScoreDetails = {
 };
 
 export type EventDescription = {
+  timeHeader?: string;
   title: string;
   description: string;
-  gameCover?: string;
+  image?: string;
 };
 
 export type MoveMyPlayerParams = {

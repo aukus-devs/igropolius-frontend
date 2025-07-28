@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircleIcon } from 'lucide-react';
 import { fetchPlayerEvents } from '@/lib/api';
 import { queryKeys } from '@/lib/queryClient';
-import { getEventDescription, getBonusCardName } from '@/lib/utils';
+import { getEventDescription, getBonusCardName, eventTimeFormat } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
 import {
@@ -80,8 +80,7 @@ function DiceRollDetails({
 }
 
 function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
-  const { title, description, gameCover } = getEventDescription(event, player);
-  const { hours, minutes } = getFormattedTime(event.timestamp);
+  const { title, description, image, timeHeader } = getEventDescription(event, player);
   const isScoreChangeEvent = event.event_type === 'score-change';
   const isMoveEvent = event.event_type === 'player-move';
   const moveEvent = isMoveEvent ? (event as MoveEvent) : null;
@@ -94,83 +93,78 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
 
   const [showDetails, setShowDetails] = useState(false);
 
-  const EventContent = () => (
-    <div className={gameCover ? 'flex gap-2' : ''}>
-      {gameCover && (
-        <div className="flex-shrink-0">
-          <div className="text-muted-foreground text-sm font-semibold mb-1">{`${hours}:${minutes}`}</div>
-          <img
-            src={gameCover}
-            alt={description}
-            className="w-10 h-[53px] rounded-sm object-cover"
-          />
-        </div>
-      )}
-      <div className={gameCover ? 'flex-1 pt-6' : ''}>
-        {!gameCover && (
-          <div className="text-muted-foreground text-sm font-semibold">{`${hours}:${minutes}`}</div>
+  const { hours, minutes } = eventTimeFormat(event.timestamp);
+
+  return (
+    <div>
+      <div className="text-muted-foreground text-sm font-semibold mb-1">
+        {timeHeader ? timeHeader : `${hours}:${minutes}`}
+      </div>
+      <div className="flex gap-2">
+        {image && (
+          <img src={image} alt={description} width="53" className="rounded-sm object-cover" />
         )}
         <div>
-          <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
-        </div>
-        <div className="flex gap-0 place-items-center text-muted-foreground text-sm font-semibold">
-          <div className="flex flex-row items-center justify-between w-full">
-            <div className="flex gap-0 place-items-center">
-              <p>{description}</p>
-              {isScoreChangeEvent && <ScoreChangeDescription event={event as ScoreChangeEvent} />}
-            </div>
-            {hasDiceRollData && (
-              <button
-                type="button"
-                onClick={() => setShowDetails(v => !v)}
-                className={`flex items-center gap-1 px-3 h-[23px] rounded-[5px] ml-2 transition-colors
+          <div>
+            <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
+          </div>
+          <div className="flex gap-0 place-items-center text-muted-foreground text-sm font-semibold">
+            <div className="flex flex-row items-center justify-between w-full">
+              <div className="flex gap-0 place-items-center">
+                <p>{description}</p>
+                {isScoreChangeEvent && <ScoreChangeDescription event={event as ScoreChangeEvent} />}
+              </div>
+              {hasDiceRollData && (
+                <button
+                  type="button"
+                  onClick={() => setShowDetails(v => !v)}
+                  className={`flex items-center gap-1 px-3 h-[23px] rounded-[5px] ml-2 transition-colors
                   ${
                     showDetails
                       ? 'bg-[#81A671] text-white'
                       : 'bg-white/20 text-white/70 hover:bg-white/30'
                   }
                 `}
-                style={{ fontSize: 14, fontWeight: 500 }}
-              >
-                <svg
-                  width="17"
-                  height="17"
-                  viewBox="0 0 17 17"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ fontSize: 14, fontWeight: 500 }}
                 >
-                  <path
-                    d="M11.3333 1.4165H5.66667C3.1875 1.4165 2.125 2.83317 2.125 4.95817V12.0415C2.125 14.1665 3.1875 15.5832 5.66667 15.5832H11.3333C13.8125 15.5832 14.875 14.1665 14.875 12.0415V4.95817C14.875 2.83317 13.8125 1.4165 11.3333 1.4165ZM5.66667 8.67692H8.5C8.79042 8.67692 9.03125 8.91775 9.03125 9.20817C9.03125 9.49859 8.79042 9.73942 8.5 9.73942H5.66667C5.37625 9.73942 5.13542 9.49859 5.13542 9.20817C5.13542 8.91775 5.37625 8.67692 5.66667 8.67692ZM11.3333 12.5728H5.66667C5.37625 12.5728 5.13542 12.3319 5.13542 12.0415C5.13542 11.7511 5.37625 11.5103 5.66667 11.5103H11.3333C11.6237 11.5103 11.8646 11.7511 11.8646 12.0415C11.8646 12.3319 11.6237 12.5728 11.3333 12.5728ZM13.1042 6.55192H11.6875C10.6108 6.55192 9.73958 5.68067 9.73958 4.604V3.18734C9.73958 2.89692 9.98042 2.65609 10.2708 2.65609C10.5612 2.65609 10.8021 2.89692 10.8021 3.18734V4.604C10.8021 5.09275 11.1987 5.48942 11.6875 5.48942H13.1042C13.3946 5.48942 13.6354 5.73025 13.6354 6.02067C13.6354 6.31109 13.3946 6.55192 13.1042 6.55192Z"
-                    fill="white"
-                    fill-opacity="0.7"
-                  />
-                </svg>
-                <span style={{ lineHeight: 1 }}>Детали</span>
-              </button>
-            )}
+                  <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 17 17"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.3333 1.4165H5.66667C3.1875 1.4165 2.125 2.83317 2.125 4.95817V12.0415C2.125 14.1665 3.1875 15.5832 5.66667 15.5832H11.3333C13.8125 15.5832 14.875 14.1665 14.875 12.0415V4.95817C14.875 2.83317 13.8125 1.4165 11.3333 1.4165ZM5.66667 8.67692H8.5C8.79042 8.67692 9.03125 8.91775 9.03125 9.20817C9.03125 9.49859 8.79042 9.73942 8.5 9.73942H5.66667C5.37625 9.73942 5.13542 9.49859 5.13542 9.20817C5.13542 8.91775 5.37625 8.67692 5.66667 8.67692ZM11.3333 12.5728H5.66667C5.37625 12.5728 5.13542 12.3319 5.13542 12.0415C5.13542 11.7511 5.37625 11.5103 5.66667 11.5103H11.3333C11.6237 11.5103 11.8646 11.7511 11.8646 12.0415C11.8646 12.3319 11.6237 12.5728 11.3333 12.5728ZM13.1042 6.55192H11.6875C10.6108 6.55192 9.73958 5.68067 9.73958 4.604V3.18734C9.73958 2.89692 9.98042 2.65609 10.2708 2.65609C10.5612 2.65609 10.8021 2.89692 10.8021 3.18734V4.604C10.8021 5.09275 11.1987 5.48942 11.6875 5.48942H13.1042C13.3946 5.48942 13.6354 5.73025 13.6354 6.02067C13.6354 6.31109 13.3946 6.55192 13.1042 6.55192Z"
+                      fill="white"
+                      fill-opacity="0.7"
+                    />
+                  </svg>
+                  <span style={{ lineHeight: 1 }}>Детали</span>
+                </button>
+              )}
+            </div>
           </div>
+          {bonusesUsed.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1 items-center">
+              <span className="text-xs text-muted-foreground mr-1">Примененные карточки:</span>
+              <span className="text-xs text-muted-foreground">
+                {bonusesUsed.map((bonus, _) => getBonusCardName(bonus)).join(', ')}
+              </span>
+            </div>
+          )}
+          {hasDiceRollData && showDetails && (
+            <div className="mt-2">
+              <DiceRollDetails
+                diceRollJson={moveEvent.dice_roll_json!}
+                adjustedRoll={moveEvent.adjusted_roll}
+              />
+            </div>
+          )}
         </div>
-        {bonusesUsed.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1 items-center">
-            <span className="text-xs text-muted-foreground mr-1">Примененные карточки:</span>
-            <span className="text-xs text-muted-foreground">
-              {bonusesUsed.map((bonus, _) => getBonusCardName(bonus)).join(', ')}
-            </span>
-          </div>
-        )}
-        {hasDiceRollData && showDetails && (
-          <div className="mt-2">
-            <DiceRollDetails
-              diceRollJson={moveEvent.dice_roll_json!}
-              adjustedRoll={moveEvent.adjusted_roll}
-            />
-          </div>
-        )}
       </div>
     </div>
   );
-
-  return <EventContent />;
 }
 
 type FilterValue = Events[0]['event_type'] | 'all';
@@ -294,7 +288,7 @@ export default function EventsTab({ player }: Props) {
           </div>
         ) : (
           Object.entries(eventsByDate).map(([date, events]) => {
-            const { month, day } = getFormattedTime(new Date(date).getTime() / 1000);
+            const { month, day } = eventTimeFormat(new Date(date).getTime() / 1000);
 
             return (
               <div key={date}>
@@ -317,32 +311,6 @@ export default function EventsTab({ player }: Props) {
       </div>
     </div>
   );
-}
-
-const months = [
-  'января',
-  'февраля',
-  'марта',
-  'апреля',
-  'мая',
-  'июня',
-  'июля',
-  'августа',
-  'сентября',
-  'октября',
-  'ноября',
-  'декабря',
-];
-
-function getFormattedTime(ts: number) {
-  const date = new Date(ts * 1000);
-
-  return {
-    month: months[date.getMonth()],
-    day: String(date.getDate()).padStart(2, '0'),
-    hours: String(date.getHours()).padStart(2, '0'),
-    minutes: String(date.getMinutes()).padStart(2, '0'),
-  };
 }
 
 function getEventsByDate(events: Events) {

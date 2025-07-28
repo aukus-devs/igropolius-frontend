@@ -172,7 +172,7 @@ function GameReview() {
         ) : (
           <Textarea
             ref={textareaRef}
-            className="resize-none h-24"
+            className="resize-none h-24 text-[16px]!"
             placeholder="Комментарий"
             value={gameReview}
             onKeyDown={e => e.stopPropagation()}

@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ActiveBonusCard, MainBonusCardType } from '@/lib/api-types-generated';
-import { cardTypes, frontendCardsData } from '@/lib/mockData';
+import { mainCardTypes, frontendCardsData } from '@/lib/mockData';
 
 type GameCardProps = {
   type: MainBonusCardType;
@@ -36,8 +36,8 @@ function GameCard({ type, inactive }: GameCardProps) {
 }
 
 function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
-  const availableCards = cardTypes.filter(type => cards.some(card => card.bonus_type === type));
-  const unavailableCards = cardTypes.filter(type => !availableCards.includes(type));
+  const availableCards = mainCardTypes.filter(type => cards.some(card => card.bonus_type === type));
+  const unavailableCards = mainCardTypes.filter(type => !availableCards.includes(type));
 
   return (
     <div className="flex flex-col my-5">
