@@ -1,7 +1,9 @@
 import { Share } from '@/components/icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SECTORS_COLOR_GROUPS } from '@/lib/constants';
 import { BuildingData } from '@/lib/types';
 import { formatTsToMonthDatetime } from '@/lib/utils';
+import { useMemo } from 'react';
 
 type Props = {
   building: BuildingData;
@@ -9,6 +11,10 @@ type Props = {
 
 function BuildingInfo({ building }: Props) {
   const { gameTitle, owner, gameLength } = building;
+
+  const showGroupBonus = useMemo(() => {
+    return SECTORS_COLOR_GROUPS.some(group => group.includes(building.sectorId));
+  }, [building.sectorId]);
 
   return (
     <Card className="w-56 pointer-events-none">
@@ -22,7 +28,7 @@ function BuildingInfo({ building }: Props) {
           <p className="text-sm">Доход: {building.income}</p>
           <Share className="w-4 h-4" />
         </div>
-        <div>Бонус группы: {building.hasGroupBonus ? 'да' : 'нет'}</div>
+        {showGroupBonus && <div>Бонус группы: {building.hasGroupBonus ? 'да' : 'нет'}</div>}
         <p className="text-sm">Построено: {formatTsToMonthDatetime(building.createdAt)}</p>
       </CardContent>
     </Card>
