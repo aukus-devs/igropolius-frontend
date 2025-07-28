@@ -1,18 +1,18 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import GamesTab from "./GamesTab";
-import CardsTab from "./CardsTab";
-import EventsTab from "./EventsTab";
-import { PlayerData } from "@/lib/types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import GamesTab from './GamesTab';
+import CardsTab from './CardsTab';
+import EventsTab from './EventsTab';
+import { PlayerDetails } from '@/lib/api-types-generated';
 
 type Props = {
-  player: PlayerData;
+  player: PlayerDetails;
 };
 
 function PlayerDialogTabs({ player }: Props) {
   const tabs = [
-    { name: "Игры", value: "games", content: <GamesTab player={player} /> },
-    { name: "Карточки", value: "cards", content: <CardsTab cards={player.bonus_cards} /> },
-    { name: "Действия", value: "actions", content: <EventsTab player={player} /> },
+    { name: 'Игры', value: 'games', content: <GamesTab player={player} /> },
+    { name: 'Карточки', value: 'cards', content: <CardsTab cards={player.bonus_cards} /> },
+    { name: 'Действия', value: 'actions', content: <EventsTab player={player} /> },
   ];
 
   return (

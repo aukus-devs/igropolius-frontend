@@ -1,9 +1,9 @@
-import { PlayerData } from '@/lib/types';
 import { Html } from '@react-three/drei';
 import { Avatar, AvatarImage } from '../ui/avatar';
+import { PlayerDetails } from '@/lib/api-types-generated';
 
 type Props = {
-  player: PlayerData;
+  player: PlayerDetails;
 };
 
 function PlayerInfo({ player }: Props) {

@@ -1,10 +1,10 @@
 import { Donationalerts, Kick, Telegram, Twitch, VkVideoLive } from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { PlayerDetails } from '@/lib/api-types-generated';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
-import { PlayerData } from '@/lib/types';
 
-function PlayerSocials({ player }: { player: PlayerData }) {
+function PlayerSocials({ player }: { player: PlayerDetails }) {
   const socials = [
     { href: player.twitch_stream_link, title: 'Твич', Icon: <Twitch /> },
     { href: player.vk_stream_link, title: 'ВкВидео', Icon: <VkVideoLive /> },
@@ -42,7 +42,7 @@ function PlayerSocials({ player }: { player: PlayerData }) {
   );
 }
 
-function PlayerDialogHeader({ player }: { player: PlayerData }) {
+function PlayerDialogHeader({ player }: { player: PlayerDetails }) {
   return (
     <div className="relative md:pt-8 pt-[50px] mb-6">
       <div className="flex gap-2 justify-center items-center mb-5">

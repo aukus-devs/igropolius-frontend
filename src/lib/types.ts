@@ -25,9 +25,6 @@ export const colors = {
 // Type for the keys of the map
 export type ColorName = keyof typeof colors;
 
-// Type for the values of the map
-export type CellColor = (typeof colors)[ColorName];
-
 export const playerColors = {
   red: '#FF453A',
   orange: '#FF9F0A',
@@ -77,12 +74,6 @@ export type GameReviewType = {
   duration: number | null;
 };
 
-export type PlayerFrontendData = {
-  color: PlayerColorValue;
-};
-
-export type PlayerData = PlayerDetails & PlayerFrontendData;
-
 export type Vector3Array = [number, number, number];
 
 export type BuildingType =
@@ -97,7 +88,7 @@ export type BuildingType =
 export type BuildingData = {
   id: number;
   type: BuildingType;
-  owner: PlayerData;
+  owner: PlayerDetails;
   sectorId: number;
   createdAt: number;
   gameLength: GameLength;

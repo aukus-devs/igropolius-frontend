@@ -6,13 +6,7 @@ import {
   ScoreByGameLength,
   TaxScoreMultiplier,
 } from '@/lib/constants';
-import {
-  BuildingData,
-  MoveMyPlayerParams,
-  PlayerData,
-  PlayerStateAction,
-  TaxData,
-} from '@/lib/types';
+import { BuildingData, MoveMyPlayerParams, PlayerStateAction, TaxData } from '@/lib/types';
 import { createTimeline } from 'animejs';
 import { create } from 'zustand';
 import useModelsStore from './modelsStore';
@@ -22,7 +16,7 @@ import {
   canBuildOnSector,
   getSectorRotation,
 } from '@/components/map/utils';
-import { playersFrontendData, SectorsById, sectorsData } from '@/lib/mockData';
+import { SectorsById, sectorsData } from '@/lib/mockData';
 import { Euler, Quaternion } from 'three';
 import { getNextTurnState, getSectorsGroup, playerOwnsSectorsGroup } from '@/lib/utils';
 import {
@@ -50,11 +44,11 @@ import useTrainsStore from './trainStore';
 
 const usePlayerStore = create<{
   myPlayerId: number | null;
-  myPlayer: PlayerData | null;
+  myPlayer: PlayerDetails | null;
   hasUpgradeBonus: boolean;
   hasDowngradeBonus: boolean;
   isPlayerMoving: boolean;
-  players: PlayerData[];
+  players: PlayerDetails[];
   buildingsPerSector: Record<number, BuildingData[]>;
   newBuildingsIds: number[];
   taxPerSector: Record<number, TaxData>;
@@ -72,7 +66,7 @@ const usePlayerStore = create<{
   }) => Promise<void>;
   receiveBonusCard: (type: MainBonusCardType, switchState?: boolean) => Promise<void>;
   // dropBonusCard: (type: MainBonusCardType) => Promise<void>;
-  stealBonusCard: (player: PlayerData, card: MainBonusCardType) => Promise<void>;
+  stealBonusCard: (player: PlayerDetails, card: MainBonusCardType) => Promise<void>;
   moveMyPlayerToPrison: () => Promise<void>;
   payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
   canSelectBuildingSector: () => boolean;
@@ -172,16 +166,8 @@ const usePlayerStore = create<{
       }
     }
     const activePlayers = playersData.filter(p => p.role === 'admin' || p.role == 'player');
-    const players: PlayerData[] = activePlayers.map(playerData => {
-      const frontendData = playersFrontendData[playerData.username] ?? {
-        color: 'white',
-      };
-
-      return {
-        ...playerData,
-        ...frontendData,
-      };
-    });
+    const players = activePlayers;
+    players.forEach(p => (p.color = p.color === '' ? 'white' : p.color));
 
     const { myPlayerId, buildingsPerSector } = get();
     const myPlayerNew = players.find(player => player.id === myPlayerId) ?? null;
@@ -472,7 +458,7 @@ const usePlayerStore = create<{
     await setNextTurnState({});
   },
 
-  stealBonusCard: async (player: PlayerData, card: MainBonusCardType) => {
+  stealBonusCard: async (player: PlayerDetails, card: MainBonusCardType) => {
     const { setNextTurnState } = get();
     await stealBonusCardApi({ player_id: player.id, bonus_type: card });
     resetNotificationsQuery();

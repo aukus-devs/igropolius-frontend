@@ -1,10 +1,4 @@
-import {
-  GameReviewType,
-  FrontendCardData,
-  SectorData,
-  playerColors,
-  PlayerFrontendData,
-} from '@/lib/types';
+import { GameReviewType, FrontendCardData, SectorData, playerColors } from '@/lib/types';
 
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { InstantCardType, MainBonusCardType, PlayerDetails } from './api-types-generated';
@@ -374,6 +368,8 @@ export const playersData: PlayerDetails[] = [
 
     total_score: 0,
     maps_completed: 0,
+    color: playerColors.red,
+    model_name: '',
 
     games: [
       {
@@ -501,6 +497,8 @@ export const playersData: PlayerDetails[] = [
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
     pointauc_token: 'abc',
+    color: playerColors.orange,
+    model_name: '',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -656,6 +654,8 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     role: 'player',
     url_handle: 'player-3',
+    color: playerColors.yellow,
+    model_name: '',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -713,6 +713,8 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     role: 'player',
     url_handle: 'player-4',
+    color: playerColors.green,
+    model_name: '',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -757,6 +759,8 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     role: 'player',
     url_handle: 'player-5',
+    color: playerColors.lightBlue,
+    model_name: '',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -807,6 +811,8 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     role: 'player',
     url_handle: 'player-6',
+    color: playerColors.blue,
+    model_name: '',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -856,6 +862,8 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     role: 'player',
     url_handle: 'player-7',
+    color: playerColors.darkBlue,
+    model_name: '',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -905,6 +913,8 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     role: 'player',
     url_handle: 'player-8',
+    color: playerColors.purple,
+    model_name: '',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -1083,33 +1093,6 @@ export const mockReviews: GameReviewType[] = [
     duration: 1800,
   },
 ];
-
-export const playersFrontendData: Record<string, PlayerFrontendData> = {
-  Praden: {
-    color: playerColors.red,
-  },
-  'Player-2': {
-    color: playerColors.orange,
-  },
-  'Player-3': {
-    color: playerColors.yellow,
-  },
-  'Player-4': {
-    color: playerColors.green,
-  },
-  'Player-5': {
-    color: playerColors.lightBlue,
-  },
-  'Player-6': {
-    color: playerColors.blue,
-  },
-  'Player-7': {
-    color: playerColors.darkBlue,
-  },
-  'Player-8': {
-    color: playerColors.purple,
-  },
-};
 
 export const CreditsData = {
   developers: ['mapcar', 'olegsvs', 'esouqu', 'junkratc'].sort(),

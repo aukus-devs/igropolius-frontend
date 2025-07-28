@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircleIcon } from 'lucide-react';
 import { fetchPlayerEvents } from '@/lib/api';
 import { queryKeys } from '@/lib/queryClient';
-import { PlayerData } from '@/lib/types';
 import { getEventDescription, getBonusCardName } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
@@ -20,11 +19,12 @@ import {
   Events,
   MainBonusCardType,
   MoveEvent,
+  PlayerDetails,
   ScoreChangeEvent,
 } from '@/lib/api-types-generated';
 
 type Props = {
-  player: PlayerData;
+  player: PlayerDetails;
 };
 
 function DiceRollDetails({
@@ -79,7 +79,7 @@ function DiceRollDetails({
   );
 }
 
-function Event({ event, player }: { event: Events[0]; player: PlayerData }) {
+function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
   const { title, description, gameCover } = getEventDescription(event, player);
   const { hours, minutes } = getFormattedTime(event.timestamp);
   const isScoreChangeEvent = event.event_type === 'score-change';

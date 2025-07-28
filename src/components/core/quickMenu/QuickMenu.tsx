@@ -1,25 +1,25 @@
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
-import usePlayerStore from "@/stores/playerStore";
-import DevelopersDialog from "./options/DevelopersDialog";
-import OrthographicToggle from "./options/OrthographicToggle";
-import RulesDialog from "./options/RulesDialog";
-import Countdown from "./options/Countdown";
-import { PlayerData } from "@/lib/types";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../Collapsible";
-import LoginDialog from "./options/LoginDialog";
-import { LogoutButton } from "./options/LogoutButton";
-import { Separator } from "@/components/ui/separator";
-import { Sort } from "@/components/icons";
-import { FALLBACK_AVATAR_URL } from "@/lib/constants";
-import TutorialDialog from "./options/TutorialDialog";
+import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
+import usePlayerStore from '@/stores/playerStore';
+import DevelopersDialog from './options/DevelopersDialog';
+import OrthographicToggle from './options/OrthographicToggle';
+import RulesDialog from './options/RulesDialog';
+import Countdown from './options/Countdown';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../Collapsible';
+import LoginDialog from './options/LoginDialog';
+import { LogoutButton } from './options/LogoutButton';
+import { Separator } from '@/components/ui/separator';
+import { Sort } from '@/components/icons';
+import { FALLBACK_AVATAR_URL } from '@/lib/constants';
+import TutorialDialog from './options/TutorialDialog';
+import { PlayerDetails } from '@/lib/api-types-generated';
 
 const buttonStyle =
-  "justify-start bg-transparent font-semibold text-base w-full rounded-none border-none";
+  'justify-start bg-transparent font-semibold text-base w-full rounded-none border-none';
 const groupStyle =
-  "flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]";
+  'flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]';
 
-function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerData | null }) {
+function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerDetails | null }) {
   return (
     <>
       {myPlayer ? (
@@ -43,7 +43,7 @@ function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerData | null }) {
 }
 
 function QuickMenu() {
-  const myPlayer = usePlayerStore((state) => state.myPlayer);
+  const myPlayer = usePlayerStore(state => state.myPlayer);
 
   return (
     <Collapsible>
@@ -52,7 +52,7 @@ function QuickMenu() {
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className={groupStyle}>
-          <Countdown className={cn(buttonStyle, "px-4 py-1.5")} />
+          <Countdown className={cn(buttonStyle, 'px-4 py-1.5')} />
         </div>
 
         <div className={groupStyle}>

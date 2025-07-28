@@ -255,6 +255,8 @@ export type BonusCards = ActiveBonusCard[];
  * via the `definition` "Role".
  */
 export type Role = "player" | "moder" | "admin" | "prison";
+export type Color = string;
+export type ModelName = string;
 export type Timestamp3 = number;
 export type Timestamp4 = number;
 export type EventType3 = "score-change";
@@ -623,6 +625,8 @@ export interface PlayerDetails {
   games: Games1;
   bonus_cards: BonusCards;
   role: Role;
+  color: Color;
+  model_name: ModelName;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

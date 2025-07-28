@@ -1,13 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { ActiveBonusCard } from '@/lib/api-types-generated';
+import { ActiveBonusCard, PlayerDetails } from '@/lib/api-types-generated';
 import { frontendCardsData } from '@/lib/mockData';
-import { PlayerData } from '@/lib/types';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 
 type Props = {
-  player: PlayerData;
+  player: PlayerDetails;
 };
 
 export default function PlayerCards({ player }: Props) {

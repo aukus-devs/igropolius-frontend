@@ -5,6 +5,7 @@ import {
   SECTOR_DEPTH,
   PLAYER_WIDTH,
   PLAYER_DEPTH,
+  STORAGE_BASE_URL,
 } from '@/lib/constants';
 import { SectorData, Vector3Array } from '@/lib/types';
 
@@ -169,4 +170,8 @@ export function calculateTrainPosition(sector: SectorData): Vector3Array {
 
 export function canBuildOnSector(sectorType: SectorData['type']) {
   return sectorType === 'property' || sectorType === 'railroad';
+}
+
+export function getPlayerModelUrl(name: string) {
+  return `${STORAGE_BASE_URL}/models/players/${name}`;
 }

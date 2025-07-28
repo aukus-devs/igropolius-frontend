@@ -1,6 +1,6 @@
-import { PLAYER_HEIGHT, PlayerModelsScales, PlayerModelsUrls } from '@/lib/constants';
+import { PLAYER_HEIGHT, PlayerModelsScales } from '@/lib/constants';
 import useModelsStore from '@/stores/modelsStore';
-import { PlayerData, Vector3Array } from '@/lib/types';
+import { Vector3Array } from '@/lib/types';
 import { ThreeEvent } from '@react-three/fiber';
 import { Group, Mesh } from 'three';
 import DiceModel from './DiceModel';
@@ -8,9 +8,11 @@ import usePlayerStore from '@/stores/playerStore';
 import { Gltf } from '@react-three/drei';
 import DiceRollDisplay from '../DiceRollDisplay.tsx';
 import PlayerInfo from '../PlayerInfo';
+import { PlayerDetails } from '@/lib/api-types-generated.ts';
+import { getPlayerModelUrl } from '../utils.ts';
 
 type Props = {
-  player: PlayerData;
+  player: PlayerDetails;
   position: Vector3Array;
   rotation: Vector3Array;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
@@ -29,7 +31,7 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
   const addPlayerModel = useModelsStore(state => state.addPlayerModel);
   const isPlayerMoving = usePlayerStore(state => state.isPlayerMoving);
   const isMyPlayer = usePlayerStore(state => state.myPlayer?.id === player.id);
-  const modelUrl = PlayerModelsUrls[player.username.toLowerCase()];
+  const modelUrl = getPlayerModelUrl(player.model_name);
 
   const onGroupRender = (group: Group | null) => {
     if (!group) return;

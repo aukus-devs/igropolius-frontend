@@ -1,10 +1,4 @@
-import {
-  EventDescription,
-  GameLengthRange,
-  PlayerData,
-  PlayerStateAction,
-  SectorData,
-} from '@/lib/types';
+import { EventDescription, GameLengthRange, PlayerStateAction, SectorData } from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { frontendCardsData, frontendInstantCardsData, SectorsById } from './mockData';
@@ -95,7 +89,7 @@ function getEventMoveInfo(event: MoveEvent) {
   };
 }
 
-function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerData) {
+function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails) {
   let title = '';
 
   switch (event.subtype) {
@@ -188,7 +182,7 @@ export function getBonusCardName(bonusType: MainBonusCardType): string {
   return data.name;
 }
 
-export function getEventDescription(event: Events[0], player: PlayerData): EventDescription {
+export function getEventDescription(event: Events[0], player: PlayerDetails): EventDescription {
   const eventType = event.event_type;
   switch (eventType) {
     case 'game':
@@ -207,7 +201,7 @@ export function getEventDescription(event: Events[0], player: PlayerData): Event
 }
 
 type NextTurnStateParams = {
-  player: PlayerData;
+  player: PlayerDetails;
   currentState: PlayerTurnState;
   mapCompleted: boolean;
   action?: PlayerStateAction;

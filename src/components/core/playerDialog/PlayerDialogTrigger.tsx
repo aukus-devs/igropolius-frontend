@@ -1,12 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { PlayerData } from '@/lib/types';
 import { Share } from '@/components/icons';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
+import { PlayerDetails } from '@/lib/api-types-generated';
 
 type Props = {
-  player: PlayerData;
+  player: PlayerDetails;
   placement: number;
   isCurrentPlayer: boolean;
 };

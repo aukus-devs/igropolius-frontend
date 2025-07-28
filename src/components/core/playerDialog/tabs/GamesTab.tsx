@@ -1,14 +1,14 @@
-import { Input } from "@/components/ui/input";
-import { PlayerData } from "@/lib/types";
-import { SearchIcon } from "lucide-react";
-import { useState } from "react";
-import GameReview from "../../GameReview";
-import CurrentGame from "../../CurrentGame";
+import { Input } from '@/components/ui/input';
+import { SearchIcon } from 'lucide-react';
+import { useState } from 'react';
+import GameReview from '../../GameReview';
+import CurrentGame from '../../CurrentGame';
+import { PlayerDetails } from '@/lib/api-types-generated';
 
-function ReviewsTab({ player }: { player: PlayerData }) {
-  const [searchText, setSearchText] = useState("");
-  const filteredGames = player.games.filter((game) =>
-    game.title.toLowerCase().includes(searchText.toLowerCase()),
+function ReviewsTab({ player }: { player: PlayerDetails }) {
+  const [searchText, setSearchText] = useState('');
+  const filteredGames = player.games.filter(game =>
+    game.title.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
@@ -23,8 +23,8 @@ function ReviewsTab({ player }: { player: PlayerData }) {
           type="text"
           className="pl-8 font-roboto-wide-semibold bg-foreground/10 border-none"
           placeholder="Поиск по играм"
-          onKeyDown={(e) => e.stopPropagation()}
-          onChange={(e) => setSearchText(e.target.value)}
+          onKeyDown={e => e.stopPropagation()}
+          onChange={e => setSearchText(e.target.value)}
         />
       </div>
       <div className="flex flex-col gap-8 py-8">

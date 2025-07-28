@@ -1,10 +1,10 @@
-import { PlayerData } from "@/lib/types";
-import { Badge } from "../ui/badge";
-import { formatMs } from "@/lib/utils";
-import { FALLBACK_GAME_POSTER } from "@/lib/constants";
+import { Badge } from '../ui/badge';
+import { formatMs } from '@/lib/utils';
+import { FALLBACK_GAME_POSTER } from '@/lib/constants';
+import { PlayerDetails } from '@/lib/api-types-generated';
 
 type Props = {
-  player: PlayerData;
+  player: PlayerDetails;
 };
 
 function CurrentGame({ player }: Props) {
@@ -17,14 +17,16 @@ function CurrentGame({ player }: Props) {
   return (
     <div className="font-semibold">
       <div className="w-full flex gap-[3px] justify-between mb-2">
-        <div className="text-xs text-white/70 font-wide-semibold">
-          Игра на стриме
-        </div>
+        <div className="text-xs text-white/70 font-wide-semibold">Игра на стриме</div>
       </div>
       <h3 className="text-2xl mb-2 font-wide-semibold">{current_game}</h3>
       <div className="flex gap-2.5">
         <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
-          <img className="h-full object-cover" src={current_game_cover || FALLBACK_GAME_POSTER} alt={current_game} />
+          <img
+            className="h-full object-cover"
+            src={current_game_cover || FALLBACK_GAME_POSTER}
+            alt={current_game}
+          />
         </div>
         <div className="text-muted-foreground">
           <div className="flex flex-wrap gap-2 mb-2.5">
@@ -38,4 +40,4 @@ function CurrentGame({ player }: Props) {
   );
 }
 
-export default CurrentGame; 
+export default CurrentGame;
