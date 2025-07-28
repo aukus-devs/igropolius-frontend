@@ -36,12 +36,6 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
   const onGroupRender = (group: Group | null) => {
     if (!group) return;
 
-    group.traverse(child => {
-      if (child instanceof Mesh) {
-        child.material.emissiveIntensity = 0.25;
-      }
-    });
-
     addPlayerModel(player.id, group);
   };
 

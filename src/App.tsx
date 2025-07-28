@@ -4,7 +4,7 @@ import { Suspense, useEffect, useMemo } from 'react';
 import { KeyboardControls, KeyboardControlsEntry } from '@react-three/drei';
 import { useShallow } from 'zustand/shallow';
 import { Controls, IS_DEV } from './lib/constants';
-import Scene from './components/map/Scene';
+import GameScene from './components/map/scenes/GameScene';
 import UI from './components/UI';
 import usePlayerStore from './stores/playerStore';
 import useEventStore from './stores/eventStore';
@@ -21,7 +21,9 @@ import useCanvasTooltipStore from './stores/canvasTooltipStore';
 import { useUserActivity } from './hooks/useUserActivity';
 import { MetrikaCounter } from 'react-metrika';
 import { useControls } from 'leva';
-import { ToneMapping } from 'three';
+import { Environment, Stats } from '@react-three/drei';
+import { STORAGE_BASE_URL } from '@/lib/constants';
+import ModelSelectionScene from './components/map/scenes/ModelSelectionScene';
 
 function App() {
   const { isInactive } = useUserActivity();
@@ -141,13 +143,39 @@ function App() {
   }
 
   const enableMetrika = !IS_DEV;
+  const isModelSelectionScene = false;
 
-  const {toneMapping}: { toneMapping: ToneMapping } = useControls({toneMapping: {
-    value: 2,
-    min: 1,
-    max: 7,
-    step: 1,
-  }});
+  const {
+    lightIntensity,
+    bgIntensity,
+    bgBlurriness,
+    toneMapping
+  } = useControls({
+    toneMapping: {
+      value: 2,
+      min: 1,
+      max: 7,
+      step: 1,
+    },
+    lightIntensity: {
+      value: 1.0,
+      min: 0,
+      max: 10,
+      step: 0.1,
+    },
+    bgIntensity: {
+      value: 1.0,
+      min: 0,
+      max: 10,
+      step: 0.1,
+    },
+    bgBlurriness: {
+      value: 0.0,
+      min: 0,
+      max: 10,
+      step: 0.1,
+    },
+  });
 
   return (
     <>
@@ -170,7 +198,22 @@ function App() {
             </TooltipProvider>
             <Canvas onPointerMissed={onPointerMissed} gl={{toneMapping}}>
               <Suspense fallback={<SceneLoader />}>
-                <Scene />
+                <Environment
+                  files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`}
+                  background
+                  environmentIntensity={lightIntensity}
+                  backgroundIntensity={bgIntensity}
+                  backgroundBlurriness={bgBlurriness}
+                />
+
+                <Stats className="fps-meter" />
+
+                {isModelSelectionScene ? (
+                  <ModelSelectionScene />
+                ) : (
+                  <GameScene />
+                )}
+
               </Suspense>
             </Canvas>
           </div>
