@@ -479,14 +479,9 @@ export function getGameLengthFullText(gameLengthRanges: GameLengthRange | undefi
 }
 
 export function playerOwnsSectorsGroup(games: PlayerDetails['games'], group: number[]) {
-  const ownedSectors = new Set();
-  for (const sectorId of group) {
-    const game = games.find(game => game.sector_id === sectorId && game.status === 'completed');
-    if (game) {
-      ownedSectors.add(sectorId);
-    }
-  }
-  return ownedSectors.size === group.length;
+  return group.every(sectorId =>
+    games.find(game => game.sector_id === sectorId && game.status === 'completed')
+  );
 }
 
 export function getSectorsGroup(sectorId: number): number[] | null {
