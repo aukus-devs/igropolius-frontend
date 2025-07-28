@@ -1,12 +1,7 @@
 import { EventDescription, GameLengthRange, PlayerStateAction, SectorData } from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import {
-  bonusCardsData,
-  frontendCardsData,
-  frontendInstantCardsData,
-  SectorsById,
-} from './mockData';
+import { bonusCardsData, frontendCardsData, SectorsById } from './mockData';
 import {
   FALLBACK_GAME_POSTER,
   ScoreByGameLength,
@@ -21,7 +16,6 @@ import {
   GameCompletionType,
   GameEvent,
   GameLength,
-  InstantCardType,
   MainBonusCardType,
   MoveEvent,
   PlayerDetails,
@@ -124,7 +118,7 @@ function getEventMoveInfo(event: MoveEvent) {
   };
 }
 
-function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails) {
+function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails): EventDescription {
   let title = '';
 
   switch (event.subtype) {
@@ -151,9 +145,11 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails)
       const showCardOwner = player.id !== event.bonus_card_owner;
       const owner = usePlayerStore.getState().players.find(p => p.id === event.bonus_card_owner);
 
-      if (event.bonus_card && event.bonus_card in frontendInstantCardsData) {
-        const card = frontendInstantCardsData[event.bonus_card as InstantCardType];
+      let image = undefined;
+      if (event.bonus_card) {
+        const card = bonusCardsData[event.bonus_card];
         title = `Получено от инстантной карточки: ${card.name}`;
+        image = card.picture;
       } else {
         title = `Получено от инстантной карточки: ${event.bonus_card}`;
       }
@@ -161,8 +157,11 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails)
       if (showCardOwner) {
         title += ` (использовал ${owner?.username})`;
       }
-
-      break;
+      return {
+        image,
+        title,
+        description: '',
+      };
     }
     default: {
       const subtype: never = event.subtype;
