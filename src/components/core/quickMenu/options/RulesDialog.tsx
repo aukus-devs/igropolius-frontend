@@ -1,8 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import RulesTabs from "../../rules/RulesTabs";
-import { Document } from "@/components/icons";
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import RulesTabs from '../../rules/RulesTabs';
+import { Document } from '@/components/icons';
 
 function RulesDialog({ className }: { className?: string }) {
   return (
@@ -13,7 +19,7 @@ function RulesDialog({ className }: { className?: string }) {
           Правила
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[37.5rem] h-[41.25rem] p-0" aria-describedby="">
+      <DialogContent className="!max-w-3xl h-[41.25rem] p-0" aria-describedby="">
         <ScrollArea className="h-full w-full overflow-auto">
           <DialogHeader className="w-full px-5 pt-5">
             <DialogTitle className="flex flex-col font-wide-black text-[2rem]">
@@ -26,7 +32,7 @@ function RulesDialog({ className }: { className?: string }) {
         </ScrollArea>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export default RulesDialog;
