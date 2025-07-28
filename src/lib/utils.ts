@@ -95,7 +95,7 @@ function getEventMoveInfo(event: MoveEvent) {
   };
 }
 
-function getEventScoreChangeInfo(event: ScoreChangeEvent) {
+function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerData) {
   let title = '';
 
   switch (event.subtype) {
@@ -119,7 +119,7 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent) {
       break;
     }
     case 'instant-card': {
-      const showCardOwner = usePlayerStore.getState().myPlayerId !== event.bonus_card_owner;
+      const showCardOwner = player.id !== event.bonus_card_owner;
       const owner = usePlayerStore.getState().players.find(p => p.id === event.bonus_card_owner);
 
       if (event.bonus_card && event.bonus_card in frontendInstantCardsData) {
@@ -188,7 +188,7 @@ export function getBonusCardName(bonusType: MainBonusCardType): string {
   return data.name;
 }
 
-export function getEventDescription(event: Events[0]): EventDescription {
+export function getEventDescription(event: Events[0], player: PlayerData): EventDescription {
   const eventType = event.event_type;
   switch (eventType) {
     case 'game':
@@ -198,7 +198,7 @@ export function getEventDescription(event: Events[0]): EventDescription {
     case 'player-move':
       return getEventMoveInfo(event);
     case 'score-change':
-      return getEventScoreChangeInfo(event);
+      return getEventScoreChangeInfo(event, player);
     default: {
       const error: never = eventType;
       throw new Error(`Unsupported event type: ${error}`);

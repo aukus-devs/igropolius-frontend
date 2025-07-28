@@ -27,8 +27,6 @@ export default function PrisonEnterCardRoll() {
     prisonCards,
     receiveBonusCard,
     removeCardFromState,
-    addCardToState,
-    currentSector,
     prisonHasNoCards,
   } = usePlayerStore(
     useShallow(state => ({
@@ -37,8 +35,6 @@ export default function PrisonEnterCardRoll() {
       prisonCards: state.prisonCards,
       receiveBonusCard: state.receiveBonusCard,
       removeCardFromState: state.removeCardFromState,
-      addCardToState: state.addCardToState,
-      currentSector: state.myPlayer?.sector_id,
       prisonHasNoCards: state.prisonCards.length === 0,
     }))
   );

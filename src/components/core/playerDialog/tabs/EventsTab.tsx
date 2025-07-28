@@ -79,8 +79,8 @@ function DiceRollDetails({
   );
 }
 
-function Event({ event }: { event: Events[0] }) {
-  const { title, description, gameCover } = getEventDescription(event);
+function Event({ event, player }: { event: Events[0]; player: PlayerData }) {
+  const { title, description, gameCover } = getEventDescription(event, player);
   const { hours, minutes } = getFormattedTime(event.timestamp);
   const isScoreChangeEvent = event.event_type === 'score-change';
   const isMoveEvent = event.event_type === 'player-move';
@@ -303,7 +303,11 @@ export default function EventsTab({ player }: Props) {
                 </div>
                 <div className="flex flex-col gap-5">
                   {events.map((event, index) => (
-                    <Event key={`${event.timestamp}-${event.event_type}-${index}`} event={event} />
+                    <Event
+                      key={`${event.timestamp}-${event.event_type}-${index}`}
+                      event={event}
+                      player={player}
+                    />
                   ))}
                 </div>
               </div>
