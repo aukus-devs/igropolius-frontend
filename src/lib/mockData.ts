@@ -346,7 +346,7 @@ export const playersData: PlayerDetails[] = [
     username: 'Praden',
     first_name: 'Денис',
     is_online: true,
-    sector_id: 1,
+    sector_id: 11,
     avatar_link: 'https://github.com/shadcn.png',
     role: 'admin',
     url_handle: 'praden',
@@ -369,7 +369,7 @@ export const playersData: PlayerDetails[] = [
     total_score: 0,
     maps_completed: 0,
     color: playerColors.red,
-    model_name: '',
+    model_name: '/boats/boat-sail-b.glb',
 
     games: [
       {
@@ -481,7 +481,7 @@ export const playersData: PlayerDetails[] = [
   },
   {
     id: 2,
-    sector_id: 5,
+    sector_id: 11,
     username: 'Player-2',
     first_name: 'Илья',
     is_online: false,
@@ -498,7 +498,7 @@ export const playersData: PlayerDetails[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     color: playerColors.orange,
-    model_name: '',
+    model_name: '/boats/boat-sail-b.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -639,7 +639,7 @@ export const playersData: PlayerDetails[] = [
   },
   {
     id: 3,
-    sector_id: 5,
+    sector_id: 11,
     username: 'Player-3',
     first_name: 'Илья',
     is_online: true,
@@ -652,10 +652,10 @@ export const playersData: PlayerDetails[] = [
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
     pointauc_token: 'abc',
-    role: 'player',
+    role: 'prison',
     url_handle: 'player-3',
     color: playerColors.yellow,
-    model_name: '',
+    model_name: '/boats/boat-sail-b.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -698,7 +698,7 @@ export const playersData: PlayerDetails[] = [
   },
   {
     id: 4,
-    sector_id: 5,
+    sector_id: 11,
     username: 'Player-4',
     first_name: 'Илья',
     is_online: false,
@@ -714,7 +714,7 @@ export const playersData: PlayerDetails[] = [
     role: 'player',
     url_handle: 'player-4',
     color: playerColors.green,
-    model_name: '',
+    model_name: '/boats/boat-sail-b.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -744,7 +744,7 @@ export const playersData: PlayerDetails[] = [
   },
   {
     id: 5,
-    sector_id: 5,
+    sector_id: 11,
     username: 'Player-5',
     first_name: 'Илья',
     is_online: false,
@@ -760,7 +760,7 @@ export const playersData: PlayerDetails[] = [
     role: 'player',
     url_handle: 'player-5',
     color: playerColors.lightBlue,
-    model_name: '',
+    model_name: '/boats/boat-sail-b.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -796,7 +796,7 @@ export const playersData: PlayerDetails[] = [
   },
   {
     id: 6,
-    sector_id: 5,
+    sector_id: 11,
     username: 'Player-6',
     first_name: 'Илья',
     is_online: true,
@@ -809,10 +809,10 @@ export const playersData: PlayerDetails[] = [
     current_auc_started_at: Math.ceil(Date.now() / 1000),
     current_auc_total_sum: null,
     pointauc_token: 'abc',
-    role: 'player',
+    role: 'prison',
     url_handle: 'player-6',
     color: playerColors.blue,
-    model_name: '',
+    model_name: '/boats/boat-sail-b.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -847,7 +847,7 @@ export const playersData: PlayerDetails[] = [
   },
   {
     id: 7,
-    sector_id: 5,
+    sector_id: 10,
     username: 'Player-7',
     first_name: 'Илья',
     is_online: true,
@@ -863,7 +863,7 @@ export const playersData: PlayerDetails[] = [
     role: 'player',
     url_handle: 'player-7',
     color: playerColors.darkBlue,
-    model_name: '',
+    model_name: '/boats/boat-sail-b.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -898,7 +898,7 @@ export const playersData: PlayerDetails[] = [
   },
   {
     id: 8,
-    sector_id: 5,
+    sector_id: 10,
     username: 'Player-8',
     first_name: 'Илья',
     is_online: true,
@@ -911,10 +911,10 @@ export const playersData: PlayerDetails[] = [
     current_game_duration: 60,
     current_auc_total_sum: null,
     pointauc_token: 'abc',
-    role: 'player',
+    role: 'prison',
     url_handle: 'player-8',
     color: playerColors.purple,
-    model_name: '',
+    model_name: '/boats/boat-sail-b.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',

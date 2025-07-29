@@ -16,7 +16,7 @@ import useEventStore from '@/stores/eventStore';
 import { Card } from './ui/card';
 
 function DesktopUI() {
-  const { loggedIn } = usePlayerStore(
+  const { position, turnState, loggedIn } = usePlayerStore(
     useShallow(state => ({
       turnState: state.turnState,
       position: state.myPlayer?.sector_id,
@@ -58,11 +58,11 @@ function DesktopUI() {
       )}
       <FrontVersionInfo />
 
-      {/* {position && (
+      {position && (
         <div className="absolute bottom-4 right-4">
           #{position} ход: {turnState}
         </div>
-      )} */}
+      )}
 
       {mainNotification && (
         <Card

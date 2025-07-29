@@ -69,7 +69,8 @@ function SectorModel({color, isCorner, isHovered}: Props) {
       ref={gltfRef}
       src={getSectorModel(isCorner, color)}
       rotation={[0, Math.PI, 0]}
-      scale={[1, 0.35, 1]}
+      scale={[1, 1, 1]}
+      position={[0, -0.5, 0]}
     />
   ), [isCorner, color]);
 
