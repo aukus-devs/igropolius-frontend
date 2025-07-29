@@ -242,6 +242,7 @@ type NextTurnStateParams = {
   currentState: PlayerTurnState;
   mapCompleted: boolean;
   action?: PlayerStateAction;
+  prevSectorId?: number;
 };
 
 export function getNextTurnState({
@@ -249,6 +250,7 @@ export function getNextTurnState({
   currentState,
   mapCompleted,
   action,
+  prevSectorId,
 }: NextTurnStateParams): PlayerTurnState {
   const sector = SectorsById[player.sector_id];
   const bonusCardsSet = new Set(player.bonus_cards.map(card => card.bonus_type));
@@ -267,6 +269,8 @@ export function getNextTurnState({
     'choosing-building-sector',
   ];
 
+  const originalSector = prevSectorId ? SectorsById[prevSectorId] : null;
+
   let maxIterations = 10;
   let state = currentState;
   let currentAction = action;
@@ -278,6 +282,7 @@ export function getNextTurnState({
       mapCompleted,
       bonusCardsSet,
       action: currentAction,
+      originalSector,
     });
     currentAction = undefined; // Reset action after first iteration
     console.log('next state:', iteration, currentAction);
@@ -298,6 +303,7 @@ type GetNextStateParams = {
   sector: SectorData;
   mapCompleted?: boolean;
   bonusCardsSet: Set<BonusCardType>;
+  originalSector: SectorData | null;
 };
 
 type StateCycle = 'stop' | PlayerTurnState;
@@ -308,6 +314,7 @@ function getNextState({
   sector,
   mapCompleted,
   bonusCardsSet,
+  originalSector,
 }: GetNextStateParams): StateCycle {
   const hasStreetTaxCard = bonusCardsSet.has('evade-street-tax');
   const hasMapTaxCard = bonusCardsSet.has('evade-map-tax');
@@ -379,6 +386,10 @@ function getNextState({
     case 'rolling-bonus-card':
       return 'rolling-dice';
     case 'dropping-card-after-game-drop':
+      if (originalSector?.type === 'prison') {
+        // if already in prison don't do enter state
+        return 'using-prison-bonuses';
+      }
       return 'entering-prison';
     case 'entering-prison':
       return 'using-prison-bonuses';

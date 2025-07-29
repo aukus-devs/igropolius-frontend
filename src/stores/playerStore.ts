@@ -122,6 +122,7 @@ const usePlayerStore = create<{
       currentState: turnState,
       mapCompleted,
       action: params.action,
+      prevSectorId: params.prevSectorId,
     });
 
     if (mapCompleted && nextTurnState !== 'using-map-tax-bonuses') {

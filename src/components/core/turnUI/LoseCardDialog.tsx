@@ -11,19 +11,21 @@ import { Card } from '@/components/ui/card';
 export default function LoseCardOnDropDialog() {
   const {
     playerCards,
-    moveToPrison,
+    moveMyPlayerToPrison,
     setNextTurnState,
     goToPrison,
     removeCardFromState,
     turnState,
+    sectorId,
   } = usePlayerStore(
     useShallow(state => ({
       playerCards: state.myPlayer?.bonus_cards || [],
-      moveToPrison: state.moveMyPlayerToPrison,
+      moveMyPlayerToPrison: state.moveMyPlayerToPrison,
       setNextTurnState: state.setNextTurnState,
       goToPrison: state.turnState === 'dropping-card-after-game-drop',
       removeCardFromState: state.removeCardFromState,
       turnState: state.turnState,
+      sectorId: state.myPlayer?.sector_id,
     }))
   );
 
@@ -80,9 +82,11 @@ export default function LoseCardOnDropDialog() {
       return;
     }
     if (goToPrison) {
-      await moveToPrison();
+      await moveMyPlayerToPrison();
+      await setNextTurnState({ prevSectorId: sectorId });
+    } else {
+      await setNextTurnState({});
     }
-    await setNextTurnState({});
   };
 
   let buttonText = 'Закрыть';
@@ -144,10 +148,11 @@ function NoCardsForInstantDropDialog() {
 }
 
 function NoCardsForDropDialog() {
-  const { setNextTurnState, moveMyPlayerToPrison } = usePlayerStore(
+  const { setNextTurnState, moveMyPlayerToPrison, sectorId } = usePlayerStore(
     useShallow(state => ({
       setNextTurnState: state.setNextTurnState,
       moveMyPlayerToPrison: state.moveMyPlayerToPrison,
+      sectorId: state.myPlayer?.sector_id,
     }))
   );
   return (
@@ -160,7 +165,7 @@ function NoCardsForDropDialog() {
           onClick={async () => {
             await makePlayerMove({ type: 'drop-to-prison', selected_die: null, adjust_by_1: null });
             await moveMyPlayerToPrison();
-            await setNextTurnState({});
+            await setNextTurnState({ prevSectorId: sectorId });
           }}
         >
           Продолжить
