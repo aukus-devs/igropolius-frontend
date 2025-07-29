@@ -62,7 +62,19 @@ function GameBoard() {
     [ruins, large, scraperE, scraperA, scraperF, scraperD, scraperX]
   );
 
-  const { sectorColor } = useControls({sectorColor: '#7fb58b'});
+  const sectorSettings = useControls("Sector", {
+    color: '#7fb58b',
+    metalness: {
+      value: 0,
+      min: 0,
+      max: 1,
+    },
+    roughness: {
+      value: 1,
+      min: 0,
+      max: 1,
+    }
+  });
 
   return (
     <Merged meshes={meshes} key={buildingsAmount}>
@@ -92,7 +104,7 @@ function GameBoard() {
                 })}
 
                 <Sector
-                  sector={{...sector, color: sectorColor}}
+                  sector={{...sector, settings: sectorSettings}}
                   position={sectorPosition}
                   rotation={rotation}
                   models={

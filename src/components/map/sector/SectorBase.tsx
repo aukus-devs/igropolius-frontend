@@ -8,7 +8,11 @@ import SectorModel from '../models/SectorModel';
 
 type Props = {
   id: number;
-  sector: SectorData;
+  sector: SectorData & {  settings: {
+    color: string;
+    metalness: number;
+    roughness: number;
+  }};
   isCorner: boolean;
   color?: ColorName;
 };
@@ -41,8 +45,9 @@ function SectorBase({ sector, color, isCorner }: Props) {
       color={color}
       isCorner={isCorner}
       isHovered={isHovered}
+      settings={sector.settings}
     />
-  ), [isCorner, color, isHovered]);
+  ), [isCorner, color, isHovered, sector.settings]);
 
   const tooltipWasOnCurrentSector =
     tooltipPrevData?.type === 'sector' && tooltipPrevData.payload.id === sector.id;

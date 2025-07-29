@@ -11,7 +11,11 @@ import { InstanceProps } from "@react-three/fiber";
 import ParkingModel from "../models/ParkingModel";
 
 type Props = {
-  sector: SectorData;
+  sector: SectorData & {  settings: {
+    color: string;
+    metalness: number;
+    roughness: number;
+  }};
   position: Vector3Array;
   rotation: Vector3Array;
   models: React.FC<InstanceProps> & Record<string, React.FC<InstanceProps>>;
