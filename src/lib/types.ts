@@ -137,12 +137,8 @@ export type EventDescription = {
 };
 
 export type MoveMyPlayerParams = {
-  totalRoll: number;
-  // bonusesUsed: RollBonusType[];
-  selectedDie: number | null;
-  adjustBy1: 1 | -1 | null;
+  sectorTo: number;
   rideTrain?: boolean;
-  action?: PlayerStateAction;
 };
 
 export type ManualUseCard = 'reroll-game' | 'game-help-allowed';

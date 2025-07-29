@@ -1,7 +1,10 @@
+import { Button } from '@/components/ui/button';
+import { makePlayerMove } from '@/lib/api';
 import { TrainsConfig } from '@/lib/constants';
 import { SectorsById } from '@/lib/mockData';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
 
@@ -16,15 +19,59 @@ export default function DiceBonusesDialog() {
   const adjustedRoll =
     selectedDie !== null ? selectedDie + (adjustBy1 || 0) : rollResultSum + (adjustBy1 || 0);
 
-  const { myPlayer, moveMyPlayer } = usePlayerStore(
-    useShallow(state => ({ myPlayer: state.myPlayer, moveMyPlayer: state.moveMyPlayer }))
+  const { myPlayer, moveMyPlayer, setNextTurnState } = usePlayerStore(
+    useShallow(state => ({
+      myPlayer: state.myPlayer,
+      moveMyPlayer: state.moveMyPlayer,
+      setNextTurnState: state.setNextTurnState,
+    }))
   );
+
+  const handleSubmit = async () => {
+    let adjustBy1Typed = null;
+    switch (adjustBy1) {
+      case 1:
+        adjustBy1Typed = 1 as const;
+        break;
+      case -1:
+        adjustBy1Typed = -1 as const;
+        break;
+      default:
+        adjustBy1Typed = null;
+    }
+
+    usePlayerStore.setState(state => ({ ...state, isPlayerMoving: true }));
+
+    const { new_sector_id, map_completed } = await makePlayerMove({
+      type: 'dice-roll',
+      selected_die: selectedDie,
+      adjust_by_1: adjustBy1Typed,
+      ride_train: rideTrain,
+    });
+
+    await setNextTurnState({
+      sectorToId: new_sector_id,
+      action: 'skip-bonus',
+      mapCompleted: map_completed,
+    });
+
+    await moveMyPlayer({
+      sectorTo: new_sector_id,
+      rideTrain,
+    });
+
+    usePlayerStore.setState(state => ({ ...state, isPlayerMoving: false }));
+  };
 
   useEffect(() => {
     if (rollResult.length === 0) {
       usePlayerStore.getState().setTurnState('rolling-dice');
     }
   }, [rollResult.length]);
+
+  const { mutateAsync: doSubmit, isPending } = useMutation({
+    mutationFn: handleSubmit,
+  });
 
   if (!myPlayer) {
     return null;
@@ -55,28 +102,6 @@ export default function DiceBonusesDialog() {
   if (adjustBy1) {
     finalDestination += adjustBy1;
   }
-
-  const handleSubmit = () => {
-    let adjustBy1Typed = null;
-    switch (adjustBy1) {
-      case 1:
-        adjustBy1Typed = 1 as const;
-        break;
-      case -1:
-        adjustBy1Typed = -1 as const;
-        break;
-      default:
-        adjustBy1Typed = null;
-    }
-
-    moveMyPlayer({
-      totalRoll: adjustedRoll,
-      adjustBy1: adjustBy1Typed,
-      selectedDie,
-      action: 'skip-bonus',
-      rideTrain,
-    });
-  };
 
   return (
     <div className="backdrop-blur-[1.5rem] bg-card/70 border-none rounded-xl p-4 font-semibold">
@@ -141,13 +166,14 @@ export default function DiceBonusesDialog() {
         )}
 
         <div className="mt-[50px]">
-          <button
+          <Button
             type="button"
-            onClick={handleSubmit}
+            loading={isPending}
+            onClick={() => doSubmit()}
             className="w-full font-bold bg-primary text-primary-foreground rounded-md py-2 hover:bg-primary/90 transition-colors"
           >
             Применить с результатом: {adjustedRoll} (#{finalDestination})
-          </button>
+          </Button>
         </div>
       </div>
     </div>

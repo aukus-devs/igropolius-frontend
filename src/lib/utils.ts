@@ -242,7 +242,8 @@ type NextTurnStateParams = {
   currentState: PlayerTurnState;
   mapCompleted: boolean;
   action?: PlayerStateAction;
-  prevSectorId?: number;
+  sectorFromId?: number;
+  sectorToId?: number;
 };
 
 export function getNextTurnState({
@@ -250,9 +251,11 @@ export function getNextTurnState({
   currentState,
   mapCompleted,
   action,
-  prevSectorId,
+  sectorToId,
 }: NextTurnStateParams): PlayerTurnState {
-  const sector = SectorsById[player.sector_id];
+  const sectorFrom = SectorsById[player.sector_id];
+  const sectorTo = sectorToId ? SectorsById[sectorToId] : sectorFrom;
+
   const bonusCardsSet = new Set(player.bonus_cards.map(card => card.bonus_type));
 
   console.log('current cards', bonusCardsSet);
@@ -269,8 +272,6 @@ export function getNextTurnState({
     'choosing-building-sector',
   ];
 
-  const originalSector = prevSectorId ? SectorsById[prevSectorId] : null;
-
   let maxIterations = 10;
   let state = currentState;
   let currentAction = action;
@@ -278,11 +279,11 @@ export function getNextTurnState({
   while (maxIterations--) {
     const iteration = getNextState({
       currentState: state,
-      sector,
+      sectorFrom,
+      sectorTo,
       mapCompleted,
       bonusCardsSet,
       action: currentAction,
-      originalSector,
     });
     currentAction = undefined; // Reset action after first iteration
     console.log('next state:', iteration, currentAction);
@@ -300,10 +301,10 @@ export function getNextTurnState({
 type GetNextStateParams = {
   currentState: PlayerTurnState;
   action?: PlayerStateAction;
-  sector: SectorData;
+  sectorFrom: SectorData;
+  sectorTo: SectorData;
   mapCompleted?: boolean;
   bonusCardsSet: Set<BonusCardType>;
-  originalSector: SectorData | null;
 };
 
 type StateCycle = 'stop' | PlayerTurnState;
@@ -311,10 +312,10 @@ type StateCycle = 'stop' | PlayerTurnState;
 function getNextState({
   currentState,
   action,
-  sector,
+  sectorFrom,
+  sectorTo,
   mapCompleted,
   bonusCardsSet,
-  originalSector,
 }: GetNextStateParams): StateCycle {
   const hasStreetTaxCard = bonusCardsSet.has('evade-street-tax');
   const hasMapTaxCard = bonusCardsSet.has('evade-map-tax');
@@ -330,7 +331,7 @@ function getNextState({
       if (hasDiceCards && !skipBonus) {
         return 'stop';
       }
-      if (sector.type === 'railroad' && !skipBonus) {
+      if (sectorFrom.type === 'railroad' && !skipBonus) {
         return 'stop';
       }
       return 'using-map-tax-bonuses';
@@ -340,15 +341,15 @@ function getNextState({
       }
       return 'using-street-tax-bonuses';
     case 'using-street-tax-bonuses':
-      if (canBuildOnSector(sector.type) && hasStreetTaxCard && !skipBonus) {
+      if (canBuildOnSector(sectorTo.type) && hasStreetTaxCard && !skipBonus) {
         return 'stop';
       }
-      if (sector.type === 'prison') {
+      if (sectorTo.type === 'prison') {
         return 'entering-prison';
       }
       return 'filling-game-review';
     case 'using-prison-bonuses':
-      if (sector.type === 'prison' && hasPrisonCard && !skipBonus) {
+      if (sectorTo.type === 'prison' && hasPrisonCard && !skipBonus) {
         if (action === 'skip-prison') {
           return 'rolling-dice';
         }
@@ -365,7 +366,7 @@ function getNextState({
       if (action === 'drop-card') {
         return 'dropping-card-after-instant-roll';
       }
-      switch (sector.type) {
+      switch (sectorFrom.type) {
         case 'bonus':
           return 'rolling-bonus-card';
         case 'parking':
@@ -379,14 +380,14 @@ function getNextState({
         case 'start-corner':
           return 'choosing-building-sector';
         default: {
-          const sectorType: never = sector.type;
+          const sectorType: never = sectorFrom.type;
           throw new Error(`Unsupported sector type: ${sectorType}`);
         }
       }
     case 'rolling-bonus-card':
       return 'rolling-dice';
     case 'dropping-card-after-game-drop':
-      if (originalSector?.type === 'prison') {
+      if (sectorFrom.type === 'prison') {
         // if already in prison don't do enter state
         return 'using-prison-bonuses';
       }
@@ -533,4 +534,12 @@ export function getSectorsGroup(sectorId: number): number[] | null {
     }
   }
   return null;
+}
+
+export function getClosesPrison(sectorId: number): number {
+  const prisonSectors = [11, 31];
+  return prisonSectors.reduce(
+    (prev, curr) => (Math.abs(curr - sectorId) < Math.abs(prev - sectorId) ? curr : prev),
+    prisonSectors[0]
+  );
 }

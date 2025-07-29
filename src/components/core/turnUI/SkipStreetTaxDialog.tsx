@@ -9,30 +9,32 @@ import { useEffect } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 export default function SkipStreetTaxDialog() {
-  const { taxInfo, players, payTaxes, setNextTurnState } = usePlayerStore(
+  const { taxInfo, players, payTaxes, setNextTurnState, dataLoaded } = usePlayerStore(
     useShallow(state => {
       const myPlayer = state.myPlayer;
       let taxInfo: TaxData = {
         taxAmount: 0,
         playerIncomes: [],
       };
-      if (myPlayer) {
+      if (myPlayer && state.taxPerSector[myPlayer.sector_id]) {
         taxInfo = state.taxPerSector[myPlayer.sector_id];
       }
+      console.log('taxes', { sectorId: myPlayer?.sector_id, taxInfo });
       return {
         taxInfo,
         players: state.players,
         payTaxes: state.payTaxesAndSwitchState,
         setNextTurnState: state.setNextTurnState,
+        dataLoaded: myPlayer?.sector_id && state.players.length > 0,
       };
     })
   );
 
   useEffect(() => {
-    if (taxInfo.taxAmount === 0) {
+    if (dataLoaded && taxInfo.taxAmount === 0) {
       setNextTurnState({ action: 'skip-bonus' });
     }
-  }, [taxInfo.taxAmount, setNextTurnState]);
+  }, [taxInfo.taxAmount, setNextTurnState, dataLoaded]);
 
   const handlePayTax = async () => {
     await payTaxes('street-tax');

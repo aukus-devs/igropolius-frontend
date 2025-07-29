@@ -19,6 +19,7 @@ import {
   PlayerEventsResponse,
   PlayerListResponse,
   PlayerMoveRequest,
+  PlayerMoveResponse,
   RollDiceResponse,
   RulesResponse,
   SavePlayerGameRequest,
@@ -314,14 +315,18 @@ export async function logout(): Promise<void> {
   }
 }
 
-export async function makePlayerMove(request: PlayerMoveRequest): Promise<void> {
+export async function makePlayerMove(request: PlayerMoveRequest): Promise<PlayerMoveResponse> {
   if (MOCK_API) {
-    return Promise.resolve();
+    return Promise.resolve({
+      new_sector_id: 10,
+      map_completed: false,
+    });
   }
-  await apiRequest('/api/players/current/moves', {
+  const response = await apiRequest('/api/players/current/moves', {
     method: 'POST',
     body: JSON.stringify(request),
   });
+  return response.json();
 }
 
 export async function saveTurnState(request: UpdatePlayerTurnStateRequest): Promise<void> {

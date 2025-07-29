@@ -283,6 +283,8 @@ export type Players = PlayerDetails[];
 export type SelectedDie = number | null;
 export type AdjustBy1 = number | null;
 export type RideTrain = boolean;
+export type NewSectorId1 = number;
+export type MapCompleted1 = boolean;
 export type Num = number;
 export type Min = number;
 export type Max = number;
@@ -300,7 +302,7 @@ export type Rating1 = number;
 export type VodLinks2 = string | null;
 export type Scores3 = number;
 export type GameId = number | null;
-export type NewSectorId1 = number;
+export type NewSectorId2 = number;
 export type EventStartTime = number | null;
 export type EventEndTime4 = number | null;
 export type PlayerId2 = number;
@@ -696,6 +698,14 @@ export interface PlayerMoveRequest {
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "PlayerMoveResponse".
+ */
+export interface PlayerMoveResponse {
+  new_sector_id: NewSectorId1;
+  map_completed: MapCompleted1;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "RollDiceRequest".
  */
 export interface RollDiceRequest {
@@ -749,7 +759,7 @@ export interface SavePlayerGameRequest {
  * via the `definition` "SavePlayerGameResponse".
  */
 export interface SavePlayerGameResponse {
-  new_sector_id: NewSectorId1;
+  new_sector_id: NewSectorId2;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

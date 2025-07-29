@@ -46,10 +46,24 @@ export default function LoseCardOnDropDialog() {
   };
 
   const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
+    if (!sectorId) {
+      throw new Error('Sector ID is not defined');
+    }
+
     setCardsBeforeDrop(playerCards.map(card => card.bonus_type));
     if (goToPrison) {
       await dropBonusCard({ bonus_type: option.value });
       removeCardFromState(option.value);
+
+      usePlayerStore.setState(state => ({ ...state, isPlayerMoving: true }));
+
+      const { new_sector_id } = await makePlayerMove({
+        type: 'drop-to-prison',
+        selected_die: null,
+        adjust_by_1: null,
+      });
+
+      await setNextTurnState({ sectorToId: new_sector_id });
     } else {
       const result = await activateInstantCard({
         card_type: 'lose-card-or-3-percent',
@@ -83,7 +97,7 @@ export default function LoseCardOnDropDialog() {
     }
     if (goToPrison) {
       await moveMyPlayerToPrison();
-      await setNextTurnState({ prevSectorId: sectorId });
+      usePlayerStore.setState(state => ({ ...state, isPlayerMoving: false }));
     } else {
       await setNextTurnState({});
     }
@@ -148,11 +162,10 @@ function NoCardsForInstantDropDialog() {
 }
 
 function NoCardsForDropDialog() {
-  const { setNextTurnState, moveMyPlayerToPrison, sectorId } = usePlayerStore(
+  const { setNextTurnState, moveMyPlayerToPrison } = usePlayerStore(
     useShallow(state => ({
       setNextTurnState: state.setNextTurnState,
       moveMyPlayerToPrison: state.moveMyPlayerToPrison,
-      sectorId: state.myPlayer?.sector_id,
     }))
   );
   return (
@@ -163,9 +176,21 @@ function NoCardsForDropDialog() {
           variant="outline"
           className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
           onClick={async () => {
-            await makePlayerMove({ type: 'drop-to-prison', selected_die: null, adjust_by_1: null });
+            usePlayerStore.setState(state => ({
+              ...state,
+              isPlayerMoving: true,
+            }));
+            const { new_sector_id } = await makePlayerMove({
+              type: 'drop-to-prison',
+              selected_die: null,
+              adjust_by_1: null,
+            });
+            await setNextTurnState({ sectorToId: new_sector_id });
             await moveMyPlayerToPrison();
-            await setNextTurnState({ prevSectorId: sectorId });
+            usePlayerStore.setState(state => ({
+              ...state,
+              isPlayerMoving: false,
+            }));
           }}
         >
           Продолжить

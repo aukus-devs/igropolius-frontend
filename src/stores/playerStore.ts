@@ -18,11 +18,15 @@ import {
 } from '@/components/map/utils';
 import { SectorsById, sectorsData } from '@/lib/mockData';
 import { Euler, Quaternion } from 'three';
-import { getNextTurnState, getSectorsGroup, playerOwnsSectorsGroup } from '@/lib/utils';
+import {
+  getClosesPrison,
+  getNextTurnState,
+  getSectorsGroup,
+  playerOwnsSectorsGroup,
+} from '@/lib/utils';
 import {
   giveBonusCard,
   dropBonusCard,
-  makePlayerMove,
   payTaxes,
   saveTurnState,
   stealBonusCard as stealBonusCardApi,
@@ -61,8 +65,9 @@ const usePlayerStore = create<{
   moveMyPlayer: (params: MoveMyPlayerParams) => Promise<void>;
   setTurnState: (turnState: PlayerTurnState | null) => void;
   setNextTurnState: (params: {
-    prevSectorId?: number;
+    sectorToId?: number;
     action?: PlayerStateAction;
+    mapCompleted?: boolean;
   }) => Promise<void>;
   receiveBonusCard: (type: MainBonusCardType, switchState?: boolean) => Promise<void>;
   // dropBonusCard: (type: MainBonusCardType) => Promise<void>;
@@ -109,23 +114,27 @@ const usePlayerStore = create<{
     });
   },
 
-  setNextTurnState: async (params: { prevSectorId?: number; action?: PlayerStateAction }) => {
+  setNextTurnState: async (params: {
+    sectorToId?: number;
+    action?: PlayerStateAction;
+    mapCompleted?: boolean;
+  }) => {
     const { myPlayer, turnState } = get();
+
+    console.log('updating state', params, turnState);
+
     if (!myPlayer || !turnState) return;
 
     set({ turnState: null });
 
-    const mapCompleted = Boolean(params.prevSectorId && myPlayer.sector_id < params.prevSectorId);
-
     const nextTurnState = getNextTurnState({
       player: myPlayer,
       currentState: turnState,
-      mapCompleted,
+      mapCompleted: params.mapCompleted ?? false,
       action: params.action,
-      prevSectorId: params.prevSectorId,
     });
 
-    if (mapCompleted && nextTurnState !== 'using-map-tax-bonuses') {
+    if (params.mapCompleted && nextTurnState !== 'using-map-tax-bonuses') {
       await payTaxes({ tax_type: 'map-tax' });
     }
 
@@ -137,10 +146,8 @@ const usePlayerStore = create<{
     }
 
     await saveTurnState({ turn_state: nextTurnState });
-    if (nextTurnState === turnState) {
-      set({ turnState: nextTurnState });
-    }
 
+    set({ turnState: nextTurnState });
     resetCurrentPlayerQuery();
     resetPlayersQuery();
   },
@@ -328,7 +335,7 @@ const usePlayerStore = create<{
         y: [playerModel.position.y, playerModel.position.y + 3, playerModel.position.y],
         z: nextPosition[2],
         ease: 'inOutSine',
-        duration: IS_DEV ? 100 : 500,
+        duration: IS_DEV ? 500 : 500,
         onUpdate: () => {
           if (isMyPlayer) {
             moveToPlayer(playerModel, false);
@@ -366,20 +373,12 @@ const usePlayerStore = create<{
   },
 
   moveMyPlayer: async (params: MoveMyPlayerParams) => {
-    const { myPlayer, setNextTurnState } = get();
+    const { myPlayer } = get();
     if (!myPlayer) {
       throw new Error('My player not found.');
     }
 
-    const originalSector = myPlayer.sector_id;
-
     set({ isPlayerMoving: true });
-    await makePlayerMove({
-      type: 'dice-roll',
-      selected_die: params.selectedDie,
-      adjust_by_1: params.adjustBy1,
-      ride_train: params.rideTrain,
-    });
 
     if (params.rideTrain) {
       const destination = await useTrainsStore.getState().rideTrain(myPlayer.sector_id);
@@ -388,9 +387,19 @@ const usePlayerStore = create<{
       }));
     }
 
-    await get().animatePlayerMovement(myPlayer.id, params.totalRoll);
-    get().updateMyPlayerSectorId(originalSector + params.totalRoll);
-    await setNextTurnState({ prevSectorId: originalSector, action: params.action });
+    const currentSector = get().myPlayer?.sector_id;
+    if (!currentSector) {
+      throw new Error('Current sector not found.');
+    }
+
+    const animationSteps =
+      params.sectorTo > currentSector
+        ? params.sectorTo - currentSector
+        : params.sectorTo + sectorsData.length - currentSector;
+
+    await get().animatePlayerMovement(myPlayer.id, animationSteps);
+    get().updateMyPlayerSectorId(params.sectorTo);
+
     set({ isPlayerMoving: false });
 
     resetNotificationsQuery();
@@ -400,14 +409,11 @@ const usePlayerStore = create<{
     const { myPlayer, animatePlayerMovement } = get();
     if (!myPlayer) return;
 
-    const prisonSectors = [11, 31];
-    const sectorId = prisonSectors.reduce((prev, curr) =>
-      Math.abs(curr - myPlayer.sector_id) < Math.abs(prev - myPlayer.sector_id) ? curr : prev
-    );
+    const prisonSector = getClosesPrison(myPlayer.sector_id);
 
-    const steps = sectorId - myPlayer.sector_id;
+    const steps = prisonSector - myPlayer.sector_id;
     await animatePlayerMovement(myPlayer.id, steps);
-    get().updateMyPlayerSectorId(sectorId);
+    get().updateMyPlayerSectorId(prisonSector);
   },
 
   setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),

@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button';
+import { makePlayerMove } from '@/lib/api';
 import { SectorsById } from '@/lib/mockData';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
+import { useMutation } from '@tanstack/react-query';
 import { useShallow } from 'zustand/shallow';
 
 export function DiceRollButton() {
@@ -23,29 +25,49 @@ export function DiceRollButton() {
   const canModifyRoll = canRideTrain || hasRollCards;
 
   const handleClick = async () => {
-    const roll = await rollDice();
+    await rollDice();
     if (canModifyRoll) {
-      await setNextTurnState({
-        prevSectorId: myPlayer?.sector_id,
-      });
+      await setNextTurnState({});
       return;
     }
 
-    await setNextTurnState({
-      prevSectorId: myPlayer?.sector_id,
+    console.log('flag 1');
+    usePlayerStore.setState(state => ({ ...state, isPlayerMoving: true }));
+
+    // skip state for using movement bonuses
+    await setNextTurnState({});
+
+    console.log('flag 2');
+
+    const { new_sector_id, map_completed } = await makePlayerMove({
+      type: 'dice-roll',
+      selected_die: null,
+      adjust_by_1: null,
+      ride_train: false,
     });
 
-    const total = roll.reduce((sum, value) => sum + value, 0);
-    moveMyPlayer({
-      totalRoll: total,
-      adjustBy1: null,
-      selectedDie: null,
+    // switch to next state and start animation
+    await setNextTurnState({
+      sectorToId: new_sector_id,
       action: 'skip-bonus',
+      mapCompleted: map_completed,
     });
+
+    console.log('flag 3');
+
+    // animate movement
+    await moveMyPlayer({
+      sectorTo: new_sector_id,
+    });
+    usePlayerStore.setState(state => ({ ...state, isPlayerMoving: false }));
   };
 
+  const { isPending, mutateAsync: doHandleClick } = useMutation({
+    mutationFn: handleClick,
+  });
+
   return (
-    <Button variant="outline" onClick={handleClick} disabled={isPlayerMoving}>
+    <Button variant="outline" onClick={() => doHandleClick()} loading={isPlayerMoving || isPending}>
       Бросить кубик и ходить
     </Button>
   );
