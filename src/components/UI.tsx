@@ -12,7 +12,7 @@ import useAdminStore from '@/stores/adminStore';
 import AdminPanel from './core/AdminPanel';
 import MyCards from './core/MyCards';
 import FrontVersionInfo from './FrontVersionInfo';
-import useEventStore from '@/stores/eventStore';
+import useSystemStore from '@/stores/systemStore';
 import { Card } from './ui/card';
 
 function DesktopUI() {
@@ -26,7 +26,7 @@ function DesktopUI() {
 
   const showAdminPanel = useAdminStore(state => state.showAdminPanel);
 
-  const mainNotification = useEventStore(state => state.mainNotification);
+  const mainNotification = useSystemStore(state => state.mainNotification);
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:block hidden">

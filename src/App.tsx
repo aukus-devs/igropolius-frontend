@@ -7,7 +7,7 @@ import { Controls, IS_DEV } from './lib/constants';
 import GameScene from './components/map/scenes/GameScene';
 import UI from './components/UI';
 import usePlayerStore from './stores/playerStore';
-import useEventStore from './stores/eventStore';
+import useSystemStore from './stores/systemStore';
 import { fetchCurrentPlayer, fetchPlayers, fetchFrontVersion, fetchEventSettings } from './lib/api';
 import { useQuery } from '@tanstack/react-query';
 import LoadingModal from './components/core/loadng/LoadingModal';
@@ -42,13 +42,19 @@ function App() {
     []
   );
 
-  const { setPlayers, setMyPlayer, setTurnState, isPlayerMoving, myRole } = usePlayerStore(
+  const { setPlayers, setMyPlayer, setTurnState, myRole } = usePlayerStore(
     useShallow(state => ({
       setPlayers: state.setPlayers,
       setMyPlayer: state.setMyPlayer,
       setTurnState: state.setTurnState,
-      isPlayerMoving: state.isPlayerMoving,
       myRole: state.myPlayer?.role,
+    }))
+  );
+
+  const { disableCurrentPlayerQuery, disablePlayersQuery } = useSystemStore(
+    useShallow(state => ({
+      disableCurrentPlayerQuery: state.disableCurrentPlayerQuery,
+      disablePlayersQuery: state.disablePlayersQuery,
     }))
   );
 
@@ -56,13 +62,14 @@ function App() {
     queryKey: queryKeys.currentPlayer,
     queryFn: fetchCurrentPlayer,
     retry: false,
+    enabled: !disableCurrentPlayerQuery,
   });
 
   const { data: playersData, isLoading } = useQuery({
     queryKey: queryKeys.players,
     queryFn: fetchPlayers,
     refetchInterval: 60 * 1000,
-    enabled: !isPlayerMoving, // Only fetch players when not moving
+    enabled: !disablePlayersQuery,
   });
 
   const { data: eventSettingsData, isError: eventSettingsError } = useQuery({
@@ -74,8 +81,8 @@ function App() {
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const unpin = useCanvasTooltipStore(state => state.unpin);
 
-  const setEventSettings = useEventStore(state => state.setEventSettings);
-  const setMainNotification = useEventStore(state => state.setMainNotification);
+  const setEventSettings = useSystemStore(state => state.setEventSettings);
+  const setMainNotification = useSystemStore(state => state.setMainNotification);
   const setRollResult = useDiceStore(state => state.setRollResult);
 
   useEffect(() => {
@@ -145,12 +152,7 @@ function App() {
   const enableMetrika = !IS_DEV;
   const isModelSelectionScene = false;
 
-  const {
-    lightIntensity,
-    bgIntensity,
-    bgBlurriness,
-    toneMapping
-  } = useControls("Environment", {
+  const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
     toneMapping: {
       value: 3,
       min: 1,
@@ -207,12 +209,7 @@ function App() {
 
                 {/* {IS_DEV && <Stats className="fps-meter" />} */}
 
-                {isModelSelectionScene ? (
-                  <ModelSelectionScene />
-                ) : (
-                  <GameScene />
-                )}
-
+                {isModelSelectionScene ? <ModelSelectionScene /> : <GameScene />}
               </Suspense>
             </Canvas>
           </div>

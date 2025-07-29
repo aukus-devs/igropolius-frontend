@@ -6,7 +6,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import { Notification, Share, X } from '../icons';
 import { fetchNotifications, markNotificationsSeen } from '@/lib/api';
 import usePlayerStore from '@/stores/playerStore';
-import useEventStore from '@/stores/eventStore';
+import useSystemStore from '@/stores/systemStore';
 import { useShallow } from 'zustand/shallow';
 import { formatMs } from '@/lib/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -130,7 +130,7 @@ function Notifications() {
   const { players, myPlayer } = usePlayerStore(
     useShallow(state => ({ players: state.players, myPlayer: state.myPlayer }))
   );
-  const eventEndTime = useEventStore(state => state.eventEndTime);
+  const eventEndTime = useSystemStore(state => state.eventEndTime);
   const queryClient = useQueryClient();
 
   const { data: notificationsData, isLoading: loading } = useQuery({

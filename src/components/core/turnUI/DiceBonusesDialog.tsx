@@ -4,6 +4,7 @@ import { TrainsConfig } from '@/lib/constants';
 import { SectorsById } from '@/lib/mockData';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
+import useSystemStore from '@/stores/systemStore';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/shallow';
@@ -40,6 +41,7 @@ export default function DiceBonusesDialog() {
         adjustBy1Typed = null;
     }
 
+    useSystemStore.setState(state => ({ ...state, disablePlayersQuery: true }));
     usePlayerStore.setState(state => ({ ...state, isPlayerMoving: true }));
 
     const { new_sector_id, map_completed } = await makePlayerMove({
@@ -61,6 +63,7 @@ export default function DiceBonusesDialog() {
     });
 
     usePlayerStore.setState(state => ({ ...state, isPlayerMoving: false }));
+    useSystemStore.setState(state => ({ ...state, disablePlayersQuery: false }));
   };
 
   useEffect(() => {

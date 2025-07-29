@@ -7,19 +7,24 @@ type MainNotification = {
   variant: 'info' | 'error';
 };
 
-interface EventStore {
+interface SystemStore {
   eventStartTime: number | null;
   eventEndTime: number | null;
   setEventSettings: (settings: EventSettings) => void;
   clearEventSettings: () => void;
   mainNotification: MainNotification | null;
   setMainNotification: (message: MainNotification | null) => void;
+  disablePlayersQuery: boolean;
+  disableCurrentPlayerQuery: boolean;
 }
 
-const useEventStore = create<EventStore>(set => ({
+const useSystemStore = create<SystemStore>(set => ({
   eventStartTime: null,
   eventEndTime: null,
   mainNotification: null,
+  disablePlayersQuery: false,
+  disableCurrentPlayerQuery: false,
+
   setMainNotification: (message: MainNotification | null) => {
     set({ mainNotification: message });
   },
@@ -44,4 +49,4 @@ const useEventStore = create<EventStore>(set => ({
   },
 }));
 
-export default useEventStore;
+export default useSystemStore;

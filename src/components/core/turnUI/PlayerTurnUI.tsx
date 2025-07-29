@@ -1,5 +1,5 @@
 import usePlayerStore from '@/stores/playerStore';
-import useEventStore from '@/stores/eventStore';
+import useSystemStore from '@/stores/systemStore';
 import { useShallow } from 'zustand/shallow';
 import GameReviewForm from './GameReviewForm';
 import RollBonusCard from './RollBonusCard';
@@ -40,7 +40,7 @@ export default function PlayerTurnUI() {
   const currentSector = myPlayerSectorId ? SectorsById[myPlayerSectorId] : null;
   const showPointAUCButton = currentSector?.rollType === 'auc';
 
-  const { eventStartTime, eventEndTime, setMainNotification } = useEventStore(
+  const { eventStartTime, eventEndTime, setMainNotification } = useSystemStore(
     useShallow(state => ({
       eventStartTime: state.eventStartTime,
       eventEndTime: state.eventEndTime,
@@ -69,7 +69,7 @@ export default function PlayerTurnUI() {
           tag: 'event-start-timer',
         });
       } else {
-        const mainNotification = useEventStore.getState().mainNotification;
+        const mainNotification = useSystemStore.getState().mainNotification;
         if (mainNotification?.tag === 'event-start-timer') {
           setMainNotification(null);
         }

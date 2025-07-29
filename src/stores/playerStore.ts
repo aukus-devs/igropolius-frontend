@@ -68,6 +68,7 @@ const usePlayerStore = create<{
     sectorToId?: number;
     action?: PlayerStateAction;
     mapCompleted?: boolean;
+    skipUpdate?: boolean;
   }) => Promise<void>;
   receiveBonusCard: (type: MainBonusCardType, switchState?: boolean) => Promise<void>;
   // dropBonusCard: (type: MainBonusCardType) => Promise<void>;
@@ -118,6 +119,7 @@ const usePlayerStore = create<{
     sectorToId?: number;
     action?: PlayerStateAction;
     mapCompleted?: boolean;
+    skipUpdate?: boolean;
   }) => {
     const { myPlayer, turnState } = get();
 
@@ -125,7 +127,9 @@ const usePlayerStore = create<{
 
     if (!myPlayer || !turnState) return;
 
-    set({ turnState: null });
+    if (!params.skipUpdate) {
+      set({ turnState: null });
+    }
 
     const nextTurnState = getNextTurnState({
       player: myPlayer,
@@ -147,7 +151,9 @@ const usePlayerStore = create<{
 
     await saveTurnState({ turn_state: nextTurnState });
 
-    set({ turnState: nextTurnState });
+    if (!params.skipUpdate) {
+      set({ turnState: nextTurnState });
+    }
     resetCurrentPlayerQuery();
     resetPlayersQuery();
   },

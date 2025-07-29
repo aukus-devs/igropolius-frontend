@@ -3,6 +3,7 @@ import { makePlayerMove } from '@/lib/api';
 import { SectorsById } from '@/lib/mockData';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
+import useSystemStore from '@/stores/systemStore';
 import { useMutation } from '@tanstack/react-query';
 import { useShallow } from 'zustand/shallow';
 
@@ -32,6 +33,7 @@ export function DiceRollButton() {
     }
 
     console.log('flag 1');
+    useSystemStore.setState(state => ({ ...state, disablePlayersQuery: true }));
     usePlayerStore.setState(state => ({ ...state, isPlayerMoving: true }));
 
     // skip state for using movement bonuses
@@ -59,7 +61,9 @@ export function DiceRollButton() {
     await moveMyPlayer({
       sectorTo: new_sector_id,
     });
+
     usePlayerStore.setState(state => ({ ...state, isPlayerMoving: false }));
+    useSystemStore.setState(state => ({ ...state, disablePlayersQuery: false }));
   };
 
   const { isPending, mutateAsync: doHandleClick } = useMutation({

@@ -7,6 +7,7 @@ import { activateInstantCard, dropBonusCard, makePlayerMove } from '@/lib/api';
 import { InstantCardResult, MainBonusCardType } from '@/lib/api-types-generated';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import useSystemStore from '@/stores/systemStore';
 
 export default function LoseCardOnDropDialog() {
   const {
@@ -55,7 +56,11 @@ export default function LoseCardOnDropDialog() {
       await dropBonusCard({ bonus_type: option.value });
       removeCardFromState(option.value);
 
-      usePlayerStore.setState(state => ({ ...state, isPlayerMoving: true }));
+      useSystemStore.setState(state => ({
+        ...state,
+        disablePlayersQuery: true,
+        disableCurrentPlayerQuery: true,
+      }));
 
       const { new_sector_id } = await makePlayerMove({
         type: 'drop-to-prison',
@@ -63,7 +68,7 @@ export default function LoseCardOnDropDialog() {
         adjust_by_1: null,
       });
 
-      await setNextTurnState({ sectorToId: new_sector_id });
+      await setNextTurnState({ sectorToId: new_sector_id, skipUpdate: true });
     } else {
       const result = await activateInstantCard({
         card_type: 'lose-card-or-3-percent',
@@ -96,8 +101,21 @@ export default function LoseCardOnDropDialog() {
       return;
     }
     if (goToPrison) {
+      usePlayerStore.setState(state => ({
+        ...state,
+        isPlayerMoving: true,
+        turnState: null,
+      }));
       await moveMyPlayerToPrison();
-      usePlayerStore.setState(state => ({ ...state, isPlayerMoving: false }));
+      usePlayerStore.setState(state => ({
+        ...state,
+        isPlayerMoving: false,
+      }));
+      useSystemStore.setState(state => ({
+        ...state,
+        disablePlayersQuery: false,
+        disableCurrentPlayerQuery: false,
+      }));
     } else {
       await setNextTurnState({});
     }
@@ -176,6 +194,10 @@ function NoCardsForDropDialog() {
           variant="outline"
           className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
           onClick={async () => {
+            useSystemStore.setState(state => ({
+              ...state,
+              disablePlayersQuery: true,
+            }));
             usePlayerStore.setState(state => ({
               ...state,
               isPlayerMoving: true,
@@ -190,6 +212,10 @@ function NoCardsForDropDialog() {
             usePlayerStore.setState(state => ({
               ...state,
               isPlayerMoving: false,
+            }));
+            useSystemStore.setState(state => ({
+              ...state,
+              disablePlayersQuery: false,
             }));
           }}
         >
