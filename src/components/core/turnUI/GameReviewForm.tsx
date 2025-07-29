@@ -10,7 +10,7 @@ import Rating from '../Rating';
 import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
-import { ArrowRight, Share, Smile, X } from '../../icons';
+import { ArrowRight, Share, Smile, Eye, Wand, X } from '../../icons';
 import { searchGames } from '@/lib/api';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -20,7 +20,6 @@ import { calculateGameCompletionScore } from '@/lib/utils';
 import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 type StatesOption = {
   title: string;
@@ -210,7 +209,7 @@ function GameReview() {
           <Tooltip disableHoverableContent>
             <TooltipTrigger asChild>
               <Button variant="ghost" size="icon" onClick={handleSpoilerTag}>
-                <EyeOffIcon className="size-[22px]" />
+                <Wand className="size-[22px]" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -222,7 +221,7 @@ function GameReview() {
         <Tooltip disableHoverableContent>
           <TooltipTrigger asChild>
             <Button variant="ghost" size="icon" onClick={() => setShowPreview(!showPreview)}>
-              <EyeIcon className="size-[22px]" />
+              <Eye className="size-[22px]" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>

@@ -26,3 +26,7 @@ export { default as Telegram } from "./Telegram";
 export { default as Twitch } from "./Twitch";
 export { default as VkVideoLive } from "./VkVideoLive";
 export { default as Smile } from "./Smile";
+export { default as Eye } from "./Eye";
+export { default as Person } from "./Person";
+export { default as Event } from "./Event";
+export { default as Wand } from "./Wand";

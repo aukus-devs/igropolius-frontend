@@ -20,8 +20,7 @@ import { TooltipProvider } from './components/ui/tooltip';
 import useCanvasTooltipStore from './stores/canvasTooltipStore';
 import { useUserActivity } from './hooks/useUserActivity';
 import { MetrikaCounter } from 'react-metrika';
-import { useControls } from 'leva';
-import { Environment, Stats } from '@react-three/drei';
+import { Environment } from '@react-three/drei';
 import { STORAGE_BASE_URL } from '@/lib/constants';
 import ModelSelectionScene from './components/map/scenes/ModelSelectionScene';
 
@@ -145,37 +144,37 @@ function App() {
   const enableMetrika = !IS_DEV;
   const isModelSelectionScene = false;
 
-  const {
-    lightIntensity,
-    bgIntensity,
-    bgBlurriness,
-    toneMapping
-  } = useControls({
-    toneMapping: {
-      value: 2,
-      min: 1,
-      max: 7,
-      step: 1,
-    },
-    lightIntensity: {
-      value: 1.0,
-      min: 0,
-      max: 10,
-      step: 0.1,
-    },
-    bgIntensity: {
-      value: 1.0,
-      min: 0,
-      max: 10,
-      step: 0.1,
-    },
-    bgBlurriness: {
-      value: 0.0,
-      min: 0,
-      max: 10,
-      step: 0.1,
-    },
-  });
+  // const {
+  //   lightIntensity,
+  //   bgIntensity,
+  //   bgBlurriness,
+  //   toneMapping
+  // } = useControls({
+  //   toneMapping: {
+  //     value: 2,
+  //     min: 1,
+  //     max: 7,
+  //     step: 1,
+  //   },
+  //   lightIntensity: {
+  //     value: 1.0,
+  //     min: 0,
+  //     max: 10,
+  //     step: 0.1,
+  //   },
+  //   bgIntensity: {
+  //     value: 1.0,
+  //     min: 0,
+  //     max: 10,
+  //     step: 0.1,
+  //   },
+  //   bgBlurriness: {
+  //     value: 0.0,
+  //     min: 0,
+  //     max: 10,
+  //     step: 0.1,
+  //   },
+  // });
 
   return (
     <>
@@ -196,17 +195,17 @@ function App() {
             <TooltipProvider>
               <UI />
             </TooltipProvider>
-            <Canvas onPointerMissed={onPointerMissed} gl={{toneMapping}}>
+            <Canvas onPointerMissed={onPointerMissed} gl={{toneMapping: 3}}>
               <Suspense fallback={<SceneLoader />}>
                 <Environment
                   files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`}
                   background
-                  environmentIntensity={lightIntensity}
-                  backgroundIntensity={bgIntensity}
-                  backgroundBlurriness={bgBlurriness}
+                  environmentIntensity={0.9}
+                  backgroundIntensity={1.4}
+                  backgroundBlurriness={0.1}
                 />
 
-                <Stats className="fps-meter" />
+                {/* {IS_DEV && <Stats className="fps-meter" />} */}
 
                 {isModelSelectionScene ? (
                   <ModelSelectionScene />

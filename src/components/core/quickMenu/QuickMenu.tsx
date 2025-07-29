@@ -56,8 +56,8 @@ function QuickMenu() {
         </div>
 
         <div className={groupStyle}>
-          <TutorialDialog className={buttonStyle} />
           <RulesDialog className={buttonStyle} />
+          <TutorialDialog className={buttonStyle} />
           <Separator />
           <DevelopersDialog className={buttonStyle} />
         </div>

@@ -47,12 +47,18 @@ function PlayerDialogHeader({ player }: { player: PlayerDetails }) {
     <div className="relative md:pt-8 pt-[50px] mb-6">
       <div className="flex gap-2 justify-center items-center mb-5">
         <div className="relative">
-          <Avatar className="w-[54px] h-[54px] overflow-auto">
+          <Avatar
+            className="w-[54px] h-[54px] overflow-auto"
+            style={{ outline: `2px solid ${player.color}` }}
+          >
             <AvatarImage src={player.avatar_link ?? FALLBACK_AVATAR_URL} />
             <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
           </Avatar>
           {player.is_online && (
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm leading-[17px] bg-red-500 px-2 rounded-[2px] font-bold">
+            <div
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm leading-[17px] px-2 rounded-[2px] font-bold"
+              style={{ background: player.color }}
+            >
               LIVE
             </div>
           )}

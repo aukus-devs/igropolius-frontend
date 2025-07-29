@@ -21,15 +21,15 @@ function BuildingInfo({ building }: Props) {
       <CardHeader>
         <CardTitle>{gameTitle}</CardTitle>
       </CardHeader>
-      <CardContent className="text-sm">
+      <CardContent className="text-sm text-muted-foreground font-semibold">
         <p>Владелец: {owner.username}</p>
         <p>Длительность игры: {gameLength}</p>
         <div className="flex items-center">
-          <p className="text-sm">Доход: {building.income}</p>
+          <p>Доход: {building.income}</p>
           <Share className="w-4 h-4" />
         </div>
         {showGroupBonus && <div>Бонус группы: {building.hasGroupBonus ? 'да' : 'нет'}</div>}
-        <p className="text-sm">Построено: {formatTsToMonthDatetime(building.createdAt)}</p>
+        <p>Построено: {formatTsToMonthDatetime(building.createdAt)}</p>
       </CardContent>
     </Card>
   );

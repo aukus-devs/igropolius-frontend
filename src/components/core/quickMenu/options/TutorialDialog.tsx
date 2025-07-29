@@ -1,10 +1,9 @@
-import { ArrowRight } from "@/components/icons";
+import { ArrowRight, Event } from "@/components/icons";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { cn } from "@/lib/utils";
 import usePlayerStore from "@/stores/playerStore";
-import { BookOpenTextIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 
@@ -23,8 +22,8 @@ function TutorialDialog({ className }: { className?: string }) {
 	return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger className={cn(buttonVariants({ variant: 'outline' }), className)}>
-        <BookOpenTextIcon />
-        Гайд
+        <Event />
+        Об ивенте
       </DialogTrigger>
       <DialogContent className="w-[600px]" aria-describedby="">
 				<DialogHeader>
