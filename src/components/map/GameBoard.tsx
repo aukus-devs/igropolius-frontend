@@ -9,6 +9,7 @@ import { Merged, useGLTF } from '@react-three/drei';
 import { InstanceProps, ObjectMap } from '@react-three/fiber';
 import { MeshStandardMaterial } from 'three';
 import { GLTF } from 'three-stdlib';
+import { useControls } from 'leva';
 
 const buildingUrls = [
   `${STORAGE_BASE_URL}/models/buildings/ruins1.glb`,
@@ -61,6 +62,8 @@ function GameBoard() {
     [ruins, large, scraperE, scraperA, scraperF, scraperD, scraperX]
   );
 
+  const { sectorColor } = useControls({sectorColor: '#7fb58b'});
+
   return (
     <Merged meshes={meshes} key={buildingsAmount}>
       {models => (
@@ -89,7 +92,7 @@ function GameBoard() {
                 })}
 
                 <Sector
-                  sector={sector}
+                  sector={{...sector, color: sectorColor}}
                   position={sectorPosition}
                   rotation={rotation}
                   models={

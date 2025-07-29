@@ -44,11 +44,12 @@ function SectorModel({color, isCorner, isHovered}: Props) {
 
     gltfRef.current.traverse((mesh) => {
       if (mesh instanceof Mesh) {
-        mesh.material = mesh.material.clone();
+        mesh.material = new MeshStandardMaterial({ color });
+        // mesh.material = mesh.material.clone();
         mesh.material.emissiveIntensity = 0.75;
       }
     });
-  })
+  }, [color]);
 
   useFrame(() => {
     if (!gltfRef.current) return;
