@@ -2,10 +2,11 @@ import { frontendCardsData, frontendInstantCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
-import { activateInstantCard } from '@/lib/api';
+import { activateInstantCard, giveBonusCard } from '@/lib/api';
 import { useCallback, useMemo, useState } from 'react';
 import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
 import { InstantCardResult, InstantCardType, MainBonusCardType } from '@/lib/api-types-generated';
+import useSystemStore from '@/stores/systemStore';
 
 type InstantCard = {
   instant: InstantCardType;
@@ -18,14 +19,14 @@ type BonusCard = {
 type OptionType = InstantCard | BonusCard;
 
 export default function RollWithInstantCards() {
-  const { receiveBonusCard, playerCards, setNextTurnState, hasDowngradeBonus, hasUpgradeBonus } =
+  const { playerCards, setNextTurnState, hasDowngradeBonus, hasUpgradeBonus, addCardToState } =
     usePlayerStore(
       useShallow(state => ({
-        receiveBonusCard: state.receiveBonusCard,
         playerCards: state.myPlayer?.bonus_cards,
         setNextTurnState: state.setNextTurnState,
         hasDowngradeBonus: state.hasDowngradeBonus,
         hasUpgradeBonus: state.hasUpgradeBonus,
+        addCardToState: state.addCardToState,
       }))
     );
 
@@ -36,6 +37,11 @@ export default function RollWithInstantCards() {
     async (option: WeightedOption<OptionType>) => {
       if (isInstantCard(option.value)) {
         if (option.value.instant === 'lose-card-or-3-percent') {
+          useSystemStore.setState(state => ({
+            ...state,
+            disableCurrentPlayerQuery: true,
+          }));
+          await setNextTurnState({ action: 'drop-card', skipUpdate: true });
           setMoveToCardDrop(true);
           return;
         }
@@ -44,10 +50,17 @@ export default function RollWithInstantCards() {
         resetCurrentPlayerQuery();
         resetPlayersQuery();
       } else if (isBonusCard(option.value)) {
-        await receiveBonusCard(option.value.card, false);
+        useSystemStore.setState(state => ({
+          ...state,
+          disableCurrentPlayerQuery: true,
+        }));
+        const newCard = await giveBonusCard({ bonus_type: option.value.card });
+        addCardToState(newCard);
+
+        setNextTurnState({ skipUpdate: true });
       }
     },
-    [receiveBonusCard, setActivationResult]
+    [setActivationResult, setNextTurnState, addCardToState]
   );
 
   const getWinnerText = (option: WeightedOption<OptionType>) => {
@@ -106,9 +119,10 @@ export default function RollWithInstantCards() {
   }
 
   const handleClose = async () => {
-    if (moveToCardDrop) {
-      await setNextTurnState({ action: 'drop-card' });
-    }
+    useSystemStore.setState(state => ({
+      ...state,
+      disableCurrentPlayerQuery: false,
+    }));
   };
 
   const getSecondaryText = () => {

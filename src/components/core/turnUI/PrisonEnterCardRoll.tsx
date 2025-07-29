@@ -4,10 +4,11 @@ import { useMemo, useState } from 'react';
 import { frontendCardsData } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
 import { MainBonusCardType } from '@/lib/api-types-generated';
-import { dropBonusCard } from '@/lib/api';
+import { dropBonusCard, giveBonusCard } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PRISON_NOTHING_CARD_IMAGE } from '@/lib/constants';
+import useSystemStore from '@/stores/systemStore';
 
 type LoseCard = {
   action: 'lose-card';
@@ -26,17 +27,17 @@ export default function PrisonEnterCardRoll() {
     setNextTurnState,
     playerCards,
     prisonCards,
-    receiveBonusCard,
     removeCardFromState,
     prisonHasNoCards,
+    addCardToState,
   } = usePlayerStore(
     useShallow(state => ({
       setNextTurnState: state.setNextTurnState,
       playerCards: state.myPlayer?.bonus_cards ?? [],
       prisonCards: state.prisonCards,
-      receiveBonusCard: state.receiveBonusCard,
       removeCardFromState: state.removeCardFromState,
       prisonHasNoCards: state.prisonCards.length === 0,
+      addCardToState: state.addCardToState,
     }))
   );
 
@@ -57,6 +58,12 @@ export default function PrisonEnterCardRoll() {
   };
 
   const handleFinished = async (option: WeightedOption<RollOptionType>) => {
+    useSystemStore.setState(state => ({
+      ...state,
+      disableCurrentPlayerQuery: true,
+    }));
+    setNextTurnState({ skipUpdate: true });
+
     if (option.value === 'nothing') {
       return;
     }
@@ -67,13 +74,17 @@ export default function PrisonEnterCardRoll() {
       return;
     }
     if (option.value.action === 'receive-card') {
-      await receiveBonusCard(option.value.card, false);
+      const newCard = await giveBonusCard({ bonus_type: option.value.card });
+      addCardToState(newCard);
       return;
     }
   };
 
   const handleClose = async () => {
-    return setNextTurnState({});
+    useSystemStore.setState(state => ({
+      ...state,
+      disableCurrentPlayerQuery: false,
+    }));
   };
 
   const options: WeightedOption<RollOptionType>[] = useMemo(() => {
@@ -157,7 +168,7 @@ function NoCardsForPrisonDialog() {
           className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
           onClick={() => setNextTurnState({})}
         >
-          Продолжить
+          Закрыть
         </Button>
       </div>
     </Card>

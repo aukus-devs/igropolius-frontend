@@ -3,22 +3,35 @@ import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { MainBonusCardType } from '@/lib/api-types-generated';
+import { giveBonusCard } from '@/lib/api';
+import useSystemStore from '@/stores/systemStore';
+import { resetNotificationsQuery } from '@/lib/queryClient';
 
 export default function RollBonusCard() {
-  const { receiveBonusCard, myPlayer, setNextTurnState } = usePlayerStore(
+  const { myPlayer, setNextTurnState, addCardToState } = usePlayerStore(
     useShallow(state => ({
-      receiveBonusCard: state.receiveBonusCard,
       myPlayer: state.myPlayer,
       setNextTurnState: state.setNextTurnState,
+      addCardToState: state.addCardToState,
     }))
   );
 
-  const handleFinished = (option: WeightedOption<MainBonusCardType>) => {
-    return receiveBonusCard(option.value, false);
+  const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
+    useSystemStore.setState(state => ({
+      ...state,
+      disableCurrentPlayerQuery: true,
+    }));
+    const newCard = await giveBonusCard({ bonus_type: option.value });
+    addCardToState(newCard);
+    setNextTurnState({ skipUpdate: true });
+    resetNotificationsQuery();
   };
 
-  const handleClose = () => {
-    return setNextTurnState({});
+  const handleClose = async () => {
+    useSystemStore.setState(state => ({
+      ...state,
+      disableCurrentPlayerQuery: false,
+    }));
   };
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {

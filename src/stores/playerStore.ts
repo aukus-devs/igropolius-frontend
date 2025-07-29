@@ -25,7 +25,6 @@ import {
   playerOwnsSectorsGroup,
 } from '@/lib/utils';
 import {
-  giveBonusCard,
   dropBonusCard,
   payTaxes,
   saveTurnState,
@@ -70,8 +69,6 @@ const usePlayerStore = create<{
     mapCompleted?: boolean;
     skipUpdate?: boolean;
   }) => Promise<void>;
-  receiveBonusCard: (type: MainBonusCardType, switchState?: boolean) => Promise<void>;
-  // dropBonusCard: (type: MainBonusCardType) => Promise<void>;
   stealBonusCard: (player: PlayerDetails, card: MainBonusCardType) => Promise<void>;
   moveMyPlayerToPrison: () => Promise<void>;
   payTaxesAndSwitchState: (type: TaxType) => Promise<void>;
@@ -423,24 +420,6 @@ const usePlayerStore = create<{
   },
 
   setTurnState: (turnState: PlayerTurnState | null) => set({ turnState }),
-
-  receiveBonusCard: async (type: MainBonusCardType, switchState: boolean = true) => {
-    const { setNextTurnState } = get();
-    const newCard = await giveBonusCard({ bonus_type: type });
-
-    // add card to player before updating turn state
-    set(state => ({
-      myPlayer: state.myPlayer
-        ? { ...state.myPlayer, bonus_cards: [...state.myPlayer.bonus_cards, newCard] }
-        : null,
-    }));
-
-    if (switchState) {
-      await setNextTurnState({});
-    }
-    resetPlayersQuery();
-    resetNotificationsQuery();
-  },
 
   removeCardFromState: (type: MainBonusCardType) => {
     set(state => ({
