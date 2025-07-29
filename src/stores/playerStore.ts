@@ -19,7 +19,7 @@ import {
 import { SectorsById, sectorsData } from '@/lib/mockData';
 import { Euler, Quaternion } from 'three';
 import {
-  getClosesPrison,
+  getClosestPrison,
   getNextTurnState,
   getSectorsGroup,
   playerOwnsSectorsGroup,
@@ -409,7 +409,7 @@ const usePlayerStore = create<{
     const { myPlayer, animatePlayerMovement } = get();
     if (!myPlayer) return;
 
-    const prisonSector = getClosesPrison(myPlayer.sector_id);
+    const prisonSector = getClosestPrison(myPlayer.sector_id);
 
     const steps = prisonSector - myPlayer.sector_id;
     await animatePlayerMovement(myPlayer.id, steps);

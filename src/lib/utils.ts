@@ -536,7 +536,7 @@ export function getSectorsGroup(sectorId: number): number[] | null {
   return null;
 }
 
-export function getClosesPrison(sectorId: number): number {
+export function getClosestPrison(sectorId: number): number {
   const prisonSectors = [11, 31];
   return prisonSectors.reduce(
     (prev, curr) => (Math.abs(curr - sectorId) < Math.abs(prev - sectorId) ? curr : prev),
