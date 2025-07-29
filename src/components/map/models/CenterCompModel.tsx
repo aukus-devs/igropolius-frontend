@@ -1,10 +1,16 @@
-import { SECTOR_CONTENT_ELEVATION, STORAGE_BASE_URL } from "@/lib/constants";
+import { STORAGE_BASE_URL } from "@/lib/constants";
 import { Gltf } from "@react-three/drei";
 
 const CenterCompUrl = `${STORAGE_BASE_URL}/models/center/center_comp.glb`;
+const mountainsUrl = `${STORAGE_BASE_URL}/models/center/mountains.glb`;
 
 function CenterCompModel() {
-  return <Gltf src={CenterCompUrl} position={[0, SECTOR_CONTENT_ELEVATION, 0]} rotation={[0, Math.PI, 0]} />;
+  return (
+    <group position={[0, -1.4, 0]} rotation={[0, Math.PI, 0]}>
+      <Gltf src={CenterCompUrl} />
+      <Gltf src={mountainsUrl} />
+    </group>
+  );
 }
 
 export default CenterCompModel;
