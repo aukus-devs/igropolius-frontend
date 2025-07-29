@@ -1,8 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "@/lib/api";
-import { resetCurrentPlayerQuery } from "@/lib/queryClient";
-import { Button } from "@/components/ui/button";
-import { Person } from "@/components/icons";
+import { useMutation } from '@tanstack/react-query';
+import { logout } from '@/lib/api';
+import { resetCurrentPlayerQuery } from '@/lib/queryClient';
+import { Button } from '@/components/ui/button';
+import { Person } from '@/components/icons';
 
 export function LogoutButton({ className }: { className?: string }) {
   const { mutateAsync: logoutRequest } = useMutation({
@@ -11,7 +11,7 @@ export function LogoutButton({ className }: { className?: string }) {
 
   const handleLogout = () => {
     logoutRequest().then(() => {
-      localStorage.removeItem("access-token");
+      localStorage.removeItem('access-token');
       resetCurrentPlayerQuery();
     });
   };
