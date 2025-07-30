@@ -67,7 +67,7 @@ export const NO_MOCKS = Boolean(import.meta.env.VITE_NO_MOCKS);
 
 export const STORAGE_BASE_URL = IS_DEV
   ? `/monopoly_s3/assets`
-  : `/assets`;
+  : `/models_assets`;
 
 export const ScoreByGameLength: { [key in GameLength]: number } = {
   '': 0,
