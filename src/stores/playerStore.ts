@@ -176,7 +176,7 @@ const usePlayerStore = create<{
         };
       }
     }
-    const activePlayers = playersData.filter(p => p.role === 'admin' || p.role == 'player');
+    const activePlayers = playersData.filter(p => p.username === 'Praden' || p.role == 'player');
     const players = activePlayers;
     players.forEach(p => (p.color = p.color === '' ? 'white' : p.color));
 

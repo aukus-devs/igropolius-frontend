@@ -407,6 +407,8 @@ export interface CreatePlayerNotificationRequest {
  */
 export interface CurrentUserResponse {
   id: Id;
+  username: Username;
+  role: Role;
   moder_for?: ModerFor;
   turn_state: PlayerTurnState;
   last_roll_result: LastRollResult;
