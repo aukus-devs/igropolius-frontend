@@ -90,6 +90,7 @@ export function getEventGameInfo(event: GameEvent) {
     title: event.game_title,
     description: '',
     image: event.game_cover || FALLBACK_GAME_POSTER,
+    sectorId: event.sector_id,
   } as EventDescription;
 }
 
@@ -172,6 +173,7 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails)
   return {
     title,
     description: '',
+    sectorId: event.sector_id,
   };
 }
 
@@ -211,7 +213,8 @@ function getEventBonusCardInfo(event: BonusCardEvent) {
     title,
     description: card.name,
     image: card?.picture || '',
-  };
+    sectorId: event.sector_id,
+  } as EventDescription;
 }
 
 export function getBonusCardName(bonusType: MainBonusCardType): string {

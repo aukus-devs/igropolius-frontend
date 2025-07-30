@@ -134,6 +134,7 @@ export type EventDescription = {
   title: string;
   description: string;
   image?: string;
+  sectorId?: number;
 };
 
 export type MoveMyPlayerParams = {

@@ -80,7 +80,7 @@ function DiceRollDetails({
 }
 
 function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
-  const { title, description, image, timeHeader } = getEventDescription(event, player);
+  const { title, description, image, timeHeader, sectorId } = getEventDescription(event, player);
   const isScoreChangeEvent = event.event_type === 'score-change';
   const isMoveEvent = event.event_type === 'player-move';
   const moveEvent = isMoveEvent ? (event as MoveEvent) : null;
@@ -95,6 +95,10 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
 
   const { hours, minutes } = eventTimeFormat(event.timestamp);
 
+  const descriptionWithSectorId = sectorId
+    ? [description, `сектор #${sectorId}`].filter(x => x !== '').join(', ')
+    : description;
+
   return (
     <div>
       <div className="text-muted-foreground text-sm font-semibold mb-1">
@@ -108,8 +112,11 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
           <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
           <div className="flex flex-row items-center justify-between w-full text-muted-foreground text-sm font-semibold">
             <div className="flex gap-0 place-items-center">
-              <p>{description}</p>
-              {isScoreChangeEvent && <ScoreChangeDescription event={event as ScoreChangeEvent} />}
+              {isScoreChangeEvent ? (
+                <ScoreChangeDescription event={event as ScoreChangeEvent} />
+              ) : (
+                <p>{descriptionWithSectorId}</p>
+              )}
             </div>
             {hasDiceRollData && (
               <button
@@ -339,7 +346,7 @@ function ScoreChangeDescription({ event }: { event: ScoreChangeEvent }) {
         </p>
         <Share className="w-3.5 h-3.5 inline" />
       </div>
-      ({event.score_before}&nbsp;→&nbsp;{event.score_after})
+      ({event.score_before}&nbsp;→&nbsp;{event.score_after}), сектор #{event.sector_id}
     </div>
   );
 }
