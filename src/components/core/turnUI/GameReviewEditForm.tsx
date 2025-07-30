@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+
 import { Button } from '../../ui/button';
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '../../ui/input';
@@ -15,91 +15,15 @@ import { searchGames, editPlayerGame } from '@/lib/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
-import { EditPlayerGame, GameCompletionType, GameLength, IgdbGameSummary, PlayerGame } from '@/lib/api-types-generated';
+import { EditPlayerGame, IgdbGameSummary, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
 import { resetPlayersQuery } from '@/lib/queryClient';
-
-type StatesOption = {
-  title: string;
-  value: GameCompletionType;
-};
-
-function GameStatus() {
-  const { setGameStatus, gameStatus } = useReviewFormStore(
-    useShallow(state => ({ setGameStatus: state.setGameStatus, gameStatus: state.gameStatus }))
-  );
-  const options: StatesOption[] = [
-    { title: 'Прошел', value: 'completed' },
-    { title: 'Дропнул', value: 'drop' },
-    { title: 'Реролл', value: 'reroll' },
-  ];
-
-  return (
-    <Select
-      onValueChange={setGameStatus}
-      defaultValue={gameStatus ?? undefined}
-    >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Выберите исход" />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option, idx) => (
-          <SelectItem key={idx} value={option.value}>
-            {option.title}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-}
 
 function GamePoster({ src }: { src: string }) {
   return (
     <div className="w-32 rounded-md overflow-hidden">
       <img className="h-full object-cover" src={src} />
     </div>
-  );
-}
-
-type GameTimeOption = {
-  title: string;
-  value: GameLength;
-};
-
-function GameTime() {
-  const { setGameTime, gameTime, gameStatus } = useReviewFormStore(
-    useShallow(state => ({
-      setGameTime: state.setGameTime,
-      gameTime: state.gameTime,
-      gameStatus: state.gameStatus,
-    }))
-  );
-  const options: GameTimeOption[] = [
-    { title: '2-5 ч.', value: '2-5' },
-    { title: '6-10 ч.', value: '5-10' },
-    { title: '11-15 ч.', value: '10-15' },
-    { title: '16-20 ч.', value: '15-20' },
-    { title: '21-25 ч.', value: '20-25' },
-    { title: '26+ ч.', value: '25+' },
-  ];
-
-  return (
-    <Select
-      onValueChange={setGameTime}
-      defaultValue={gameTime ?? undefined}
-      disabled={gameStatus !== 'completed'}
-    >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Время по HLTB" />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option, idx) => (
-          <SelectItem key={idx} value={option.value}>
-            {option.title}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
   );
 }
 
@@ -329,10 +253,8 @@ function GameReviewEditForm({
     error,
     clearError,
     selectedGame,
-    gameStatus,
     setGameTitle,
     setGameReview,
-    setGameStatus,
     setGameTime,
     setSelectedGame,
     setVodLinks,
@@ -345,10 +267,8 @@ function GameReviewEditForm({
       error: state.error,
       clearError: state.clearError,
       selectedGame: state.selectedGame,
-      gameStatus: state.gameStatus,
       setGameTitle: state.setGameTitle,
       setGameReview: state.setGameReview,
-      setGameStatus: state.setGameStatus,
       setGameTime: state.setGameTime,
       setSelectedGame: state.setSelectedGame,
       setVodLinks: state.setVodLinks,
@@ -359,7 +279,7 @@ function GameReviewEditForm({
   const setOpen = externalSetOpen || internalSetOpen;
 
   const { mutateAsync: doEditGame, isPending: isEditing } = useMutation({
-    mutationFn: ({ gameId, request }: { gameId: number; request: EditPlayerGame }) => 
+    mutationFn: ({ gameId, request }: { gameId: number; request: EditPlayerGame }) =>
       editPlayerGame(gameId, request),
   });
 
@@ -368,8 +288,6 @@ function GameReviewEditForm({
       setGameTitle(gameToEdit.title);
       setGameReview(gameToEdit.review);
       setRating(gameToEdit.rating);
-      setGameStatus(gameToEdit.status);
-      setGameTime(gameToEdit.length || '');
       setVodLinks(gameToEdit.vod_links || '');
       if (gameToEdit.cover) {
         setSelectedGame({
@@ -380,29 +298,14 @@ function GameReviewEditForm({
         });
       }
     }
-  }, [
-    gameToEdit,
-    open,
-    setGameTitle,
-    setGameReview,
-    setRating,
-    setGameStatus,
-    setGameTime,
-    setSelectedGame,
-    setVodLinks,
-  ]);
+  }, [gameToEdit, open, setGameTitle, setGameReview, setRating, setVodLinks, setSelectedGame]);
 
   const isSaveButtonDisabled = useReviewFormStore(state => {
     if (!state.gameTitle) return true;
-    if (!state.gameStatus) return true;
     if (state.gameReview.length === 0) return true;
     if (state.rating === 0) return true;
 
-    if (state.gameStatus === 'reroll') return false;
-    if (state.gameStatus === 'drop') return false;
-
-    if (state.gameTime) return false;
-    return true;
+    return false;
   });
 
   useEffect(() => {
@@ -462,11 +365,6 @@ function GameReviewEditForm({
               <HLTBLink />
             </div>
 
-            <div className="flex gap-2 w-full">
-              <GameStatus />
-              {gameStatus === 'completed' && <GameTime />}
-            </div>
-
             <div className="font-roboto-wide-semibold">Оценка — {rating}</div>
             <Rating onChange={setRating} initialValue={rating} />
             <GameReview />
@@ -491,4 +389,4 @@ function GameReviewEditForm({
   );
 }
 
-export default GameReviewEditForm; 
+export default GameReviewEditForm;

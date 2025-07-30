@@ -374,6 +374,7 @@ export const playersData: PlayerDetails[] = [
     games: [
       {
         id: 1,
+        player_id: 1,
         sector_id: 38,
         created_at: Math.ceil(Date.now() / 1000),
         length: '2-5',
@@ -387,6 +388,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 2,
+        player_id: 1,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '25+',
@@ -400,6 +402,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 3,
+        player_id: 1,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '20-25',
@@ -413,6 +416,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 4,
+        player_id: 1,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -426,6 +430,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 5,
+        player_id: 1,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '10-15',
@@ -439,6 +444,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 6,
+        player_id: 1,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '5-10',
@@ -452,6 +458,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 7,
+        player_id: 1,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '2-5',
@@ -465,6 +472,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 8,
+        player_id: 1,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '',
@@ -512,6 +520,7 @@ export const playersData: PlayerDetails[] = [
     games: [
       {
         id: 9,
+        player_id: 2,
         sector_id: 24,
         created_at: Math.ceil(Date.now() / 1000),
         length: '25+',
@@ -525,6 +534,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 10,
+        player_id: 2,
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -538,6 +548,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 11,
+        player_id: 2,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '25+',
@@ -551,6 +562,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 12,
+        player_id: 2,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '20-25',
@@ -564,6 +576,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 13,
+        player_id: 2,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -578,6 +591,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 14,
+        player_id: 2,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '10-15',
@@ -591,6 +605,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 15,
+        player_id: 2,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '5-10',
@@ -604,6 +619,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 16,
+        player_id: 2,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '2-5',
@@ -617,6 +633,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 17,
+        player_id: 2,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '',
@@ -669,6 +686,7 @@ export const playersData: PlayerDetails[] = [
     games: [
       {
         id: 18,
+        player_id: 3,
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
         length: '5-10',
@@ -682,6 +700,7 @@ export const playersData: PlayerDetails[] = [
       },
       {
         id: 19,
+        player_id: 3,
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '10-15',
@@ -728,6 +747,7 @@ export const playersData: PlayerDetails[] = [
     games: [
       {
         id: 20,
+        player_id: 4,
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
         length: '',
@@ -773,6 +793,7 @@ export const playersData: PlayerDetails[] = [
     games: [
       {
         id: 21,
+        player_id: 5,
         sector_id: 2,
         created_at: Math.ceil(Date.now() / 1000),
         length: '2-5',
@@ -825,6 +846,7 @@ export const playersData: PlayerDetails[] = [
     games: [
       {
         id: 22,
+        player_id: 6,
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -876,6 +898,7 @@ export const playersData: PlayerDetails[] = [
     games: [
       {
         id: 23,
+        player_id: 7,
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
@@ -927,6 +950,7 @@ export const playersData: PlayerDetails[] = [
     games: [
       {
         id: 24,
+        player_id: 8,
         sector_id: 10,
         created_at: Math.ceil(Date.now() / 1000),
         length: '5-10',

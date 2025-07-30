@@ -59,7 +59,7 @@ function GameReview({ game }: Props) {
     month: 'long',
   }).format(new Date(created_at * 1000));
   const { color, statusText } = getStatusData(status);
-
+  console.log(currentUser);
   const canEdit =
     myPlayer &&
     currentUser &&
