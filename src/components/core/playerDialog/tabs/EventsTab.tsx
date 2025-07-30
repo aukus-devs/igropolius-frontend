@@ -22,6 +22,8 @@ import {
   PlayerDetails,
   ScoreChangeEvent,
 } from '@/lib/api-types-generated';
+import { bonusCardsData } from '@/lib/mockData';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 type Props = {
   player: PlayerDetails;
@@ -80,7 +82,10 @@ function DiceRollDetails({
 }
 
 function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
-  const { title, description, image, timeHeader, sectorId } = getEventDescription(event, player);
+  const { title, description, image, timeHeader, sectorId, bonusType } = getEventDescription(
+    event,
+    player
+  );
   const isScoreChangeEvent = event.event_type === 'score-change';
   const isMoveEvent = event.event_type === 'player-move';
   const moveEvent = isMoveEvent ? (event as MoveEvent) : null;
@@ -95,6 +100,8 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
 
   const { hours, minutes } = eventTimeFormat(event.timestamp);
 
+  const cardInfo = bonusType ? bonusCardsData[bonusType] : null;
+
   const descriptionWithSectorId = sectorId
     ? [description, `сектор #${sectorId}`].filter(x => x !== '').join(', ')
     : description;
@@ -106,7 +113,14 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
       </div>
       <div className="flex gap-2">
         {image && (
-          <img src={image} alt={description} width="53" className="rounded-sm object-cover" />
+          <Tooltip>
+            <TooltipTrigger>
+              <img src={image} alt={description} width="53" className="rounded-sm object-cover" />
+            </TooltipTrigger>
+            {cardInfo && (
+              <TooltipContent className="w-fit max-w-60">{cardInfo.description}</TooltipContent>
+            )}
+          </Tooltip>
         )}
         <div className="w-full">
           <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
