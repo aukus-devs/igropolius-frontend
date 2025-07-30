@@ -10,7 +10,7 @@ import Rating from '../Rating';
 import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
-import { ArrowRight, Eye, X } from '../../icons';
+import { ArrowRight, Eye, X, Smile, Wand } from '../../icons';
 import { searchGames, editPlayerGame } from '@/lib/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -18,6 +18,8 @@ import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { EditPlayerGame, IgdbGameSummary, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
 import { resetPlayersQuery } from '@/lib/queryClient';
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
+import EmotePanel from './EmotePanel';
 
 function GamePoster({ src }: { src: string }) {
   return (
@@ -30,8 +32,61 @@ function GamePoster({ src }: { src: string }) {
 function GameReview() {
   const gameReview = useReviewFormStore(state => state.editGameReview);
   const setGameReview = useReviewFormStore(state => state.setEditGameReview);
+  const [showEmotePanel, setShowEmotePanel] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleEmoteSelect = (emoteUrl: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const currentValue = gameReview;
+
+    const newValue =
+      currentValue.slice(0, start) + `[7tv]${emoteUrl}[/7tv]` + currentValue.slice(end);
+    setGameReview(newValue);
+
+    setShowEmotePanel(false);
+
+    setTimeout(() => {
+      textarea.focus();
+      const newCursorPos = start + `[7tv]${emoteUrl}[/7tv]`.length;
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+    }, 0);
+  };
+
+  const handleSpoilerTag = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const currentValue = gameReview;
+    const selectedText = currentValue.slice(start, end);
+
+    let newValue: string;
+    let newCursorPos: number;
+
+    if (selectedText) {
+      newValue =
+        currentValue.slice(0, start) +
+        `[spoiler]${selectedText}[/spoiler]` +
+        currentValue.slice(end);
+      newCursorPos = start + `[spoiler]${selectedText}[/spoiler]`.length;
+    } else {
+      newValue = currentValue.slice(0, start) + '[spoiler][/spoiler]' + currentValue.slice(end);
+      newCursorPos = start + '[spoiler]'.length;
+    }
+
+    setGameReview(newValue);
+
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+    }, 0);
+  };
 
   return (
     <div className="relative">
@@ -53,6 +108,43 @@ function GameReview() {
       </div>
 
       <div className="flex justify-end mt-2">
+        {!showPreview && (
+          <Popover open={showEmotePanel} onOpenChange={setShowEmotePanel}>
+            <Tooltip disableHoverableContent>
+              <TooltipTrigger asChild>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Smile className="size-[22px]" />
+                  </Button>
+                </PopoverTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Смайлы 7TV</p>
+              </TooltipContent>
+            </Tooltip>
+            <PopoverContent
+              className="w-auto p-0 border-none bg-transparent shadow-none"
+              align="end"
+              sideOffset={5}
+            >
+              <EmotePanel onEmoteSelect={handleEmoteSelect} />
+            </PopoverContent>
+          </Popover>
+        )}
+
+        {!showPreview && (
+          <Tooltip disableHoverableContent>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" onClick={handleSpoilerTag}>
+                <Wand className="size-[22px]" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Спойлер</p>
+            </TooltipContent>
+          </Tooltip>
+        )}
+
         <Tooltip disableHoverableContent>
           <TooltipTrigger asChild>
             <Button variant="ghost" size="icon" onClick={() => setShowPreview(!showPreview)}>
