@@ -55,7 +55,11 @@ const useSystemStore = create<SystemStore>(set => ({
   },
 
   setMyUser: (data?: CurrentUserResponse | null) => {
-    set({ myUser: data || null });
+    if (!data) {
+      set({ myUser: null, actingUserId: null });
+      return;
+    }
+    set({ myUser: data });
   },
 
   setActingUserId: (userId: number | null) => set({ actingUserId: userId }),
