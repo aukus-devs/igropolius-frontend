@@ -540,11 +540,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
                 onClick={onConfirm}
                 loading={isLoading}
               >
-                {isSubmitting ? (
-                  'Отправка...'
-                ) : (
-                  <ButtonText gameStatus={gameStatus} scores={scores.total} />
-                )}
+                <ButtonText gameStatus={gameStatus} scores={scores.total} loading={isSubmitting} />
               </Button>
             </TooltipTrigger>
             {gameStatus === 'completed' && (
