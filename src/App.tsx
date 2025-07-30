@@ -104,6 +104,8 @@ function App() {
   useEffect(() => {
     if (currentPlayerData?.role === 'admin') {
       setShowAdminPanel(true);
+    } else {
+      setShowAdminPanel(false);
     }
   }, [currentPlayerData?.role, setShowAdminPanel]);
 

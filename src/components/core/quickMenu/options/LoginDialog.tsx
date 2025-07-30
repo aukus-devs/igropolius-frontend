@@ -33,7 +33,6 @@ export default function LoginDialog({ className }: { className?: string }) {
         localStorage.setItem('access-token', res.token);
         resetCurrentPlayerQuery();
         setOpen(false);
-        window.location.reload();
       })
       .catch(err => {
         if (err.body) {
