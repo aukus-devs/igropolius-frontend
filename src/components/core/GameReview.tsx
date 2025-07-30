@@ -61,10 +61,9 @@ function GameReview({ game }: Props) {
   const { color, statusText } = getStatusData(status);
   console.log(currentUser);
   const canEdit =
-    myPlayer &&
     currentUser &&
     (currentUser.role === 'admin' ||
-      myPlayer.id === game.player_id ||
+      (myPlayer && myPlayer.id === game.player_id) ||
       (currentUser.role === 'moder' && currentUser.moder_for === game.player_id));
 
   function toggleVods() {
