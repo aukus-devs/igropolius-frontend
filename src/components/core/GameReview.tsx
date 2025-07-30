@@ -72,8 +72,8 @@ function GameReview({ game }: Props) {
 
   return (
     <div className="font-semibold">
-      <div className="w-full flex gap-[3px] justify-between">
-        <div className={`text-xs ${color} font-wide-semibold`}>
+      <div className="w-full flex items-center justify-between">
+        <div className={`${color} font-wide-semibold text-xs`}>
           {statusText} — {formattedDate}
         </div>
         <div className="flex gap-2">
@@ -98,7 +98,7 @@ function GameReview({ game }: Props) {
           </Toggle>
         </div>
       </div>
-      <h3 className="text-2xl mb-2 font-wide-semibold">{title}</h3>
+      <h3 className="text-2xl mb-2.5 font-wide-semibold">{title}</h3>
       <div className="flex gap-2.5">
         <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
           <img className="h-full object-cover" src={cover || FALLBACK_GAME_POSTER} />

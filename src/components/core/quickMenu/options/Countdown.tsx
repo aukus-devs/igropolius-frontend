@@ -23,7 +23,7 @@ export default function Countdown({ className }: Props) {
 
   const targetTime = eventEndTime * 1000;
   const diff = targetTime - time;
-  const message = diff > 0 ? `До конца — ${formatMs(diff)}` : 'Ивент завершен';
+  const message = diff > 0 ? `До конца ивента — ${formatMs(diff)}` : 'Ивент завершен';
 
   return <div className={className}>{message}</div>;
 }

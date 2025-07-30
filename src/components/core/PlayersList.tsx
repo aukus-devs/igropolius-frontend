@@ -1,6 +1,5 @@
 import PlayerDialog from './playerDialog/PlayerDialog';
 import usePlayerStore from '@/stores/playerStore';
-import Clock from './Clock';
 import { useShallow } from 'zustand/shallow';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './Collapsible';
 
@@ -26,8 +25,8 @@ function PlayersList() {
     <div className="w-[268px]">
       <Collapsible>
         <div className="flex w-full justify-between items-center">
-          <span className="text-[#494949] font-wide-black text-sm">
-            МСК — <Clock />
+          <span className="text-[#494949] font-wide-black">
+            Игроки
           </span>
           <CollapsibleTrigger className="p-0 h-auto" />
         </div>

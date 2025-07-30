@@ -13,9 +13,10 @@ import { Sort } from '@/components/icons';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
 import TutorialDialog from './options/TutorialDialog';
 import { PlayerDetails } from '@/lib/api-types-generated';
+import Clock from '../Clock';
 
 const buttonStyle =
-  'justify-start bg-transparent font-semibold text-base w-full rounded-none border-none';
+  'flex items-center justify-start max-h-9 bg-transparent font-semibold text-base w-full rounded-none border-none px-3 py-2';
 const groupStyle =
   'flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]';
 
@@ -52,11 +53,12 @@ function QuickMenu() {
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className={groupStyle}>
-          <Countdown className={cn(buttonStyle, 'px-4 py-1.5')} />
+          <Countdown className={cn(buttonStyle, 'text-sm')} />
         </div>
 
         <div className={groupStyle}>
           <RulesDialog className={buttonStyle} />
+          <Separator />
           <TutorialDialog className={buttonStyle} />
           <Separator />
           <DevelopersDialog className={buttonStyle} />
@@ -64,6 +66,8 @@ function QuickMenu() {
 
         <div className={groupStyle}>
           <OrthographicToggle className={buttonStyle} />
+          <Separator />
+          <div className={cn(buttonStyle, 'whitespace-pre')}>Время ивента — <Clock /> MSK </div>
         </div>
 
         <div className={groupStyle}>

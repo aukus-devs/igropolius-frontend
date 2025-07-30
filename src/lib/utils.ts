@@ -439,22 +439,22 @@ export function formatMs(diffMs: number) {
   const minutes = Math.floor((diffS % (60 * 60)) / 60);
   const seconds = diffS % 60;
 
-  const hoursPadded = String(hours).padStart(2, '0');
-  const minutesPadded = String(minutes).padStart(2, '0');
-  const secondsPadded = String(seconds).padStart(2, '0');
+  // const hoursPadded = String(hours).padStart(2, '0');
+  // const minutesPadded = String(minutes).padStart(2, '0');
+  // const secondsPadded = String(seconds).padStart(2, '0');
 
   if (days > 0) {
     if (hours === 0) {
-      return `${days}д ${minutesPadded}м`;
+      return `${days}д ${minutes}м`;
     }
-    return `${days}д ${hoursPadded}ч`;
+    return `${days}д ${hours}ч ${minutes}м`;
   }
 
   if (hours === 0) {
-    return `${minutesPadded}м ${secondsPadded}с`;
+    return `${minutes}м ${seconds}с`;
   }
 
-  return `${hoursPadded}ч ${minutesPadded}м`;
+  return `${hours}ч ${minutes}м`;
 }
 
 type CompletionScoreParams = {
