@@ -639,6 +639,7 @@ export interface PlayerDetails {
  */
 export interface PlayerGame {
   id: Id4;
+  player_id: PlayerId;
   created_at: CreatedAt1;
   status: GameCompletionType;
   sector_id: SectorId6;

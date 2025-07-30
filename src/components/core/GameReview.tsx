@@ -15,7 +15,6 @@ import { queryKeys } from '@/lib/queryClient';
 
 type Props = {
   game: PlayerGame;
-  playerId: number;
 };
 
 function getStatusData(status: GameCompletionType) {
@@ -42,7 +41,7 @@ function getStatusData(status: GameCompletionType) {
   }
 }
 
-function GameReview({ game, playerId }: Props) {
+function { game }: Props) {
   const { title, review, vod_links, duration, length, rating, status, created_at, cover } = game;
   const myPlayer = usePlayerStore(state => state.myPlayer);
 
@@ -65,8 +64,8 @@ function GameReview({ game, playerId }: Props) {
     myPlayer &&
     currentUser &&
     (currentUser.role === 'admin' ||
-      myPlayer.id === playerId ||
-      (currentUser.role === 'moder' && currentUser.moder_for === playerId));
+      myPlayer.id === game.player_id ||
+      (currentUser.role === 'moder' && currentUser.moder_for === game.player_id));
 
   function toggleVods() {
     setIsVodsOpen(!isVodsOpen);
