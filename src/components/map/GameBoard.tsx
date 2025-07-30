@@ -1,7 +1,12 @@
 import { sectorsData } from '@/lib/mockData';
 import { HALF_BOARD, STORAGE_BASE_URL } from '@/lib/constants';
 import Sector from './sector/Sector';
-import { calculatePlayerPosition, calculateSectorPosition, getSectorRotation } from './utils';
+import {
+  calculatePlayerPosition,
+  calculateSectorPosition,
+  getPlayerRotationOnSector,
+  getSectorRotation,
+} from './utils';
 import usePlayerStore from '@/stores/playerStore';
 import React, { useMemo } from 'react';
 import PlayerModel from './models/PlayerModel';
@@ -68,7 +73,8 @@ function GameBoard() {
           {sectorsData.map(sector => {
             const playersOnSector = playersData.filter(player => player.sector_id === sector.id);
             const sectorPosition = calculateSectorPosition(sector);
-            const rotation = getSectorRotation(sector.position);
+            const playerRotation = getPlayerRotationOnSector(sector);
+            const sectorRotation = getSectorRotation(sector.position);
 
             return (
               <React.Fragment key={sector.id}>
@@ -78,12 +84,13 @@ function GameBoard() {
                     playersOnSector.length,
                     sector
                   );
+
                   return (
                     <PlayerModel
                       key={player.id}
                       player={player}
                       position={playerPosition}
-                      rotation={rotation}
+                      rotation={playerRotation}
                     />
                   );
                 })}
@@ -91,7 +98,7 @@ function GameBoard() {
                 <Sector
                   sector={sector}
                   position={sectorPosition}
-                  rotation={rotation}
+                  rotation={sectorRotation}
                   models={
                     models as React.FC<InstanceProps> & Record<string, React.FC<InstanceProps>>
                   }

@@ -53,6 +53,10 @@ export function calculatePlayerPosition(
   totalPlayers: number,
   sector: SectorData
 ): Vector3Array {
+  if (sector.type === 'parking') {
+    return calculatePlayerPositionOnParking(idx, sector);
+  }
+
   const { rowOffset, columnOffset } = calculateGridOffsets(idx, totalPlayers);
   const { x: baseX, z: baseZ } = calculateBasePosition(sector);
   const { offsetX, offsetZ } = calculatePlayerOffsets(
@@ -69,8 +73,40 @@ export function calculatePlayerPosition(
   ];
 }
 
-function calculateGridOffsets(idx: number, totalPlayers: number) {
-  const columns = Math.min(totalPlayers, MAX_COLUMNS);
+function calculatePlayerPositionOnParking(idx: number, sector: SectorData): Vector3Array {
+  const { x: baseX, z: baseZ } = calculateBasePosition(sector);
+
+  const firstRowY = -4;
+  const secondRowY = 2.5;
+  const parkingPlacesX = [-7.4, -5.2, -3.1, -0.8, 1.4, 3.5];
+
+  const parkingOrder = [
+    { row: 1, place: 2 },
+    { row: 1, place: 4 },
+    { row: 1, place: 6 },
+    { row: 2, place: 3 },
+    { row: 2, place: 5 },
+    { row: 2, place: 1 },
+    { row: 1, place: 1 },
+    { row: 2, place: 2 },
+    { row: 2, place: 4 },
+    { row: 1, place: 3 },
+    { row: 1, place: 5 },
+    { row: 2, place: 6 },
+  ];
+
+  const parkingX = parkingPlacesX[parkingOrder[idx].place - 1];
+  const parkingY = parkingOrder[idx].row === 1 ? firstRowY : secondRowY;
+
+  return [
+    sector.position.x * SECTOR_WIDTH + baseX + parkingX,
+    PLAYER_ELEVATION,
+    sector.position.y * SECTOR_WIDTH + baseZ + parkingY,
+  ];
+}
+
+function calculateGridOffsets(idx: number, totalPlayers: number, maxColumns: number = MAX_COLUMNS) {
+  const columns = Math.min(totalPlayers, maxColumns);
   const rows = Math.ceil(totalPlayers / columns);
 
   const row = Math.floor(idx / columns);
@@ -161,6 +197,13 @@ export function getSectorRotation(position: SectorData['position']): Vector3Arra
   if (y === 10) return [0, Math.PI, 0]; // top
 
   throw new Error('Sector position not found');
+}
+
+export function getPlayerRotationOnSector(sector: SectorData): Vector3Array {
+  if (sector.type === 'parking') {
+    return [0, -Math.PI / 2, 0];
+  }
+  return getSectorRotation(sector.position);
 }
 
 export function calculateTrainPosition(sector: SectorData): Vector3Array {
