@@ -41,7 +41,7 @@ function getStatusData(status: GameCompletionType) {
   }
 }
 
-function { game }: Props) {
+function GameReview({ game }: Props) {
   const { title, review, vod_links, duration, length, rating, status, created_at, cover } = game;
   const myPlayer = usePlayerStore(state => state.myPlayer);
 
@@ -138,11 +138,7 @@ function { game }: Props) {
       </div>
 
       {showEditForm && (
-        <GameReviewEditForm
-          gameToEdit={game}
-          open={showEditForm}
-          setOpen={setShowEditForm}
-        />
+        <GameReviewEditForm gameToEdit={game} open={showEditForm} setOpen={setShowEditForm} />
       )}
     </div>
   );
