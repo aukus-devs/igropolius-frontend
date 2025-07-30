@@ -176,8 +176,7 @@ const usePlayerStore = create<{
         };
       }
     }
-    const activePlayers = playersData.filter(p => p.username === 'Praden' || p.role == 'player');
-    const players = activePlayers;
+    const players = playersData;
     players.forEach(p => (p.color = p.color === '' ? 'white' : p.color));
 
     const { myPlayerId, buildingsPerSector } = get();
