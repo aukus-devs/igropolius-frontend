@@ -59,8 +59,6 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
         ref={onModelRender}
         src={modelUrl}
         onClick={e => (e.stopPropagation(), onClick?.(e))}
-        castShadow
-        receiveShadow
         rotation={[0, Math.PI / 2, 0]}
         scale={modelScale}
       />

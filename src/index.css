@@ -163,10 +163,3 @@
 .text-box-trim-end {
   text-box-trim: trim-end;
 }
-
-.fps-meter {
-  position: absolute !important;
-  top: auto !important;
-  bottom: 0px !important;
-  left: 0px !important;
-}

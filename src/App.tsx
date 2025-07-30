@@ -20,10 +20,11 @@ import { TooltipProvider } from './components/ui/tooltip';
 import useCanvasTooltipStore from './stores/canvasTooltipStore';
 import { useUserActivity } from './hooks/useUserActivity';
 import { MetrikaCounter } from 'react-metrika';
-import { Environment } from '@react-three/drei';
+import { Environment, Stats } from '@react-three/drei';
 import { STORAGE_BASE_URL } from '@/lib/constants';
 import ModelSelectionScene from './components/map/scenes/ModelSelectionScene';
 import { useControls } from 'leva';
+import { Bloom, EffectComposer, HueSaturation, N8AO, ToneMapping } from "@react-three/postprocessing"
 
 function App() {
   const { isInactive } = useUserActivity();
@@ -154,8 +155,8 @@ function App() {
 
   const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
     toneMapping: {
-      value: 3,
-      min: 1,
+      value: 5,
+      min: 0,
       max: 7,
       step: 1,
     },
@@ -175,6 +176,55 @@ function App() {
       value: 0.1,
       min: 0,
       max: 1,
+    },
+  });
+  const effects = useControls("Effects", {
+    enabled: false
+  })
+  const n8ao = useControls("N8AO", {
+    renderMode: {
+      value: 0,
+      min: 0,
+      max: 4,
+      step: 1,
+    },
+    aoRadius: {
+      value: 3,
+      min: 1,
+      max: 10,
+      step: 0.01,
+    },
+    distanceFalloff: {
+      value: 1,
+      min: 0.1,
+      max: 10,
+      step: 0.01,
+    },
+    intensity: {
+      value: 4.5,
+      min: 0.0,
+      max: 10,
+      step: 0.01,
+    },
+  });
+  const bloom = useControls("Bloom", {
+    lumThreshold: {
+      value: 0.1,
+      min: 0.0,
+      max: 1,
+      step: 0.01,
+    },
+    lumSmoothing: {
+      value: 0.1,
+      min: 0.0,
+      max: 1,
+      step: 0.01,
+    },
+    intensity: {
+      value: 0.25,
+      min: 0,
+      max: 1,
+      step: 0.01,
     },
   });
 
@@ -207,9 +257,26 @@ function App() {
                   backgroundBlurriness={bgBlurriness}
                 />
 
-                {/* {IS_DEV && <Stats className="fps-meter" />} */}
+                <Stats className="!bottom-6 !top-auto" />
 
                 {isModelSelectionScene ? <ModelSelectionScene /> : <GameScene />}
+
+                <EffectComposer enabled={effects.enabled} resolutionScale={100} renderPriority={1} enableNormalPass>
+                  <ToneMapping mode={toneMapping} />
+                  <Bloom
+                    intensity={bloom.intensity}
+                    luminanceThreshold={bloom.lumThreshold}
+                    luminanceSmoothing={bloom.lumSmoothing}
+                  />
+                  <HueSaturation />
+                  <N8AO
+                    halfRes
+                    renderMode={n8ao.renderMode}
+                    aoRadius={n8ao.aoRadius}
+                    intensity={n8ao.intensity}
+                    distanceFalloff={n8ao.distanceFalloff}
+                  />
+                </EffectComposer>
               </Suspense>
             </Canvas>
           </div>
