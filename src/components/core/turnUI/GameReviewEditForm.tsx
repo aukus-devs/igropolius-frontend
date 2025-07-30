@@ -28,8 +28,8 @@ function GamePoster({ src }: { src: string }) {
 }
 
 function GameReview() {
-  const gameReview = useReviewFormStore(state => state.gameReview);
-  const setGameReview = useReviewFormStore(state => state.setGameReview);
+  const gameReview = useReviewFormStore(state => state.editGameReview);
+  const setGameReview = useReviewFormStore(state => state.setEditGameReview);
   const [showPreview, setShowPreview] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -77,10 +77,10 @@ function GameTitle({
 }) {
   const { gameTitle, setGameTitle, selectedGame, setSelectedGame } = useReviewFormStore(
     useShallow(state => ({
-      gameTitle: state.gameTitle,
-      setGameTitle: state.setGameTitle,
-      selectedGame: state.selectedGame,
-      setSelectedGame: state.setSelectedGame,
+      gameTitle: state.editGameTitle,
+      setGameTitle: state.setEditGameTitle,
+      selectedGame: state.editSelectedGame,
+      setSelectedGame: state.setEditSelectedGame,
     }))
   );
   const [showResults, setShowResults] = useState(false);
@@ -193,7 +193,7 @@ function GameTitle({
 }
 
 function HLTBLink() {
-  const gameTitle = useReviewFormStore(state => state.gameTitle);
+  const gameTitle = useReviewFormStore(state => state.editGameTitle);
 
   const cleanGameTitle = gameTitle ? gameTitle.replace(/\s*\(\d{4}\)\s*$/, '').trim() : '';
 
@@ -215,8 +215,8 @@ function HLTBLink() {
 }
 
 function VodLinks() {
-  const vodLinks = useReviewFormStore(state => state.vodLinks);
-  const setVodLinks = useReviewFormStore(state => state.setVodLinks);
+  const vodLinks = useReviewFormStore(state => state.editVodLinks);
+  const setVodLinks = useReviewFormStore(state => state.setEditVodLinks);
 
   return (
     <div className="flex flex-col gap-2">
@@ -262,16 +262,16 @@ function GameReviewEditForm({
     useShallow(state => ({
       open: state.open,
       setOpen: state.setOpen,
-      setRating: state.setRating,
-      rating: state.rating,
-      error: state.error,
-      clearError: state.clearError,
-      selectedGame: state.selectedGame,
-      setGameTitle: state.setGameTitle,
-      setGameReview: state.setGameReview,
-      setGameTime: state.setGameTime,
-      setSelectedGame: state.setSelectedGame,
-      setVodLinks: state.setVodLinks,
+      setRating: state.setEditRating,
+      rating: state.editRating,
+      error: state.editError,
+      clearError: state.clearEditError,
+      selectedGame: state.editSelectedGame,
+      setGameTitle: state.setEditGameTitle,
+      setGameReview: state.setEditGameReview,
+      setGameTime: state.setEditGameTime,
+      setSelectedGame: state.setEditSelectedGame,
+      setVodLinks: state.setEditVodLinks,
     }))
   );
 
@@ -301,9 +301,9 @@ function GameReviewEditForm({
   }, [gameToEdit, open, setGameTitle, setGameReview, setRating, setVodLinks, setSelectedGame]);
 
   const isSaveButtonDisabled = useReviewFormStore(state => {
-    if (!state.gameTitle) return true;
-    if (state.gameReview.length === 0) return true;
-    if (state.rating === 0) return true;
+    if (!state.editGameTitle) return true;
+    if (state.editGameReview.length === 0) return true;
+    if (state.editRating === 0) return true;
 
     return false;
   });
@@ -321,14 +321,15 @@ function GameReviewEditForm({
     clearError();
 
     try {
-      const { gameTitle, gameReview, vodLinks, rating } = useReviewFormStore.getState();
+      const { editGameTitle, editGameReview, editVodLinks, editRating } =
+        useReviewFormStore.getState();
       await doEditGame({
         gameId: gameToEdit.id,
         request: {
-          game_title: gameTitle,
-          game_review: gameReview,
-          rating: rating,
-          vod_links: vodLinks || undefined,
+          game_title: editGameTitle,
+          game_review: editGameReview,
+          rating: editRating,
+          vod_links: editVodLinks || undefined,
         },
       });
       resetPlayersQuery();

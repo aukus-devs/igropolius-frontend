@@ -16,6 +16,15 @@ const useReviewFormStore = create<{
   selectedGame: IgdbGameSummary | null;
   error: string | null;
   isSubmitting: boolean;
+  editRating: number;
+  editGameTitle: string;
+  editGameTime: GameLength | null;
+  editGameStatus: GameCompletionType | null;
+  editGameReview: string;
+  editVodLinks: string;
+  editSelectedGame: IgdbGameSummary | null;
+  editError: string | null;
+  editIsSubmitting: boolean;
   setRating: (value: number) => void;
   setGameTitle: (value: string) => void;
   setGameTime: (value: GameLength) => void;
@@ -23,9 +32,17 @@ const useReviewFormStore = create<{
   setGameReview: (value: string) => void;
   setVodLinks: (value: string) => void;
   setSelectedGame: (game: IgdbGameSummary | null) => void;
+  setEditRating: (value: number) => void;
+  setEditGameTitle: (value: string) => void;
+  setEditGameTime: (value: GameLength) => void;
+  setEditGameStatus: (value: GameCompletionType) => void;
+  setEditGameReview: (value: string) => void;
+  setEditVodLinks: (value: string) => void;
+  setEditSelectedGame: (game: IgdbGameSummary | null) => void;
   sendReview: (scores: number) => Promise<void>;
   getReviewScores: (params: { sectorId: number; mapsCompleted: number }) => ScoreDetails;
   clearError: () => void;
+  clearEditError: () => void;
   open: boolean;
   setOpen: (open: boolean) => void;
   // retrySubmit: () => Promise<void>;
@@ -39,6 +56,15 @@ const useReviewFormStore = create<{
   selectedGame: null,
   error: null,
   isSubmitting: false,
+  editRating: 0,
+  editGameTitle: '',
+  editGameTime: null,
+  editGameStatus: null,
+  editGameReview: '',
+  editVodLinks: '',
+  editSelectedGame: null,
+  editError: null,
+  editIsSubmitting: false,
   open: false,
 
   setOpen: open => set({ open }),
@@ -49,7 +75,15 @@ const useReviewFormStore = create<{
   setGameReview: value => set({ gameReview: value }),
   setVodLinks: value => set({ vodLinks: value }),
   setSelectedGame: game => set({ selectedGame: game }),
+  setEditRating: value => set({ editRating: value }),
+  setEditGameTitle: value => set({ editGameTitle: value }),
+  setEditGameTime: value => set({ editGameTime: value }),
+  setEditGameStatus: value => set({ editGameStatus: value }),
+  setEditGameReview: value => set({ editGameReview: value }),
+  setEditVodLinks: value => set({ editVodLinks: value }),
+  setEditSelectedGame: game => set({ editSelectedGame: game }),
   clearError: () => set({ error: null }),
+  clearEditError: () => set({ editError: null }),
   sendReview: async (scores: number) => {
     const { rating, gameTitle, gameTime, gameStatus, gameReview, vodLinks, selectedGame } = get();
 
