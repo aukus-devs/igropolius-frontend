@@ -450,6 +450,7 @@ export interface EditPlayerGame {
   game_review: GameReview;
   rating: Rating;
   vod_links?: VodLinks;
+  game_id?: GameId;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

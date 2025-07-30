@@ -191,7 +191,7 @@ function GameTitle({
   const { data: gamesSearchData, isFetching: isSearching } = useQuery({
     queryKey: queryKeys.searchGames(gameTitleDebounced),
     queryFn: () => searchGames(gameTitleDebounced),
-    enabled: gameTitleDebounced.length >= 2 && !gameAlreadySelected,
+    enabled: gameTitleDebounced.length >= 2,
     initialData: { games: [] },
   });
 
@@ -237,7 +237,8 @@ function GameTitle({
 
       {showResults &&
         (searchResults.length > 0 || isSearching) &&
-        gameTitleDebounced.length >= 2 && (
+        gameTitleDebounced.length >= 2 &&
+        !gameAlreadySelected && (
           <div
             className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
             onMouseDown={e => e.preventDefault()}
@@ -413,7 +414,7 @@ function GameReviewEditForm({
     clearError();
 
     try {
-      const { editGameTitle, editGameReview, editVodLinks, editRating } =
+      const { editGameTitle, editGameReview, editVodLinks, editRating, editSelectedGame } =
         useReviewFormStore.getState();
       await doEditGame({
         gameId: gameToEdit.id,
@@ -422,6 +423,7 @@ function GameReviewEditForm({
           game_review: editGameReview,
           rating: editRating,
           vod_links: editVodLinks || undefined,
+          game_id: editSelectedGame?.id || null,
         },
       });
       resetPlayersQuery();
