@@ -8,7 +8,6 @@ import MobileTabs from './core/mobile/MobileTabs';
 import MobilePlayersList from './core/mobile/MobilePlayerList';
 import DiceErrorNotification from './core/DiceErrorNotification';
 import PlayerTurnUI from './core/turnUI/PlayerTurnUI';
-import useAdminStore from '@/stores/adminStore';
 import AdminPanel from './core/AdminPanel';
 import MyCards from './core/MyCards';
 import FrontVersionInfo from './FrontVersionInfo';
@@ -24,7 +23,11 @@ function DesktopUI() {
     }))
   );
 
-  const showAdminPanel = useAdminStore(state => state.showAdminPanel);
+  const myUser = useSystemStore(state => state.myUser);
+
+  console.log({ myUser });
+
+  const showAdminPanel = myUser?.role === 'admin';
 
   const mainNotification = useSystemStore(state => state.mainNotification);
 

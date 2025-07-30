@@ -68,7 +68,7 @@ export type InstantCardType =
   | "reroll"
   | "reroll-and-roll"
   | "lose-card-or-3-percent";
-export type SectorId = number;
+export type SectorId = number | null;
 export type StolenFromPlayer = number | null;
 export type StolenBy = number | null;
 /**
@@ -114,6 +114,12 @@ export type CardName1 = string | null;
 export type EventEndTime2 = number | null;
 export type MessageText3 = string | null;
 export type Id = number;
+export type Username = string;
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "Role".
+ */
+export type Role = "player" | "moder" | "admin" | "prison";
 export type ModerFor = number | null;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -144,7 +150,9 @@ export type Dice = number[];
 export type RandomOrgLink = string | null;
 export type GameTitle2 = string;
 export type GameReview = string;
+export type Rating = number;
 export type VodLinks = string | null;
+export type GameId = number | null;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "GameCompletionType".
@@ -174,7 +182,7 @@ export type Limit = number;
  * via the `definition` "InstantCardResult".
  */
 export type InstantCardResult = "reroll" | "card-lost" | "score-received" | "scores-lost";
-export type Username = string;
+export type Username1 = string;
 export type Password = string;
 export type Token = string;
 export type NotificationIds = number[];
@@ -215,7 +223,7 @@ export type Notifications = NotificationItem[];
  */
 export type TaxType = "street-tax" | "map-tax";
 export type Id3 = number;
-export type Username1 = string;
+export type Username2 = string;
 export type FirstName = string;
 export type UrlHandle = string;
 export type IsOnline = boolean;
@@ -239,22 +247,18 @@ export type SectorId5 = number;
 export type TotalScore = number;
 export type MapsCompleted = number;
 export type Id4 = number;
+export type PlayerId2 = number;
 export type CreatedAt1 = number;
 export type SectorId6 = number;
 export type Title = string;
 export type Review = string;
-export type Rating = number;
+export type Rating1 = number;
 export type LengthBonus = number | null;
 export type Duration = number | null;
 export type VodLinks1 = string | null;
 export type Cover1 = string | null;
 export type Games1 = PlayerGame[];
 export type BonusCards = ActiveBonusCard[];
-/**
- * This interface was referenced by `ApiSchema`'s JSON-Schema
- * via the `definition` "Role".
- */
-export type Role = "player" | "moder" | "admin" | "prison";
 export type Color = string;
 export type ModelName = string;
 export type Timestamp3 = number;
@@ -298,14 +302,14 @@ export type CreatedAt2 = number;
 export type Versions = RulesVersion[];
 export type Title1 = string;
 export type Review1 = string;
-export type Rating1 = number;
+export type Rating2 = number;
 export type VodLinks2 = string | null;
 export type Scores3 = number;
-export type GameId = number | null;
+export type GameId1 = number | null;
 export type NewSectorId2 = number;
 export type EventStartTime = number | null;
 export type EventEndTime4 = number | null;
-export type PlayerId2 = number;
+export type PlayerId3 = number;
 export type Success1 = boolean;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -334,7 +338,7 @@ export interface BonusCardEvent {
   event_type: EventType;
   subtype: BonusCardEventType;
   bonus_type: BonusType;
-  sector_id: SectorId;
+  sector_id?: SectorId;
   stolen_from_player?: StolenFromPlayer;
   stolen_by?: StolenBy;
 }
@@ -410,7 +414,7 @@ export interface CurrentUserResponse {
   username: Username;
   role: Role;
   moder_for?: ModerFor;
-  turn_state: PlayerTurnState;
+  turn_state?: PlayerTurnState | null;
   last_roll_result: LastRollResult;
   has_upgrade_bonus?: HasUpgradeBonus;
   has_downgrade_bonus?: HasDowngradeBonus;
@@ -520,7 +524,7 @@ export interface IgdbGamesSearchRequest {
  * via the `definition` "LoginRequest".
  */
 export interface LoginRequest {
-  username: Username;
+  username: Username1;
   password: Password;
 }
 /**
@@ -605,7 +609,7 @@ export interface PayTaxRequest {
  */
 export interface PlayerDetails {
   id: Id3;
-  username: Username1;
+  username: Username2;
   first_name: FirstName;
   url_handle: UrlHandle;
   is_online: IsOnline;
@@ -640,13 +644,13 @@ export interface PlayerDetails {
  */
 export interface PlayerGame {
   id: Id4;
-  player_id: PlayerId;
+  player_id: PlayerId2;
   created_at: CreatedAt1;
   status: GameCompletionType;
   sector_id: SectorId6;
   title: Title;
   review: Review;
-  rating: Rating;
+  rating: Rating1;
   length: GameLength;
   length_bonus?: LengthBonus;
   duration?: Duration;
@@ -753,11 +757,11 @@ export interface SavePlayerGameRequest {
   status: GameCompletionType;
   title: Title1;
   review: Review1;
-  rating: Rating1;
+  rating: Rating2;
   length: GameLength;
   vod_links?: VodLinks2;
   scores: Scores3;
-  game_id?: GameId;
+  game_id?: GameId1;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -779,7 +783,7 @@ export interface SetEventEndTimeRequest {
  * via the `definition` "StealBonusCardRequest".
  */
 export interface StealBonusCardRequest {
-  player_id: PlayerId2;
+  player_id: PlayerId3;
   bonus_type: MainBonusCardType;
 }
 /**

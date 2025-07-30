@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '@/lib/api';
-import { resetCurrentPlayerQuery } from '@/lib/queryClient';
+import { refetchCurrentPlayer } from '@/lib/queryClient';
 import { cn } from '@/lib/utils';
 import {
   Dialog,
@@ -31,7 +31,7 @@ export default function LoginDialog({ className }: { className?: string }) {
     loginRequest({ username, password })
       .then(res => {
         localStorage.setItem('access-token', res.token);
-        resetCurrentPlayerQuery();
+        refetchCurrentPlayer();
         setOpen(false);
       })
       .catch(err => {

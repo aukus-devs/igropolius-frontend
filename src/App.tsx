@@ -15,7 +15,6 @@ import { queryKeys } from './lib/queryClient';
 import CanvasTooltip from './components/map/canvasTooltip/CanvasTooltip';
 import SceneLoader from './components/map/SceneLoader';
 import useDiceStore from './stores/diceStore';
-import useAdminStore from './stores/adminStore';
 import { TooltipProvider } from './components/ui/tooltip';
 import useCanvasTooltipStore from './stores/canvasTooltipStore';
 import { useUserActivity } from './hooks/useUserActivity';
@@ -49,10 +48,11 @@ function App() {
     }))
   );
 
-  const { disableCurrentPlayerQuery, disablePlayersQuery } = useSystemStore(
+  const { disableCurrentPlayerQuery, disablePlayersQuery, setMyUser } = useSystemStore(
     useShallow(state => ({
       disableCurrentPlayerQuery: state.disableCurrentPlayerQuery,
       disablePlayersQuery: state.disablePlayersQuery,
+      setMyUser: state.setMyUser,
     }))
   );
 
@@ -93,21 +93,13 @@ function App() {
     if (currentPlayerDataError) {
       setMyPlayer(undefined);
       setTurnState(null);
+      setMyUser(null);
       return;
     }
     setMyPlayer(currentPlayerData);
     setTurnState(currentPlayerData?.turn_state ?? null);
-  }, [currentPlayerData, setMyPlayer, setTurnState, currentPlayerDataError]);
-
-  const setShowAdminPanel = useAdminStore(state => state.setShowAdminPanel);
-
-  useEffect(() => {
-    if (currentPlayerData?.role === 'admin') {
-      setShowAdminPanel(true);
-    } else {
-      setShowAdminPanel(false);
-    }
-  }, [currentPlayerData?.role, setShowAdminPanel]);
+    setMyUser(currentPlayerData);
+  }, [currentPlayerData, setMyPlayer, setTurnState, currentPlayerDataError, setMyUser]);
 
   useEffect(() => {
     setPlayers(playersData?.players ?? []);

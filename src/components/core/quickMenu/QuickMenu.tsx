@@ -12,26 +12,26 @@ import { Separator } from '@/components/ui/separator';
 import { Sort } from '@/components/icons';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
 import TutorialDialog from './options/TutorialDialog';
-import { PlayerDetails } from '@/lib/api-types-generated';
 import Clock from '../Clock';
+import useSystemStore from '@/stores/systemStore';
 
 const buttonStyle =
   'flex items-center justify-start max-h-9 bg-transparent font-semibold text-base w-full rounded-none border-none px-3 py-2';
 const groupStyle =
   'flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]';
 
-function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerDetails | null }) {
+function QuickMenuTitle({ username, avatarLink }: { username?: string; avatarLink?: string }) {
   return (
     <>
-      {myPlayer ? (
+      {username ? (
         <div className="flex gap-2 items-center font-bold text-base">
           <Avatar className="w-6 h-6">
-            <AvatarImage src={myPlayer.avatar_link || FALLBACK_AVATAR_URL} />
+            <AvatarImage src={avatarLink || FALLBACK_AVATAR_URL} />
             <AvatarFallback className="bg-primary-foreground uppercase">
-              {myPlayer.username.slice(0, 2)}
+              {username.slice(0, 2)}
             </AvatarFallback>
           </Avatar>
-          <span>{myPlayer.username}</span>
+          <span>{username}</span>
         </div>
       ) : (
         <div className="flex gap-2 items-center font-bold pl-[7px] text-base">
@@ -44,12 +44,16 @@ function QuickMenuTitle({ myPlayer }: { myPlayer: PlayerDetails | null }) {
 }
 
 function QuickMenu() {
+  const myUser = useSystemStore(state => state.myUser);
   const myPlayer = usePlayerStore(state => state.myPlayer);
 
   return (
     <Collapsible>
       <CollapsibleTrigger className="w-full">
-        <QuickMenuTitle myPlayer={myPlayer} />
+        <QuickMenuTitle
+          username={myUser?.username}
+          avatarLink={myPlayer?.avatar_link ?? undefined}
+        />
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className={groupStyle}>
@@ -73,7 +77,7 @@ function QuickMenu() {
         </div>
 
         <div className={groupStyle}>
-          {myPlayer ? (
+          {myUser ? (
             <LogoutButton className={buttonStyle} />
           ) : (
             <LoginDialog className={buttonStyle} />

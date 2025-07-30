@@ -8,10 +8,7 @@ import { GameCompletionType, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
 import { Button } from '../ui/button';
 import GameReviewEditForm from './turnUI/GameReviewEditForm';
-import usePlayerStore from '@/stores/playerStore';
-import { useQuery } from '@tanstack/react-query';
-import { fetchCurrentPlayer } from '@/lib/api';
-import { queryKeys } from '@/lib/queryClient';
+import useSystemStore from '@/stores/systemStore';
 
 type Props = {
   game: PlayerGame;
@@ -43,13 +40,7 @@ function getStatusData(status: GameCompletionType) {
 
 function GameReview({ game }: Props) {
   const { title, review, vod_links, duration, length, rating, status, created_at, cover } = game;
-  const myPlayer = usePlayerStore(state => state.myPlayer);
-
-  const { data: currentUser } = useQuery({
-    queryKey: queryKeys.currentPlayer,
-    queryFn: fetchCurrentPlayer,
-    enabled: !!myPlayer,
-  });
+  const myUser = useSystemStore(state => state.myUser);
 
   const [isVodsOpen, setIsVodsOpen] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
@@ -61,10 +52,9 @@ function GameReview({ game }: Props) {
   const { color, statusText } = getStatusData(status);
 
   const canEdit =
-    currentUser &&
-    (currentUser.role === 'admin' ||
-      (myPlayer && myPlayer.id === game.player_id) ||
-      (currentUser.role === 'moder' && currentUser.moder_for === game.player_id));
+    myUser?.role === 'admin' ||
+    myUser?.id === game.player_id ||
+    (myUser?.role === 'moder' && myUser?.moder_for === game.player_id);
 
   function toggleVods() {
     setIsVodsOpen(!isVodsOpen);

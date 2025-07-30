@@ -1,4 +1,4 @@
-import { Settings as EventSettings } from '@/lib/api-types-generated';
+import { CurrentUserResponse, Settings as EventSettings } from '@/lib/api-types-generated';
 import { create } from 'zustand';
 
 type MainNotification = {
@@ -16,6 +16,8 @@ interface SystemStore {
   setMainNotification: (message: MainNotification | null) => void;
   disablePlayersQuery: boolean;
   disableCurrentPlayerQuery: boolean;
+  myUser: CurrentUserResponse | null;
+  setMyUser: (data?: CurrentUserResponse | null) => void;
 }
 
 const useSystemStore = create<SystemStore>(set => ({
@@ -24,6 +26,7 @@ const useSystemStore = create<SystemStore>(set => ({
   mainNotification: null,
   disablePlayersQuery: false,
   disableCurrentPlayerQuery: false,
+  myUser: null,
 
   setMainNotification: (message: MainNotification | null) => {
     set({ mainNotification: message });
@@ -46,6 +49,10 @@ const useSystemStore = create<SystemStore>(set => ({
       eventStartTime: null,
       eventEndTime: null,
     });
+  },
+
+  setMyUser: (data?: CurrentUserResponse | null) => {
+    set({ myUser: data || null });
   },
 }));
 
