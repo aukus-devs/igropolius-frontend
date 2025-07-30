@@ -162,6 +162,8 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails)
         image,
         title,
         description: '',
+        sectorId: event.sector_id,
+        bonusType: event.bonus_card ?? undefined,
       };
     }
     default: {
@@ -214,6 +216,7 @@ function getEventBonusCardInfo(event: BonusCardEvent) {
     description: card.name,
     image: card?.picture || '',
     sectorId: event.sector_id,
+    bonusType: event.bonus_type,
   } as EventDescription;
 }
 

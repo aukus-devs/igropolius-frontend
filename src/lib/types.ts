@@ -1,4 +1,4 @@
-import { GameCompletionType, GameLength, PlayerDetails } from './api-types-generated';
+import { BonusType, GameCompletionType, GameLength, PlayerDetails } from './api-types-generated';
 
 const ColorBrown = '#AC8E68';
 const ColorLightBlue = '#64D2FF';
@@ -135,6 +135,7 @@ export type EventDescription = {
   description: string;
   image?: string;
   sectorId?: number;
+  bonusType?: BonusType;
 };
 
 export type MoveMyPlayerParams = {
