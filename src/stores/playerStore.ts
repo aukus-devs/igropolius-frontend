@@ -14,6 +14,7 @@ import useCameraStore from './cameraStore';
 import {
   calculatePlayerPosition,
   canBuildOnSector,
+  getPlayerRotationOnSector,
   getSectorRotation,
 } from '@/components/map/utils';
 import { SectorsById, sectorsData } from '@/lib/mockData';
@@ -329,8 +330,12 @@ const usePlayerStore = create<{
         nextSectorPlayers.length,
         nextSector
       );
-      const currentRotation = getSectorRotation(currentSector.position);
-      const nextRotation = getSectorRotation(nextSector.position);
+
+      const currentRotation = getPlayerRotationOnSector(currentSector);
+      const nextRotation = getPlayerRotationOnSector(nextSector);
+
+      // const currentRotation = getSectorRotation(currentSector.position);
+      // const nextRotation = getSectorRotation(nextSector.position);
 
       tl.add(playerModel.position, {
         x: nextPosition[0],

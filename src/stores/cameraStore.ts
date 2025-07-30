@@ -1,9 +1,9 @@
-import CameraControls from "camera-controls";
-import { create } from "zustand";
-import useModelsStore from "./modelsStore";
-import { Group, Vector3 } from "three";
-import { HALF_BOARD } from "@/lib/constants";
-import { getShortestRotationDelta } from "@/lib/utils";
+import CameraControls from 'camera-controls';
+import { create } from 'zustand';
+import useModelsStore from './modelsStore';
+import { Group, Vector3 } from 'three';
+import { HALF_BOARD } from '@/lib/constants';
+import { getShortestRotationDelta } from '@/lib/utils';
 
 const useCameraStore = create<{
   cameraControls: CameraControls | null;
@@ -19,7 +19,10 @@ const useCameraStore = create<{
 
   toggleOrthographic: () => set({ isOrthographic: !useCameraStore.getState().isOrthographic }),
 
-  setCameraControls: (controls) => set({ cameraControls: controls }),
+  setCameraControls: controls => {
+    console.log('setCameraControls', controls);
+    set({ cameraControls: controls });
+  },
 
   rotateAroundPlayer: async (model: Group, enableTransition = true) => {
     const cameraControls = get().cameraControls;
@@ -31,13 +34,9 @@ const useCameraStore = create<{
     const modelLeft = new Vector3(0, 0, 1);
     modelLeft.applyQuaternion(model.quaternion);
 
-    const cameraPosition = new Vector3()
-      .copy(modelPosition)
-      .add(modelLeft);
+    const cameraPosition = new Vector3().copy(modelPosition).add(modelLeft);
 
-    const direction = new Vector3()
-      .subVectors(modelPosition, cameraPosition)
-      .normalize();
+    const direction = new Vector3().subVectors(modelPosition, cameraPosition).normalize();
 
     const currentAzimuth = cameraControls.azimuthAngle;
     const rawTargetAzimuth = Math.atan2(direction.x, direction.z);
@@ -60,11 +59,15 @@ const useCameraStore = create<{
     );
   },
 
-  cameraToPlayer: async (playerId) => {
+  cameraToPlayer: async playerId => {
+    console.log('camera to player', playerId);
     const { cameraControls, moveToPlayer, rotateAroundPlayer } = get();
+    console.log({ cameraControls });
     if (!cameraControls) return;
 
     const playerModel = useModelsStore.getState().getPlayerModel(playerId);
+
+    console.log({ playerModel });
 
     if (playerModel) {
       moveToPlayer(playerModel);
