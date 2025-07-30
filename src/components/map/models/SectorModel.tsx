@@ -34,14 +34,9 @@ type Props = {
 	color?: ColorName;
 	isCorner: boolean;
   isHovered: boolean;
-  settings: {
-    color: string;
-    metalness: number;
-    roughness: number;
-  }
 }
 
-function SectorModel({color, isCorner, isHovered, settings}: Props) {
+function SectorModel({color, isCorner, isHovered}: Props) {
   const gltfRef = useRef<Group>(null);
 
   useEffect(() => {
@@ -49,14 +44,13 @@ function SectorModel({color, isCorner, isHovered, settings}: Props) {
 
     gltfRef.current.traverse((mesh) => {
       if (mesh instanceof Mesh) {
-        mesh.material = new MeshStandardMaterial({ color: settings.color });
-        // mesh.material = mesh.material.clone();
+        mesh.material = mesh.material.clone();
         mesh.material.emissiveIntensity = 0.75;
-        mesh.material.metalness = settings.metalness;
-        mesh.material.roughness = settings.roughness;
+        mesh.material.metalness = 0.05;
+        mesh.material.roughness = 0.51;
       }
     });
-  }, [color, settings]);
+  }, [color]);
 
   useFrame(() => {
     if (!gltfRef.current) return;

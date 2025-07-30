@@ -23,8 +23,6 @@ import { MetrikaCounter } from 'react-metrika';
 import { Environment, Stats } from '@react-three/drei';
 import { STORAGE_BASE_URL } from '@/lib/constants';
 import ModelSelectionScene from './components/map/scenes/ModelSelectionScene';
-import { useControls } from 'leva';
-import { Bloom, EffectComposer, HueSaturation, N8AO, ToneMapping } from "@react-three/postprocessing"
 
 function App() {
   const { isInactive } = useUserActivity();
@@ -153,80 +151,80 @@ function App() {
   const enableMetrika = !IS_DEV;
   const isModelSelectionScene = false;
 
-  const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
-    toneMapping: {
-      value: 5,
-      min: 0,
-      max: 7,
-      step: 1,
-    },
-    lightIntensity: {
-      value: 0.9,
-      min: 0,
-      max: 10,
-      step: 0.1,
-    },
-    bgIntensity: {
-      value: 1.4,
-      min: 0,
-      max: 10,
-      step: 0.1,
-    },
-    bgBlurriness: {
-      value: 0.1,
-      min: 0,
-      max: 1,
-    },
-  });
-  const effects = useControls("Effects", {
-    enabled: false
-  })
-  const n8ao = useControls("N8AO", {
-    renderMode: {
-      value: 0,
-      min: 0,
-      max: 4,
-      step: 1,
-    },
-    aoRadius: {
-      value: 3,
-      min: 1,
-      max: 10,
-      step: 0.01,
-    },
-    distanceFalloff: {
-      value: 1,
-      min: 0.1,
-      max: 10,
-      step: 0.01,
-    },
-    intensity: {
-      value: 4.5,
-      min: 0.0,
-      max: 10,
-      step: 0.01,
-    },
-  });
-  const bloom = useControls("Bloom", {
-    lumThreshold: {
-      value: 0.1,
-      min: 0.0,
-      max: 1,
-      step: 0.01,
-    },
-    lumSmoothing: {
-      value: 0.1,
-      min: 0.0,
-      max: 1,
-      step: 0.01,
-    },
-    intensity: {
-      value: 0.25,
-      min: 0,
-      max: 1,
-      step: 0.01,
-    },
-  });
+  // const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
+  //   toneMapping: {
+  //     value: 1,
+  //     min: 0,
+  //     max: 7,
+  //     step: 1,
+  //   },
+  //   lightIntensity: {
+  //     value: 0.7,
+  //     min: 0,
+  //     max: 10,
+  //     step: 0.1,
+  //   },
+  //   bgIntensity: {
+  //     value: 1.4,
+  //     min: 0,
+  //     max: 10,
+  //     step: 0.1,
+  //   },
+  //   bgBlurriness: {
+  //     value: 0.06,
+  //     min: 0,
+  //     max: 1,
+  //   },
+  // });
+  // const effects = useControls("Effects", {
+  //   enabled: false
+  // })
+  // const n8ao = useControls("N8AO", {
+  //   renderMode: {
+  //     value: 0,
+  //     min: 0,
+  //     max: 4,
+  //     step: 1,
+  //   },
+  //   aoRadius: {
+  //     value: 3,
+  //     min: 1,
+  //     max: 10,
+  //     step: 0.01,
+  //   },
+  //   distanceFalloff: {
+  //     value: 1,
+  //     min: 0.1,
+  //     max: 10,
+  //     step: 0.01,
+  //   },
+  //   intensity: {
+  //     value: 4.5,
+  //     min: 0.0,
+  //     max: 10,
+  //     step: 0.01,
+  //   },
+  // });
+  // const bloom = useControls("Bloom", {
+  //   lumThreshold: {
+  //     value: 0.1,
+  //     min: 0.0,
+  //     max: 1,
+  //     step: 0.01,
+  //   },
+  //   lumSmoothing: {
+  //     value: 0.1,
+  //     min: 0.0,
+  //     max: 1,
+  //     step: 0.01,
+  //   },
+  //   intensity: {
+  //     value: 0.25,
+  //     min: 0,
+  //     max: 1,
+  //     step: 0.01,
+  //   },
+  // });
 
   return (
     <>
@@ -247,21 +245,21 @@ function App() {
             <TooltipProvider>
               <UI />
             </TooltipProvider>
-            <Canvas onPointerMissed={onPointerMissed} gl={{ toneMapping }}>
+            <Canvas onPointerMissed={onPointerMissed} gl={{ toneMapping: 1 }}>
               <Suspense fallback={<SceneLoader />}>
                 <Environment
                   files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`}
                   background
-                  environmentIntensity={lightIntensity}
-                  backgroundIntensity={bgIntensity}
-                  backgroundBlurriness={bgBlurriness}
+                  environmentIntensity={0.7}
+                  backgroundIntensity={1.4}
+                  backgroundBlurriness={0.06}
                 />
 
                 <Stats className="!bottom-6 !top-auto" />
 
                 {isModelSelectionScene ? <ModelSelectionScene /> : <GameScene />}
 
-                <EffectComposer enabled={effects.enabled} resolutionScale={100} renderPriority={1} enableNormalPass>
+                {/* <EffectComposer enabled={effects.enabled} resolutionScale={100} renderPriority={1} enableNormalPass>
                   <ToneMapping mode={toneMapping} />
                   <Bloom
                     intensity={bloom.intensity}
@@ -276,7 +274,7 @@ function App() {
                     intensity={n8ao.intensity}
                     distanceFalloff={n8ao.distanceFalloff}
                   />
-                </EffectComposer>
+                </EffectComposer> */}
               </Suspense>
             </Canvas>
           </div>
