@@ -13,6 +13,7 @@ export function LogoutButton({ className }: { className?: string }) {
     logoutRequest().then(() => {
       localStorage.removeItem('access-token');
       resetCurrentPlayerQuery();
+      window.location.reload();
     });
   };
 
