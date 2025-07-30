@@ -538,9 +538,9 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
                 className="ml-auto w-60"
                 disabled={isSendButtonDisabled || isSubmitting}
                 onClick={onConfirm}
-                loading={isLoading}
+                loading={isLoading || isSubmitting}
               >
-                <ButtonText gameStatus={gameStatus} scores={scores.total} loading={isSubmitting} />
+                <ButtonText gameStatus={gameStatus} scores={scores.total} />
               </Button>
             </TooltipTrigger>
             {gameStatus === 'completed' && (

@@ -1,6 +1,5 @@
 import { playersData } from './mockData';
 import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS, EMOTES_SEARCH_API_URL } from './constants';
-import useAdminStore from '@/stores/adminStore';
 import {
   CurrentUserResponse,
   DropBonusCardRequest,
@@ -31,6 +30,7 @@ import {
   UseInstantCardRequest,
   UseInstantCardResponse,
 } from './api-types-generated';
+import useSystemStore from '@/stores/systemStore';
 
 const MOCK_API = NO_MOCKS ? false : IS_DEV;
 
@@ -39,7 +39,7 @@ const API_HOST = IS_DEV ? 'http://localhost:8000' : 'https://igropolius.ru';
 async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<Response> {
   let actingUserId = null;
   if (!endpoint.includes('/api/login') && !endpoint.includes('/api/internal')) {
-    actingUserId = useAdminStore.getState().actingUserId;
+    actingUserId = useSystemStore.getState().actingUserId;
   }
 
   // console.log({ actingUserId });

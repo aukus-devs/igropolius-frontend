@@ -6,7 +6,7 @@ import { Box3, OrthographicCamera, PerspectiveCamera, Vector3 } from 'three';
 import { BOARD_SIZE, SECTOR_DEPTH, SECTOR_HEIGHT } from '@/lib/constants';
 import useCameraStore from '@/stores/cameraStore';
 import usePlayerStore from '@/stores/playerStore';
-import useAdminStore from '@/stores/adminStore';
+import useSystemStore from '@/stores/systemStore';
 
 export function CustomCameraControls() {
   const [_, getKeys] = useKeyboardControls();
@@ -17,7 +17,7 @@ export function CustomCameraControls() {
   const myPlayerId = usePlayerStore(state => state.myPlayerId);
   const cameraControls = useRef<CameraControlsComponent | null>(null);
 
-  const isActing = useAdminStore(state => state.actingUserId !== null);
+  const isActing = useSystemStore(state => state.actingUserId !== null);
 
   const keysMovespeed = 10;
 

@@ -2,11 +2,11 @@ import { useShallow } from 'zustand/shallow';
 import { Card } from '../ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import usePlayerStore from '@/stores/playerStore';
-import useAdminStore from '@/stores/adminStore';
 import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
 import { Button } from '../ui/button';
 import { resetDb } from '@/lib/api';
 import { useMutation } from '@tanstack/react-query';
+import useSystemStore from '@/stores/systemStore';
 
 export default function AdminPanel() {
   const { myPlayer, players } = usePlayerStore(
@@ -16,7 +16,7 @@ export default function AdminPanel() {
     }))
   );
 
-  const { actingUserId, setActingUserId } = useAdminStore(
+  const { actingUserId, setActingUserId } = useSystemStore(
     useShallow(state => ({
       actingUserId: state.actingUserId,
       setActingUserId: state.setActingUserId,

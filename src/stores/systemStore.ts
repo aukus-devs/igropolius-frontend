@@ -18,6 +18,8 @@ interface SystemStore {
   disableCurrentPlayerQuery: boolean;
   myUser: CurrentUserResponse | null;
   setMyUser: (data?: CurrentUserResponse | null) => void;
+  actingUserId: number | null;
+  setActingUserId: (userId: number | null) => void;
 }
 
 const useSystemStore = create<SystemStore>(set => ({
@@ -27,6 +29,7 @@ const useSystemStore = create<SystemStore>(set => ({
   disablePlayersQuery: false,
   disableCurrentPlayerQuery: false,
   myUser: null,
+  actingUserId: null,
 
   setMainNotification: (message: MainNotification | null) => {
     set({ mainNotification: message });
@@ -54,6 +57,8 @@ const useSystemStore = create<SystemStore>(set => ({
   setMyUser: (data?: CurrentUserResponse | null) => {
     set({ myUser: data || null });
   },
+
+  setActingUserId: (userId: number | null) => set({ actingUserId: userId }),
 }));
 
 export default useSystemStore;

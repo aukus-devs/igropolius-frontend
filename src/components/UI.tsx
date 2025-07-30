@@ -23,11 +23,9 @@ function DesktopUI() {
     }))
   );
 
-  const myUser = useSystemStore(state => state.myUser);
-
-  console.log({ myUser });
-
-  const showAdminPanel = myUser?.role === 'admin';
+  const showAdminPanel = useSystemStore(
+    state => state.myUser?.role === 'admin' || state.actingUserId
+  );
 
   const mainNotification = useSystemStore(state => state.mainNotification);
 
