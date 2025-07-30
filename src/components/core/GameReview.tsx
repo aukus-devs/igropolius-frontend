@@ -2,13 +2,20 @@ import { Badge } from '../ui/badge';
 import { formatMs } from '@/lib/utils';
 import { useState } from 'react';
 import { Toggle } from '../ui/toggle';
-import { VideoCircle } from '../icons';
+import { VideoCircle, Edit } from '../icons';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { GameCompletionType, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
+import { Button } from '../ui/button';
+import GameReviewEditForm from './turnUI/GameReviewEditForm';
+import usePlayerStore from '@/stores/playerStore';
+import { useQuery } from '@tanstack/react-query';
+import { fetchCurrentPlayer } from '@/lib/api';
+import { queryKeys } from '@/lib/queryClient';
 
 type Props = {
   game: PlayerGame;
+  playerId: number;
 };
 
 function getStatusData(status: GameCompletionType) {
@@ -35,16 +42,31 @@ function getStatusData(status: GameCompletionType) {
   }
 }
 
-function GameReview({ game }: Props) {
+function GameReview({ game, playerId }: Props) {
   const { title, review, vod_links, duration, length, rating, status, created_at, cover } = game;
+  const myPlayer = usePlayerStore(state => state.myPlayer);
+
+  const { data: currentUser } = useQuery({
+    queryKey: queryKeys.currentPlayer,
+    queryFn: fetchCurrentPlayer,
+    enabled: !!myPlayer,
+  });
 
   const [isVodsOpen, setIsVodsOpen] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
 
   const formattedDate = new Intl.DateTimeFormat('ru-RU', {
     day: 'numeric',
     month: 'long',
   }).format(new Date(created_at * 1000));
   const { color, statusText } = getStatusData(status);
+
+  const canEdit =
+    myPlayer &&
+    currentUser &&
+    (currentUser.role === 'admin' ||
+      myPlayer.id === playerId ||
+      (currentUser.role === 'moder' && currentUser.moder_for === playerId));
 
   function toggleVods() {
     setIsVodsOpen(!isVodsOpen);
@@ -56,14 +78,27 @@ function GameReview({ game }: Props) {
         <div className={`text-xs ${color} font-wide-semibold`}>
           {statusText} — {formattedDate}
         </div>
-        <Toggle
-          className="text-sm gap-[3px] py-[3px] px-2.5 h-fit border-none data-[state=off]:bg-white/20 text-white/70"
-          disabled={!vod_links}
-          onPressedChange={toggleVods}
-        >
-          <VideoCircle />
-          Записи
-        </Toggle>
+        <div className="flex gap-2">
+          {canEdit && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowEditForm(true)}
+              className="text-sm gap-[3px] py-[3px] px-2.5 h-fit border-none bg-white/20 text-white/70 hover:bg-white/30"
+            >
+              <Edit className="size-4" />
+              Редактировать
+            </Button>
+          )}
+          <Toggle
+            className="text-sm gap-[3px] py-[3px] px-2.5 h-fit border-none data-[state=off]:bg-white/20 text-white/70"
+            disabled={!vod_links}
+            onPressedChange={toggleVods}
+          >
+            <VideoCircle />
+            Записи
+          </Toggle>
+        </div>
       </div>
       <h3 className="text-2xl mb-2 font-wide-semibold">{title}</h3>
       <div className="flex gap-2.5">
@@ -102,6 +137,14 @@ function GameReview({ game }: Props) {
           )}
         </div>
       </div>
+
+      {showEditForm && (
+        <GameReviewEditForm
+          gameToEdit={game}
+          open={showEditForm}
+          setOpen={setShowEditForm}
+        />
+      )}
     </div>
   );
 }

@@ -448,6 +448,7 @@ export interface DropBonusCardRequest {
 export interface EditPlayerGame {
   game_title: GameTitle2;
   game_review: GameReview;
+  rating: Rating;
   vod_links?: VodLinks;
 }
 /**

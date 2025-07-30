@@ -4,6 +4,7 @@ import useAdminStore from '@/stores/adminStore';
 import {
   CurrentUserResponse,
   DropBonusCardRequest,
+  EditPlayerGame,
   EventSettingsResponse,
   GiveBonusCardRequest,
   GiveBonusCardResponse,
@@ -649,6 +650,16 @@ export async function movePlayerGame(request: MovePlayerGameRequest): Promise<vo
   }
   await apiRequest(`/api/player-games/move`, {
     method: 'POST',
+    body: JSON.stringify(request),
+  });
+}
+
+export async function editPlayerGame(gameId: number, request: EditPlayerGame): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest(`/api/player-games/${gameId}`, {
+    method: 'PATCH',
     body: JSON.stringify(request),
   });
 }

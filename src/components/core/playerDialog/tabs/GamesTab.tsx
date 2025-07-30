@@ -30,7 +30,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
       <div className="flex flex-col gap-8 py-8">
         <CurrentGame player={player} />
         {filteredGames.map((game, idx) => (
-          <GameReview key={idx} game={game} />
+          <GameReview key={idx} game={game} playerId={player.id} />
         ))}
       </div>
     </>

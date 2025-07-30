@@ -12,6 +12,7 @@ const useReviewFormStore = create<{
   gameTime: GameLength | null;
   gameStatus: GameCompletionType | null;
   gameReview: string;
+  vodLinks: string;
   selectedGame: IgdbGameSummary | null;
   error: string | null;
   isSubmitting: boolean;
@@ -20,6 +21,7 @@ const useReviewFormStore = create<{
   setGameTime: (value: GameLength) => void;
   setGameStatus: (value: GameCompletionType) => void;
   setGameReview: (value: string) => void;
+  setVodLinks: (value: string) => void;
   setSelectedGame: (game: IgdbGameSummary | null) => void;
   sendReview: (scores: number) => Promise<void>;
   getReviewScores: (params: { sectorId: number; mapsCompleted: number }) => ScoreDetails;
@@ -33,6 +35,7 @@ const useReviewFormStore = create<{
   gameTime: null,
   gameStatus: null,
   gameReview: '',
+  vodLinks: '',
   selectedGame: null,
   error: null,
   isSubmitting: false,
@@ -44,10 +47,11 @@ const useReviewFormStore = create<{
   setGameTime: value => set({ gameTime: value }),
   setGameStatus: value => set({ gameStatus: value }),
   setGameReview: value => set({ gameReview: value }),
+  setVodLinks: value => set({ vodLinks: value }),
   setSelectedGame: game => set({ selectedGame: game }),
   clearError: () => set({ error: null }),
   sendReview: async (scores: number) => {
-    const { rating, gameTitle, gameTime, gameStatus, gameReview, selectedGame } = get();
+    const { rating, gameTitle, gameTime, gameStatus, gameReview, vodLinks, selectedGame } = get();
 
     if (!gameStatus) {
       throw new Error('Game status is required');
@@ -65,6 +69,7 @@ const useReviewFormStore = create<{
         review: gameReview,
         length,
         scores,
+        vod_links: vodLinks || undefined,
         game_id: selectedGame?.id || null,
       });
 
@@ -76,6 +81,7 @@ const useReviewFormStore = create<{
         gameTime: null,
         gameStatus: null,
         gameReview: '',
+        vodLinks: '',
         selectedGame: null,
         error: null,
         open: false,
