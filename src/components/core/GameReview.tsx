@@ -60,6 +60,12 @@ function GameReview({ game }: Props) {
   }).format(new Date(created_at * 1000));
   const { color, statusText } = getStatusData(status);
   console.log(currentUser);
+  console.log('game.player_id:', game.player_id);
+  console.log('currentUser.moder_for:', currentUser?.moder_for);
+  console.log(
+    'currentUser.moder_for === game.player_id',
+    currentUser?.moder_for === game.player_id
+  );
   const canEdit =
     currentUser &&
     (currentUser.role === 'admin' ||
