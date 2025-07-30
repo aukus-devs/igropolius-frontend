@@ -1,4 +1,3 @@
-import { UserIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { login } from '@/lib/api';
@@ -13,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import { buttonVariants, Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Person } from '@/components/icons';
 
 export default function LoginDialog({ className }: { className?: string }) {
   const [username, setUsername] = useState('');
@@ -50,7 +50,7 @@ export default function LoginDialog({ className }: { className?: string }) {
         className={cn(buttonVariants({ variant: 'outline' }), className)}
         onClick={() => setOpen(true)}
       >
-        <UserIcon className="h-4 w-4" />
+        <Person />
         Логин
       </DialogTrigger>
       <DialogContent aria-describedby="" className="w-[400px]">

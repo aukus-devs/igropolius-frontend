@@ -53,7 +53,9 @@ function QuickMenu() {
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className={groupStyle}>
-          <Countdown className={cn(buttonStyle, 'text-sm')} />
+          <div className={cn(buttonStyle, 'whitespace-pre')}>Время — <Clock /> MSK </div>
+          <Separator />
+          <Countdown className={buttonStyle} />
         </div>
 
         <div className={groupStyle}>
@@ -66,8 +68,7 @@ function QuickMenu() {
 
         <div className={groupStyle}>
           <OrthographicToggle className={buttonStyle} />
-          <Separator />
-          <div className={cn(buttonStyle, 'whitespace-pre')}>Время ивента — <Clock /> MSK </div>
+
         </div>
 
         <div className={groupStyle}>
