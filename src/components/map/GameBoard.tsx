@@ -2,7 +2,7 @@ import { sectorsData } from '@/lib/mockData';
 import { HALF_BOARD, STORAGE_BASE_URL } from '@/lib/constants';
 import Sector from './sector/Sector';
 import {
-  calculatePlayerPosition,
+  calculatePlayerPositionOnSector,
   calculateSectorPosition,
   getPlayerRotationOnSector,
   getSectorRotation,
@@ -43,7 +43,7 @@ function getBuildingMeshes(prefix: string, gltf: GLTF & ObjectMap) {
 }
 
 function GameBoard() {
-  const playersData = usePlayerStore(state => state.players);
+  const playersPerSector = usePlayerStore(state => state.playersPerSector);
   const buildingsAmount = usePlayerStore(state => {
     return Object.values(state.buildingsPerSector)
       .map(buildings => {
@@ -71,19 +71,15 @@ function GameBoard() {
       {models => (
         <group name="board" position={[-HALF_BOARD, 0, -HALF_BOARD]}>
           {sectorsData.map(sector => {
-            const playersOnSector = playersData.filter(player => player.sector_id === sector.id);
+            const playersOnSector = playersPerSector[sector.id] || [];
             const sectorPosition = calculateSectorPosition(sector);
             const playerRotation = getPlayerRotationOnSector(sector);
             const sectorRotation = getSectorRotation(sector.position);
 
             return (
               <React.Fragment key={sector.id}>
-                {playersOnSector.map((player, idx) => {
-                  const playerPosition = calculatePlayerPosition(
-                    idx,
-                    playersOnSector.length,
-                    sector
-                  );
+                {playersOnSector.map(player => {
+                  const playerPosition = calculatePlayerPositionOnSector(player, sector);
 
                   return (
                     <PlayerModel

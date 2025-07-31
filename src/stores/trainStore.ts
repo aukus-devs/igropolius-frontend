@@ -5,7 +5,7 @@ import useModelsStore from './modelsStore';
 import usePlayerStore from './playerStore';
 import { HALF_BOARD, TrainsConfig } from '@/lib/constants';
 import { SectorsById } from '@/lib/mockData';
-import { calculatePlayerPosition, getSectorRotation } from '@/components/map/utils';
+import { calculatePlayerPositionOnSector, getSectorRotation } from '@/components/map/utils';
 import useCameraStore from './cameraStore';
 
 type TrainConfig = {
@@ -47,14 +47,8 @@ const useTrainsStore = create<{
     carriageWorldPosition.z += HALF_BOARD;
 
     const destinationSector = SectorsById[TrainsConfig[trainId].sectorTo];
-    const destinationSectorPlayers = usePlayerStore
-      .getState()
-      .players.filter(player => player.sector_id === destinationSector.id);
-    const destinationPosition = calculatePlayerPosition(
-      destinationSectorPlayers.length,
-      destinationSectorPlayers.length,
-      destinationSector
-    );
+    const destinationPosition = calculatePlayerPositionOnSector(myPlayer, destinationSector);
+
     const destinationRotation = getSectorRotation(destinationSector.position);
     const playerGroupQuat = new Quaternion().setFromEuler(new Euler(...destinationRotation, 'XYZ'));
     const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, 'XYZ'));

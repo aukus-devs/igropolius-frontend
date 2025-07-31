@@ -12,10 +12,9 @@ import { create } from 'zustand';
 import useModelsStore from './modelsStore';
 import useCameraStore from './cameraStore';
 import {
-  calculatePlayerPosition,
+  calculatePlayerPositionOnSector,
   canBuildOnSector,
   getPlayerRotationOnSector,
-  getSectorRotation,
 } from '@/components/map/utils';
 import { SectorsById, sectorsData } from '@/lib/mockData';
 import { Euler, Quaternion } from 'three';
@@ -54,6 +53,7 @@ const usePlayerStore = create<{
   isPlayerMoving: boolean;
   players: PlayerDetails[];
   buildingsPerSector: Record<number, BuildingData[]>;
+  playersPerSector: Record<number, PlayerDetails[]>;
   newBuildingsIds: number[];
   taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
@@ -84,6 +84,10 @@ const usePlayerStore = create<{
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
+  playersPerSector: Object.fromEntries(sectorsData.map(sector => [sector.id, []])) as Record<
+    number,
+    PlayerDetails[]
+  >,
   newBuildingsIds: [],
   taxPerSector: {},
   turnState: null,
@@ -246,7 +250,7 @@ const usePlayerStore = create<{
       }
     }
 
-    console.log({ taxPerSector });
+    // console.log({ taxPerSector });
 
     // sort all buildings values by createdAt
     for (const building of Object.values(buildings)) {
@@ -278,10 +282,18 @@ const usePlayerStore = create<{
       })
     );
 
+    const playersPerSector = Object.fromEntries(
+      sectorsData.map(sector => [
+        sector.id,
+        players.filter(player => player.sector_id === sector.id).sort((a, b) => a.id - b.id),
+      ])
+    ) as Record<number, PlayerDetails[]>;
+
     set({
       players,
       buildingsPerSector: buildings,
       newBuildingsIds,
+      playersPerSector,
       taxPerSector,
       prisonCards: prisonPlayer?.bonus_cards ?? [],
     });
@@ -324,12 +336,7 @@ const usePlayerStore = create<{
       if (!nextSector)
         throw new Error(`Failed to find path from ${currentSectorId} to ${nextSectorId}.`);
 
-      const nextSectorPlayers = get().players.filter(player => player.sector_id === nextSectorId);
-      const nextPosition = calculatePlayerPosition(
-        nextSectorPlayers.length,
-        nextSectorPlayers.length,
-        nextSector
-      );
+      const nextPosition = calculatePlayerPositionOnSector(player, nextSector);
 
       const currentRotation = getPlayerRotationOnSector(currentSector);
       const nextRotation = getPlayerRotationOnSector(nextSector);
@@ -419,6 +426,11 @@ const usePlayerStore = create<{
     const prisonSector = getClosestPrison(myPlayer.sector_id);
 
     const steps = prisonSector - myPlayer.sector_id;
+    // console.log({
+    //   prisonSector,
+    //   steps,
+    // });
+
     await animatePlayerMovement(myPlayer.id, steps);
     get().updateMyPlayerSectorId(prisonSector);
   },

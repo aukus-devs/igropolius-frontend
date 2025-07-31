@@ -549,3 +549,12 @@ export function getClosestPrison(sectorId: number): number {
     prisonSectors[0]
   );
 }
+
+export function wasLastMoveDropToPrison(player: PlayerDetails): boolean {
+  const sorted = [...player.games].sort((a, b) => b.created_at - a.created_at);
+  const last = sorted[0];
+  if (!last) {
+    return false;
+  }
+  return last.status === 'drop';
+}

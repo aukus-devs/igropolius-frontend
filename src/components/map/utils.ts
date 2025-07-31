@@ -1,3 +1,4 @@
+import { PlayerDetails } from '@/lib/api-types-generated';
 import {
   PLAYER_ELEVATION,
   SECTOR_WIDTH,
@@ -8,6 +9,8 @@ import {
   STORAGE_BASE_URL,
 } from '@/lib/constants';
 import { SectorData, Vector3Array } from '@/lib/types';
+import { wasLastMoveDropToPrison } from '@/lib/utils';
+import usePlayerStore from '@/stores/playerStore';
 
 export type SectorPosition =
   | 'bottom'
@@ -48,12 +51,38 @@ const COL_SPACING = PLAYER_WIDTH + 1.5;
 const ROW_SPACING = PLAYER_DEPTH + 1;
 const OFFSET_FROM_TOP = SECTOR_DEPTH / 2.5;
 
-export function calculatePlayerPosition(
-  idx: number,
-  totalPlayers: number,
-  sector: SectorData,
-  insidePrison: boolean = false
-): Vector3Array {
+export function calculatePlayerPositionOnSector(player: PlayerDetails, sector: SectorData) {
+  let playersOnSector = usePlayerStore.getState().playersPerSector[sector.id] || [];
+  let insidePrison = false;
+  if (sector.type === 'prison') {
+    insidePrison = wasLastMoveDropToPrison(player);
+    playersOnSector = playersOnSector.filter(p => wasLastMoveDropToPrison(p) === insidePrison);
+  }
+
+  let idx = playersOnSector.findIndex(p => p.id === player.id);
+  if (idx === -1) {
+    idx = playersOnSector.length;
+  }
+  const totalPlayers = playersOnSector.length;
+  return calculatePlayerPosition({
+    idx,
+    totalPlayers,
+    sector,
+    insidePrison,
+  });
+}
+
+function calculatePlayerPosition({
+  idx,
+  totalPlayers,
+  sector,
+  insidePrison,
+}: {
+  idx: number;
+  totalPlayers: number;
+  sector: SectorData;
+  insidePrison?: boolean;
+}): Vector3Array {
   if (sector.type === 'parking') {
     return calculatePlayerPositionOnParking(idx, sector);
   }
@@ -115,11 +144,13 @@ function calculatePlayerPositionOnParking(idx: number, sector: SectorData): Vect
 function calculatePlayerPositionInPrisonParking(idx: number, sector: SectorData): Vector3Array {
   const { x: baseX, z: baseZ } = calculateBasePosition(sector);
 
-  const prisonParkingSide1Y = -8;
-  const prisonParkingSide1XPositions = [-5.3, -3.2, -0.9, 1.3, 3.4] as const;
+  const prisonOrientation = sector.id === 11 ? 1 : -1;
 
-  const prisonParkingSide2X = 7.5;
-  const prisonParkingSide2YPositions = [-4, -0.0, 4] as const;
+  const prisonParkingSide1Y = 8;
+  const prisonParkingSide1XPositions = [5.3, 3.2, 0.9, -1.3, -3.4] as const;
+
+  const prisonParkingSide2X = -7.5;
+  const prisonParkingSide2YPositions = [4, 0.0, -4] as const;
 
   const parkingSlotsOrder = [
     { y: prisonParkingSide1Y, x: prisonParkingSide1XPositions[2] },
@@ -132,21 +163,34 @@ function calculatePlayerPositionInPrisonParking(idx: number, sector: SectorData)
     { x: prisonParkingSide2X, y: prisonParkingSide2YPositions[2] },
   ];
 
-  const parkingSlot = parkingSlotsOrder[idx];
+  const parkingSlot = parkingSlotsOrder[idx % parkingSlotsOrder.length];
 
   return [
-    sector.position.x * SECTOR_WIDTH + baseX + parkingSlot.x,
+    sector.position.x * SECTOR_WIDTH + baseX + parkingSlot.x * prisonOrientation,
     PLAYER_ELEVATION,
-    sector.position.y * SECTOR_WIDTH + baseZ + parkingSlot.y,
+    sector.position.y * SECTOR_WIDTH + baseZ + parkingSlot.y * prisonOrientation,
   ];
 }
 
 function calculatePlayerPositionInsidePrison(idx: number, sector: SectorData): Vector3Array {
   const { x: baseX, z: baseZ } = calculateBasePosition(sector);
+  const prisonPositions = [
+    { x: 0, y: -2 },
+    { x: -2, y: -2 },
+    { x: 0, y: 2 },
+    { x: 2, y: 2 },
+    { x: 2, y: -2 },
+    { x: -2, y: 2 },
+    { x: -4, y: -2 },
+    { x: -4, y: 2 },
+  ];
+
+  const position = prisonPositions[idx % prisonPositions.length];
+
   return [
-    sector.position.x * SECTOR_WIDTH + baseX,
+    sector.position.x * SECTOR_WIDTH + baseX + position.x,
     PLAYER_ELEVATION,
-    sector.position.y * SECTOR_WIDTH + baseZ,
+    sector.position.y * SECTOR_WIDTH + baseZ + position.y,
   ];
 }
 
