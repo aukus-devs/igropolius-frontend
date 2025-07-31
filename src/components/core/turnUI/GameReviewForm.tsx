@@ -379,15 +379,15 @@ function HLTBLink() {
     ? `https://howlongtobeat.com/?q=${encodeURIComponent(cleanGameTitle)}`
     : 'https://howlongtobeat.com/';
 
+  const handleClick = () => {
+    window.open(hltbUrl, '_blank');
+  };
+
   return (
-    <Button className="font-semibold border-none py-0 px-9 rounded-md">
-      <a
-        className="flex gap-1 size-full items-center justify-center"
-        href={hltbUrl}
-        target="_blank"
-      >
+    <Button className="font-semibold border-none py-0 px-9 rounded-md" onClick={handleClick}>
+      <span className="flex gap-1 items-center">
         На HLTB <ArrowRight />
-      </a>
+      </span>
     </Button>
   );
 }
@@ -437,17 +437,17 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
   const scores =
     myPlayer && gameStatus
       ? calculateGameCompletionScore({
-        gameLength,
-        gameStatus,
-        sectorId: myPlayer.sector_id,
-        mapsCompleted: myPlayer.maps_completed,
-      })
+          gameLength,
+          gameStatus,
+          sectorId: myPlayer.sector_id,
+          mapsCompleted: myPlayer.maps_completed,
+        })
       : {
-        total: 0,
-        base: 0,
-        sectorMultiplier: 1,
-        mapCompletionBonus: 0,
-      };
+          total: 0,
+          base: 0,
+          sectorMultiplier: 1,
+          mapCompletionBonus: 0,
+        };
 
   const isSendButtonDisabled = useReviewFormStore(state => {
     if (!state.gameTitle) return true;

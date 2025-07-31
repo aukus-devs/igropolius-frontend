@@ -294,15 +294,15 @@ function HLTBLink() {
     ? `https://howlongtobeat.com/?q=${encodeURIComponent(cleanGameTitle)}`
     : 'https://howlongtobeat.com/';
 
+  const handleClick = () => {
+    window.open(hltbUrl, '_blank');
+  };
+
   return (
-    <Button className="font-semibold border-none py-0 px-9 rounded-md">
-      <a
-        className="flex gap-1 size-full items-center justify-center"
-        href={hltbUrl}
-        target="_blank"
-      >
+    <Button className="font-semibold border-none py-0 px-9 rounded-md" onClick={handleClick}>
+      <span className="flex gap-1 items-center">
         На HLTB <ArrowRight />
-      </a>
+      </span>
     </Button>
   );
 }
