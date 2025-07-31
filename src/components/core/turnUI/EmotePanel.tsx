@@ -3,13 +3,15 @@ import { Input } from '../../ui/input';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { searchEmotes } from '@/lib/api';
+import ImageLoader from '../ImageLoader';
+import { LoaderCircleIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface EmotePanelProps {
   onEmoteSelect: (emoteUrl: string) => void;
-  className?: string;
 }
 
-export default function EmotePanel({ onEmoteSelect, className = '' }: EmotePanelProps) {
+export default function EmotePanel({ onEmoteSelect }: EmotePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,42 +33,40 @@ export default function EmotePanel({ onEmoteSelect, className = '' }: EmotePanel
 
   return (
     <div
-      className={`w-[236px] h-[171px] bg-white/15 backdrop-blur-[50px] rounded-lg p-1 overflow-visible ${className}`}
+      className="bg-white/15 backdrop-blur-[1.5rem] rounded-lg p-2"
     >
-      <div className="w-full h-7 bg-white/15 rounded-[5px] mb-1">
-        <Input
-          ref={searchInputRef}
-          type="text"
-          placeholder="Поиск смайлов..."
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="w-full h-full border-none bg-transparent text-white placeholder-white/70 text-sm px-2 py-0"
-          onKeyDown={e => e.stopPropagation()}
-        />
-      </div>
+      <Input
+        ref={searchInputRef}
+        type="text"
+        className="w-full text-white placeholder-white/70 bg-white/15 rounded-[5px] mb-2"
+        value={searchQuery}
+        onChange={e => setSearchQuery(e.target.value)}
+        onKeyDown={e => e.stopPropagation()}
+        placeholder="Поиск смайлов..."
+      />
 
-      <div className="flex-1 h-32 overflow-visible">
+      <div className="w-[calc(7_*_48px)] h-[calc(4_*_48px)]">
         {isFetching && debouncedQuery.length >= 2 ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white/70"></div>
+          <div className="w-full h-full flex items-center justify-center">
+            <LoaderCircleIcon className="animate-spin text-primary" size={24} />
           </div>
         ) : emoteData?.emotes && emoteData.emotes.length > 0 ? (
-          <div className="grid grid-cols-7 gap-1 p-1 overflow-visible">
+          <div className="grid grid-cols-[repeat(7,48px)] grid-rows-[repeat(4,48px)]">
             {emoteData?.emotes?.map((emoteUrl, index) => (
-              <button
+              <Button
                 key={index}
+                variant="ghost"
+                size="icon"
+                className="w-full h-full p-2 rounded hover:bg-white/15"
                 onClick={() => handleEmoteClick(emoteUrl)}
-                className="w-7 h-7 rounded hover:bg-white/20 transition-colors flex items-center justify-center group relative hover:z-10"
               >
-                <img
+                <ImageLoader
                   src={emoteUrl}
                   alt="emote"
-                  className="w-6 h-6 object-contain transition-transform duration-50 group-hover:scale-300"
-                  onError={e => {
-                    e.currentTarget.style.display = 'none';
-                  }}
+                  className="h-full w-full"
+                  onError={(e) => e.currentTarget.style.display = 'none'}
                 />
-              </button>
+              </Button>
             ))}
           </div>
         ) : debouncedQuery.length >= 2 ? (

@@ -10,6 +10,7 @@ import { useShallow } from 'zustand/shallow';
 import { canBuildOnSector } from '../utils';
 import { useMutation } from '@tanstack/react-query';
 import { movePlayerGame } from '@/lib/api';
+import ImageLoader from '@/components/core/ImageLoader';
 
 type Props = {
   sector: SectorData;
@@ -76,10 +77,11 @@ function SectorInfo({ sector }: Props) {
               {prisonCardsList.length > 0 && (
                 <div className="flex gap-1">
                   {prisonCardsList.map((c, id) => (
-                    <img
+                    <ImageLoader
                       key={id}
-                      className="w-5 h-10"
                       src={frontendCardsData[c.bonus_type].picture}
+                      alt={frontendCardsData[c.bonus_type].name}
+                      className="w-5 h-10"
                     />
                   ))}
                 </div>

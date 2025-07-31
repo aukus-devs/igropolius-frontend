@@ -10,6 +10,7 @@ import BonusCardUsedConfirmation from './turnUI/BonusCardUsedConfirmation';
 import { activateBonusCard } from '@/lib/api';
 import { resetPlayersQuery } from '@/lib/queryClient';
 import { MainBonusCardType } from '@/lib/api-types-generated';
+import ImageLoader from './ImageLoader';
 
 export default function MyCards() {
   const { cards, turnState } = usePlayerStore(
@@ -47,8 +48,12 @@ export default function MyCards() {
               (card.bonus_type === 'reroll-game' || card.bonus_type === 'game-help-allowed');
             return (
               <Tooltip delayDuration={0} key={idx}>
-                <TooltipTrigger className="flex w-[32px] h-[45px] rounded-sm overflow-hidden">
-                  <img src={cardData.picture} />
+                <TooltipTrigger>
+                  <ImageLoader
+                    className="flex w-[32px] h-[45px] rounded-sm overflow-hidden"
+                    src={cardData.picture}
+                    alt={cardData.name}
+                  />
                 </TooltipTrigger>
                 <TooltipContent
                   className="bg-card/70 backdrop-blur-[1.5rem] p-3"
@@ -57,8 +62,12 @@ export default function MyCards() {
                   sideOffset={8}
                 >
                   <div className="flex gap-4">
-                    <div className="w-[200px]">
-                      <img src={cardData.picture} className="rounded-sm" />
+                    <div className="">
+                      <ImageLoader
+                        src={cardData.picture}
+                        alt={cardData.name}
+                        className="w-[200px] rounded-md overflow-hidden"
+                      />
                     </div>
                     <div className="w-[200px]">
                       <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>

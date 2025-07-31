@@ -20,6 +20,7 @@ import { calculateGameCompletionScore } from '@/lib/utils';
 import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
+import ImageLoader from '../ImageLoader';
 
 type StatesOption = {
   title: string;
@@ -54,9 +55,11 @@ function GameStatus() {
 
 function GamePoster({ src }: { src: string }) {
   return (
-    <div className="w-32 rounded-md overflow-hidden">
-      <img className="h-full object-cover" src={src} />
-    </div>
+    <ImageLoader
+      src={src}
+      alt="Game poster"
+      className="min-w-[120px] w-[120px] h-[159px] rounded-md overflow-hidden"
+    />
   );
 }
 
@@ -337,10 +340,10 @@ function GameTitle({
                   className="flex items-center gap-3 p-2 hover:bg-gray-100 cursor-pointer"
                   onClick={() => handleGameSelect(game)}
                 >
-                  <img
+                  <ImageLoader
                     src={game.cover || FALLBACK_GAME_POSTER}
                     alt={game.name}
-                    className="w-10 h-14 object-cover rounded"
+                    className="w-10 h-14 rounded overflow-hidden"
                   />
                   <div className="flex-1">
                     <div className="font-semibold text-gray-900">{game.name}</div>
@@ -434,17 +437,17 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
   const scores =
     myPlayer && gameStatus
       ? calculateGameCompletionScore({
-          gameLength,
-          gameStatus,
-          sectorId: myPlayer.sector_id,
-          mapsCompleted: myPlayer.maps_completed,
-        })
+        gameLength,
+        gameStatus,
+        sectorId: myPlayer.sector_id,
+        mapsCompleted: myPlayer.maps_completed,
+      })
       : {
-          total: 0,
-          base: 0,
-          sectorMultiplier: 1,
-          mapCompletionBonus: 0,
-        };
+        total: 0,
+        base: 0,
+        sectorMultiplier: 1,
+        mapCompletionBonus: 0,
+      };
 
   const isSendButtonDisabled = useReviewFormStore(state => {
     if (!state.gameTitle) return true;
@@ -506,9 +509,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
         </DialogHeader>
 
         <div className="flex gap-4">
-          <div className="flex flex-col gap-3">
-            <GamePoster src={selectedGame?.cover || FALLBACK_GAME_POSTER} />
-          </div>
+          <GamePoster src={selectedGame?.cover || FALLBACK_GAME_POSTER} />
 
           <div className="flex flex-col gap-2 w-full">
             <div className="flex gap-2 w-full">

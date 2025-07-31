@@ -4,6 +4,7 @@ import { ActiveBonusCard, PlayerDetails } from '@/lib/api-types-generated';
 import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
+import ImageLoader from '../ImageLoader';
 
 type Props = {
   player: PlayerDetails;
@@ -53,8 +54,12 @@ function PlayerCard({
 
   return (
     <Tooltip delayDuration={0}>
-      <TooltipTrigger className="flex w-[32px] h-[45px] rounded-sm overflow-hidden">
-        <img src={cardData.picture} />
+      <TooltipTrigger>
+        <ImageLoader
+          src={cardData.picture}
+          alt={cardData.name}
+          className="flex w-[32px] h-[45px] rounded-sm overflow-hidden"
+        />
       </TooltipTrigger>
       <TooltipContent
         className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3"

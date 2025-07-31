@@ -24,6 +24,7 @@ import {
 } from '@/lib/api-types-generated';
 import { bonusCardsData } from '@/lib/mockData';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import ImageLoader from '../../ImageLoader';
 
 type Props = {
   player: PlayerDetails;
@@ -115,7 +116,11 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
         {image && (
           <Tooltip>
             <TooltipTrigger>
-              <img src={image} alt={description} width="53" className="rounded-sm object-cover" />
+              <ImageLoader
+                className="w-[40px] h-[53px] md:w-[52px] md:h-[70px] rounded-sm overflow-hidden"
+                src={image}
+                alt={description}
+              />
             </TooltipTrigger>
             {cardInfo && (
               <TooltipContent className="w-fit max-w-60">{cardInfo.description}</TooltipContent>
@@ -137,11 +142,10 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
                 type="button"
                 onClick={() => setShowDetails(v => !v)}
                 className={`flex items-center gap-1 px-3 h-[23px] rounded-[5px] ml-2 transition-colors
-                ${
-                  showDetails
+                ${showDetails
                     ? 'bg-[#81A671] text-white'
                     : 'bg-white/20 text-white/70 hover:bg-white/30'
-                }
+                  }
               `}
                 style={{ fontSize: 14, fontWeight: 500 }}
               >

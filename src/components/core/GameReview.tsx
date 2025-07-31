@@ -9,6 +9,7 @@ import { parseReview } from '@/lib/textParsing';
 import { Button } from '../ui/button';
 import GameReviewEditForm from './turnUI/GameReviewEditForm';
 import useSystemStore from '@/stores/systemStore';
+import ImageLoader from './ImageLoader';
 
 type Props = {
   game: PlayerGame;
@@ -90,9 +91,11 @@ function GameReview({ game }: Props) {
       </div>
       <h3 className="text-2xl mb-2.5 font-wide-semibold">{title}</h3>
       <div className="flex gap-2.5">
-        <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
-          <img className="h-full object-cover" src={cover || FALLBACK_GAME_POSTER} />
-        </div>
+        <ImageLoader
+          className="min-w-[105px] w-[105px] h-[140px] rounded-md overflow-hidden"
+          src={cover || FALLBACK_GAME_POSTER}
+          alt={title}
+        />
         <div className="text-muted-foreground">
           {length && (
             <div className="flex flex-wrap gap-2 mb-2.5">

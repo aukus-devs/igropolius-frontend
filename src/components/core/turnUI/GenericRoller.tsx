@@ -6,11 +6,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
 import BezierEasing from 'bezier-easing';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Card } from '../../ui/card';
 import { useMutation } from '@tanstack/react-query';
+import ImageLoader from '../ImageLoader';
 
 const FAST_SPIN_DURATION = 2000;
 const MIN_SPIN_DURATION = 12000; // ms
@@ -303,22 +302,18 @@ export default function GenericRoller<T>({
             {cardList.map((item, idx) => {
               const isWinner = idx === winnerIndex;
               return (
-                <Card
+                <ImageLoader
                   key={idx}
+                  src={item.imageUrl}
+                  alt={item.label}
+                  className="data-[dimmed=true]:opacity-95 data-[dimmed=true]:brightness-50 transition-all duration-400 ease-in-out"
+                  data-dimmed={rollPhase === 'finished' && !isWinner}
                   style={{
                     height: isWinner ? `${CARD_HEIGHT * 1.25}px` : `${CARD_HEIGHT}px`,
                     width: isWinner ? `${CARD_WIDTH * 1.25}px` : `${CARD_WIDTH}px`,
                     transition: 'all 0.4s ease',
                   }}
-                  className={cn(
-                    'overflow-hidden shadow-none relative transition-all duration-300 ease-in-out',
-                    {
-                      'opacity-95 brightness-50': rollPhase === 'finished' && !isWinner,
-                    }
-                  )}
-                >
-                  <img src={item.imageUrl} className="absolute top-0" />
-                </Card>
+                />
               );
             })}
           </div>

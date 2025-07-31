@@ -2,6 +2,7 @@ import { Badge } from '../ui/badge';
 import { formatMs } from '@/lib/utils';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { PlayerDetails } from '@/lib/api-types-generated';
+import ImageLoader from './ImageLoader';
 
 type Props = {
   player: PlayerDetails;
@@ -21,13 +22,11 @@ function CurrentGame({ player }: Props) {
       </div>
       <h3 className="text-2xl mb-2.5 font-wide-semibold">{current_game}</h3>
       <div className="flex gap-2.5">
-        <div className="min-w-[90px] h-[120px] rounded-md overflow-hidden">
-          <img
-            className="h-full object-cover"
-            src={current_game_cover || FALLBACK_GAME_POSTER}
-            alt={current_game}
-          />
-        </div>
+        <ImageLoader
+          className="min-w-[105px] w-[105px] h-[140px] rounded-md overflow-hidden"
+          src={current_game_cover || FALLBACK_GAME_POSTER}
+          alt={current_game}
+        />
         <div className="text-muted-foreground">
           <div className="flex flex-wrap gap-2 mb-2.5">
             <Badge className="bg-white/20 text-white/70 font-semibold">

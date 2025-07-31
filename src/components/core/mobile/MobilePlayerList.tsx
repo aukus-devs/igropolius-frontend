@@ -73,9 +73,9 @@ function MobilePlayersList() {
           >
             Игроки
             {isOpened ? (
-              <ChevronDown width={32} height={32} />
+              <ChevronDown className="size-6 stroke-3" />
             ) : (
-              <ChevronUp width={32} height={32} />
+              <ChevronUp className="size-6 stroke-3" />
             )}
           </Button>
 

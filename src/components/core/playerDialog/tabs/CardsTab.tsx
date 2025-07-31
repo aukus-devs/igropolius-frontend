@@ -1,6 +1,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ActiveBonusCard, MainBonusCardType } from '@/lib/api-types-generated';
 import { mainCardTypes, frontendCardsData } from '@/lib/mockData';
+import ImageLoader from '../../ImageLoader';
 
 type GameCardProps = {
   type: MainBonusCardType;
@@ -16,8 +17,12 @@ function GameCard({ type, inactive }: GameCardProps) {
       data-inactive={inactive}
     >
       <Tooltip delayDuration={0}>
-        <TooltipTrigger className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] rounded-xl overflow-hidden">
-          <img src={cardData.picture} />
+        <TooltipTrigger>
+          <ImageLoader
+            className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] rounded-xl overflow-hidden"
+            src={cardData.picture}
+            alt={cardData.name}
+          />
         </TooltipTrigger>
         <TooltipContent
           className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3"

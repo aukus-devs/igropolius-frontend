@@ -49,7 +49,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "md:bg-card/70 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed md:top-[50%] md:left-[50%] z-50 grid w-full md:translate-x-[-50%] md:translate-y-[-50%] gap-4 p-5 md:shadow-lg duration-200 md:backdrop-blur-[1.5rem] bg-background sm:max-w-[600px] rounded-none md:rounded-2xl",
+          "md:bg-card/70 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed md:top-[50%] md:left-[50%] z-50 grid w-full md:translate-x-[-50%] md:translate-y-[-50%] gap-4 p-5 md:shadow-lg duration-200 md:backdrop-blur-[1.5rem] bg-background sm:max-w-[600px] rounded-none md:rounded-2xl focus-visible:outline-transparent",
           className,
         )}
         onOpenAutoFocus={(e) => e.preventDefault()}
