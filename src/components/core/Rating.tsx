@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { animated, useSpring } from '@react-spring/web';
 
 type Props = {
   initialValue?: number;
@@ -18,6 +19,7 @@ function Rating({ initialValue = 0, onChange }: Props) {
   const value = isHovered ? displayValue : lockedValue;
   const finalValue = parseFloat((value / 10).toFixed(1).replace(/\.0$/, ''));
   const color = useMemo(() => getColor(value), [value]);
+  const spr = useSpring({ width: `${isHovered ? displayValue : lockedValue}%` });
 
   function getColor(val: number) {
     if (val <= 25) return 'bg-red-500';
@@ -42,8 +44,9 @@ function Rating({ initialValue = 0, onChange }: Props) {
 
   function onMouseMove(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const { width, left } = e.currentTarget.getBoundingClientRect();
-    const clampedValue = ((e.clientX - left) / width) * 100;
-    setDisplayValue(clampedValue);
+    const val = ((e.clientX - left) / width) * 100;
+
+    setDisplayValue(Math.ceil(val / 5) * 5);
   }
 
   return (
@@ -72,11 +75,11 @@ function Rating({ initialValue = 0, onChange }: Props) {
           onMouseLeave={onMouseLeave}
           onMouseMove={onMouseMove}
         >
-          <div
-            className={`absolute z-20 h-full mask-[url(#mask)] mask-intersect mask-alpha mask-repeat-x transition-colors data-[hovered=false]:transition-all data-[hovered=false]:duration-500 ${color}`}
+          <animated.div
+            className={`absolute z-20 h-full mask-[url(#mask)] mask-intersect mask-alpha mask-repeat-x transition-colors ${color}`}
             data-hovered={isHovered}
-            style={{ width: `${value}%`, maskSize: `${ITEM_WIDTH}px ${ITEM_HEIGHT}px` }}
-          ></div>
+            style={{ width: spr.width, maskSize: `${ITEM_WIDTH}px ${ITEM_HEIGHT}px` }}
+          ></animated.div>
           <div
             className="pointer-events-none absolute z-10 h-full w-full bg-popover mask-[url(#mask)] mask-intersect mask-alpha mask-repeat-x transition-all duration-500 data-[disabled=true]:opacity-30"
             style={{ maskSize: `${ITEM_WIDTH}px ${ITEM_HEIGHT}px` }}
