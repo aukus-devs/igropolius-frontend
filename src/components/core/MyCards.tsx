@@ -52,7 +52,8 @@ export default function MyCards() {
               <Tooltip delayDuration={0} key={idx}>
                 <TooltipTrigger>
                   <ImageLoader
-                    className="flex w-[32px] h-[45px] rounded-sm overflow-hidden"
+                    className="relative z-10 flex w-[32px] h-[45px] rounded-sm overflow-hidden data-[usable=true]:animate-shake"
+                    data-usable={canBeUsed}
                     src={cardData.picture}
                     alt={cardData.name}
                   />

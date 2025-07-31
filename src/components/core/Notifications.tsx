@@ -110,11 +110,18 @@ function NotificationCard({
 
   return (
     <Card
-      className="p-2 gap-0.5 font-semibold data-[important=true]:bg-[oklch(0.38_0.02_135.11/0.7)]"
+      className="p-2 gap-0.5 font-semibold"
       data-important={isImportant}
     >
       <CardHeader className="px-0 gap-0.5">
-        <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
+        {isImportant ? (
+          <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
+        ) : (
+          <CardDescription className="flex text-sm justify-between flex-wrap">
+            <div>Важное Уведомление</div>
+            <div>{date}</div>
+          </CardDescription>
+        )}
         <CardTitle className="text-base">{text}</CardTitle>
       </CardHeader>
       {scores != null && (

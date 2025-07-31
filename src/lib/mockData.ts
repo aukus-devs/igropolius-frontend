@@ -368,7 +368,7 @@ export const playersData: PlayerDetails[] = [
     total_score: 0,
     maps_completed: 0,
     color: playerColors.red,
-    model_name: '/boats/boat-sail-b.glb',
+    model_name: '/cars/race-future1.glb',
 
     games: [
       {
@@ -484,7 +484,18 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
       },
     ],
-    bonus_cards: [],
+    bonus_cards: [
+      {
+        bonus_type: 'game-help-allowed',
+        received_at: Math.ceil(Date.now() / 1000),
+        received_on_sector: 5,
+      },
+      {
+        bonus_type: 'game-help-allowed',
+        received_at: Math.ceil(Date.now() / 1000),
+        received_on_sector: 5,
+      },
+    ],
   },
   {
     id: 2,
@@ -504,7 +515,7 @@ export const playersData: PlayerDetails[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     color: playerColors.orange,
-    model_name: '/boats/boat-sail-b.glb',
+    model_name: '/cars/race-future1.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -669,7 +680,7 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     url_handle: 'player-3',
     color: playerColors.yellow,
-    model_name: '/boats/boat-sail-b.glb',
+    model_name: '/cars/race-future1.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -729,7 +740,7 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     url_handle: 'player-4',
     color: playerColors.green,
-    model_name: '/boats/boat-sail-b.glb',
+    model_name: '/cars/race-future1.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -775,7 +786,7 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     url_handle: 'player-5',
     color: playerColors.lightBlue,
-    model_name: '/boats/boat-sail-b.glb',
+    model_name: '/cars/race-future1.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -827,7 +838,7 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     url_handle: 'player-6',
     color: playerColors.blue,
-    model_name: '/boats/boat-sail-b.glb',
+    model_name: '/cars/race-future1.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -878,7 +889,7 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     url_handle: 'player-7',
     color: playerColors.darkBlue,
-    model_name: '/boats/boat-sail-b.glb',
+    model_name: '/cars/race-future1.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
@@ -929,7 +940,7 @@ export const playersData: PlayerDetails[] = [
     pointauc_token: 'abc',
     url_handle: 'player-8',
     color: playerColors.purple,
-    model_name: '/boats/boat-sail-b.glb',
+    model_name: '/cars/race-future1.glb',
 
     twitch_stream_link: 'https://twitch.tv/praden',
     vk_stream_link: 'https://live.vkvideo.ru/praden',
