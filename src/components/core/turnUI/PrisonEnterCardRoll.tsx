@@ -99,7 +99,7 @@ export default function PrisonEnterCardRoll() {
 
     if (prisonCards.length > 0) {
       const newPrisonCards = prisonCards.filter(
-        card => !playerCards.some(playerCard => playerCard.bonus_type === card.bonus_type)
+        card => !playerCards.some(playerCard => playerCard.bonus_type === card)
       );
 
       const prisonCardWeight = 25 / newPrisonCards.length;
@@ -107,11 +107,11 @@ export default function PrisonEnterCardRoll() {
         result.push({
           value: {
             action: 'receive-card',
-            card: card.bonus_type,
+            card,
           },
-          label: `Получить ${frontendCardsData[card.bonus_type].name}`,
+          label: `Получить ${frontendCardsData[card].name}`,
           weight: prisonCardWeight,
-          imageUrl: frontendCardsData[card.bonus_type].picture,
+          imageUrl: frontendCardsData[card].picture,
         });
       });
     } else {

@@ -284,6 +284,7 @@ export type IncomeFromPlayer = number | null;
 export type BonusCardOwner = number | null;
 export type Events = (GameEvent | BonusCardEvent | ScoreChangeEvent | MoveEvent)[];
 export type Players = PlayerDetails[];
+export type PrisonCards = MainBonusCardType[];
 export type SelectedDie = number | null;
 export type AdjustBy1 = number | null;
 export type RideTrain = boolean;
@@ -634,7 +635,6 @@ export interface PlayerDetails {
   maps_completed: MapsCompleted;
   games: Games1;
   bonus_cards: BonusCards;
-  role: Role;
   color: Color;
   model_name: ModelName;
 }
@@ -694,6 +694,7 @@ export interface ScoreChangeEvent {
  */
 export interface PlayerListResponse {
   players: Players;
+  prison_cards: PrisonCards;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
