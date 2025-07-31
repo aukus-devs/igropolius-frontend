@@ -57,7 +57,7 @@ const usePlayerStore = create<{
   newBuildingsIds: number[];
   taxPerSector: Record<number, TaxData>;
   turnState: PlayerTurnState | null;
-  prisonCards: ActiveBonusCard[];
+  prisonCards: MainBonusCardType[];
   setMyPlayer: (data?: CurrentUserResponse) => void;
   updateMyPlayerSectorId: (id: number) => void;
   setPlayers: (players: PlayerDetails[]) => void;
@@ -76,6 +76,7 @@ const usePlayerStore = create<{
   canSelectBuildingSector: () => boolean;
   removeCardFromState: (type: MainBonusCardType) => void;
   addCardToState: (card: ActiveBonusCard) => void;
+  setPrisonCards: (cards: MainBonusCardType[]) => void;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -262,8 +263,6 @@ const usePlayerStore = create<{
       return b.total_score - a.total_score;
     });
 
-    const prisonPlayer = playersData.find(p => p.role === 'prison');
-
     const prevPlayers = get().players;
 
     await Promise.all(
@@ -296,7 +295,6 @@ const usePlayerStore = create<{
       newBuildingsIds,
       playersPerSector,
       taxPerSector,
-      prisonCards: prisonPlayer?.bonus_cards ?? [],
     });
   },
 
@@ -485,6 +483,7 @@ const usePlayerStore = create<{
     const { turnState, myPlayer } = get();
     return turnState === 'choosing-building-sector' && myPlayer?.sector_id === 1;
   },
+  setPrisonCards: (cards: MainBonusCardType[]) => set({ prisonCards: cards }),
 }));
 
 export default usePlayerStore;

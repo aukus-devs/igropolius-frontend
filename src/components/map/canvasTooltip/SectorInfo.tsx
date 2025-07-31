@@ -79,8 +79,8 @@ function SectorInfo({ sector }: Props) {
                   {prisonCardsList.map((c, id) => (
                     <ImageLoader
                       key={id}
-                      src={frontendCardsData[c.bonus_type].picture}
-                      alt={frontendCardsData[c.bonus_type].name}
+                      src={frontendCardsData[c].picture}
+                      alt={frontendCardsData[c].name}
                       className="w-5 h-10"
                     />
                   ))}

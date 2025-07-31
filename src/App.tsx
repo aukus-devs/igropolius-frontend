@@ -40,11 +40,12 @@ function App() {
     []
   );
 
-  const { setPlayers, setMyPlayer, setTurnState } = usePlayerStore(
+  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards } = usePlayerStore(
     useShallow(state => ({
       setPlayers: state.setPlayers,
       setMyPlayer: state.setMyPlayer,
       setTurnState: state.setTurnState,
+      setPrisonCards: state.setPrisonCards,
     }))
   );
 
@@ -103,7 +104,11 @@ function App() {
 
   useEffect(() => {
     setPlayers(playersData?.players ?? []);
-  }, [setPlayers, playersData]);
+  }, [setPlayers, playersData?.players]);
+
+  useEffect(() => {
+    setPrisonCards(playersData?.prison_cards ?? []);
+  }, [setPrisonCards, playersData?.prison_cards]);
 
   useEffect(() => {
     if (eventSettingsData?.settings) {

@@ -13,12 +13,14 @@ import { MainBonusCardType } from '@/lib/api-types-generated';
 import ImageLoader from './ImageLoader';
 
 export default function MyCards() {
-  const { cards, turnState } = usePlayerStore(
+  const { myCards, turnState } = usePlayerStore(
     useShallow(state => ({
-      cards: state.myPlayer?.bonus_cards ?? [],
+      myCards: state.myPlayer?.bonus_cards,
       turnState: state.turnState,
     }))
   );
+
+  const cards = myCards || [];
 
   const [usedCard, setUsedCard] = useState<ManualUseCard | null>(null);
 
@@ -50,7 +52,8 @@ export default function MyCards() {
               <Tooltip delayDuration={0} key={idx}>
                 <TooltipTrigger>
                   <ImageLoader
-                    className="flex w-[32px] h-[45px] rounded-sm overflow-hidden"
+                    className="relative z-10 flex w-[32px] h-[45px] rounded-sm overflow-hidden data-[usable=true]:animate-shake"
+                    data-usable={canBeUsed}
                     src={cardData.picture}
                     alt={cardData.name}
                   />

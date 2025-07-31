@@ -1,24 +1,27 @@
+import { Vector3Array } from "@/lib/types";
 import useDiceStore from "@/stores/diceStore";
 import { Group } from "three";
+import DiceRollDisplay from "../DiceRollDisplay";
 
 type Props = {
-  color?: string;
+  id: number;
+  position: Vector3Array;
 };
 
-function DiceModel({ color = "#fff" }: Props) {
-  const setDiceModel = useDiceStore((state) => state.setDiceModel);
+function DiceModel({ id, ...props }: Props) {
+  const addDiceModel = useDiceStore((state) => state.addDiceModel);
 
-  const onRender = (el?: Group) => {
-    if (el) {
-      setDiceModel(el);
-    }
-  };
+  function onGroupRender(group: Group) {
+    if (!group) return;
+    addDiceModel(group);
+  }
 
   return (
-    <group ref={onRender} name="dice" scale={[0, 0, 0]}>
+    <group ref={onGroupRender} {...props} scale={[0, 0, 0]}>
+      <DiceRollDisplay resultIdx={id} />
       <mesh>
         <dodecahedronGeometry args={[0.5, 0]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial />
       </mesh>
     </group>
   );

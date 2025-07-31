@@ -200,6 +200,7 @@ export async function fetchPlayers(): Promise<PlayerListResponse> {
   if (MOCK_API) {
     return Promise.resolve({
       players: playersData,
+      prison_cards: [],
     });
   }
   const response = await apiRequest('/api/players');

@@ -13,6 +13,7 @@ const useCameraStore = create<{
   toggleOrthographic: () => void;
   moveToPlayer: (model: Group, enableTransition?: boolean) => Promise<void>;
   rotateAroundPlayer: (model: Group, enableTransition?: boolean) => Promise<void>;
+  cameraToRoll: () => Promise<void>;
 }>((set, get) => ({
   cameraControls: null,
   isOrthographic: false,
@@ -72,6 +73,13 @@ const useCameraStore = create<{
       moveToPlayer(playerModel);
       await rotateAroundPlayer(playerModel);
     }
+  },
+
+  cameraToRoll: async () => {
+    const { cameraControls } = get();
+    if (!cameraControls) return;
+
+    await cameraControls.setLookAt(-1.3, 112, -124, 0, 0, 0, true);
   },
 }));
 
