@@ -107,6 +107,7 @@ export default function GenericRoller<T>({
   const [isOpen, setIsOpen] = useState(false);
   const [rollPhase, setRollPhase] = useState<'idle' | 'rolling' | 'finished'>('idle');
   const [cardList, setCardList] = useState<WeightedOption<T>[]>([]);
+  const [wasRollingBeforeHidden, setWasRollingBeforeHidden] = useState(false);
 
   const winner = winnerIndex !== null ? cardList[winnerIndex] : null;
 
@@ -234,6 +235,8 @@ export default function GenericRoller<T>({
       setRollPhase('finished');
       handleRollFinish(cardList[index]);
       animationRef.current = null;
+      isIdleRunningRef.current = false;
+      setWasRollingBeforeHidden(false);
     }
     animationRef.current = requestAnimationFrame(animate);
   }, [handleRollFinish, cardList]);
@@ -245,6 +248,7 @@ export default function GenericRoller<T>({
       setRollPhase('idle');
       centerIndexRef.current = Math.floor(IDLE_CARD_COUNT / 2);
       offsetRef.current = -((centerIndexRef.current - 1) * CARD_FULL_WIDTH + CARD_WIDTH / 2);
+      setWasRollingBeforeHidden(false);
     } else {
       if (animationRef.current !== null) {
         cancelAnimationFrame(animationRef.current);
@@ -252,11 +256,39 @@ export default function GenericRoller<T>({
       setWinnerIndex(null);
       animationRef.current = null;
       isIdleRunningRef.current = false;
+      setWasRollingBeforeHidden(false);
     }
     setIsOpen(isOpen);
   };
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setWasRollingBeforeHidden(rollPhase === 'rolling');
+        if (animationRef.current !== null) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = null;
+        }
+        isIdleRunningRef.current = false;
+      } else {
+        if (rollPhase === 'idle' && cardList.length > 0 && !isIdleRunningRef.current) {
+          isIdleRunningRef.current = true;
+          animationRef.current = requestAnimationFrame(idleAnimate);
+        } else if (
+          wasRollingBeforeHidden &&
+          rollPhase === 'rolling' &&
+          cardList.length > IDLE_CARD_COUNT
+        ) {
+          setWasRollingBeforeHidden(false);
+          if (animationRef.current === null) {
+            startRollingAnimation();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     if (rollPhase === 'idle' && cardList.length > 0) {
       if (!isIdleRunningRef.current) {
         isIdleRunningRef.current = true;
@@ -264,9 +296,15 @@ export default function GenericRoller<T>({
       }
     }
     if (rollPhase === 'rolling' && cardList.length > IDLE_CARD_COUNT) {
-      startRollingAnimation();
+      if (animationRef.current === null) {
+        startRollingAnimation();
+      }
     }
-  }, [rollPhase, cardList.length, idleAnimate, startRollingAnimation]);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [rollPhase, cardList.length, idleAnimate, startRollingAnimation, wasRollingBeforeHidden]);
 
   const handleRollClick = () => {
     setRollPhase('rolling');
@@ -276,6 +314,7 @@ export default function GenericRoller<T>({
 
     if (animationRef.current !== null) {
       cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
     }
   };
 
