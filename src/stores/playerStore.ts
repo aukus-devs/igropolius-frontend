@@ -15,9 +15,10 @@ import {
   calculatePlayerPositionOnSector,
   canBuildOnSector,
   getPlayerRotationOnSector,
+  getSectorRotation,
 } from '@/components/map/utils';
 import { SectorsById, sectorsData } from '@/lib/mockData';
-import { Euler, Quaternion } from 'three';
+import { Euler, Quaternion, Vector3 } from 'three';
 import {
   getClosestPrison,
   getNextTurnState,
@@ -77,6 +78,7 @@ const usePlayerStore = create<{
   removeCardFromState: (type: MainBonusCardType) => void;
   addCardToState: (card: ActiveBonusCard) => void;
   setPrisonCards: (cards: MainBonusCardType[]) => void;
+  animateToPrison: (prisonId: number) => Promise<void>;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -418,19 +420,55 @@ const usePlayerStore = create<{
     resetNotificationsQuery();
   },
 
+  animateToPrison: async (prisonId: number) => {
+    const myPlayer = get().myPlayer;
+    const myPlayerId = myPlayer?.id;
+    if (!myPlayerId) throw new Error(`My player not found`);
+
+    const playerModel = useModelsStore.getState().getPlayerModel(myPlayerId);
+    const playerMesh = playerModel.children[0];
+
+    const destinationSector = SectorsById[prisonId];
+    const destinationPosition = calculatePlayerPositionOnSector(myPlayer, destinationSector);
+    const distance = new Vector3(...destinationPosition).sub(playerModel.position).length();
+
+    const destinationRotation = getSectorRotation(destinationSector.position);
+    const playerGroupQuat = new Quaternion().setFromEuler(new Euler(...destinationRotation, 'XYZ'));
+    const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, 'XYZ'));
+    const { moveToPlayer } = useCameraStore.getState();
+
+    return new Promise((resolve) => {
+      createTimeline({
+        onUpdate: () => moveToPlayer(playerModel, false),
+      })
+        .add(playerModel.position, {
+          y: playerModel.position.y + 5,
+          duration: 300,
+        })
+        .add(playerModel.position, {
+          x: destinationPosition[0],
+          z: destinationPosition[2],
+          duration: distance * 20,
+        })
+        .add(playerModel.position, {
+          y: playerModel.position.y,
+          duration: 300,
+          onUpdate: ({ progress }) => {
+            playerModel.quaternion.rotateTowards(playerGroupQuat, progress);
+            playerMesh.quaternion.rotateTowards(playerMeshQuat, progress);
+          },
+        })
+        .then(() => resolve());
+    })
+  },
+
   moveMyPlayerToPrison: async () => {
-    const { myPlayer, animatePlayerMovement } = get();
+    const { myPlayer } = get();
     if (!myPlayer) return;
 
     const prisonSector = getClosestPrison(myPlayer.sector_id);
 
-    const steps = prisonSector - myPlayer.sector_id;
-    // console.log({
-    //   prisonSector,
-    //   steps,
-    // });
-
-    await animatePlayerMovement(myPlayer.id, steps);
+    await get().animateToPrison(prisonSector);
     get().updateMyPlayerSectorId(prisonSector);
   },
 
@@ -440,9 +478,9 @@ const usePlayerStore = create<{
     set(state => ({
       myPlayer: state.myPlayer
         ? {
-            ...state.myPlayer,
-            bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
-          }
+          ...state.myPlayer,
+          bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
+        }
         : null,
     }));
   },
