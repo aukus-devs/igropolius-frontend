@@ -25,7 +25,7 @@ type RollOptionType = 'nothing' | LoseCard | ReceiveCard;
 export default function PrisonEnterCardRoll() {
   const {
     setNextTurnState,
-    playerCards,
+    playerCardsOrEmpty,
     prisonCards,
     removeCardFromState,
     prisonHasNoCards,
@@ -33,13 +33,15 @@ export default function PrisonEnterCardRoll() {
   } = usePlayerStore(
     useShallow(state => ({
       setNextTurnState: state.setNextTurnState,
-      playerCards: state.myPlayer?.bonus_cards ?? [],
+      playerCardsOrEmpty: state.myPlayer?.bonus_cards,
       prisonCards: state.prisonCards,
       removeCardFromState: state.removeCardFromState,
       prisonHasNoCards: state.prisonCards.length === 0,
       addCardToState: state.addCardToState,
     }))
   );
+
+  const playerCards = playerCardsOrEmpty || [];
 
   const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
 

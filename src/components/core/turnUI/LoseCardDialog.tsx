@@ -11,7 +11,7 @@ import useSystemStore from '@/stores/systemStore';
 
 export default function LoseCardOnDropDialog() {
   const {
-    playerCards,
+    playerCardsOrEmpty,
     moveMyPlayerToPrison,
     setNextTurnState,
     goToPrison,
@@ -20,7 +20,7 @@ export default function LoseCardOnDropDialog() {
     sectorId,
   } = usePlayerStore(
     useShallow(state => ({
-      playerCards: state.myPlayer?.bonus_cards || [],
+      playerCardsOrEmpty: state.myPlayer?.bonus_cards,
       moveMyPlayerToPrison: state.moveMyPlayerToPrison,
       setNextTurnState: state.setNextTurnState,
       goToPrison: state.turnState === 'dropping-card-after-game-drop',
@@ -29,6 +29,8 @@ export default function LoseCardOnDropDialog() {
       sectorId: state.myPlayer?.sector_id,
     }))
   );
+
+  const playerCards = useMemo(() => playerCardsOrEmpty || [], [playerCardsOrEmpty]);
 
   const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
   const [dropResult, setDropResult] = useState<InstantCardResult | null>(null);

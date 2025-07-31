@@ -11,12 +11,14 @@ type Props = {
 };
 
 export default function PlayerCards({ player }: Props) {
-  const { stealBonusCard, myCards } = usePlayerStore(
+  const { stealBonusCard, myCardsOrEmpty } = usePlayerStore(
     useShallow(state => ({
       stealBonusCard: state.stealBonusCard,
-      myCards: state.myPlayer?.bonus_cards || [],
+      myCardsOrEmpty: state.myPlayer?.bonus_cards,
     }))
   );
+
+  const myCards = myCardsOrEmpty || [];
 
   if (player.bonus_cards.length === 0) {
     return <div className="">Нет карточек</div>;
