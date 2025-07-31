@@ -15,6 +15,7 @@ function MobilePlayersList() {
   );
   const [isOpened, setIsOpened] = useState(false);
   const redElementRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
   const toggleDialog = () => setIsOpened(!isOpened);
@@ -42,6 +43,28 @@ function MobilePlayersList() {
     }
   };
 
+  const handleScrollAreaTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientY);
+  };
+
+  const handleScrollAreaTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart !== null && isOpened) {
+      const touchEnd = e.changedTouches[0].clientY;
+      const diff = touchStart - touchEnd;
+
+      if (diff < -50) {
+        const scrollElement = scrollAreaRef.current?.querySelector(
+          '[data-radix-scroll-area-viewport]'
+        );
+        if (scrollElement && scrollElement.scrollTop === 0) {
+          setIsOpened(false);
+        }
+      }
+
+      setTouchStart(null);
+    }
+  };
+
   const PlayersList = useMemo(() => {
     return (
       <div className="space-y-2">
@@ -63,8 +86,11 @@ function MobilePlayersList() {
   return (
     players.length > 0 && (
       <ScrollArea
+        ref={scrollAreaRef}
         className="group data-[opened=true]:bg-background bg-gradient-to-t from-50% from-background translate-y-[calc(100%_-_20rem)] data-[opened=true]:translate-y-0 transition-all duration-300 data-[opened=false]:pointer-events-none h-dvh data-[opened=false]:[&_[data-slot='scroll-area-viewport']]:!overflow-hidden"
         data-opened={isOpened}
+        onTouchStart={isOpened ? handleScrollAreaTouchStart : undefined}
+        onTouchEnd={isOpened ? handleScrollAreaTouchEnd : undefined}
       >
         <div className="w-full px-4 mx-auto pt-[110px] h-full pb-6 relative">
           <Button
