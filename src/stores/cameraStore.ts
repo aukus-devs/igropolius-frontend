@@ -20,7 +20,6 @@ const useCameraStore = create<{
   toggleOrthographic: () => set({ isOrthographic: !useCameraStore.getState().isOrthographic }),
 
   setCameraControls: controls => {
-    console.log('setCameraControls', controls);
     set({ cameraControls: controls });
   },
 

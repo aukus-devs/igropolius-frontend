@@ -248,7 +248,7 @@ type NextTurnStateParams = {
   currentState: PlayerTurnState;
   mapCompleted: boolean;
   action?: PlayerStateAction;
-  sectorFromId?: number;
+  // sectorFromId?: number;
   sectorToId?: number;
 };
 

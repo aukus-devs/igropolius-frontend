@@ -19,7 +19,6 @@ export default function SkipStreetTaxDialog() {
       if (myPlayer && state.taxPerSector[myPlayer.sector_id]) {
         taxInfo = state.taxPerSector[myPlayer.sector_id];
       }
-      console.log('taxes', { sectorId: myPlayer?.sector_id, taxInfo });
       return {
         taxInfo,
         players: state.players,
