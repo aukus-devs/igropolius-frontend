@@ -460,7 +460,6 @@ function GameReviewEditForm({
               <HLTBLink />
             </div>
 
-            <div className="font-roboto-wide-semibold">Оценка — {rating}</div>
             <Rating onChange={setRating} initialValue={rating} />
             <GameReview />
             <VodLinks />

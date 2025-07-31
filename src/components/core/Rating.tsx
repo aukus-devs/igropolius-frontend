@@ -1,73 +1,102 @@
-import { useState } from 'react';
-import { Button } from '../ui/button';
+import { useMemo, useState } from 'react';
 
 type Props = {
   initialValue?: number;
-  onChange?: (value: number) => void;
+  onChange?: (value: number, displayedValue: number) => void;
 };
 
+const ITEMS = [...Array(10)];
+const ITEM_WIDTH = 44;
+const ITEM_HEIGHT = 24;
+const GAP = 6;
+const ROUNDED = 12;
+
 function Rating({ initialValue = 0, onChange }: Props) {
-  const [value, setValue] = useState(initialValue);
-  const [hoverValue, setHoverValue] = useState<number | null>(null);
-  const [hoverPosition, setHoverPosition] = useState<number | null>(null);
-  let color = 'bg-purple-500';
+  const [displayValue, setDisplayValue] = useState(0);
+  const [lockedValue, setLockedValue] = useState(initialValue * 10);
+  const [isHovered, setHovered] = useState(false);
+  const value = isHovered ? displayValue : lockedValue;
+  const finalValue = parseFloat((value / 10).toFixed(1).replace(/\.0$/, ''));
+  const color = useMemo(() => getColor(value), [value]);
 
-  if ((hoverValue || value) < 4) color = 'bg-red-500';
-  else if ((hoverValue || value) < 7) color = 'bg-yellow-500';
-  else if ((hoverValue || value) < 9) color = 'bg-green-500';
-
-  const renderSector = (index: number) => {
-    const ratingValue = index + 1;
-    const displayValue = hoverValue !== null ? hoverValue : value;
-    // const isActive = value === ratingValue || value === ratingValue - 0.5;
-    const isFull = displayValue >= ratingValue;
-    const isHalf = displayValue >= ratingValue - 0.5;
-
-    return (
-      <div className="relative bg-popover transition-all rounded-2xl h-full w-11 hover:scale-115 overflow-hidden active:scale-100">
-        <div className="relative z-20 pointer-events-none w-full h-full flex items-center justify-center">
-          {ratingValue}
-        </div>
-        <div
-          className={`absolute left-0 top-0 z-10 w-full h-full ${color} rounded-none transition-colors`}
-          style={{ width: isFull ? '100%' : isHalf ? '50%' : '0%' }}
-        />
-      </div>
-    );
-  };
-
-  function handleClick(index: number) {
-    const newValue = hoverPosition && hoverPosition > 0.5 ? index + 1 : index + 0.5;
-
-    setValue(newValue);
-    onChange?.(newValue);
+  function getColor(val: number) {
+    if (val <= 25) return 'bg-red-500';
+    if (val <= 50) return 'bg-yellow-500';
+    if (val <= 75) return 'bg-green-500';
+    return 'bg-purple-500';
   }
 
-  function handleMouseMove(e: React.MouseEvent, index: number) {
-    const starBox = e.currentTarget.getBoundingClientRect();
-    const percent = (e.clientX - starBox.left) / starBox.width;
+  function onClick() {
+    setLockedValue(Math.round(displayValue));
+    onChange?.(finalValue, displayValue);
+  }
 
-    setHoverPosition(percent);
-    setHoverValue(percent > 0.5 ? index + 1 : index + 0.5);
+  function onMouseLeave() {
+    setHovered(false);
+    setDisplayValue(lockedValue);
+  }
+
+  function onMouseEnter() {
+    setHovered(true);
+  }
+
+  function onMouseMove(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    const { width, left } = e.currentTarget.getBoundingClientRect();
+    const clampedValue = ((e.clientX - left) / width) * 100;
+    setDisplayValue(clampedValue);
   }
 
   return (
-    <div className="flex items-center">
-      {[...Array(10)].map((_, index) => {
-        return (
-          <Button
-            key={index}
-            variant="ghost"
-            className="relative px-[3px] py-0 h-6 hover:bg-transparent font-roboto-wide-semibold-italic"
-            onClick={() => handleClick(index)}
-            onMouseMove={e => handleMouseMove(e, index)}
-            onMouseEnter={() => setHoverValue(index + 1)}
-            onMouseLeave={() => setHoverValue(null)}
-          >
-            {renderSector(index)}
-          </Button>
-        );
-      })}
+    <div>
+      <svg width="0" height="0" className="absolute">
+        <mask id="mask">
+          {ITEMS.map((_, idx) => (
+            <rect
+              key={idx}
+              x={idx * (ITEM_WIDTH + GAP)}
+              width={ITEM_WIDTH}
+              height={ITEM_HEIGHT}
+              rx={ROUNDED}
+              ry={ROUNDED}
+              fill="white"
+            />
+          ))}
+        </mask>
+      </svg>
+      <div className="flex flex-col gap-2.5">
+        <div className="font-roboto-wide-semibold">Оценка — {finalValue}</div>
+        <button
+          className="relative w-fit cursor-pointer border-0 bg-transparent"
+          onClick={onClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          onMouseMove={onMouseMove}
+        >
+          <div
+            className={`absolute z-20 h-full mask-[url(#mask)] mask-intersect mask-alpha mask-repeat-x transition-colors data-[hovered=false]:transition-all data-[hovered=false]:duration-500 ${color}`}
+            data-hovered={isHovered}
+            style={{ width: `${value}%`, maskSize: `${ITEM_WIDTH}px ${ITEM_HEIGHT}px` }}
+          ></div>
+          <div
+            className="pointer-events-none absolute z-10 h-full w-full bg-popover mask-[url(#mask)] mask-intersect mask-alpha mask-repeat-x transition-all duration-500 data-[disabled=true]:opacity-30"
+            style={{ maskSize: `${ITEM_WIDTH}px ${ITEM_HEIGHT}px` }}
+            data-disabled={value > 0 && !isHovered}
+          ></div>
+
+          <div className="relative z-30 flex gap-1.5">
+            {ITEMS.map((_, idx) => (
+              <div
+                key={idx}
+                className="flex justify-center items-center transition-all select-none data-[disabled=true]:opacity-30 font-roboto-wide-semibold-italic text-sm"
+                data-disabled={value > 0 && idx >= finalValue && !isHovered}
+                style={{ width: `${ITEM_WIDTH}px`, height: `${ITEM_HEIGHT}px` }}
+              >
+                {idx + 1}
+              </div>
+            ))}
+          </div>
+        </button>
+      </div>
     </div>
   );
 }
