@@ -22,6 +22,7 @@ import { MetrikaCounter } from 'react-metrika';
 import { Environment, Stats } from '@react-three/drei';
 import { STORAGE_BASE_URL } from '@/lib/constants';
 import ModelSelectionScene from './components/map/scenes/ModelSelectionScene';
+import FPSCounter from './components/map/FPSCounter';
 
 function App() {
   const { isInactive } = useUserActivity();
@@ -253,8 +254,6 @@ function App() {
                   backgroundBlurriness={0.06}
                 />
 
-                <Stats className="!bottom-6 !top-auto" />
-
                 {isModelSelectionScene ? <ModelSelectionScene /> : <GameScene />}
 
                 {/* <EffectComposer enabled={effects.enabled} resolutionScale={100} renderPriority={1} enableNormalPass>
@@ -275,6 +274,7 @@ function App() {
                 </EffectComposer> */}
               </Suspense>
             </Canvas>
+            <FPSCounter />
           </div>
         </KeyboardControls>
       )}
