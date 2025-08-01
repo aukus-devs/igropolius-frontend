@@ -9,10 +9,13 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import RulesTabs from '../../rules/RulesTabs';
 import { Document } from '@/components/icons';
+import useUrlPath from '@/hooks/useUrlPath';
 
 function RulesDialog({ className }: { className?: string }) {
+  const { activate, pathActive } = useUrlPath('/rules');
+
   return (
-    <Dialog>
+    <Dialog open={pathActive} onOpenChange={activate}>
       <DialogTrigger asChild>
         <Button variant="outline" className={className}>
           <Document className="h-4 w-4" />

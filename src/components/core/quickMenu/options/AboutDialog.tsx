@@ -12,7 +12,8 @@ import { CreditsData } from '@/lib/mockData';
 import { Event } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import usePlayerStore from '@/stores/playerStore';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import useUrlPath from '@/hooks/useUrlPath';
 
 type Props = {
   className?: string;
@@ -23,15 +24,20 @@ export default function AboutDialog({ className }: Props) {
     key: 'first-time-visit',
     defaultValue: true,
   });
-  const myPlayer = usePlayerStore((state) => state.myPlayer)
-  const [isOpen, setIsOpen] = useState(firstTimeVisit ? true : false);
+
+  const { activate, pathActive } = useUrlPath('/about');
+
+  const myPlayer = usePlayerStore(state => state.myPlayer);
 
   useEffect(() => {
     saveFirstTimeVisit(false);
-  }, [saveFirstTimeVisit]);
+    if (firstTimeVisit) {
+      activate(true);
+    }
+  }, [saveFirstTimeVisit, activate, firstTimeVisit]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={pathActive} onOpenChange={activate}>
       <DialogTrigger className={cn(buttonVariants({ variant: 'outline' }), className)}>
         <Event />
         Об ивенте
@@ -62,14 +68,18 @@ export default function AboutDialog({ className }: Props) {
             <div className="flex gap-2 flex-col">
               <div className="mt-[30px] text-xl font-wide-black">Программирование</div>
               {CreditsData.developers.map((dev, index) => (
-                <div key={index} className="text-base font-wide-medium">{dev}</div>
+                <div key={index} className="text-base font-wide-medium">
+                  {dev}
+                </div>
               ))}
             </div>
 
             <div className="flex gap-2 flex-col">
               <div className="mt-[50px] text-xl font-wide-black">Дизайн</div>
               {CreditsData.designers.map((dev, index) => (
-                <div key={index} className="text-base font-wide-medium">{dev}</div>
+                <div key={index} className="text-base font-wide-medium">
+                  {dev}
+                </div>
               ))}
             </div>
 

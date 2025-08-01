@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { ArrowLeft, Location } from '@/components/icons';
 import PlayerCards from './PlayerCards';
 import { PlayerDetails } from '@/lib/api-types-generated';
+import useUrlPath from '@/hooks/useUrlPath';
 
 type Props = {
   player: PlayerDetails;
@@ -27,10 +28,12 @@ type Props = {
 function PlayerDialog({ player, placement, isCurrentPlayer, showCards }: Props) {
   const cameraToPlayer = useCameraStore(state => state.cameraToPlayer);
 
+  const { activate, pathActive } = useUrlPath(`/${player.username.toLowerCase()}`);
+
   return (
     <div className="relative w-full md:first:mt-[5px] first:mt-2">
       <div className="group/player-dialog">
-        <Dialog>
+        <Dialog open={pathActive} onOpenChange={activate}>
           <DialogTrigger className="flex w-full mx-auto md:h-auto">
             <PlayerDialogTrigger
               player={player}
