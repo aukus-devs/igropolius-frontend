@@ -10,6 +10,8 @@ import BezierEasing from 'bezier-easing';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import ImageLoader from '../ImageLoader';
+import { useSound } from '@/hooks/useSound';
+import { DRUM_SOUND_URL } from '@/lib/constants';
 
 const FAST_SPIN_DURATION = 2000;
 const MIN_SPIN_DURATION = 12000; // ms
@@ -102,6 +104,7 @@ export default function GenericRoller<T>({
   const centerIndexRef = useRef(0);
   const offsetRef = useRef(0);
   const isIdleRunningRef = useRef(false);
+  const { play: playDrumSound, stop: stopDrumSound } = useSound(DRUM_SOUND_URL);
 
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -233,6 +236,7 @@ export default function GenericRoller<T>({
       const index = Math.floor(-offsetRef.current / CARD_FULL_WIDTH);
       setWinnerIndex(index);
       setRollPhase('finished');
+      stopDrumSound();
       handleRollFinish(cardList[index]);
       animationRef.current = null;
       isIdleRunningRef.current = false;
@@ -253,6 +257,7 @@ export default function GenericRoller<T>({
       if (animationRef.current !== null) {
         cancelAnimationFrame(animationRef.current);
       }
+      stopDrumSound();
       setWinnerIndex(null);
       animationRef.current = null;
       isIdleRunningRef.current = false;
@@ -308,6 +313,7 @@ export default function GenericRoller<T>({
 
   const handleRollClick = () => {
     setRollPhase('rolling');
+    playDrumSound();
 
     const randomCards = generateList(150, rollOptions);
     setCardList(prev => [...prev, ...randomCards]);
