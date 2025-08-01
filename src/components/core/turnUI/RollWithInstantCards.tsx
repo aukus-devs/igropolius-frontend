@@ -50,14 +50,8 @@ export default function RollWithInstantCards() {
         resetCurrentPlayerQuery();
         resetPlayersQuery();
       } else if (isBonusCard(option.value)) {
-        useSystemStore.setState(state => ({
-          ...state,
-          disableCurrentPlayerQuery: true,
-        }));
         const newCard = await giveBonusCard({ bonus_type: option.value.card });
         addCardToState(newCard);
-
-        setNextTurnState({ skipUpdate: true });
       }
     },
     [setActivationResult, setNextTurnState, addCardToState]
