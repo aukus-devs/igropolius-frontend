@@ -1,0 +1,83 @@
+import { buttonVariants } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { CreditsData } from '@/lib/mockData';
+import { Event } from '@/components/icons';
+import useLocalStorage from '@/hooks/useLocalStorage';
+import usePlayerStore from '@/stores/playerStore';
+import { useState, useEffect } from 'react';
+
+type Props = {
+  className?: string;
+};
+
+export default function AboutDialog({ className }: Props) {
+  const { value: firstTimeVisit, save: saveFirstTimeVisit } = useLocalStorage({
+    key: 'first-time-visit',
+    defaultValue: true,
+  });
+  const myPlayer = usePlayerStore((state) => state.myPlayer)
+  const [isOpen, setIsOpen] = useState(firstTimeVisit ? true : false);
+
+  useEffect(() => {
+    saveFirstTimeVisit(false);
+  }, [saveFirstTimeVisit]);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger className={cn(buttonVariants({ variant: 'outline' }), className)}>
+        <Event />
+        Об ивенте
+      </DialogTrigger>
+      <DialogContent className="w-[600px] p-0" aria-describedby="">
+        <ScrollArea className="max-h-[700px] px-5">
+          <DialogHeader className="pt-5 pb-4">
+            <DialogTitle className="text-[32px] font-wide-black leading-[38px]">
+              Добро пожаловать в Игрополиус,
+              <span className="text-primary"> {myPlayer?.username || 'Зритель'}</span>
+            </DialogTitle>
+          </DialogHeader>
+
+          <p className="font-semibold">
+            Игрополис — это увлекательный ивент, где популярные стримеры соревнуются друг с другом,
+            проходя различные игры. Каждый участник бросает кубик, чтобы сделать ход по специальной
+            игровой карте, выполняет задания и стремится первым достичь финиша.
+            <br />
+            <br />
+            Побеждает тот, кто проявит ловкость, смекалку и удачу, чтобы обойти соперников и стать
+            чемпионом Игрополиса!
+          </p>
+
+          <div className="mt-20 mb-[30px] text-3xl font-wide-black">
+            Команда разработки Игрополиуса
+          </div>
+          <div className="pb-5">
+            <div className="flex gap-2 flex-col">
+              <div className="mt-[30px] text-xl font-wide-black">Программирование</div>
+              {CreditsData.developers.map((dev, index) => (
+                <div key={index} className="text-base font-wide-medium">{dev}</div>
+              ))}
+            </div>
+
+            <div className="flex gap-2 flex-col">
+              <div className="mt-[50px] text-xl font-wide-black">Дизайн</div>
+              {CreditsData.designers.map((dev, index) => (
+                <div key={index} className="text-base font-wide-medium">{dev}</div>
+              ))}
+            </div>
+
+            <div className="mt-[50px] text-xl font-wide-black">Идеи</div>
+            <div className="mt-[10px] font-wide-medium">Praden</div>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+}
