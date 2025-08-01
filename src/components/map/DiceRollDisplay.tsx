@@ -17,7 +17,7 @@ function DiceRollDisplay({ resultIdx, position }: Props) {
   const rollSum = rollResult.reduce((sum, num) => sum + num, 0);
 
   return (
-    <Html zIndexRange={[0, 0]} center position={position}>
+    <Html zIndexRange={[0, 0]} center position={position} style={{ pointerEvents: 'none' }}>
       <Card
         className="items-center scale-0 data-[visible=true]:scale-100 duration-300 px-2"
         data-visible={showRoll}

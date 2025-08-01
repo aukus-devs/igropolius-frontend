@@ -19,7 +19,7 @@ import { TooltipProvider } from './components/ui/tooltip';
 import useCanvasTooltipStore from './stores/canvasTooltipStore';
 import { useUserActivity } from './hooks/useUserActivity';
 import { MetrikaCounter } from 'react-metrika';
-import { Environment, Stats } from '@react-three/drei';
+import { Environment } from '@react-three/drei';
 import { STORAGE_BASE_URL } from '@/lib/constants';
 import ModelSelectionScene from './components/map/scenes/ModelSelectionScene';
 import FPSCounter from './components/map/FPSCounter';
