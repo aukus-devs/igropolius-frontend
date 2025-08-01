@@ -30,3 +30,4 @@ export { default as Eye } from "./Eye";
 export { default as Person } from "./Person";
 export { default as Event } from "./Event";
 export { default as Wand } from "./Wand";
+export { default as Volume } from "./Volume";

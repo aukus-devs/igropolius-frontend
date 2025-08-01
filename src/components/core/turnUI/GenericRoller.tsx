@@ -12,6 +12,8 @@ import { useMutation } from '@tanstack/react-query';
 import ImageLoader from '../ImageLoader';
 import { useSound } from '@/hooks/useSound';
 import { DRUM_SOUND_URL } from '@/lib/constants';
+import { Volume } from '@/components/icons';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 const FAST_SPIN_DURATION = 2000;
 const MIN_SPIN_DURATION = 12000; // ms
@@ -104,7 +106,11 @@ export default function GenericRoller<T>({
   const centerIndexRef = useRef(0);
   const offsetRef = useRef(0);
   const isIdleRunningRef = useRef(false);
-  const { play: playDrumSound, stop: stopDrumSound } = useSound(DRUM_SOUND_URL);
+  const { value: isMuted, save: saveMutedState } = useLocalStorage({
+    key: 'roller-sound-muted',
+    defaultValue: false,
+  });
+  const { play: playDrumSound, stop: stopDrumSound } = useSound(DRUM_SOUND_URL, isMuted);
 
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -376,6 +382,20 @@ export default function GenericRoller<T>({
             Закрыть
           </Button>
         )}
+        <Button
+          variant="outline"
+          size="icon"
+          className="absolute rounded-xl z-20"
+          style={{ top: '65%', right: '20px' }}
+          onClick={() => {
+            if (!isMuted) {
+              stopDrumSound();
+            }
+            saveMutedState(!isMuted);
+          }}
+        >
+          <Volume muted={isMuted} className="h-4 w-4" />
+        </Button>
         {rollPhase === 'finished' && (
           <div className="absolute bottom-[20%] flex flex-col items-center justify-center gap-4">
             {secondaryText && <div className="text-base font-semibold ">{secondaryText}</div>}
