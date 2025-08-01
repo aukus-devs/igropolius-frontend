@@ -2,7 +2,7 @@ import usePlayerStore from '@/stores/playerStore';
 import { Card } from '../ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { Button } from '../ui/button';
-import { frontendCardsData } from '@/lib/mockData';
+import { frontendCardsData, mainCardTypes } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
 import { ManualUseCard } from '@/lib/types';
 import { useState } from 'react';
@@ -43,51 +43,59 @@ export default function MyCards() {
       <Card className="p-2 gap-2 w-fit">
         <span>Мои карточки</span>
         <div className="flex flex-wrap gap-2 ">
-          {cards.map((card, idx) => {
-            const cardData = frontendCardsData[card.bonus_type];
+          {mainCardTypes.map((bonus, idx) => {
+            const cardData = frontendCardsData[bonus];
+            const cardOwned = cards.find(card => card.bonus_type === bonus);
             const canBeUsed =
+              cardOwned &&
               turnState === 'filling-game-review' &&
-              (card.bonus_type === 'reroll-game' || card.bonus_type === 'game-help-allowed');
+              (bonus === 'reroll-game' || bonus === 'game-help-allowed');
             return (
-              <Tooltip delayDuration={0} key={idx}>
-                <TooltipTrigger>
-                  <ImageLoader
-                    className="relative z-10 flex w-[32px] h-[45px] rounded-sm overflow-hidden data-[usable=true]:animate-shake"
-                    data-usable={canBeUsed}
-                    src={cardData.picture}
-                    alt={cardData.name}
-                  />
-                </TooltipTrigger>
-                <TooltipContent
-                  className="bg-card/70 backdrop-blur-[1.5rem] p-3"
-                  side="bottom"
-                  align="start"
-                  sideOffset={8}
-                >
-                  <div className="flex gap-4">
-                    <div className="">
-                      <ImageLoader
-                        src={cardData.picture}
-                        alt={cardData.name}
-                        className="w-[200px] rounded-md overflow-hidden"
-                      />
-                    </div>
-                    <div className="w-[200px]">
-                      <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
-                      <div className="text-base font-semibold text-muted-foreground">
-                        {cardData.description}
+              <div
+                key={bonus}
+                data-inactive={!cardOwned}
+                className="data-[inactive=true]:grayscale-100"
+              >
+                <Tooltip delayDuration={0} key={idx}>
+                  <TooltipTrigger>
+                    <ImageLoader
+                      className="relative z-10 flex w-[32px] h-[45px] rounded-sm overflow-hidden data-[usable=true]:animate-shake"
+                      data-usable={canBeUsed}
+                      src={cardData.picture}
+                      alt={cardData.name}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent
+                    className="bg-card/70 backdrop-blur-[1.5rem] p-3"
+                    side="bottom"
+                    align="start"
+                    sideOffset={8}
+                  >
+                    <div className="flex gap-4">
+                      <div className="">
+                        <ImageLoader
+                          src={cardData.picture}
+                          alt={cardData.name}
+                          className="w-[200px] rounded-md overflow-hidden"
+                        />
                       </div>
-                      {canBeUsed && (
-                        <div className="mt-2 w-full">
-                          <Button className="w-full" onClick={() => handleUseCard(card.bonus_type)}>
-                            Использовать
-                          </Button>
+                      <div className="w-[200px]">
+                        <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
+                        <div className="text-base font-semibold text-muted-foreground">
+                          {cardData.description}
                         </div>
-                      )}
+                        {canBeUsed && (
+                          <div className="mt-2 w-full">
+                            <Button className="w-full" onClick={() => handleUseCard(bonus)}>
+                              Использовать
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
             );
           })}
         </div>
