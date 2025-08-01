@@ -24,6 +24,7 @@ import {
   getNextTurnState,
   getSectorsGroup,
   playerOwnsSectorsGroup,
+  wasLastMoveDropToPrison,
 } from '@/lib/utils';
 import {
   dropBonusCard,
@@ -277,7 +278,12 @@ const usePlayerStore = create<{
         if (prevPlayer && player.sector_id !== prevPlayer.sector_id) {
           const mapLength = sectorsData.length;
           const positionDiff = player.sector_id - prevPlayer.sector_id;
-          const steps = (positionDiff + mapLength) % mapLength;
+          let steps = (positionDiff + mapLength) % mapLength;
+          if (positionDiff < 0) {
+            if (wasLastMoveDropToPrison(player)) {
+              steps = positionDiff;
+            }
+          }
 
           await get().animatePlayerMovement(player.id, steps);
         }
@@ -437,7 +443,7 @@ const usePlayerStore = create<{
     const playerMeshQuat = new Quaternion().setFromEuler(new Euler(0, Math.PI / 2, 0, 'XYZ'));
     const { moveToPlayer } = useCameraStore.getState();
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       createTimeline({
         onUpdate: () => moveToPlayer(playerModel, false),
       })
@@ -459,7 +465,7 @@ const usePlayerStore = create<{
           },
         })
         .then(() => resolve());
-    })
+    });
   },
 
   moveMyPlayerToPrison: async () => {
@@ -478,9 +484,9 @@ const usePlayerStore = create<{
     set(state => ({
       myPlayer: state.myPlayer
         ? {
-          ...state.myPlayer,
-          bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
-        }
+            ...state.myPlayer,
+            bonus_cards: state.myPlayer.bonus_cards.filter(card => card.bonus_type !== type),
+          }
         : null,
     }));
   },
