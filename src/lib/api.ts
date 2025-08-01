@@ -621,7 +621,7 @@ export async function fetchEventSettings(): Promise<EventSettingsResponse> {
     return Promise.resolve({
       settings: {
         event_start_time: '1753092244',
-        event_end_time: '1754013556',
+        event_end_time: '1794013556',
       },
     });
   }
