@@ -25,7 +25,7 @@ function PlayersList() {
     <div className="w-[268px]">
       <Collapsible>
         <div className="flex w-full justify-between items-center">
-          <span className="text-[#494949] font-wide-black">
+          <span className="text-[#282828] font-wide-black">
             Игроки
           </span>
           <CollapsibleTrigger className="p-0 h-auto" />

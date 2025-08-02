@@ -10,15 +10,13 @@ function PlayerInfo({ player }: Props) {
   return (
     <Html
       zIndexRange={[0, 0]}
-      pointerEvents="none"
       style={{ pointerEvents: 'none' }}
       center
-      position={[0, 2.5, 0]}
+      position={[0, 3.5, 0]}
     >
       <Avatar className="outline-white/50 outline-2">
         <AvatarImage src={player.avatar_link ?? ''} />
       </Avatar>
-      {/* <div className="text-shadow-md/50 whitespace-nowrap">{player.username}</div> */}
     </Html>
   );
 }

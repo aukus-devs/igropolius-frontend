@@ -5,7 +5,6 @@ import { randInt } from 'three/src/math/MathUtils.js';
 import { sleep } from '@/lib/utils';
 import { rollDice as rollDiceAPI } from '@/lib/api';
 import { resetNotificationsQuery } from '@/lib/queryClient';
-import useCameraStore from './cameraStore';
 
 const useDiceStore = create<{
   diceModels: Group[];
@@ -51,7 +50,6 @@ const useDiceStore = create<{
 
     if (!diceModel) throw new Error(`Dice model not found.`);
 
-    await useCameraStore.getState().cameraToRoll();
     set({ isRolling: true, error: null, rollResult: [] });
 
     const animationStartTime = Date.now();

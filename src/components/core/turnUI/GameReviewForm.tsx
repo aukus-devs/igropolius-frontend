@@ -500,7 +500,9 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     <Dialog open={open} onOpenChange={setOpen}>
       {showTrigger && (
         <DialogTrigger asChild>
-          <Button variant="outline">Оценка игры</Button>
+          <Button variant="action">
+            Оценка игры
+          </Button>
         </DialogTrigger>
       )}
       <DialogContent className="sm:max-w-[790px] p-2.5" aria-describedby="">

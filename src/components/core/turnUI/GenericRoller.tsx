@@ -307,7 +307,9 @@ export default function GenericRoller<T>({
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">{openButtonText}</Button>
+        <Button variant="action">
+          {openButtonText}
+        </Button>
       </DialogTrigger>
       <DialogContent
         className="flex flex-col items-center justify-center w-full min-w-full h-screen md:backdrop-blur-none md:rounded-none m-0 p-0 md:bg-transparent overflow-hidden"

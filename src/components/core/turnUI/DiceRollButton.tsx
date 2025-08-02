@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { makePlayerMove } from '@/lib/api';
 import { SectorsById } from '@/lib/mockData';
+import useCameraStore from '@/stores/cameraStore';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
 import useSystemStore from '@/stores/systemStore';
@@ -17,6 +18,7 @@ export function DiceRollButton() {
     }))
   );
   const rollDice = useDiceStore(state => state.rollDice);
+  const cameraToRoll = useCameraStore(state => state.cameraToRoll);
 
   const playerCards = myPlayer?.bonus_cards || [];
   const hasRollCards = playerCards.some(
@@ -26,6 +28,7 @@ export function DiceRollButton() {
   const canModifyRoll = canRideTrain || hasRollCards;
 
   const handleClick = async () => {
+    await cameraToRoll();
     await rollDice();
     if (canModifyRoll) {
       await setNextTurnState({});
@@ -71,7 +74,7 @@ export function DiceRollButton() {
   });
 
   return (
-    <Button variant="outline" onClick={() => doHandleClick()} loading={isPlayerMoving || isPending}>
+    <Button variant="action" onClick={() => doHandleClick()} loading={isPlayerMoving || isPending}>
       Бросить кубик и ходить
     </Button>
   );

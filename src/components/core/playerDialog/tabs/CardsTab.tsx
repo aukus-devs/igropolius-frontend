@@ -16,7 +16,7 @@ function GameCard({ type, inactive }: GameCardProps) {
       className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] text-primary-foreground rounded-xl data-[inactive=true]:grayscale-100"
       data-inactive={inactive}
     >
-      <Tooltip delayDuration={0}>
+      <Tooltip delayDuration={0} disableHoverableContent>
         <TooltipTrigger>
           <ImageLoader
             className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] rounded-xl overflow-hidden"
@@ -26,7 +26,7 @@ function GameCard({ type, inactive }: GameCardProps) {
         </TooltipTrigger>
         <TooltipContent
           className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3"
-          side="bottom"
+          side="right"
           align="start"
           sideOffset={8}
         >

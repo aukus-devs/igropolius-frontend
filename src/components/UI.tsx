@@ -44,7 +44,7 @@ function DesktopUI() {
         <Notifications />
       </div>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2">
         <PlayerTurnUI />
       </div>
       {showAdminPanel && (
@@ -54,6 +54,7 @@ function DesktopUI() {
       )}
       {loggedIn && (
         <div className="absolute left-4 bottom-20">
+          <span className="text-[#282828] font-wide-black">Мои карточки</span>
           <MyCards />
         </div>
       )}

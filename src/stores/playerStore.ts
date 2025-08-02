@@ -356,7 +356,7 @@ const usePlayerStore = create<{
         y: [playerModel.position.y, playerModel.position.y + 3, playerModel.position.y],
         z: nextPosition[2],
         ease: 'inOutSine',
-        duration: IS_DEV ? 500 : 500,
+        duration: IS_DEV ? 100 : 500,
         onUpdate: () => {
           if (isMyPlayer) {
             moveToPlayer(playerModel, false);

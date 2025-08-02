@@ -7,7 +7,7 @@ type Props = {
 export default function PointAUCButton({ className }: Props) {
   return (
     <Button
-      variant="outline"
+      variant="action"
       className={className}
       onClick={() => window.open('https://pointauc.com/', '_blank')}
     >

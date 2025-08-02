@@ -40,65 +40,57 @@ export default function MyCards() {
   return (
     <>
       {usedCard && <BonusCardUsedConfirmation card={usedCard} onClose={handleDialogClose} />}
-      <Card className="p-2 gap-2 w-fit">
-        <span>Мои карточки</span>
-        <div className="flex flex-wrap gap-2 ">
-          {mainCardTypes.map((bonus, idx) => {
-            const cardData = frontendCardsData[bonus];
-            const cardOwned = cards.find(card => card.bonus_type === bonus);
-            const canBeUsed =
-              cardOwned &&
-              turnState === 'filling-game-review' &&
-              (bonus === 'reroll-game' || bonus === 'game-help-allowed');
-            return (
-              <div
-                key={bonus}
-                data-inactive={!cardOwned}
-                className="data-[inactive=true]:grayscale-100"
+      <Card className="flex flex-row p-2 gap-2">
+        {mainCardTypes.map((bonus, idx) => {
+          const cardData = frontendCardsData[bonus];
+          const cardOwned = cards.find(card => card.bonus_type === bonus);
+          const canBeUsed =
+            cardOwned &&
+            turnState === 'filling-game-review' &&
+            (bonus === 'reroll-game' || bonus === 'game-help-allowed');
+          return (
+            <Tooltip delayDuration={0} key={idx}>
+              <TooltipTrigger>
+                <ImageLoader
+                  className="relative z-10 flex w-[32px] h-[45px] rounded-sm overflow-hidden data-[usable=true]:animate-shake data-[inactive=true]:grayscale-100"
+                  data-usable={canBeUsed}
+                  data-inactive={!cardOwned}
+                  src={cardData.picture}
+                  alt={cardData.name}
+                />
+              </TooltipTrigger>
+              <TooltipContent
+                className="bg-card/70 backdrop-blur-[1.5rem] p-3"
+                side="bottom"
+                align="start"
+                sideOffset={8}
               >
-                <Tooltip delayDuration={0} key={idx}>
-                  <TooltipTrigger>
+                <div className="flex gap-4">
+                  <div className="">
                     <ImageLoader
-                      className="relative z-10 flex w-[32px] h-[45px] rounded-sm overflow-hidden data-[usable=true]:animate-shake"
-                      data-usable={canBeUsed}
                       src={cardData.picture}
                       alt={cardData.name}
+                      className="w-[200px] rounded-md overflow-hidden"
                     />
-                  </TooltipTrigger>
-                  <TooltipContent
-                    className="bg-card/70 backdrop-blur-[1.5rem] p-3"
-                    side="bottom"
-                    align="start"
-                    sideOffset={8}
-                  >
-                    <div className="flex gap-4">
-                      <div className="">
-                        <ImageLoader
-                          src={cardData.picture}
-                          alt={cardData.name}
-                          className="w-[200px] rounded-md overflow-hidden"
-                        />
-                      </div>
-                      <div className="w-[200px]">
-                        <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
-                        <div className="text-base font-semibold text-muted-foreground">
-                          {cardData.description}
-                        </div>
-                        {canBeUsed && (
-                          <div className="mt-2 w-full">
-                            <Button className="w-full" onClick={() => handleUseCard(bonus)}>
-                              Использовать
-                            </Button>
-                          </div>
-                        )}
-                      </div>
+                  </div>
+                  <div className="w-[200px]">
+                    <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
+                    <div className="text-base font-semibold text-muted-foreground">
+                      {cardData.description}
                     </div>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-            );
-          })}
-        </div>
+                    {canBeUsed && (
+                      <div className="mt-2 w-full">
+                        <Button className="w-full" onClick={() => handleUseCard(bonus)}>
+                          Использовать
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          );
+        })}
       </Card>
     </>
   );
