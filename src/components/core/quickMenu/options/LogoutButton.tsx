@@ -28,12 +28,12 @@ export function LogoutButton({ className }: { className?: string }) {
 
   const handleLogout = () => {
     logoutRequest().then(() => {
-      localStorage.removeItem('access-token');
       setAccessToken(null);
       setMyUser(null);
       setMyPlayer(undefined);
       setTurnState(null);
       resetCurrentPlayerQuery();
+      localStorage.removeItem('access-token');
     });
   };
 
