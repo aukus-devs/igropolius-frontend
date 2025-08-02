@@ -267,6 +267,7 @@ export default function GenericRoller<T>({
 
       useSystemStore.setState(state => ({
         ...state,
+        disablePlayersQuery: false,
         disableCurrentPlayerQuery: false,
       }));
     }
@@ -288,6 +289,7 @@ export default function GenericRoller<T>({
   const handleRollClick = () => {
     useSystemStore.setState(state => ({
       ...state,
+      disablePlayersQuery: true,
       disableCurrentPlayerQuery: true,
     }));
 
