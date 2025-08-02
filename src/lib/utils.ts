@@ -86,7 +86,7 @@ export function getEventGameInfo(event: GameEvent) {
   const { hours, minutes } = eventTimeFormat(event.timestamp);
 
   return {
-    timeHeader: `${hours}:${minutes} - ${header}`,
+    timeHeader: `${hours}:${minutes} — ${header}`,
     title: event.game_title,
     description: '',
     image: event.game_cover || FALLBACK_GAME_POSTER,
@@ -115,7 +115,7 @@ function getEventMoveInfo(event: MoveEvent) {
 
   return {
     title,
-    description: `С ${event.sector_from} клетки на ${event.sector_to}`,
+    description: `с ${event.sector_from} клетки на ${event.sector_to}`,
   };
 }
 

@@ -1,4 +1,4 @@
-import { Share } from '@/components/icons';
+import { ArrowRight, Document2, Share, TickCircle } from '@/components/icons';
 import {
   Select,
   SelectContent,
@@ -25,6 +25,7 @@ import {
 import { bonusCardsData } from '@/lib/mockData';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import ImageLoader from '../../ImageLoader';
+import { Toggle } from '@/components/ui/toggle';
 
 type Props = {
   player: PlayerDetails;
@@ -38,55 +39,46 @@ function DiceRollDetails({
   adjustedRoll: number;
 }) {
   return (
-    <div className="space-y-2">
-      <div className="text-xs text-muted-foreground">
+    <div className="space-y-[5px] text-sm font-medium text-muted-foreground animate-in fade-in-0">
+      <div>
         {diceRollJson.is_random_org_result
           ? 'Результаты броска кубиков через Random.org'
           : `Результаты броска кубиков (локальный бросок, причина: ${diceRollJson.random_org_fail_reason})`}
       </div>
-      <div className="text-xs text-muted-foreground">Кубики: {diceRollJson.data.join(', ')}</div>
-      <div className="text-xs text-muted-foreground">
+      <div>Кубики: {diceRollJson.data.join(', ')}</div>
+      <div>
         Сумма кубиков: {diceRollJson.data[0] + diceRollJson.data[1]}
       </div>
-      <div className="text-xs text-muted-foreground">Итоговый результат: {adjustedRoll}</div>
+      <div>Итоговый результат: {adjustedRoll}</div>
       {diceRollJson.is_random_org_result && (
-        <div className="flex items-center gap-2 mt-1">
-          <svg
-            width="17"
-            height="17"
-            viewBox="0 0 17 17"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.5013 1.4165C4.59839 1.4165 1.41797 4.59692 1.41797 8.49984C1.41797 12.4028 4.59839 15.5832 8.5013 15.5832C12.4042 15.5832 15.5846 12.4028 15.5846 8.49984C15.5846 4.59692 12.4042 1.4165 8.5013 1.4165ZM11.8871 6.87067L7.87088 10.8869C7.77172 10.9861 7.63714 11.0428 7.49547 11.0428C7.3538 11.0428 7.21922 10.9861 7.12005 10.8869L5.11547 8.88234C4.91005 8.67692 4.91005 8.33692 5.11547 8.1315C5.32089 7.92609 5.66089 7.92609 5.8663 8.1315L7.49547 9.76067L11.1363 6.11984C11.3417 5.91442 11.6817 5.91442 11.8871 6.11984C12.0926 6.32525 12.0926 6.65817 11.8871 6.87067Z"
-              fill="#30D158"
-            />
-          </svg>
-          <span className="text-[#30D158] text-xs">Результат подтвержден Random.org</span>
+        <div className="flex items-center gap-[5px] text-green-500">
+          <TickCircle />
+          Результат подтвержден Random.org
         </div>
       )}
       {diceRollJson.random_org_check_form && (
-        <div className="mt-1">
-          <a
-            href={diceRollJson.random_org_check_form}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#268AFF] hover:text-blue-700 text-xs underline"
-          >
-            Открыть проверочную форму
-          </a>
-        </div>
+        <a
+          href={diceRollJson.random_org_check_form}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-foreground"
+        >
+          Открыть проверочную форму
+        </a>
       )}
     </div>
   );
 }
 
 function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
+  const [showDetails, setShowDetails] = useState(false);
+
+  const { hours, minutes } = eventTimeFormat(event.timestamp);
   const { title, description, image, timeHeader, sectorId, bonusType } = getEventDescription(
     event,
     player
   );
+  const cardInfo = bonusType ? bonusCardsData[bonusType] : null;
   const isScoreChangeEvent = event.event_type === 'score-change';
   const isMoveEvent = event.event_type === 'player-move';
   const moveEvent = isMoveEvent ? (event as MoveEvent) : null;
@@ -97,22 +89,12 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
     bonusesUsed = event.bonuses_used;
   }
 
-  const [showDetails, setShowDetails] = useState(false);
-
-  const { hours, minutes } = eventTimeFormat(event.timestamp);
-
-  const cardInfo = bonusType ? bonusCardsData[bonusType] : null;
-
-  const descriptionWithSectorId = sectorId
-    ? [description, `сектор #${sectorId}`].filter(x => x !== '').join(', ')
-    : description;
-
   return (
     <div>
-      <div className="text-muted-foreground text-sm font-semibold mb-1">
+      <div className="mb-2.5 text-muted-foreground text-sm font-semibold">
         {timeHeader ? timeHeader : `${hours}:${minutes}`}
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2.5 items-start mb-[5px]">
         {image && (
           <Tooltip>
             <TooltipTrigger>
@@ -127,62 +109,33 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
             )}
           </Tooltip>
         )}
-        <div className="w-full">
-          <h3 className="font-wide-medium text-[#F2F2F2]">{title}</h3>
-          <div className="flex flex-row items-center justify-between w-full text-muted-foreground text-sm font-semibold">
-            <div className="flex gap-0 place-items-center">
-              {isScoreChangeEvent ? (
-                <ScoreChangeDescription event={event as ScoreChangeEvent} />
-              ) : (
-                <p>{descriptionWithSectorId}</p>
-              )}
-            </div>
-            {hasDiceRollData && (
-              <button
-                type="button"
-                onClick={() => setShowDetails(v => !v)}
-                className={`flex items-center gap-1 px-3 h-[23px] rounded-[5px] ml-2 transition-colors
-                ${showDetails
-                    ? 'bg-[#81A671] text-white'
-                    : 'bg-white/20 text-white/70 hover:bg-white/30'
-                  }
-              `}
-                style={{ fontSize: 14, fontWeight: 500 }}
-              >
-                <svg
-                  width="17"
-                  height="17"
-                  viewBox="0 0 17 17"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.3333 1.4165H5.66667C3.1875 1.4165 2.125 2.83317 2.125 4.95817V12.0415C2.125 14.1665 3.1875 15.5832 5.66667 15.5832H11.3333C13.8125 15.5832 14.875 14.1665 14.875 12.0415V4.95817C14.875 2.83317 13.8125 1.4165 11.3333 1.4165ZM5.66667 8.67692H8.5C8.79042 8.67692 9.03125 8.91775 9.03125 9.20817C9.03125 9.49859 8.79042 9.73942 8.5 9.73942H5.66667C5.37625 9.73942 5.13542 9.49859 5.13542 9.20817C5.13542 8.91775 5.37625 8.67692 5.66667 8.67692ZM11.3333 12.5728H5.66667C5.37625 12.5728 5.13542 12.3319 5.13542 12.0415C5.13542 11.7511 5.37625 11.5103 5.66667 11.5103H11.3333C11.6237 11.5103 11.8646 11.7511 11.8646 12.0415C11.8646 12.3319 11.6237 12.5728 11.3333 12.5728ZM13.1042 6.55192H11.6875C10.6108 6.55192 9.73958 5.68067 9.73958 4.604V3.18734C9.73958 2.89692 9.98042 2.65609 10.2708 2.65609C10.5612 2.65609 10.8021 2.89692 10.8021 3.18734V4.604C10.8021 5.09275 11.1987 5.48942 11.6875 5.48942H13.1042C13.3946 5.48942 13.6354 5.73025 13.6354 6.02067C13.6354 6.31109 13.3946 6.55192 13.1042 6.55192Z"
-                    fill="white"
-                    fill-opacity="0.7"
-                  />
-                </svg>
-                <span style={{ lineHeight: 1 }}>Детали</span>
-              </button>
-            )}
-          </div>
-          {bonusesUsed.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1 items-center">
-              <span className="text-xs text-muted-foreground mr-1">Примененные карточки:</span>
-              <span className="text-xs text-muted-foreground">
-                {bonusesUsed.map((bonus, _) => getBonusCardName(bonus)).join(', ')}
-              </span>
-            </div>
-          )}
-          {hasDiceRollData && showDetails && (
-            <div className="mt-2">
-              <DiceRollDetails
-                diceRollJson={moveEvent.dice_roll_json!}
-                adjustedRoll={moveEvent.adjusted_roll}
-              />
-            </div>
+        <div className="flex justify-between items-center w-full">
+          <div className="font-roboto-wide-semibold">{title}{!sectorId && ': '}{!sectorId && description}</div>
+          {hasDiceRollData && (
+            <Toggle size="sm" className="bg-foreground/20 text-foreground/70" onPressedChange={setShowDetails}>
+              <Document2 />
+              Детали
+            </Toggle>
           )}
         </div>
+      </div>
+
+      {isScoreChangeEvent &&
+        <ScoreChangeDescription event={event as ScoreChangeEvent} />
+      }
+
+      <div className="space-y-[5px]">
+        {bonusesUsed.length > 0 && (
+          <div className="text-sm font-medium text-muted-foreground">
+            Примененные карточки: {bonusesUsed.map((bonus, _) => getBonusCardName(bonus)).join(', ')}
+          </div>
+        )}
+        {hasDiceRollData && showDetails && (
+          <DiceRollDetails
+            diceRollJson={moveEvent.dice_roll_json!}
+            adjustedRoll={moveEvent.adjusted_roll}
+          />
+        )}
       </div>
     </div>
   );
@@ -214,7 +167,7 @@ function EventsTabFilter({
     <div className="flex items-center gap-2.5 justify-self-end">
       <span className="font-semibold text-muted-foreground">Фильтр</span>
       <Select value={selectedFilter} onValueChange={value => onFilterChange(value as FilterValue)}>
-        <SelectTrigger className="w-[140px] rounded-lg bg-foreground/10">
+        <SelectTrigger className="w-[140px] rounded-lg bg-foreground/10 text-muted-foreground">
           <SelectValue placeholder="Все" />
         </SelectTrigger>
         <SelectContent className="bg-foreground/10">
@@ -288,11 +241,11 @@ export default function EventsTab({ player }: Props) {
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-4">
-        <p className="text-muted-foreground text-center">Произошла ошибка при загрузке событий</p>
-        <p className="text-sm text-red-500 text-center">
+        <p className="text-muted-foreground text-center font-semibold">Произошла ошибка при загрузке событий</p>
+        <p className="text-sm text-red-500 text-center font-semibold">
           {error instanceof Error ? error.message : 'Неизвестная ошибка'}
         </p>
-        <Button onClick={() => refetch()} variant="outline">
+        <Button onClick={() => refetch()}>
           Повторить
         </Button>
       </div>
@@ -309,12 +262,14 @@ export default function EventsTab({ player }: Props) {
           </div>
         ) : (
           Object.entries(eventsByDate).map(([date, events]) => {
-            const { month, day } = eventTimeFormat(new Date(date).getTime() / 1000);
+            const eventDate = new Date(date);
+            const isToday = eventDate.toDateString() === new Date().toDateString();
+            const { month, day } = eventTimeFormat(eventDate.getTime() / 1000);
 
             return (
               <div key={date}>
-                <div className="mb-2.5 w-full text-center text-muted-foreground font-wide-semibold text-xs">
-                  {`${day} ${month}`}
+                <div className="mb-5 w-full text-center text-muted-foreground font-roboto-wide-semibold text-sm">
+                  {isToday ? 'Сегодня' : `${day} ${month}`}
                 </div>
                 <div className="flex flex-col gap-5">
                   {events.map((event, index) => (
@@ -353,18 +308,20 @@ function getEventsByDate(events: Events) {
 }
 
 function ScoreChangeDescription({ event }: { event: ScoreChangeEvent }) {
+  const scoreColor = event.amount > 0 ? 'text-green-500' : 'text-red-500';
+
   return (
-    <div className="flex items-center gap-2">
-      <div
-        className={`flex items-center gap-0 ${event.amount > 0 ? 'text-[#30D158]' : 'text-[#FF453A]'}`}
-      >
+    <div className="flex items-center gap-2 leading-[19px]">
+      <div className={`flex items-center font-semibold ${scoreColor}`}>
         <p>
           {event.amount > 0 && '+'}
           {event.amount}
         </p>
-        <Share className="w-3.5 h-3.5 inline" />
+        <Share className="size-[15px]" />
       </div>
-      ({event.score_before}&nbsp;→&nbsp;{event.score_after}), сектор #{event.sector_id}
+      <p className="text-muted-foreground text-sm font-semibold">
+        ({event.score_before} <ArrowRight className="inline size-4" /> {event.score_after})
+      </p>
     </div>
   );
 }
