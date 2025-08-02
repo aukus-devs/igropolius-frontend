@@ -36,13 +36,35 @@ const MOCK_API = NO_MOCKS ? false : IS_DEV;
 
 const API_HOST = IS_DEV ? 'http://localhost:8000' : 'https://igropolius.ru';
 
+export function showApiError(endpoint: string, status: number, body: any, requestBody?: any) {
+  const systemStore = useSystemStore.getState();
+  const errorMessage = body?.detail || body?.message || JSON.stringify(body);
+  let notificationText = `Ошибка ${status} в ${endpoint}: ${errorMessage}`;
+
+  if (requestBody) {
+    const requestBodyStr = typeof requestBody === 'string' ? requestBody : JSON.stringify(requestBody);
+    notificationText += `\nЗапрос: ${requestBodyStr}`;
+  }
+
+  systemStore.setMainNotification({
+    text: notificationText,
+    tag: 'api-error',
+    variant: 'error',
+  });
+
+  setTimeout(() => {
+    const currentNotification = systemStore.mainNotification;
+    if (currentNotification?.tag === 'api-error') {
+      systemStore.setMainNotification(null);
+    }
+  }, 10000);
+}
+
 async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<Response> {
   let actingUserId = null;
   if (!endpoint.includes('/api/login') && !endpoint.includes('/api/internal')) {
     actingUserId = useSystemStore.getState().actingUserId;
   }
-
-  // console.log({ actingUserId });
 
   const token = localStorage.getItem('access-token') ?? '';
   const response = await fetch(`${API_HOST}${endpoint}`, {
@@ -54,12 +76,14 @@ async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<R
     },
   });
   if (!response.ok) {
-    const errorData = await response.json();
+    const errorData = await response.json().catch(() => ({ detail: 'Неизвестная ошибка' }));
     console.error('API request failed:', {
       endpoint,
       status: response.status,
       error: errorData,
+      requestBody: params.body,
     });
+    showApiError(endpoint, response.status, errorData, params.body);
     return Promise.reject({ body: errorData, status: response.status });
   }
   return response;
@@ -285,13 +309,10 @@ export async function saveRulesVersion(request: NewRulesVersionRequest): Promise
   if (MOCK_API) {
     return Promise.resolve();
   }
-  const response = await apiRequest('/api/rules', {
+  await apiRequest('/api/rules', {
     method: 'POST',
     body: JSON.stringify(request),
   });
-  if (!response.ok) {
-    return Promise.reject('Failed to save rules version');
-  }
 }
 
 export async function login(request: LoginRequest): Promise<LoginResponse> {
@@ -311,10 +332,7 @@ export async function logout(): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
   }
-  const response = await apiRequest('/api/logout', { method: 'POST' });
-  if (!response.ok) {
-    return Promise.reject('Logout failed');
-  }
+  await apiRequest('/api/logout', { method: 'POST' });
 }
 
 export async function makePlayerMove(request: PlayerMoveRequest): Promise<PlayerMoveResponse> {
@@ -482,10 +500,7 @@ export async function resetDb(): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
   }
-  const response = await apiRequest('/api/internal/reset-db', { method: 'POST' });
-  if (!response.ok) {
-    return Promise.reject('Failed to reset database');
-  }
+  await apiRequest('/api/internal/reset-db', { method: 'POST' });
 }
 
 export async function fetchNotifications(): Promise<NotificationsResponse> {
@@ -640,6 +655,8 @@ export async function searchEmotes(query: string): Promise<EmoteSearchResponse> 
 
   const response = await fetch(`${EMOTES_SEARCH_API_URL}/${encodeURIComponent(query)}`);
   if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ detail: 'Ошибка поиска 7TV смайлов' }));
+    showApiError(`emotes-search/${query}`, response.status, errorData, { query });
     throw new Error('Failed to search emotes');
   }
   return response.json();

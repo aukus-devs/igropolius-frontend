@@ -67,13 +67,21 @@ function DesktopUI() {
 
       {mainNotification && (
         <Card
-          className={`absolute top-3 left-1/2 -translate-x-1/2 ${
+          className={`absolute top-3 left-1/2 -translate-x-1/2 max-w-2xl ${
             mainNotification.variant === 'error'
               ? 'bg-destructive/90 text-white border-destructive'
               : ''
           }`}
         >
-          <div className="pl-4 pr-4 rounded-md">{mainNotification.text}</div>
+          <div className="pl-4 pr-4 rounded-md flex items-start gap-2 py-2">
+            <div className="flex-1 whitespace-pre-wrap text-sm">{mainNotification.text}</div>
+            <button
+              onClick={() => useSystemStore.getState().setMainNotification(null)}
+              className="text-white/70 hover:text-white transition-colors flex-shrink-0"
+            >
+              ✕
+            </button>
+          </div>
         </Card>
       )}
     </div>
@@ -81,10 +89,32 @@ function DesktopUI() {
 }
 
 function MobileUI() {
+  const mainNotification = useSystemStore(state => state.mainNotification);
+
   return (
     <div className="absolute h-dvh w-dvw [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:hidden block">
       <MobileTabs />
       <MobilePlayersList />
+
+      {mainNotification && (
+        <Card
+          className={`absolute top-20 left-4 right-4 ${
+            mainNotification.variant === 'error'
+              ? 'bg-destructive/90 text-white border-destructive'
+              : ''
+          }`}
+        >
+          <div className="pl-4 pr-4 rounded-md flex items-start gap-2 py-2">
+            <div className="flex-1 whitespace-pre-wrap text-sm">{mainNotification.text}</div>
+            <button
+              onClick={() => useSystemStore.getState().setMainNotification(null)}
+              className="text-white/70 hover:text-white transition-colors flex-shrink-0"
+            >
+              ✕
+            </button>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }
