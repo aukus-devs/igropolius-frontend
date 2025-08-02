@@ -111,7 +111,7 @@ export default function GenericRoller<T>({
     key: 'roller-sound-muted',
     defaultValue: false,
   });
-  const { play: playDrumSound, stop: stopDrumSound } = useSound(DRUM_SOUND_URL, isMuted);
+  const { play: playDrumSound, stop: stopDrumSound } = useSound(DRUM_SOUND_URL, isMuted, true);
 
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);

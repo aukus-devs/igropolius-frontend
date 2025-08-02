@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 
-export function useSound(soundPath: string, muted: boolean = false) {
+export function useSound(soundPath: string, muted: boolean = false, loop: boolean = false) {
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const play = useCallback(() => {
@@ -9,13 +9,14 @@ export function useSound(soundPath: string, muted: boolean = false) {
         if (!audioRef.current) {
             audioRef.current = new Audio(soundPath);
             audioRef.current.volume = 0.3;
+            audioRef.current.loop = loop;
         }
 
         audioRef.current.currentTime = 0;
         audioRef.current.play().catch(error => {
             console.warn('Failed to play sound:', error);
         });
-    }, [soundPath, muted]);
+    }, [soundPath, muted, loop]);
 
     const stop = useCallback(() => {
         if (audioRef.current) {
