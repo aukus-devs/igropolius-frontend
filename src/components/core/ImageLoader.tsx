@@ -30,7 +30,7 @@ function ImageLoader({ src, alt, ...divProps }: Props) {
 			{loadedSrc ? (
 				<img
 					src={loadedSrc}
-					className="h-full object-cover animate-in fade-in-0"
+					className="w-full object-cover animate-in fade-in-0"
 					alt={alt}
 					draggable={false}
 				/>

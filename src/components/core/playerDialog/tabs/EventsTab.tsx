@@ -110,7 +110,7 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
           </Tooltip>
         )}
         <div className="flex justify-between items-center w-full">
-          <div className="font-roboto-wide-semibold">{title}{!sectorId && ': '}{!sectorId && description}</div>
+          <div className="font-roboto-wide-semibold whitespace-pre">{title}{!sectorId && ': '}{!sectorId && description}</div>
           {hasDiceRollData && (
             <Toggle size="sm" className="bg-foreground/20 text-foreground/70" onPressedChange={setShowDetails}>
               <Document2 />
@@ -308,15 +308,13 @@ function getEventsByDate(events: Events) {
 }
 
 function ScoreChangeDescription({ event }: { event: ScoreChangeEvent }) {
-  const scoreColor = event.amount > 0 ? 'text-green-500' : 'text-red-500';
+  const amount = event.amount === 0 ? '0' : `${event.amount > 0 ? '+ ' : '- '}${Math.abs(event.amount)}`;
+  const color = event.amount > 0 ? 'text-green-500' : event.amount < 0 ? 'text-red-500' : 'text-foreground';
 
   return (
-    <div className="flex items-center gap-2 leading-[19px]">
-      <div className={`flex items-center font-semibold ${scoreColor}`}>
-        <p>
-          {event.amount > 0 && '+'}
-          {event.amount}
-        </p>
+    <div className="flex items-center gap-1">
+      <div className={`flex items-center font-semibold ${color}`}>
+        <p>{amount}</p>
         <Share className="size-[15px]" />
       </div>
       <p className="text-muted-foreground text-sm font-semibold">

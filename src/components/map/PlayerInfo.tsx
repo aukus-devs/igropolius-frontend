@@ -1,6 +1,7 @@
 import { Html } from '@react-three/drei';
-import { Avatar, AvatarImage } from '../ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { PlayerDetails } from '@/lib/api-types-generated';
+import { FALLBACK_AVATAR_URL } from '@/lib/constants';
 
 type Props = {
   player: PlayerDetails;
@@ -15,7 +16,8 @@ function PlayerInfo({ player }: Props) {
       position={[0, 3.5, 0]}
     >
       <Avatar className="outline-white/50 outline-2">
-        <AvatarImage src={player.avatar_link ?? ''} />
+        <AvatarImage src={player.avatar_link ?? FALLBACK_AVATAR_URL} />
+        <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
       </Avatar>
     </Html>
   );
