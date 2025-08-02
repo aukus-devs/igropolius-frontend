@@ -87,6 +87,17 @@ async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<R
       error: errorData,
       requestBody: params.body,
     });
+
+    if ((response.status === 401 || response.status === 403) && endpoint.includes('/api/players/current')) {
+      const systemStore = useSystemStore.getState();
+      localStorage.removeItem('access-token');
+      systemStore.setAccessToken(null);
+      systemStore.setMyUser(null);
+      systemStore.setActingUserId(null);
+      window.location.href = '/';
+      return Promise.reject({ body: errorData, status: response.status });
+    }
+
     showApiError(endpoint, response.status, errorData, params.body);
     return Promise.reject({ body: errorData, status: response.status });
   }
