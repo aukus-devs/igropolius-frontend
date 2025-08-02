@@ -37,6 +37,10 @@ const MOCK_API = NO_MOCKS ? false : IS_DEV;
 const API_HOST = IS_DEV ? 'http://localhost:8000' : 'https://igropolius.ru';
 
 export function showApiError(endpoint: string, status: number, body: any, requestBody?: any) {
+  if (status === 401) {
+    return;
+  }
+
   const systemStore = useSystemStore.getState();
   const errorMessage = body?.detail || body?.message || JSON.stringify(body);
   let notificationText = `Ошибка ${status} в ${endpoint}: ${errorMessage}`;
