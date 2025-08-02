@@ -20,6 +20,8 @@ interface SystemStore {
   setMyUser: (data?: CurrentUserResponse | null) => void;
   actingUserId: number | null;
   setActingUserId: (userId: number | null) => void;
+  accessToken: string | null;
+  setAccessToken: (token: string | null) => void;
 }
 
 const useSystemStore = create<SystemStore>(set => ({
@@ -30,6 +32,7 @@ const useSystemStore = create<SystemStore>(set => ({
   disableCurrentPlayerQuery: false,
   myUser: null,
   actingUserId: null,
+  accessToken: localStorage.getItem('access-token'),
 
   setMainNotification: (message: MainNotification | null) => {
     set({ mainNotification: message });
@@ -63,6 +66,8 @@ const useSystemStore = create<SystemStore>(set => ({
   },
 
   setActingUserId: (userId: number | null) => set({ actingUserId: userId }),
+
+  setAccessToken: (token: string | null) => set({ accessToken: token }),
 }));
 
 export default useSystemStore;

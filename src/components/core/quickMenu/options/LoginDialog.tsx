@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { login } from '@/lib/api';
 import { refetchCurrentPlayer } from '@/lib/queryClient';
 import { cn } from '@/lib/utils';
+import useSystemStore from '@/stores/systemStore';
 import {
   Dialog,
   DialogContent,
@@ -21,6 +22,8 @@ export default function LoginDialog({ className }: { className?: string }) {
 
   const [error, setError] = useState<string | null>(null);
 
+  const setAccessToken = useSystemStore(state => state.setAccessToken);
+
   const { mutateAsync: loginRequest } = useMutation({
     mutationFn: async ({ username, password }: { username: string; password: string }) => {
       return login({ username, password });
@@ -31,6 +34,7 @@ export default function LoginDialog({ className }: { className?: string }) {
     loginRequest({ username, password })
       .then(res => {
         localStorage.setItem('access-token', res.token);
+        setAccessToken(res.token);
         refetchCurrentPlayer();
         setOpen(false);
       })

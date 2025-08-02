@@ -50,19 +50,20 @@ function App() {
     }))
   );
 
-  const { disableCurrentPlayerQuery, disablePlayersQuery, setMyUser } = useSystemStore(
+  const { disableCurrentPlayerQuery, disablePlayersQuery, setMyUser, accessToken } = useSystemStore(
     useShallow(state => ({
       disableCurrentPlayerQuery: state.disableCurrentPlayerQuery,
       disablePlayersQuery: state.disablePlayersQuery,
       setMyUser: state.setMyUser,
+      accessToken: state.accessToken,
     }))
   );
 
   const { data: currentPlayerData, isError: currentPlayerDataError } = useQuery({
-    queryKey: queryKeys.currentPlayer,
+    queryKey: [...queryKeys.currentPlayer, accessToken],
     queryFn: fetchCurrentPlayer,
     retry: false,
-    enabled: !disableCurrentPlayerQuery && localStorage.getItem('access-token') !== null,
+    enabled: !disableCurrentPlayerQuery && accessToken !== null,
   });
 
   const { data: playersData, isLoading } = useQuery({
