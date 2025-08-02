@@ -16,7 +16,7 @@ export default function GameGauntletsButton({ gameLengthRanges, className }: Pro
   };
 
   return (
-    <Button variant="outline" className={className} onClick={handleClick}>
+    <Button variant="action" className={className} onClick={handleClick}>
       GameGauntlets {getGameLengthShortText(gameLengthRanges)}
     </Button>
   );

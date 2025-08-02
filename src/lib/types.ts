@@ -1,14 +1,14 @@
 import { BonusType, GameCompletionType, GameLength, PlayerDetails } from './api-types-generated';
 
-const ColorBrown = '#AC8E68';
-const ColorLightBlue = '#64D2FF';
-const ColorPink = '#BF5AF2';
-const ColorOrange = '#FF9F0A';
-const ColorRed = '#FF453A';
-const ColorYellow = '#FFD60A';
-const ColorGreen = '#30D158';
-const ColorBlue = '#0A84FF';
-const ColorPastelGreen = '#AAD4A3';
+const ColorBrown = '#8f553f';
+const ColorLightBlue = '#1cb5d4';
+const ColorPink = '#c9268e';
+const ColorOrange = '#e07516';
+const ColorRed = '#c72424';
+const ColorYellow = '#e8c413';
+const ColorGreen = '#26bf3b';
+const ColorBlue = '#1965b5';
+const ColorPastelGreen = '#7fb58b';
 
 export const colors = {
   brown: ColorBrown,
