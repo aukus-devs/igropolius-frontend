@@ -109,10 +109,16 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
             )}
           </Tooltip>
         )}
-        <div className="flex justify-between items-center w-full">
-          <div className="font-roboto-wide-semibold whitespace-pre">{title}{!sectorId && ': '}{!sectorId && description}</div>
+        <div className="flex flex-wrap justify-between items-center w-full">
+          <div className="font-roboto-wide-semibold whitespace-pre">
+            {title}{!sectorId && ': '}{!sectorId && description}
+          </div>
           {hasDiceRollData && (
-            <Toggle size="sm" className="bg-foreground/20 text-foreground/70" onPressedChange={setShowDetails}>
+            <Toggle
+              size="sm"
+              className="bg-foreground/20 text-foreground/70"
+              onPressedChange={setShowDetails}
+            >
               <Document2 />
               Детали
             </Toggle>

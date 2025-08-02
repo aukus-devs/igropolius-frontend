@@ -63,7 +63,7 @@ function GameReview({ game }: Props) {
 
   return (
     <div className="font-semibold">
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-center justify-between mb-2.5">
         <div className={`${color} font-wide-semibold text-xs`}>
           {statusText} — {formattedDate}
         </div>
@@ -73,14 +73,15 @@ function GameReview({ game }: Props) {
               variant="ghost"
               size="sm"
               onClick={() => setShowEditForm(true)}
-              className="text-sm gap-[3px] py-[3px] px-2.5 h-fit border-none bg-white/20 text-white/70 hover:bg-white/30"
+              className="text-sm gap-[3px] px-2.5 bg-white/20 text-white/70 hover:bg-white/30"
             >
               <Edit className="size-4" />
               Редактировать
             </Button>
           )}
           <Toggle
-            className="text-sm gap-[3px] py-[3px] px-2.5 h-fit border-none data-[state=off]:bg-white/20 text-white/70"
+            size="sm"
+            className="bg-foreground/20 text-foreground/70"
             disabled={!vod_links}
             onPressedChange={toggleVods}
           >

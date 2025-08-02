@@ -17,7 +17,7 @@ function CurrentGame({ player }: Props) {
 
   return (
     <div className="font-semibold">
-      <div className="w-full flex justify-between mb-2">
+      <div className="w-full flex justify-between mb-2.5">
         <div className="text-white/70 font-wide-semibold text-xs">Игра на стриме</div>
       </div>
       <h3 className="text-2xl mb-2.5 font-wide-semibold">{current_game}</h3>

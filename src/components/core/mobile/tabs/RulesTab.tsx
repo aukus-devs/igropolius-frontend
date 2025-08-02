@@ -9,7 +9,7 @@ function RulesTab() {
           Правила <span className="text-primary">Игрополиуса</span>
         </p>
       </div>
-      <div className="mt-[30px] px-5">
+      <div className="mt-5 px-5">
         <RulesTabs />
       </div>
     </ScrollArea>

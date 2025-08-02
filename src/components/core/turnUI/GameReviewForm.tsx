@@ -173,6 +173,7 @@ function GameReview() {
           </div>
         ) : (
           <Textarea
+            id="game-review"
             ref={textareaRef}
             className="resize-none h-24 text-[16px]!"
             placeholder="Комментарий"

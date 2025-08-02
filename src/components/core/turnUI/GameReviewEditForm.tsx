@@ -97,6 +97,7 @@ function GameReview() {
           </div>
         ) : (
           <Textarea
+            id="game-review"
             ref={textareaRef}
             className="resize-none h-24 text-[16px]!"
             placeholder="Комментарий"
@@ -313,8 +314,9 @@ function VodLinks() {
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium">Ссылки на записи</label>
+      <div className="text-sm font-medium font-roboto-wide-semibold">Ссылки на записи</div>
       <Textarea
+        id="vod-links"
         className="resize-none h-20 text-[14px]"
         placeholder="Введите ссылки на записи (каждая с новой строки)"
         value={vodLinks}
