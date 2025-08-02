@@ -21,7 +21,7 @@ const buttonVariants = cva(
         success: 'text-black bg-green-500 hover:bg-green-600',
         error: 'text-black bg-red-500 hover:bg-red-600',
         warning: 'text-black bg-yellow-500 hover:bg-yellow-600',
-        action: 'bg-card/70 text-card-foreground hover:bg-card text-base w-[300px] rounded-xl font-bold backdrop-blur-[1.5rem]',
+        action: 'bg-card/70 text-card-foreground hover:bg-card text-base w-[300px] rounded-xl font-bold backdrop-blur-[1.5rem] flex-1',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

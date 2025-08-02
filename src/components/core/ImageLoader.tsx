@@ -32,6 +32,7 @@ function ImageLoader({ src, alt, ...divProps }: Props) {
 					src={loadedSrc}
 					className="h-full object-cover animate-in fade-in-0"
 					alt={alt}
+					draggable={false}
 				/>
 			) : (
 				<Skeleton className="w-full h-full" />

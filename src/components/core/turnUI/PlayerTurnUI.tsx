@@ -109,7 +109,7 @@ export default function PlayerTurnUI() {
       return <DiceRollButton />;
     case 'filling-game-review':
       return (
-        <div className="flex gap-4">
+        <div className="flex w-[736px] gap-2">
           <RollWithInstantCards />
           <GameReviewForm showTrigger />
           {showPointAUCButton && <PointAUCButton />}
