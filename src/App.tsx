@@ -62,7 +62,7 @@ function App() {
     queryKey: queryKeys.currentPlayer,
     queryFn: fetchCurrentPlayer,
     retry: false,
-    enabled: !disableCurrentPlayerQuery,
+    enabled: !disableCurrentPlayerQuery && localStorage.getItem('access-token') !== null,
   });
 
   const { data: playersData, isLoading } = useQuery({
