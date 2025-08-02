@@ -14,6 +14,7 @@ import { useSound } from '@/hooks/useSound';
 import { DRUM_SOUND_URL } from '@/lib/constants';
 import { Volume } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
+import useSystemStore from '@/stores/systemStore';
 
 const FAST_SPIN_DURATION = 2000;
 const MIN_SPIN_DURATION = 12000; // ms
@@ -263,6 +264,11 @@ export default function GenericRoller<T>({
       setWinnerIndex(null);
       animationRef.current = null;
       isIdleRunningRef.current = false;
+
+      useSystemStore.setState(state => ({
+        ...state,
+        disableCurrentPlayerQuery: false,
+      }));
     }
     setIsOpen(isOpen);
   };
@@ -280,6 +286,11 @@ export default function GenericRoller<T>({
   }, [rollPhase, cardList.length, idleAnimate, startRollingAnimation]);
 
   const handleRollClick = () => {
+    useSystemStore.setState(state => ({
+      ...state,
+      disableCurrentPlayerQuery: true,
+    }));
+
     setRollPhase('rolling');
     playDrumSound();
 
