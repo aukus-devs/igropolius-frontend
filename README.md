@@ -11,3 +11,4 @@ Built with three.js, React, Fiber and TypeScript.
 TODO:
 
 - [ ] Пофиксить анимацию хода игрока если он ходит назад
+- [ ] Обновить навзания улиц
