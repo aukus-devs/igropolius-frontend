@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { RichTextEditor } from './RichText';
 import { Button } from '@/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
+import useSystemStore from '@/stores/systemStore';
 import { saveRulesVersion } from '@/lib/api';
 import RichDisplay from './RichDisplay';
 import { resetCurrentRulesQuery } from '@/lib/queryClient';
@@ -18,7 +19,9 @@ export default function Rules({
   const [editValue, setEditValue] = useState<string>('');
 
   const [editing, setEditing] = useState(false);
-  const canEdit = true;
+  const myUser = useSystemStore(state => state.myUser);
+
+  const canEdit = myUser?.role === 'admin';
 
   const { mutateAsync: saveRules, isPending } = useMutation({
     mutationFn: saveRulesVersion,
