@@ -21,7 +21,10 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
       data-highlighted={isCurrentPlayer}
     >
       <div className="relative">
-        <Avatar className="md:w-7 md:h-7 w-[41px] h-[41px]">
+        <Avatar
+          className="md:w-7 md:h-7 w-[41px] h-[41px]"
+          style={{ outline: `2px solid ${player.color}` }}
+        >
           <AvatarImage src={player.avatar_link ?? FALLBACK_AVATAR_URL} />
           <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
         </Avatar>
