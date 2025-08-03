@@ -6,6 +6,8 @@ import { MainBonusCardType } from '@/lib/api-types-generated';
 import { giveBonusCard } from '@/lib/api';
 import useSystemStore from '@/stores/systemStore';
 import { resetNotificationsQuery } from '@/lib/queryClient';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export default function RollBonusCard() {
   const { myPlayer, setNextTurnState, addCardToState } = usePlayerStore(
@@ -54,6 +56,10 @@ export default function RollBonusCard() {
     return acc;
   }, [] as WeightedOption<MainBonusCardType>[]);
 
+  if (weightedOptions.length === 0) {
+    return <NoCardsToReceive />;
+  }
+
   return (
     <GenericRoller<MainBonusCardType>
       options={weightedOptions}
@@ -64,5 +70,29 @@ export default function RollBonusCard() {
       getWinnerText={getWinnerText}
       onClose={handleClose}
     />
+  );
+}
+
+function NoCardsToReceive() {
+  const setNextTurnState = usePlayerStore(state => state.setNextTurnState);
+  return (
+    <Card className="p-4">
+      <span className="font-wide-semibold">Ты собрал все карточки, нечего ролить</span>
+      <div className="flex justify-evenly mt-2 gap-2">
+        <Button
+          variant="outline"
+          className="bg-[#0A84FF] hover:bg-[#0A84FF]/70 w-full flex-1"
+          onClick={() => {
+            useSystemStore.setState(state => ({
+              ...state,
+              disableCurrentPlayerQuery: false,
+            }));
+            setNextTurnState({});
+          }}
+        >
+          Продолжить
+        </Button>
+      </div>
+    </Card>
   );
 }
