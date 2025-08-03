@@ -41,7 +41,7 @@ export default function PrisonEnterCardRoll() {
     }))
   );
 
-  const playerCards = playerCardsOrEmpty || [];
+  const playerCards = useMemo(() => playerCardsOrEmpty || [], [playerCardsOrEmpty]);
 
   const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
 

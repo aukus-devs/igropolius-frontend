@@ -12,7 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import ImageLoader from '../ImageLoader';
 import { useSound } from '@/hooks/useSound';
 import { DRUM_SOUND_URL } from '@/lib/constants';
-import { Volume } from '@/components/icons';
+import { Volume, X } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import useSystemStore from '@/stores/systemStore';
 
@@ -307,9 +307,7 @@ export default function GenericRoller<T>({
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="action">
-          {openButtonText}
-        </Button>
+        <Button variant="action">{openButtonText}</Button>
       </DialogTrigger>
       <DialogContent
         className="flex flex-col items-center justify-center w-full min-w-full h-screen md:backdrop-blur-none md:rounded-none m-0 p-0 md:bg-transparent overflow-hidden"
@@ -346,16 +344,17 @@ export default function GenericRoller<T>({
           </div>
         </div>
         {rollPhase === 'idle' && (
-          <Button className="z-20 rounded-xl" onClick={handleRollClick}>
+          <Button className="absolute w-[300px] rounded-xl bottom-[25%]" onClick={handleRollClick}>
             Заролить
           </Button>
         )}
         {rollPhase === 'idle' && (
           <Button
-            className="absolute w-[300px] rounded-xl bottom-[25%]"
+            variant="ghost"
+            className="absolute rounded-xl top-[25%] right-[25%]"
             onClick={() => handleOpenChange(false)}
           >
-            Закрыть
+            <X style={{ width: 25, height: 25 }} />
           </Button>
         )}
         <Button

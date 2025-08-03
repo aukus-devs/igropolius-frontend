@@ -36,7 +36,12 @@ const MOCK_API = NO_MOCKS ? false : IS_DEV;
 
 const API_HOST = IS_DEV ? 'http://localhost:8000' : 'https://igropolius.ru';
 
-export function showApiError(endpoint: string, status: number, body: any, requestBody?: any) {
+export function showApiError(
+  endpoint: string,
+  status: number,
+  body?: { detail?: string; message?: string },
+  requestBody?: unknown
+) {
   if (status === 401) {
     return;
   }
@@ -46,7 +51,8 @@ export function showApiError(endpoint: string, status: number, body: any, reques
   let notificationText = `Ошибка ${status} в ${endpoint}: ${errorMessage}`;
 
   if (requestBody) {
-    const requestBodyStr = typeof requestBody === 'string' ? requestBody : JSON.stringify(requestBody);
+    const requestBodyStr =
+      typeof requestBody === 'string' ? requestBody : JSON.stringify(requestBody);
     notificationText += `\nЗапрос: ${requestBodyStr}`;
   }
 
@@ -88,7 +94,10 @@ async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<R
       requestBody: params.body,
     });
 
-    if ((response.status === 401 || response.status === 403) && endpoint.includes('/api/players/current')) {
+    if (
+      (response.status === 401 || response.status === 403) &&
+      endpoint.includes('/api/players/current')
+    ) {
       const systemStore = useSystemStore.getState();
       localStorage.removeItem('access-token');
       systemStore.setAccessToken(null);
