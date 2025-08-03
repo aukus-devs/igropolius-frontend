@@ -6,7 +6,7 @@ import { InstantCardType, MainBonusCardType, PlayerDetails } from './api-types-g
 export const sectorsData: SectorData[] = [
   {
     id: 1,
-    name: 'Улица Базовая',
+    name: 'Площадь Базовая',
     position: { x: 0, y: 0 },
     type: 'start-corner',
     rollType: 'voting',
@@ -14,7 +14,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 2,
-    name: 'Переулок Пепеговский',
+    name: 'проспект героев ХПГ',
     position: { x: 1, y: 0 },
     type: 'property',
     color: 'brown',
@@ -22,7 +22,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 3,
-    name: 'Улица Дурки',
+    name: 'улица Трясская',
     position: { x: 2, y: 0 },
     type: 'bonus',
     rollType: 'steam',
@@ -30,7 +30,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 4,
-    name: 'Улица Донатная',
+    name: 'улица Аукусная',
     position: { x: 3, y: 0 },
     type: 'property',
     color: 'brown',
@@ -38,7 +38,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 5,
-    name: 'Переулок Чомик',
+    name: 'переулок Осудителей',
     position: { x: 4, y: 0 },
     type: 'property',
     color: 'brown',
@@ -46,7 +46,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 6,
-    name: 'Улица Тихого Дэна',
+    name: 'Твичевский вокзал',
     position: { x: 5, y: 0 },
     type: 'railroad',
     rollType: 'steam',
@@ -54,7 +54,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 7,
-    name: 'Улица Рандомная',
+    name: 'улица 1984 года',
     position: { x: 6, y: 0 },
     type: 'property',
     color: 'lightblue',
@@ -62,7 +62,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 8,
-    name: 'Улица Колескина',
+    name: 'Рандомный бульвар',
     position: { x: 7, y: 0 },
     type: 'bonus',
     rollType: 'steam',
@@ -70,7 +70,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 9,
-    name: 'Улица Ауково',
+    name: 'улица Пушкина',
     position: { x: 8, y: 0 },
     type: 'property',
     color: 'lightblue',
@@ -78,7 +78,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 10,
-    name: 'Переулок Таа',
+    name: 'Чатовское шоссе',
     position: { x: 9, y: 0 },
     type: 'property',
     color: 'lightblue',
@@ -94,7 +94,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 12,
-    name: 'Переулок Аниме',
+    name: 'улица Гачино',
     position: { x: 10, y: 1 },
     type: 'property',
     color: 'pink',
@@ -102,7 +102,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 13,
-    name: 'Улица Бана',
+    name: 'улица Стимовская',
     position: { x: 10, y: 2 },
     type: 'bonus',
     rollType: 'steam',
@@ -110,7 +110,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 14,
-    name: 'Улица Жокерге',
+    name: 'улица 60-летия Аука',
     position: { x: 10, y: 3 },
     type: 'property',
     color: 'pink',
@@ -118,7 +118,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 15,
-    name: 'Улица кинотетр Синема"',
+    name: 'Шейховый проезд',
     position: { x: 10, y: 4 },
     type: 'property',
     color: 'pink',
@@ -126,7 +126,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 16,
-    name: 'Улица 1984 года',
+    name: 'Вкплеевский вокзал',
     position: { x: 10, y: 5 },
     type: 'railroad',
     rollType: 'steam',
@@ -134,7 +134,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 17,
-    name: 'Улица Красивская',
+    name: 'улица Платно',
     position: { x: 10, y: 6 },
     type: 'property',
     color: 'orange',
@@ -142,7 +142,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 18,
-    name: 'Переулок Чатовский',
+    name: 'улица Бесплатно',
     position: { x: 10, y: 7 },
     type: 'bonus',
     rollType: 'steam',
@@ -150,7 +150,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 19,
-    name: 'Улица Кубическая',
+    name: 'Дроповый переулок',
     position: { x: 10, y: 8 },
     type: 'property',
     color: 'orange',
@@ -158,7 +158,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 20,
-    name: 'Переулок Дропа',
+    name: 'проспект Советов',
     position: { x: 10, y: 9 },
     type: 'property',
     color: 'orange',
@@ -174,7 +174,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 22,
-    name: 'Переулок Бредикова',
+    name: 'улица героев Рунета',
     position: { x: 9, y: 10 },
     type: 'property',
     color: 'red',
@@ -182,7 +182,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 23,
-    name: 'Улица имени Кала Засто',
+    name: 'аллея Мошны',
     position: { x: 8, y: 10 },
     type: 'bonus',
     rollType: 'steam',
@@ -190,7 +190,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 24,
-    name: 'Улица Стимовская',
+    name: 'авеню Уравнителей',
     position: { x: 7, y: 10 },
     type: 'property',
     color: 'red',
@@ -198,7 +198,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 25,
-    name: 'Переулок Арольфина',
+    name: 'улица 1080 павших',
     position: { x: 6, y: 10 },
     type: 'property',
     color: 'red',
@@ -206,7 +206,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 26,
-    name: 'Улица Хуховая',
+    name: 'Киковский вокзал',
     position: { x: 5, y: 10 },
     type: 'railroad',
     rollType: 'steam',
@@ -214,7 +214,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 27,
-    name: 'Переулок Ауковый',
+    name: 'улица Паст',
     position: { x: 4, y: 10 },
     type: 'property',
     color: 'yellow',
@@ -222,7 +222,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 28,
-    name: 'Улица Форсена',
+    name: 'улица Скамино',
     position: { x: 3, y: 10 },
     type: 'property',
     color: 'yellow',
@@ -230,7 +230,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 29,
-    name: 'Улица Идейная',
+    name: 'улица им. Патреги',
     position: { x: 2, y: 10 },
     type: 'bonus',
     rollType: 'steam',
@@ -238,7 +238,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 30,
-    name: 'Переулок Сужающихся Домов',
+    name: 'Аниме проспект',
     position: { x: 1, y: 10 },
     type: 'property',
     color: 'yellow',
@@ -254,7 +254,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 32,
-    name: 'Улица Уродская',
+    name: 'Скуфский бульвар',
     position: { x: 0, y: 9 },
     type: 'property',
     color: 'green',
@@ -262,7 +262,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 33,
-    name: 'Переулок 40-разовый',
+    name: 'квартал Красных фонарей',
     position: { x: 0, y: 8 },
     type: 'property',
     color: 'green',
@@ -270,7 +270,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 34,
-    name: 'Улица Сратьная',
+    name: 'переулок Терпения',
     position: { x: 0, y: 7 },
     type: 'bonus',
     rollType: 'steam',
@@ -278,7 +278,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 35,
-    name: 'Улица Соточно-каловая',
+    name: 'улица Перекатная',
     position: { x: 0, y: 6 },
     type: 'property',
     color: 'green',
@@ -286,7 +286,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 36,
-    name: 'Переулок Агуш',
+    name: 'Гудгеймовский вокзал',
     position: { x: 0, y: 5 },
     type: 'railroad',
     rollType: 'steam',
@@ -294,7 +294,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 37,
-    name: 'Улица Вихарькова',
+    name: 'аллея Стримхат',
     position: { x: 0, y: 4 },
     type: 'property',
     color: 'blue',
@@ -302,7 +302,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 38,
-    name: 'Переулок Кэнникэта',
+    name: 'улица Ластецкая',
     position: { x: 0, y: 3 },
     type: 'property',
     color: 'blue',
@@ -310,7 +310,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 39,
-    name: 'Улица Паст',
+    name: 'улица Мегаластецкая',
     position: { x: 0, y: 2 },
     type: 'bonus',
     rollType: 'steam',
@@ -318,7 +318,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 40,
-    name: 'Переулок Ган Дона',
+    name: 'улица Ультраластецкая',
     position: { x: 0, y: 1 },
     type: 'property',
     color: 'blue',
