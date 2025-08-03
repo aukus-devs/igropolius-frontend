@@ -8,7 +8,6 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '../../ui/tooltip';
 import useReviewFormStore from '@/stores/reviewFormStore';
 import Rating from '../Rating';
 import { useShallow } from 'zustand/shallow';
-import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
 import { ArrowRight, Eye, X, Smile, Wand } from '../../icons';
 import { searchGames, editPlayerGame } from '@/lib/api';
@@ -350,7 +349,6 @@ function GameReviewEditForm({
     selectedGame,
     setGameTitle,
     setGameReview,
-    setGameTime,
     setSelectedGame,
     setVodLinks,
   } = useReviewFormStore(

@@ -1,11 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Spoiler } from 'spoiled';
 
-function parseEmotesInText(
-  text: string,
-  lineIndex: number,
-  baseIndex: number,
-  insideSpoiler: boolean = false
-): React.ReactNode[] {
+function parseEmotesInText(text: string, lineIndex: number, baseIndex: number): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
   const emotesRegex = /\[7tv\](.*?)\[\/7tv\]/g;
   let lastIndex = 0;
@@ -21,11 +17,7 @@ function parseEmotesInText(
         key={`emote-${lineIndex}-${baseIndex}-${parts.length}`}
         src={match[1]}
         alt="emote"
-        className={`inline-block h-6 mx-1 align-middle ${
-          insideSpoiler
-            ? 'opacity-0 group-hover:opacity-100 group-data-[revealed=true]:opacity-100 transition-opacity'
-            : ''
-        }`}
+        className="inline-block h-6 mx-1 align-middle"
       />
     );
 
@@ -46,23 +38,10 @@ const SpoilerSpan = ({
   children: React.ReactNode[];
   spoilerKey: string;
 }) => {
-  const [isRevealed, setIsRevealed] = useState(false);
-
-  const handleClick = () => {
-    setIsRevealed(!isRevealed);
-  };
-
   return (
-    <span
-      key={spoilerKey}
-      className={`bg-white/5 transition-colors cursor-pointer px-1 rounded inline-block break-words max-w-full group ${
-        isRevealed ? 'text-current' : 'text-transparent hover:text-current'
-      }`}
-      data-revealed={isRevealed}
-      onClick={handleClick}
-    >
+    <Spoiler key={spoilerKey} revealOn="click">
       {children}
-    </span>
+    </Spoiler>
   );
 };
 
@@ -84,7 +63,7 @@ export function parseReview(text: string) {
       }
 
       const spoilerContent = spoilerMatch[1];
-      const spoilerParts = parseEmotesInText(spoilerContent, lineIndex, parts.length, true);
+      const spoilerParts = parseEmotesInText(spoilerContent, lineIndex, parts.length);
 
       parts.push(
         <SpoilerSpan
