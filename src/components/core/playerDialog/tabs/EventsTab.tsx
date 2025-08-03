@@ -110,8 +110,15 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
           </Tooltip>
         )}
         <div className="flex flex-wrap justify-between items-center w-full">
-          <div className="font-roboto-wide-semibold whitespace-pre">
-            {title}{!sectorId && ': '}{!sectorId && description}
+          <div className="flex flex-col">
+            <div className="font-roboto-wide-semibold whitespace-pre">
+              {title}{!sectorId && ': '}{!sectorId && description}
+            </div>
+            {sectorId && (
+              <div className="text-sm text-muted-foreground font-semibold">
+                Сектор #{sectorId}
+              </div>
+            )}
           </div>
           {hasDiceRollData && (
             <Toggle
