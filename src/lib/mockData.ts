@@ -1226,64 +1226,66 @@ export const frontendCardsData: Record<MainBonusCardType, FrontendCardData> = {
 
 export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData> = {
   'receive-1-percent-from-all': {
-    name: '1% от всех',
+    name: 'Сюрприз',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-1-percent-from-all.png`,
-    description: 'Получить 1% от всех игроков - позволяет получить 1% от всех игроков в игре.',
+    description:
+      'В честь вашего дня рождения все другие игроки перечисляют вам очки (1% от суммы каждого).',
   },
   'receive-scores-for-place': {
-    name: 'Очки за место',
+    name: 'Выбыл, говорите?',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-scores-for-place.png`,
-    description: 'Получить процент очков равный месту.',
+    description: 'Получаете % очков, равный вашему месту в таблице.',
   },
   'receive-5-percent-or-reroll': {
-    name: '5% или реролл',
+    name: 'Тогда бесплатный тостер',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-5-percent-or-reroll.png`,
-    description: 'Получить 5% очков если находишься в нижней части таблицы, иначе реролл.',
+    description:
+      'Если вы находитесь во второй половине таблицы лидеров, получаете (5%) очков; если в первой - реролл колеса.',
   },
   'receive-3-percent': {
-    name: 'получить 3%',
+    name: 'Деньги то, видит Бог, небольшие',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-3-percent.png`,
-    description: 'Получить 3% очков.',
+    description: 'Получите (3%) очков.',
   },
   'leaders-lose-percents': {
-    name: 'Лидеры теряют',
+    name: 'А вот это явно не моя проблема',
     picture: `${import.meta.env.BASE_URL}assets/cards/leaders-lose-percents.png`,
-    description: 'Топ 3 места теряют 3%, 2% и 1% очков соответственно.',
+    description: 'Первые три места в таблице лидеров теряют (3, 2, 1)% очков.',
   },
   'receive-1-percent-plus-20': {
-    name: '1% плюс 20',
+    name: 'Просто мы нашли резинку',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-1-percent-plus-20.png`,
-    description: 'Получить 1% плюс 20 очков.',
+    description: 'Получите (1%+20) очков.',
   },
   'lose-2-percents': {
-    name: 'Потерять 2%',
+    name: 'Плата?',
     picture: `${import.meta.env.BASE_URL}assets/cards/lose-2-percents.png`,
-    description: 'Потерять 2% очков.',
+    description: 'Потеряйте (2%) очков.',
   },
   reroll: {
-    name: 'Реролл',
+    name: 'Вернуться к исходной стадии',
     picture: `${import.meta.env.BASE_URL}assets/cards/reroll.png`,
-    description: 'Реролл карточки.',
+    description: 'Реролл этого колеса.',
   },
   'reroll-and-roll': {
-    name: 'Двойной ролл',
+    name: 'Процесс стабилизируется',
     picture: `${import.meta.env.BASE_URL}assets/cards/reroll-and-roll.png`,
-    description: 'Реролл этого колеса 2 раза.',
+    description: 'Реролл этого колеса, плюс один дополнительный ролл.',
   },
   'lose-card-or-3-percent': {
-    name: 'Потерять карточку или 3%',
+    name: 'Явно не моя проблема',
     picture: `${import.meta.env.BASE_URL}assets/cards/lose-card-or-3-percent.png`,
-    description: 'Потерять одну карточку или 3% очков если карточек нет.',
+    description: 'Игрок теряет случайную карточку; если карточек нет, потеря 3% очков.',
   },
   'upgrade-next-building': {
-    name: 'Улучшить следующее здание',
+    name: 'Он собирает установку',
     picture: `${import.meta.env.BASE_URL}assets/cards/upgrade-next-building.png`,
-    description: 'Улучшить следующее здание на карте.',
+    description: 'Плюс один тир следующего здания.',
   },
   'downgrade-next-building': {
-    name: 'Понизить следующее здание',
+    name: 'Я не мог просчитаться',
     picture: `${import.meta.env.BASE_URL}assets/cards/downgrade-next-building.png`,
-    description: 'Понизить следующее здание на карте.',
+    description: 'Минус один тир следующего здания.',
   },
 };
 
