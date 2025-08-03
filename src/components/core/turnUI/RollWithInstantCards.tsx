@@ -58,6 +58,24 @@ export default function RollWithInstantCards() {
   );
 
   const getWinnerText = (option: WeightedOption<OptionType>) => {
+    let activationText = '';
+    if (activationResult === 'reroll') {
+      activationText = ': выпал реролл';
+    }
+    if (activationResult === 'score-received') {
+      activationText = ': получено 5% от своего счёта';
+    }
+
+    if (isInstantCard(option.value)) {
+      return frontendInstantCardsData[option.value.instant].name + activationText;
+    }
+    if (isBonusCard(option.value)) {
+      return frontendCardsData[option.value.card].name + activationText;
+    }
+    return 'Неизвестный тип карточки' as never;
+  };
+
+  const getSecondaryText = (option: WeightedOption<OptionType>) => {
     if (isInstantCard(option.value)) {
       return frontendInstantCardsData[option.value.instant].description;
     }
@@ -117,15 +135,8 @@ export default function RollWithInstantCards() {
       ...state,
       disableCurrentPlayerQuery: false,
     }));
-  };
-
-  const getSecondaryText = () => {
-    if (activationResult === 'reroll') {
-      return 'Выпал реролл';
-    }
-    if (activationResult === 'score-received') {
-      return 'Вы получили 5% от своего счёта';
-    }
+    setActivationResult(null);
+    setMoveToCardDrop(false);
   };
 
   return (

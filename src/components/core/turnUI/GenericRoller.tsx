@@ -118,10 +118,17 @@ export default function GenericRoller<T>({
   const [rollPhase, setRollPhase] = useState<'idle' | 'rolling' | 'finished'>('idle');
   const [cardList, setCardList] = useState<WeightedOption<T>[]>([]);
 
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+
   const winner = winnerIndex !== null ? cardList[winnerIndex] : null;
 
   let headerText = header;
   let secondaryText: string | undefined = undefined;
+
+  if (rollPhase === 'rolling') {
+    headerText = getWinnerText(cardList[currentCardIndex]);
+  }
+
   if (winner !== null) {
     headerText = getWinnerText(winner);
     secondaryText = getSecondaryText?.(winner);
@@ -236,6 +243,14 @@ export default function GenericRoller<T>({
           animationRef.current = requestAnimationFrame(animate);
         }
       }
+
+      setCurrentCardIndex(c => {
+        const newIndex = Math.floor(-offsetRef.current / CARD_FULL_WIDTH);
+        if (newIndex !== c) {
+          return newIndex;
+        }
+        return c;
+      });
     }
 
     function finishAnimation() {
@@ -318,7 +333,7 @@ export default function GenericRoller<T>({
         }}
       >
         <DialogHeader className="absolute bottom-[70%] max-w-4xl ">
-          <DialogTitle className="font-wide-black text-3xl text-center">{headerText}</DialogTitle>
+          <DialogTitle className="font-wide-black text-2xl text-center">{headerText}</DialogTitle>
         </DialogHeader>
         <div className="absolute left-1/2">
           <div className="absolute z-20 top-0 -translate-x-1/2 -translate-y-1/2 border-l-[18px] border-r-[18px] border-t-[18px] border-l-transparent border-r-transparent border-primary" />

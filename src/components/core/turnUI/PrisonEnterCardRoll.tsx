@@ -1,7 +1,7 @@
 import usePlayerStore from '@/stores/playerStore';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { useMemo, useState } from 'react';
-import { frontendCardsData } from '@/lib/mockData';
+import { bonusCardsData, frontendCardsData } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
 import { MainBonusCardType } from '@/lib/api-types-generated';
 import { dropBonusCard, giveBonusCard } from '@/lib/api';
@@ -43,23 +43,31 @@ export default function PrisonEnterCardRoll() {
 
   const playerCards = useMemo(() => playerCardsOrEmpty || [], [playerCardsOrEmpty]);
 
+  const [rollFinished, setRollFinished] = useState(false);
   const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
 
   const getWinnerText = (option: WeightedOption<RollOptionType>) => {
     if (option.value === 'nothing') {
       return 'Ничего не происходит';
     }
+    if (!rollFinished) {
+      return bonusCardsData[option.value.card].name;
+    }
     switch (option.value.action) {
       case 'lose-card': {
-        return `Вы теряете карточку ${option.value.card}`;
+        return `Потеря карточки ${bonusCardsData[option.value.card].name}`;
       }
       case 'receive-card': {
-        return `Вы получаете карточку ${option.value.card}`;
+        return `Получена карточка ${bonusCardsData[option.value.card].name}`;
+      }
+      default: {
+        return 'Неизвестное действие' as never;
       }
     }
   };
 
   const handleFinished = async (option: WeightedOption<RollOptionType>) => {
+    setRollFinished(true);
     useSystemStore.setState(state => ({
       ...state,
       disableCurrentPlayerQuery: true,
@@ -83,6 +91,8 @@ export default function PrisonEnterCardRoll() {
   };
 
   const handleClose = async () => {
+    setRollFinished(false);
+    setCardsBeforeDrop([]);
     useSystemStore.setState(state => ({
       ...state,
       disableCurrentPlayerQuery: false,

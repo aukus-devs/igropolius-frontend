@@ -17,7 +17,6 @@ export default function LoseCardOnDropDialog() {
     goToPrison,
     removeCardFromState,
     turnState,
-    sectorId,
   } = usePlayerStore(
     useShallow(state => ({
       playerCardsOrEmpty: state.myPlayer?.bonus_cards,
@@ -32,6 +31,7 @@ export default function LoseCardOnDropDialog() {
 
   const playerCards = useMemo(() => playerCardsOrEmpty || [], [playerCardsOrEmpty]);
 
+  const [rollFinished, setRollFinished] = useState(false);
   const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
   const [dropResult, setDropResult] = useState<InstantCardResult | null>(null);
 
@@ -45,13 +45,27 @@ export default function LoseCardOnDropDialog() {
   }, [playerCards]);
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
-    return `Карточка "${frontendCardsData[option.value].name}" сгорает`;
+    if (dropResult && rollFinished) {
+      if (dropResult === 'card-lost') {
+        return `Потеряна карточка ${frontendCardsData[option.value].name}`;
+      } else if (dropResult === 'scores-lost') {
+        return 'Потеряно 3% от общего счёта';
+      } else if (dropResult === 'reroll') {
+        return 'Выпавшая карточка не найдена, реролл дропа';
+      }
+    }
+    if (rollFinished) {
+      return `Потеряна карточка ${frontendCardsData[option.value].name}`;
+    }
+    return frontendCardsData[option.value].name;
+  };
+
+  const getSecondaryText = (option: WeightedOption<MainBonusCardType>) => {
+    return frontendCardsData[option.value].description;
   };
 
   const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
-    if (!sectorId) {
-      throw new Error('Sector ID is not defined');
-    }
+    setRollFinished(true);
 
     setCardsBeforeDrop(playerCards.map(card => card.bonus_type));
     if (goToPrison) {
@@ -83,22 +97,10 @@ export default function LoseCardOnDropDialog() {
     }
   };
 
-  const getSecondaryText = () => {
-    if (dropResult) {
-      if (dropResult === 'card-lost') {
-        return 'Карточка потеряна';
-      } else if (dropResult === 'scores-lost') {
-        return 'Потеряно 3% от общего счёта';
-      } else if (dropResult === 'reroll') {
-        return 'Реролл дропа';
-      }
-    }
-    return undefined;
-  };
-
   const handleClose = async () => {
-    // TODO if page refershes before we lose context
     setDropResult(null);
+    setRollFinished(false);
+    setCardsBeforeDrop([]);
     if (dropResult === 'reroll') {
       return;
     }
