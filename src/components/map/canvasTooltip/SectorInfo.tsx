@@ -11,6 +11,7 @@ import { canBuildOnSector } from '../utils';
 import { useMutation } from '@tanstack/react-query';
 import { movePlayerGame } from '@/lib/api';
 import ImageLoader from '@/components/core/ImageLoader';
+import { GameRollTypeNames } from '@/lib/constants';
 
 type Props = {
   sector: SectorData;
@@ -63,7 +64,7 @@ function SectorInfo({ sector }: Props) {
       <CardContent>
         <div className="text-sm text-muted-foreground font-semibold">
           <p>Тип: {SectorTypeLabes[type]}</p>
-          <p>Ролл игры: {rollType}</p>
+          <p>Ролл игры: {GameRollTypeNames[rollType]}</p>
           {gameLengthRanges && <p>Длительность: {getGameLengthFullText(gameLengthRanges)}</p>}
           {showTax && (
             <div className="flex items-center">
