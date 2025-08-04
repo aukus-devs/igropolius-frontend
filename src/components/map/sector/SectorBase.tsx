@@ -39,14 +39,18 @@ function SectorBase({ sector, color, isCorner }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   const isHighlighted = highlightedSectorId === sector.id;
-  
-  const model = useMemo(() => (
-    <SectorModel
-      color={color}
-      isCorner={isCorner}
-      isHovered={isHovered || isHighlighted}
-    />
-  ), [isCorner, color, isHovered, isHighlighted]);
+
+  const model = useMemo(
+    () => (
+      <SectorModel
+        color={color}
+        isCorner={isCorner}
+        isHovered={isHovered}
+        isHighlighted={isHighlighted}
+      />
+    ),
+    [isCorner, color, isHovered, isHighlighted]
+  );
 
   const tooltipWasOnCurrentSector =
     tooltipPrevData?.type === 'sector' && tooltipPrevData.payload.id === sector.id;

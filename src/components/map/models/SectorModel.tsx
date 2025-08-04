@@ -1,12 +1,12 @@
-import { EMISSION_FULL, EMISSION_NONE, STORAGE_BASE_URL } from "@/lib/constants";
-import { ColorName } from "@/lib/types";
-import { Gltf } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef } from "react";
-import { Group, Mesh, MeshStandardMaterial } from "three";
+import { EMISSION_FULL, EMISSION_NONE, STORAGE_BASE_URL } from '@/lib/constants';
+import { ColorName } from '@/lib/types';
+import { Gltf } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { useEffect, useMemo, useRef } from 'react';
+import { Group, Mesh, MeshStandardMaterial } from 'three';
 
 function getSectorModel(isCorner: boolean, color?: ColorName) {
-	if (isCorner) return `${STORAGE_BASE_URL}/models/sectors/square_sector.glb`;
+  if (isCorner) return `${STORAGE_BASE_URL}/models/sectors/square_sector.glb`;
 
   switch (color) {
     case 'brown':
@@ -31,18 +31,19 @@ function getSectorModel(isCorner: boolean, color?: ColorName) {
 }
 
 type Props = {
-	color?: ColorName;
-	isCorner: boolean;
+  color?: ColorName;
+  isCorner: boolean;
   isHovered: boolean;
-}
+  isHighlighted: boolean;
+};
 
-function SectorModel({color, isCorner, isHovered}: Props) {
+function SectorModel({ color, isCorner, isHovered, isHighlighted }: Props) {
   const gltfRef = useRef<Group>(null);
 
   useEffect(() => {
     if (!gltfRef.current) return;
 
-    gltfRef.current.traverse((mesh) => {
+    gltfRef.current.traverse(mesh => {
       if (mesh instanceof Mesh) {
         mesh.material = mesh.material.clone();
         mesh.material.emissiveIntensity = 0.75;
@@ -55,28 +56,38 @@ function SectorModel({color, isCorner, isHovered}: Props) {
   useFrame(() => {
     if (!gltfRef.current) return;
 
-    gltfRef.current.traverse((mesh) => {
+    gltfRef.current.traverse(mesh => {
       if (mesh instanceof Mesh) {
         const material = mesh.material as MeshStandardMaterial;
 
         if (material) {
-          material.emissive.lerp(isHovered ? EMISSION_FULL : EMISSION_NONE, 0.1);
+          material.emissive.lerp(
+            isHovered
+              ? EMISSION_FULL
+              : isHighlighted
+                ? EMISSION_FULL.clone().multiplyScalar(0.5)
+                : EMISSION_NONE,
+            0.1
+          );
         }
       }
-    })
+    });
   });
 
-  const model = useMemo(() => (
-    <Gltf
-      ref={gltfRef}
-      src={getSectorModel(isCorner, color)}
-      rotation={[0, Math.PI, 0]}
-      scale={[1, 1, 1]}
-      position={[0, -0.5, 0]}
-    />
-  ), [isCorner, color]);
+  const model = useMemo(
+    () => (
+      <Gltf
+        ref={gltfRef}
+        src={getSectorModel(isCorner, color)}
+        rotation={[0, Math.PI, 0]}
+        scale={[1, 1, 1]}
+        position={[0, -0.5, 0]}
+      />
+    ),
+    [isCorner, color]
+  );
 
-	return model;
+  return model;
 }
 
 export default SectorModel;
