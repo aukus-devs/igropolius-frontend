@@ -141,6 +141,7 @@ export const PlayerModelsScales: Record<string, number> = {
 };
 
 export const EMOTES_SEARCH_API_URL = 'https://api4.rhhhhhhh.live/search_emotes';
+export const SEVENTV_EMOTE_BASE_URL = 'https://starege.rhhhhhhh.live/https://cdn.7tv.app/emote';
 
 export const SECTORS_COLOR_GROUPS: number[][] = [
   [2, 4, 5],

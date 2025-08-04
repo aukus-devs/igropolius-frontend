@@ -7,6 +7,7 @@ import {
   ScoreByGameLength,
   SECTORS_COLOR_GROUPS,
   SectorScoreMultiplier,
+  SEVENTV_EMOTE_BASE_URL,
 } from './constants';
 import usePlayerStore from '@/stores/playerStore';
 import {
@@ -557,4 +558,13 @@ export function wasLastMoveDropToPrison(player: PlayerDetails): boolean {
     return false;
   }
   return last.status === 'drop';
+}
+
+export function extract7tvEmoteId(emoteUrl: string): string | null {
+  const match = emoteUrl.match(/\/emote\/([^\/]+)\//);
+  return match ? match[1] : null;
+}
+
+export function create7tvEmoteUrl(emoteId: string): string {
+  return `${SEVENTV_EMOTE_BASE_URL}/${emoteId}/2x.webp`;
 }

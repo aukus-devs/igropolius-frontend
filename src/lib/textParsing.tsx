@@ -1,5 +1,6 @@
 import React from 'react';
 import { Spoiler } from 'spoiled';
+import { create7tvEmoteUrl } from './utils';
 
 function parseEmotesInText(text: string, lineIndex: number, baseIndex: number): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
@@ -12,10 +13,13 @@ function parseEmotesInText(text: string, lineIndex: number, baseIndex: number): 
       parts.push(text.slice(lastIndex, match.index));
     }
 
+    const emoteId = match[1];
+    const emoteUrl = create7tvEmoteUrl(emoteId);
+
     parts.push(
       <img
         key={`emote-${lineIndex}-${baseIndex}-${parts.length}`}
-        src={match[1]}
+        src={emoteUrl}
         alt="emote"
         className="inline-block h-6 mx-1 align-middle"
       />

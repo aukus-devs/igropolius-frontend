@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
-import { calculateGameCompletionScore } from '@/lib/utils';
+import { calculateGameCompletionScore, extract7tvEmoteId } from '@/lib/utils';
 import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
@@ -116,19 +116,22 @@ function GameReview() {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
+    const emoteId = extract7tvEmoteId(emoteUrl);
+    if (!emoteId) return;
+
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const currentValue = gameReview;
 
     const newValue =
-      currentValue.slice(0, start) + `[7tv]${emoteUrl}[/7tv]` + currentValue.slice(end);
+      currentValue.slice(0, start) + `[7tv]${emoteId}[/7tv]` + currentValue.slice(end);
     setGameReview(newValue);
 
     setShowEmotePanel(false);
 
     setTimeout(() => {
       textarea.focus();
-      const newCursorPos = start + `[7tv]${emoteUrl}[/7tv]`.length;
+      const newCursorPos = start + `[7tv]${emoteId}[/7tv]`.length;
       textarea.setSelectionRange(newCursorPos, newCursorPos);
     }, 0);
   };
@@ -501,9 +504,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     <Dialog open={open} onOpenChange={setOpen}>
       {showTrigger && (
         <DialogTrigger asChild>
-          <Button variant="action">
-            Оценка игры
-          </Button>
+          <Button variant="action">Оценка игры</Button>
         </DialogTrigger>
       )}
       <DialogContent className="sm:max-w-[790px] p-2.5" aria-describedby="">

@@ -17,6 +17,7 @@ import { parseReview } from '@/lib/textParsing';
 import { resetPlayersQuery } from '@/lib/queryClient';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import EmotePanel from './EmotePanel';
+import { extract7tvEmoteId } from '@/lib/utils';
 
 function GamePoster({ src }: { src: string }) {
   return (
@@ -41,19 +42,22 @@ function GameReview({
     const textarea = textareaRef.current;
     if (!textarea) return;
 
+    const emoteId = extract7tvEmoteId(emoteUrl);
+    if (!emoteId) return;
+
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const currentValue = gameReview;
 
     const newValue =
-      currentValue.slice(0, start) + `[7tv]${emoteUrl}[/7tv]` + currentValue.slice(end);
+      currentValue.slice(0, start) + `[7tv]${emoteId}[/7tv]` + currentValue.slice(end);
     setGameReview(newValue);
 
     setShowEmotePanel(false);
 
     setTimeout(() => {
       textarea.focus();
-      const newCursorPos = start + `[7tv]${emoteUrl}[/7tv]`.length;
+      const newCursorPos = start + `[7tv]${emoteId}[/7tv]`.length;
       textarea.setSelectionRange(newCursorPos, newCursorPos);
     }, 0);
   };
