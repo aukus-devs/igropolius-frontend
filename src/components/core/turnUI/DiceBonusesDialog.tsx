@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { makePlayerMove } from '@/lib/api';
 import { TrainsConfig } from '@/lib/constants';
-import { SectorsById } from '@/lib/mockData';
+import { SectorsById, sectorsData } from '@/lib/mockData';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
 import useSystemStore from '@/stores/systemStore';
@@ -79,24 +79,20 @@ export default function DiceBonusesDialog() {
     mutationFn: handleSubmit,
   });
 
-  if (!myPlayer) {
-    return null;
-  }
-
-  const bonusCards = myPlayer.bonus_cards || [];
+  const bonusCards = myPlayer?.bonus_cards || [];
 
   const hasAdjustBy1 = bonusCards.some(card => card.bonus_type === 'adjust-roll-by1');
   const hasChooseDie = bonusCards.some(card => card.bonus_type === 'choose-1-die');
   const canRideTrain = Boolean(
-    myPlayer.sector_id && SectorsById[myPlayer.sector_id].type === 'railroad'
+    myPlayer?.sector_id && SectorsById[myPlayer.sector_id].type === 'railroad'
   );
 
   let trainDestination: number | null = null;
-  if (canRideTrain) {
+  if (canRideTrain && myPlayer?.sector_id) {
     trainDestination = TrainsConfig[myPlayer.sector_id].sectorTo;
   }
 
-  let finalDestination = myPlayer.sector_id;
+  let finalDestination = myPlayer?.sector_id || 0;
   if (rideTrain && trainDestination) {
     finalDestination = trainDestination;
   }
@@ -109,6 +105,8 @@ export default function DiceBonusesDialog() {
     finalDestination += adjustBy1;
   }
 
+  finalDestination = ((finalDestination - 1) % sectorsData.length) + 1;
+
   useEffect(() => {
     if (!myPlayer) {
       setHighlightedSectorId(null);
@@ -116,13 +114,15 @@ export default function DiceBonusesDialog() {
     }
 
     setHighlightedSectorId(finalDestination);
-  }, [myPlayer, finalDestination, setHighlightedSectorId]);
 
-  useEffect(() => {
     return () => {
       setHighlightedSectorId(null);
     };
-  }, [setHighlightedSectorId]);
+  }, [myPlayer, finalDestination, setHighlightedSectorId]);
+
+  if (!myPlayer) {
+    return null;
+  }
 
   return (
     <div className="backdrop-blur-[1.5rem] bg-card/70 border-none rounded-xl p-4 font-semibold">
