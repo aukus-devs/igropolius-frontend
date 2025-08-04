@@ -9,7 +9,7 @@ export const sectorsData: SectorData[] = [
     name: 'Площадь Базовая',
     position: { x: 0, y: 0 },
     type: 'start-corner',
-    rollType: 'voting',
+    rollType: 'steam',
     gameLengthRanges: { min: 3, max: 27 },
   },
   {
@@ -169,7 +169,7 @@ export const sectorsData: SectorData[] = [
     name: 'Парковка',
     position: { x: 10, y: 10 },
     type: 'parking',
-    rollType: 'voting',
+    rollType: 'steam',
     gameLengthRanges: { min: 3, max: 22 },
   },
   {

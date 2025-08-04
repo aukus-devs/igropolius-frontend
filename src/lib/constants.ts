@@ -1,4 +1,4 @@
-import { BuildingType, SectorData, TrainData } from '@/lib/types';
+import { BuildingType, GameRollType, SectorData, TrainData } from '@/lib/types';
 import { Color } from 'three';
 import { GameLength } from './api-types-generated';
 
@@ -65,9 +65,7 @@ export const MOCK_DICE_ROLL: [number, number] = [3, 5];
 export const IS_DEV = import.meta.env.MODE === 'development';
 export const NO_MOCKS = Boolean(import.meta.env.VITE_NO_MOCKS);
 
-export const STORAGE_BASE_URL = IS_DEV
-  ? `/monopoly_s3/assets`
-  : `/models_assets`;
+export const STORAGE_BASE_URL = IS_DEV ? `/monopoly_s3/assets` : `/models_assets`;
 
 export const ScoreByGameLength: { [key in GameLength]: number } = {
   '': 0,
@@ -127,7 +125,7 @@ export const PlayerModelsUrlsArray = [
   `${STORAGE_BASE_URL}/models/players/trains/train-diesel-a.glb`,
   `${STORAGE_BASE_URL}/models/players/trains/train-locomotive-a.glb`,
   `${STORAGE_BASE_URL}/models/players/trains/train-tram-modern.glb`,
-]
+];
 
 export const PlayerModelsScales: Record<string, number> = {
   [`${STORAGE_BASE_URL}/models/players/boats/boat-tow-a.glb`]: 0.5,
@@ -157,3 +155,8 @@ export const SECTORS_COLOR_GROUPS: number[][] = [
 
 export const PRISON_NOTHING_CARD_IMAGE = `${import.meta.env.BASE_URL}assets/cards/prison-nothing.png`;
 export const DRUM_SOUND_URL = `${import.meta.env.BASE_URL}assets/sounds/baraban.mp3`;
+
+export const GameRollTypeNames: Record<GameRollType, string> = {
+  auc: 'аукцион',
+  steam: 'пресет из стима',
+};

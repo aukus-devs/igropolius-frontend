@@ -41,7 +41,7 @@ export const playerColors = {
 export type PlayerColor = keyof typeof playerColors;
 export type PlayerColorValue = (typeof playerColors)[PlayerColor];
 
-export type CellRollType = 'auc' | 'steam' | 'voting';
+export type GameRollType = 'auc' | 'steam';
 
 type Position = {
   x: number;
@@ -59,7 +59,7 @@ export type SectorData = {
   name: string;
   position: Position;
   color?: ColorName;
-  rollType: CellRollType;
+  rollType: GameRollType;
   gameLengthRanges?: GameLengthRange; // for roll on https://gamegauntlets.com
 };
 
