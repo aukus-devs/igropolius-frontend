@@ -90,10 +90,7 @@ function GameReview({ game }: Props) {
           </Toggle>
         </div>
       </div>
-      <h3
-        className="text-2xl mb-2.5 font-wide-semibold leading-tight max-w-full overflow-hidden"
-        style={{ wordBreak: 'break-all' }}
-      >
+      <h3 className="text-2xl mb-2.5 font-wide-semibold break-all leading-tight max-w-full overflow-hidden">
         {title}
       </h3>
       <div className="flex gap-2.5">
@@ -102,7 +99,7 @@ function GameReview({ game }: Props) {
           src={cover || FALLBACK_GAME_POSTER}
           alt={title}
         />
-        <div className="text-muted-foreground">
+        <div className="text-muted-foreground break-all">
           {length && (
             <div className="flex flex-wrap gap-2 mb-2.5">
               <Badge className="bg-white/20 text-white/70 font-semibold">
