@@ -5,9 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Input } from '../../ui/input';
 import { Textarea } from '../../ui/textarea';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../../ui/tooltip';
-import useReviewFormStore from '@/stores/reviewFormStore';
 import Rating from '../Rating';
-import { useShallow } from 'zustand/shallow';
 import { queryKeys } from '@/lib/queryClient';
 import { ArrowRight, Eye, X, Smile, Wand } from '../../icons';
 import { searchGames, editPlayerGame } from '@/lib/api';
@@ -28,9 +26,13 @@ function GamePoster({ src }: { src: string }) {
   );
 }
 
-function GameReview() {
-  const gameReview = useReviewFormStore(state => state.editGameReview);
-  const setGameReview = useReviewFormStore(state => state.setEditGameReview);
+function GameReview({
+  gameReview,
+  setGameReview,
+}: {
+  gameReview: string;
+  setGameReview: (value: string) => void;
+}) {
   const [showEmotePanel, setShowEmotePanel] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -163,18 +165,18 @@ function GameReview() {
 function GameTitle({
   inputRef,
   open,
+  gameTitle,
+  setGameTitle,
+  selectedGame,
+  setSelectedGame,
 }: {
   inputRef: React.RefObject<HTMLInputElement | null>;
   open: boolean;
+  gameTitle: string;
+  setGameTitle: (value: string) => void;
+  selectedGame: IgdbGameSummary | null;
+  setSelectedGame: (game: IgdbGameSummary | null) => void;
 }) {
-  const { gameTitle, setGameTitle, selectedGame, setSelectedGame } = useReviewFormStore(
-    useShallow(state => ({
-      gameTitle: state.editGameTitle,
-      setGameTitle: state.setEditGameTitle,
-      selectedGame: state.editSelectedGame,
-      setSelectedGame: state.setEditSelectedGame,
-    }))
-  );
   const [showResults, setShowResults] = useState(false);
   const [wasCleared, setWasCleared] = useState(false);
 
@@ -285,9 +287,7 @@ function GameTitle({
   );
 }
 
-function HLTBLink() {
-  const gameTitle = useReviewFormStore(state => state.editGameTitle);
-
+function HLTBLink({ gameTitle }: { gameTitle: string }) {
   const cleanGameTitle = gameTitle ? gameTitle.replace(/\s*\(\d{4}\)\s*$/, '').trim() : '';
 
   const hltbUrl = cleanGameTitle
@@ -307,10 +307,13 @@ function HLTBLink() {
   );
 }
 
-function VodLinks() {
-  const vodLinks = useReviewFormStore(state => state.editVodLinks);
-  const setVodLinks = useReviewFormStore(state => state.setEditVodLinks);
-
+function VodLinks({
+  vodLinks,
+  setVodLinks,
+}: {
+  vodLinks: string;
+  setVodLinks: (value: string) => void;
+}) {
   return (
     <div className="flex flex-col gap-2">
       <div className="text-sm font-medium font-roboto-wide-semibold">Ссылки на записи</div>
@@ -338,38 +341,17 @@ function GameReviewEditForm({
   setOpen?: (open: boolean) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [open, setOpen] = useState(false);
+  const [gameTitle, setGameTitle] = useState('');
+  const [gameReview, setGameReview] = useState('');
+  const [rating, setRating] = useState(0);
+  const [vodLinks, setVodLinks] = useState('');
+  const [selectedGame, setSelectedGame] = useState<IgdbGameSummary | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const {
-    open: internalOpen,
-    setOpen: internalSetOpen,
-    setRating,
-    rating,
-    error,
-    clearError,
-    selectedGame,
-    setGameTitle,
-    setGameReview,
-    setSelectedGame,
-    setVodLinks,
-  } = useReviewFormStore(
-    useShallow(state => ({
-      open: state.open,
-      setOpen: state.setOpen,
-      setRating: state.setEditRating,
-      rating: state.editRating,
-      error: state.editError,
-      clearError: state.clearEditError,
-      selectedGame: state.editSelectedGame,
-      setGameTitle: state.setEditGameTitle,
-      setGameReview: state.setEditGameReview,
-      setGameTime: state.setEditGameTime,
-      setSelectedGame: state.setEditSelectedGame,
-      setVodLinks: state.setEditVodLinks,
-    }))
-  );
-
-  const open = externalOpen !== undefined ? externalOpen : internalOpen;
-  const setOpen = externalSetOpen || internalSetOpen;
+  const isControlled = externalOpen !== undefined;
+  const isOpen = isControlled ? externalOpen : open;
+  const setIsOpen = isControlled ? externalSetOpen! : setOpen;
 
   const { mutateAsync: doEditGame, isPending: isEditing } = useMutation({
     mutationFn: ({ gameId, request }: { gameId: number; request: EditPlayerGame }) =>
@@ -377,7 +359,7 @@ function GameReviewEditForm({
   });
 
   useEffect(() => {
-    if (gameToEdit && open) {
+    if (gameToEdit && isOpen) {
       setGameTitle(gameToEdit.title);
       setGameReview(gameToEdit.review);
       setRating(gameToEdit.rating);
@@ -391,68 +373,74 @@ function GameReviewEditForm({
         });
       }
     }
-  }, [gameToEdit, open, setGameTitle, setGameReview, setRating, setVodLinks, setSelectedGame]);
+  }, [gameToEdit, isOpen]);
 
-  const isSaveButtonDisabled = useReviewFormStore(state => {
-    if (!state.editGameTitle) return true;
-    if (state.editGameReview.length === 0) return true;
-    if (state.editRating === 0) return true;
-
-    return false;
-  });
+  const isSaveButtonDisabled = !gameTitle || gameReview.length === 0 || rating === 0;
 
   useEffect(() => {
-    if (open && !selectedGame) {
+    if (isOpen && !selectedGame) {
       const timeoutId = setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
       return () => clearTimeout(timeoutId);
     }
-  }, [open, selectedGame]);
+  }, [isOpen, selectedGame]);
 
-  const clearEditState = () => {
+  const clearFormState = () => {
     setGameTitle('');
     setGameReview('');
     setRating(0);
     setVodLinks('');
     setSelectedGame(null);
-    clearError();
+    setError(null);
   };
 
   const onConfirm = async () => {
-    clearError();
+    setError(null);
 
     try {
-      const { editGameTitle, editGameReview, editVodLinks, editRating, editSelectedGame } =
-        useReviewFormStore.getState();
       await doEditGame({
         gameId: gameToEdit.id,
         request: {
-          game_title: editGameTitle,
-          game_review: editGameReview,
-          rating: editRating,
-          vod_links: editVodLinks || undefined,
-          game_id: editSelectedGame?.id || null,
+          game_title: gameTitle,
+          game_review: gameReview,
+          rating: rating,
+          vod_links: vodLinks || undefined,
+          game_id: selectedGame?.id || null,
         },
       });
       resetPlayersQuery();
+      clearFormState();
     } catch (error) {
       console.error('Failed to edit game:', error);
+      setError('Не удалось сохранить изменения. Попробуйте еще раз.');
       return;
     }
 
-    setOpen(false);
+    setIsOpen(false);
   };
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
-      clearEditState();
+      clearFormState();
     }
-    setOpen(newOpen);
+    setIsOpen(newOpen);
   };
 
+  useEffect(() => {
+    if (!isOpen) {
+      clearFormState();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    return () => {
+      clearFormState();
+    };
+  }, []);
+
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       {showTrigger && (
         <DialogTrigger asChild>
           <Button variant="outline">Редактировать</Button>
@@ -471,14 +459,21 @@ function GameReviewEditForm({
           <div className="flex flex-col gap-2 w-full">
             <div className="flex gap-2 w-full">
               <div className="flex-1">
-                <GameTitle inputRef={inputRef} open={open} />
+                <GameTitle
+                  inputRef={inputRef}
+                  open={isOpen}
+                  gameTitle={gameTitle}
+                  setGameTitle={setGameTitle}
+                  selectedGame={selectedGame}
+                  setSelectedGame={setSelectedGame}
+                />
               </div>
-              <HLTBLink />
+              <HLTBLink gameTitle={gameTitle} />
             </div>
 
             <Rating onChange={setRating} initialValue={rating} />
-            <GameReview />
-            <VodLinks />
+            <GameReview gameReview={gameReview} setGameReview={setGameReview} />
+            <VodLinks vodLinks={vodLinks} setVodLinks={setVodLinks} />
           </div>
         </div>
 
