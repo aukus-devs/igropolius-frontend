@@ -8,9 +8,13 @@ export default function FPSCounter() {
     <>
       <div
         ref={container}
-        className="absolute bottom-[25px] left-[10px] h-[13px] scale-125 grayscale-100 overflow-hidden"
+        className="absolute bottom-[74px] right-[25px] h-[13px] scale-123 grayscale-100 overflow-hidden"
       />
-      <Stats showPanel={0} parent={container as React.RefObject<HTMLElement>} className="relative!" />
+      <Stats
+        showPanel={0}
+        parent={container as React.RefObject<HTMLElement>}
+        className="relative!"
+      />
     </>
   );
 }
