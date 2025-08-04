@@ -118,6 +118,19 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
     return Promise.resolve({
       events: [
         {
+          timestamp: 1754087023,
+          event_type: 'score-change',
+          subtype: 'instant-card',
+          amount: -0.52,
+          reason: 'Leader lost 1% from instant card',
+          sector_id: 17,
+          score_before: 52.0,
+          score_after: 51.48,
+          income_from_player: null,
+          bonus_card: 'leaders-lose-percents',
+          bonus_card_owner: 3,
+        },
+        {
           event_type: 'game',
           timestamp: 1750661642,
           subtype: 'completed',

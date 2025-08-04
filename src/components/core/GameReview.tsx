@@ -90,7 +90,12 @@ function GameReview({ game }: Props) {
           </Toggle>
         </div>
       </div>
-      <h3 className="text-2xl mb-2.5 font-wide-semibold">{title}</h3>
+      <h3
+        className="text-2xl mb-2.5 font-wide-semibold leading-tight max-w-full overflow-hidden"
+        style={{ wordBreak: 'break-all' }}
+      >
+        {title}
+      </h3>
       <div className="flex gap-2.5">
         <ImageLoader
           className="min-w-[105px] w-[105px] h-[140px] rounded-md overflow-hidden"
