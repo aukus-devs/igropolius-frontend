@@ -40,7 +40,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
           </div>
         </div>
         <div className="flex text-sm text-muted-foreground  font-semibold w-full leading-[17px]">
-          <span className="w-full text-start whitespace-break-spaces">
+          <span className="w-full text-start whitespace-break-spaces line-clamp-1">
             {player.current_game || 'Выбирает игру...'}
           </span>
           <span className="text-white/20 self-end">#{placement}</span>
