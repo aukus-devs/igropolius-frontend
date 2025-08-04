@@ -18,7 +18,12 @@ type BonusCard = {
 
 type OptionType = InstantCard | BonusCard;
 
-export default function RollWithInstantCards() {
+type Props = {
+  autoOpen?: boolean;
+  onClose: (result?: 'drop' | 'reroll') => void;
+};
+
+export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
   const { playerCards, setNextTurnState, hasDowngradeBonus, hasUpgradeBonus, addCardToState } =
     usePlayerStore(
       useShallow(state => ({
@@ -128,9 +133,19 @@ export default function RollWithInstantCards() {
   let finishText = 'Готово';
   if (moveToCardDrop) {
     finishText = 'Перейти к дропу карточки';
+  } else if (activationResult === 'reroll') {
+    finishText = 'Реролл';
   }
 
   const handleClose = async () => {
+    if (moveToCardDrop) {
+      onClose('drop');
+    } else if (activationResult === 'reroll') {
+      onClose('reroll');
+    } else {
+      onClose();
+    }
+
     useSystemStore.setState(state => ({
       ...state,
       disableCurrentPlayerQuery: false,
@@ -141,6 +156,8 @@ export default function RollWithInstantCards() {
 
   return (
     <GenericRoller<OptionType>
+      key="roll-with-instant-cards"
+      autoOpen={autoOpen}
       options={options}
       header="Ролл карточки"
       openButtonText="Ролл за донат"

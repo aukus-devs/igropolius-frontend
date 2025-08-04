@@ -9,7 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import useSystemStore from '@/stores/systemStore';
 
-export default function LoseCardOnDropDialog() {
+export default function LoseCardOnDropDialog({
+  autoOpen,
+  onClose,
+}: {
+  autoOpen?: boolean;
+  onClose?: () => void;
+}) {
   const {
     playerCardsOrEmpty,
     moveMyPlayerToPrison,
@@ -29,7 +35,7 @@ export default function LoseCardOnDropDialog() {
     }))
   );
 
-  const playerCards = useMemo(() => playerCardsOrEmpty || [], [playerCardsOrEmpty]);
+  const playerCards = useMemo(() => playerCardsOrEmpty ?? [], [playerCardsOrEmpty]);
 
   const [rollFinished, setRollFinished] = useState(false);
   const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
@@ -42,7 +48,7 @@ export default function LoseCardOnDropDialog() {
       value: card.bonus_type,
       weight: 1,
     }));
-  }, [playerCards]);
+  }, [playerCards, autoOpen]);
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
     if (dropResult && rollFinished) {
@@ -101,6 +107,7 @@ export default function LoseCardOnDropDialog() {
     setDropResult(null);
     setRollFinished(false);
     setCardsBeforeDrop([]);
+    onClose?.();
     if (dropResult === 'reroll') {
       return;
     }
@@ -148,6 +155,8 @@ export default function LoseCardOnDropDialog() {
 
   return (
     <GenericRoller<MainBonusCardType>
+      key="lose-card-dialog"
+      autoOpen={autoOpen}
       header="Потеря карточки"
       openButtonText="Дропнуть карточку"
       finishButtonText={buttonText}

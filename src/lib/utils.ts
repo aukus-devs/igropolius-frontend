@@ -150,10 +150,10 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails)
       let image = undefined;
       if (event.bonus_card) {
         const card = bonusCardsData[event.bonus_card];
-        title = `Получено от карточки:\n${card.name}`;
+        title = `Карточка "${card.name}"`;
         image = card.picture;
       } else {
-        title = `Получено от карточки:\n${event.bonus_card}`;
+        title = `Карточка "${event.bonus_card}"`;
       }
 
       if (showCardOwner) {

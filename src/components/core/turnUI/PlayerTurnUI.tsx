@@ -86,6 +86,12 @@ export default function PlayerTurnUI() {
     return () => clearInterval(interval);
   }, [eventStartTime, eventEndTime, setMainNotification]);
 
+  const [moveToDialog, setMoveToDialog] = useState<'drop' | 'reroll' | null>(null);
+
+  useEffect(() => {
+    setMoveToDialog(null);
+  }, [turnState]);
+
   const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
 
   const disableUI = isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded;
@@ -110,7 +116,10 @@ export default function PlayerTurnUI() {
     case 'filling-game-review':
       return (
         <div className="flex w-[736px] gap-2">
-          <RollWithInstantCards />
+          <RollWithInstantCards
+            autoOpen={moveToDialog === 'reroll'}
+            onClose={result => setMoveToDialog(result ?? null)}
+          />
           <GameReviewForm showTrigger />
           {showPointAUCButton && <PointAUCButton />}
           {currentSector?.gameLengthRanges && (
@@ -140,7 +149,12 @@ export default function PlayerTurnUI() {
     case 'dropping-card-after-game-drop':
       return <LoseCardOnDropDialog />;
     case 'dropping-card-after-instant-roll':
-      return <LoseCardOnDropDialog />;
+      return (
+        <LoseCardOnDropDialog
+          autoOpen={moveToDialog === 'drop'}
+          onClose={() => setMoveToDialog(null)}
+        />
+      );
     case 'choosing-building-sector':
       return (
         <Card className="p-4">

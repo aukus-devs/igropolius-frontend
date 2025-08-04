@@ -82,6 +82,7 @@ function getRandomExcept<T>(
 }
 
 type Props<T> = {
+  autoOpen?: boolean;
   options: WeightedOption<T>[];
   header: string;
   openButtonText: string;
@@ -93,6 +94,7 @@ type Props<T> = {
 };
 
 export default function GenericRoller<T>({
+  autoOpen,
   options: rollOptions,
   header,
   openButtonText,
@@ -262,32 +264,46 @@ export default function GenericRoller<T>({
       animationRef.current = null;
     }
     animationRef.current = requestAnimationFrame(animate);
-  }, [handleRollFinish, cardList]);
+  }, [handleRollFinish, cardList, fastRoll, stopDrumSound]);
 
-  const handleOpenChange = (isOpen: boolean) => {
-    if (isOpen) {
-      const randomCards = generateList(IDLE_CARD_COUNT, rollOptions);
-      setCardList(randomCards);
-      setRollPhase('idle');
-      centerIndexRef.current = Math.floor(IDLE_CARD_COUNT / 2);
-      offsetRef.current = -((centerIndexRef.current - 1) * CARD_FULL_WIDTH + CARD_WIDTH / 2);
-    } else {
-      if (animationRef.current !== null) {
-        cancelAnimationFrame(animationRef.current);
+  const resetState = useCallback(() => {
+    const randomCards = generateList(IDLE_CARD_COUNT, rollOptions);
+    setCardList(randomCards);
+    setRollPhase('idle');
+    centerIndexRef.current = Math.floor(IDLE_CARD_COUNT / 2);
+    offsetRef.current = -((centerIndexRef.current - 1) * CARD_FULL_WIDTH + CARD_WIDTH / 2);
+  }, [rollOptions]);
+
+  const handleOpenChange = useCallback(
+    (isOpen: boolean) => {
+      setIsOpen(isOpen);
+      if (isOpen) {
+        resetState();
+      } else {
+        if (animationRef.current !== null) {
+          cancelAnimationFrame(animationRef.current);
+        }
+        stopDrumSound();
+        setWinnerIndex(null);
+        animationRef.current = null;
+        isIdleRunningRef.current = false;
+
+        useSystemStore.setState(state => ({
+          ...state,
+          disablePlayersQuery: false,
+          disableCurrentPlayerQuery: false,
+        }));
       }
-      stopDrumSound();
-      setWinnerIndex(null);
-      animationRef.current = null;
-      isIdleRunningRef.current = false;
+    },
+    [resetState, stopDrumSound]
+  );
 
-      useSystemStore.setState(state => ({
-        ...state,
-        disablePlayersQuery: false,
-        disableCurrentPlayerQuery: false,
-      }));
+  useEffect(() => {
+    if (autoOpen && !isOpen) {
+      resetState();
+      setIsOpen(true);
     }
-    setIsOpen(isOpen);
-  };
+  }, [autoOpen, resetState, isOpen]);
 
   useEffect(() => {
     if (rollPhase === 'idle' && cardList.length > 0) {
@@ -394,10 +410,10 @@ export default function GenericRoller<T>({
               loading={isLoading}
               disabled={isError}
               onClick={async () => {
-                handleOpenChange(false);
                 if (winner !== null && onClose) {
                   await onClose(winner);
                 }
+                handleOpenChange(false);
               }}
             >
               {isError ? 'Ошибка' : finishButtonText}
