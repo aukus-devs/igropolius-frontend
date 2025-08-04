@@ -72,18 +72,20 @@ export default function PrisonEnterCardRoll() {
       ...state,
       disableCurrentPlayerQuery: true,
     }));
-    setNextTurnState({ skipUpdate: true });
 
     if (option.value === 'nothing') {
+      setNextTurnState({ skipUpdate: true });
       return;
     }
     if (option.value.action === 'lose-card') {
       setCardsBeforeDrop(playerCards.map(card => card.bonus_type));
       await dropBonusCard({ bonus_type: option.value.card });
       removeCardFromState(option.value.card);
+      setNextTurnState({ skipUpdate: true });
       return;
     }
     if (option.value.action === 'receive-card') {
+      setNextTurnState({ skipUpdate: true });
       const newCard = await giveBonusCard({ bonus_type: option.value.card });
       addCardToState(newCard);
       return;
