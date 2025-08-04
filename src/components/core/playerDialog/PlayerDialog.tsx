@@ -74,7 +74,7 @@ function PlayerDialog({ player, placement, isCurrentPlayer, showCards }: Props) 
               <div>
                 <div className="flex items-center gap-1 font-bold">Показать на карте</div>
                 <div className="text-muted-foreground text-sm justify-self-start font-semibold">
-                  {player.sector_id} клетка
+                  сектор #{player.sector_id}
                 </div>
               </div>
             </Button>

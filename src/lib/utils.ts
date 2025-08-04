@@ -116,7 +116,7 @@ function getEventMoveInfo(event: MoveEvent) {
 
   return {
     title,
-    description: `с ${event.sector_from} клетки на ${event.sector_to}`,
+    description: `с сектора #${event.sector_from} на #${event.sector_to}`,
   };
 }
 
@@ -125,7 +125,7 @@ function getEventScoreChangeInfo(event: ScoreChangeEvent, player: PlayerDetails)
 
   switch (event.subtype) {
     case 'street-tax':
-      title = `Заплатил налог на клетке ${event.sector_id}`;
+      title = `Заплатил налог на секторе #${event.sector_id}`;
       break;
     case 'map-tax':
       title = 'Заплатил налог за круг';
