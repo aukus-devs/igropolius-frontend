@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 
-export function useUserActivity(inactivityTimeout = 5 * 60 * 1000) { // 5 min
+export function useUserActivity(inactivityTimeout = 2 * 60 * 1000) { // 2 min
     const [isInactive, setIsInactive] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
