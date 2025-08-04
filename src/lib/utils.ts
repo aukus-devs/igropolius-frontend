@@ -561,7 +561,7 @@ export function wasLastMoveDropToPrison(player: PlayerDetails): boolean {
 }
 
 export function extract7tvEmoteId(emoteUrl: string): string | null {
-  const match = emoteUrl.match(/\/emote\/([^\/]+)\//);
+  const match = emoteUrl.match(/\/emote\/([^/]+)\//);
   return match ? match[1] : null;
 }
 
