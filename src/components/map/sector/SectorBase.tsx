@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
+import useSystemStore from '@/stores/systemStore';
 import SectorModel from '../models/SectorModel';
 
 type Props = {
@@ -34,15 +35,18 @@ function SectorBase({ sector, color, isCorner }: Props) {
     }))
   );
   const canSelectBuildingSector = usePlayerStore(state => state.canSelectBuildingSector);
+  const highlightedSectorId = useSystemStore(state => state.highlightedSectorId);
   const [isHovered, setIsHovered] = useState(false);
 
+  const isHighlighted = highlightedSectorId === sector.id;
+  
   const model = useMemo(() => (
     <SectorModel
       color={color}
       isCorner={isCorner}
-      isHovered={isHovered}
+      isHovered={isHovered || isHighlighted}
     />
-  ), [isCorner, color, isHovered]);
+  ), [isCorner, color, isHovered, isHighlighted]);
 
   const tooltipWasOnCurrentSector =
     tooltipPrevData?.type === 'sector' && tooltipPrevData.payload.id === sector.id;

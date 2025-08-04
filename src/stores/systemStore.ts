@@ -22,6 +22,8 @@ interface SystemStore {
   setActingUserId: (userId: number | null) => void;
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
+  highlightedSectorId: number | null;
+  setHighlightedSectorId: (sectorId: number | null) => void;
 }
 
 const useSystemStore = create<SystemStore>(set => ({
@@ -33,6 +35,7 @@ const useSystemStore = create<SystemStore>(set => ({
   myUser: null,
   actingUserId: null,
   accessToken: localStorage.getItem('access-token'),
+  highlightedSectorId: null,
 
   setMainNotification: (message: MainNotification | null) => {
     set({ mainNotification: message });
@@ -68,6 +71,7 @@ const useSystemStore = create<SystemStore>(set => ({
   setActingUserId: (userId: number | null) => set({ actingUserId: userId }),
 
   setAccessToken: (token: string | null) => set({ accessToken: token }),
+  setHighlightedSectorId: (sectorId: number | null) => set({ highlightedSectorId: sectorId }),
 }));
 
 export default useSystemStore;

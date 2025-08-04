@@ -28,6 +28,8 @@ export default function DiceBonusesDialog() {
     }))
   );
 
+  const setHighlightedSectorId = useSystemStore(state => state.setHighlightedSectorId);
+
   const handleSubmit = async () => {
     let adjustBy1Typed = null;
     switch (adjustBy1) {
@@ -43,6 +45,7 @@ export default function DiceBonusesDialog() {
 
     useSystemStore.setState(state => ({ ...state, disablePlayersQuery: true }));
     usePlayerStore.setState(state => ({ ...state, isPlayerMoving: true }));
+    setHighlightedSectorId(null);
 
     const { new_sector_id, map_completed } = await makePlayerMove({
       type: 'dice-roll',
@@ -105,6 +108,21 @@ export default function DiceBonusesDialog() {
   if (adjustBy1) {
     finalDestination += adjustBy1;
   }
+
+  useEffect(() => {
+    if (!myPlayer) {
+      setHighlightedSectorId(null);
+      return;
+    }
+
+    setHighlightedSectorId(finalDestination);
+  }, [myPlayer, finalDestination, setHighlightedSectorId]);
+
+  useEffect(() => {
+    return () => {
+      setHighlightedSectorId(null);
+    };
+  }, [setHighlightedSectorId]);
 
   return (
     <div className="backdrop-blur-[1.5rem] bg-card/70 border-none rounded-xl p-4 font-semibold">
