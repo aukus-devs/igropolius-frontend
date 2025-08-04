@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useMemo, useState, useRef } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ChevronDown, ChevronUp } from '@/components/icons';
+import { useLocation } from 'react-router';
 
 function MobilePlayersList() {
   const { players, myPlayer } = usePlayerStore(
@@ -17,6 +18,11 @@ function MobilePlayersList() {
   const redElementRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const location = useLocation();
+
+  const isPlayerProfileOpen = players.some(
+    player => location.pathname === `/${player.username.toLowerCase()}`
+  );
 
   const toggleDialog = () => setIsOpened(!isOpened);
 
@@ -27,10 +33,12 @@ function MobilePlayersList() {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (isPlayerProfileOpen) return;
     setTouchStart(e.touches[0].clientY);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    if (isPlayerProfileOpen) return;
     if (touchStart !== null) {
       const touchEnd = e.changedTouches[0].clientY;
       const diff = touchStart - touchEnd;
@@ -44,10 +52,12 @@ function MobilePlayersList() {
   };
 
   const handleScrollAreaTouchStart = (e: React.TouchEvent) => {
+    if (isPlayerProfileOpen) return;
     setTouchStart(e.touches[0].clientY);
   };
 
   const handleScrollAreaTouchEnd = (e: React.TouchEvent) => {
+    if (isPlayerProfileOpen) return;
     if (touchStart !== null && isOpened) {
       const touchEnd = e.changedTouches[0].clientY;
       const diff = touchStart - touchEnd;
@@ -89,8 +99,8 @@ function MobilePlayersList() {
         ref={scrollAreaRef}
         className="group data-[opened=true]:bg-background bg-gradient-to-t from-50% from-background translate-y-[calc(100%_-_20rem)] data-[opened=true]:translate-y-0 transition-all duration-300 data-[opened=false]:pointer-events-none h-dvh data-[opened=false]:[&_[data-slot='scroll-area-viewport']]:!overflow-hidden"
         data-opened={isOpened}
-        onTouchStart={isOpened ? handleScrollAreaTouchStart : undefined}
-        onTouchEnd={isOpened ? handleScrollAreaTouchEnd : undefined}
+        onTouchStart={isOpened && !isPlayerProfileOpen ? handleScrollAreaTouchStart : undefined}
+        onTouchEnd={isOpened && !isPlayerProfileOpen ? handleScrollAreaTouchEnd : undefined}
       >
         <div className="w-full px-4 mx-auto pt-[110px] h-full pb-6 relative">
           <Button
@@ -105,7 +115,7 @@ function MobilePlayersList() {
             )}
           </Button>
 
-          {!isOpened && (
+          {!isOpened && !isPlayerProfileOpen && (
             <div
               ref={redElementRef}
               className="absolute top-[110px] left-0 right-0 bottom-0 bg-transparent z-20 cursor-pointer pointer-events-auto"
