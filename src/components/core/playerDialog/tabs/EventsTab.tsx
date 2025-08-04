@@ -111,7 +111,7 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
         )}
         <div className="flex flex-wrap justify-between items-center w-full">
           <div className="flex flex-col">
-            <div className="font-roboto-wide-semibold break-words leading-tight">
+            <div className="font-roboto-wide-semibold break-all leading-tight">
               {title}
               {!sectorId && ': '}
               {!sectorId && description}
