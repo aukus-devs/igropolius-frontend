@@ -52,7 +52,7 @@ function CollapsibleContent({ className, children }: { className?: string; child
     <div
       ref={contentRef}
       style={{ height }}
-      className={cn("flex flex-col justify-end space-y-[5px] z-[-1] transition-[opacity,width,height] duration-300 overflow-hidden mx-auto group-data-[collapsed=true]:opacity-50 group-data-[collapsed=true]:pointer-events-none group-data-[collapsed=true]:w-[calc(100%_-_6px)] w-full hover:overflow-visible", className)}
+      className={cn("flex flex-col justify-end space-y-[5px] z-[-1] transition-[opacity,scale,height] duration-300 overflow-hidden mx-auto group-data-[collapsed=true]:opacity-50 group-data-[collapsed=true]:pointer-events-none group-data-[collapsed=true]:scale-x-95 w-full hover:overflow-visible", className)}
     >
       {children}
     </div>
