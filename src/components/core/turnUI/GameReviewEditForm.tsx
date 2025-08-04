@@ -93,7 +93,14 @@ function GameReview({
     <div className="relative">
       <div className="relative">
         {showPreview ? (
-          <div className="min-h-24 p-3 bg-white/10 rounded-md border border-white/20 text-white">
+          <div
+            className="min-h-24 p-3 bg-white/10 rounded-md border border-white/20 text-white"
+            style={{
+              wordBreak: 'break-all',
+              overflowWrap: 'break-word',
+              whiteSpace: 'pre-wrap',
+            }}
+          >
             {gameReview ? parseReview(gameReview) : 'Комментарий'}
           </div>
         ) : (
