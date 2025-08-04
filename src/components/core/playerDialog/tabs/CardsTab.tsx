@@ -1,6 +1,8 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ActiveBonusCard, MainBonusCardType } from '@/lib/api-types-generated';
 import { mainCardTypes, frontendCardsData } from '@/lib/mockData';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { useState, useEffect, useRef } from 'react';
 import ImageLoader from '../../ImageLoader';
 
 type GameCardProps = {
@@ -10,6 +12,66 @@ type GameCardProps = {
 
 function GameCard({ type, inactive }: GameCardProps) {
   const cardData = frontendCardsData[type];
+  const isMobile = useIsMobile();
+  const [showDescription, setShowDescription] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (showDescription) {
+        setShowDescription(false);
+      }
+    };
+
+    if (isMobile) {
+      document.addEventListener('scroll', handleScroll, { passive: true });
+      return () => document.removeEventListener('scroll', handleScroll);
+    }
+  }, [isMobile, showDescription]);
+
+  const handleCardClick = () => {
+    if (isMobile) {
+      setShowDescription(!showDescription);
+    }
+  };
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setShowDescription(false);
+    }
+  };
+
+  if (isMobile) {
+    return (
+      <div className="relative">
+        <div
+          ref={cardRef}
+          className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] text-primary-foreground rounded-xl data-[inactive=true]:grayscale-100 cursor-pointer"
+          data-inactive={inactive}
+          onClick={handleCardClick}
+        >
+          <ImageLoader
+            className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] rounded-xl overflow-hidden"
+            src={cardData.picture}
+            alt={cardData.name}
+          />
+        </div>
+        {showDescription && (
+          <div
+            className="fixed top-0 left-0 right-0 bottom-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={handleOverlayClick}
+          >
+            <div className="bg-card/95 backdrop-blur-[1.5rem] p-4 rounded-lg border shadow-lg w-full max-w-sm">
+              <div className="text-[16px] font-semibold mb-2">{cardData.name}</div>
+              <div className="text-sm font-semibold text-muted-foreground">
+                {cardData.description}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div
