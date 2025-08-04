@@ -410,6 +410,15 @@ function GameReviewEditForm({
     }
   }, [open, selectedGame]);
 
+  const clearEditState = () => {
+    setGameTitle('');
+    setGameReview('');
+    setRating(0);
+    setVodLinks('');
+    setSelectedGame(null);
+    clearError();
+  };
+
   const onConfirm = async () => {
     clearError();
 
@@ -435,8 +444,15 @@ function GameReviewEditForm({
     setOpen(false);
   };
 
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen) {
+      clearEditState();
+    }
+    setOpen(newOpen);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       {showTrigger && (
         <DialogTrigger asChild>
           <Button variant="outline">Редактировать</Button>
