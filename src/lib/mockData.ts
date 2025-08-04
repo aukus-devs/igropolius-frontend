@@ -230,7 +230,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 29,
-    name: 'улица им. Патреги',
+    name: 'улица им. Патрего',
     position: { x: 2, y: 10 },
     type: 'bonus',
     rollType: 'steam',
