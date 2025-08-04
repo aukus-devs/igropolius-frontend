@@ -1123,7 +1123,7 @@ export const frontendCardsData: Record<MainBonusCardType, FrontendCardData> = {
   'skip-prison-day': {
     name: 'Прилежное поведение',
     picture: `${import.meta.env.BASE_URL}assets/cards/skip-prison-day.png`,
-    description: 'Позволяет покинуть тюрьму. (Используется до ролла игры.)',
+    description: 'Позволяет покинуть тюрьму. (Используется до ролла игры в тюрьме.)',
   },
   'evade-street-tax': {
     name: 'Сквоттер',
