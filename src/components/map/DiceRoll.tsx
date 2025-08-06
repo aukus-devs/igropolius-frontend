@@ -18,9 +18,9 @@ function DiceRoll() {
 
 	return (
 		<group ref={ref}>
-			<DiceRollDisplay position={[0, 0.75, 0]} />
-			<DiceModel id={0} position={[0.75, 0, 0]} />
-			<DiceModel id={1} position={[-0.75, 0, 0]} />
+			<DiceRollDisplay position={[0, 1.5, 0]} />
+			<DiceModel id={0} position={[-0.75, 0, 0]} />
+			<DiceModel id={1} position={[0.75, 0, 0]} />
 		</group>
 	);
 }

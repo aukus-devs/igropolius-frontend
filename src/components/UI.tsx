@@ -13,8 +13,10 @@ import MyCards from './core/MyCards';
 import FrontVersionInfo from './FrontVersionInfo';
 import useSystemStore from '@/stores/systemStore';
 import { Card } from './ui/card';
+import { useRef } from 'react';
 
 function DesktopUI() {
+  const techContainer = useRef<HTMLDivElement>(null);
   const { position, turnState, loggedIn } = usePlayerStore(
     useShallow(state => ({
       turnState: state.turnState,
@@ -58,15 +60,18 @@ function DesktopUI() {
           <MyCards />
         </div>
       )}
-      {position && (
-        <div className="absolute bottom-4 right-4">
-          #{position} ход: {turnState}
+        <div ref={techContainer} className="absolute bottom-0 right-0 flex">
+          {/* <Stats
+            className="!relative h-[13px] scale-150 grayscale-100 overflow-hidden"
+            parent={techContainer!}
+            /> */}
+          {position && (
+            <div className="relative text-xs text-white/80 bg-black/60 p-1">
+              #{position} ход: {turnState}
+            </div>
+          )}
+          <FrontVersionInfo />
         </div>
-      )}
-
-      <div className="absolute bottom-12 right-4">
-        <FrontVersionInfo />
-      </div>
 
       {mainNotification && (
         <Card

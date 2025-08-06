@@ -1,8 +1,8 @@
 import { Html } from "@react-three/drei";
-import { Card, CardContent } from "../ui/card";
 import useDiceStore from "@/stores/diceStore";
 import { useShallow } from "zustand/shallow";
 import { Vector3Array } from "@/lib/types";
+import { Card, CardContent } from "../ui/card";
 
 type Props = {
   resultIdx?: number;
@@ -15,15 +15,18 @@ function DiceRollDisplay({ resultIdx, position }: Props) {
   );
 
   const rollSum = rollResult.reduce((sum, num) => sum + num, 0);
+  const text = resultIdx === undefined
+    ? `На кубиках выпало — ${rollSum} (${rollResult[0]} + ${rollResult[1]})`
+    : rollResult[resultIdx];
 
   return (
     <Html zIndexRange={[0, 0]} center position={position} style={{ pointerEvents: 'none' }}>
-      <Card
-        className="items-center scale-0 data-[visible=true]:scale-100 duration-300 px-2"
-        data-visible={showRoll}
-      >
-        <CardContent className="flex gap-2 text-4xl font-medium">
-          <div>{resultIdx !== undefined ? rollResult[resultIdx] : rollSum}</div>
+      <Card className="scale-0 data-[visible=true]:scale-100 duration-300" data-visible={showRoll}>
+        <CardContent
+          className="font-roboto-wide-semibold text-5xl data-[sum=true]:text-3xl whitespace-nowrap"
+          data-sum={resultIdx === undefined}
+        >
+          {text}
         </CardContent>
       </Card>
     </Html>

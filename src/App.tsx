@@ -22,7 +22,6 @@ import { MetrikaCounter } from 'react-metrika';
 import { Environment } from '@react-three/drei';
 import { STORAGE_BASE_URL } from '@/lib/constants';
 import ModelSelectionScene from './components/map/scenes/ModelSelectionScene';
-import FPSCounter from './components/map/FPSCounter';
 
 function App() {
   const { isInactive } = useUserActivity();
@@ -275,7 +274,7 @@ function App() {
                 </EffectComposer> */}
               </Suspense>
             </Canvas>
-            <FPSCounter />
+            {/* <FPSCounter /> */}
           </div>
         </KeyboardControls>
       )}
