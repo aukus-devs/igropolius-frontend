@@ -51,7 +51,17 @@ export default function PrisonEnterCardRoll() {
       return 'Ничего не происходит';
     }
     if (!rollFinished) {
-      return bonusCardsData[option.value.card].name;
+      switch (option.value.action) {
+        case 'lose-card': {
+          return `Потеря карточки ${bonusCardsData[option.value.card].name}`;
+        }
+        case 'receive-card': {
+          return `Получение карточки ${bonusCardsData[option.value.card].name}`;
+        }
+        default: {
+          return 'Неизвестное действие' as never;
+        }
+      }
     }
     switch (option.value.action) {
       case 'lose-card': {
