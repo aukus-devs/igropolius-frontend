@@ -16,6 +16,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../ui/dialog';
+import useLocalStorage from '@/hooks/useLocalStorage';
+import { ChevronUp, ChevronDown } from '../icons';
 
 export default function AdminPanel() {
   const { myPlayer, players } = usePlayerStore(
@@ -34,6 +36,10 @@ export default function AdminPanel() {
 
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [countdown, setCountdown] = useState(3);
+  const { value: isCollapsed, save: setIsCollapsed } = useLocalStorage({
+    key: 'admin-panel-collapsed',
+    defaultValue: false,
+  });
 
   const handleSelectChange = (value: string) => {
     const selectedPlayer = players.find(player => String(player.id) === value);
@@ -68,6 +74,10 @@ export default function AdminPanel() {
     setCountdown(3);
   };
 
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   useEffect(() => {
     if (showResetDialog && countdown > 0) {
       const timer = setTimeout(() => {
@@ -82,31 +92,40 @@ export default function AdminPanel() {
   return (
     <>
       <Card className="p-2" style={{ width: '300px' }}>
-        <div>Admin panel</div>
-        <div className="flex gap-2">
-          Игрок для действий:
-          <Select
-            defaultValue={defaultValue}
-            onValueChange={handleSelectChange}
-            value={String(actingUserId ?? defaultValue)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Игрок" />
-            </SelectTrigger>
-            <SelectContent>
-              {players.map(player => (
-                <SelectItem key={player.id} value={String(player.id)}>
-                  {player.username}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Button onClick={handleOpenResetDialog} disabled={isPending} className="bg-red-700">
-            Обнулить бд
+        <div className="flex items-center justify-between">
+          <div>Admin panel</div>
+          <Button variant="ghost" size="sm" onClick={toggleCollapse} className="h-6 w-6 p-0">
+            {isCollapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
           </Button>
         </div>
+        {!isCollapsed && (
+          <>
+            <div className="flex gap-2 mt-2">
+              Игрок для действий:
+              <Select
+                defaultValue={defaultValue}
+                onValueChange={handleSelectChange}
+                value={String(actingUserId ?? defaultValue)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Игрок" />
+                </SelectTrigger>
+                <SelectContent>
+                  {players.map(player => (
+                    <SelectItem key={player.id} value={String(player.id)}>
+                      {player.username}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="mt-2">
+              <Button onClick={handleOpenResetDialog} disabled={isPending} className="bg-red-700">
+                Обнулить бд
+              </Button>
+            </div>
+          </>
+        )}
       </Card>
 
       <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
