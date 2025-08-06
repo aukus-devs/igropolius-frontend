@@ -317,6 +317,12 @@ export default function GenericRoller<T>({
     }
   }, [rollPhase, cardList.length, idleAnimate, startRollingAnimation]);
 
+  useEffect(() => {
+    if (!isMuted && rollPhase === 'rolling') {
+      playDrumSound();
+    }
+  }, [isMuted, rollPhase]);
+
   const handleRollClick = () => {
     useSystemStore.setState(state => ({
       ...state,
@@ -325,7 +331,6 @@ export default function GenericRoller<T>({
     }));
 
     setRollPhase('rolling');
-    playDrumSound();
 
     const randomCards = generateList(150, rollOptions);
     setCardList(prev => [...prev, ...randomCards]);
