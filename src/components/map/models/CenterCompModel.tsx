@@ -10,7 +10,10 @@ function CenterCompModel() {
     <group position={[0, -1.4, 0]} rotation={[0, Math.PI, 0]}>
       <Gltf src={CenterCompUrl} />
       <Gltf src={mountainsUrl} position={[0, 0.56, 0]} />
-      <BlinkingLight position={[3, 14, 0]} color="red" onDuration={1} offDuration={1} />
+      <BlinkingLight position={[3, 14, 0]} color="orange" onDuration={1} offDuration={1} />
+
+      {/*<Box position={[3, 14, 0]} args={[1, 1, 1]} visible={true} />*/}
+      <BlinkingLight position={[1, 14, -2.9]} color="orange" onDuration={1} offDuration={1} />
     </group>
   );
 }
