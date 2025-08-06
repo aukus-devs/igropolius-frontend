@@ -14,6 +14,8 @@ import { Sort } from '@/components/icons';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
 import Clock from '../Clock';
 import useSystemStore from '@/stores/systemStore';
+import { useNavigate } from 'react-router';
+import { Button } from '@/components/ui/button';
 
 const buttonStyle =
   'flex items-center justify-start max-h-9 bg-transparent font-semibold text-base w-full rounded-none border-none px-3 py-2';
@@ -47,8 +49,16 @@ function QuickMenu() {
   const myUser = useSystemStore(state => state.myUser);
   const myPlayer = usePlayerStore(state => state.myPlayer);
 
+  const navigate = useNavigate();
+
+  const openProfile = () => {
+    if (myUser) {
+      navigate(`/${myUser.username.toLowerCase()}`);
+    }
+  };
+
   return (
-    <Collapsible>
+    <Collapsible key={myPlayer?.id}>
       <CollapsibleTrigger className="w-full">
         <QuickMenuTitle
           username={myUser?.username}
@@ -62,6 +72,12 @@ function QuickMenu() {
           </div>
           <Separator />
           <Countdown className={buttonStyle} />
+          <Separator />
+          {myUser && (
+            <Button variant="outline" className={buttonStyle} onClick={openProfile}>
+              Мой профиль
+            </Button>
+          )}
         </div>
 
         <div className={groupStyle}>
