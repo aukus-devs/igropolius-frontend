@@ -7,10 +7,8 @@ import StreamPlayer from '../components/streams/StreamPlayer';
 import StreamChat from '../components/streams/StreamChat';
 import { Button } from '../components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router';
 
 export default function StreamsPage() {
-  const navigate = useNavigate();
   const [expandedStreamIndex, setExpandedStreamIndex] = useState<number | null>(null);
   const [showChat, setShowChat] = useState(true);
   const [visiblePlayers, setVisiblePlayers] = useState<Set<string>>(new Set());
@@ -172,9 +170,13 @@ export default function StreamsPage() {
     return (
       <div className="min-h-screen bg-[#282828]">
         <div className="container mx-auto px-4 py-8">
-          <Button variant="ghost" onClick={() => navigate('/')} className="mb-6 text-white">
+          <Button
+            variant="ghost"
+            onClick={() => (window.location.href = '/')}
+            className="mb-6 text-white"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            На главную
+            Игрополиус
           </Button>
           <div className="text-center py-12">
             <h1 className="text-2xl font-bold text-white mb-4">Стримы</h1>
@@ -189,9 +191,13 @@ export default function StreamsPage() {
     <div className="min-h-screen bg-[#282828]">
       <div className="py-4 px-4">
         <div className="mb-4 flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate('/')} className="text-white">
+          <Button
+            variant="ghost"
+            onClick={() => (window.location.href = '/')}
+            className="text-white"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            На главную
+            Игрополиус
           </Button>
 
           <div className="flex flex-wrap gap-2">
