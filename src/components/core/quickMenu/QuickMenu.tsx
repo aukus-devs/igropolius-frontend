@@ -8,6 +8,7 @@ import Countdown from './options/Countdown';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../Collapsible';
 import LoginDialog from './options/LoginDialog';
 import { LogoutButton } from './options/LogoutButton';
+import StreamsButton from './options/StreamsButton';
 import { Separator } from '@/components/ui/separator';
 import { Sort } from '@/components/icons';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
@@ -67,6 +68,8 @@ function QuickMenu() {
           <RulesDialog className={buttonStyle} />
           <Separator />
           <AboutDialog className={buttonStyle} />
+          <Separator />
+          <StreamsButton className={buttonStyle} />
         </div>
 
         <div className={groupStyle}>
