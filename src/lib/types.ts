@@ -91,6 +91,7 @@ export type BuildingData = {
   owner: PlayerDetails;
   sectorId: number;
   createdAt: number;
+  gameStatus: GameCompletionType;
   gameLength: GameLength;
   gameTitle: string;
   income: number;

@@ -239,6 +239,7 @@ const usePlayerStore = create<{
           owner: player,
           sectorId: building.sector_id,
           createdAt: building.created_at,
+          gameStatus: building.status,
           gameLength: building.length,
           gameTitle: building.title,
           income,

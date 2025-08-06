@@ -10,7 +10,7 @@ type Props = {
 };
 
 function BuildingInfo({ building }: Props) {
-  const { gameTitle, owner, gameLength } = building;
+  const { gameTitle, owner, gameLength, gameStatus } = building;
 
   const showGroupBonus = useMemo(() => {
     return SECTORS_COLOR_GROUPS.some(group => group.includes(building.sectorId));
@@ -19,11 +19,14 @@ function BuildingInfo({ building }: Props) {
   return (
     <Card className="w-56 pointer-events-none">
       <CardHeader>
-        <CardTitle>{gameTitle}</CardTitle>
+        <CardTitle>
+          {gameTitle} {gameStatus === 'drop' && '(дроп)'}
+        </CardTitle>
       </CardHeader>
       <CardContent className="text-sm text-muted-foreground font-semibold">
         <p>Владелец: {owner.username}</p>
         <p>Длительность игры: {gameLength}</p>
+
         <div className="flex items-center">
           <p>Доход: {building.income}</p>
           <Share className="w-4 h-4" />
