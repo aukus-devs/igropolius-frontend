@@ -75,7 +75,7 @@ function BuildingModel({ building, position, models }: Props) {
   }
 
   return (
-    <group ref={groupRef} position={position}>
+    <group ref={groupRef} position={position} rotation={[0, type === 'ruins' ? Math.PI : 0, 0]}>
       <ColoredPart color={owner.color} />
       <StaticPart />
       <OutlinePart onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
