@@ -40,7 +40,7 @@ function App() {
     []
   );
 
-  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards, isMyModelSelected } =
+  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards, needToSelectModel } =
     usePlayerStore(
       useShallow(state => ({
         setPlayers: state.setPlayers,
@@ -48,7 +48,7 @@ function App() {
         setTurnState: state.setTurnState,
         setPrisonCards: state.setPrisonCards,
         players: state.players,
-        isMyModelSelected: state.isMyModelSelected,
+        needToSelectModel: state.needToSelectModel,
       }))
     );
 
@@ -156,7 +156,7 @@ function App() {
   }
 
   const enableMetrika = !IS_DEV;
-  const isModelSelectionScene = !isMyModelSelected();
+  const isModelSelectionScene = needToSelectModel();
 
   // const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
   //   toneMapping: {

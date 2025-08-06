@@ -20,7 +20,7 @@ import GameGauntletsButton from './GameGauntletsButton';
 import { formatTsToMonthDatetime } from '@/lib/utils';
 
 export default function PlayerTurnUI() {
-  const { turnState, isPlayerMoving, hasCardsToSteal, myPlayerSectorId, isMyModelSelected } =
+  const { turnState, isPlayerMoving, hasCardsToSteal, myPlayerSectorId, needToSelectModel } =
     usePlayerStore(
       useShallow(state => {
         const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
@@ -34,7 +34,7 @@ export default function PlayerTurnUI() {
           hasCardsToSteal: cardsToSteal.length > 0,
           myPlayerSectorId: state.myPlayer?.sector_id ?? null,
           canSelectBuildingSector: state.canSelectBuildingSector,
-          isMyModelSelected: state.isMyModelSelected,
+          needToSelectModel: state.needToSelectModel,
         };
       })
     );
@@ -96,10 +96,10 @@ export default function PlayerTurnUI() {
 
   const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
 
-  const modelIsNotSelected = !isMyModelSelected();
+  const needToSelect = needToSelectModel();
 
   const disableUI =
-    isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded || modelIsNotSelected;
+    isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded || needToSelect;
   if (disableUI) {
     if (eventSettingsNotLoaded) {
       return (
