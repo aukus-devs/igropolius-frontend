@@ -13,6 +13,8 @@ export default function StreamsPage() {
   const navigate = useNavigate();
   const [expandedStreamIndex, setExpandedStreamIndex] = useState<number | null>(null);
   const [showChat, setShowChat] = useState(true);
+  const [visiblePlayers, setVisiblePlayers] = useState<Set<string>>(new Set());
+  const [showAllPlayers, setShowAllPlayers] = useState(true);
   const streamRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,8 +38,40 @@ export default function StreamsPage() {
   };
 
   useEffect(() => {
+    if (showAllPlayers) {
+      setVisiblePlayers(new Set(onlineStreamers.map(player => player.id.toString())));
+    }
+  }, [onlineStreamers, showAllPlayers]);
+
+  const filteredStreamers = onlineStreamers.filter(player => {
+    return showAllPlayers || visiblePlayers.has(player.id.toString());
+  });
+
+  const getOriginalIndex = (filteredIndex: number) => {
+    const player = filteredStreamers[filteredIndex];
+    return onlineStreamers.findIndex(p => p.id === player.id);
+  };
+
+  const handleTogglePlayer = (playerId: string) => {
+    const newVisiblePlayers = new Set(visiblePlayers);
+    if (newVisiblePlayers.has(playerId)) {
+      newVisiblePlayers.delete(playerId);
+    } else {
+      newVisiblePlayers.add(playerId);
+    }
+    setVisiblePlayers(newVisiblePlayers);
+    setShowAllPlayers(false);
+  };
+
+  const handleShowAll = () => {
+    setShowAllPlayers(true);
+    setVisiblePlayers(new Set(onlineStreamers.map(player => player.id.toString())));
+  };
+
+  useEffect(() => {
     if (expandedStreamIndex !== null) {
-      const expandedElement = streamRefs.current[expandedStreamIndex];
+      const originalExpandedIndex = getOriginalIndex(expandedStreamIndex);
+      const expandedElement = streamRefs.current[originalExpandedIndex];
       const container = containerRef.current;
 
       if (expandedElement && container) {
@@ -51,13 +85,20 @@ export default function StreamsPage() {
         const gap = 8;
         const expandedWidth = containerRect.width - chatWidth - leftOffset - rightOffset;
 
-        const otherElements = streamRefs.current.filter((_, i) => i !== expandedStreamIndex);
+        const visibleOriginalIndices = filteredStreamers.map((_, i) => getOriginalIndex(i));
+        const otherElements = visibleOriginalIndices
+          .filter(i => i !== originalExpandedIndex)
+          .map(i => streamRefs.current[i])
+          .filter(Boolean);
+
         const remainingCount = otherElements.length;
         const rowsNeeded = remainingCount <= 6 ? 1 : Math.ceil(remainingCount / 6);
         const bottomAreaHeight =
-          remainingCount <= 6
-            ? elementHeight + gap + 40
-            : rowsNeeded * elementHeight + (rowsNeeded - 1) * gap + topOffset;
+          remainingCount === 0
+            ? 0
+            : remainingCount <= 6
+              ? elementHeight + gap + 20
+              : rowsNeeded * elementHeight + (rowsNeeded - 1) * gap + topOffset;
         const expandedHeight = window.innerHeight - bottomAreaHeight - 50;
 
         expandedElement.style.position = 'fixed';
@@ -91,7 +132,7 @@ export default function StreamsPage() {
             let topPosition;
             if (remainingCount <= 6) {
               const totalBottomHeight = elementHeight + gap;
-              const bottomCenterY = window.innerHeight - totalBottomHeight - 20;
+              const bottomCenterY = window.innerHeight - totalBottomHeight - 10;
               topPosition = bottomCenterY;
             } else {
               topPosition = expandedHeight + topOffset + gap + row * (elementHeight + gap);
@@ -119,7 +160,7 @@ export default function StreamsPage() {
           ref.style.zIndex = '';
           ref.style.transition = '';
           ref.style.borderRadius = '';
-          ref.style.display = index >= 12 ? 'none' : 'block';
+          ref.style.display = index < 12 ? 'block' : 'none';
         }
       });
     }
@@ -139,7 +180,7 @@ export default function StreamsPage() {
         <div className="container mx-auto px-4 py-8">
           <Button variant="ghost" onClick={() => navigate('/')} className="mb-6 text-white">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Назад
+            На главную
           </Button>
           <div className="text-center py-12">
             <h1 className="text-2xl font-bold text-white mb-4">Стримы</h1>
@@ -151,10 +192,43 @@ export default function StreamsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#282828] flex items-center">
+    <div className="min-h-screen bg-[#282828]">
+      <div className="py-4 px-4">
+        <div className="mb-4 flex items-center gap-4">
+          <Button variant="ghost" onClick={() => navigate('/')} className="text-white">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            На главную
+          </Button>
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant={showAllPlayers ? 'default' : 'outline'}
+              onClick={handleShowAll}
+              className="text-white"
+            >
+              Все онлайн
+            </Button>
+            {onlineStreamers.map(player => (
+              <Button
+                key={player.id}
+                variant={
+                  visiblePlayers.has(player.id.toString()) && !showAllPlayers
+                    ? 'default'
+                    : 'outline'
+                }
+                onClick={() => handleTogglePlayer(player.id.toString())}
+                className="text-white"
+              >
+                {player.username}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div ref={containerRef} className="p-2 relative w-full">
-        <div className="grid grid-cols-4 gap-2 h-full">
-          {onlineStreamers.map((player, index) => (
+        <div className="grid grid-cols-4 gap-2">
+          {filteredStreamers.map((player, index) => (
             <div
               key={player.id}
               ref={el => {
