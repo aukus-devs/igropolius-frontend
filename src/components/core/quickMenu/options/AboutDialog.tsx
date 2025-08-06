@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import useUrlPath from '@/hooks/useUrlPath';
 import { Github } from 'lucide-react';
 import { Link } from 'react-router';
+import Boosty from '@/components/icons/Boosty';
 
 type Props = {
   className?: string;
@@ -85,7 +86,7 @@ export default function AboutDialog({ className }: Props) {
             <div className="mt-[10px] font-wide-medium">Praden</div>
           </div>
 
-          <div className="mt-10 mb-[30px] text-xl font-wide-black">
+          <div className="mt-10 mb-[30px] text-xl font-wide-black flex gap-2">
             <Link
               to="https://github.com/aukus-devs/igropolius-frontend"
               target="_blank"
@@ -93,6 +94,14 @@ export default function AboutDialog({ className }: Props) {
               className="flex items-center"
             >
               <Github className="inline mr-2" />
+            </Link>
+            <Link
+              to="https://boosty.to/aukus"
+              className="flex items-center"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Boosty className="inline mr-2 w-5" fill="white" />
             </Link>
           </div>
         </ScrollArea>
