@@ -14,6 +14,8 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 import usePlayerStore from '@/stores/playerStore';
 import { useEffect } from 'react';
 import useUrlPath from '@/hooks/useUrlPath';
+import { Github } from 'lucide-react';
+import { Link } from 'react-router';
 
 type Props = {
   className?: string;
@@ -81,6 +83,17 @@ export default function AboutDialog({ className }: Props) {
 
             <div className="mt-[50px] text-xl font-wide-black">Идеи</div>
             <div className="mt-[10px] font-wide-medium">Praden</div>
+          </div>
+
+          <div className="mt-10 mb-[30px] text-xl font-wide-black">
+            <Link
+              to="https://github.com/aukus-devs/igropolius-frontend"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
+              <Github className="inline mr-2" />
+            </Link>
           </div>
         </ScrollArea>
       </DialogContent>
