@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -16,23 +16,23 @@ export function BlinkingLight({
   offDuration?: number;
 }) {
   const lightRef = useRef<THREE.PointLight>(null!);
-  const [isOn, setIsOn] = useState(true);
+  const lightOn = useRef(true);
   const phaseStart = useRef(0);
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
     const timeInPhase = elapsed - phaseStart.current;
 
-    if (isOn && timeInPhase > onDuration) {
-      setIsOn(false);
+    if (lightOn.current && timeInPhase > onDuration) {
+      lightOn.current = false;
       phaseStart.current = elapsed;
-    } else if (!isOn && timeInPhase > offDuration) {
-      setIsOn(true);
+    } else if (!lightOn.current && timeInPhase > offDuration) {
+      lightOn.current = true;
       phaseStart.current = elapsed;
     }
 
     if (lightRef.current) {
-      lightRef.current.intensity = isOn ? onIntensity : 0;
+      lightRef.current.intensity = lightOn.current ? onIntensity : 0;
     }
   });
 
