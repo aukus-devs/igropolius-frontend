@@ -13,7 +13,7 @@ function CenterCompModel() {
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (lightRef.current) {
-      lightRef.current.intensity = 1 + Math.sin(t * 5) * 5; // flicker
+      lightRef.current.intensity = 1 + Math.sin(t * 3) * 10; // flicker
     }
   });
 
