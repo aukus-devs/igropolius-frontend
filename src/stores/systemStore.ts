@@ -1,5 +1,6 @@
 import { CurrentUserResponse, Settings as EventSettings } from '@/lib/api-types-generated';
 import { create } from 'zustand';
+import usePlayerStore from './playerStore';
 
 type MainNotification = {
   text: string;
@@ -26,7 +27,7 @@ interface SystemStore {
   setHighlightedSectorId: (sectorId: number | null) => void;
 }
 
-const useSystemStore = create<SystemStore>(set => ({
+const useSystemStore = create<SystemStore>((set, get) => ({
   eventStartTime: null,
   eventEndTime: null,
   mainNotification: null,
@@ -72,6 +73,19 @@ const useSystemStore = create<SystemStore>(set => ({
 
   setAccessToken: (token: string | null) => set({ accessToken: token }),
   setHighlightedSectorId: (sectorId: number | null) => set({ highlightedSectorId: sectorId }),
+
+  needsToSelectModel: () => {
+    const { myUser } = get();
+    if (!myUser) {
+      return false;
+    }
+    const myPlayer = usePlayerStore.getState().players.find(player => player.id === myUser.id);
+    if (!myPlayer) {
+      return false;
+    }
+
+    return !myPlayer.model_name || !myPlayer.color;
+  },
 }));
 
 export default useSystemStore;
