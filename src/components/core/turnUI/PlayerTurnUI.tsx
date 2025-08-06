@@ -20,32 +20,33 @@ import GameGauntletsButton from './GameGauntletsButton';
 import { formatTsToMonthDatetime } from '@/lib/utils';
 
 export default function PlayerTurnUI() {
-  const { turnState, isPlayerMoving, hasCardsToSteal, myPlayerSectorId } = usePlayerStore(
-    useShallow(state => {
-      const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
-      const otherPlayers = state.players.filter(player => player.id !== state.myPlayerId);
-      const cardsToSteal = otherPlayers.flatMap(player =>
-        player.bonus_cards.filter(card => !myCardsSet.has(card.bonus_type))
-      );
-      return {
-        turnState: state.turnState,
-        isPlayerMoving: state.isPlayerMoving,
-        hasCardsToSteal: cardsToSteal.length > 0,
-        myPlayerSectorId: state.myPlayer?.sector_id ?? null,
-        canSelectBuildingSector: state.canSelectBuildingSector,
-      };
-    })
-  );
+  const { turnState, isPlayerMoving, hasCardsToSteal, myPlayerSectorId, isMyModelSelected } =
+    usePlayerStore(
+      useShallow(state => {
+        const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
+        const otherPlayers = state.players.filter(player => player.id !== state.myPlayerId);
+        const cardsToSteal = otherPlayers.flatMap(player =>
+          player.bonus_cards.filter(card => !myCardsSet.has(card.bonus_type))
+        );
+        return {
+          turnState: state.turnState,
+          isPlayerMoving: state.isPlayerMoving,
+          hasCardsToSteal: cardsToSteal.length > 0,
+          myPlayerSectorId: state.myPlayer?.sector_id ?? null,
+          canSelectBuildingSector: state.canSelectBuildingSector,
+          isMyModelSelected: state.isMyModelSelected,
+        };
+      })
+    );
 
   const currentSector = myPlayerSectorId ? SectorsById[myPlayerSectorId] : null;
   const showPointAUCButton = currentSector?.rollType === 'auc';
 
-  const { eventStartTime, eventEndTime, setMainNotification, needsToSelectModel } = useSystemStore(
+  const { eventStartTime, eventEndTime, setMainNotification } = useSystemStore(
     useShallow(state => ({
       eventStartTime: state.eventStartTime,
       eventEndTime: state.eventEndTime,
       setMainNotification: state.setMainNotification,
-      needsToSelectModel: state.needsToSelectModel,
     }))
   );
 
@@ -95,8 +96,10 @@ export default function PlayerTurnUI() {
 
   const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
 
+  const modelIsNotSelected = !isMyModelSelected();
+
   const disableUI =
-    isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded || needsToSelectModel;
+    isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded || modelIsNotSelected;
   if (disableUI) {
     if (eventSettingsNotLoaded) {
       return (

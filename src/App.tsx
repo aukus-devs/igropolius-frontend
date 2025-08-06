@@ -40,15 +40,17 @@ function App() {
     []
   );
 
-  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards, players } = usePlayerStore(
-    useShallow(state => ({
-      setPlayers: state.setPlayers,
-      setMyPlayer: state.setMyPlayer,
-      setTurnState: state.setTurnState,
-      setPrisonCards: state.setPrisonCards,
-      players: state.players,
-    }))
-  );
+  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards, isMyModelSelected } =
+    usePlayerStore(
+      useShallow(state => ({
+        setPlayers: state.setPlayers,
+        setMyPlayer: state.setMyPlayer,
+        setTurnState: state.setTurnState,
+        setPrisonCards: state.setPrisonCards,
+        players: state.players,
+        isMyModelSelected: state.isMyModelSelected,
+      }))
+    );
 
   const { disableCurrentPlayerQuery, disablePlayersQuery, setMyUser, accessToken } = useSystemStore(
     useShallow(state => ({
@@ -82,11 +84,10 @@ function App() {
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const unpin = useCanvasTooltipStore(state => state.unpin);
 
-  const { setEventSettings, setMainNotification, myUser } = useSystemStore(
+  const { setEventSettings, setMainNotification } = useSystemStore(
     useShallow(state => ({
       setEventSettings: state.setEventSettings,
       setMainNotification: state.setMainNotification,
-      myUser: state.myUser,
     }))
   );
 
@@ -155,14 +156,7 @@ function App() {
   }
 
   const enableMetrika = !IS_DEV;
-  let isModelSelectionScene = false;
-
-  if (myUser) {
-    const myPlayer = players.find(player => player.id === myUser.id);
-    if (myPlayer) {
-      isModelSelectionScene = !myPlayer.model_name || !myPlayer.color;
-    }
-  }
+  const isModelSelectionScene = !isMyModelSelected();
 
   // const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
   //   toneMapping: {

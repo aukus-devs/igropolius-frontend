@@ -80,6 +80,7 @@ const usePlayerStore = create<{
   addCardToState: (card: ActiveBonusCard) => void;
   setPrisonCards: (cards: MainBonusCardType[]) => void;
   animateToPrison: (prisonId: number) => Promise<void>;
+  isMyModelSelected: () => boolean;
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
@@ -529,6 +530,13 @@ const usePlayerStore = create<{
     return turnState === 'choosing-building-sector' && myPlayer?.sector_id === 1;
   },
   setPrisonCards: (cards: MainBonusCardType[]) => set({ prisonCards: cards }),
+
+  isMyModelSelected: () => {
+    const { myPlayer } = get();
+    if (!myPlayer) return false;
+
+    return Boolean(myPlayer.model_name && myPlayer.color);
+  },
 }));
 
 export default usePlayerStore;
