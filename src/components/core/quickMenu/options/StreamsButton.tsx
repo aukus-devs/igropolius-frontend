@@ -12,7 +12,7 @@ export default function StreamsButton({ className }: StreamsButtonProps) {
       className={className}
       onClick={() => window.open('/streams', '_blank')}
     >
-      <VideoCircle className="mr-2 h-4 w-4" />
+      <VideoCircle />
       Мультитрансляция
     </Button>
   );
