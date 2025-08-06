@@ -1,12 +1,16 @@
+import { updatePlayer } from '@/lib/api';
 import {
   PLAYER_WIDTH,
   PlayerModelsScales,
   PlayerModelsUrlsArray,
   SECTOR_CONTENT_ELEVATION,
 } from '@/lib/constants';
+import { refetechPlayersQuery } from '@/lib/queryClient';
 import { playerColors, Vector3Array } from '@/lib/types';
+import usePlayerStore from '@/stores/playerStore';
 import { Box, CameraControls, Gltf, PerspectiveCamera, Text, useCursor } from '@react-three/drei';
 import { ThreeEvent, useFrame } from '@react-three/fiber';
+import { useMutation } from '@tanstack/react-query';
 import { useMemo, useRef, useState } from 'react';
 import { Color, Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 type ModelProps = {
@@ -14,11 +18,11 @@ type ModelProps = {
   color: string;
   url: string;
   isSelected: boolean;
-  isColorless?: boolean;
   onClick?: () => void;
+  isDisabled: boolean;
 };
 
-function Model({ url, position, color, isSelected, isColorless, onClick }: ModelProps) {
+function Model({ url, position, color, isSelected, onClick, isDisabled }: ModelProps) {
   const [isHovered, setHover] = useState(false);
   const ref = useRef<Group>(null);
 
@@ -33,14 +37,17 @@ function Model({ url, position, color, isSelected, isColorless, onClick }: Model
   useFrame(() => {
     if (!ref.current) return;
 
-    const targetScale = isHovered || isSelected ? scale * 1.25 : scale;
+    const targetScale = isHovered || isSelected ? scale * 1.5 : scale;
     scaleVector.set(targetScale, targetScale, targetScale);
     ref.current.scale.lerp(scaleVector, 0.25);
 
     ref.current.traverse(child => {
       if (child instanceof Mesh) {
         if (child.name === 'body001') {
-          const targetColor = isSelected || isColorless ? selectColor : defaultColor;
+          let targetColor = selectColor;
+          if (isDisabled) {
+            targetColor = defaultColor;
+          }
           child.material.color.lerp(targetColor, 0.25);
         }
       }
@@ -54,17 +61,17 @@ function Model({ url, position, color, isSelected, isColorless, onClick }: Model
         src={url}
         position={position}
         scale={scale}
-        onClick={e => (e.stopPropagation(), onClick?.())}
-        onPointerEnter={() => setHover(true)}
-        onPointerLeave={() => setHover(false)}
+        onClick={e => (e.stopPropagation(), !isDisabled && onClick?.())}
+        onPointerEnter={() => !isDisabled && setHover(true)}
+        onPointerLeave={() => !isDisabled && setHover(false)}
       />
     );
-  }, [url, position, scale, onClick]);
+  }, [url, position, scale, onClick, isDisabled]);
 
   return <>{gltf}</>;
 }
 
-function ColorBox({ position, color, isSelected, onClick }: Omit<ModelProps, 'url'>) {
+function ColorBox({ position, color, isSelected, onClick, isDisabled }: Omit<ModelProps, 'url'>) {
   const [isHovered, setHover] = useState(false);
   const ref = useRef<Mesh>(null);
 
@@ -80,14 +87,16 @@ function ColorBox({ position, color, isSelected, onClick }: Omit<ModelProps, 'ur
     scaleVector.set(targetScale, targetScale, targetScale);
     ref.current.scale.lerp(scaleVector, 0.25);
 
-    const targetColor = selectColor;
+    const targetColor = isDisabled ? new Color('grey') : selectColor;
     const material = ref.current.material as MeshStandardMaterial;
     material.color.lerp(targetColor, 0.25);
   });
 
   function onclick(e: ThreeEvent<PointerEvent>) {
-    e.stopPropagation();
-    onClick?.();
+    if (!isDisabled) {
+      e.stopPropagation();
+      onClick?.();
+    }
   }
 
   return (
@@ -95,8 +104,8 @@ function ColorBox({ position, color, isSelected, onClick }: Omit<ModelProps, 'ur
       ref={ref}
       position={position}
       onClick={onclick}
-      onPointerEnter={() => setHover(true)}
-      onPointerLeave={() => setHover(false)}
+      onPointerEnter={() => !isDisabled && setHover(true)}
+      onPointerLeave={() => !isDisabled && setHover(false)}
     >
       <boxGeometry args={[1, 0.5, 1]} />
       <meshStandardMaterial color={color} />
@@ -151,6 +160,15 @@ function ModelSelectionScene() {
   const [selectedColor, setColor] = useState<string | null>(null);
   const [selectedUrl, setUrl] = useState<string | null>(null);
 
+  const players = usePlayerStore(state => state.players);
+
+  const modelsTaken = players.map(player => player.model_name);
+  const colorsTaken = players.map(player => player.color);
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: updatePlayer,
+  });
+
   function toggleUrl(url: string) {
     if (selectedUrl === url) {
       setUrl(null);
@@ -167,9 +185,22 @@ function ModelSelectionScene() {
     setColor(color);
   }
 
-  function confirm() {
-    console.log('confirmed');
-  }
+  const confirm = async () => {
+    if (!selectedColor || !selectedUrl) {
+      return;
+    }
+
+    const modelName = selectedUrl.split('/players/')[1];
+
+    try {
+      await mutateAsync({ color: selectedColor, model_name: modelName });
+      refetechPlayersQuery();
+    } catch {
+      setColor(null);
+      setUrl(null);
+      refetechPlayersQuery();
+    }
+  };
 
   return (
     <group>
@@ -198,21 +229,24 @@ function ModelSelectionScene() {
         >
           Выберите модельку
         </Text>
-        {PlayerModelsUrlsArray.map((url, idx) => (
-          <Model
-            key={idx}
-            url={url}
-            position={calculateGridPosition({
-              idx,
-              size: [4, 4],
-              gap: [PLAYER_WIDTH * 2, 5],
-            })}
-            isSelected={url === selectedUrl}
-            isColorless={!selectedUrl}
-            color={selectedColor || 'white'}
-            onClick={() => toggleUrl(url)}
-          />
-        ))}
+        {PlayerModelsUrlsArray.map((url, idx) => {
+          const isTaken = modelsTaken.includes(url.split('/players/')[1]);
+          return (
+            <Model
+              key={idx}
+              url={url}
+              position={calculateGridPosition({
+                idx,
+                size: [4, 4],
+                gap: [PLAYER_WIDTH * 2, 5],
+              })}
+              isSelected={url === selectedUrl}
+              isDisabled={isTaken}
+              color={selectedColor || 'white'}
+              onClick={() => toggleUrl(url)}
+            />
+          );
+        })}
       </group>
 
       <group position={[13, 0, 0]}>
@@ -234,14 +268,14 @@ function ModelSelectionScene() {
                 gap: [2, 2],
               })}
               isSelected={color === selectedColor}
-              isColorless={!selectedColor}
+              isDisabled={colorsTaken.includes(color)}
               onClick={() => toggleColor(color)}
             />
           ))}
         </group>
       </group>
 
-      <Button3D isDisabled={!selectedColor || !selectedUrl} onClick={confirm} />
+      <Button3D isDisabled={!selectedColor || !selectedUrl || isPending} onClick={confirm} />
     </group>
   );
 }

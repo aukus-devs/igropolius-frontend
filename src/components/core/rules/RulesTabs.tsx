@@ -53,7 +53,7 @@ export default function RulesTabs() {
         ))}
       </TabsList>
       {tabs.map(({ value, content }) => (
-        <TabsContent key={value} value={value} className="mt-10 sm:mt-10 mt-16">
+        <TabsContent key={value} value={value} className="mt-10 sm:mt-10">
           {content}
         </TabsContent>
       ))}

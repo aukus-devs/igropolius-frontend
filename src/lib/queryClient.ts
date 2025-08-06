@@ -25,6 +25,10 @@ export const resetPlayersQuery = () => {
   client.invalidateQueries({ queryKey: queryKeys.players });
 };
 
+export const refetechPlayersQuery = () => {
+  client.refetchQueries({ queryKey: queryKeys.players });
+};
+
 export const resetPlayerEventsQuery = (playerId: number) => {
   client.invalidateQueries({ queryKey: queryKeys.playerEvents(playerId) });
 };

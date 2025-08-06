@@ -26,6 +26,7 @@ import {
   SavePlayerGameResponse,
   StealBonusCardRequest,
   UpdatePlayerInternalRequest,
+  UpdatePlayerRequest,
   UpdatePlayerTurnStateRequest,
   UseBonusCardRequest,
   UseInstantCardRequest,
@@ -725,6 +726,16 @@ export async function updatePlayerInternal(request: UpdatePlayerInternalRequest)
     return Promise.resolve();
   }
   await apiRequest('/api/internal/player', {
+    method: 'POST',
+    body: JSON.stringify(request),
+  });
+}
+
+export async function updatePlayer(request: UpdatePlayerRequest): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest('/api/players', {
     method: 'POST',
     body: JSON.stringify(request),
   });

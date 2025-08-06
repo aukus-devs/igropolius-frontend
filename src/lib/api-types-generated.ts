@@ -319,6 +319,8 @@ export type Success1 = boolean;
 export type StreamPlatform1 = "twitch" | "vk" | "kick" | "none";
 export type PlayerId4 = number;
 export type SectorId8 = number | null;
+export type ModelName1 = string;
+export type Color1 = string;
 
 export interface ApiSchema {
   [k: string]: unknown;
@@ -809,6 +811,14 @@ export interface UpdatePlayerInternalRequest {
   sector_id?: SectorId8;
   bonus_card?: MainBonusCardType | null;
   turn_state?: PlayerTurnState | null;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "UpdatePlayerRequest".
+ */
+export interface UpdatePlayerRequest {
+  model_name: ModelName1;
+  color: Color1;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

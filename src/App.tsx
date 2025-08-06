@@ -40,12 +40,13 @@ function App() {
     []
   );
 
-  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards } = usePlayerStore(
+  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards, players } = usePlayerStore(
     useShallow(state => ({
       setPlayers: state.setPlayers,
       setMyPlayer: state.setMyPlayer,
       setTurnState: state.setTurnState,
       setPrisonCards: state.setPrisonCards,
+      players: state.players,
     }))
   );
 
@@ -81,11 +82,11 @@ function App() {
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const unpin = useCanvasTooltipStore(state => state.unpin);
 
-  const { setEventSettings, setMainNotification, needsToSelectModel } = useSystemStore(
+  const { setEventSettings, setMainNotification, myUser } = useSystemStore(
     useShallow(state => ({
       setEventSettings: state.setEventSettings,
       setMainNotification: state.setMainNotification,
-      needsToSelectModel: state.needsToSelectModel,
+      myUser: state.myUser,
     }))
   );
 
@@ -154,9 +155,14 @@ function App() {
   }
 
   const enableMetrika = !IS_DEV;
-  const isModelSelectionScene = needsToSelectModel();
+  let isModelSelectionScene = false;
 
-  console.log({ isModelSelectionScene });
+  if (myUser) {
+    const myPlayer = players.find(player => player.id === myUser.id);
+    if (myPlayer) {
+      isModelSelectionScene = !myPlayer.model_name || !myPlayer.color;
+    }
+  }
 
   // const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
   //   toneMapping: {
