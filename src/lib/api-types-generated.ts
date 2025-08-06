@@ -808,7 +808,6 @@ export interface UpdatePlayerInternalRequest {
   player_id: PlayerId4;
   sector_id?: SectorId8;
   bonus_card?: MainBonusCardType | null;
-  instant_card?: InstantCardType | null;
   turn_state?: PlayerTurnState | null;
 }
 /**

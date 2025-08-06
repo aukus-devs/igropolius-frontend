@@ -20,8 +20,8 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 import { ChevronUp, ChevronDown } from '../icons';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { frontendCardsData, frontendInstantCardsData } from '@/lib/mockData';
-import { MainBonusCardType, InstantCardType, PlayerTurnState } from '@/lib/api-types-generated';
+import { frontendCardsData } from '@/lib/mockData';
+import { MainBonusCardType, PlayerTurnState } from '@/lib/api-types-generated';
 
 export default function AdminPanel() {
   const { myPlayer, players } = usePlayerStore(
@@ -47,7 +47,6 @@ export default function AdminPanel() {
 
   const [newSectorId, setNewSectorId] = useState<string>('');
   const [selectedBonusCard, setSelectedBonusCard] = useState<MainBonusCardType | 'none'>('none');
-  const [selectedInstantCard, setSelectedInstantCard] = useState<InstantCardType | 'none'>('none');
   const [selectedTurnState, setSelectedTurnState] = useState<PlayerTurnState | 'none'>('none');
 
   const selectedPlayer = players.find(player => player.id === actingUserId);
@@ -77,7 +76,6 @@ export default function AdminPanel() {
       resetCurrentPlayerQuery();
       setNewSectorId('');
       setSelectedBonusCard('none');
-      setSelectedInstantCard('none');
       setSelectedTurnState('none');
     },
   });
@@ -115,9 +113,6 @@ export default function AdminPanel() {
     if (selectedBonusCard !== 'none') {
       request.bonus_card = selectedBonusCard;
     }
-    if (selectedInstantCard !== 'none') {
-      request.instant_card = selectedInstantCard;
-    }
     if (selectedTurnState !== 'none') {
       request.turn_state = selectedTurnState;
     }
@@ -152,11 +147,6 @@ export default function AdminPanel() {
 
   const bonusCardOptions = Object.entries(frontendCardsData).map(([type, data]) => ({
     value: type as MainBonusCardType,
-    label: data.name,
-  }));
-
-  const instantCardOptions = Object.entries(frontendInstantCardsData).map(([type, data]) => ({
-    value: type as InstantCardType,
     label: data.name,
   }));
 
@@ -261,30 +251,6 @@ export default function AdminPanel() {
                   </div>
 
                   <div>
-                    <Label htmlFor="instant-card" className="mb-2 block">
-                      Выдать инстантную карту:
-                    </Label>
-                    <Select
-                      value={selectedInstantCard}
-                      onValueChange={value =>
-                        setSelectedInstantCard(value as InstantCardType | 'none')
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите карту" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">Нет</SelectItem>
-                        {instantCardOptions.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
                     <Label htmlFor="turn-state" className="mb-2 block">
                       Состояние хода:
                     </Label>
@@ -312,10 +278,7 @@ export default function AdminPanel() {
                     onClick={handleUpdatePlayer}
                     disabled={
                       isUpdatingPlayer ||
-                      (!newSectorId &&
-                        selectedBonusCard === 'none' &&
-                        selectedInstantCard === 'none' &&
-                        selectedTurnState === 'none')
+                      (!newSectorId && selectedBonusCard === 'none' && selectedTurnState === 'none')
                     }
                     className="w-full"
                   >
