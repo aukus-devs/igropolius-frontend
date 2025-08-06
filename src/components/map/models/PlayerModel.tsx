@@ -21,6 +21,10 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
   const isPlayerMoving = usePlayerStore(state => state.isPlayerMoving);
   const modelUrl = getPlayerModelUrl(player.model_name);
 
+  if (player.model_name === '') {
+    return null;
+  }
+
   const onGroupRender = (group: Group | null) => {
     if (!group) return;
 

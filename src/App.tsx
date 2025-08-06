@@ -81,8 +81,14 @@ function App() {
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const unpin = useCanvasTooltipStore(state => state.unpin);
 
-  const setEventSettings = useSystemStore(state => state.setEventSettings);
-  const setMainNotification = useSystemStore(state => state.setMainNotification);
+  const { setEventSettings, setMainNotification, needsToSelectModel } = useSystemStore(
+    useShallow(state => ({
+      setEventSettings: state.setEventSettings,
+      setMainNotification: state.setMainNotification,
+      needsToSelectModel: state.needsToSelectModel,
+    }))
+  );
+
   const setRollResult = useDiceStore(state => state.setRollResult);
 
   useEffect(() => {
@@ -148,7 +154,9 @@ function App() {
   }
 
   const enableMetrika = !IS_DEV;
-  const isModelSelectionScene = false;
+  const isModelSelectionScene = needsToSelectModel();
+
+  console.log({ isModelSelectionScene });
 
   // const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
   //   toneMapping: {

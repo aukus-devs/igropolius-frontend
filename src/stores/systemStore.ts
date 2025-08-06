@@ -25,6 +25,7 @@ interface SystemStore {
   setAccessToken: (token: string | null) => void;
   highlightedSectorId: number | null;
   setHighlightedSectorId: (sectorId: number | null) => void;
+  needsToSelectModel: () => boolean;
 }
 
 const useSystemStore = create<SystemStore>((set, get) => ({

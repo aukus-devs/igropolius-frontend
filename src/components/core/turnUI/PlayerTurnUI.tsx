@@ -40,11 +40,12 @@ export default function PlayerTurnUI() {
   const currentSector = myPlayerSectorId ? SectorsById[myPlayerSectorId] : null;
   const showPointAUCButton = currentSector?.rollType === 'auc';
 
-  const { eventStartTime, eventEndTime, setMainNotification } = useSystemStore(
+  const { eventStartTime, eventEndTime, setMainNotification, needsToSelectModel } = useSystemStore(
     useShallow(state => ({
       eventStartTime: state.eventStartTime,
       eventEndTime: state.eventEndTime,
       setMainNotification: state.setMainNotification,
+      needsToSelectModel: state.needsToSelectModel,
     }))
   );
 
@@ -94,7 +95,8 @@ export default function PlayerTurnUI() {
 
   const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
 
-  const disableUI = isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded;
+  const disableUI =
+    isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded || needsToSelectModel;
   if (disableUI) {
     if (eventSettingsNotLoaded) {
       return (
