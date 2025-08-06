@@ -47,11 +47,6 @@ export default function StreamsPage() {
     return showAllPlayers || visiblePlayers.has(player.id.toString());
   });
 
-  const getOriginalIndex = (filteredIndex: number) => {
-    const player = filteredStreamers[filteredIndex];
-    return onlineStreamers.findIndex(p => p.id === player.id);
-  };
-
   const handleTogglePlayer = (playerId: string) => {
     const newVisiblePlayers = new Set(visiblePlayers);
     if (newVisiblePlayers.has(playerId)) {
@@ -70,8 +65,7 @@ export default function StreamsPage() {
 
   useEffect(() => {
     if (expandedStreamIndex !== null) {
-      const originalExpandedIndex = getOriginalIndex(expandedStreamIndex);
-      const expandedElement = streamRefs.current[originalExpandedIndex];
+      const expandedElement = streamRefs.current[expandedStreamIndex];
       const container = containerRef.current;
 
       if (expandedElement && container) {
@@ -85,9 +79,9 @@ export default function StreamsPage() {
         const gap = 8;
         const expandedWidth = containerRect.width - chatWidth - leftOffset - rightOffset;
 
-        const visibleOriginalIndices = filteredStreamers.map((_, i) => getOriginalIndex(i));
-        const otherElements = visibleOriginalIndices
-          .filter(i => i !== originalExpandedIndex)
+        const otherElements = filteredStreamers
+          .map((_, i) => i)
+          .filter(i => i !== expandedStreamIndex)
           .map(i => streamRefs.current[i])
           .filter(Boolean);
 
@@ -252,7 +246,7 @@ export default function StreamsPage() {
           <>
             {showChat && (
               <div className="fixed top-0 right-0 z-[9999] w-80 h-screen bg-white shadow-lg">
-                <StreamChat player={onlineStreamers[expandedStreamIndex]} className="h-full" />
+                <StreamChat player={filteredStreamers[expandedStreamIndex]} className="h-full" />
               </div>
             )}
           </>
