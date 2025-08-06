@@ -111,7 +111,7 @@ export const PlayerModelsUrlsArray = [
   `${STORAGE_BASE_URL}/models/players/cars/van1.glb`,
   `${STORAGE_BASE_URL}/models/players/cars/garbage-truck1.glb`,
   `${STORAGE_BASE_URL}/models/players/cars/delivery-flat2.glb`,
-  `${STORAGE_BASE_URL}/models/players/cars/delivery2.glb`,
+  // `${STORAGE_BASE_URL}/models/players/cars/delivery2.glb`,
   `${STORAGE_BASE_URL}/models/players/cars/race-future1.glb`,
   `${STORAGE_BASE_URL}/models/players/cars/sedan-sports2.glb`,
   `${STORAGE_BASE_URL}/models/players/cars/tractor2.glb`,
