@@ -37,9 +37,11 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
 
   const [activationResult, setActivationResult] = useState<InstantCardResult | null>(null);
   const [moveToCardDrop, setMoveToCardDrop] = useState<boolean>(false);
+  const [rollFinished, setRollFinished] = useState(false);
 
   const handleFinished = useCallback(
     async (option: WeightedOption<OptionType>) => {
+      setRollFinished(true);
       if (isInstantCard(option.value)) {
         if (option.value.instant === 'lose-card-or-3-percent') {
           useSystemStore.setState(state => ({
@@ -63,26 +65,37 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
   );
 
   const getWinnerText = (option: WeightedOption<OptionType>) => {
-    let activationText = '';
-    if (activationResult === 'reroll') {
-      activationText = ': выпал реролл';
-    }
-    if (activationResult === 'score-received') {
-      activationText = ': получено 5% от своего счёта';
-    }
-
     if (isInstantCard(option.value)) {
+      let activationText = '';
+      if (rollFinished) {
+        if (
+          activationResult === 'reroll' &&
+          option.value.instant !== 'reroll' &&
+          option.value.instant !== 'reroll-and-roll'
+        ) {
+          activationText = ': выпал реролл';
+        }
+        if (activationResult === 'score-received') {
+          activationText = ': получено 5% от своего счёта';
+        }
+      }
+
       return frontendInstantCardsData[option.value.instant].name + activationText;
     }
     if (isBonusCard(option.value)) {
-      return frontendCardsData[option.value.card].name + activationText;
+      const name = frontendCardsData[option.value.card].name;
+      if (rollFinished) {
+        return `Получено: ${name}`;
+      }
+      return name;
     }
     return 'Неизвестный тип карточки' as never;
   };
 
   const getSecondaryText = (option: WeightedOption<OptionType>) => {
     if (isInstantCard(option.value)) {
-      return frontendInstantCardsData[option.value.instant].description;
+      const description = frontendInstantCardsData[option.value.instant].description;
+      return `Активируется автоматически: ${description}`;
     }
     if (isBonusCard(option.value)) {
       return frontendCardsData[option.value.card].description;
@@ -138,6 +151,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
   }
 
   const handleClose = async () => {
+    setRollFinished(false);
     if (moveToCardDrop) {
       onClose('drop');
     } else if (activationResult === 'reroll') {

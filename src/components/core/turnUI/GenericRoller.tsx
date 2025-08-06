@@ -408,8 +408,10 @@ export default function GenericRoller<T>({
           <Volume muted={isMuted} className="h-4 w-4" />
         </Button>
         {rollPhase === 'finished' && (
-          <div className="absolute bottom-[20%] flex flex-col items-center justify-center gap-4">
-            {secondaryText && <div className="text-base font-semibold ">{secondaryText}</div>}
+          <div className="absolute bottom-[15%] flex flex-col items-center justify-center gap-4">
+            {secondaryText && (
+              <div className="text-base font-semibold w-200 text-center ">{secondaryText}</div>
+            )}
             <Button
               className="w-[300px] rounded-xl"
               loading={isLoading}

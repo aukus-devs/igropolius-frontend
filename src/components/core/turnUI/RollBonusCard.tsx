@@ -40,6 +40,10 @@ export default function RollBonusCard() {
     return frontendCardsData[option.value].name;
   };
 
+  const getSecondaryText = () => {
+    return 'Карточка получена';
+  };
+
   const myCurrentCards = myPlayer?.bonus_cards ?? [];
   const myCurrentCardsTypes = myCurrentCards.map(card => card.bonus_type);
 
@@ -68,6 +72,7 @@ export default function RollBonusCard() {
       finishButtonText="Закрыть"
       onRollFinish={handleFinished}
       getWinnerText={getWinnerText}
+      getSecondaryText={getSecondaryText}
       onClose={handleClose}
     />
   );

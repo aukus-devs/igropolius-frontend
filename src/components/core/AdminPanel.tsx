@@ -21,7 +21,11 @@ import { ChevronUp, ChevronDown } from '../icons';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { frontendCardsData } from '@/lib/mockData';
-import { MainBonusCardType, PlayerTurnState } from '@/lib/api-types-generated';
+import {
+  MainBonusCardType,
+  PlayerTurnState,
+  UpdatePlayerInternalRequest,
+} from '@/lib/api-types-generated';
 
 export default function AdminPanel() {
   const { myPlayer, players } = usePlayerStore(
@@ -105,7 +109,7 @@ export default function AdminPanel() {
   const handleUpdatePlayer = async () => {
     if (!actingUserId) return;
 
-    const request: any = { player_id: actingUserId };
+    const request: UpdatePlayerInternalRequest = { player_id: actingUserId };
 
     if (newSectorId) {
       request.sector_id = parseInt(newSectorId);
