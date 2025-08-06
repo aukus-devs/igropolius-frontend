@@ -6,7 +6,6 @@ import { hasStream } from '../lib/streamUtils';
 import StreamPlayer from '../components/streams/StreamPlayer';
 import StreamChat from '../components/streams/StreamChat';
 import { Button } from '../components/ui/button';
-import { ArrowLeft } from 'lucide-react';
 
 export default function StreamsPage() {
   const [expandedStreamIndex, setExpandedStreamIndex] = useState<number | null>(null);
@@ -175,7 +174,6 @@ export default function StreamsPage() {
             onClick={() => (window.location.href = '/')}
             className="mb-6 text-white"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
             Игрополиус
           </Button>
           <div className="text-center py-12">
@@ -196,7 +194,6 @@ export default function StreamsPage() {
             onClick={() => (window.location.href = '/')}
             className="text-white"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
             Игрополиус
           </Button>
 

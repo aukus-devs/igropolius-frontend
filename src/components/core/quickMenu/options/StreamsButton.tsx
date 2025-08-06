@@ -1,5 +1,5 @@
 import { VideoCircle } from '@/components/icons';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface StreamsButtonProps {
   className?: string;
@@ -7,9 +7,13 @@ interface StreamsButtonProps {
 
 export default function StreamsButton({ className }: StreamsButtonProps) {
   return (
-    <button onClick={() => window.open('/streams', '_blank')} className={cn(className)}>
+    <Button
+      variant="outline"
+      className={className}
+      onClick={() => window.open('/streams', '_blank')}
+    >
       <VideoCircle className="mr-2 h-4 w-4" />
       Мультитрансляция
-    </button>
+    </Button>
   );
 }
