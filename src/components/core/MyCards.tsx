@@ -60,7 +60,7 @@ export default function MyCards() {
                 />
               </TooltipTrigger>
               <TooltipContent
-                className="bg-card/70 backdrop-blur-[1.5rem] p-3"
+                className="bg-card/70 backdrop-blur-[1.5rem] p-3 rounded-xl"
                 side="bottom"
                 align="start"
                 sideOffset={8}
@@ -74,8 +74,8 @@ export default function MyCards() {
                     />
                   </div>
                   <div className="w-[200px]">
-                    <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
-                    <div className="text-base font-semibold text-muted-foreground">
+                    <div className="text-[20px] font-semibold mb-2 leading-6">{cardData.name}</div>
+                    <div className="text-base font-semibold text-muted-foreground leading-[19px]">
                       {cardData.description}
                     </div>
                     {canBeUsed && (

@@ -64,13 +64,13 @@ function PlayerCard({
         />
       </TooltipTrigger>
       <TooltipContent
-        className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3"
+        className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3 rounded-xl"
         side="bottom"
         align="start"
         sideOffset={8}
       >
-        <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
-        <div className="text-base font-semibold text-muted-foreground">{cardData.description}</div>
+        <div className="text-[20px] font-semibold mb-2 leading-6">{cardData.name}</div>
+        <div className="text-base font-semibold text-muted-foreground leading-[19px]">{cardData.description}</div>
         {canBeStolen && (
           <div className="mt-2 w-full">
             <Button className="w-full" onClick={() => onSelect()}>

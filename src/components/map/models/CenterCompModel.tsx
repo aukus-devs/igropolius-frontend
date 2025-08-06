@@ -8,7 +8,7 @@ function CenterCompModel() {
   return (
     <group position={[0, -1.4, 0]} rotation={[0, Math.PI, 0]}>
       <Gltf src={CenterCompUrl} />
-      <Gltf src={mountainsUrl} />
+      <Gltf src={mountainsUrl} position={[0, 0.56, 0]} />
     </group>
   );
 }

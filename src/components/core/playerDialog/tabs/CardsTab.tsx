@@ -87,13 +87,13 @@ function GameCard({ type, inactive }: GameCardProps) {
           />
         </TooltipTrigger>
         <TooltipContent
-          className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3"
+          className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3 rounded-xl"
           side="right"
           align="start"
           sideOffset={8}
         >
-          <div className="text-[20px] font-semibold mb-2">{cardData.name}</div>
-          <div className="text-base font-semibold text-muted-foreground">
+          <div className="text-[20px] font-semibold mb-2 leading-6">{cardData.name}</div>
+          <div className="text-base font-semibold text-muted-foreground leading-[19px]">
             {cardData.description}
           </div>
         </TooltipContent>

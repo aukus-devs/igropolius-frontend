@@ -21,7 +21,7 @@ import GamesHistory from './options/GamesHistory';
 const buttonStyle =
   'flex items-center justify-start max-h-9 bg-transparent font-semibold text-base w-full rounded-none border-none px-3 py-2';
 const groupStyle =
-  'flex flex-col items-center w-full rounded-[10px] backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]';
+  'flex flex-col items-center w-full rounded-xl backdrop-blur-[1.5rem] bg-card/70 overflow-hidden shrink-0 first:mt-[5px]';
 
 function QuickMenuTitle({ username, avatarLink }: { username?: string; avatarLink?: string }) {
   return (

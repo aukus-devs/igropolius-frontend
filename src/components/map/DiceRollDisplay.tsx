@@ -21,9 +21,9 @@ function DiceRollDisplay({ resultIdx, position }: Props) {
 
   return (
     <Html zIndexRange={[0, 0]} center position={position} style={{ pointerEvents: 'none' }}>
-      <Card className="scale-0 data-[visible=true]:scale-100 duration-300" data-visible={showRoll}>
+      <Card className="scale-0 data-[visible=true]:scale-100 duration-300 p-0" data-visible={showRoll}>
         <CardContent
-          className="font-roboto-wide-semibold text-5xl data-[sum=true]:text-3xl whitespace-nowrap"
+          className="font-roboto-wide-semibold text-[64px] py-1 px-5 leading-[75px] data-[sum=true]:text-[32px] data-[sum=true]:py-2.5 data-[sum=true]:px-9 data-[sum=true]:leading-[38px] whitespace-nowrap"
           data-sum={resultIdx === undefined}
         >
           {text}
