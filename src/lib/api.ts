@@ -25,6 +25,7 @@ import {
   SavePlayerGameRequest,
   SavePlayerGameResponse,
   StealBonusCardRequest,
+  UpdatePlayerInternalRequest,
   UpdatePlayerTurnStateRequest,
   UseBonusCardRequest,
   UseInstantCardRequest,
@@ -715,6 +716,16 @@ export async function editPlayerGame(gameId: number, request: EditPlayerGame): P
   }
   await apiRequest(`/api/player-games/${gameId}`, {
     method: 'PATCH',
+    body: JSON.stringify(request),
+  });
+}
+
+export async function updatePlayerInternal(request: UpdatePlayerInternalRequest): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest('/api/internal/player', {
+    method: 'POST',
     body: JSON.stringify(request),
   });
 }

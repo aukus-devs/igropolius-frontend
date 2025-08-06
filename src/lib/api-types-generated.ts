@@ -317,6 +317,8 @@ export type Success1 = boolean;
  * via the `definition` "StreamPlatform".
  */
 export type StreamPlatform1 = "twitch" | "vk" | "kick" | "none";
+export type PlayerId4 = number;
+export type SectorId8 = number | null;
 
 export interface ApiSchema {
   [k: string]: unknown;
@@ -797,6 +799,17 @@ export interface StreamCheckResponse {
 }
 export interface Stats {
   [k: string]: unknown;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "UpdatePlayerInternalRequest".
+ */
+export interface UpdatePlayerInternalRequest {
+  player_id: PlayerId4;
+  sector_id?: SectorId8;
+  bonus_card?: MainBonusCardType | null;
+  instant_card?: InstantCardType | null;
+  turn_state?: PlayerTurnState | null;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
