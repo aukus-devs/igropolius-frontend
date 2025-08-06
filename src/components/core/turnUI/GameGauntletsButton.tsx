@@ -10,7 +10,7 @@ type Props = {
 export default function GameGauntletsButton({ gameLengthRanges, className }: Props) {
   const handleClick = () => {
     window.open(
-      `https://gamegauntlets.igropolius.ru/?queryFilters=true&length=${gameLengthRanges.min},${gameLengthRanges.max}#wheel`,
+      `https://gamegauntlets.igropolius.ru/?queryFilters=true&empty=false&length=${gameLengthRanges.min},${gameLengthRanges.max}#wheel`,
       '_blank'
     );
   };
