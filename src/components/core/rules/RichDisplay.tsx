@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from "react";
+import React, { Fragment, useMemo } from 'react';
 
 type Props = {
   value: string;
@@ -11,10 +11,10 @@ type Op = {
     italic?: boolean;
     underline?: boolean;
     strike?: boolean;
-    align?: "left" | "center" | "right" | "justify";
-    list?: "bullet" | "ordered";
+    align?: 'left' | 'center' | 'right' | 'justify';
+    list?: 'bullet' | 'ordered';
     header?: 1 | 2 | 3 | 4 | 5 | 6;
-    "code-block"?: "plain";
+    'code-block'?: 'plain';
     blockquote?: boolean;
     link?: string;
     indent?: number;
@@ -27,15 +27,15 @@ export default function RichDisplay({ value }: Props) {
     const ops = parsed.ops || [];
     const blocks = splitIntoBlocks(ops);
     const segments = blocksIntoSegments(blocks);
-    console.log({ parsed, blocks, segments });
+    // console.log({ parsed, blocks, segments });
     return segments;
   }, [value]);
   return (
     <div className="ql-snow">
-      <div className="ql-editor" style={{ padding: "0px" }}>
+      <div className="ql-editor" style={{ padding: '0px' }}>
         {segments.map((blocks, segIdx) => {
           const isFirst = segIdx === 0;
-          const marginTop = isFirst ? "mt-0" : "mt-[10px]";
+          const marginTop = isFirst ? 'mt-0' : 'mt-[10px]';
           return (
             <div
               key={segIdx}
@@ -54,11 +54,11 @@ export default function RichDisplay({ value }: Props) {
 
 type BlockOp = {
   attributes: {
-    "code-block"?: "plain";
+    'code-block'?: 'plain';
     blockquote?: boolean;
     header?: 1 | 2 | 3 | 4 | 5 | 6;
-    list?: "bullet" | "ordered";
-    align?: "left" | "center" | "right" | "justify";
+    list?: 'bullet' | 'ordered';
+    align?: 'left' | 'center' | 'right' | 'justify';
   };
   children: BlockChild[];
 };
@@ -87,24 +87,24 @@ function setBlockAttributes(block: BlockOp, op: Op) {
   block.attributes.header = op.attributes?.header;
   block.attributes.list = op.attributes?.list;
   block.attributes.align = op.attributes?.align;
-  block.attributes["code-block"] = op.attributes?.["code-block"];
+  block.attributes['code-block'] = op.attributes?.['code-block'];
 }
 
 function splitIntoBlocks(ops: Op[]) {
   const blocks: BlockOp[] = [];
   let currentBlock: BlockOp = {
-    attributes: {} as BlockOp["attributes"],
+    attributes: {} as BlockOp['attributes'],
     children: [] as BlockChild[],
   };
 
-  ops.forEach((op) => {
+  ops.forEach(op => {
     const insertItems = splitWithNewlines(op.insert);
 
     // console.log({ insert: op.insert, attrs: op.attributes })
 
-    insertItems.forEach((item) => {
+    insertItems.forEach(item => {
       console.log({ item });
-      if (item === "\n") {
+      if (item === '\n') {
         if (op.attributes?.list) {
           const lastBlock = blocks[blocks.length - 1];
           if (lastBlock && lastBlock.attributes?.list === op.attributes?.list) {
@@ -128,7 +128,7 @@ function splitIntoBlocks(ops: Op[]) {
                 {
                   closed: true,
                   op: {
-                    insert: "",
+                    insert: '',
                     attributes: {
                       indent,
                       list: op.attributes?.list,
@@ -152,7 +152,7 @@ function splitIntoBlocks(ops: Op[]) {
           setBlockAttributes(currentBlock, op);
           blocks.push(currentBlock);
           currentBlock = {
-            attributes: {} as BlockOp["attributes"],
+            attributes: {} as BlockOp['attributes'],
             children: [] as BlockChild[],
           };
         } else {
@@ -160,7 +160,7 @@ function splitIntoBlocks(ops: Op[]) {
             {
               closed: true,
               op: {
-                insert: "",
+                insert: '',
                 attributes: op.attributes,
               },
             },
@@ -168,7 +168,7 @@ function splitIntoBlocks(ops: Op[]) {
           setBlockAttributes(currentBlock, op);
           blocks.push(currentBlock);
           currentBlock = {
-            attributes: {} as BlockOp["attributes"],
+            attributes: {} as BlockOp['attributes'],
             children: [] as BlockChild[],
           };
         }
@@ -207,7 +207,7 @@ function splitIntoBlocks(ops: Op[]) {
 
 function blocksIntoSegments(blocks: BlockOp[]) {
   const segments: BlockOp[][] = [];
-  blocks.forEach((block) => {
+  blocks.forEach(block => {
     if (block.attributes?.header === 1) {
       segments.push([block]);
     } else {
@@ -227,32 +227,32 @@ type BlockProps = {
 };
 
 function Block({ block }: BlockProps) {
-  let BlockTag: React.ElementType = "p";
+  let BlockTag: React.ElementType = 'p';
   if (block.attributes.blockquote) {
-    BlockTag = "blockquote";
+    BlockTag = 'blockquote';
   }
   if (block.attributes.header) {
     BlockTag = `h${block.attributes.header}`;
   }
   if (block.attributes.list) {
-    BlockTag = "ol";
+    BlockTag = 'ol';
   }
-  if (block.attributes["code-block"]) {
-    BlockTag = "pre";
+  if (block.attributes['code-block']) {
+    BlockTag = 'pre';
   }
 
-  let backgroundColor = "transparent";
-  if (block.attributes["code-block"]) {
-    backgroundColor = "#1e1e1e";
+  let backgroundColor = 'transparent';
+  if (block.attributes['code-block']) {
+    backgroundColor = '#1e1e1e';
   }
   if (block.attributes.blockquote) {
-    backgroundColor = "#1e1e1e";
+    backgroundColor = '#1e1e1e';
   }
 
   return (
     <BlockTag
       style={{
-        margin: "0",
+        margin: '0',
         backgroundColor,
         textAlign: block.attributes.align,
       }}
@@ -281,41 +281,41 @@ function Block({ block }: BlockProps) {
 }
 
 function BlockChild({ op }: { op: Op }) {
-  if (op.insert === "") {
+  if (op.insert === '') {
     return <Fragment>&nbsp;</Fragment>;
   }
 
-  let SpanElement: React.ElementType = "span";
+  let SpanElement: React.ElementType = 'span';
   const style: React.CSSProperties = {};
 
   const additionalProps: { [k: string]: string } = {};
 
   if (op.attributes?.bold) {
-    style.fontWeight = "bold";
+    style.fontWeight = 'bold';
   }
   if (op.attributes?.italic) {
-    style.fontStyle = "italic";
+    style.fontStyle = 'italic';
   }
   if (op.attributes?.underline) {
-    style.textDecoration = "underline";
+    style.textDecoration = 'underline';
   }
   if (op.attributes?.strike) {
-    style.textDecoration = "line-through";
+    style.textDecoration = 'line-through';
   }
   if (op.attributes?.align) {
     style.textAlign = op.attributes.align;
   }
   if (op.attributes?.link) {
-    SpanElement = "a";
-    style.color = "blue";
-    style.textDecoration = "underline";
-    style.cursor = "pointer";
-    additionalProps["href"] = op.attributes.link;
-    additionalProps["target"] = "_blank";
-    additionalProps["rel"] = "noopener noreferrer";
+    SpanElement = 'a';
+    style.color = '#4EA8DE';
+    style.textDecoration = 'underline';
+    style.cursor = 'pointer';
+    additionalProps['href'] = op.attributes.link;
+    additionalProps['target'] = '_blank';
+    additionalProps['rel'] = 'noopener noreferrer';
   }
 
-  const insertValues = op.insert.split("\n");
+  const insertValues = op.insert.split('\n');
   return (
     <SpanElement style={style} {...additionalProps}>
       {insertValues.map((v, idx) => {
