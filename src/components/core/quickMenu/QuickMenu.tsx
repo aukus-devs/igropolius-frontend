@@ -16,6 +16,7 @@ import Clock from '../Clock';
 import useSystemStore from '@/stores/systemStore';
 import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
+import GamesHistory from './options/GamesHistory';
 
 const buttonStyle =
   'flex items-center justify-start max-h-9 bg-transparent font-semibold text-base w-full rounded-none border-none px-3 py-2';
@@ -82,6 +83,8 @@ function QuickMenu() {
 
         <div className={groupStyle}>
           <RulesDialog className={buttonStyle} />
+          <Separator />
+          <GamesHistory className={buttonStyle} />
           <Separator />
           <AboutDialog className={buttonStyle} />
           <Separator />
