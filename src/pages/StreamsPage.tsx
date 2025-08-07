@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPlayers } from '../lib/api';
 import { queryKeys } from '../lib/queryClient';
@@ -21,44 +21,84 @@ export default function StreamsPage() {
     refetchInterval: 60 * 1000,
   });
 
-  const onlineStreamers =
-    playersData?.players?.filter(player => player.is_online && hasStream(player)) || [];
-  console.log(onlineStreamers);
-  const handleToggleExpand = (index: number) => {
-    if (expandedStreamIndex === index) {
-      setExpandedStreamIndex(null);
-      setShowChat(true);
-    } else {
-      setExpandedStreamIndex(index);
-      setShowChat(true);
-    }
-  };
+  const onlineStreamers = useMemo(() => {
+    return playersData?.players?.filter(player => player.is_online && hasStream(player)) || [];
+  }, [playersData?.players]);
+  const handleToggleExpand = useCallback(
+    (index: number) => {
+      if (expandedStreamIndex === index) {
+        setExpandedStreamIndex(null);
+        setShowChat(true);
+      } else {
+        setExpandedStreamIndex(index);
+        setShowChat(true);
+      }
+    },
+    [expandedStreamIndex]
+  );
 
   useEffect(() => {
     if (showAllPlayers) {
-      setVisiblePlayers(new Set(onlineStreamers.map(player => player.id.toString())));
+      const newVisiblePlayers = new Set(onlineStreamers.map(player => player.id.toString()));
+      const currentVisiblePlayers = Array.from(visiblePlayers);
+      const newVisiblePlayersArray = Array.from(newVisiblePlayers);
+
+      if (
+        currentVisiblePlayers.length !== newVisiblePlayersArray.length ||
+        !currentVisiblePlayers.every(id => newVisiblePlayers.has(id))
+      ) {
+        setVisiblePlayers(newVisiblePlayers);
+      }
     }
-  }, [onlineStreamers, showAllPlayers]);
+  }, [onlineStreamers, showAllPlayers, visiblePlayers]);
 
-  const filteredStreamers = onlineStreamers.filter(player => {
-    return showAllPlayers || visiblePlayers.has(player.id.toString());
-  });
+  const filteredStreamers = useMemo(() => {
+    return onlineStreamers.filter(player => {
+      return showAllPlayers || visiblePlayers.has(player.id.toString());
+    });
+  }, [onlineStreamers, showAllPlayers, visiblePlayers]);
 
-  const handleTogglePlayer = (playerId: string) => {
-    const newVisiblePlayers = new Set(visiblePlayers);
-    if (newVisiblePlayers.has(playerId)) {
-      newVisiblePlayers.delete(playerId);
-    } else {
-      newVisiblePlayers.add(playerId);
-    }
-    setVisiblePlayers(newVisiblePlayers);
-    setShowAllPlayers(false);
-  };
+  const handleTogglePlayer = useCallback(
+    (playerId: string) => {
+      const newVisiblePlayers = new Set(visiblePlayers);
+      if (newVisiblePlayers.has(playerId)) {
+        newVisiblePlayers.delete(playerId);
+      } else {
+        newVisiblePlayers.add(playerId);
+      }
+      setVisiblePlayers(newVisiblePlayers);
+      setShowAllPlayers(false);
+    },
+    [visiblePlayers]
+  );
 
-  const handleShowAll = () => {
+  const handleShowAll = useCallback(() => {
     setShowAllPlayers(true);
-    setVisiblePlayers(new Set(onlineStreamers.map(player => player.id.toString())));
-  };
+  }, []);
+
+  const handleToggleChat = useCallback(() => {
+    setShowChat(!showChat);
+  }, [showChat]);
+
+  const handleGoHome = useCallback(() => {
+    window.location.href = '/';
+  }, []);
+
+  const resetElementStyles = useCallback(() => {
+    streamRefs.current.forEach((ref, index) => {
+      if (ref) {
+        ref.style.position = '';
+        ref.style.top = '';
+        ref.style.left = '';
+        ref.style.width = '';
+        ref.style.height = '';
+        ref.style.zIndex = '';
+        ref.style.transition = '';
+        ref.style.borderRadius = '';
+        ref.style.display = index < 12 ? 'block' : 'none';
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (expandedStreamIndex !== null) {
@@ -141,21 +181,9 @@ export default function StreamsPage() {
         });
       }
     } else {
-      streamRefs.current.forEach((ref, index) => {
-        if (ref) {
-          ref.style.position = '';
-          ref.style.top = '';
-          ref.style.left = '';
-          ref.style.width = '';
-          ref.style.height = '';
-          ref.style.zIndex = '';
-          ref.style.transition = '';
-          ref.style.borderRadius = '';
-          ref.style.display = index < 12 ? 'block' : 'none';
-        }
-      });
+      resetElementStyles();
     }
-  }, [expandedStreamIndex, showChat]);
+  }, [expandedStreamIndex, showChat, filteredStreamers, resetElementStyles]);
 
   if (isLoading) {
     return (
@@ -169,11 +197,7 @@ export default function StreamsPage() {
     return (
       <div className="min-h-screen bg-[#282828]">
         <div className="container mx-auto px-4 py-8">
-          <Button
-            variant="ghost"
-            onClick={() => (window.location.href = '/')}
-            className="mb-6 text-white"
-          >
+          <Button variant="ghost" onClick={handleGoHome} className="mb-6 text-white">
             Игрополиус
           </Button>
           <div className="text-center py-12">
@@ -189,11 +213,7 @@ export default function StreamsPage() {
     <div className="min-h-screen bg-[#282828]">
       <div className="py-4 px-4">
         <div className="mb-4 flex items-center gap-4">
-          <Button
-            variant="ghost"
-            onClick={() => (window.location.href = '/')}
-            className="text-white"
-          >
+          <Button variant="ghost" onClick={handleGoHome} className="text-white">
             Игрополиус
           </Button>
 
@@ -238,7 +258,7 @@ export default function StreamsPage() {
                 isExpanded={expandedStreamIndex === index}
                 onToggleExpand={() => handleToggleExpand(index)}
                 showChat={showChat}
-                onToggleChat={() => setShowChat(!showChat)}
+                onToggleChat={handleToggleChat}
                 className="h-full"
               />
             </div>
