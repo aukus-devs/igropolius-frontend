@@ -56,30 +56,29 @@ function DesktopUI() {
       )}
       {loggedIn && (
         <div className="absolute left-4 bottom-5">
-          <span className="text-[#282828] font-wide-black">Мои карточки</span>
+          <span className="text-[#282828] font-roboto-wide-black opacity-70">Мои карточки</span>
           <MyCards />
         </div>
       )}
-        <div ref={techContainer} className="absolute bottom-0 right-0 flex">
-          {/* <Stats
+      <div ref={techContainer} className="absolute bottom-0 right-0 flex">
+        {/* <Stats
             className="!relative h-[13px] scale-150 grayscale-100 overflow-hidden"
             parent={techContainer!}
             /> */}
-          {position && (
-            <div className="relative text-xs text-white/80 bg-black/60 p-1">
-              #{position} ход: {turnState}
-            </div>
-          )}
-          <FrontVersionInfo />
-        </div>
+        {position && (
+          <div className="relative text-xs text-white/80 bg-black/60 p-1">
+            #{position} ход: {turnState}
+          </div>
+        )}
+        <FrontVersionInfo />
+      </div>
 
       {mainNotification && (
         <Card
-          className={`absolute top-3 left-1/2 -translate-x-1/2 max-w-2xl ${
-            mainNotification.variant === 'error'
+          className={`absolute top-3 left-1/2 -translate-x-1/2 max-w-2xl ${mainNotification.variant === 'error'
               ? 'bg-destructive/90 text-white border-destructive'
               : ''
-          }`}
+            }`}
         >
           <div className="pl-4 pr-4 rounded-md flex items-start gap-2 py-2">
             <div className="flex-1 whitespace-pre-wrap text-sm">{mainNotification.text}</div>
@@ -106,11 +105,10 @@ function MobileUI() {
 
       {mainNotification && (
         <Card
-          className={`absolute top-20 left-4 right-4 ${
-            mainNotification.variant === 'error'
+          className={`absolute top-20 left-4 right-4 ${mainNotification.variant === 'error'
               ? 'bg-destructive/90 text-white border-destructive'
               : ''
-          }`}
+            }`}
         >
           <div className="pl-4 pr-4 rounded-md flex items-start gap-2 py-2">
             <div className="flex-1 whitespace-pre-wrap text-sm">{mainNotification.text}</div>
