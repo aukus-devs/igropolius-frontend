@@ -42,7 +42,7 @@ export function CustomCameraControls() {
           0.1,
           1000
         )
-      : new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+      : new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.3, 1000);
 
     newCamera.zoom = isOrthographic ? 7 : 1;
     newCamera.position.set(0, 120, isOrthographic ? -0.1 : -100);
