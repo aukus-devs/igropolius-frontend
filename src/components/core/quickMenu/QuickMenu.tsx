@@ -17,6 +17,7 @@ import useSystemStore from '@/stores/systemStore';
 import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import GamesHistory from './options/GamesHistory';
+import SvgProfile from '@/components/icons/Profile';
 
 const buttonStyle =
   'flex items-center justify-start max-h-9 bg-transparent font-semibold text-base w-full rounded-none border-none px-3 py-2';
@@ -73,26 +74,29 @@ function QuickMenu() {
           </div>
           <Separator />
           <Countdown className={buttonStyle} />
-          <Separator />
-          {myUser && (
-            <Button variant="outline" className={buttonStyle} onClick={openProfile}>
-              Мой профиль
-            </Button>
-          )}
         </div>
 
         <div className={groupStyle}>
+          {myUser && (
+            <>
+              <Button variant="outline" className={buttonStyle} onClick={openProfile}>
+                <SvgProfile />
+                Мой профиль
+              </Button>
+              <Separator />
+            </>
+          )}
           <RulesDialog className={buttonStyle} />
           <Separator />
           <GamesHistory className={buttonStyle} />
           <Separator />
           <AboutDialog className={buttonStyle} />
-          <Separator />
-          <StreamsButton className={buttonStyle} />
         </div>
 
         <div className={groupStyle}>
           <OrthographicToggle className={buttonStyle} />
+          <Separator />
+          <StreamsButton className={buttonStyle} />
         </div>
 
         <div className={groupStyle}>

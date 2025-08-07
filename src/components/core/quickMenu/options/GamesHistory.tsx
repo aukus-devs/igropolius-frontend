@@ -9,6 +9,7 @@ import {
 import useUrlPath from '@/hooks/useUrlPath';
 import { cn } from '@/lib/utils';
 import GamesHistoryContent from './GamesHistoryContent';
+import SvgGame from '@/components/icons/Game';
 
 export default function GamesHistory({ className }: { className?: string }) {
   const { pathActive, activate } = useUrlPath('/history');
@@ -16,6 +17,7 @@ export default function GamesHistory({ className }: { className?: string }) {
   return (
     <Dialog open={pathActive} onOpenChange={activate}>
       <DialogTrigger className={cn(buttonVariants({ variant: 'outline' }), className)}>
+        <SvgGame />
         История игр
       </DialogTrigger>
       <DialogContent
