@@ -148,7 +148,11 @@ export default function PlayerTurnUI() {
       if (!hasCardsToSteal) {
         return <NoCardsToStealDialog />;
       }
-      return null; // No UI for stealing bonus card, handled in PlayerCards
+      return (
+        <Card className="p-4">
+          <span>Выбери, какую карточку своровать у игрока</span>
+        </Card>
+      );
     case 'entering-prison':
       return <PrisonEnterCardRoll />;
     case 'dropping-card-after-game-drop':
