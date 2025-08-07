@@ -274,7 +274,7 @@ function Block({ block }: BlockProps) {
             </li>
           );
         }
-        return <p>{groupRendered}</p>;
+        return <p key={idx}>{groupRendered}</p>;
       })}
     </BlockTag>
   );

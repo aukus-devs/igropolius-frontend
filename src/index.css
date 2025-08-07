@@ -52,10 +52,9 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --animate-shake: shake 1.25s cubic-bezier(.36, .07, .19, .97) infinite;
+  --animate-shake: shake 1.25s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
 
   @keyframes shake {
-
     0%,
     30% {
       transform: rotate(0deg);
@@ -110,6 +109,25 @@
 
     @apply bg-background text-foreground;
   }
+}
+
+.font-roboto-wide {
+  font-family: 'Roboto Flex', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    'slnt' 0,
+    'wdth' 130,
+    'GRAD' 0,
+    'XOPQ' 140,
+    'XTRA' 520,
+    'YOPQ' 79,
+    'YTAS' 750,
+    'YTDE' -203,
+    'YTFI' 738,
+    'YTLC' 514,
+    'YTUC' 712;
 }
 
 .font-roboto-wide-semibold {

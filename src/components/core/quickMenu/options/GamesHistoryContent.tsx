@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useQuery } from '@tanstack/react-query';
-import { LoaderCircleIcon } from 'lucide-react';
+import { LoaderCircleIcon, SearchIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 type Historyitem = {
@@ -39,6 +39,9 @@ export default function GamesHistoryContent() {
     if (!historyData?.games.length) {
       return [];
     }
+    if (debouncedFilter.length < 3) {
+      return historyData.games;
+    }
     return historyData.games.filter(
       item =>
         item.game_title.toLowerCase().includes(debouncedFilter) ||
@@ -46,7 +49,7 @@ export default function GamesHistoryContent() {
         item.event_name.toLowerCase().includes(debouncedFilter) ||
         item.review.toLowerCase().includes(debouncedFilter)
     );
-  }, [debouncedFilter, historyData?.games.length]);
+  }, [debouncedFilter, historyData?.games]);
 
   if (isLoading || !historyData) {
     return (
@@ -58,22 +61,28 @@ export default function GamesHistoryContent() {
 
   return (
     <div>
-      <Input
-        className="mt-[30px] mb-[30px] font-roboto-wide-semibold bg-foreground/10 border-none"
-        type="text"
-        value={searchFilter}
-        onChange={e => setSearchFilter(e.target.value)}
-        placeholder="Поиск"
-        onKeyDown={e => e.stopPropagation()}
-      />
+      <div className="relative">
+        <SearchIcon
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          size="1rem"
+        />
+        <Input
+          className="pl-8 mt-[30px] mb-[30px] font-roboto-wide-semibold bg-foreground/10 border-none"
+          type="text"
+          value={searchFilter}
+          onChange={e => setSearchFilter(e.target.value)}
+          placeholder="Поиск"
+          onKeyDown={e => e.stopPropagation()}
+        />
+      </div>
       <div className="flex flex-col gap-[50px] w-full">
         {filteredGames.map(item => (
           <div
             key={`${item.player_nickname}-${item.game_title}-${item.date}`}
             className="flex flex-col gap-[10px]"
           >
-            <div className="font-roboto-wide-semibold">
-              {item.player_nickname}&nbsp;—&nbsp;{item.event_name}&nbsp;—&nbsp;
+            <div className="font-roboto-wide text-base">
+              {capitalize(item.player_nickname)}&nbsp;—&nbsp;{item.event_name}&nbsp;—&nbsp;
               {item.completion_status}
             </div>
             <div className="text-2xl p-0 font-roboto-wide-semibold">{item.game_title}</div>
@@ -86,7 +95,11 @@ export default function GamesHistoryContent() {
               <div className="flex flex-col gap-[10px]">
                 <div className="flex gap-2">
                   <Badge className="bg-white/20 text-white/70 font-semibold">
-                    Пройдено за: {sencondsToHourMin(item.game_time)}
+                    {item.completion_status === 'drop' ? (
+                      <span>Пройдено за: {sencondsToHourMin(item.game_time)}</span>
+                    ) : (
+                      <span>Играл: {sencondsToHourMin(item.game_time)}</span>
+                    )}
                   </Badge>
                 </div>
                 <span className="break-words whitespace-normal text-pretty">
@@ -106,4 +119,8 @@ function sencondsToHourMin(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   return `${hours}ч ${minutes}мин`;
+}
+
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
