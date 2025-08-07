@@ -5,7 +5,7 @@ import useSystemStore from '@/stores/systemStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import { Button } from '@/components/ui/button';
-import { Person } from '@/components/icons';
+import { LogOut } from '@/components/icons';
 
 export function LogoutButton({ className }: { className?: string }) {
   const { setAccessToken, setMyUser } = useSystemStore(
@@ -39,7 +39,7 @@ export function LogoutButton({ className }: { className?: string }) {
 
   return (
     <Button variant="outline" className={className} onClick={handleLogout}>
-      <Person />
+      <LogOut />
       <span>Выйти</span>
     </Button>
   );
