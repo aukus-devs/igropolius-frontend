@@ -40,32 +40,39 @@ function App() {
     []
   );
 
-  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards, needToSelectModel } =
-    usePlayerStore(
-      useShallow(state => ({
-        setPlayers: state.setPlayers,
-        setMyPlayer: state.setMyPlayer,
-        setTurnState: state.setTurnState,
-        setPrisonCards: state.setPrisonCards,
-        players: state.players,
-        needToSelectModel: state.needToSelectModel,
-      }))
-    );
+  const { setPlayers, setMyPlayer, setTurnState, setPrisonCards, myPlayer } = usePlayerStore(
+    useShallow(state => ({
+      setPlayers: state.setPlayers,
+      setMyPlayer: state.setMyPlayer,
+      setTurnState: state.setTurnState,
+      setPrisonCards: state.setPrisonCards,
+      players: state.players,
 
-  const { disableCurrentPlayerQuery, disablePlayersQuery, setMyUser, accessToken } = useSystemStore(
+      myPlayer: state.myPlayer,
+    }))
+  );
+
+  const {
+    disableCurrentPlayerQuery,
+    disablePlayersQuery,
+    setMyUser,
+    setActingUserId,
+    accessToken,
+  } = useSystemStore(
     useShallow(state => ({
       disableCurrentPlayerQuery: state.disableCurrentPlayerQuery,
       disablePlayersQuery: state.disablePlayersQuery,
       setMyUser: state.setMyUser,
       accessToken: state.accessToken,
+      setActingUserId: state.setActingUserId,
     }))
   );
 
-  const { data: currentPlayerData, isError: currentPlayerDataError } = useQuery({
-    queryKey: [...queryKeys.currentPlayer, accessToken],
+  const { data: currentPlayerData, error: currentPlayerDataError } = useQuery({
+    queryKey: queryKeys.currentPlayer,
     queryFn: fetchCurrentPlayer,
     retry: false,
-    enabled: !disableCurrentPlayerQuery && accessToken !== null,
+    enabled: !disableCurrentPlayerQuery && Boolean(accessToken),
   });
 
   const { data: playersData, isLoading } = useQuery({
@@ -104,12 +111,21 @@ function App() {
       setMyPlayer(undefined);
       setTurnState(null);
       setMyUser(null);
+      setActingUserId(null);
       return;
     }
+    // console.log('set my player', currentPlayerData);
     setMyPlayer(currentPlayerData);
     setTurnState(currentPlayerData?.turn_state ?? null);
     setMyUser(currentPlayerData);
-  }, [currentPlayerData, setMyPlayer, setTurnState, currentPlayerDataError, setMyUser]);
+  }, [
+    currentPlayerData,
+    setMyPlayer,
+    setTurnState,
+    currentPlayerDataError,
+    setMyUser,
+    setActingUserId,
+  ]);
 
   useEffect(() => {
     setPlayers(playersData?.players ?? []);
@@ -156,7 +172,8 @@ function App() {
   }
 
   const enableMetrika = !IS_DEV;
-  const isModelSelectionScene = needToSelectModel();
+
+  const isModelSelectionScene = myPlayer && (!myPlayer.model_name || !myPlayer.color);
 
   // const { lightIntensity, bgIntensity, bgBlurriness, toneMapping } = useControls('Environment', {
   //   toneMapping: {

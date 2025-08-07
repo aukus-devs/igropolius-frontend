@@ -21,6 +21,10 @@ export const refetchCurrentPlayer = () => {
   client.refetchQueries({ queryKey: queryKeys.currentPlayer });
 };
 
+export const removeCurrentPlayerQuery = () => {
+  client.removeQueries({ queryKey: queryKeys.currentPlayer });
+};
+
 export const resetPlayersQuery = () => {
   client.invalidateQueries({ queryKey: queryKeys.players });
 };

@@ -20,24 +20,23 @@ import GameGauntletsButton from './GameGauntletsButton';
 import { formatTsToMonthDatetime } from '@/lib/utils';
 
 export default function PlayerTurnUI() {
-  const { turnState, isPlayerMoving, hasCardsToSteal, myPlayerSectorId, needToSelectModel } =
-    usePlayerStore(
-      useShallow(state => {
-        const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
-        const otherPlayers = state.players.filter(player => player.id !== state.myPlayerId);
-        const cardsToSteal = otherPlayers.flatMap(player =>
-          player.bonus_cards.filter(card => !myCardsSet.has(card.bonus_type))
-        );
-        return {
-          turnState: state.turnState,
-          isPlayerMoving: state.isPlayerMoving,
-          hasCardsToSteal: cardsToSteal.length > 0,
-          myPlayerSectorId: state.myPlayer?.sector_id ?? null,
-          canSelectBuildingSector: state.canSelectBuildingSector,
-          needToSelectModel: state.needToSelectModel,
-        };
-      })
-    );
+  const { turnState, isPlayerMoving, hasCardsToSteal, myPlayerSectorId, myPlayer } = usePlayerStore(
+    useShallow(state => {
+      const myCardsSet = new Set(state.myPlayer?.bonus_cards.map(card => card.bonus_type) ?? []);
+      const otherPlayers = state.players.filter(player => player.id !== state.myPlayerId);
+      const cardsToSteal = otherPlayers.flatMap(player =>
+        player.bonus_cards.filter(card => !myCardsSet.has(card.bonus_type))
+      );
+      return {
+        turnState: state.turnState,
+        isPlayerMoving: state.isPlayerMoving,
+        hasCardsToSteal: cardsToSteal.length > 0,
+        myPlayerSectorId: state.myPlayer?.sector_id ?? null,
+        canSelectBuildingSector: state.canSelectBuildingSector,
+        myPlayer: state.myPlayer,
+      };
+    })
+  );
 
   const currentSector = myPlayerSectorId ? SectorsById[myPlayerSectorId] : null;
   const showPointAUCButton = currentSector?.rollType === 'auc';
@@ -96,7 +95,7 @@ export default function PlayerTurnUI() {
 
   const eventSettingsNotLoaded = eventStartTime === null || eventEndTime === null;
 
-  const needToSelect = needToSelectModel();
+  const needToSelect = myPlayer && (!myPlayer.model_name || !myPlayer.color);
 
   const disableUI =
     isPlayerMoving || eventSettingsNotLoaded || eventNotStarted || eventEnded || needToSelect;

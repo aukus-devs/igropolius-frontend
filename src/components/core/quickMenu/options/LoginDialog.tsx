@@ -24,7 +24,7 @@ export default function LoginDialog({ className }: { className?: string }) {
 
   const setAccessToken = useSystemStore(state => state.setAccessToken);
 
-  const { mutateAsync: loginRequest } = useMutation({
+  const { mutateAsync: loginRequest, isPending } = useMutation({
     mutationFn: async ({ username, password }: { username: string; password: string }) => {
       return login({ username, password });
     },
@@ -82,7 +82,7 @@ export default function LoginDialog({ className }: { className?: string }) {
             type="password"
             className="w-full mt-2"
           />
-          <Button className="w-full mt-4" onClick={handleLogin}>
+          <Button className="w-full mt-4" onClick={handleLogin} loading={isPending}>
             Войти
           </Button>
           {error && <div className="text-red-500 mt-2 text-sm">Ошибка: {error}</div>}
