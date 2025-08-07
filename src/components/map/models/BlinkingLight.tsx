@@ -41,7 +41,7 @@ export function BlinkingLight({
       ref={lightRef}
       position={position}
       color={color}
-      distance={25}
+      distance={8}
       decay={0.5}
       castShadow
     />
