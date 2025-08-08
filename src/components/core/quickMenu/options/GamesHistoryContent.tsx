@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -61,6 +62,8 @@ export default function GamesHistoryContent() {
 
   const debouncedFilter = useDebounce(searchFilter.toLowerCase(), 300);
 
+  const [limit, setLimit] = useState(100);
+
   const filteredGames = useMemo(() => {
     if (!historyData?.games.length) {
       return [];
@@ -91,6 +94,10 @@ export default function GamesHistoryContent() {
     return eventFiltered;
   }, [debouncedFilter, historyData?.games, playerFilter, eventFilter]);
 
+  const limitedGames = useMemo(() => {
+    return filteredGames.slice(0, limit);
+  }, [filteredGames, limit]);
+
   if (isLoading || !historyData) {
     return (
       <div className="flex justify-center mt-20">
@@ -98,6 +105,8 @@ export default function GamesHistoryContent() {
       </div>
     );
   }
+
+  const showLoadMore = limitedGames.length < filteredGames.length;
 
   return (
     <div>
@@ -147,7 +156,7 @@ export default function GamesHistoryContent() {
         </div>
       </div>
       <div className="flex flex-col gap-[50px] w-full">
-        {filteredGames.map(item => (
+        {limitedGames.map(item => (
           <div
             key={`${item.player_nickname}-${item.game_title}-${item.date}`}
             className="flex flex-col gap-[10px]"
@@ -181,6 +190,14 @@ export default function GamesHistoryContent() {
             </div>
           </div>
         ))}
+
+        {showLoadMore && (
+          <div className="flex justify-center">
+            <Button className=" font-roboto-wide-semibold" onClick={() => setLimit(limit + 100)}>
+              Показать еще ({limitedGames.length} / {filteredGames.length})
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
