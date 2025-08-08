@@ -259,6 +259,7 @@ export type LengthBonus = number | null;
 export type Duration1 = number | null;
 export type VodLinks1 = string | null;
 export type Cover1 = string | null;
+export type GameId1 = number | null;
 export type Games1 = PlayerGame[];
 export type BonusCards = ActiveBonusCard[];
 export type Color = string;
@@ -308,7 +309,7 @@ export type Review1 = string;
 export type Rating2 = number;
 export type VodLinks2 = string | null;
 export type Scores3 = number;
-export type GameId1 = number | null;
+export type GameId2 = number | null;
 export type NewSectorId2 = number;
 export type EventStartTime = number | null;
 export type EventEndTime4 = number | null;
@@ -677,6 +678,7 @@ export interface PlayerGame {
   duration?: Duration1;
   vod_links?: VodLinks1;
   cover?: Cover1;
+  game_id?: GameId1;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -783,7 +785,7 @@ export interface SavePlayerGameRequest {
   length: GameLength;
   vod_links?: VodLinks2;
   scores: Scores3;
-  game_id?: GameId1;
+  game_id?: GameId2;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
