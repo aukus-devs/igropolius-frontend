@@ -708,11 +708,11 @@ export async function movePlayerGame(request: MovePlayerGameRequest): Promise<vo
   });
 }
 
-export async function editPlayerGame(gameId: number, request: EditPlayerGame): Promise<void> {
+export async function editPlayerGame(playerGameId: number, request: EditPlayerGame): Promise<void> {
   if (MOCK_API) {
     return Promise.resolve();
   }
-  await apiRequest(`/api/player-games/${gameId}`, {
+  await apiRequest(`/api/player-games/${playerGameId}`, {
     method: 'PATCH',
     body: JSON.stringify(request),
   });

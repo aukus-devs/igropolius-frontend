@@ -365,8 +365,8 @@ function GameReviewEditForm({
   const setIsOpen = isControlled ? externalSetOpen! : setOpen;
 
   const { mutateAsync: doEditGame, isPending: isEditing } = useMutation({
-    mutationFn: ({ gameId, request }: { gameId: number; request: EditPlayerGame }) =>
-      editPlayerGame(gameId, request),
+    mutationFn: ({ playerGameId, request }: { playerGameId: number; request: EditPlayerGame }) =>
+      editPlayerGame(playerGameId, request),
   });
 
   useEffect(() => {
@@ -411,7 +411,7 @@ function GameReviewEditForm({
 
     try {
       await doEditGame({
-        gameId: gameToEdit.id,
+        playerGameId: gameToEdit.id,
         request: {
           game_title: gameTitle,
           game_review: gameReview,
