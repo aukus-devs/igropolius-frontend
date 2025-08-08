@@ -31,7 +31,7 @@ function Model({ url, position, color, isSelected, onClick, isDisabled }: ModelP
   useCursor(isHovered);
 
   const scaleVector = new Vector3(1, 1, 1);
-  const defaultColor = new Color('white');
+  const disabledColor = new Color('grey');
   const selectColor = new Color(color);
 
   useFrame(() => {
@@ -44,10 +44,7 @@ function Model({ url, position, color, isSelected, onClick, isDisabled }: ModelP
     ref.current.traverse(child => {
       if (child instanceof Mesh) {
         if (child.name === 'body001') {
-          let targetColor = selectColor;
-          if (isDisabled) {
-            targetColor = defaultColor;
-          }
+          const targetColor = isDisabled ? disabledColor : selectColor;
           child.material.color.lerp(targetColor, 0.25);
         }
       }

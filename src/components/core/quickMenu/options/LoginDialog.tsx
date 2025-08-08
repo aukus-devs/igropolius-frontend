@@ -67,17 +67,29 @@ export default function LoginDialog({ className }: { className?: string }) {
         </DialogHeader>
         <div className="mt-7">
           <Input
+            disabled={isPending}
             type="text"
             onChange={e => setUsername(e.target.value)}
-            onKeyDown={e => e.stopPropagation()}
+            onKeyDown={e => {
+              e.stopPropagation();
+              if (e.key === 'Enter') {
+                handleLogin();
+              }
+            }}
             value={username}
             placeholder="Введите логин"
             className="w-full"
           />
           <Input
+            disabled={isPending}
             value={password}
             onChange={e => setPassword(e.target.value)}
-            onKeyDown={e => e.stopPropagation()}
+            onKeyDown={e => {
+              e.stopPropagation();
+              if (e.key === 'Enter') {
+                handleLogin();
+              }
+            }}
             placeholder="Введите пароль"
             type="password"
             className="w-full mt-2"
