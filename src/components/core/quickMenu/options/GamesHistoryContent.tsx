@@ -50,10 +50,8 @@ export default function GamesHistoryContent() {
     },
   });
 
-  const [playerFilter, setPlayerFilter] = useState<string | undefined>(undefined);
-  const [eventFilter, setEventFilter] = useState<string | undefined>(undefined);
-
-  console.log(historyData?.games.filter(x => !x.player_nickname));
+  const [playerFilter, setPlayerFilter] = useState<string>('none');
+  const [eventFilter, setEventFilter] = useState<string>('none');
 
   const [searchFilter, setSearchFilter] = useState('');
 
@@ -74,15 +72,17 @@ export default function GamesHistoryContent() {
               item.event_name.toLowerCase().includes(debouncedFilter) ||
               item.review.toLowerCase().includes(debouncedFilter)
           );
-    const playerFiltered = playerFilter
-      ? searchFiltered.filter(
-          item => item.player_nickname.toLowerCase() === playerFilter.toLowerCase()
-        )
-      : searchFiltered;
+    const playerFiltered =
+      playerFilter !== 'none'
+        ? searchFiltered.filter(
+            item => item.player_nickname.toLowerCase() === playerFilter.toLowerCase()
+          )
+        : searchFiltered;
 
-    const eventFiltered = eventFilter
-      ? playerFiltered.filter(item => item.event_name.toLowerCase() === eventFilter.toLowerCase())
-      : playerFiltered;
+    const eventFiltered =
+      eventFilter !== 'none'
+        ? playerFiltered.filter(item => item.event_name.toLowerCase() === eventFilter.toLowerCase())
+        : playerFiltered;
 
     return eventFiltered;
   }, [debouncedFilter, historyData?.games, playerFilter, eventFilter]);
@@ -112,12 +112,13 @@ export default function GamesHistoryContent() {
         />
       </div>
       <div>
-        <div className="flex mt-[10px] mb-[30px]">
+        <div className="flex mt-[10px] mb-[30px] gap-[10px]">
           <Select value={playerFilter} onValueChange={value => setPlayerFilter(value)}>
             <SelectTrigger>
               <SelectValue placeholder="Игрок" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="none">Все игроки</SelectItem>
               {players.map(player => (
                 <SelectItem key={player.id} value={player.username}>
                   {player.username}
@@ -125,15 +126,13 @@ export default function GamesHistoryContent() {
               ))}
             </SelectContent>
           </Select>
-          <Button variant="ghost" onClick={() => setPlayerFilter(undefined)}>
-            <X />
-          </Button>
 
           <Select value={eventFilter} onValueChange={value => setEventFilter(value)}>
             <SelectTrigger>
               <SelectValue placeholder="Ивент" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="none">Все ивенты</SelectItem>
               {['MGE', 'Aukus1', 'Aukus2', 'Aukus3'].map(evt => (
                 <SelectItem key={evt} value={evt}>
                   {evt}
@@ -141,9 +140,6 @@ export default function GamesHistoryContent() {
               ))}
             </SelectContent>
           </Select>
-          <Button variant="ghost" onClick={() => setEventFilter(undefined)}>
-            <X />
-          </Button>
         </div>
       </div>
       <div className="flex flex-col gap-[50px] w-full">
