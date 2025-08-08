@@ -167,19 +167,22 @@ export default function GamesHistoryContent() {
             </div>
             <div className="text-2xl p-0 font-roboto-wide-semibold">{item.game_title}</div>
             <div className="flex gap-[8px]">
-              <div className="min-w-[150px]">
-                {item.game_cover && (
-                  <img src={item.game_cover} className="min-w-[150px] w-[150px]"></img>
-                )}
-              </div>
+              {item.game_cover && (
+                <div>
+                  <img src={item.game_cover} className="min-w-[150px] w-[150px] rounded-md"></img>
+                </div>
+              )}
+
               <div className="flex flex-col gap-[10px]">
                 <div className="flex gap-2">
                   <Badge className="bg-white/20 text-white/70 font-semibold">
-                    {item.completion_status === 'completed' ? (
-                      <span>Пройдено за: {sencondsToHourMin(item.game_time)}</span>
-                    ) : (
-                      <span>Играл: {sencondsToHourMin(item.game_time)}</span>
-                    )}
+                    {item.game_time === 0 && <span>Время: нет данных</span>}
+                    {item.game_time > 0 &&
+                      (item.completion_status === 'completed' ? (
+                        <span>Пройдено за: {sencondsToHourMin(item.game_time)}</span>
+                      ) : (
+                        <span>Играл: {sencondsToHourMin(item.game_time)}</span>
+                      ))}
                   </Badge>
                 </div>
                 <span className="wrap-anywhere">
