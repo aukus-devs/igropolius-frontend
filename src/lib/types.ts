@@ -26,20 +26,20 @@ export const colors = {
 export type ColorName = keyof typeof colors;
 
 export const playerColors = {
-  red: '#FF453A',
-  orange: '#FF9F0A',
-  yellow: '#FFD60A',
-  green: '#30D158',
-  lightBlue: '#64D2FF',
-  blue: '#0A84FF',
-  darkBlue: '#5E5CE6',
-  purple: '#BF5AF2',
-  pink: '#FF375F',
-  brown: '#AC8E68',
+  blue: '#007AFF',
+  green: '#34C759',
+  pink: '#ECA3D4',
+  orange: '#E58600',
+  purple: '#AF52DE',
+  darkBlue: '#5856D6',
+  red: '#FF3B30',
+  brown: '#A2845E',
+  brightPink: '#FF2D55',
+  lavander: '#AF99DF',
 } as const;
 
-export type PlayerColor = keyof typeof playerColors;
-export type PlayerColorValue = (typeof playerColors)[PlayerColor];
+// export type PlayerColor = keyof typeof playerColors;
+// export type PlayerColorValue = (typeof playerColors)[PlayerColor];
 
 export type GameRollType = 'auc' | 'steam';
 

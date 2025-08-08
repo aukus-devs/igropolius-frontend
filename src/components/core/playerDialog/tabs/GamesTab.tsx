@@ -37,8 +37,8 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
           </div>
         ) : (
           <>
-            {filteredGames.map((game, idx) => (
-              <GameReview key={idx} game={game} />
+            {filteredGames.map(game => (
+              <GameReview key={game.id} game={game} />
             ))}
           </>
         )}
