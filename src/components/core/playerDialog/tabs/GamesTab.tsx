@@ -13,6 +13,8 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
       game.review.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const showCurrentGame = player.current_game?.toLowerCase().includes(searchText.toLowerCase());
+
   return (
     <>
       <div className="relative">
@@ -30,7 +32,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
         />
       </div>
       <div className="flex flex-col gap-8 py-8">
-        <CurrentGame player={player} />
+        {showCurrentGame && <CurrentGame player={player} />}
         {filteredGames.length === 0 ? (
           <div className="text-center text-xs font-roboto-wide-semibold text-muted-foreground">
             Нет игр {searchText && <span>, соответствующих вашему запросу.</span>}
