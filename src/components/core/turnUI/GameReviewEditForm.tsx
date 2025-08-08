@@ -417,7 +417,7 @@ function GameReviewEditForm({
           game_review: gameReview,
           rating: rating,
           vod_links: vodLinks || undefined,
-          game_id: selectedGame?.id || null,
+          game_id: selectedGame?.id || gameToEdit.id,
         },
       });
       resetPlayersQuery();
