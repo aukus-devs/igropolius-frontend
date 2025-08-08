@@ -32,9 +32,9 @@ type GamesHistory = {
 };
 
 export default function GamesHistoryContent() {
-  const players = usePlayerStore(state => state.players);
+  const playersOrig = usePlayerStore(state => state.players);
 
-  players.sort((a, b) => {
+  const players = [...playersOrig].sort((a, b) => {
     if (a.username < b.username) return -1;
     if (a.username > b.username) return 1;
     return 0;
