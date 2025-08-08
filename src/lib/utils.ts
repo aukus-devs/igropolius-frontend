@@ -184,19 +184,21 @@ function getEventBonusCardInfo(event: BonusCardEvent) {
   let title = '';
   const players = usePlayerStore.getState().players;
 
+  const cardName = bonusCardsData[event.bonus_type].name || 'Неизвестная карточка';
+
   switch (event.subtype) {
     case 'received':
-      title = 'Получил карточку';
+      title = `Получил «${cardName}»`;
       break;
     case 'used':
-      title = 'Использовал карточку';
+      title = `Использовал «${cardName}»`;
       break;
     case 'dropped':
-      title = 'Потерял карточку';
+      title = `Потерял «${cardName}»`;
       break;
     case 'stolen-from-me': {
       const player = players.find(p => p.id === event.stolen_by);
-      title = `${player?.username} украл карточку`;
+      title = `${player?.username} украл «${cardName}»`;
       break;
     }
     case 'stolen-by-me': {
