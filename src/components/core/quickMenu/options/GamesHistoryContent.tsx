@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useDebounce } from '@/hooks/useDebounce';
+import { IS_DEV } from '@/lib/constants';
 import usePlayerStore from '@/stores/playerStore';
 import { useQuery } from '@tanstack/react-query';
 import { LoaderCircleIcon, SearchIcon } from 'lucide-react';
@@ -38,6 +39,12 @@ export default function GamesHistoryContent() {
   const { data: historyData, isLoading } = useQuery({
     queryKey: ['gamesHistory'],
     queryFn: async (): Promise<GamesHistory> => {
+      if (IS_DEV) {
+        const data = await fetch(
+          'https://raw.githubusercontent.com/aukus-devs/games-history/refs/heads/main/games_history.json'
+        );
+        return data.json();
+      }
       const data = await fetch('/games_history.json');
       return data.json();
     },
@@ -46,7 +53,7 @@ export default function GamesHistoryContent() {
   const [playerFilter, setPlayerFilter] = useState<string | undefined>(undefined);
   const [eventFilter, setEventFilter] = useState<string | undefined>(undefined);
 
-  console.log({ playerFilter });
+  console.log(historyData?.games.filter(x => !x.player_nickname));
 
   const [searchFilter, setSearchFilter] = useState('');
 
