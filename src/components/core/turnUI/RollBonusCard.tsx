@@ -8,6 +8,7 @@ import useSystemStore from '@/stores/systemStore';
 import { resetNotificationsQuery } from '@/lib/queryClient';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 export default function RollBonusCard() {
   const { myPlayer, setNextTurnState, addCardToState } = usePlayerStore(
@@ -18,7 +19,10 @@ export default function RollBonusCard() {
     }))
   );
 
+  const [cardsBeforeRoll, setCardsBeforeRoll] = useState(myPlayer?.bonus_cards ?? []);
+
   const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
+    setCardsBeforeRoll(myPlayer?.bonus_cards ?? []);
     const newCard = await giveBonusCard({ bonus_type: option.value });
     addCardToState(newCard);
     setNextTurnState({ skipUpdate: true });
@@ -53,7 +57,7 @@ export default function RollBonusCard() {
     return acc;
   }, [] as WeightedOption<MainBonusCardType>[]);
 
-  if (weightedOptions.length === 0) {
+  if (weightedOptions.length === 0 && cardsBeforeRoll.length === allCardTypes.length) {
     return <NoCardsToReceive />;
   }
 

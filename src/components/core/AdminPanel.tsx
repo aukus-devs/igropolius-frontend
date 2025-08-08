@@ -250,7 +250,7 @@ export default function AdminPanel() {
                       <SelectTrigger>
                         <SelectValue placeholder="Выберите карту" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-blue-950">
                         <SelectItem value="none">Нет</SelectItem>
                         {bonusCardOptions.map(option => (
                           <SelectItem key={option.value} value={option.value}>
@@ -274,7 +274,7 @@ export default function AdminPanel() {
                       <SelectTrigger>
                         <SelectValue placeholder="Выберите состояние" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-blue-950">
                         <SelectItem value="none">Не изменять</SelectItem>
                         {turnStateOptions.map(option => (
                           <SelectItem key={option.value} value={option.value}>
