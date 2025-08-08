@@ -34,6 +34,12 @@ type GamesHistory = {
 export default function GamesHistoryContent() {
   const players = usePlayerStore(state => state.players);
 
+  players.sort((a, b) => {
+    if (a.username < b.username) return -1;
+    if (a.username > b.username) return 1;
+    return 0;
+  });
+
   const { data: historyData, isLoading } = useQuery({
     queryKey: ['gamesHistory'],
     queryFn: async (): Promise<GamesHistory> => {
