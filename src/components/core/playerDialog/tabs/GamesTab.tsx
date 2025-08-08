@@ -7,8 +7,10 @@ import { PlayerDetails } from '@/lib/api-types-generated';
 
 function ReviewsTab({ player }: { player: PlayerDetails }) {
   const [searchText, setSearchText] = useState('');
-  const filteredGames = player.games.filter(game =>
-    game.title.toLowerCase().includes(searchText.toLowerCase())
+  const filteredGames = player.games.filter(
+    game =>
+      game.title.toLowerCase().includes(searchText.toLowerCase()) ||
+      game.review.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
@@ -29,9 +31,17 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
       </div>
       <div className="flex flex-col gap-8 py-8">
         <CurrentGame player={player} />
-        {filteredGames.map((game, idx) => (
-          <GameReview key={idx} game={game} />
-        ))}
+        {filteredGames.length === 0 ? (
+          <div className="text-center text-muted-foreground">
+            Нет игр {searchText && <span>, соответствующих вашему запросу.</span>}
+          </div>
+        ) : (
+          <>
+            {filteredGames.map((game, idx) => (
+              <GameReview key={idx} game={game} />
+            ))}
+          </>
+        )}
       </div>
     </>
   );
