@@ -1,6 +1,4 @@
-import { X } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -169,7 +167,7 @@ export default function GamesHistoryContent() {
                     )}
                   </Badge>
                 </div>
-                <span className="break-words whitespace-normal text-pretty">
+                <span className="wrap-anywhere">
                   {item.rating && <span>{item.rating}&nbsp;—&nbsp;</span>}
                   {item.review}
                 </span>
