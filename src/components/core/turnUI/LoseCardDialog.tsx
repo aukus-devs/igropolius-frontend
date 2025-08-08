@@ -53,7 +53,7 @@ export default function LoseCardOnDropDialog({
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
     if (dropResult && rollFinished) {
       if (dropResult === 'card-lost') {
-        return `Потеряна карточка ${frontendCardsData[option.value].name}`;
+        return `Потеряна карточка «${frontendCardsData[option.value].name}»`;
       } else if (dropResult === 'scores-lost') {
         return 'Потеряно 3% от общего счёта';
       } else if (dropResult === 'reroll') {
@@ -61,7 +61,7 @@ export default function LoseCardOnDropDialog({
       }
     }
     if (rollFinished) {
-      return `Потеряна карточка ${frontendCardsData[option.value].name}`;
+      return `Потеряна карточка «${frontendCardsData[option.value].name}»`;
     }
     return frontendCardsData[option.value].name;
   };

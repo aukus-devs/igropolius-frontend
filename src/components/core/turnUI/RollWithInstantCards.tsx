@@ -85,7 +85,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     if (isBonusCard(option.value)) {
       const name = frontendCardsData[option.value.card].name;
       if (rollFinished) {
-        return `Получено: ${name}`;
+        return `Получено: «${name}»`;
       }
       return name;
     }
