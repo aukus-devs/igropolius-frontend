@@ -28,6 +28,18 @@ type HistoryItem = {
   game_time: number;
 };
 
+const CompletionTitle: Record<HistoryItem['completion_status'], string> = {
+  completed: 'Прошел',
+  drop: 'Дропнул',
+  reroll: 'Реролл',
+};
+
+const CompletionColor: Record<HistoryItem['completion_status'], string> = {
+  completed: 'bg-green-700',
+  drop: 'bg-red-700',
+  reroll: 'bg-yellow-700',
+};
+
 type GamesHistory = {
   games: HistoryItem[];
 };
@@ -40,6 +52,21 @@ export default function GamesHistoryContent() {
     if (a.username > b.username) return 1;
     return 0;
   });
+
+  const playersByName = useMemo(() => {
+    return players.reduce(
+      (acc, player) => {
+        acc[player.username.toLowerCase()] = player;
+        return acc;
+      },
+      {} as Record<string, (typeof players)[0]>
+    );
+  }, [players]);
+
+  const getPlayerColor = (nickname: string): string => {
+    const player = playersByName[nickname.toLowerCase()];
+    return player ? `bg-[${player.color}]` : 'bg-primary'; // Default color if player not found
+  };
 
   const { data: historyData, isLoading } = useQuery({
     queryKey: ['gamesHistory'],
@@ -161,9 +188,14 @@ export default function GamesHistoryContent() {
             key={`${item.player_nickname}-${item.game_title}-${item.date}`}
             className="flex flex-col gap-[10px]"
           >
-            <div className="font-roboto-wide text-base">
-              {capitalize(item.player_nickname)}&nbsp;—&nbsp;{item.event_name}&nbsp;—&nbsp;
-              {item.completion_status}
+            <div className="font-roboto-wide text-base flex gap-[8px]">
+              <Badge className={`${getPlayerColor(item.player_nickname)}`}>
+                {capitalize(item.player_nickname)}
+              </Badge>
+              <Badge className={`${CompletionColor[item.completion_status]}`}>
+                {CompletionTitle[item.completion_status]}
+              </Badge>
+              <Badge>{item.event_name}</Badge>
             </div>
             <div className="text-2xl p-0 font-roboto-wide-semibold">{item.game_title}</div>
             <div className="flex gap-[8px]">
