@@ -375,9 +375,9 @@ function GameReviewEditForm({
       setGameReview(gameToEdit.review);
       setRating(gameToEdit.rating);
       setVodLinks(gameToEdit.vod_links || '');
-      if (gameToEdit.cover) {
+      if (gameToEdit.game_id) {
         setSelectedGame({
-          id: gameToEdit.id,
+          id: gameToEdit.game_id,
           name: gameToEdit.title,
           cover: gameToEdit.cover,
           release_year: null,
