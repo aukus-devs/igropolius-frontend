@@ -1,11 +1,21 @@
+import { X } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useDebounce } from '@/hooks/useDebounce';
+import usePlayerStore from '@/stores/playerStore';
 import { useQuery } from '@tanstack/react-query';
 import { LoaderCircleIcon, SearchIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-type Historyitem = {
+type HistoryItem = {
   player_nickname: string;
   game_title: string;
   game_cover: string;
@@ -19,10 +29,12 @@ type Historyitem = {
 };
 
 type GamesHistory = {
-  games: Historyitem[];
+  games: HistoryItem[];
 };
 
 export default function GamesHistoryContent() {
+  const players = usePlayerStore(state => state.players);
+
   const { data: historyData, isLoading } = useQuery({
     queryKey: ['gamesHistory'],
     queryFn: async (): Promise<GamesHistory> => {
@@ -30,6 +42,11 @@ export default function GamesHistoryContent() {
       return data.json();
     },
   });
+
+  const [playerFilter, setPlayerFilter] = useState<string | undefined>(undefined);
+  const [eventFilter, setEventFilter] = useState<string | undefined>(undefined);
+
+  console.log({ playerFilter });
 
   const [searchFilter, setSearchFilter] = useState('');
 
@@ -39,17 +56,29 @@ export default function GamesHistoryContent() {
     if (!historyData?.games.length) {
       return [];
     }
-    if (debouncedFilter.length < 3) {
-      return historyData.games;
-    }
-    return historyData.games.filter(
-      item =>
-        item.game_title.toLowerCase().includes(debouncedFilter) ||
-        item.player_nickname.toLowerCase().includes(debouncedFilter) ||
-        item.event_name.toLowerCase().includes(debouncedFilter) ||
-        item.review.toLowerCase().includes(debouncedFilter)
-    );
-  }, [debouncedFilter, historyData?.games]);
+
+    const searchFiltered =
+      debouncedFilter.length < 3
+        ? historyData.games
+        : historyData.games.filter(
+            item =>
+              item.game_title.toLowerCase().includes(debouncedFilter) ||
+              item.player_nickname.toLowerCase().includes(debouncedFilter) ||
+              item.event_name.toLowerCase().includes(debouncedFilter) ||
+              item.review.toLowerCase().includes(debouncedFilter)
+          );
+    const playerFiltered = playerFilter
+      ? searchFiltered.filter(
+          item => item.player_nickname.toLowerCase() === playerFilter.toLowerCase()
+        )
+      : searchFiltered;
+
+    const eventFiltered = eventFilter
+      ? playerFiltered.filter(item => item.event_name.toLowerCase() === eventFilter.toLowerCase())
+      : playerFiltered;
+
+    return eventFiltered;
+  }, [debouncedFilter, historyData?.games, playerFilter, eventFilter]);
 
   if (isLoading || !historyData) {
     return (
@@ -61,19 +90,54 @@ export default function GamesHistoryContent() {
 
   return (
     <div>
-      <div className="relative">
+      <div className="relative mt-[30px]">
         <SearchIcon
           className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           size="1rem"
         />
         <Input
-          className="pl-8 mt-[30px] mb-[30px] font-roboto-wide-semibold bg-foreground/10 border-none"
+          className="pl-8 font-roboto-wide-semibold bg-foreground/10 border-none"
           type="text"
           value={searchFilter}
           onChange={e => setSearchFilter(e.target.value)}
           placeholder="Поиск"
           onKeyDown={e => e.stopPropagation()}
         />
+      </div>
+      <div>
+        <div className="flex mt-[10px] mb-[30px]">
+          <Select value={playerFilter} onValueChange={value => setPlayerFilter(value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Игрок" />
+            </SelectTrigger>
+            <SelectContent>
+              {players.map(player => (
+                <SelectItem key={player.id} value={player.username}>
+                  {player.username}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button variant="ghost" onClick={() => setPlayerFilter(undefined)}>
+            <X />
+          </Button>
+
+          <Select value={eventFilter} onValueChange={value => setEventFilter(value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Ивент" />
+            </SelectTrigger>
+            <SelectContent>
+              {['MGE', 'Aukus1', 'Aukus2', 'Aukus3'].map(evt => (
+                <SelectItem key={evt} value={evt}>
+                  {evt}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button variant="ghost" onClick={() => setEventFilter(undefined)}>
+            <X />
+          </Button>
+        </div>
       </div>
       <div className="flex flex-col gap-[50px] w-full">
         {filteredGames.map(item => (
