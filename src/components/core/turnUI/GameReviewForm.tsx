@@ -17,7 +17,12 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { calculateGameCompletionScore, extract7tvEmoteId, formatMs } from '@/lib/utils';
-import { GameCompletionType, GameLength, IgdbGameSummary, Duration } from '@/lib/api-types-generated';
+import {
+  GameCompletionType,
+  GameLength,
+  IgdbGameSummary,
+  Duration,
+} from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
 import ImageLoader from '../ImageLoader';
@@ -33,7 +38,7 @@ function GameStatus({ gameDuration }: { gameDuration?: Duration }) {
   );
   const options: StatesOption[] = [
     {
-      title: gameDuration ? `Прошёл за — ${formatMs(gameDuration)}` : 'Прошёл',
+      title: gameDuration ? `Прошёл за — ${formatMs(gameDuration * 1000)}` : 'Прошёл',
       value: 'completed',
     },
     { title: 'Дропнул', value: 'drop' },

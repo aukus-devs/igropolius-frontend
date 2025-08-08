@@ -740,7 +740,7 @@ export async function updatePlayer(request: UpdatePlayerRequest): Promise<void> 
 
 export async function fetchGameDuration(request: GameDurationRequest): Promise<GameDurationResponse> {
   if (MOCK_API) {
-    return Promise.resolve({ duration: 7200000 }); // 2h 0m
+    return Promise.resolve({ duration: 7200 }); // 2h 0m in seconds
   }
   const response = await apiRequest('/api/game-duration', {
     method: 'POST',
