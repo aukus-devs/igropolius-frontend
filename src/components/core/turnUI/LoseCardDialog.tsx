@@ -94,6 +94,7 @@ export default function LoseCardOnDropDialog({
       if (result.result === 'card-lost') {
         removeCardFromState(option.value);
       }
+      await setNextTurnState({ skipUpdate: true });
     }
   };
 
@@ -119,7 +120,7 @@ export default function LoseCardOnDropDialog({
       }));
       useSystemStore.getState().enableQueries(true);
     } else {
-      await setNextTurnState({});
+      // drop because of instant card
       useSystemStore.getState().enableQueries(true);
     }
   };
