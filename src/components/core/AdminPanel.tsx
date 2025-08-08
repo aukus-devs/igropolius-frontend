@@ -2,7 +2,12 @@ import { useShallow } from 'zustand/shallow';
 import { Card } from '../ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import usePlayerStore from '@/stores/playerStore';
-import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
+import {
+  refetchCurrentPlayer,
+  refetechPlayersQuery,
+  resetCurrentPlayerQuery,
+  resetPlayersQuery,
+} from '@/lib/queryClient';
 import { Button } from '../ui/button';
 import { resetDb, updatePlayerInternal } from '@/lib/api';
 import { useMutation } from '@tanstack/react-query';
@@ -122,6 +127,8 @@ export default function AdminPanel() {
     }
 
     await updatePlayer(request);
+    refetchCurrentPlayer();
+    refetechPlayersQuery();
   };
 
   useEffect(() => {
