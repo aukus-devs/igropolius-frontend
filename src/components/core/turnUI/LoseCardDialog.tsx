@@ -78,12 +78,6 @@ export default function LoseCardOnDropDialog({
       await dropBonusCard({ bonus_type: option.value });
       removeCardFromState(option.value);
 
-      useSystemStore.setState(state => ({
-        ...state,
-        disablePlayersQuery: true,
-        disableCurrentPlayerQuery: true,
-      }));
-
       const { new_sector_id } = await makePlayerMove({
         type: 'drop-to-prison',
         selected_die: null,
@@ -109,6 +103,7 @@ export default function LoseCardOnDropDialog({
     setCardsBeforeDrop([]);
     onClose?.();
     if (dropResult === 'reroll') {
+      useSystemStore.getState().enableQueries(true);
       return;
     }
     if (goToPrison) {
@@ -122,13 +117,10 @@ export default function LoseCardOnDropDialog({
         ...state,
         isPlayerMoving: false,
       }));
-      useSystemStore.setState(state => ({
-        ...state,
-        disablePlayersQuery: false,
-        disableCurrentPlayerQuery: false,
-      }));
+      useSystemStore.getState().enableQueries(true);
     } else {
       await setNextTurnState({});
+      useSystemStore.getState().enableQueries(true);
     }
   };
 

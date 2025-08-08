@@ -19,21 +19,14 @@ export default function RollBonusCard() {
   );
 
   const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
-    useSystemStore.setState(state => ({
-      ...state,
-      disableCurrentPlayerQuery: true,
-    }));
     const newCard = await giveBonusCard({ bonus_type: option.value });
     addCardToState(newCard);
     setNextTurnState({ skipUpdate: true });
     resetNotificationsQuery();
   };
 
-  const handleClose = async () => {
-    useSystemStore.setState(state => ({
-      ...state,
-      disableCurrentPlayerQuery: false,
-    }));
+  const handleClose = () => {
+    useSystemStore.getState().enableQueries(true);
   };
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
@@ -91,6 +84,7 @@ function NoCardsToReceive() {
             useSystemStore.setState(state => ({
               ...state,
               disableCurrentPlayerQuery: false,
+              disablePlayersQuery: false,
             }));
             setNextTurnState({});
           }}

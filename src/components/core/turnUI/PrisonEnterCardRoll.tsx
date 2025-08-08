@@ -78,10 +78,6 @@ export default function PrisonEnterCardRoll() {
 
   const handleFinished = async (option: WeightedOption<RollOptionType>) => {
     setRollFinished(true);
-    useSystemStore.setState(state => ({
-      ...state,
-      disableCurrentPlayerQuery: true,
-    }));
 
     if (option.value === 'nothing') {
       setNextTurnState({ skipUpdate: true });
@@ -105,10 +101,7 @@ export default function PrisonEnterCardRoll() {
   const handleClose = async () => {
     setRollFinished(false);
     setCardsBeforeDrop([]);
-    useSystemStore.setState(state => ({
-      ...state,
-      disableCurrentPlayerQuery: false,
-    }));
+    useSystemStore.getState().enableQueries(true);
   };
 
   const options: WeightedOption<RollOptionType>[] = useMemo(() => {

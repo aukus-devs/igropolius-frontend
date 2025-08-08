@@ -150,7 +150,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     finishText = 'Реролл';
   }
 
-  const handleClose = async () => {
+  const handleClose = () => {
     setRollFinished(false);
     if (moveToCardDrop) {
       onClose('drop');
@@ -160,10 +160,8 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
       onClose();
     }
 
-    useSystemStore.setState(state => ({
-      ...state,
-      disableCurrentPlayerQuery: false,
-    }));
+    useSystemStore.getState().enableQueries(true);
+
     setActivationResult(null);
     setMoveToCardDrop(false);
   };

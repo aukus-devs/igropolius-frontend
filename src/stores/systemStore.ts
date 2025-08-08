@@ -26,6 +26,7 @@ interface SystemStore {
   highlightedSectorId: number | null;
   setHighlightedSectorId: (sectorId: number | null) => void;
   needsToSelectModel: () => boolean;
+  enableQueries: (enable: boolean) => void;
 }
 
 const useSystemStore = create<SystemStore>((set, get) => ({
@@ -86,6 +87,13 @@ const useSystemStore = create<SystemStore>((set, get) => ({
     }
 
     return !myPlayer.model_name || !myPlayer.color;
+  },
+
+  enableQueries: (enable: boolean) => {
+    set({
+      disablePlayersQuery: !enable,
+      disableCurrentPlayerQuery: !enable,
+    });
   },
 }));
 

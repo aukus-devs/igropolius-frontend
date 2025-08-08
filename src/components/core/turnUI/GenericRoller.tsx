@@ -88,7 +88,7 @@ type Props<T> = {
   openButtonText: string;
   finishButtonText: string;
   onRollFinish: (option: WeightedOption<T>) => Promise<void>;
-  onClose?: (option: WeightedOption<T>) => Promise<void>;
+  onClose?: (option: WeightedOption<T>) => void;
   getWinnerText: (option: WeightedOption<T>) => string;
   getSecondaryText?: (option: WeightedOption<T>) => string | undefined;
 };
@@ -287,12 +287,6 @@ export default function GenericRoller<T>({
         setWinnerIndex(null);
         animationRef.current = null;
         isIdleRunningRef.current = false;
-
-        useSystemStore.setState(state => ({
-          ...state,
-          disablePlayersQuery: false,
-          disableCurrentPlayerQuery: false,
-        }));
       }
     },
     [resetState, stopDrumSound]
@@ -324,11 +318,7 @@ export default function GenericRoller<T>({
   }, [isMuted, rollPhase]);
 
   const handleRollClick = () => {
-    useSystemStore.setState(state => ({
-      ...state,
-      disablePlayersQuery: true,
-      disableCurrentPlayerQuery: true,
-    }));
+    useSystemStore.getState().enableQueries(false);
 
     setRollPhase('rolling');
 
@@ -416,11 +406,11 @@ export default function GenericRoller<T>({
               className="w-[300px] rounded-xl"
               loading={isLoading}
               disabled={isError}
-              onClick={async () => {
-                if (winner !== null && onClose) {
-                  await onClose(winner);
-                }
+              onClick={() => {
                 handleOpenChange(false);
+                if (winner !== null && onClose) {
+                  onClose(winner);
+                }
               }}
             >
               {isError ? 'Ошибка' : finishButtonText}

@@ -60,9 +60,7 @@ const useCameraStore = create<{
   },
 
   cameraToPlayer: async playerId => {
-    console.log('camera to player', playerId);
     const { cameraControls, moveToPlayer, rotateAroundPlayer } = get();
-    console.log({ cameraControls });
     if (!cameraControls) return;
 
     const playerModel = useModelsStore.getState().getPlayerModel(playerId);
