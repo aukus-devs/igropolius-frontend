@@ -70,7 +70,7 @@ export function getEventGameInfo(event: GameEvent) {
 
   switch (event.subtype) {
     case 'completed':
-      header = 'Прошел игру';
+      header = 'Прошёл игру';
       break;
     case 'drop':
       header = 'Дроп игры';

@@ -158,6 +158,8 @@ export type GameId = number | null;
  * via the `definition` "GameCompletionType".
  */
 export type GameCompletionType = "completed" | "drop" | "reroll";
+export type GameName = string;
+export type Duration = number | null;
 export type Timestamp1 = number;
 export type EventType1 = "game";
 export type GameTitle3 = string;
@@ -254,7 +256,7 @@ export type Title = string;
 export type Review = string;
 export type Rating1 = number;
 export type LengthBonus = number | null;
-export type Duration = number | null;
+export type Duration1 = number | null;
 export type VodLinks1 = string | null;
 export type Cover1 = string | null;
 export type Games1 = PlayerGame[];
@@ -310,6 +312,7 @@ export type GameId1 = number | null;
 export type NewSectorId2 = number;
 export type EventStartTime = number | null;
 export type EventEndTime4 = number | null;
+export type EndpointResetDbEnabled = number | null;
 export type PlayerId3 = number;
 export type Success1 = boolean;
 /**
@@ -470,6 +473,20 @@ export interface EventSettingsResponse {
 }
 export interface Settings {
   [k: string]: string | null;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "GameDurationRequest".
+ */
+export interface GameDurationRequest {
+  game_name: GameName;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "GameDurationResponse".
+ */
+export interface GameDurationResponse {
+  duration: Duration;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -657,7 +674,7 @@ export interface PlayerGame {
   rating: Rating1;
   length: GameLength;
   length_bonus?: LengthBonus;
-  duration?: Duration;
+  duration?: Duration1;
   vod_links?: VodLinks1;
   cover?: Cover1;
 }
@@ -782,6 +799,7 @@ export interface SavePlayerGameResponse {
 export interface SetEventEndTimeRequest {
   event_start_time?: EventStartTime;
   event_end_time?: EventEndTime4;
+  endpoint_reset_db_enabled?: EndpointResetDbEnabled;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

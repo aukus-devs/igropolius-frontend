@@ -9,6 +9,7 @@ export const queryKeys = {
   currentRulesVersion: ['current-rules-version'],
   allRulesVersions: ['all-rules-versions'],
   searchGames: (title: string) => ['search-games', title],
+  gameDuration: (gameName: string | undefined) => ['game-duration', gameName],
   notifications: ['notifications'],
   eventSettings: ['event-settings'],
 } as const;

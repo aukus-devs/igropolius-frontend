@@ -11,13 +11,13 @@ import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
 import { ArrowRight, Share, Smile, Eye, Wand, X } from '../../icons';
-import { searchGames } from '@/lib/api';
+import { searchGames, fetchGameDuration } from '@/lib/api';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
-import { calculateGameCompletionScore, extract7tvEmoteId } from '@/lib/utils';
-import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
+import { calculateGameCompletionScore, extract7tvEmoteId, formatMs } from '@/lib/utils';
+import { GameCompletionType, GameLength, IgdbGameSummary, Duration } from '@/lib/api-types-generated';
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
 import ImageLoader from '../ImageLoader';
@@ -27,12 +27,15 @@ type StatesOption = {
   value: GameCompletionType;
 };
 
-function GameStatus() {
+function GameStatus({ gameDuration }: { gameDuration?: Duration }) {
   const { setGameStatus, gameStatus } = useReviewFormStore(
     useShallow(state => ({ setGameStatus: state.setGameStatus, gameStatus: state.gameStatus }))
   );
   const options: StatesOption[] = [
-    { title: 'Прошел', value: 'completed' },
+    {
+      title: gameDuration ? `Прошёл за — ${formatMs(gameDuration)}` : 'Прошёл',
+      value: 'completed',
+    },
     { title: 'Дропнул', value: 'drop' },
     { title: 'Реролл', value: 'reroll' },
   ];
@@ -434,6 +437,12 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     }))
   );
 
+  const { data: gameDurationData } = useQuery({
+    queryKey: queryKeys.gameDuration(selectedGame?.name),
+    queryFn: () => fetchGameDuration({ game_name: selectedGame!.name }),
+    enabled: !!selectedGame?.id,
+  });
+
   const { mutateAsync: doSendReview, isPending: isLoading } = useMutation({
     mutationFn: sendReview,
   });
@@ -524,7 +533,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
             </div>
 
             <div className="flex gap-2 w-full">
-              <GameStatus />
+              <GameStatus gameDuration={gameDurationData?.duration} />
               {gameStatus === 'completed' && <GameTime />}
             </div>
 

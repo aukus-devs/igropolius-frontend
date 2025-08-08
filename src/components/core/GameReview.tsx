@@ -24,7 +24,7 @@ function getStatusData(status: GameCompletionType) {
       };
     case 'completed':
       return {
-        statusText: 'Прошел',
+        statusText: 'Прошёл',
         color: 'text-green-500',
       };
     case 'reroll':

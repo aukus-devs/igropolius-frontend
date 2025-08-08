@@ -5,6 +5,8 @@ import {
   DropBonusCardRequest,
   EditPlayerGame,
   EventSettingsResponse,
+  GameDurationRequest,
+  GameDurationResponse,
   GiveBonusCardRequest,
   GiveBonusCardResponse,
   IgdbGamesListResponse,
@@ -734,4 +736,12 @@ export async function updatePlayer(request: UpdatePlayerRequest): Promise<void> 
     method: 'POST',
     body: JSON.stringify(request),
   });
+}
+
+export async function fetchGameDuration(request: GameDurationRequest): Promise<GameDurationResponse> {
+  if (MOCK_API) {
+    return Promise.resolve({ duration: 7200000 }); // 2h 0m
+  }
+  const response = await apiRequest(`/api/game-duration/${request.game_name}`);
+  return response.json();
 }
