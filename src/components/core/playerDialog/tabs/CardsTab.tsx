@@ -118,7 +118,7 @@ function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
 
       {unavailableCards.length > 0 && (
         <>
-          <p className="text-center text-xs font-wide-semibold text-muted-foreground mb-5">
+          <p className="text-center text-xs font-roboto-wide-semibold text-muted-foreground mb-5">
             Не полученые
           </p>
           <div className="flex flex-wrap gap-y-2.5 gap-x-2">

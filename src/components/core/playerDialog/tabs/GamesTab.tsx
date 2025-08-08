@@ -32,7 +32,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
       <div className="flex flex-col gap-8 py-8">
         <CurrentGame player={player} />
         {filteredGames.length === 0 ? (
-          <div className="text-center text-muted-foreground">
+          <div className="text-center text-xs font-roboto-wide-semibold text-muted-foreground">
             Нет игр {searchText && <span>, соответствующих вашему запросу.</span>}
           </div>
         ) : (

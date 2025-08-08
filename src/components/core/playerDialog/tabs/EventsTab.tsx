@@ -272,7 +272,7 @@ export default function EventsTab({ player }: Props) {
       <EventsTabFilter selectedFilter={selectedFilter} onFilterChange={setSelectedFilter} />
       <div className="flex flex-col gap-7.5 mb-5">
         {Object.keys(eventsByDate).length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center text-xs font-roboto-wide-semibold text-muted-foreground py-8">
             {selectedFilter === 'all' ? 'Нет событий' : `Нет событий типа "${selectedFilter}"`}
           </div>
         ) : (
