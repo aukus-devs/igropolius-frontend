@@ -742,6 +742,9 @@ export async function fetchGameDuration(request: GameDurationRequest): Promise<G
   if (MOCK_API) {
     return Promise.resolve({ duration: 7200000 }); // 2h 0m
   }
-  const response = await apiRequest(`/api/game-duration/${request.game_name}`);
+  const response = await apiRequest('/api/game-duration', {
+    method: 'POST',
+    body: JSON.stringify(request),
+  });
   return response.json();
 }
