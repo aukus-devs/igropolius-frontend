@@ -159,7 +159,7 @@ export default function GamesHistoryContent() {
               <div className="flex flex-col gap-[10px]">
                 <div className="flex gap-2">
                   <Badge className="bg-white/20 text-white/70 font-semibold">
-                    {item.completion_status === 'drop' ? (
+                    {item.completion_status === 'completed' ? (
                       <span>Пройдено за: {sencondsToHourMin(item.game_time)}</span>
                     ) : (
                       <span>Играл: {sencondsToHourMin(item.game_time)}</span>
