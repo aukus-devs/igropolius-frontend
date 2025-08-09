@@ -51,17 +51,7 @@ export default function PrisonEnterCardRoll() {
       return 'Ничего не происходит';
     }
     if (!rollFinished) {
-      switch (option.value.action) {
-        case 'lose-card': {
-          return `Потеря карточки «${bonusCardsData[option.value.card].name}»`;
-        }
-        case 'receive-card': {
-          return `Получение карточки «${bonusCardsData[option.value.card].name}»`;
-        }
-        default: {
-          return 'Неизвестное действие' as never;
-        }
-      }
+      return bonusCardsData[option.value.card].name;
     }
     switch (option.value.action) {
       case 'lose-card': {
@@ -126,9 +116,10 @@ export default function PrisonEnterCardRoll() {
             action: 'receive-card',
             card,
           },
-          label: `Получить ${frontendCardsData[card].name}`,
+          label: frontendCardsData[card].name,
           weight: prisonCardWeight,
           imageUrl: frontendCardsData[card].picture,
+          variant: 'positive',
         });
       });
     } else {
@@ -143,9 +134,10 @@ export default function PrisonEnterCardRoll() {
             action: 'lose-card',
             card: card.bonus_type,
           },
-          label: `Потерять ${frontendCardsData[card.bonus_type].name}`,
+          label: frontendCardsData[card.bonus_type].name,
           weight: playerCardWeight,
           imageUrl: frontendCardsData[card.bonus_type].picture,
+          variant: 'negative',
         });
       });
     } else {

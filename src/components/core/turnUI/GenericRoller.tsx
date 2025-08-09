@@ -30,7 +30,13 @@ const BACKSWING_OFFSET = 60; // px
 const IDLE_CARD_COUNT = 21;
 const MIN_CARD_IN_ROLL = 75;
 
-export type WeightedOption<T> = { value: T; weight: number; label: string; imageUrl: string };
+export type WeightedOption<T> = {
+  value: T;
+  weight: number;
+  label: string;
+  imageUrl: string;
+  variant?: 'positive' | 'negative';
+};
 
 function weightedRandom<T>(options: WeightedOption<T>[]): WeightedOption<T> {
   const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
@@ -352,6 +358,14 @@ export default function GenericRoller<T>({
           <div ref={rouletteRef} style={{ gap: `${GAP}px` }} className=" flex items-center">
             {cardList.map((item, idx) => {
               const isWinner = idx === winnerIndex;
+              const borderStyle: React.CSSProperties = {};
+              if (item.variant === 'positive') {
+                borderStyle.border = '2px solid #30D158'; // green
+                borderStyle.borderRadius = '10px';
+              } else if (item.variant === 'negative') {
+                borderStyle.border = '2px solid #FF453A'; // red
+                borderStyle.borderRadius = '10px';
+              }
               return (
                 <ImageLoader
                   key={idx}
@@ -363,6 +377,7 @@ export default function GenericRoller<T>({
                     height: isWinner ? `${CARD_HEIGHT * 1.25}px` : `${CARD_HEIGHT}px`,
                     width: isWinner ? `${CARD_WIDTH * 1.25}px` : `${CARD_WIDTH}px`,
                     transition: 'all 0.4s ease',
+                    ...borderStyle,
                   }}
                 />
               );
