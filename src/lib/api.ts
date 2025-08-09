@@ -57,7 +57,7 @@ export function showApiError(
   if (requestBody) {
     const requestBodyStr =
       typeof requestBody === 'string' ? requestBody : JSON.stringify(requestBody);
-    notificationText += `\nЗапрос: ${requestBodyStr}`;
+    notificationText += `\nЗапрос: ${requestBodyStr.slice(0, 300)}`;
   }
 
   systemStore.setMainNotification({
@@ -738,7 +738,9 @@ export async function updatePlayer(request: UpdatePlayerRequest): Promise<void> 
   });
 }
 
-export async function fetchGameDuration(request: GameDurationRequest): Promise<GameDurationResponse> {
+export async function fetchGameDuration(
+  request: GameDurationRequest
+): Promise<GameDurationResponse> {
   if (MOCK_API) {
     return Promise.resolve({ duration: 7200 }); // 2h 0m in seconds
   }
