@@ -25,7 +25,7 @@ function RulesDialog({ className }: { className?: string }) {
       <DialogContent className="!max-w-3xl h-[41.25rem] p-0" aria-describedby="">
         <ScrollArea className="h-full w-full overflow-auto">
           <DialogHeader className="w-full px-5 pt-5">
-            <DialogTitle className="flex flex-col font-wide-black text-[2rem]">
+            <DialogTitle className="font-wide-black text-[2rem]">
               Правила <span className="text-primary">Игрополиуса</span>
             </DialogTitle>
           </DialogHeader>

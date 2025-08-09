@@ -39,7 +39,7 @@ export default function RichDisplay({ value }: Props) {
           return (
             <div
               key={segIdx}
-              className={`editor-segment rounded-[10px] p-[10px] md:bg-black/15 bg-[#1C1C1C] ${marginTop}`}
+              className={`editor-segment rounded-[10px] p-[10px] md:bg-black/15 bg-[#1C1C1C] ${marginTop} font-semibold text-base`}
             >
               {blocks.map((block, bIdx) => (
                 <Block key={bIdx} block={block} />

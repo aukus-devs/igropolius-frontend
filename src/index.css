@@ -219,6 +219,11 @@
   border: unset;
 }
 
+.rich-diff .ql-container {
+  font-size: 16px;
+  font-family: 'Golos Text', sans-serif;
+}
+
 .rich-editor .ql-container .ql-editor {
   overflow-y: auto;
   height: 350px;
