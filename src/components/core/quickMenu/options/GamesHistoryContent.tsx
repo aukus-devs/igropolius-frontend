@@ -53,20 +53,19 @@ export default function GamesHistoryContent() {
     return 0;
   });
 
-  const playersByName = useMemo(() => {
+  const colorsByName = useMemo(() => {
     return players.reduce(
       (acc, player) => {
-        acc[player.username.toLowerCase()] = player;
+        if (player.color === 'white') {
+          acc[player.username.toLowerCase()] = '';
+        } else {
+          acc[player.username.toLowerCase()] = player.color;
+        }
         return acc;
       },
-      {} as Record<string, (typeof players)[0]>
+      {} as Record<string, string>
     );
   }, [players]);
-
-  const getPlayerColor = (nickname: string): string => {
-    const player = playersByName[nickname.toLowerCase()];
-    return player ? `bg-[${player.color}]` : 'bg-primary'; // Default color if player not found
-  };
 
   const { data: historyData, isLoading } = useQuery({
     queryKey: ['gamesHistory'],
@@ -189,7 +188,12 @@ export default function GamesHistoryContent() {
             className="flex flex-col gap-[10px]"
           >
             <div className="font-roboto-wide text-base flex gap-[8px]">
-              <Badge className={`${getPlayerColor(item.player_nickname)}`}>
+              <Badge
+                style={{
+                  backgroundColor:
+                    colorsByName[item.player_nickname.toLowerCase()] || 'var(--primary)',
+                }}
+              >
                 {capitalize(item.player_nickname)}
               </Badge>
               <Badge className={`${CompletionColor[item.completion_status]}`}>
