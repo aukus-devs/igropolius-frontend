@@ -1265,7 +1265,7 @@ export const mockReviews: GameReviewType[] = [
 
 export const CreditsData = {
   developers: ['mapcar', 'olegsvs', 'esouqu', 'junkratc'].sort(),
-  designers: ['lepayy', 'rotvg0vne', 'naknagets', 'ksanich'].sort(),
+  designers: ['lepayy', 'rotvg0vne', 'naknagetss (artnaku)', 'ksanich'].sort(),
   testers: ['Arkadiy'].sort(),
   ideas: ['Praden'],
 };
