@@ -32,18 +32,25 @@ export default function RichDisplay({ value }: Props) {
   }, [value]);
   return (
     <div className="ql-snow">
-      <div className="ql-editor" style={{ padding: '0px' }}>
+      <div className="ql-editor flex flex-col gap-[30px]" style={{ padding: '0px' }}>
         {segments.map((blocks, segIdx) => {
           const isFirst = segIdx === 0;
           const marginTop = isFirst ? 'mt-0' : 'mt-[10px]';
+          const segmentHeader = blocks[0];
+          const blocksRest = blocks.slice(1);
           return (
-            <div
-              key={segIdx}
-              className={`editor-segment rounded-[10px] p-[10px] md:bg-black/15 bg-[#1C1C1C] ${marginTop} font-semibold text-base`}
-            >
-              {blocks.map((block, bIdx) => (
-                <Block key={bIdx} block={block} />
-              ))}
+            <div>
+              <div className="ml-[10px]">
+                <Block block={segmentHeader} />
+              </div>
+              <div
+                key={segIdx}
+                className={`editor-segment rounded-[10px] p-[10px] md:bg-black/20 bg-[#1C1C1C] ${marginTop} font-semibold text-base mt-[15px]`}
+              >
+                {blocksRest.map((block, bIdx) => (
+                  <Block key={bIdx} block={block} />
+                ))}
+              </div>
             </div>
           );
         })}
