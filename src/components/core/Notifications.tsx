@@ -10,7 +10,7 @@ import useSystemStore from '@/stores/systemStore';
 import { useShallow } from 'zustand/shallow';
 import { formatMs } from '@/lib/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '@/lib/queryClient';
+import { queryKeys, refetchNotificationsQuery } from '@/lib/queryClient';
 import { NotificationItem, PlayerDetails } from '@/lib/api-types-generated';
 
 function formatNotificationText(
@@ -109,10 +109,18 @@ function NotificationCard({
   const date = formatNotificationDate(notification.created_at);
 
   return (
-    <Card
-      className="p-2 gap-0.5 font-semibold"
-      data-important={isImportant}
-    >
+    <Card className="p-2 gap-0.5 font-semibold" data-important={isImportant}>
+      <div className="absolute top-0 right-0">
+        <Button
+          variant="ghost"
+          onClick={async () => {
+            await markNotificationsSeen({ notification_ids: [notification.id] });
+            refetchNotificationsQuery();
+          }}
+        >
+          <X />
+        </Button>
+      </div>
       <CardHeader className="px-0 gap-0.5">
         {isImportant ? (
           <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
@@ -154,7 +162,7 @@ function Notifications() {
 
     const notificationIds = notifications.map(n => n.id);
     await markNotificationsSeen({ notification_ids: notificationIds });
-    queryClient.invalidateQueries({ queryKey: queryKeys.notifications });
+    queryClient.refetchQueries({ queryKey: queryKeys.notifications });
   }
 
   if (loading) {

@@ -50,6 +50,10 @@ export const removeNotificationsQuery = () => {
   client.removeQueries({ queryKey: queryKeys.notifications });
 };
 
+export const refetchNotificationsQuery = () => {
+  client.refetchQueries({ queryKey: queryKeys.notifications });
+};
+
 export const resetEventSettingsQuery = () => {
   client.invalidateQueries({ queryKey: queryKeys.eventSettings });
 };
