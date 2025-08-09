@@ -110,7 +110,7 @@ function NotificationCard({
 
   return (
     <Card className="p-2 gap-0.5 font-semibold" data-important={isImportant}>
-      <div className="absolute top-0 right-0">
+      {/*<div className="absolute top-0 right-0">
         <Button
           variant="ghost"
           onClick={async () => {
@@ -120,7 +120,7 @@ function NotificationCard({
         >
           <X />
         </Button>
-      </div>
+      </div>*/}
       <CardHeader className="px-0 gap-0.5">
         {isImportant ? (
           <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
