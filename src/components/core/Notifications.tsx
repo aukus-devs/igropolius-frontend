@@ -10,7 +10,7 @@ import useSystemStore from '@/stores/systemStore';
 import { useShallow } from 'zustand/shallow';
 import { formatMs } from '@/lib/utils';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { queryKeys, refetchNotificationsQuery } from '@/lib/queryClient';
+import { queryKeys } from '@/lib/queryClient';
 import { NotificationItem, PlayerDetails } from '@/lib/api-types-generated';
 
 function formatNotificationText(
