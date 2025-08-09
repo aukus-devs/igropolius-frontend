@@ -39,7 +39,7 @@ export default function RichDisplay({ value }: Props) {
           return (
             <div
               key={segIdx}
-              className={`editor-segment rounded-[6px] p-[10px] md:bg-black/20 bg-[#1C1C1C] ${marginTop}`}
+              className={`editor-segment rounded-[10px] p-[10px] md:bg-black/15 bg-[#1C1C1C] ${marginTop}`}
             >
               {blocks.map((block, bIdx) => (
                 <Block key={bIdx} block={block} />
@@ -103,7 +103,7 @@ function splitIntoBlocks(ops: Op[]) {
     // console.log({ insert: op.insert, attrs: op.attributes })
 
     insertItems.forEach(item => {
-      console.log({ item });
+      // console.log({ item });
       if (item === '\n') {
         if (op.attributes?.list) {
           const lastBlock = blocks[blocks.length - 1];
