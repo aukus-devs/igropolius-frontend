@@ -10,7 +10,7 @@ import Rating from '../Rating';
 import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import { queryKeys } from '@/lib/queryClient';
-import { ArrowRight, Share, Smile, Eye, Wand, X } from '../../icons';
+import { ArrowRight, Share, Smile, Eye, Wand, X, InfoCircle } from '../../icons';
 import { searchGames, fetchGameDuration } from '@/lib/api';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -113,7 +113,7 @@ function GameTime() {
   );
 }
 
-function GameReview() {
+function GameReview({ gameDuration }: { gameDuration?: Duration }) {
   const gameReview = useReviewFormStore(state => state.gameReview);
   const setGameReview = useReviewFormStore(state => state.setGameReview);
   const [showEmotePanel, setShowEmotePanel] = useState(false);
@@ -195,55 +195,78 @@ function GameReview() {
         )}
       </div>
 
-      <div className="flex justify-end mt-2">
-        {!showPreview && (
-          <Popover open={showEmotePanel} onOpenChange={setShowEmotePanel}>
+      <div className="flex justify-between items-center mt-2">
+        <div className="flex-1">
+          <GameDurationInfo gameDuration={gameDuration} />
+        </div>
+
+        <div className="flex">
+          {!showPreview && (
+            <Popover open={showEmotePanel} onOpenChange={setShowEmotePanel}>
+              <Tooltip disableHoverableContent>
+                <TooltipTrigger asChild>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <Smile className="size-[22px]" />
+                    </Button>
+                  </PopoverTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Смайлы 7TV</p>
+                </TooltipContent>
+              </Tooltip>
+              <PopoverContent
+                className="w-auto p-0 border-none bg-transparent shadow-none"
+                align="end"
+                sideOffset={5}
+              >
+                <EmotePanel onEmoteSelect={handleEmoteSelect} />
+              </PopoverContent>
+            </Popover>
+          )}
+
+          {!showPreview && (
             <Tooltip disableHoverableContent>
               <TooltipTrigger asChild>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Smile className="size-[22px]" />
-                  </Button>
-                </PopoverTrigger>
+                <Button variant="ghost" size="icon" onClick={handleSpoilerTag}>
+                  <Wand className="size-[22px]" />
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Смайлы 7TV</p>
+                <p>Спойлер</p>
               </TooltipContent>
             </Tooltip>
-            <PopoverContent
-              className="w-auto p-0 border-none bg-transparent shadow-none"
-              align="end"
-              sideOffset={5}
-            >
-              <EmotePanel onEmoteSelect={handleEmoteSelect} />
-            </PopoverContent>
-          </Popover>
-        )}
+          )}
 
-        {!showPreview && (
           <Tooltip disableHoverableContent>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" onClick={handleSpoilerTag}>
-                <Wand className="size-[22px]" />
+              <Button variant="ghost" size="icon" onClick={() => setShowPreview(!showPreview)}>
+                <Eye className="size-[22px]" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Спойлер</p>
+              <p>Превью</p>
             </TooltipContent>
           </Tooltip>
-        )}
-
-        <Tooltip disableHoverableContent>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" onClick={() => setShowPreview(!showPreview)}>
-              <Eye className="size-[22px]" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Превью</p>
-          </TooltipContent>
-        </Tooltip>
+        </div>
       </div>
+    </div>
+  );
+}
+
+function GameDurationInfo({ gameDuration }: { gameDuration?: Duration }) {
+  const gameStatus = useReviewFormStore(state => state.gameStatus);
+
+  if (gameStatus !== 'completed' || !gameDuration) {
+    return null;
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <InfoCircle className="size-[17px] text-white/60" />
+      <span className="text-sm text-white/60">
+        Время прохождения игры примерно и берётся из категории стрима.
+      </span>
     </div>
   );
 }
@@ -543,7 +566,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
             </div>
 
             <Rating onChange={setRating} initialValue={rating} />
-            <GameReview />
+            <GameReview gameDuration={gameDurationData?.duration} />
           </div>
         </div>
 

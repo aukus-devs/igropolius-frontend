@@ -35,3 +35,4 @@ export { default as Volume } from "./Volume";
 export { default as TickCircle } from "./TickCircle";
 export { default as LogIn } from "./LogIn";
 export { default as LogOut } from "./LogOut";
+export { default as InfoCircle } from "./InfoCircle";
