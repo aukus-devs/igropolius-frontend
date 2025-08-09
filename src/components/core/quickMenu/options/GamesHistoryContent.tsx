@@ -136,49 +136,51 @@ export default function GamesHistoryContent() {
 
   return (
     <div>
-      <div className="relative mt-[30px]">
-        <SearchIcon
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-          size="1rem"
-        />
-        <Input
-          className="pl-8 font-roboto-wide-semibold bg-foreground/10 border-none"
-          type="text"
-          value={searchFilter}
-          onChange={e => setSearchFilter(e.target.value)}
-          placeholder="Поиск"
-          onKeyDown={e => e.stopPropagation()}
-        />
-      </div>
-      <div>
-        <div className="flex mt-[10px] mb-[30px] gap-[10px]">
-          <Select value={playerFilter} onValueChange={value => setPlayerFilter(value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Игрок" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">Все игроки</SelectItem>
-              {players.map(player => (
-                <SelectItem key={player.id} value={player.username}>
-                  {player.username}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      <div className="sticky top-[10px]">
+        <div className="mt-[30px] relative ">
+          <SearchIcon
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            size="1rem"
+          />
+          <Input
+            className="pl-8 font-roboto-wide-semibold bg-[#575b58] border-none"
+            type="text"
+            value={searchFilter}
+            onChange={e => setSearchFilter(e.target.value)}
+            placeholder="Поиск"
+            onKeyDown={e => e.stopPropagation()}
+          />
+        </div>
+        <div>
+          <div className="flex mt-[10px] mb-[30px] gap-[10px]">
+            <Select value={playerFilter} onValueChange={value => setPlayerFilter(value)}>
+              <SelectTrigger className="bg-[#575b58]">
+                <SelectValue placeholder="Игрок" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Все игроки</SelectItem>
+                {players.map(player => (
+                  <SelectItem key={player.id} value={player.username}>
+                    {player.username}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          <Select value={eventFilter} onValueChange={value => setEventFilter(value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Ивент" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">Все ивенты</SelectItem>
-              {['MGE', 'Aukus1', 'Aukus2', 'Aukus3'].map(evt => (
-                <SelectItem key={evt} value={evt}>
-                  {evt}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select value={eventFilter} onValueChange={value => setEventFilter(value)}>
+              <SelectTrigger className="bg-[#575b58]">
+                <SelectValue placeholder="Ивент" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Все ивенты</SelectItem>
+                {['MGE', 'Aukus1', 'Aukus2', 'Aukus3'].map(evt => (
+                  <SelectItem key={evt} value={evt}>
+                    {evt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-[50px] w-full">
