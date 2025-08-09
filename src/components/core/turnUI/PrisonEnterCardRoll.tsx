@@ -81,9 +81,9 @@ export default function PrisonEnterCardRoll() {
       return;
     }
     if (option.value.action === 'receive-card') {
-      setNextTurnState({ skipUpdate: true });
       const newCard = await giveBonusCard({ bonus_type: option.value.card });
       addCardToState(newCard);
+      setNextTurnState({ skipUpdate: true });
       return;
     }
   };
