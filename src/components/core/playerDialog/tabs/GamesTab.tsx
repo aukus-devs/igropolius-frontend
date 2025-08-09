@@ -17,7 +17,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
 
   return (
     <>
-      <div className="relative">
+      <div className="sticky top-[54px] z-50">
         <SearchIcon
           className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           size="1rem"
@@ -25,7 +25,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
         <Input
           id="search"
           type="text"
-          className="pl-8 font-roboto-wide-semibold bg-foreground/10 border-none"
+          className="pl-8 font-roboto-wide-semibold bg-[#575b58] border-none"
           placeholder="Поиск по играм"
           onKeyDown={e => e.stopPropagation()}
           onChange={e => setSearchText(e.target.value)}

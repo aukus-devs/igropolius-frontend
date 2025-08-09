@@ -17,11 +17,11 @@ function PlayerDialogTabs({ player }: Props) {
 
   return (
     <Tabs className="md:px-5 px-[15px]" defaultValue={tabs[0].value}>
-      <TabsList className="w-full bg-transparent gap-2 p-0">
+      <TabsList className="w-full bg-transparent gap-2 p-0 sticky top-[10px] z-50">
         {tabs.map(({ name, value }) => (
           <TabsTrigger
             key={value}
-            className="text-muted-foreground bg-foreground/20 rounded-xl hover:text-foreground transition-colors data-[state=active]:text-primary-foreground data-[state=active]:bg-primary h-8 font-roboto-wide-semibold"
+            className="text-muted-foreground bg-[#575b58] rounded-xl hover:text-foreground transition-colors data-[state=active]:text-primary-foreground data-[state=active]:bg-primary h-8 font-roboto-wide-semibold"
             value={value}
           >
             {name}
@@ -29,7 +29,7 @@ function PlayerDialogTabs({ player }: Props) {
         ))}
       </TabsList>
       {tabs.map(({ value, content }) => (
-        <TabsContent key={value} value={value}>
+        <TabsContent key={value} value={value} className="z-10">
           {content}
         </TabsContent>
       ))}
