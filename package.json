@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --build --noEmit",
     "prepare": "husky install",
-    "bump-version": "node -e \"const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json')); let [major, minor, patch] = pkg.version.split('.').map(Number); patch += 1; pkg.version = [major, minor, patch].join('.'); fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\\n');\""
+    "bump-version": "node -e \"const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json')); let [major, minor, patch] = pkg.version.split('.').map(Number); patch += 1; pkg.version = [major, minor, patch].join('.'); fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\\n');\"",
+    "generate-icons": "bash scripts/generate-icons.sh"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.4",
@@ -71,7 +72,7 @@
     "react-metrika": "^0.3.3",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.0",
+    "vite": "^6.3.3",
     "zustand": "^5.0.3"
   },
   "packageManager": "yarn@1.22.22"
