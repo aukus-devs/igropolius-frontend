@@ -29,7 +29,7 @@ function RulesDialog({ className }: { className?: string }) {
               Правила <span className="text-primary">Игрополиуса</span>
             </DialogTitle>
           </DialogHeader>
-          <div className="mt-[30px] px-5">
+          <div className="mt-[30px] px-5 mb-20">
             <RulesTabs />
           </div>
         </ScrollArea>

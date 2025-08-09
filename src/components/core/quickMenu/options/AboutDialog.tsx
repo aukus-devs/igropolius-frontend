@@ -82,6 +82,15 @@ export default function AboutDialog({ className }: Props) {
               ))}
             </div>
 
+            <div className="flex gap-2 flex-col">
+              <div className="mt-[50px] text-xl font-wide-black">Тесты</div>
+              {CreditsData.testers.map((dev, index) => (
+                <div key={index} className="text-base font-wide-medium">
+                  {dev}
+                </div>
+              ))}
+            </div>
+
             <div className="mt-[50px] text-xl font-wide-black">Идеи</div>
             <div className="mt-[10px] font-wide-medium">Praden</div>
           </div>
@@ -104,6 +113,7 @@ export default function AboutDialog({ className }: Props) {
               <Boosty className="inline mr-2 w-5" fill="white" />
             </Link>
           </div>
+          <div className="mb-20"></div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
