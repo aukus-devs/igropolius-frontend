@@ -83,7 +83,7 @@ export default function AboutDialog({ className }: Props) {
             </div>
 
             <div className="flex gap-2 flex-col">
-              <div className="mt-[50px] text-xl font-wide-black">Тесты</div>
+              <div className="mt-[50px] text-xl font-wide-black">Аналитики</div>
               {CreditsData.testers.map((dev, index) => (
                 <div key={index} className="text-base font-wide-medium">
                   {dev}
