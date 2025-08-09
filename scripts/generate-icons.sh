@@ -6,29 +6,27 @@ if [ ! -f "public/fav.svg" ]; then
     exit 1
 fi
 
-if ! command -v convert &> /dev/null; then
-    echo "ImageMagick not installed"
+if ! command -v inkscape &> /dev/null; then
+    echo "inkscape not installed"
     exit 1
 fi
 
 mkdir -p public
 
 echo "favicon-16x16.png..."
-convert public/fav.svg -background none -resize 16x16 public/favicon-16x16.png
+inkscape -w 16 -h 16 public/fav.svg --export-png public/favicon-16x16.png --export-background-opacity=0
 
 echo "favicon-32x32.png..."
-convert public/fav.svg -background none -resize 32x32 public/favicon-32x32.png
+inkscape -w 32 -h 32 public/fav.svg --export-png public/favicon-32x32.png --export-background-opacity=0
 
 echo "apple-touch-icon.png..."
-convert public/fav.svg -background none -resize 180x180 public/apple-touch-icon.png
+inkscape -w 180 -h 180 public/fav.svg --export-png public/apple-touch-icon.png --export-background-opacity=0
 
 echo "android-chrome-192x192.png..."
-convert public/fav.svg -background none -resize 192x192 public/android-chrome-192x192.png
+inkscape -w 192 -h 192 public/fav.svg --export-png public/android-chrome-192x192.png --export-background-opacity=0
 
 echo "android-chrome-512x512.png..."
-convert public/fav.svg -background none -resize 512x512 public/android-chrome-512x512.png
-
-convert public/fav.svg -resize 1200x630 -background white -gravity center -extent 1200x630 public/og-image.png
+inkscape -w 512 -h 512 public/fav.svg --export-png public/android-chrome-512x512.png --export-background-opacity=0
 
 echo "Done, public/:"
 echo "   - favicon-16x16.png"
@@ -36,5 +34,3 @@ echo "   - favicon-32x32.png"
 echo "   - apple-touch-icon.png"
 echo "   - android-chrome-192x192.png"
 echo "   - android-chrome-512x512.png"
-echo "   - og-image.png"
-
