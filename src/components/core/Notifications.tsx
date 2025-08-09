@@ -126,7 +126,7 @@ function NotificationCard({
           <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
         ) : (
           <CardDescription className="flex text-sm justify-between flex-wrap">
-            <div>Важное Уведомление</div>
+            <div>Важное</div>
             <div>{date}</div>
           </CardDescription>
         )}
