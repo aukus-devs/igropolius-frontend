@@ -35,7 +35,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
         {showCurrentGame && <CurrentGame player={player} />}
         {filteredGames.length === 0 ? (
           <div className="text-center text-xs font-roboto-wide-semibold text-muted-foreground">
-            Нет игр {searchText && <span>, соответствующих вашему запросу.</span>}
+            Нет игр {searchText && <span>, соответствующих запросу.</span>}
           </div>
         ) : (
           <>
