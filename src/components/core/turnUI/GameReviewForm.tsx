@@ -265,7 +265,7 @@ function GameDurationInfo({ gameDuration }: { gameDuration?: Duration }) {
     <div className="flex items-center gap-2">
       <InfoCircle className="size-[17px] text-white/60" />
       <span className="text-sm text-white/60">
-        Время прохождения игры примерно и берётся из категории стрима.
+        Время «Прошел за» примерное, и высчитывается по категории стрима
       </span>
     </div>
   );
