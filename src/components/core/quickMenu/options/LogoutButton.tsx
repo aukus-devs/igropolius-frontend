@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { logout } from '@/lib/api';
-import { removeCurrentPlayerQuery } from '@/lib/queryClient';
+import { removeCurrentPlayerQuery, removeNotificationsQuery } from '@/lib/queryClient';
 import useSystemStore from '@/stores/systemStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
@@ -34,6 +34,7 @@ export function LogoutButton({ className }: { className?: string }) {
       setTurnState(null);
 
       removeCurrentPlayerQuery();
+      removeNotificationsQuery();
       localStorage.removeItem('access-token');
     });
   };
