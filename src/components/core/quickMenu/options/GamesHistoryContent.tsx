@@ -151,7 +151,7 @@ export default function GamesHistoryContent() {
             type="text"
             value={searchFilter}
             onChange={e => setSearchFilter(e.target.value)}
-            placeholder="Поиск"
+            placeholder="Поиск, минимум 3 символа"
             onKeyDown={e => e.stopPropagation()}
           />
         </div>
