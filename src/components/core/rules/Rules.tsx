@@ -43,7 +43,7 @@ export default function Rules({
   };
 
   return (
-    <div className="my-5">
+    <div className="">
       {editing ? (
         <div>
           <div className="flex gap-4 items-center">
@@ -63,9 +63,8 @@ export default function Rules({
         </div>
       ) : (
         <div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center pt-4 sm:pt-0">
+          <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center sm:pt-0">
             {canEdit && <Button onClick={() => setEditing(true)}>Редактировать</Button>}
-            от {formatTsToFullDate(version.created_at)}
           </div>
           <div className="mt-4">
             <div className="rich-display">
