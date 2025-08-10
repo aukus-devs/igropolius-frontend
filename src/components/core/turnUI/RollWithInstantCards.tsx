@@ -24,16 +24,13 @@ type Props = {
 };
 
 export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
-  const { playerCards, setNextTurnState, hasDowngradeBonus, hasUpgradeBonus, addCardToState } =
-    usePlayerStore(
-      useShallow(state => ({
-        playerCards: state.myPlayer?.bonus_cards,
-        setNextTurnState: state.setNextTurnState,
-        hasDowngradeBonus: state.hasDowngradeBonus,
-        hasUpgradeBonus: state.hasUpgradeBonus,
-        addCardToState: state.addCardToState,
-      }))
-    );
+  const { playerCards, setNextTurnState, addCardToState } = usePlayerStore(
+    useShallow(state => ({
+      playerCards: state.myPlayer?.bonus_cards,
+      setNextTurnState: state.setNextTurnState,
+      addCardToState: state.addCardToState,
+    }))
+  );
 
   const [activationResult, setActivationResult] = useState<InstantCardResult | null>(null);
   const [moveToCardDrop, setMoveToCardDrop] = useState<boolean>(false);
@@ -126,12 +123,6 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
 
     Object.entries(frontendInstantCardsData).forEach(([instantType_, cardData]) => {
       const instantType = instantType_ as InstantCardType;
-      if (hasDowngradeBonus && instantType === 'downgrade-next-building') {
-        return; // Skip this card if downgrade bonus is active
-      }
-      if (hasUpgradeBonus && instantType === 'upgrade-next-building') {
-        return; // Skip this card if upgrade bonus is active
-      }
       result.push({
         value: { instant: instantType },
         label: cardData.name,
@@ -141,7 +132,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     });
 
     return result;
-  }, [playerCards, hasDowngradeBonus, hasUpgradeBonus]);
+  }, [playerCards]);
 
   let finishText = 'Готово';
   if (moveToCardDrop) {

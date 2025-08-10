@@ -139,8 +139,6 @@ export type PlayerTurnState =
   | "stealing-bonus-card"
   | "choosing-building-sector";
 export type LastRollResult = number[];
-export type HasUpgradeBonus = boolean;
-export type HasDowngradeBonus = boolean;
 export type IsRandomOrgResult = boolean;
 export type RandomOrgCheckForm = string | null;
 export type RandomOrgFailReason = string | null;
@@ -264,6 +262,7 @@ export type Games1 = PlayerGame[];
 export type BonusCards = ActiveBonusCard[];
 export type Color = string;
 export type ModelName = string;
+export type BuildingUpgradeBonus = number;
 export type Timestamp3 = number;
 export type Timestamp4 = number;
 export type EventType3 = "score-change";
@@ -425,8 +424,6 @@ export interface CurrentUserResponse {
   moder_for?: ModerFor;
   turn_state?: PlayerTurnState | null;
   last_roll_result: LastRollResult;
-  has_upgrade_bonus?: HasUpgradeBonus;
-  has_downgrade_bonus?: HasDowngradeBonus;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -659,6 +656,7 @@ export interface PlayerDetails {
   bonus_cards: BonusCards;
   color: Color;
   model_name: ModelName;
+  building_upgrade_bonus: BuildingUpgradeBonus;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

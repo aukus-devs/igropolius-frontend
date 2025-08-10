@@ -370,6 +370,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     color: playerColors.red,
     model_name: '/cars/race-future1.glb',
+    building_upgrade_bonus: 0,
 
     games: [
       {
@@ -531,6 +532,7 @@ export const playersData: PlayerDetails[] = [
     donation_link: 'https://donate.praden.com',
 
     maps_completed: 0,
+    building_upgrade_bonus: 0,
 
     total_score: 5000,
     games: [
@@ -698,6 +700,7 @@ export const playersData: PlayerDetails[] = [
 
     total_score: 200,
     maps_completed: 1,
+    building_upgrade_bonus: 0,
 
     games: [
       {
@@ -759,6 +762,7 @@ export const playersData: PlayerDetails[] = [
 
     total_score: 200,
     maps_completed: 2,
+    building_upgrade_bonus: 0,
 
     games: [
       {
@@ -806,6 +810,7 @@ export const playersData: PlayerDetails[] = [
 
     total_score: 200,
     maps_completed: 0,
+    building_upgrade_bonus: 0,
     games: [
       {
         id: 21,
@@ -859,6 +864,7 @@ export const playersData: PlayerDetails[] = [
 
     total_score: 200,
     maps_completed: 0,
+    building_upgrade_bonus: 0,
     games: [
       {
         id: 22,
@@ -911,6 +917,7 @@ export const playersData: PlayerDetails[] = [
 
     total_score: 200,
     maps_completed: 0,
+    building_upgrade_bonus: 0,
     games: [
       {
         id: 23,
@@ -963,6 +970,7 @@ export const playersData: PlayerDetails[] = [
 
     total_score: 200,
     maps_completed: 0,
+    building_upgrade_bonus: 0,
     games: [
       {
         id: 24,
@@ -1017,6 +1025,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     games: [],
     bonus_cards: [],
+    building_upgrade_bonus: 0,
   },
   {
     id: 10,
@@ -1048,6 +1057,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     games: [],
     bonus_cards: [],
+    building_upgrade_bonus: 0,
   },
   {
     id: 11,
@@ -1079,6 +1089,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     games: [],
     bonus_cards: [],
+    building_upgrade_bonus: 0,
   },
   {
     id: 12,
@@ -1109,6 +1120,7 @@ export const playersData: PlayerDetails[] = [
     maps_completed: 0,
     games: [],
     bonus_cards: [],
+    building_upgrade_bonus: 0,
   },
 ];
 

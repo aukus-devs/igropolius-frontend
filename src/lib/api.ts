@@ -243,13 +243,9 @@ export async function fetchCurrentPlayer(): Promise<CurrentUserResponse> {
     return Promise.resolve({
       id: 1,
       username: 'Praden',
-      url_handle: 'praden',
       turn_state: 'rolling-dice',
       role: 'admin',
-      sector_id: 1,
       last_roll_result: MOCK_DICE_ROLL,
-      has_downgrade_bonus: false,
-      has_upgrade_bonus: false,
     });
   }
   const response = await apiRequest('/api/players/current');

@@ -50,8 +50,6 @@ import useTrainsStore from './trainStore';
 const usePlayerStore = create<{
   myPlayerId: number | null;
   myPlayer: PlayerDetails | null;
-  hasUpgradeBonus: boolean;
-  hasDowngradeBonus: boolean;
   isPlayerMoving: boolean;
   players: PlayerDetails[];
   buildingsPerSector: Record<number, BuildingData[]>;
@@ -83,8 +81,6 @@ const usePlayerStore = create<{
 }>((set, get) => ({
   myPlayerId: null,
   myPlayer: null,
-  hasUpgradeBonus: false,
-  hasDowngradeBonus: false,
   isPlayerMoving: false,
   players: [],
   buildingsPerSector: {},
@@ -102,8 +98,6 @@ const usePlayerStore = create<{
       set({
         myPlayerId: null,
         myPlayer: null,
-        hasUpgradeBonus: false,
-        hasDowngradeBonus: false,
         turnState: null,
       });
       return;
@@ -116,8 +110,6 @@ const usePlayerStore = create<{
     }
     set({
       myPlayerId: data.id,
-      hasUpgradeBonus: data.has_upgrade_bonus,
-      hasDowngradeBonus: data.has_downgrade_bonus,
     });
   },
 
