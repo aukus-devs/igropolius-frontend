@@ -80,12 +80,12 @@ async function apiRequest(endpoint: string, params: RequestInit = {}): Promise<R
     actingUserId = useSystemStore.getState().actingUserId;
   }
 
-  const token = localStorage.getItem('access-token') ?? '';
+  const token = localStorage.getItem('access-token');
   const response = await fetch(`${API_HOST}${endpoint}`, {
     ...params,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(actingUserId ? { 'X-Acting-User-Id': String(actingUserId) } : {}),
     },
   });
