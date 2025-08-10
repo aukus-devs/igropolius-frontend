@@ -16,8 +16,8 @@ function PlayerDialogTabs({ player }: Props) {
   ];
 
   return (
-    <Tabs className="md:px-5 px-[15px]" defaultValue={tabs[0].value}>
-      <TabsList className="w-full bg-transparent gap-2 p-0 sticky top-[10px] z-50">
+    <Tabs className="md:px-0 px-[15px]" defaultValue={tabs[0].value}>
+      <TabsList className="md:p-5 w-full bg-[#81A772]/10 backdrop-blur-md gap-2 p-0 sticky top-0 z-50">
         {tabs.map(({ name, value }) => (
           <TabsTrigger
             key={value}
@@ -29,7 +29,7 @@ function PlayerDialogTabs({ player }: Props) {
         ))}
       </TabsList>
       {tabs.map(({ value, content }) => (
-        <TabsContent key={value} value={value} className="z-10">
+        <TabsContent key={value} value={value} className="z-10 px-5">
           {content}
         </TabsContent>
       ))}

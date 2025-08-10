@@ -17,7 +17,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
 
   return (
     <>
-      <div className="sticky top-[54px] z-50">
+      <div className="z-50">
         <SearchIcon
           className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           size="1rem"
