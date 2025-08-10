@@ -386,6 +386,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/123456789',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 2,
@@ -400,6 +401,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/987654321',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 3,
@@ -414,6 +416,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/1122334455',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 4,
@@ -428,6 +431,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/5566778899',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 5,
@@ -442,6 +446,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 6,
@@ -456,6 +461,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/2233445566',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 7,
@@ -470,6 +476,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/6677889900',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 8,
@@ -484,6 +491,7 @@ export const playersData: PlayerDetails[] = [
         status: 'drop',
         vod_links: null,
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
     ],
     bonus_cards: [
@@ -549,6 +557,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/123456789',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 10,
@@ -563,6 +572,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/987654321',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 11,
@@ -577,6 +587,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/1122334455',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 12,
@@ -591,6 +602,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/5566778899',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 13,
@@ -606,6 +618,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 14,
@@ -620,6 +633,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/2233445566',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 15,
@@ -634,6 +648,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/6677889900',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 16,
@@ -648,6 +663,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/1234567890',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 17,
@@ -662,6 +678,7 @@ export const playersData: PlayerDetails[] = [
         status: 'drop',
         vod_links: null,
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
     ],
     bonus_cards: [
@@ -716,6 +733,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/2233445566',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
       {
         id: 19,
@@ -730,6 +748,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/6677889900',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
     ],
     bonus_cards: [],
@@ -778,6 +797,7 @@ export const playersData: PlayerDetails[] = [
         status: 'drop',
         vod_links: null,
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
     ],
     bonus_cards: [],
@@ -826,6 +846,7 @@ export const playersData: PlayerDetails[] = [
         vod_links:
           'https://www.twitch.tv/videos/1234567890, https://www.twitch.tv/videos/1234567891, https://www.twitch.tv/videos/1234567892',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
     ],
     bonus_cards: [
@@ -879,6 +900,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/5566778899',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
     ],
     bonus_cards: [
@@ -932,6 +954,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
     ],
     bonus_cards: [
@@ -985,6 +1008,7 @@ export const playersData: PlayerDetails[] = [
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/2233445566',
         cover: FALLBACK_GAME_POSTER,
+        length_bonus: 0,
       },
     ],
     bonus_cards: [

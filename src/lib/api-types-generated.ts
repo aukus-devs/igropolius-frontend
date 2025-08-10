@@ -253,7 +253,7 @@ export type SectorId6 = number;
 export type Title = string;
 export type Review = string;
 export type Rating1 = number;
-export type LengthBonus = number | null;
+export type LengthBonus = number;
 export type Duration1 = number | null;
 export type VodLinks1 = string | null;
 export type Cover1 = string | null;
@@ -672,7 +672,7 @@ export interface PlayerGame {
   review: Review;
   rating: Rating1;
   length: GameLength;
-  length_bonus?: LengthBonus;
+  length_bonus: LengthBonus;
   duration?: Duration1;
   vod_links?: VodLinks1;
   cover?: Cover1;
