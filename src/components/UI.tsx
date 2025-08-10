@@ -31,7 +31,7 @@ function DesktopUI() {
     state => state.myUser?.role === 'admin' || state.actingUserId
   );
 
-  const mainNotification = useSystemStore(state => state.mainNotification);
+  const mainNotification = useSystemStore(useShallow(state => state.mainNotification));
 
   return (
     <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:block hidden">

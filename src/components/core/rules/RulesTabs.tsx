@@ -4,18 +4,34 @@ import RulesChanges from './RulesChanges';
 import { LoaderCircleIcon } from 'lucide-react';
 import useRules from '@/hooks/useRules';
 import { RulesCategory } from '@/lib/api-types-generated';
+import { useRef, useState } from 'react';
 
 export default function RulesTabs() {
   const { isLoading, rules, setSelectedCategory } = useRules();
 
-  // const { data: rulesData, isLoading } = useQuery({
-  //   queryKey: queryKeys.currentRulesVersion,
-  //   queryFn: fetchCurrentRules,
-  // });
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
 
-  // const generalRules = rulesData?.versions.find(rule => rule.category === 'general');
-  // const gameplayRules = rulesData?.versions.find(rule => rule.category === 'gameplay');
-  // const donationsRules = rulesData?.versions.find(rule => rule.category === 'donations');
+  const onRender = (element: HTMLDivElement | null) => {
+    if (!element) return;
+
+    stickyRef.current = element;
+
+    const container = element.closest('#scroll-area-viewport');
+    if (!container) return; // fallback
+
+    const handleScroll = () => {
+      // console.log({ scrollRef: stickyRef.current });
+      if (!stickyRef.current) return;
+      const { top } = stickyRef.current.getBoundingClientRect();
+      // Check if sticky element is exactly at top:0
+      setStuck(top <= 0);
+    };
+    // Run on mount and on scroll
+    handleScroll();
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => container.removeEventListener('scroll', handleScroll);
+  };
 
   if (isLoading) {
     return <LoaderCircleIcon className="animate-spin text-primary mx-auto mt-20" size={50} />;
@@ -40,9 +56,23 @@ export default function RulesTabs() {
     { name: 'Изменения', value: 'changelog', content: <RulesChanges /> },
   ];
 
+  const tabsStyle: React.CSSProperties = {};
+  if (stuck) {
+    tabsStyle.backgroundColor = 'rgba(129, 167, 114, 0.1)';
+    tabsStyle.backdropFilter = 'blur(10px)';
+  } else {
+    tabsStyle.background = 'transparent';
+  }
+
+  // console.log({ stuck, tabsStyle });
+
   return (
     <Tabs defaultValue={tabs[0].value} className="gap-0">
-      <TabsList className="flex w-full bg-[#81A772]/10 backdrop-blur-md gap-2 p-5 flex-wrap sticky top-0 z-50">
+      <TabsList
+        className="flex w-full gap-2 p-5 flex-wrap sticky top-0 z-50"
+        style={tabsStyle}
+        ref={onRender}
+      >
         {tabs.map(({ name, value }) => (
           <TabsTrigger
             key={value}

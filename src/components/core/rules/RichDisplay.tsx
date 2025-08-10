@@ -39,7 +39,7 @@ export default function RichDisplay({ value }: Props) {
           const segmentHeader = blocks[0];
           const blocksRest = blocks.slice(1);
           return (
-            <div>
+            <div key={segIdx}>
               <div className="ml-[10px]">
                 <Block block={segmentHeader} />
               </div>
