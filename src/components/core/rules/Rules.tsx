@@ -6,7 +6,6 @@ import useSystemStore from '@/stores/systemStore';
 import { saveRulesVersion } from '@/lib/api';
 import RichDisplay from './RichDisplay';
 import { resetCurrentRulesQuery } from '@/lib/queryClient';
-import { formatTsToFullDate } from '@/lib/utils';
 import { RulesCategory, RulesVersion } from '@/lib/api-types-generated';
 
 export default function Rules({

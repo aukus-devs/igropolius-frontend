@@ -6,6 +6,7 @@ type MainNotification = {
   text: string;
   tag: 'event-start-timer' | 'event-ended' | 'event-settings-error' | 'api-error';
   variant: 'info' | 'error';
+  permanent?: boolean;
 };
 
 interface SystemStore {

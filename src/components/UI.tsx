@@ -14,6 +14,8 @@ import FrontVersionInfo from './FrontVersionInfo';
 import useSystemStore from '@/stores/systemStore';
 import { Card } from './ui/card';
 import { useRef } from 'react';
+import { Button } from './ui/button';
+import { X } from './icons';
 
 function DesktopUI() {
   const techContainer = useRef<HTMLDivElement>(null);
@@ -75,19 +77,23 @@ function DesktopUI() {
 
       {mainNotification && (
         <Card
-          className={`absolute top-3 left-1/2 -translate-x-1/2 max-w-2xl ${mainNotification.variant === 'error'
+          className={`absolute top-3 left-1/2 -translate-x-1/2 max-w-2xl ${
+            mainNotification.variant === 'error'
               ? 'bg-destructive/90 text-white border-destructive'
               : ''
-            }`}
+          }`}
         >
-          <div className="pl-4 pr-4 rounded-md flex items-start gap-2 py-2">
-            <div className="flex-1 whitespace-pre-wrap text-sm">{mainNotification.text}</div>
-            <button
-              onClick={() => useSystemStore.getState().setMainNotification(null)}
-              className="text-white/70 hover:text-white transition-colors flex-shrink-0"
-            >
-              ✕
-            </button>
+          <div className="relative rounded-md flex items-start gap-2">
+            <div className="px-4 flex-1 whitespace-pre-wrap text-sm">{mainNotification.text}</div>
+            {!mainNotification.permanent && (
+              <Button
+                variant="ghost"
+                onClick={() => useSystemStore.getState().setMainNotification(null)}
+                className=" text-white/70 hover:text-white transition-colors flex-shrink-0"
+              >
+                <X />
+              </Button>
+            )}
           </div>
         </Card>
       )}
@@ -105,10 +111,11 @@ function MobileUI() {
 
       {mainNotification && (
         <Card
-          className={`absolute top-20 left-4 right-4 ${mainNotification.variant === 'error'
+          className={`absolute top-20 left-4 right-4 ${
+            mainNotification.variant === 'error'
               ? 'bg-destructive/90 text-white border-destructive'
               : ''
-            }`}
+          }`}
         >
           <div className="pl-4 pr-4 rounded-md flex items-start gap-2 py-2">
             <div className="flex-1 whitespace-pre-wrap text-sm">{mainNotification.text}</div>

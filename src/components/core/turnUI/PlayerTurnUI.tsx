@@ -77,10 +77,18 @@ export default function PlayerTurnUI() {
       }
 
       if (_eventEnded) {
+        const players = usePlayerStore.getState().players;
+        const playersByScore = players.sort((p1, p2) => p2.total_score - p1.total_score);
+        const winner = playersByScore[0];
+        const notificationText = winner
+          ? `Ивент завершён, победил ${winner.username}!`
+          : 'Ивент завершён';
+
         setMainNotification({
-          text: 'Ивент завершён',
+          text: notificationText,
           variant: 'info',
           tag: 'event-ended',
+          permanent: true,
         });
       }
     }, 1000);
