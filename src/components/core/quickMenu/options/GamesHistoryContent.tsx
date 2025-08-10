@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useDebounce } from '@/hooks/useDebounce';
+import useScrollStyler from '@/hooks/useScrollStyler';
 import { IS_DEV } from '@/lib/constants';
 import usePlayerStore from '@/stores/playerStore';
 import { useQuery } from '@tanstack/react-query';
@@ -125,6 +126,8 @@ export default function GamesHistoryContent() {
     return filteredGames.slice(0, limit);
   }, [filteredGames, limit]);
 
+  const { onRender, style } = useScrollStyler();
+
   if (isLoading || !historyData) {
     return (
       <div className="flex justify-center mt-20">
@@ -136,9 +139,9 @@ export default function GamesHistoryContent() {
   const showLoadMore = limitedGames.length < filteredGames.length;
 
   return (
-    <div>
-      <div className="sticky p-5 top-0 bg-[#81A772]/10 backdrop-blur-md z-50  rounded-lg mb-[30px]">
-        <div className="relative ">
+    <>
+      <div className="sticky p-5 top-0 z-50 rounded-lg mb-[30px]" style={style} ref={onRender}>
+        <div className="relative">
           <SearchIcon
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             size="1rem"
@@ -241,7 +244,7 @@ export default function GamesHistoryContent() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
 
