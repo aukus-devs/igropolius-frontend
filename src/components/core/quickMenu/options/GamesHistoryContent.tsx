@@ -35,7 +35,7 @@ const CompletionTitle: Record<HistoryItem['completion_status'], string> = {
 };
 
 const CompletionColor: Record<HistoryItem['completion_status'], string> = {
-  completed: 'bg-green-700',
+  completed: 'bg-[#30D158]',
   drop: 'bg-red-700',
   reroll: 'bg-yellow-700',
 };
@@ -95,29 +95,30 @@ export default function GamesHistoryContent() {
       return [];
     }
 
-    const searchFiltered =
-      debouncedFilter.length < 3
-        ? historyData.games
-        : historyData.games.filter(
-            item =>
-              item.game_title.toLowerCase().includes(debouncedFilter) ||
-              item.player_nickname.toLowerCase().includes(debouncedFilter) ||
-              item.event_name.toLowerCase().includes(debouncedFilter) ||
-              item.review.toLowerCase().includes(debouncedFilter)
-          );
     const playerFiltered =
       playerFilter !== 'none'
-        ? searchFiltered.filter(
+        ? historyData.games.filter(
             item => item.player_nickname.toLowerCase() === playerFilter.toLowerCase()
           )
-        : searchFiltered;
+        : historyData.games;
 
     const eventFiltered =
       eventFilter !== 'none'
         ? playerFiltered.filter(item => item.event_name.toLowerCase() === eventFilter.toLowerCase())
         : playerFiltered;
 
-    return eventFiltered;
+    const searchFiltered =
+      debouncedFilter.length < 3
+        ? eventFiltered
+        : eventFiltered.filter(
+            item =>
+              item.game_title.toLowerCase().includes(debouncedFilter) ||
+              item.player_nickname.toLowerCase().includes(debouncedFilter) ||
+              item.event_name.toLowerCase().includes(debouncedFilter) ||
+              item.review.toLowerCase().includes(debouncedFilter)
+          );
+
+    return searchFiltered;
   }, [debouncedFilter, historyData?.games, playerFilter, eventFilter]);
 
   const limitedGames = useMemo(() => {
@@ -136,8 +137,8 @@ export default function GamesHistoryContent() {
 
   return (
     <div>
-      <div className="sticky top-[10px]">
-        <div className="mt-[30px] relative ">
+      <div className="sticky p-5 top-0 bg-[#81A772]/10 backdrop-blur-md z-50  rounded-lg mb-[30px]">
+        <div className="relative ">
           <SearchIcon
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             size="1rem"
@@ -152,7 +153,7 @@ export default function GamesHistoryContent() {
           />
         </div>
         <div>
-          <div className="flex mt-[10px] mb-[30px] gap-[10px]">
+          <div className="flex mt-[10px] gap-[10px]">
             <Select value={playerFilter} onValueChange={value => setPlayerFilter(value)}>
               <SelectTrigger className="bg-[#575b58]">
                 <SelectValue placeholder="Игрок" />
@@ -183,7 +184,7 @@ export default function GamesHistoryContent() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-[50px] w-full">
+      <div className="flex flex-col gap-[50px] w-full px-5">
         {limitedGames.map(item => (
           <div
             key={`${item.player_nickname}-${item.game_title}-${item.date}`}
@@ -201,7 +202,7 @@ export default function GamesHistoryContent() {
               <Badge className={`${CompletionColor[item.completion_status]}`}>
                 {CompletionTitle[item.completion_status]}
               </Badge>
-              <Badge>{item.event_name}</Badge>
+              <Badge className="bg-white/20 text-white/70">{item.event_name}</Badge>
             </div>
             <div className="text-2xl p-0 font-roboto-wide-semibold">{item.game_title}</div>
             <div className="flex gap-[8px]">
@@ -214,8 +215,8 @@ export default function GamesHistoryContent() {
               <div className="flex flex-col gap-[10px]">
                 <div className="flex gap-2">
                   <Badge className="bg-white/20 text-white/70 font-semibold">
-                    {item.game_time === 0 && <span>Время: нет данных</span>}
-                    {item.game_time > 0 &&
+                    {item.game_time < 60 && <span>Время: нет данных</span>}
+                    {item.game_time > 60 &&
                       (item.completion_status === 'completed' ? (
                         <span>Пройдено за: {sencondsToHourMin(item.game_time)}</span>
                       ) : (
