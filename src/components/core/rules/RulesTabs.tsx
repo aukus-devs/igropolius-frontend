@@ -4,36 +4,12 @@ import RulesChanges from './RulesChanges';
 import { LoaderCircleIcon } from 'lucide-react';
 import useRules from '@/hooks/useRules';
 import { RulesCategory } from '@/lib/api-types-generated';
-import { useRef, useState } from 'react';
+import useScrollStyler from '@/hooks/useScrollStyler';
 
 export default function RulesTabs() {
   const { isLoading, rules, setSelectedCategory } = useRules();
 
-  const stickyRef = useRef<HTMLDivElement>(null);
-  const [stuck, setStuck] = useState(false);
-
-  const onRender = (element: HTMLDivElement | null) => {
-    if (!element) return;
-
-    stickyRef.current = element;
-
-    const container = element.closest('#scroll-area-viewport');
-    if (!container) return; // fallback
-
-    const handleScroll = () => {
-      // console.log({ scrollRef: stickyRef.current });
-      if (!stickyRef.current) return;
-
-      const cRect = container.getBoundingClientRect();
-      const sRect = stickyRef.current.getBoundingClientRect();
-      const topRelative = sRect.top - cRect.top;
-      setStuck(topRelative <= 0);
-    };
-    // Run on mount and on scroll
-    handleScroll();
-    container.addEventListener('scroll', handleScroll, { passive: true });
-    return () => container.removeEventListener('scroll', handleScroll);
-  };
+  const { onRender, style } = useScrollStyler();
 
   if (isLoading) {
     return <LoaderCircleIcon className="animate-spin text-primary mx-auto mt-20" size={50} />;
@@ -58,22 +34,13 @@ export default function RulesTabs() {
     { name: 'Изменения', value: 'changelog', content: <RulesChanges /> },
   ];
 
-  const tabsStyle: React.CSSProperties = {};
-  if (stuck) {
-    tabsStyle.backgroundColor = 'rgba(129, 167, 114, 0.1)';
-    tabsStyle.backdropFilter = 'blur(10px)';
-    tabsStyle.borderRadius = '16px';
-  } else {
-    tabsStyle.background = 'transparent';
-  }
-
   // console.log({ stuck, tabsStyle });
 
   return (
     <Tabs defaultValue={tabs[0].value} className="gap-0">
       <TabsList
         className="flex w-full gap-2 p-5 flex-wrap sticky top-0 z-50"
-        style={tabsStyle}
+        style={style}
         ref={onRender}
       >
         {tabs.map(({ name, value }) => (

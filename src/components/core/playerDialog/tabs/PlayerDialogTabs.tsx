@@ -3,6 +3,7 @@ import GamesTab from './GamesTab';
 import CardsTab from './CardsTab';
 import EventsTab from './EventsTab';
 import { PlayerDetails } from '@/lib/api-types-generated';
+import useScrollStyler from '@/hooks/useScrollStyler';
 
 type Props = {
   player: PlayerDetails;
@@ -15,9 +16,11 @@ function PlayerDialogTabs({ player }: Props) {
     { name: 'Действия', value: 'actions', content: <EventsTab player={player} /> },
   ];
 
+  const { onRender, style } = useScrollStyler();
+
   return (
     <Tabs className="md:px-0 px-[15px]" defaultValue={tabs[0].value}>
-      <TabsList className="md:p-5 w-full bg-[#81A772]/10 backdrop-blur-md gap-2 p-0 sticky top-0 z-50">
+      <TabsList className="md:p-5 w-full  gap-2 p-0 sticky top-0 z-50" style={style} ref={onRender}>
         {tabs.map(({ name, value }) => (
           <TabsTrigger
             key={value}
