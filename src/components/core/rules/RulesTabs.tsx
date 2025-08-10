@@ -23,9 +23,11 @@ export default function RulesTabs() {
     const handleScroll = () => {
       // console.log({ scrollRef: stickyRef.current });
       if (!stickyRef.current) return;
-      const { top } = stickyRef.current.getBoundingClientRect();
-      // Check if sticky element is exactly at top:0
-      setStuck(top <= 0);
+
+      const cRect = container.getBoundingClientRect();
+      const sRect = stickyRef.current.getBoundingClientRect();
+      const topRelative = sRect.top - cRect.top;
+      setStuck(topRelative <= 0);
     };
     // Run on mount and on scroll
     handleScroll();
@@ -60,6 +62,7 @@ export default function RulesTabs() {
   if (stuck) {
     tabsStyle.backgroundColor = 'rgba(129, 167, 114, 0.1)';
     tabsStyle.backdropFilter = 'blur(10px)';
+    tabsStyle.borderRadius = '16px';
   } else {
     tabsStyle.background = 'transparent';
   }
