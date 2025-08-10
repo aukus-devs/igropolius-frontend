@@ -22,7 +22,7 @@ export default function GamesHistory({ className }: { className?: string }) {
         История игр
       </DialogTrigger>
       <DialogContent
-        className="m:max-w-[600px] h-[90vh] max-h-[660px] flex flex-col p-0"
+        className="m:max-w-[600px] max-h-[780px] flex flex-col p-0"
         aria-describedby=""
       >
         <ScrollArea className="flex h-full flex-1 overflow-y-auto overflow-x-hidden">
