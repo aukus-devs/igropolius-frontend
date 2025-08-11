@@ -248,6 +248,13 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
       lastCommonLine = oldLine;
     }
 
+    if (
+      (oldLine && newLines.find(l => l.trim() === oldLine)) ||
+      (newLine && oldLines.find(l => l.trim() === newLine))
+    ) {
+      continue;
+    }
+
     if (oldLine !== newLine) {
       if (result.ops.length > 0) {
         result.ops.push({ insert: "\n" });
