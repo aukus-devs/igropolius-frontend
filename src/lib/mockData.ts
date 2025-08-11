@@ -86,7 +86,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 11,
-    name: 'Тюрьма',
+    name: 'Тюрьма 1',
     position: { x: 10, y: 0 },
     type: 'prison',
     rollType: 'steam',
@@ -246,7 +246,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 31,
-    name: 'Тюрьма',
+    name: 'Тюрьма 2',
     position: { x: 0, y: 10 },
     type: 'prison',
     rollType: 'steam',
