@@ -108,10 +108,10 @@ function SectorInfo({ sector }: Props) {
 export default SectorInfo;
 
 const SectorTypeLabes: Record<SectorData['type'], string> = {
-  bonus: 'бонусный',
-  parking: 'парковка',
-  prison: 'тюрьма',
-  property: 'строительный',
-  railroad: 'вокзал',
-  'start-corner': 'старт',
+  bonus: 'Шанс',
+  parking: 'Парковка',
+  prison: 'Тюрьма',
+  property: 'Улица',
+  railroad: 'Вокзал',
+  'start-corner': 'Старт',
 };
