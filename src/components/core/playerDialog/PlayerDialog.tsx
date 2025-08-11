@@ -42,7 +42,7 @@ function PlayerDialog({ player, placement, isCurrentPlayer, showCards }: Props) 
             />
           </DialogTrigger>
           <DialogContent
-            className="flex flex-col gap-8 md:h-[700px] h-auto left-0 bottom-0 max-h-[90dvh] w-screen md:w-[600px] p-0"
+            className="flex flex-col gap-8 h-[calc(100dvh_-_74px)] left-0 bottom-0 w-screen md:w-[600px] p-0"
             aria-describedby=""
           >
             <DialogClose

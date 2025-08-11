@@ -45,7 +45,7 @@ export default function AboutDialog({ className }: Props) {
         <Event />
         Об ивенте
       </DialogTrigger>
-      <DialogContent className="w-[600px] p-0 max-h-[90dvh] h-auto" aria-describedby="">
+      <DialogContent className="w-[600px] p-0 h-[calc(100dvh_-_74px)]" aria-describedby="">
         <ScrollArea className="max-h-[700px] px-5">
           <DialogHeader className="pt-5 pb-4">
             <DialogTitle className="text-[32px] font-wide-black leading-[38px]">
