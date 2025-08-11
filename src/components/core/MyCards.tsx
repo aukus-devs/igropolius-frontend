@@ -93,25 +93,30 @@ export default function MyCards() {
           );
         })}
         {buildingBonus !== undefined && buildingBonus !== 0 && (
-          <Tooltip>
-            <TooltipTrigger>
-              <div
-                className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
-                data-positive={buildingBonus > 0}
-              >
-                {buildingBonus > 0 && '+'}
-                {buildingBonus}
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <div className="w-[200px]">
-                <div className="text-[20px] font-semibold mb-2 leading-6">Бонус зданий</div>
-                <div className="text-base font-semibold text-muted-foreground leading-[19px]">
-                  Автоматически увеличивает или уменьшает размер следующего здания
+          <>
+            <div className="flex flex-col items-center justify-center">
+              <div className="rounded-xl bg-gray-500 w-1 h-3.5"></div>
+            </div>
+            <Tooltip>
+              <TooltipTrigger>
+                <div
+                  className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
+                  data-positive={buildingBonus > 0}
+                >
+                  {buildingBonus > 0 && '+'}
+                  {buildingBonus}
                 </div>
-              </div>
-            </TooltipContent>
-          </Tooltip>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div className="w-[200px]">
+                  <div className="text-[20px] font-semibold mb-2 leading-6">Бонус зданий</div>
+                  <div className="text-base font-semibold text-muted-foreground leading-[19px]">
+                    Автоматически увеличивает или уменьшает размер следующего здания
+                  </div>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </>
         )}
       </Card>
     </>
