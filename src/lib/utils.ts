@@ -188,17 +188,17 @@ function getEventBonusCardInfo(event: BonusCardEvent) {
 
   switch (event.subtype) {
     case 'received':
-      title = `Получил «${cardName}»`;
+      title = `Получил "${cardName}"`;
       break;
     case 'used':
-      title = `Использовал «${cardName}»`;
+      title = `Использовал "${cardName}"`;
       break;
     case 'dropped':
-      title = `Потерял «${cardName}»`;
+      title = `Потерял "${cardName}"`;
       break;
     case 'stolen-from-me': {
       const player = players.find(p => p.id === event.stolen_by);
-      title = `${player?.username} украл «${cardName}»`;
+      title = `${player?.username} украл "${cardName}"`;
       break;
     }
     case 'stolen-by-me': {

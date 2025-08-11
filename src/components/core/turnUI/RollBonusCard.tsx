@@ -34,7 +34,7 @@ export default function RollBonusCard() {
   };
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
-    return `«${frontendCardsData[option.value].name}»`;
+    return `"${frontendCardsData[option.value].name}"`;
   };
 
   const getSecondaryText = () => {

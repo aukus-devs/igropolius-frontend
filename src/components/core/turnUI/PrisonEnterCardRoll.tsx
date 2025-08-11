@@ -55,10 +55,10 @@ export default function PrisonEnterCardRoll() {
     }
     switch (option.value.action) {
       case 'lose-card': {
-        return `Потеряна карточка «${bonusCardsData[option.value.card].name}»`;
+        return `Потеряна карточка "${bonusCardsData[option.value.card].name}"`;
       }
       case 'receive-card': {
-        return `Получена карточка «${bonusCardsData[option.value.card].name}»`;
+        return `Получена карточка "${bonusCardsData[option.value.card].name}"`;
       }
       default: {
         return 'Неизвестное действие' as never;
