@@ -58,7 +58,7 @@ function DesktopUI() {
       )}
       {loggedIn && (
         <div className="absolute left-4 bottom-5">
-          <span className="text-[#282828] font-roboto-wide-black opacity-70">Мои карточки</span>
+          <span className="text-[#282828] font-roboto-wide-black opacity-70">Мои бонусы</span>
           <MyCards />
         </div>
       )}

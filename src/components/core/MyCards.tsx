@@ -13,10 +13,11 @@ import { MainBonusCardType } from '@/lib/api-types-generated';
 import ImageLoader from './ImageLoader';
 
 export default function MyCards() {
-  const { myCards, turnState } = usePlayerStore(
+  const { myCards, turnState, buildingBonus } = usePlayerStore(
     useShallow(state => ({
       myCards: state.myPlayer?.bonus_cards,
       turnState: state.turnState,
+      buildingBonus: state.myPlayer?.building_upgrade_bonus,
     }))
   );
 
@@ -91,6 +92,26 @@ export default function MyCards() {
             </Tooltip>
           );
         })}
+        {buildingBonus !== undefined && buildingBonus !== 0 && (
+          <Tooltip>
+            <TooltipTrigger>
+              <div
+                className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
+                data-positive={buildingBonus > 0}
+              >
+                {buildingBonus}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <div className="w-[200px]">
+                <div className="text-[20px] font-semibold mb-2 leading-6">Бонус зданий</div>
+                <div className="text-base font-semibold text-muted-foreground leading-[19px]">
+                  Автоматически увеличивает или уменьшает размер следующего здания
+                </div>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        )}
       </Card>
     </>
   );
