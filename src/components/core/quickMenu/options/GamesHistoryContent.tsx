@@ -37,8 +37,8 @@ const CompletionTitle: Record<HistoryItem['completion_status'], string> = {
 
 const CompletionColor: Record<HistoryItem['completion_status'], string> = {
   completed: 'bg-[#30D158]',
-  drop: 'bg-red-700',
-  reroll: 'bg-yellow-700',
+  drop: 'bg-red-500',
+  reroll: 'bg-blue-500',
 };
 
 type GamesHistory = {
