@@ -86,7 +86,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 11,
-    name: 'Тюрьма «Домик е*ли»',
+    name: 'Тюрьма',
     position: { x: 10, y: 0 },
     type: 'prison',
     rollType: 'steam',
@@ -166,7 +166,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 21,
-    name: 'Парковка «Ну начинается...»',
+    name: 'Парковка',
     position: { x: 10, y: 10 },
     type: 'parking',
     rollType: 'steam',
@@ -246,7 +246,7 @@ export const sectorsData: SectorData[] = [
   },
   {
     id: 31,
-    name: 'Тюрьма «Секреты модератора»',
+    name: 'Тюрьма',
     position: { x: 0, y: 10 },
     type: 'prison',
     rollType: 'steam',
