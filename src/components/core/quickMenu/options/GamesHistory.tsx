@@ -21,7 +21,7 @@ export default function GamesHistory({ className }: { className?: string }) {
         <SvgGame />
         История игр
       </DialogTrigger>
-      <DialogContent className="max-w-[600px] h-[780px] p-0" aria-describedby="">
+      <DialogContent className="max-w-[600px] max-h-[90dvh] h-auto p-0" aria-describedby="">
         <ScrollArea className="h-full w-full overflow-auto">
           <DialogHeader className="pt-5 px-5 mb-[20px]">
             <DialogTitle className="text-[32px] font-wide-black leading-[38px]">

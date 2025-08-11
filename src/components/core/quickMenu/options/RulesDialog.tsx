@@ -27,7 +27,7 @@ function RulesDialog({ className }: { className?: string }) {
           Правила
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[600px] h-[780px] p-0" aria-describedby="">
+      <DialogContent className="max-w-[600px] max-h-[90dvh] h-auto p-0" aria-describedby="">
         <ScrollArea className="h-full w-full overflow-auto">
           <DialogHeader className="w-full px-5 pt-5 relative">
             <DialogTitle className="flex flex-col font-wide-black text-[2rem]">
