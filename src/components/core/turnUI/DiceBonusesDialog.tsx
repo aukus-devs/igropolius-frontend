@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { makePlayerMove } from '@/lib/api';
 import { TrainsConfig } from '@/lib/constants';
 import { SectorsById, sectorsData } from '@/lib/mockData';
+import useCameraStore from '@/stores/cameraStore';
 import useDiceStore from '@/stores/diceStore';
 import usePlayerStore from '@/stores/playerStore';
 import useSystemStore from '@/stores/systemStore';
@@ -46,6 +47,10 @@ export default function DiceBonusesDialog() {
     useSystemStore.setState(state => ({ ...state, disablePlayersQuery: true }));
     usePlayerStore.setState(state => ({ ...state, isPlayerMoving: true }));
     setHighlightedSectorId(null);
+
+    if (myPlayer) {
+      await useCameraStore.getState().cameraToPlayer(myPlayer.id);
+    }
 
     const { new_sector_id, map_completed } = await makePlayerMove({
       type: 'dice-roll',
