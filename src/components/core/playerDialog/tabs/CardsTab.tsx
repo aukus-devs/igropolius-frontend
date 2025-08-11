@@ -102,17 +102,20 @@ function GameCard({ type, inactive }: GameCardProps) {
   );
 }
 
-function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
+function CardsTab({ cards, buildingBonus }: { cards: ActiveBonusCard[]; buildingBonus?: number }) {
   const availableCards = mainCardTypes.filter(type => cards.some(card => card.bonus_type === type));
   const unavailableCards = mainCardTypes.filter(type => !availableCards.includes(type));
 
+  const showAvailableSection = availableCards.length > 0 || Boolean(buildingBonus);
+
   return (
     <div className="flex flex-col my-5 px-5">
-      {availableCards.length > 0 && (
+      {showAvailableSection && (
         <div className="flex flex-wrap gap-y-2.5 gap-x-2 mb-[50px]">
           {availableCards.map(type => (
             <GameCard key={type} type={type} />
           ))}
+          <BuildingBonusCard buildingBonus={buildingBonus} />
         </div>
       )}
 
@@ -133,3 +136,36 @@ function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
 }
 
 export default CardsTab;
+
+function BuildingBonusCard({ buildingBonus }: { buildingBonus?: number }) {
+  if (!buildingBonus) {
+    return null;
+  }
+
+  return (
+    <div className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] text-primary-foreground rounded-xl">
+      <Tooltip delayDuration={0} disableHoverableContent>
+        <TooltipTrigger>
+          <div
+            className="flex md:w-[134px] md:h-[189px] w-[122px] h-[170px] rounded-xl overflow-hidden data-[positive=true]:bg-green-500 bg-red-500 justify-center items-center text-4xl"
+            data-positive={buildingBonus > 0}
+          >
+            {buildingBonus > 0 && '+'}
+            {buildingBonus}
+          </div>
+        </TooltipTrigger>
+        <TooltipContent
+          className="max-w-[280px] bg-card/70 backdrop-blur-[1.5rem] p-3 rounded-xl"
+          side="right"
+          align="start"
+          sideOffset={8}
+        >
+          <div className="text-[20px] font-semibold mb-2 leading-6">Бонус зданий</div>
+          <div className="text-base font-semibold text-muted-foreground leading-[19px]">
+            Автоматически увеличивает или уменьшает размер следующего здания
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </div>
+  );
+}

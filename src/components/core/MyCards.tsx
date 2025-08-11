@@ -99,6 +99,7 @@ export default function MyCards() {
                 className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
                 data-positive={buildingBonus > 0}
               >
+                {buildingBonus > 0 && '+'}
                 {buildingBonus}
               </div>
             </TooltipTrigger>
