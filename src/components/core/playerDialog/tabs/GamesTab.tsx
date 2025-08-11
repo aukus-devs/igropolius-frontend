@@ -5,6 +5,8 @@ import GameReview from '../../GameReview';
 import CurrentGame from '../../CurrentGame';
 import { PlayerDetails } from '@/lib/api-types-generated';
 import useScrollStyler from '@/hooks/useScrollStyler';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router';
 
 function ReviewsTab({ player }: { player: PlayerDetails }) {
   const { onRender, style, stuck } = useScrollStyler();
@@ -25,9 +27,19 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
 
   const showCurrentGame = player.current_game?.toLowerCase().includes(searchText.toLowerCase());
 
+  const navigate = useNavigate();
+
+  const [opening, setOpening] = useState(false);
+
+  const openHistorySearch = () => {
+    setOpening(true);
+    const escapedSearchText = encodeURIComponent(searchText);
+    navigate(`/history?player=${player.username}&search=${escapedSearchText}`);
+  };
+
   return (
     <>
-      <div className="z-50 sticky top-[72px] px-5 pb-5" style={style} ref={onRender}>
+      <div className="z-50 sticky flex gap-2 top-[72px] px-5 pb-5" style={style} ref={onRender}>
         <SearchIcon
           className="absolute left-7 top-4.5 -translate-y-1/2 text-muted-foreground"
           size="1rem"
@@ -40,6 +52,9 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
           onKeyDown={e => e.stopPropagation()}
           onChange={e => setSearchText(e.target.value)}
         />
+        <Button className="font-roboto-wide-semibold" onClick={openHistorySearch} loading={opening}>
+          Прошлые ивенты
+        </Button>
       </div>
       <div className="flex flex-col gap-8 py-8 px-5">
         {showCurrentGame && <CurrentGame player={player} />}

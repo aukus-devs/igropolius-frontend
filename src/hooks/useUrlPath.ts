@@ -23,5 +23,6 @@ export default function useUrlPath(path: string) {
   return {
     pathActive,
     activate,
+    location,
   };
 }

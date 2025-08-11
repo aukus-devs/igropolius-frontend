@@ -10,11 +10,12 @@ import {
 } from '@/components/ui/select';
 import { useDebounce } from '@/hooks/useDebounce';
 import useScrollStyler from '@/hooks/useScrollStyler';
+import useUrlPath from '@/hooks/useUrlPath';
 import { IS_DEV } from '@/lib/constants';
 import usePlayerStore from '@/stores/playerStore';
 import { useQuery } from '@tanstack/react-query';
 import { LoaderCircleIcon, SearchIcon } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type HistoryItem = {
   player_nickname: string;
@@ -46,6 +47,8 @@ type GamesHistory = {
 };
 
 export default function GamesHistoryContent() {
+  const { location } = useUrlPath('/history');
+
   const playersOrig = usePlayerStore(state => state.players);
 
   const players = [...playersOrig].sort((a, b) => {
@@ -90,6 +93,18 @@ export default function GamesHistoryContent() {
   const debouncedFilter = useDebounce(searchFilter.toLowerCase(), 300);
 
   const [limit, setLimit] = useState(100);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const player = urlParams.get('player');
+    if (player) {
+      setPlayerFilter(player);
+    }
+    const search = urlParams.get('search');
+    if (search) {
+      setSearchFilter(search);
+    }
+  }, [location.search]);
 
   const filteredGames = useMemo(() => {
     if (!historyData) {
