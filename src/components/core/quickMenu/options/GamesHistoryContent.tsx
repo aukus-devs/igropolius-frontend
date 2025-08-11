@@ -92,16 +92,18 @@ export default function GamesHistoryContent() {
   const [limit, setLimit] = useState(100);
 
   const filteredGames = useMemo(() => {
-    if (!historyData?.games.length) {
+    if (!historyData) {
       return [];
     }
 
+    const baseFilter = historyData.games.filter(defaultFilter);
+
     const playerFiltered =
       playerFilter !== 'none'
-        ? historyData.games.filter(
+        ? baseFilter.filter(
             item => item.player_nickname.toLowerCase() === playerFilter.toLowerCase()
           )
-        : historyData.games;
+        : baseFilter;
 
     const eventFiltered =
       eventFilter !== 'none'
@@ -177,7 +179,7 @@ export default function GamesHistoryContent() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Все ивенты</SelectItem>
-                {['MGE', 'Aukus1', 'Aukus2', 'Aukus3'].map(evt => (
+                {['MGE', 'Aukus2', 'Aukus3'].sort().map(evt => (
                   <SelectItem key={evt} value={evt}>
                     {evt}
                   </SelectItem>
@@ -256,4 +258,8 @@ function sencondsToHourMin(seconds: number): string {
 
 function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function defaultFilter(item: HistoryItem) {
+  return item.event_name !== 'Aukus1';
 }
