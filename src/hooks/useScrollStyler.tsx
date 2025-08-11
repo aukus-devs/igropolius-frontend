@@ -16,10 +16,11 @@ export default function useScrollStyler() {
       // console.log({ scrollRef: stickyRef.current });
       if (!stickyRef.current) return;
 
+      const stickingTop = parseInt(getComputedStyle(element).top) || 0;
       const cRect = container.getBoundingClientRect();
       const sRect = stickyRef.current.getBoundingClientRect();
       const topRelative = sRect.top - cRect.top;
-      setStuck(topRelative <= 0);
+      setStuck(topRelative <= stickingTop);
     };
     // Run on mount and on scroll
     handleScroll();
@@ -39,5 +40,6 @@ export default function useScrollStyler() {
   return {
     onRender,
     style,
+    stuck,
   };
 }

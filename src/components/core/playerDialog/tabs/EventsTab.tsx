@@ -46,9 +46,7 @@ function DiceRollDetails({
           : `Результаты броска кубиков (локальный бросок, причина: ${diceRollJson.random_org_fail_reason})`}
       </div>
       <div>Кубики: {diceRollJson.data.join(', ')}</div>
-      <div>
-        Сумма кубиков: {diceRollJson.data[0] + diceRollJson.data[1]}
-      </div>
+      <div>Сумма кубиков: {diceRollJson.data[0] + diceRollJson.data[1]}</div>
       <div>Итоговый результат: {adjustedRoll}</div>
       {diceRollJson.is_random_org_result && (
         <div className="flex items-center gap-[5px] text-green-500">
@@ -117,9 +115,7 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
               {!sectorId && description}
             </div>
             {sectorId && (
-              <div className="text-sm text-muted-foreground font-semibold">
-                Сектор #{sectorId}
-              </div>
+              <div className="text-sm text-muted-foreground font-semibold">Сектор #{sectorId}</div>
             )}
           </div>
           {hasDiceRollData && (
@@ -135,14 +131,13 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
         </div>
       </div>
 
-      {isScoreChangeEvent &&
-        <ScoreChangeDescription event={event as ScoreChangeEvent} />
-      }
+      {isScoreChangeEvent && <ScoreChangeDescription event={event as ScoreChangeEvent} />}
 
       <div className="space-y-[5px]">
         {bonusesUsed.length > 0 && (
           <div className="text-sm font-medium text-muted-foreground">
-            Примененные карточки: {bonusesUsed.map((bonus, _) => getBonusCardName(bonus)).join(', ')}
+            Примененные карточки:{' '}
+            {bonusesUsed.map((bonus, _) => getBonusCardName(bonus)).join(', ')}
           </div>
         )}
         {hasDiceRollData && showDetails && (
@@ -255,20 +250,20 @@ export default function EventsTab({ player }: Props) {
 
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 gap-4">
-        <p className="text-muted-foreground text-center font-semibold">Произошла ошибка при загрузке событий</p>
+      <div className="flex flex-col items-center justify-center py-12 gap-4 px-5">
+        <p className="text-muted-foreground text-center font-semibold">
+          Произошла ошибка при загрузке событий
+        </p>
         <p className="text-sm text-red-500 text-center font-semibold">
           {error instanceof Error ? error.message : 'Неизвестная ошибка'}
         </p>
-        <Button onClick={() => refetch()}>
-          Повторить
-        </Button>
+        <Button onClick={() => refetch()}>Повторить</Button>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="px-5">
       <EventsTabFilter selectedFilter={selectedFilter} onFilterChange={setSelectedFilter} />
       <div className="flex flex-col gap-7.5 mb-5">
         {Object.keys(eventsByDate).length === 0 ? (
@@ -323,8 +318,10 @@ function getEventsByDate(events: Events) {
 }
 
 function ScoreChangeDescription({ event }: { event: ScoreChangeEvent }) {
-  const amount = event.amount === 0 ? '0' : `${event.amount > 0 ? '+ ' : '- '}${Math.abs(event.amount)}`;
-  const color = event.amount > 0 ? 'text-green-500' : event.amount < 0 ? 'text-red-500' : 'text-foreground';
+  const amount =
+    event.amount === 0 ? '0' : `${event.amount > 0 ? '+ ' : '- '}${Math.abs(event.amount)}`;
+  const color =
+    event.amount > 0 ? 'text-green-500' : event.amount < 0 ? 'text-red-500' : 'text-foreground';
 
   return (
     <div className="flex items-center gap-1">

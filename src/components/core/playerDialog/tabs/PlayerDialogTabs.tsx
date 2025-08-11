@@ -16,10 +16,17 @@ function PlayerDialogTabs({ player }: Props) {
     { name: 'Действия', value: 'actions', content: <EventsTab player={player} /> },
   ];
 
-  const { onRender, style } = useScrollStyler();
+  const { onRender, style, stuck } = useScrollStyler();
+
+  if (stuck) {
+    style.borderTopRightRadius = style.borderRadius;
+    style.borderTopLeftRadius = style.borderRadius;
+    style.borderBottomLeftRadius = 0;
+    style.borderBottomRightRadius = 0;
+  }
 
   return (
-    <Tabs className="md:px-0 px-[15px]" defaultValue={tabs[0].value}>
+    <Tabs className="md:px-0 px-[15px] gap-0" defaultValue={tabs[0].value}>
       <TabsList className="md:p-5 w-full  gap-2 p-0 sticky top-0 z-50" style={style} ref={onRender}>
         {tabs.map(({ name, value }) => (
           <TabsTrigger
@@ -32,7 +39,7 @@ function PlayerDialogTabs({ player }: Props) {
         ))}
       </TabsList>
       {tabs.map(({ value, content }) => (
-        <TabsContent key={value} value={value} className="z-10 px-5">
+        <TabsContent key={value} value={value} className="z-10">
           {content}
         </TabsContent>
       ))}

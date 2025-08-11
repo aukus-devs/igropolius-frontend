@@ -4,8 +4,18 @@ import { useState } from 'react';
 import GameReview from '../../GameReview';
 import CurrentGame from '../../CurrentGame';
 import { PlayerDetails } from '@/lib/api-types-generated';
+import useScrollStyler from '@/hooks/useScrollStyler';
 
 function ReviewsTab({ player }: { player: PlayerDetails }) {
+  const { onRender, style, stuck } = useScrollStyler();
+
+  if (stuck) {
+    style.borderTopRightRadius = 0;
+    style.borderTopLeftRadius = 0;
+    style.borderBottomLeftRadius = style.borderRadius;
+    style.borderBottomRightRadius = style.borderRadius;
+  }
+
   const [searchText, setSearchText] = useState('');
   const filteredGames = player.games.filter(
     game =>
@@ -17,9 +27,9 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
 
   return (
     <>
-      <div className="z-50 relative">
+      <div className="z-50 sticky top-[72px] px-5 pb-5" style={style} ref={onRender}>
         <SearchIcon
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          className="absolute left-7 top-4.5 -translate-y-1/2 text-muted-foreground"
           size="1rem"
         />
         <Input
@@ -31,7 +41,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
           onChange={e => setSearchText(e.target.value)}
         />
       </div>
-      <div className="flex flex-col gap-8 py-8">
+      <div className="flex flex-col gap-8 py-8 px-5">
         {showCurrentGame && <CurrentGame player={player} />}
         {filteredGames.length === 0 ? (
           <div className="text-center text-xs font-roboto-wide-semibold text-muted-foreground">

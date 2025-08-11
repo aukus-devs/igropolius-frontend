@@ -107,7 +107,7 @@ function CardsTab({ cards }: { cards: ActiveBonusCard[] }) {
   const unavailableCards = mainCardTypes.filter(type => !availableCards.includes(type));
 
   return (
-    <div className="flex flex-col my-5">
+    <div className="flex flex-col my-5 px-5">
       {availableCards.length > 0 && (
         <div className="flex flex-wrap gap-y-2.5 gap-x-2 mb-[50px]">
           {availableCards.map(type => (
