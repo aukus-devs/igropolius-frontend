@@ -19,27 +19,46 @@ function MobilePlayersList() {
   const redElementRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const previousActiveTab = useRef<string | undefined>(undefined);
   const location = useLocation();
-  const setShouldRender3D = useRenderStore(state => state.setShouldRender3D);
+  const { setShouldRender3D, activeTab } = useRenderStore(
+    useShallow(state => ({
+      setShouldRender3D: state.setShouldRender3D,
+      activeTab: state.activeTab,
+    }))
+  );
 
   const isPlayerProfileOpen = players.some(
     player => location.pathname === `/${player.username.toLowerCase()}`
   );
 
   useEffect(() => {
-    setShouldRender3D(!isOpened);
-  }, [isOpened, setShouldRender3D]);
+    if (activeTab === 'map') {
+      setShouldRender3D(!isOpened);
+    }
+  }, [isOpened, setShouldRender3D, activeTab]);
+
+  useEffect(() => {
+    if (previousActiveTab.current !== undefined && previousActiveTab.current !== activeTab) {
+      setIsOpened(prev => (prev ? false : prev));
+    }
+    previousActiveTab.current = activeTab;
+  }, [activeTab]);
 
   const toggleDialog = () => {
     const newOpenedState = !isOpened;
     setIsOpened(newOpenedState);
-    setShouldRender3D(!newOpenedState);
+    if (activeTab === 'map') {
+      setShouldRender3D(!newOpenedState);
+    }
   };
 
   const handleRedElementClick = () => {
     if (!isOpened) {
       setIsOpened(true);
-      setShouldRender3D(false);
+      if (activeTab === 'map') {
+        setShouldRender3D(false);
+      }
     }
   };
 
@@ -56,7 +75,9 @@ function MobilePlayersList() {
 
       if (diff > 50 && !isOpened) {
         setIsOpened(true);
-        setShouldRender3D(false);
+        if (activeTab === 'map') {
+          setShouldRender3D(false);
+        }
       }
 
       setTouchStart(null);

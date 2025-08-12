@@ -3,9 +3,15 @@ import MapTab from './tabs/MapTab';
 import RulesTab from './tabs/RulesTab';
 import { Document, Home } from '@/components/icons';
 import useRenderStore from '@/stores/renderStore';
+import { useShallow } from 'zustand/shallow';
 
 function MobileTabs() {
-  const setShouldRender3D = useRenderStore(state => state.setShouldRender3D);
+  const { setShouldRender3D, setActiveTab } = useRenderStore(
+    useShallow(state => ({
+      setShouldRender3D: state.setShouldRender3D,
+      setActiveTab: state.setActiveTab,
+    }))
+  );
 
   const tabs = [
     { icon: <Home />, value: 'map', content: <MapTab /> },
@@ -14,6 +20,7 @@ function MobileTabs() {
 
   const handleValueChange = (value: string) => {
     setShouldRender3D(value === 'map');
+    setActiveTab(value);
   };
 
   return (
