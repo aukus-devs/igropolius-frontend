@@ -67,7 +67,8 @@ export type InstantCardType =
   | "lose-2-percents"
   | "reroll"
   | "reroll-and-roll"
-  | "lose-card-or-3-percent";
+  | "lose-card-or-3-percent"
+  | "receive-scores-for-active-cards";
 export type SectorId = number | null;
 export type StolenFromPlayer = number | null;
 export type StolenBy = number | null;

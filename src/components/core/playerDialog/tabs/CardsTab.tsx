@@ -138,10 +138,6 @@ function CardsTab({ cards, buildingBonus }: { cards: ActiveBonusCard[]; building
 export default CardsTab;
 
 function BuildingBonusCard({ buildingBonus }: { buildingBonus?: number }) {
-  if (!buildingBonus) {
-    return null;
-  }
-
   const isMobile = useIsMobile();
   const [showDescription, setShowDescription] = useState(false);
 
@@ -157,6 +153,10 @@ function BuildingBonusCard({ buildingBonus }: { buildingBonus?: number }) {
       return () => document.removeEventListener('scroll', handleScroll);
     }
   }, [isMobile, showDescription]);
+
+  if (!buildingBonus) {
+    return null;
+  }
 
   const handleCardClick = () => {
     if (isMobile) {

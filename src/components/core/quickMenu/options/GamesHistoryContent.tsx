@@ -107,7 +107,7 @@ export default function GamesHistoryContent() {
   }, [location.search]);
 
   const filteredGames = useMemo(() => {
-    if (!historyData) {
+    if (!historyData?.games) {
       return [];
     }
 
