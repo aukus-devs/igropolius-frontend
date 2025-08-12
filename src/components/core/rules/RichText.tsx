@@ -255,17 +255,17 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
     if (oldLine !== newLine) {
       let state: 'diff' | 'added' | 'removed' = 'diff';
 
-      if (oldLine && newLines.find(l => l.trim() === oldLine)) {
+      if (oldLine !== '' && newLines.find(l => l.trim() === oldLine)) {
         // line added
         state = 'added';
-        newLinesIndex++;
+        // newLinesIndex++;
         oldLinesIndex--;
       }
 
-      if (newLine && oldLines.find(l => l.trim() === newLine)) {
+      if (newLine !== '' && oldLines.find(l => l.trim() === newLine)) {
         // line removed
         state = 'removed';
-        oldLinesIndex++;
+        // oldLinesIndex++;
         newLinesIndex--;
       }
 
@@ -291,6 +291,7 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
         result.ops.push({ insert: '\n' });
         result.ops.push(...deltas[1].ops);
       }
+      result.ops.push({ insert: '\n' });
 
       // const deltas = getHighlightedLines(oldLine, newLine);
 
