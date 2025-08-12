@@ -4,27 +4,27 @@
   "description": "Игрополиус — это увлекательный ивент, где стримеры соревнуются друг с другом, проходя различные игры. Каждый участник бросает кубики, чтобы сделать ход по специальной игровой карте, строит здания, зарабатывает очки и бонусы, стремясь стать самым влиятельным!",
   "icons": [
     {
-      "src": "/16x16.png",
+      "src": "/favicon-16x16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "/32x32.png",
+      "src": "/favicon-32x32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "/48x48.png",
+      "src": "/favicon-48x48.png",
       "sizes": "48x48",
       "type": "image/png"
     },
     {
-      "src": "/64x64.png",
+      "src": "/favicon-64x64.png",
       "sizes": "64x64",
       "type": "image/png"
     },
     {
-      "src": "/96x96.png",
+      "src": "/favicon-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
