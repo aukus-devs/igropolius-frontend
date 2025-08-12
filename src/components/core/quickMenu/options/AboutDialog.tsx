@@ -52,8 +52,8 @@ export default function AboutDialog({ className }: Props) {
         <ScrollArea className="max-h-full px-5 overflow-y-auto">
           <DialogHeader className="pt-5 pb-4">
             <DialogTitle className="text-[32px] font-wide-black leading-[38px]">
-              Добро пожаловать в Игрополиус,
-              <span className="text-primary"> {myPlayer?.username || 'Зритель'}</span>
+              Добро пожаловать в Игрополиус,&nbsp;
+              <span className="text-primary">{myPlayer?.username || 'Зритель'}</span>
             </DialogTitle>
           </DialogHeader>
 
@@ -63,39 +63,19 @@ export default function AboutDialog({ className }: Props) {
             карте, строит здания, зарабатывает очки и бонусы, стремясь стать самым влиятельным!
           </p>
 
-          <div className="mt-20 mb-[30px] text-3xl font-wide-black">
-            Команда разработки Игрополиуса
+          <div className="mt-20 mb-[20px] text-3xl font-wide-black">
+            Команда разработки
+            <br />
+            <span className="text-primary">Игрополиуса</span>
           </div>
           <div className="pb-5">
             <div className="flex gap-2 flex-col">
-              <div className="mt-[30px] text-xl font-wide-black">Программирование</div>
-              {CreditsData.developers.map((dev, index) => (
-                <div key={index} className="text-base font-wide-medium">
-                  {dev}
+              {CreditsData.map(item => (
+                <div key={item.name} className="text-base font-wide-medium">
+                  {item.name} — {item.action}
                 </div>
               ))}
             </div>
-
-            <div className="flex gap-2 flex-col">
-              <div className="mt-[50px] text-xl font-wide-black">Дизайн</div>
-              {CreditsData.designers.map((dev, index) => (
-                <div key={index} className="text-base font-wide-medium">
-                  {dev}
-                </div>
-              ))}
-            </div>
-
-            <div className="flex gap-2 flex-col">
-              <div className="mt-[50px] text-xl font-wide-black">Аналитики</div>
-              {CreditsData.testers.map((dev, index) => (
-                <div key={index} className="text-base font-wide-medium">
-                  {dev}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-[50px] text-xl font-wide-black">Идеи</div>
-            <div className="mt-[10px] font-wide-medium">Praden</div>
           </div>
 
           <div className="mt-10 mb-[30px] text-xl font-wide-black flex gap-2">
