@@ -45,8 +45,11 @@ export default function AboutDialog({ className }: Props) {
         <Event />
         Об ивенте
       </DialogTrigger>
-      <DialogContent className="w-[600px] p-0 h-[calc(100dvh_-_74px)]" aria-describedby="">
-        <ScrollArea className="max-h-[700px] px-5">
+      <DialogContent
+        className="w-[600px] p-0 h-[calc(100dvh_-_74px)] overflow-hidden"
+        aria-describedby=""
+      >
+        <ScrollArea className="max-h-full px-5 overflow-y-auto">
           <DialogHeader className="pt-5 pb-4">
             <DialogTitle className="text-[32px] font-wide-black leading-[38px]">
               Добро пожаловать в Игрополиус,
@@ -113,7 +116,6 @@ export default function AboutDialog({ className }: Props) {
               <Boosty className="inline mr-2 w-5" fill="white" />
             </Link>
           </div>
-          <div className="mb-20"></div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
