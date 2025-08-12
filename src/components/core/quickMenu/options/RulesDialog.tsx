@@ -12,12 +12,23 @@ import { Document } from '@/components/icons';
 import useUrlPath from '@/hooks/useUrlPath';
 import useRules from '@/hooks/useRules';
 import { formatTsToFullDate } from '@/lib/utils';
+import useRenderStore from '@/stores/renderStore';
+import { useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 function RulesDialog({ className }: { className?: string }) {
   const { activate, pathActive } = useUrlPath('/rules');
+  const setShouldRender3D = useRenderStore(state => state.setShouldRender3D);
+  const isMobile = useIsMobile();
 
   const { rules } = useRules();
   const createdTime = rules?.created_at ? formatTsToFullDate(rules.created_at) : null;
+
+  useEffect(() => {
+    if (isMobile) {
+      setShouldRender3D(!pathActive);
+    }
+  }, [pathActive, setShouldRender3D, isMobile]);
 
   return (
     <Dialog open={pathActive} onOpenChange={activate}>

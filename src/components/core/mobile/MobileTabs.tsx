@@ -1,16 +1,23 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MapTab from "./tabs/MapTab";
-import RulesTab from "./tabs/RulesTab";
-import { Document, Home } from "@/components/icons";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import MapTab from './tabs/MapTab';
+import RulesTab from './tabs/RulesTab';
+import { Document, Home } from '@/components/icons';
+import useRenderStore from '@/stores/renderStore';
 
 function MobileTabs() {
+  const setShouldRender3D = useRenderStore(state => state.setShouldRender3D);
+
   const tabs = [
-    { icon: <Home />, value: "map", content: <MapTab /> },
-    { icon: <Document />, value: "rules", content: <RulesTab /> },
+    { icon: <Home />, value: 'map', content: <MapTab /> },
+    { icon: <Document />, value: 'rules', content: <RulesTab /> },
   ];
 
+  const handleValueChange = (value: string) => {
+    setShouldRender3D(value === 'map');
+  };
+
   return (
-    <Tabs className="gap-0" defaultValue={tabs[0].value}>
+    <Tabs className="gap-0" defaultValue={tabs[0].value} onValueChange={handleValueChange}>
       <TabsList className="w-full gap-2 p-[15px] h-auto rounded-none bg-transparent fixed top-0 z-50">
         {tabs.map(({ icon, value }) => (
           <TabsTrigger

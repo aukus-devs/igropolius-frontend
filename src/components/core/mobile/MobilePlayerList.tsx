@@ -2,10 +2,11 @@ import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import PlayerDialog from '../playerDialog/PlayerDialog';
 import { Button } from '@/components/ui/button';
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ChevronDown, ChevronUp } from '@/components/icons';
 import { useLocation } from 'react-router';
+import useRenderStore from '@/stores/renderStore';
 
 function MobilePlayersList() {
   const { players, myPlayer } = usePlayerStore(
@@ -19,16 +20,26 @@ function MobilePlayersList() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const location = useLocation();
+  const setShouldRender3D = useRenderStore(state => state.setShouldRender3D);
 
   const isPlayerProfileOpen = players.some(
     player => location.pathname === `/${player.username.toLowerCase()}`
   );
 
-  const toggleDialog = () => setIsOpened(!isOpened);
+  useEffect(() => {
+    setShouldRender3D(!isOpened);
+  }, [isOpened, setShouldRender3D]);
+
+  const toggleDialog = () => {
+    const newOpenedState = !isOpened;
+    setIsOpened(newOpenedState);
+    setShouldRender3D(!newOpenedState);
+  };
 
   const handleRedElementClick = () => {
     if (!isOpened) {
       setIsOpened(true);
+      setShouldRender3D(false);
     }
   };
 
@@ -45,6 +56,7 @@ function MobilePlayersList() {
 
       if (diff > 50 && !isOpened) {
         setIsOpened(true);
+        setShouldRender3D(false);
       }
 
       setTouchStart(null);

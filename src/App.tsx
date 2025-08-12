@@ -22,9 +22,13 @@ import { MetrikaCounter } from 'react-metrika';
 import { Environment } from '@react-three/drei';
 import { STORAGE_BASE_URL } from '@/lib/constants';
 import ModelSelectionScene from './components/map/scenes/ModelSelectionScene';
+import useRenderStore from './stores/renderStore';
+import { useIsMobile } from './hooks/use-mobile';
 
 function App() {
   const { isInactive } = useUserActivity();
+  const shouldRender3D = useRenderStore(state => state.shouldRender3D);
+  const isMobile = useIsMobile();
 
   const map = useMemo<KeyboardControlsEntry<Controls>[]>(
     () => [
@@ -269,36 +273,40 @@ function App() {
             <TooltipProvider>
               <UI />
             </TooltipProvider>
-            <Canvas onPointerMissed={onPointerMissed} gl={{ toneMapping: 1 }}>
-              <Suspense fallback={<SceneLoader />}>
-                <Environment
-                  files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`}
-                  background
-                  environmentIntensity={0.7}
-                  backgroundIntensity={1.4}
-                  backgroundBlurriness={0.06}
-                />
-
-                {isModelSelectionScene ? <ModelSelectionScene /> : <GameScene />}
-
-                {/* <EffectComposer enabled={effects.enabled} resolutionScale={100} renderPriority={1} enableNormalPass>
-                  <ToneMapping mode={toneMapping} />
-                  <Bloom
-                    intensity={bloom.intensity}
-                    luminanceThreshold={bloom.lumThreshold}
-                    luminanceSmoothing={bloom.lumSmoothing}
+            {!isMobile || shouldRender3D ? (
+              <Canvas onPointerMissed={onPointerMissed} gl={{ toneMapping: 1 }}>
+                <Suspense fallback={<SceneLoader />}>
+                  <Environment
+                    files={`${STORAGE_BASE_URL}/textures/sky2_2k.hdr`}
+                    background
+                    environmentIntensity={0.7}
+                    backgroundIntensity={1.4}
+                    backgroundBlurriness={0.06}
                   />
-                  <HueSaturation />
-                  <N8AO
-                    halfRes
-                    renderMode={n8ao.renderMode}
-                    aoRadius={n8ao.aoRadius}
-                    intensity={n8ao.intensity}
-                    distanceFalloff={n8ao.distanceFalloff}
-                  />
-                </EffectComposer> */}
-              </Suspense>
-            </Canvas>
+
+                  {isModelSelectionScene ? <ModelSelectionScene /> : <GameScene />}
+
+                  {/* <EffectComposer enabled={effects.enabled} resolutionScale={100} renderPriority={1} enableNormalPass>
+                    <ToneMapping mode={toneMapping} />
+                    <Bloom
+                      intensity={bloom.intensity}
+                      luminanceThreshold={bloom.lumThreshold}
+                      luminanceSmoothing={bloom.lumSmoothing}
+                    />
+                    <HueSaturation />
+                    <N8AO
+                      halfRes
+                      renderMode={n8ao.renderMode}
+                      aoRadius={n8ao.aoRadius}
+                      intensity={n8ao.intensity}
+                      distanceFalloff={n8ao.distanceFalloff}
+                    />
+                  </EffectComposer> */}
+                </Suspense>
+              </Canvas>
+            ) : (
+              <div className="w-full h-full bg-black" />
+            )}
             {/* <FPSCounter /> */}
           </div>
         </KeyboardControls>
