@@ -1,7 +1,7 @@
-import { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
-import Quill, { Delta, QuillOptions, Range } from "quill";
+import { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
+import Quill, { Delta, QuillOptions, Range } from 'quill';
 
-import "quill/dist/quill.snow.css";
+import 'quill/dist/quill.snow.css';
 
 type Props = {
   readOnly?: boolean;
@@ -25,14 +25,14 @@ export function RichTextEditor({ readOnly, onTextChange, initialValue }: Props) 
   useEffect(() => {
     const initialDecoded = initialValue
       ? new Delta(JSON.parse(initialValue))
-      : new Delta().insert("Начни редактировать");
+      : new Delta().insert('Начни редактировать');
     quillRef.current?.setContents(initialDecoded);
   }, [initialValue]);
 
   return (
     <div
       className="rich-editor"
-      onKeyDown={(e) => {
+      onKeyDown={e => {
         e.stopPropagation();
       }}
     >
@@ -67,7 +67,7 @@ type EditorProps = {
   onSelectionChange?: (
     range: Range | null,
     oldRange: Range | null,
-    source: "user" | "api" | "silent",
+    source: 'user' | 'api' | 'silent'
   ) => void;
 };
 
@@ -85,13 +85,13 @@ const Editor = forwardRef<Quill | null, EditorProps>(
     });
 
     useEffect(() => {
-      if (ref && typeof ref === "object" && ref.current && defaultValue && readOnly) {
+      if (ref && typeof ref === 'object' && ref.current && defaultValue && readOnly) {
         ref.current.setContents(defaultValue);
       }
     }, [defaultValue, ref, readOnly]);
 
     useEffect(() => {
-      if (ref && typeof ref === "object" && ref.current) {
+      if (ref && typeof ref === 'object' && ref.current) {
         ref.current.enable(!readOnly);
       }
     }, [ref, readOnly]);
@@ -102,33 +102,31 @@ const Editor = forwardRef<Quill | null, EditorProps>(
         return;
       }
 
-      const editorContainer = container.appendChild(
-        container.ownerDocument.createElement("div"),
-      );
+      const editorContainer = container.appendChild(container.ownerDocument.createElement('div'));
 
       const params: QuillOptions = {
-        theme: "snow",
+        theme: 'snow',
         modules: {
           toolbar: [
             [{ header: [1, 2, 3, false] }],
-            ["bold", "italic", "underline", "strike"],
-            ["blockquote", "code-block"],
-            [{ align: [] }, { list: "ordered" }, { list: "bullet" }],
-            ["link"],
-            ["clean"],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ align: [] }, { list: 'ordered' }, { list: 'bullet' }],
+            ['link'],
+            ['clean'],
           ],
         },
       };
       if (readOnly) {
-        params["readOnly"] = true;
-        params["modules"] = {
+        params['readOnly'] = true;
+        params['modules'] = {
           toolbar: false,
         };
       }
 
       const quill = new Quill(editorContainer, params);
 
-      if (ref && typeof ref === "object") {
+      if (ref && typeof ref === 'object') {
         ref.current = quill;
       }
 
@@ -145,18 +143,18 @@ const Editor = forwardRef<Quill | null, EditorProps>(
       });
 
       return () => {
-        if (ref && typeof ref === "object") {
+        if (ref && typeof ref === 'object') {
           ref.current = null;
         }
-        container.innerHTML = "";
+        container.innerHTML = '';
       };
     }, [ref, readOnly]);
 
-    return <div className={`${readOnly ? "read-only" : ""}`} ref={containerRef} />;
-  },
+    return <div className={`${readOnly ? 'read-only' : ''}`} ref={containerRef} />;
+  }
 );
 
-Editor.displayName = "Editor";
+Editor.displayName = 'Editor';
 
 type DiffProps = {
   oldContent: string;
@@ -184,8 +182,8 @@ export function RichTextDiff({ oldContent, newContent }: DiffProps) {
 // Helper to split Delta into text lines
 function deltaToLines(delta: Delta): string[] {
   const text =
-    delta.ops?.map((op) => (typeof op.insert === "string" ? op.insert : "")).join("") || "";
-  return text.split("\n").map((line, i, arr) => (i < arr.length - 1 ? line + "\n" : line));
+    delta.ops?.map(op => (typeof op.insert === 'string' ? op.insert : '')).join('') || '';
+  return text.split('\n').map((line, i, arr) => (i < arr.length - 1 ? line + '\n' : line));
 }
 
 // Helper function to split a line into words, preserving whitespace
@@ -204,27 +202,27 @@ function getHighlightedLines(oldLine: string, newLine: string): [Delta, Delta] {
   const maxLength = Math.max(oldTokens.length, newTokens.length);
 
   for (let i = 0; i < maxLength; i++) {
-    const oldToken = oldTokens[i] || "";
-    const newToken = newTokens[i] || "";
+    const oldToken = oldTokens[i] || '';
+    const newToken = newTokens[i] || '';
 
     if (oldToken === newToken) {
       oldDelta.insert(oldToken);
       newDelta.insert(newToken);
     } else {
       if (oldToken) {
-        oldDelta.insert(oldToken, { color: "#FF453A" });
+        oldDelta.insert(oldToken, { color: '#FF453A' });
       }
       if (newToken) {
-        newDelta.insert(newToken, { color: "#30D158" });
+        newDelta.insert(newToken, { color: '#30D158' });
       }
     }
   }
 
   if (oldDelta.ops.length > 0) {
-    oldDelta.ops.unshift({ insert: "-\t" });
+    oldDelta.ops.unshift({ insert: '-\t' });
   }
   if (newDelta.ops.length > 0) {
-    newDelta.ops.unshift({ insert: "+\t" });
+    newDelta.ops.unshift({ insert: '+\t' });
   }
 
   return [oldDelta, newDelta];
@@ -240,42 +238,107 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
 
   let lastCommonLine: string | null = null;
 
-  for (let i = 0; i < maxLen; i++) {
-    const oldLine = (oldLines[i] || "").trim();
-    const newLine = (newLines[i] || "").trim();
+  let oldLinesIndex = 0;
+  let newLinesIndex = 0;
 
-    if (oldLine === newLine && oldLine !== "") {
+  for (let i = 0; i < maxLen; i++) {
+    const oldLine = (oldLines[oldLinesIndex] || '').trim();
+    const newLine = (newLines[newLinesIndex] || '').trim();
+
+    oldLinesIndex++;
+    newLinesIndex++;
+
+    if (oldLine === newLine && oldLine !== '') {
       lastCommonLine = oldLine;
     }
 
-    if (
-      (oldLine && newLines.find(l => l.trim() === oldLine)) ||
-      (newLine && oldLines.find(l => l.trim() === newLine))
-    ) {
-      continue;
-    }
-
     if (oldLine !== newLine) {
+      let state: 'diff' | 'added' | 'removed' = 'diff';
+
+      if (oldLine && newLines.find(l => l.trim() === oldLine)) {
+        // line added
+        state = 'added';
+        newLinesIndex++;
+        oldLinesIndex--;
+      }
+
+      if (newLine && oldLines.find(l => l.trim() === newLine)) {
+        // line removed
+        state = 'removed';
+        oldLinesIndex++;
+        newLinesIndex--;
+      }
+
       if (result.ops.length > 0) {
-        result.ops.push({ insert: "\n" });
+        result.ops.push({ insert: '\n' });
       }
 
       if (lastCommonLine) {
         result.ops.push({ insert: lastCommonLine });
-        result.ops.push({ insert: "\n" });
+        result.ops.push({ insert: '\n' });
       }
 
-      const deltas = getHighlightedLines(oldLine, newLine);
-      if (deltas[0].ops.length > 0) {
+      // console.log('diff found', { oldLine, newLine, state });
+
+      if (state === 'added') {
+        result.ops.push({ insert: newLine, attributes: { color: '#30D158' } });
+      } else if (state === 'removed') {
+        result.ops.push({ insert: oldLine, attributes: { color: '#FF453A' } });
+      } else {
+        // diff
+        const deltas = getHighlightedLines(oldLine, newLine);
         result.ops.push(...deltas[0].ops);
-        result.ops.push({ insert: "\n" });
-      }
-      if (deltas[1].ops.length > 0) {
+        result.ops.push({ insert: '\n' });
         result.ops.push(...deltas[1].ops);
-        result.ops.push({ insert: "\n" });
       }
+
+      // const deltas = getHighlightedLines(oldLine, newLine);
+
+      // if (deltas[0].ops.length > 0) {
+      //   result.ops.push(...deltas[0].ops);
+      //   result.ops.push({ insert: '\n' });
+      // }
+      // if (deltas[1].ops.length > 0) {
+      //   result.ops.push(...deltas[1].ops);
+      //   result.ops.push({ insert: '\n' });
+      // }
     }
   }
 
   return result;
 }
+
+function diffToReadable(diff: Delta): string[] {
+  const result = [];
+  const currentItem = [];
+  for (const op of diff.ops) {
+    if (typeof op.insert === 'string') {
+      if (op.insert.endsWith('\n')) {
+        currentItem.push(op.insert.slice(0, -1)); // Remove trailing newline
+        result.push(currentItem.join(''));
+        currentItem.length = 0; // Reset current item
+      } else {
+        currentItem.push(op.insert);
+      }
+    }
+  }
+  if (currentItem.length > 0) {
+    result.push(currentItem.join('')); // Add any remaining text
+  }
+  return result;
+}
+
+function getDeltaLines(input: string) {
+  return deltaToLines(new Delta(JSON.parse(input)));
+}
+
+// @ts-expect-error debugging
+window.deltaToLines = deltaToLines;
+// @ts-expect-error debugging
+window.getHighlightedLines = getHighlightedLines;
+// @ts-expect-error debugging
+window.getLineDiffHighlight = getLineDiffHighlight;
+// @ts-expect-error debugging
+window.diffToReadable = diffToReadable;
+// @ts-expect-error debugging
+window.getDeltaLines = getDeltaLines;
