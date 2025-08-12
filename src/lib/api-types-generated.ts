@@ -50,7 +50,8 @@ export type BonusCardType =
   | "lose-2-percents"
   | "reroll"
   | "reroll-and-roll"
-  | "lose-card-or-3-percent";
+  | "lose-card-or-3-percent"
+  | "receive-scores-for-active-cards";
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "InstantCardType".
