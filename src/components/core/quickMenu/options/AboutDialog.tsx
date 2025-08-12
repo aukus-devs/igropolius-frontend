@@ -63,7 +63,7 @@ export default function AboutDialog({ className }: Props) {
             карте, строит здания, зарабатывает очки и бонусы, стремясь стать самым влиятельным!
           </p>
 
-          <div className="mt-20 mb-[20px] text-3xl font-wide-black">
+          <div className="mt-[50px] mb-[20px] text-3xl font-wide-black">
             Команда разработки
             <br />
             <span className="text-primary">Игрополиуса</span>
