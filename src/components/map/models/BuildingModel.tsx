@@ -80,24 +80,20 @@ function BuildingModel({ building, position, models }: Props) {
     setIsHovered(false);
   }
 
-  function onClick(e: ThreeEvent<MouseEvent>) {
-    e.stopPropagation();
+  // function onClick(e: ThreeEvent<MouseEvent>) {
+  //   e.stopPropagation();
 
-    if (isMobile) {
-      setData({ type: 'building', payload: building });
-      setIsHovered(true);
-    }
-  }
+  //   if (isMobile) {
+  //     setData({ type: 'building', payload: building });
+  //     setIsHovered(true);
+  //   }
+  // }
 
   return (
     <group ref={groupRef} position={position} rotation={[0, type === 'ruins' ? Math.PI : 0, 0]}>
       <ColoredPart color={owner.color} />
       <StaticPart />
-      <OutlinePart
-        onPointerEnter={onPointerEnter}
-        onPointerLeave={onPointerLeave}
-        onClick={onClick}
-      >
+      <OutlinePart onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
         {isHovered && <Outlines thickness={5} color="white" />}
       </OutlinePart>
     </group>
