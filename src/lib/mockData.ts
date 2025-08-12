@@ -51,6 +51,7 @@ export const sectorsData: SectorData[] = [
     type: 'railroad',
     rollType: 'steam',
     gameLengthRanges: { min: 6, max: 19 },
+    color: 'gray',
   },
   {
     id: 7,
@@ -131,6 +132,7 @@ export const sectorsData: SectorData[] = [
     type: 'railroad',
     rollType: 'steam',
     gameLengthRanges: { min: 3, max: 16 },
+    color: 'gray',
   },
   {
     id: 17,
@@ -211,6 +213,7 @@ export const sectorsData: SectorData[] = [
     type: 'railroad',
     rollType: 'steam',
     gameLengthRanges: { min: 6, max: 19 },
+    color: 'gray',
   },
   {
     id: 27,
@@ -291,6 +294,7 @@ export const sectorsData: SectorData[] = [
     type: 'railroad',
     rollType: 'steam',
     gameLengthRanges: { min: 3, max: 16 },
+    color: 'gray',
   },
   {
     id: 37,

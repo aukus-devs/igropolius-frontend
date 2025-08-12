@@ -20,6 +20,7 @@ export const colors = {
   green: ColorGreen,
   blue: ColorBlue,
   pastelgreen: ColorPastelGreen,
+  gray: '#4c4c4c', // Grey color
 };
 
 // Type for the keys of the map
