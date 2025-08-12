@@ -34,7 +34,7 @@ echo "favicon-96x96.png..."
 inkscape -w 96 -h 96 public/fav.svg --export-png public/favicon-96x96.png --export-background-opacity=0
 
 echo "favicon.ico..."
-convert public/favicon-32x32.png public/favicon.ico
+convert public/favicon-16x16.png public/favicon-32x32.png public/favicon-48x48.png public/favicon-64x64.png public/favicon-96x96.png public/favicon.ico
 
 echo "apple-touch-icon.png..."
 inkscape -w 180 -h 180 public/fav.svg --export-png public/apple-touch-icon.png --export-background-opacity=0
