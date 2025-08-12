@@ -51,7 +51,7 @@ export default function AboutDialog({ className }: Props) {
       >
         <ScrollArea className="max-h-full px-5 overflow-y-auto">
           <DialogHeader className="pt-5 pb-4">
-            <DialogTitle className="text-[32px] font-wide-black leading-[38px]">
+            <DialogTitle className="text-[32px] font-wide-black! leading-[38px]">
               Добро пожаловать в Игрополиус,&nbsp;
               <span className="text-primary">{myPlayer?.username || 'Зритель'}</span>
             </DialogTitle>
