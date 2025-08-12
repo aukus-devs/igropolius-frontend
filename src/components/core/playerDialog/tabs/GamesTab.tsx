@@ -52,7 +52,11 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
           onKeyDown={e => e.stopPropagation()}
           onChange={e => setSearchText(e.target.value)}
         />
-        <Button className="font-roboto-wide-semibold" onClick={openHistorySearch} loading={opening}>
+        <Button
+          className=" bg-[#575b58] font-roboto-wide-semibold text-muted-foreground hover:text-foreground hover:bg-[#575b58]"
+          onClick={openHistorySearch}
+          loading={opening}
+        >
           Прошлые ивенты
         </Button>
       </div>
