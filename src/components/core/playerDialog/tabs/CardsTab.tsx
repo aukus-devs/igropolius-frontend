@@ -142,6 +142,66 @@ function BuildingBonusCard({ buildingBonus }: { buildingBonus?: number }) {
     return null;
   }
 
+  const isMobile = useIsMobile();
+  const [showDescription, setShowDescription] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (showDescription) {
+        setShowDescription(false);
+      }
+    };
+
+    if (isMobile) {
+      document.addEventListener('scroll', handleScroll, { passive: true });
+      return () => document.removeEventListener('scroll', handleScroll);
+    }
+  }, [isMobile, showDescription]);
+
+  const handleCardClick = () => {
+    if (isMobile) {
+      setShowDescription(!showDescription);
+    }
+  };
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setShowDescription(false);
+    }
+  };
+
+  if (isMobile) {
+    return (
+      <div className="relative">
+        <div
+          className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] text-primary-foreground rounded-xl cursor-pointer"
+          onClick={handleCardClick}
+        >
+          <div
+            className="flex md:w-[134px] md:h-[189px] w-[122px] h-[170px] rounded-xl overflow-hidden data-[positive=true]:bg-green-500 bg-red-500 justify-center items-center text-4xl"
+            data-positive={buildingBonus > 0}
+          >
+            {buildingBonus > 0 && '+'}
+            {buildingBonus}
+          </div>
+        </div>
+        {showDescription && (
+          <div
+            className="fixed top-0 left-0 right-0 bottom-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={handleOverlayClick}
+          >
+            <div className="bg-card/95 backdrop-blur-[1.5rem] p-4 rounded-lg border shadow-lg w-full max-w-sm">
+              <div className="text-[16px] font-semibold mb-2">Бонус зданий</div>
+              <div className="text-sm font-semibold text-muted-foreground">
+                Автоматически увеличивает или уменьшает размер следующего здания
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="flex md:w-[134px] md:h-[189px] w-[122px] h-[173px] text-primary-foreground rounded-xl">
       <Tooltip delayDuration={0} disableHoverableContent>
