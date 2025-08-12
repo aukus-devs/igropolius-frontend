@@ -12,6 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import { movePlayerGame } from '@/lib/api';
 import ImageLoader from '@/components/core/ImageLoader';
 import { GameRollTypeNames } from '@/lib/constants';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type Props = {
   sector: SectorData;
@@ -20,6 +21,7 @@ type Props = {
 function SectorInfo({ sector }: Props) {
   const { id, name, type, rollType, gameLengthRanges } = sector;
 
+  const isMobile = useIsMobile();
   const unpin = useCanvasTooltipStore(state => state.unpin);
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const { taxInfo, prisonCards, canSelectBuildingSector } = usePlayerStore(
@@ -49,8 +51,14 @@ function SectorInfo({ sector }: Props) {
     dismiss();
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (isMobile) {
+      e.stopPropagation();
+    }
+  };
+
   return (
-    <Card className="w-[260px]">
+    <Card className="w-[260px]" onClick={handleCardClick}>
       <CardHeader>
         <div className="flex justify-between">
           <div

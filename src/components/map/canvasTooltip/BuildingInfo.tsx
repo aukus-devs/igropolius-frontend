@@ -4,6 +4,7 @@ import { SECTORS_COLOR_GROUPS } from '@/lib/constants';
 import { BuildingData } from '@/lib/types';
 import { formatTsToMonthDatetime } from '@/lib/utils';
 import { useMemo } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type Props = {
   building: BuildingData;
@@ -12,12 +13,23 @@ type Props = {
 function BuildingInfo({ building }: Props) {
   const { gameTitle, owner, gameLength, gameStatus } = building;
 
+  const isMobile = useIsMobile();
+
   const showGroupBonus = useMemo(() => {
     return SECTORS_COLOR_GROUPS.some(group => group.includes(building.sectorId));
   }, [building.sectorId]);
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (isMobile) {
+      e.stopPropagation();
+    }
+  };
+
   return (
-    <Card className="w-56 pointer-events-none">
+    <Card
+      className={`w-56 ${isMobile ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      onClick={handleCardClick}
+    >
       <CardHeader>
         <CardTitle>
           {gameTitle} {gameStatus === 'drop' && '(дроп)'}

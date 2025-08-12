@@ -7,6 +7,7 @@ import { InstanceProps, ThreeEvent } from '@react-three/fiber';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import { Outlines } from '@react-three/drei';
 import usePlayerStore from '@/stores/playerStore';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type Props = {
   building: BuildingData;
@@ -44,6 +45,7 @@ function BuildingModel({ building, position, models }: Props) {
   const StaticPart = models[`${type}_1`] as React.FC<PositionMeshProps>;
   const OutlinePart = models[`${type}_outline`] as React.FC<PositionMeshProps>;
 
+  const isMobile = useIsMobile();
   const setData = useCanvasTooltipStore(state => state.setData);
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
   const [isHovered, setIsHovered] = useState(false);
@@ -63,6 +65,8 @@ function BuildingModel({ building, position, models }: Props) {
   function onPointerEnter(e: ThreeEvent<PointerEvent>) {
     e.stopPropagation();
 
+    if (isMobile) return;
+
     setData({ type: 'building', payload: building });
     setIsHovered(true);
   }
@@ -70,15 +74,30 @@ function BuildingModel({ building, position, models }: Props) {
   function onPointerLeave(e: ThreeEvent<PointerEvent>) {
     e.stopPropagation();
 
+    if (isMobile) return;
+
     dismiss();
     setIsHovered(false);
+  }
+
+  function onClick(e: ThreeEvent<MouseEvent>) {
+    e.stopPropagation();
+
+    if (isMobile) {
+      setData({ type: 'building', payload: building });
+      setIsHovered(true);
+    }
   }
 
   return (
     <group ref={groupRef} position={position} rotation={[0, type === 'ruins' ? Math.PI : 0, 0]}>
       <ColoredPart color={owner.color} />
       <StaticPart />
-      <OutlinePart onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
+      <OutlinePart
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+        onClick={onClick}
+      >
         {isHovered && <Outlines thickness={5} color="white" />}
       </OutlinePart>
     </group>

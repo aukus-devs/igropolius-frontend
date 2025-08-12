@@ -6,6 +6,7 @@ import { useShallow } from 'zustand/shallow';
 import usePlayerStore from '@/stores/playerStore';
 import useSystemStore from '@/stores/systemStore';
 import SectorModel from '../models/SectorModel';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type Props = {
   id: number;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 function SectorBase({ sector, color, isCorner }: Props) {
+  const isMobile = useIsMobile();
   const {
     setData,
     dismiss,
@@ -70,6 +72,8 @@ function SectorBase({ sector, color, isCorner }: Props) {
   function onPointerEnter(e: ThreeEvent<PointerEvent>) {
     e.stopPropagation();
 
+    if (isMobile) return;
+
     setData({ type: 'sector', payload: sector });
     setIsHovered(true);
 
@@ -80,6 +84,8 @@ function SectorBase({ sector, color, isCorner }: Props) {
 
   function onPointerLeave(e: ThreeEvent<PointerEvent>) {
     e.stopPropagation();
+
+    if (isMobile) return;
 
     dismiss();
 
@@ -94,6 +100,12 @@ function SectorBase({ sector, color, isCorner }: Props) {
 
   function onClick(e: ThreeEvent<MouseEvent>) {
     e.stopPropagation();
+
+    if (isMobile) {
+      setData({ type: 'sector', payload: sector });
+      setIsHovered(true);
+      return;
+    }
 
     if (!canSelectBuildingSector()) return;
 
