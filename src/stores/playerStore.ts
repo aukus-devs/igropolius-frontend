@@ -36,6 +36,7 @@ import {
   resetCurrentPlayerQuery,
   resetPlayersQuery,
   resetNotificationsQuery,
+  refetechPlayersQuery,
 } from '@/lib/queryClient';
 import {
   ActiveBonusCard,
@@ -504,7 +505,12 @@ const usePlayerStore = create<{
 
   stealBonusCard: async (player: PlayerDetails, card: MainBonusCardType) => {
     const { setNextTurnState } = get();
-    await stealBonusCardApi({ player_id: player.id, bonus_type: card });
+    try {
+      await stealBonusCardApi({ player_id: player.id, bonus_type: card });
+    } catch (e) {
+      refetechPlayersQuery();
+      throw e;
+    }
     resetNotificationsQuery();
     await setNextTurnState({});
   },
