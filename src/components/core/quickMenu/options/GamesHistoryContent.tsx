@@ -5,6 +5,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -15,7 +16,7 @@ import { IS_DEV } from '@/lib/constants';
 import usePlayerStore from '@/stores/playerStore';
 import { useQuery } from '@tanstack/react-query';
 import { LoaderCircleIcon, SearchIcon } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 
 type HistoryItem = {
   player_nickname: string;
@@ -198,10 +199,13 @@ export default function GamesHistoryContent({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Все игроки</SelectItem>
-                {players.map(player => (
-                  <SelectItem key={player.id} value={player.username}>
-                    {player.username}
-                  </SelectItem>
+                {players.map((player, idx) => (
+                  <Fragment key={player.id}>
+                    <SelectItem key={player.id} value={player.username}>
+                      {player.username}
+                    </SelectItem>
+                    {idx !== players.length - 1 && <SelectSeparator />}
+                  </Fragment>
                 ))}
               </SelectContent>
             </Select>
@@ -212,10 +216,13 @@ export default function GamesHistoryContent({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Все ивенты</SelectItem>
-                {['MGE', 'Aukus2', 'Aukus3'].sort().map(evt => (
-                  <SelectItem key={evt} value={evt}>
-                    {evt}
-                  </SelectItem>
+                {['MGE', 'Aukus2', 'Aukus3'].sort().map((evt, idx) => (
+                  <Fragment key={evt}>
+                    <SelectItem key={evt} value={evt}>
+                      {evt}
+                    </SelectItem>
+                    {idx !== ['MGE', 'Aukus2', 'Aukus3'].length - 1 && <SelectSeparator />}
+                  </Fragment>
                 ))}
               </SelectContent>
             </Select>

@@ -208,7 +208,7 @@ export default function AdminPanel() {
                 <SelectTrigger>
                   <SelectValue placeholder="Игрок" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-blue-950">
                   {players.map(player => (
                     <SelectItem key={player.id} value={String(player.id)}>
                       {player.username}
