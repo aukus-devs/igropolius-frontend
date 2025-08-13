@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronUp } from "../icons";
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
+import { ChevronDown, ChevronUp } from '../icons';
 
 type CollapsibleContextType = {
   isCollapsed: boolean;
@@ -10,29 +10,43 @@ type CollapsibleContextType = {
 
 const CollapsibleContext = createContext<CollapsibleContextType>({
   isCollapsed: false,
-  toggleCollapse: () => { },
+  toggleCollapse: () => {},
 });
 
-function CollapsibleTrigger({ className, children }: { className?: string; children?: React.ReactNode }) {
+function CollapsibleTrigger({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: React.ReactNode;
+}) {
   const { isCollapsed, toggleCollapse } = useContext(CollapsibleContext);
 
   return (
     <Button
       variant="outline"
-      className={cn("flex-row justify-between p-[5px] bg-card/70 rounded-xl backdrop-blur-[1.5rem] border-none", className)}
+      className={cn(
+        'flex-row justify-between p-[5px] bg-card/70 backdrop-blur-[1.5rem] border-none',
+        children ? 'rounded-xl' : '',
+        className
+      )}
       onClick={toggleCollapse}
     >
       {children}
-      <div
-        className="rounded-md py-[3px] px-[13px] h-auto items-center font-semibold border-none font-wide-black text-xs text-muted-foreground [&_svg:not([class*='size-'])]:size-[19px] bg-white/[0.08]"
-      >
+      <div className="rounded-md py-[3px] px-[13px] h-auto items-center font-semibold border-none font-wide-black text-xs text-muted-foreground [&_svg:not([class*='size-'])]:size-[19px] bg-white/[0.08]">
         {!isCollapsed ? <ChevronUp /> : <ChevronDown />}
       </div>
     </Button>
-  )
+  );
 }
 
-function CollapsibleContent({ className, children }: { className?: string; children: React.ReactNode }) {
+function CollapsibleContent({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   const { isCollapsed } = useContext(CollapsibleContext);
   const [height, setHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -52,7 +66,10 @@ function CollapsibleContent({ className, children }: { className?: string; child
     <div
       ref={contentRef}
       style={{ height }}
-      className={cn("flex flex-col justify-end space-y-[5px] z-[-1] transition-[opacity,scale,height] duration-300 overflow-hidden mx-auto group-data-[collapsed=true]:opacity-50 group-data-[collapsed=true]:pointer-events-none group-data-[collapsed=true]:scale-x-95 w-full hover:overflow-visible", className)}
+      className={cn(
+        'flex flex-col justify-end space-y-[5px] z-[-1] transition-[opacity,scale,height] duration-300 overflow-hidden mx-auto group-data-[collapsed=true]:opacity-50 group-data-[collapsed=true]:pointer-events-none group-data-[collapsed=true]:scale-x-95 w-full hover:overflow-visible',
+        className
+      )}
     >
       {children}
     </div>
@@ -69,11 +86,7 @@ function Collapsible({ children }: { children: React.ReactNode }) {
         {children}
       </div>
     </CollapsibleContext.Provider>
-  )
+  );
 }
 
-export {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent
-}
+export { Collapsible, CollapsibleTrigger, CollapsibleContent };
