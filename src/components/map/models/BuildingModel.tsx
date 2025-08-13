@@ -22,6 +22,7 @@ type PositionMeshProps = InstanceProps & {
   children?: React.ReactNode;
   onPointerEnter?: (e: ThreeEvent<PointerEvent>) => void;
   onPointerLeave?: (e: ThreeEvent<PointerEvent>) => void;
+  onClick?: (e: ThreeEvent<MouseEvent>) => void;
 };
 
 async function animateAppearance(model: THREE.Group) {
@@ -48,6 +49,7 @@ function BuildingModel({ building, position, models }: Props) {
   const isMobile = useIsMobile();
   const setData = useCanvasTooltipStore(state => state.setData);
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
+  const tooltipData = useCanvasTooltipStore(state => state.data);
   const [isHovered, setIsHovered] = useState(false);
   const groupRef = useRef<THREE.Group>(null);
 
@@ -61,6 +63,18 @@ function BuildingModel({ building, position, models }: Props) {
 
     animateAppearance(groupRef.current);
   }, [isNewBuilding]);
+
+  useEffect(() => {
+    if (isMobile && isHovered) {
+      if (
+        !tooltipData ||
+        tooltipData.type !== 'building' ||
+        tooltipData.payload?.id !== building.id
+      ) {
+        setIsHovered(false);
+      }
+    }
+  }, [isMobile, tooltipData, isHovered, building.id]);
 
   function onPointerEnter(e: ThreeEvent<PointerEvent>) {
     e.stopPropagation();
@@ -80,20 +94,24 @@ function BuildingModel({ building, position, models }: Props) {
     setIsHovered(false);
   }
 
-  // function onClick(e: ThreeEvent<MouseEvent>) {
-  //   e.stopPropagation();
+  function onClick(e: ThreeEvent<MouseEvent>) {
+    e.stopPropagation();
 
-  //   if (isMobile) {
-  //     setData({ type: 'building', payload: building });
-  //     setIsHovered(true);
-  //   }
-  // }
+    if (isMobile) {
+      setData({ type: 'building', payload: building });
+      setIsHovered(true);
+    }
+  }
 
   return (
     <group ref={groupRef} position={position} rotation={[0, type === 'ruins' ? Math.PI : 0, 0]}>
       <ColoredPart color={owner.color} />
       <StaticPart />
-      <OutlinePart onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
+      <OutlinePart
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+        onClick={onClick}
+      >
         {isHovered && <Outlines thickness={5} color="white" />}
       </OutlinePart>
     </group>
