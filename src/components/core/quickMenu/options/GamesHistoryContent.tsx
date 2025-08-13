@@ -243,7 +243,7 @@ export default function GamesHistoryContent({
               <Badge className="bg-white/20 text-white/70">{item.event_name}</Badge>
             </div>
             <div className="text-2xl p-0 font-roboto-wide-semibold">{item.game_title}</div>
-            <div className="flex gap-[8px]">
+            <div className={`flex gap-[8px] flex-col md:flex-row`}>
               {item.game_cover && (
                 <div>
                   <img src={item.game_cover} className="min-w-[150px] w-[150px] rounded-md"></img>
