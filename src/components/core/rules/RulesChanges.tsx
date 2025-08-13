@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { RichTextDiff } from './RichText';
+import { LazyRichTextDiff } from './RichText';
 import { fetchAllRules } from '@/lib/api';
 import { queryKeys } from '@/lib/queryClient';
 import { formatTsToFullDate } from '@/lib/utils';
@@ -60,7 +60,7 @@ export default function RulesChanges() {
               </div>
             </div>
             <div className="font-semibold text-base">
-              <RichTextDiff oldContent={oldV.content} newContent={newV.content} />
+              <LazyRichTextDiff oldContent={oldV.content} newContent={newV.content} />
             </div>
           </div>
         );

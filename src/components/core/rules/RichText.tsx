@@ -1,5 +1,6 @@
-import { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
+import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Quill, { Delta, QuillOptions, Range } from 'quill';
+import { LoaderCircleIcon } from 'lucide-react';
 
 import 'quill/dist/quill.snow.css';
 
@@ -163,15 +164,12 @@ type DiffProps = {
 
 export function RichTextDiff({ oldContent, newContent }: DiffProps) {
   const quillRef = useRef<Quill | null>(null);
-  const diff = getLineDiffHighlight(oldContent, newContent);
+
   useEffect(() => {
-    const diff2 = getLineDiffHighlight(oldContent, newContent);
-    quillRef.current?.setContents(diff2);
+    const diffResult = getQuillDiff(oldContent, newContent);
+    quillRef.current?.setContents(diffResult);
   }, [oldContent, newContent]);
 
-  if (diff.ops.length === 0) {
-    return <div>Изменения стиля</div>;
-  }
   return (
     <div className="rich-diff">
       <Editor ref={quillRef} readOnly />
@@ -179,167 +177,415 @@ export function RichTextDiff({ oldContent, newContent }: DiffProps) {
   );
 }
 
-// Helper to split Delta into text lines
-function deltaToLines(delta: Delta): string[] {
-  const text =
-    delta.ops?.map(op => (typeof op.insert === 'string' ? op.insert : '')).join('') || '';
-  return text.split('\n').map((line, i, arr) => (i < arr.length - 1 ? line + '\n' : line));
+export function LazyRichTextDiff({ oldContent, newContent }: DiffProps) {
+  const quillRef = useRef<Quill | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [diffCalculated, setDiffCalculated] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const calculationStartedRef = useRef(false);
+  const contentKeyRef = useRef(oldContent + newContent);
+
+  if (contentKeyRef.current !== oldContent + newContent) {
+    contentKeyRef.current = oldContent + newContent;
+    calculationStartedRef.current = false;
+    setDiffCalculated(false);
+    setIsCalculating(false);
+  }
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !diffCalculated && !calculationStartedRef.current) {
+          calculationStartedRef.current = true;
+          setIsCalculating(true);
+
+          const calculateDiff = () => {
+            setTimeout(() => {
+              try {
+                const diffResult = getQuillDiff(oldContent, newContent);
+
+                setTimeout(() => {
+                  if (quillRef.current) {
+                    quillRef.current.setContents(diffResult);
+                  }
+                  setIsCalculating(false);
+                  setDiffCalculated(true);
+                }, 200);
+              } catch (error) {
+                console.error('LazyRichTextDiff: Error calculating diff:', error);
+                if (quillRef.current) {
+                  quillRef.current.setContents(
+                    new Delta().insert('Ошибка при вычислении изменений')
+                  );
+                }
+                setIsCalculating(false);
+                setDiffCalculated(true);
+              }
+            }, 100);
+          };
+
+          calculateDiff();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [oldContent, newContent, diffCalculated]);
+
+  return (
+    <div ref={containerRef} className="rich-diff relative">
+      <Editor ref={quillRef} readOnly />
+      {isCalculating && (
+        <div className="absolute inset-0 flex justify-center items-center">
+          <LoaderCircleIcon className="animate-spin text-primary" size={24} />
+          <span className="ml-2 text-muted-foreground">Вычисляем изменения...</span>
+        </div>
+      )}
+    </div>
+  );
 }
 
-// Helper function to split a line into words, preserving whitespace
-function tokenizeWords(line: string): string[] {
-  return line.match(/\S+|\s+/g) || [];
+function getQuillDiff(oldJson: string, newJson: string): Delta {
+  try {
+    const oldContent = new Delta(JSON.parse(oldJson));
+    const newContent = new Delta(JSON.parse(newJson));
+
+    const oldLines = deltaToLines(oldContent);
+    const newLines = deltaToLines(newContent);
+
+    const diffResult = getLineDiff(oldLines, newLines);
+
+    return diffResult;
+  } catch (error) {
+    console.error('Error processing diff:', error);
+    return new Delta().insert('Ошибка при обработке изменений');
+  }
 }
 
-// Function to get highlighted differences between two lines
-function getHighlightedLines(oldLine: string, newLine: string): [Delta, Delta] {
-  const oldTokens = tokenizeWords(oldLine);
-  const newTokens = tokenizeWords(newLine);
+function deltaToLines(delta: Delta): DeltaLine[] {
+  const lines: DeltaLine[] = [];
+  let currentLine = new Delta();
 
-  const oldDelta = new Delta();
-  const newDelta = new Delta();
+  for (const op of delta.ops || []) {
+    if (typeof op.insert === 'string') {
+      const text = op.insert;
+      const parts = text.split('\n');
 
-  const maxLength = Math.max(oldTokens.length, newTokens.length);
+      for (let i = 0; i < parts.length; i++) {
+        if (i > 0) {
+          lines.push({
+            delta: currentLine,
+            text:
+              currentLine.ops
+                ?.map(op => (typeof op.insert === 'string' ? op.insert : ''))
+                .join('') || '',
+          });
+          currentLine = new Delta();
+        }
 
-  for (let i = 0; i < maxLength; i++) {
-    const oldToken = oldTokens[i] || '';
-    const newToken = newTokens[i] || '';
-
-    if (oldToken === newToken) {
-      oldDelta.insert(oldToken);
-      newDelta.insert(newToken);
-    } else {
-      if (oldToken) {
-        oldDelta.insert(oldToken, { color: '#FF453A' });
+        if (parts[i]) {
+          currentLine.insert(parts[i], op.attributes || {});
+        }
       }
-      if (newToken) {
-        newDelta.insert(newToken, { color: '#30D158' });
+    } else {
+      currentLine.insert(op.insert || '');
+    }
+  }
+
+  if (currentLine.ops && currentLine.ops.length > 0) {
+    lines.push({
+      delta: currentLine,
+      text: currentLine.ops.map(op => (typeof op.insert === 'string' ? op.insert : '')).join(''),
+    });
+  }
+
+  return lines;
+}
+
+interface DeltaLine {
+  delta: Delta;
+  text: string;
+}
+
+function getWordLevelDiff(oldLine: DeltaLine, newLine: DeltaLine): Delta {
+  const result = new Delta();
+
+  const oldWords = getWordsWithFormatting(oldLine.delta);
+  const newWords = getWordsWithFormatting(newLine.delta);
+
+  const oldWordsText = oldWords.map(w => w.text);
+  const newWordsText = newWords.map(w => w.text);
+
+  let oldIndex = 0;
+  let newIndex = 0;
+
+  while (oldIndex < oldWords.length || newIndex < newWords.length) {
+    const oldWord = oldWords[oldIndex];
+    const newWord = newWords[newIndex];
+
+    if (oldIndex >= oldWords.length) {
+      result.insert(newWord.text, {
+        ...newWord.attributes,
+        color: '#30D158',
+      });
+      newIndex++;
+    } else if (newIndex >= newWords.length) {
+      result.insert(oldWord.text, {
+        ...oldWord.attributes,
+        color: '#FF453A',
+        strike: true,
+      });
+      oldIndex++;
+    } else if (oldWord.text === newWord.text) {
+      result.insert(newWord.text, newWord.attributes);
+      oldIndex++;
+      newIndex++;
+    } else {
+      const oldWordInNew = newWordsText.indexOf(oldWord.text, newIndex);
+      const newWordInOld = oldWordsText.indexOf(newWord.text, oldIndex);
+
+      if (
+        oldWordInNew !== -1 &&
+        (newWordInOld === -1 || oldWordInNew - newIndex < newWordInOld - oldIndex)
+      ) {
+        result.insert(newWord.text, {
+          ...newWord.attributes,
+          color: '#30D158',
+        });
+        newIndex++;
+      } else if (newWordInOld !== -1) {
+        result.insert(oldWord.text, {
+          ...oldWord.attributes,
+          color: '#FF453A',
+          strike: true,
+        });
+        oldIndex++;
+      } else {
+        result.insert(oldWord.text, {
+          ...oldWord.attributes,
+          color: '#FF453A',
+          strike: true,
+        });
+        result.insert(newWord.text, {
+          ...newWord.attributes,
+          color: '#30D158',
+        });
+        oldIndex++;
+        newIndex++;
       }
     }
   }
 
-  if (oldDelta.ops.length > 0) {
-    oldDelta.ops.unshift({ insert: '-\t' });
-  }
-  if (newDelta.ops.length > 0) {
-    newDelta.ops.unshift({ insert: '+\t' });
-  }
-
-  return [oldDelta, newDelta];
+  return result;
 }
 
-// Build diff-highlight Delta showing changed lines with inline highlights
-function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
-  const oldLines = deltaToLines(new Delta(JSON.parse(oldJson)));
-  const newLines = deltaToLines(new Delta(JSON.parse(newJson)));
+function getWordsWithFormatting(delta: Delta): Array<{ text: string; attributes: any }> {
+  const words: Array<{ text: string; attributes: any }> = [];
 
+  for (const op of delta.ops || []) {
+    if (typeof op.insert === 'string') {
+      const text = op.insert;
+      const tokens = text.match(/\S+|\s+/g) || [];
+
+      tokens.forEach(token => {
+        words.push({
+          text: token,
+          attributes: op.attributes || {},
+        });
+      });
+    }
+  }
+
+  return words;
+}
+
+function getWordsHighlightedForRemoval(oldLine: DeltaLine, newLine: DeltaLine): Delta {
   const result = new Delta();
+
+  const oldWords = getWordsWithFormatting(oldLine.delta);
+  const newWords = getWordsWithFormatting(newLine.delta);
+
+  const newWordsText = newWords.map(w => w.text);
+
+  oldWords.forEach(oldWord => {
+    if (newWordsText.includes(oldWord.text)) {
+      result.insert(oldWord.text, oldWord.attributes);
+    } else {
+      result.insert(oldWord.text, {
+        ...oldWord.attributes,
+        color: '#FF453A',
+      });
+    }
+  });
+
+  return result;
+}
+
+function getWordsHighlightedForAddition(oldLine: DeltaLine, newLine: DeltaLine): Delta {
+  const result = new Delta();
+
+  const oldWords = getWordsWithFormatting(oldLine.delta);
+  const newWords = getWordsWithFormatting(newLine.delta);
+
+  const oldWordsText = oldWords.map(w => w.text);
+
+  newWords.forEach(newWord => {
+    if (oldWordsText.includes(newWord.text)) {
+      result.insert(newWord.text, newWord.attributes);
+    } else {
+      result.insert(newWord.text, {
+        ...newWord.attributes,
+        color: '#30D158',
+      });
+    }
+  });
+
+  return result;
+}
+
+function getLineDiff(
+  oldLines: DeltaLine[],
+  newLines: DeltaLine[],
+  contextLines: number = 2
+): Delta {
+  const result = new Delta();
+  const changes: Array<{
+    type: 'removed' | 'added' | 'modified' | 'context';
+    line: DeltaLine;
+    index: number;
+    oldLine?: DeltaLine;
+  }> = [];
+
   const maxLen = Math.max(oldLines.length, newLines.length);
-
-  let lastCommonLine: string | null = null;
-
-  let oldLinesIndex = 0;
-  let newLinesIndex = 0;
+  const changedIndices = new Set<number>();
 
   for (let i = 0; i < maxLen; i++) {
-    const oldLine = (oldLines[oldLinesIndex] || '').trim();
-    const newLine = (newLines[newLinesIndex] || '').trim();
+    const oldLine = oldLines[i];
+    const newLine = newLines[i];
 
-    oldLinesIndex++;
-    newLinesIndex++;
-
-    if (oldLine === newLine && oldLine !== '') {
-      lastCommonLine = oldLine;
-    }
-
-    if (oldLine !== newLine) {
-      let state: 'diff' | 'added' | 'removed' = 'diff';
-
-      if (oldLine !== '' && newLines.find(l => l.trim() === oldLine)) {
-        // line added
-        state = 'added';
-        // newLinesIndex++;
-        oldLinesIndex--;
-      }
-
-      if (newLine !== '' && oldLines.find(l => l.trim() === newLine)) {
-        // line removed
-        state = 'removed';
-        // oldLinesIndex++;
-        newLinesIndex--;
-      }
-
-      if (result.ops.length > 0) {
-        result.ops.push({ insert: '\n' });
-      }
-
-      if (lastCommonLine) {
-        result.ops.push({ insert: lastCommonLine });
-        result.ops.push({ insert: '\n' });
-      }
-
-      // console.log('diff found', { oldLine, newLine, state });
-
-      if (state === 'added') {
-        result.ops.push({ insert: newLine, attributes: { color: '#30D158' } });
-      } else if (state === 'removed') {
-        result.ops.push({ insert: oldLine, attributes: { color: '#FF453A' } });
-      } else {
-        // diff
-        const deltas = getHighlightedLines(oldLine, newLine);
-        result.ops.push(...deltas[0].ops);
-        result.ops.push({ insert: '\n' });
-        result.ops.push(...deltas[1].ops);
-      }
-      result.ops.push({ insert: '\n' });
-
-      // const deltas = getHighlightedLines(oldLine, newLine);
-
-      // if (deltas[0].ops.length > 0) {
-      //   result.ops.push(...deltas[0].ops);
-      //   result.ops.push({ insert: '\n' });
-      // }
-      // if (deltas[1].ops.length > 0) {
-      //   result.ops.push(...deltas[1].ops);
-      //   result.ops.push({ insert: '\n' });
-      // }
+    if (!oldLine && newLine) {
+      changes.push({ type: 'added', line: newLine, index: i });
+      changedIndices.add(i);
+    } else if (oldLine && !newLine) {
+      changes.push({ type: 'removed', line: oldLine, index: i });
+      changedIndices.add(i);
+    } else if (oldLine && newLine && oldLine.text !== newLine.text) {
+      changes.push({ type: 'modified', line: newLine, index: i, oldLine });
+      changedIndices.add(i);
     }
   }
+
+  if (changes.length === 0) {
+    return new Delta().insert('Нет изменений');
+  }
+
+  const contextIndices = new Set<number>();
+  changedIndices.forEach(index => {
+    for (
+      let i = Math.max(0, index - contextLines);
+      i <= Math.min(maxLen - 1, index + contextLines);
+      i++
+    ) {
+      contextIndices.add(i);
+    }
+  });
+
+  const groupedChanges = new Map<
+    number,
+    Array<{ type: 'removed' | 'added' | 'modified'; line: DeltaLine; oldLine?: DeltaLine }>
+  >();
+  changes.forEach(change => {
+    if (!groupedChanges.has(change.index)) {
+      groupedChanges.set(change.index, []);
+    }
+    groupedChanges.get(change.index)!.push({
+      type: change.type as 'removed' | 'added' | 'modified',
+      line: change.line,
+      oldLine: change.oldLine,
+    });
+  });
+
+  let isFirst = true;
+  Array.from(contextIndices)
+    .sort((a, b) => a - b)
+    .forEach(index => {
+      if (!isFirst) {
+        result.insert('\n');
+      }
+      isFirst = false;
+
+      if (groupedChanges.has(index)) {
+        const indexChanges = groupedChanges.get(index)!;
+        indexChanges.forEach((change, changeIndex) => {
+          if (changeIndex > 0) {
+            result.insert('\n');
+          }
+
+          if (change.type === 'removed') {
+            result.insert('- ');
+            change.line.delta.ops?.forEach(op => {
+              if (typeof op.insert === 'string') {
+                result.insert(op.insert, {
+                  ...(op.attributes || {}),
+                  color: '#FF453A',
+                  strike: true,
+                });
+              } else {
+                result.insert(op.insert || '');
+              }
+            });
+          } else if (change.type === 'added') {
+            result.insert('+ ');
+            change.line.delta.ops?.forEach(op => {
+              if (typeof op.insert === 'string') {
+                result.insert(op.insert, {
+                  ...(op.attributes || {}),
+                  color: '#30D158',
+                });
+              } else {
+                result.insert(op.insert || '');
+              }
+            });
+          } else if (change.type === 'modified' && change.oldLine) {
+            result.insert('- ');
+            const oldWordsHighlighted = getWordsHighlightedForRemoval(change.oldLine, change.line);
+            result.ops.push(...oldWordsHighlighted.ops);
+
+            result.insert('\n');
+
+            result.insert('+ ');
+            const newWordsHighlighted = getWordsHighlightedForAddition(change.oldLine, change.line);
+            result.ops.push(...newWordsHighlighted.ops);
+          }
+        });
+      } else {
+        const contextLine = oldLines[index] || newLines[index];
+        if (contextLine) {
+          result.insert('  ', { color: '#666666' });
+          contextLine.delta.ops?.forEach(op => {
+            result.insert(op.insert || '', { color: '#666666' });
+          });
+        }
+      }
+    });
 
   return result;
 }
 
-function diffToReadable(diff: Delta): string[] {
-  const result = [];
-  const currentItem = [];
-  for (const op of diff.ops) {
-    if (typeof op.insert === 'string') {
-      if (op.insert.endsWith('\n')) {
-        currentItem.push(op.insert.slice(0, -1)); // Remove trailing newline
-        result.push(currentItem.join(''));
-        currentItem.length = 0; // Reset current item
-      } else {
-        currentItem.push(op.insert);
-      }
-    }
-  }
-  if (currentItem.length > 0) {
-    result.push(currentItem.join('')); // Add any remaining text
-  }
-  return result;
-}
-
-function getDeltaLines(input: string) {
-  return deltaToLines(new Delta(JSON.parse(input)));
-}
-
+// @ts-expect-error debugging
+window.getQuillDiff = getQuillDiff;
 // @ts-expect-error debugging
 window.deltaToLines = deltaToLines;
 // @ts-expect-error debugging
-window.getHighlightedLines = getHighlightedLines;
+window.getWordLevelDiff = getWordLevelDiff;
 // @ts-expect-error debugging
-window.getLineDiffHighlight = getLineDiffHighlight;
+window.getWordsWithFormatting = getWordsWithFormatting;
 // @ts-expect-error debugging
-window.diffToReadable = diffToReadable;
+window.getWordsHighlightedForRemoval = getWordsHighlightedForRemoval;
 // @ts-expect-error debugging
-window.getDeltaLines = getDeltaLines;
+window.getWordsHighlightedForAddition = getWordsHighlightedForAddition;
