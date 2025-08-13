@@ -17,6 +17,7 @@ import { ArrowLeft, Location } from '@/components/icons';
 import PlayerCards from './PlayerCards';
 import { PlayerDetails } from '@/lib/api-types-generated';
 import useUrlPath from '@/hooks/useUrlPath';
+import { useRef } from 'react';
 
 type Props = {
   player: PlayerDetails;
@@ -27,6 +28,7 @@ type Props = {
 
 function PlayerDialog({ player, placement, isCurrentPlayer, showCards }: Props) {
   const cameraToPlayer = useCameraStore(state => state.cameraToPlayer);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const { activate, pathActive } = useUrlPath(`/${player.username.toLowerCase()}`);
 
@@ -54,12 +56,12 @@ function PlayerDialog({ player, placement, isCurrentPlayer, showCards }: Props) 
               <ArrowLeft />
               <span>Назад к списку</span>
             </DialogClose>
-            <ScrollArea className="flex h-full">
+            <ScrollArea className="flex h-full" ref={scrollAreaRef}>
               <DialogHeader>
                 <DialogTitle className="hidden" />
                 <PlayerDialogHeader player={player} />
               </DialogHeader>
-              <PlayerDialogTabs player={player} />
+              <PlayerDialogTabs player={player} scrollAreaRef={scrollAreaRef} />
             </ScrollArea>
           </DialogContent>
         </Dialog>

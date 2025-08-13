@@ -4,12 +4,14 @@ import CardsTab from './CardsTab';
 import EventsTab from './EventsTab';
 import { PlayerDetails } from '@/lib/api-types-generated';
 import useScrollStyler from '@/hooks/useScrollStyler';
+import { RefObject } from 'react';
 
 type Props = {
   player: PlayerDetails;
+  scrollAreaRef?: RefObject<HTMLDivElement | null>;
 };
 
-function PlayerDialogTabs({ player }: Props) {
+function PlayerDialogTabs({ player, scrollAreaRef }: Props) {
   const tabs = [
     { name: 'Игры', value: 'games', content: <GamesTab player={player} /> },
     {
@@ -24,6 +26,15 @@ function PlayerDialogTabs({ player }: Props) {
 
   const { onRender, style, stuck } = useScrollStyler();
 
+  const handleTabChange = () => {
+    if (scrollAreaRef?.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-slot="scroll-area-viewport"]');
+      if (viewport) {
+        viewport.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
   if (stuck) {
     style.borderTopRightRadius = style.borderRadius;
     style.borderTopLeftRadius = style.borderRadius;
@@ -32,7 +43,11 @@ function PlayerDialogTabs({ player }: Props) {
   }
 
   return (
-    <Tabs className="md:px-0 px-[15px] gap-0" defaultValue={tabs[0].value}>
+    <Tabs
+      className="md:px-0 px-[15px] gap-0"
+      defaultValue={tabs[0].value}
+      onValueChange={handleTabChange}
+    >
       <TabsList className="md:p-5 w-full  gap-2 p-0 sticky top-0 z-50" style={style} ref={onRender}>
         {tabs.map(({ name, value }) => (
           <TabsTrigger
