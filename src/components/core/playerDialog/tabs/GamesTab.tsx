@@ -52,7 +52,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
         style={style}
         ref={onRender}
       >
-        <div className="relative">
+        <div className="relative flex-2">
           <SearchIcon
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             size="1rem"
@@ -73,13 +73,13 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
             initialPlayerFilter={player.username}
             initialSearchFilter={searchText}
           >
-            <Button className=" bg-[#575b58] font-roboto-wide-semibold text-muted-foreground hover:text-foreground hover:bg-[#575b58]">
+            <Button className="flex-1 bg-[#575b58] font-roboto-wide-semibold text-muted-foreground hover:text-foreground hover:bg-[#575b58]">
               Прошлые ивенты
             </Button>
           </GamesHistoryDialog>
         ) : (
           <Button
-            className=" bg-[#575b58] font-roboto-wide-semibold text-muted-foreground hover:text-foreground hover:bg-[#575b58]"
+            className="flex-1 bg-[#575b58] font-roboto-wide-semibold text-muted-foreground hover:text-foreground hover:bg-[#575b58]"
             onClick={openHistorySearch}
             loading={opening}
           >
