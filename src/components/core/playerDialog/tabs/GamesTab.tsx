@@ -7,6 +7,8 @@ import { PlayerDetails } from '@/lib/api-types-generated';
 import useScrollStyler from '@/hooks/useScrollStyler';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router';
+import { useIsMobile } from '@/hooks/use-mobile';
+import GamesHistoryDialog from '../GamesHistoryDialog';
 
 function ReviewsTab({ player }: { player: PlayerDetails }) {
   const { onRender, style, stuck } = useScrollStyler();
@@ -28,13 +30,19 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
   const showCurrentGame = player.current_game?.toLowerCase().includes(searchText.toLowerCase());
 
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const [opening, setOpening] = useState(false);
+  const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
 
   const openHistorySearch = () => {
-    setOpening(true);
-    const escapedSearchText = encodeURIComponent(searchText);
-    navigate(`/history?player=${player.username}&search=${escapedSearchText}`);
+    if (isMobile) {
+      setHistoryDialogOpen(true);
+    } else {
+      setOpening(true);
+      const escapedSearchText = encodeURIComponent(searchText);
+      navigate(`/history?player=${player.username}&search=${escapedSearchText}`);
+    }
   };
 
   return (
@@ -56,13 +64,26 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
           onKeyDown={e => e.stopPropagation()}
           onChange={e => setSearchText(e.target.value)}
         />
-        <Button
-          className=" bg-[#575b58] font-roboto-wide-semibold text-muted-foreground hover:text-foreground hover:bg-[#575b58]"
-          onClick={openHistorySearch}
-          loading={opening}
-        >
-          Прошлые ивенты
-        </Button>
+        {isMobile ? (
+          <GamesHistoryDialog
+            open={historyDialogOpen}
+            onOpenChange={setHistoryDialogOpen}
+            initialPlayerFilter={player.username}
+            initialSearchFilter={searchText}
+          >
+            <Button className=" bg-[#575b58] font-roboto-wide-semibold text-muted-foreground hover:text-foreground hover:bg-[#575b58]">
+              Прошлые ивенты
+            </Button>
+          </GamesHistoryDialog>
+        ) : (
+          <Button
+            className=" bg-[#575b58] font-roboto-wide-semibold text-muted-foreground hover:text-foreground hover:bg-[#575b58]"
+            onClick={openHistorySearch}
+            loading={opening}
+          >
+            Прошлые ивенты
+          </Button>
+        )}
       </div>
       <div className={`flex flex-col gap-8 md:px-5 mt-2 md:mt-0`}>
         {showCurrentGame && <CurrentGame player={player} />}

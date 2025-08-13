@@ -46,7 +46,15 @@ type GamesHistory = {
   games: HistoryItem[];
 };
 
-export default function GamesHistoryContent() {
+type Props = {
+  initialPlayerFilter?: string;
+  initialSearchFilter?: string;
+};
+
+export default function GamesHistoryContent({
+  initialPlayerFilter,
+  initialSearchFilter,
+}: Props = {}) {
   const { location } = useUrlPath('/history');
 
   const playersOrig = usePlayerStore(state => state.players);
@@ -95,16 +103,26 @@ export default function GamesHistoryContent() {
   const [limit, setLimit] = useState(100);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const player = urlParams.get('player');
-    if (player) {
-      setPlayerFilter(player);
+    if (initialPlayerFilter) {
+      setPlayerFilter(initialPlayerFilter);
+    } else {
+      const urlParams = new URLSearchParams(location.search);
+      const player = urlParams.get('player');
+      if (player) {
+        setPlayerFilter(player);
+      }
     }
-    const search = urlParams.get('search');
-    if (search) {
-      setSearchFilter(search);
+
+    if (initialSearchFilter) {
+      setSearchFilter(initialSearchFilter);
+    } else {
+      const urlParams = new URLSearchParams(location.search);
+      const search = urlParams.get('search');
+      if (search) {
+        setSearchFilter(search);
+      }
     }
-  }, [location.search]);
+  }, [location.search, initialPlayerFilter, initialSearchFilter]);
 
   const filteredGames = useMemo(() => {
     if (!historyData?.games) {
