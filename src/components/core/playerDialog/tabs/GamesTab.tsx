@@ -39,7 +39,11 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
 
   return (
     <>
-      <div className="z-50 sticky flex gap-2 top-[72px] px-5 pb-5" style={style} ref={onRender}>
+      <div
+        className={`z-50 md:sticky flex gap-2 top-[72px] md:px-5 md:pb-5 mt-2 md:mt-0`}
+        style={style}
+        ref={onRender}
+      >
         <SearchIcon
           className="absolute left-7 top-4.5 -translate-y-1/2 text-muted-foreground"
           size="1rem"
@@ -60,7 +64,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
           Прошлые ивенты
         </Button>
       </div>
-      <div className="flex flex-col gap-8 py-8 px-5">
+      <div className={`flex flex-col gap-8 md:px-5 mt-2 md:mt-0`}>
         {showCurrentGame && <CurrentGame player={player} />}
         {filteredGames.length === 0 ? (
           <div className="text-center text-xs font-roboto-wide-semibold text-muted-foreground">

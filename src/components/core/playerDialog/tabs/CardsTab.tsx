@@ -109,7 +109,7 @@ function CardsTab({ cards, buildingBonus }: { cards: ActiveBonusCard[]; building
   const showAvailableSection = availableCards.length > 0 || Boolean(buildingBonus);
 
   return (
-    <div className="flex flex-col my-5 px-5">
+    <div className="flex flex-col md:my-0 my-5 md:px-5">
       {showAvailableSection && (
         <div className="flex flex-wrap gap-y-2.5 gap-x-2 mb-[50px]">
           {availableCards.map(type => (
