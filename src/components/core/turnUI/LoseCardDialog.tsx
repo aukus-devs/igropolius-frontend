@@ -4,7 +4,7 @@ import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import { activateInstantCard, dropBonusCard, makePlayerMove } from '@/lib/api';
-import { InstantCardResult, MainBonusCardType } from '@/lib/api-types-generated';
+import { MainBonusCardType, UseInstantCardResponse } from '@/lib/api-types-generated';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import useSystemStore from '@/stores/systemStore';
@@ -39,7 +39,7 @@ export default function LoseCardOnDropDialog({
 
   const [rollFinished, setRollFinished] = useState(false);
   const [cardsBeforeDrop, setCardsBeforeDrop] = useState<MainBonusCardType[]>([]);
-  const [dropResult, setDropResult] = useState<InstantCardResult | null>(null);
+  const [dropResult, setDropResult] = useState<UseInstantCardResponse | null>(null);
 
   const options: WeightedOption<MainBonusCardType>[] = useMemo(() => {
     return playerCards.map(card => ({
@@ -52,11 +52,15 @@ export default function LoseCardOnDropDialog({
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
     if (dropResult && rollFinished) {
-      if (dropResult === 'card-lost') {
+      if (dropResult.result === 'card-lost') {
         return `Потеряна карточка "${frontendCardsData[option.value].name}"`;
-      } else if (dropResult === 'scores-lost') {
-        return 'Потеряно 3% от общего счёта';
-      } else if (dropResult === 'reroll') {
+      } else if (dropResult.result === 'score-change') {
+        const change = dropResult.score_change || 0;
+        if (change > 0) {
+          return `Получено +${change}`;
+        }
+        return `Потеряно ${Math.abs(change)}`;
+      } else if (dropResult.result === 'reroll') {
         return 'Выпавшая карточка не найдена, реролл дропа';
       }
     }
@@ -90,7 +94,7 @@ export default function LoseCardOnDropDialog({
         card_type: 'lose-card-or-3-percent',
         card_to_lose: option.value,
       });
-      setDropResult(result.result ?? null);
+      setDropResult(result);
       if (result.result === 'card-lost') {
         removeCardFromState(option.value);
       }
@@ -103,7 +107,7 @@ export default function LoseCardOnDropDialog({
     setRollFinished(false);
     setCardsBeforeDrop([]);
     onClose?.();
-    if (dropResult === 'reroll') {
+    if (dropResult?.result === 'reroll') {
       useSystemStore.getState().enableQueries(true);
       return;
     }
@@ -129,7 +133,7 @@ export default function LoseCardOnDropDialog({
   if (goToPrison) {
     buttonText = 'Пойти в тюрьму';
   }
-  if (dropResult === 'reroll') {
+  if (dropResult?.result === 'reroll') {
     buttonText = 'Реролл';
   }
 

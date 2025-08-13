@@ -1214,11 +1214,11 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
     description:
       'Если вы находитесь на одном из трех последних мест, получите 8 очков, в противном случае - реролл колеса. В перый игровой день, пока места не распределены - получите (5) очков.',
   },
-  'receive-3-percent': {
-    name: 'Деньги то, видит Бог, небольшие',
-    picture: `${import.meta.env.BASE_URL}assets/cards/receive-3-percent.png`,
-    description: 'Получите 4 очков.',
-  },
+  // 'receive-3-percent': {
+  //   name: 'Деньги то, видит Бог, небольшие',
+  //   picture: `${import.meta.env.BASE_URL}assets/cards/receive-3-percent.png`,
+  //   description: 'Получите 4 очков.',
+  // },
   'leaders-lose-percents': {
     name: 'А вот это явно не моя проблема',
     picture: `${import.meta.env.BASE_URL}assets/cards/leaders-lose-percents.png`,
@@ -1246,7 +1246,7 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
     description: 'Реролл этого колеса, плюс один дополнительный ролл.',
   },
   'lose-card-or-3-percent': {
-    name: 'Явно не моя проблема',
+    name: 'Просто не повезло',
     picture: `${import.meta.env.BASE_URL}assets/cards/lose-card-or-3-percent.png`,
     description: 'Игрок теряет случайную карточку; если карточек нет, потеря (6) очков.',
   },

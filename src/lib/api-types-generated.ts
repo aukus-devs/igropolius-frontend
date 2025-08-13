@@ -42,7 +42,6 @@ export type BonusCardType =
   | "receive-1-percent-from-all"
   | "receive-scores-for-place"
   | "receive-5-percent-or-reroll"
-  | "receive-3-percent"
   | "leaders-lose-percents"
   | "receive-1-percent-plus-20"
   | "upgrade-next-building"
@@ -60,7 +59,6 @@ export type InstantCardType =
   | "receive-1-percent-from-all"
   | "receive-scores-for-place"
   | "receive-5-percent-or-reroll"
-  | "receive-3-percent"
   | "leaders-lose-percents"
   | "receive-1-percent-plus-20"
   | "upgrade-next-building"
@@ -183,7 +181,7 @@ export type Limit = number;
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "InstantCardResult".
  */
-export type InstantCardResult = "reroll" | "card-lost" | "score-received" | "scores-lost";
+export type InstantCardResult = "reroll" | "card-lost" | "score-change";
 export type Username1 = string;
 export type Password = string;
 export type Token = string;
@@ -326,6 +324,7 @@ export type PlayerId4 = number;
 export type SectorId8 = number | null;
 export type ModelName1 = string;
 export type Color1 = string;
+export type ScoreChange = number | null;
 
 export interface ApiSchema {
   [k: string]: unknown;
@@ -875,4 +874,5 @@ export interface UseInstantCardRequest {
  */
 export interface UseInstantCardResponse {
   result?: InstantCardResult | null;
+  score_change?: ScoreChange;
 }

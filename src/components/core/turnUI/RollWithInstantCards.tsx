@@ -5,7 +5,11 @@ import GenericRoller, { WeightedOption } from './GenericRoller';
 import { activateInstantCard, giveBonusCard } from '@/lib/api';
 import { useCallback, useMemo, useState } from 'react';
 import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
-import { InstantCardResult, InstantCardType, MainBonusCardType } from '@/lib/api-types-generated';
+import {
+  InstantCardType,
+  MainBonusCardType,
+  UseInstantCardResponse,
+} from '@/lib/api-types-generated';
 import useSystemStore from '@/stores/systemStore';
 
 type InstantCard = {
@@ -32,7 +36,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     }))
   );
 
-  const [activationResult, setActivationResult] = useState<InstantCardResult | null>(null);
+  const [activationResult, setActivationResult] = useState<UseInstantCardResponse | null>(null);
   const [moveToCardDrop, setMoveToCardDrop] = useState<boolean>(false);
   const [rollFinished, setRollFinished] = useState(false);
 
@@ -50,7 +54,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
           return;
         }
         const response = await activateInstantCard({ card_type: option.value.instant });
-        setActivationResult(response.result ?? null);
+        setActivationResult(response);
         resetCurrentPlayerQuery();
         resetPlayersQuery();
       } else if (isBonusCard(option.value)) {
@@ -66,14 +70,19 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
       let activationText = '';
       if (rollFinished) {
         if (
-          activationResult === 'reroll' &&
+          activationResult?.result === 'reroll' &&
           option.value.instant !== 'reroll' &&
           option.value.instant !== 'reroll-and-roll'
         ) {
           activationText = ': выпал реролл';
         }
-        if (activationResult === 'score-received') {
-          activationText = ': получено 5% от своего счёта';
+        if (activationResult?.result === 'score-change') {
+          const amount = activationResult.score_change ?? 0;
+          if (amount > 0) {
+            activationText = `: получено +${amount}`;
+          } else if (amount < 0) {
+            activationText = `: потеряно ${Math.abs(amount)}`;
+          }
         }
       }
 
@@ -137,7 +146,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
   let finishText = 'Готово';
   if (moveToCardDrop) {
     finishText = 'Перейти к дропу карточки';
-  } else if (activationResult === 'reroll') {
+  } else if (activationResult?.result === 'reroll') {
     finishText = 'Реролл';
   }
 
@@ -145,7 +154,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     setRollFinished(false);
     if (moveToCardDrop) {
       onClose('drop');
-    } else if (activationResult === 'reroll') {
+    } else if (activationResult?.result === 'reroll') {
       onClose('reroll');
     } else {
       onClose();
