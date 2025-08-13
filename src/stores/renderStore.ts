@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import useCanvasTooltipStore from './canvasTooltipStore';
 
 interface RenderStore {
     shouldRender3D: boolean;
@@ -9,7 +10,15 @@ interface RenderStore {
 
 const useRenderStore = create<RenderStore>((set) => ({
     shouldRender3D: true,
-    setShouldRender3D: (shouldRender) => set({ shouldRender3D: shouldRender }),
+    setShouldRender3D: (shouldRender) => {
+        set({ shouldRender3D: shouldRender });
+
+        if (!shouldRender) {
+            const tooltipStore = useCanvasTooltipStore.getState();
+            tooltipStore.dismiss();
+            tooltipStore.unpin();
+        }
+    },
     activeTab: 'map',
     setActiveTab: (tab) => set({ activeTab: tab }),
 }));
