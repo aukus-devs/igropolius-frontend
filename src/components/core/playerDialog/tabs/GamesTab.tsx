@@ -8,7 +8,7 @@ import useScrollStyler from '@/hooks/useScrollStyler';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router';
 import { useIsMobile } from '@/hooks/use-mobile';
-import GamesHistoryDialog from '../GamesHistoryDialog';
+import GamesHistoryDialog from '../../mobile/tabs/GamesHistoryDialog';
 
 function ReviewsTab({ player }: { player: PlayerDetails }) {
   const { onRender, style, stuck } = useScrollStyler();

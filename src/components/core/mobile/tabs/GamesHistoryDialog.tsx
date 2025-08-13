@@ -8,7 +8,7 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import GamesHistoryContent from '../quickMenu/options/GamesHistoryContent';
+import GamesHistoryContent from '../../quickMenu/options/GamesHistoryContent';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ArrowLeft } from '@/components/icons';
 import { ReactNode } from 'react';
@@ -42,7 +42,7 @@ export default function GamesHistoryDialog({
           )}
         >
           <ArrowLeft />
-          <span>Назад</span>
+          <span>Назад к списку</span>
         </DialogClose>
         <ScrollArea className="h-full w-full overflow-auto">
           <DialogHeader className="pt-5 px-5 mb-[20px]">
