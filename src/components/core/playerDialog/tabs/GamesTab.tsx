@@ -52,18 +52,20 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
         style={style}
         ref={onRender}
       >
-        <SearchIcon
-          className="absolute left-7 top-4.5 -translate-y-1/2 text-muted-foreground"
-          size="1rem"
-        />
-        <Input
-          id="search"
-          type="text"
-          className="pl-8 font-roboto-wide-semibold bg-[#575b58] border-none"
-          placeholder="Поиск по играм"
-          onKeyDown={e => e.stopPropagation()}
-          onChange={e => setSearchText(e.target.value)}
-        />
+        <div className="relative">
+          <SearchIcon
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            size="1rem"
+          />
+          <Input
+            id="search"
+            type="text"
+            className="pl-8 font-roboto-wide-semibold bg-[#575b58] border-none"
+            placeholder="Поиск по играм"
+            onKeyDown={e => e.stopPropagation()}
+            onChange={e => setSearchText(e.target.value)}
+          />
+        </div>
         {isMobile ? (
           <GamesHistoryDialog
             open={historyDialogOpen}
