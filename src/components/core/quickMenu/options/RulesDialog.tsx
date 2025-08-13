@@ -13,13 +13,14 @@ import useUrlPath from '@/hooks/useUrlPath';
 import useRules from '@/hooks/useRules';
 import { formatTsToFullDate } from '@/lib/utils';
 import useRenderStore from '@/stores/renderStore';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 function RulesDialog({ className }: { className?: string }) {
   const { activate, pathActive } = useUrlPath('/rules');
   const setShouldRender3D = useRenderStore(state => state.setShouldRender3D);
   const isMobile = useIsMobile();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const { rules } = useRules();
   const createdTime = rules?.created_at ? formatTsToFullDate(rules.created_at) : null;
@@ -39,7 +40,7 @@ function RulesDialog({ className }: { className?: string }) {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[600px] h-[calc(100dvh_-_74px)] p-0" aria-describedby="">
-        <ScrollArea className="h-full w-full overflow-auto">
+        <ScrollArea className="h-full w-full overflow-auto" ref={scrollAreaRef}>
           <DialogHeader className="w-full px-5 pt-5 relative">
             <DialogTitle className="flex flex-col font-wide-black text-[2rem]">
               Правила <span className="text-primary">Игрополиуса</span>
@@ -49,7 +50,7 @@ function RulesDialog({ className }: { className?: string }) {
             </div>
           </DialogHeader>
           <div className="mt-[30px] mb-20">
-            <RulesTabs />
+            <RulesTabs scrollAreaRef={scrollAreaRef} />
           </div>
         </ScrollArea>
       </DialogContent>
