@@ -517,7 +517,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     clearError();
 
     try {
-      await doSendReview(scores.total);
+      await doSendReview();
     } catch (error) {
       console.error('Failed to submit review:', error);
       return;
