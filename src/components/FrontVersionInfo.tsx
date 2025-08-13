@@ -4,7 +4,7 @@ export default function FrontVersionInfo() {
       className="flex flex-col items-start p-1 text-xs text-white/80 bg-black/60 select-none"
       id="front-version-info"
     >
-      Версия: {import.meta.env.PACKAGE_VERSION}
+      v.{import.meta.env.PACKAGE_VERSION}
     </div>
   );
 }
