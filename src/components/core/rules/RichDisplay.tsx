@@ -324,7 +324,10 @@ function BlockChild({ op }: { op: Op }) {
 
   const insertValues = op.insert.split('\n');
   return (
-    <SpanElement style={style} {...additionalProps}>
+    <SpanElement
+      style={{ ...style, wordBreak: 'break-word', overflowWrap: 'break-word' }}
+      {...additionalProps}
+    >
       {insertValues.map((v, idx) => {
         const isFirst = idx === 0;
         return (
