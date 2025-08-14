@@ -82,6 +82,9 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
     player
   );
   const cardInfo = bonusType ? bonusCardsData[bonusType] : null;
+  const cardScoreMultiplier =
+    event.subtype === 'instant-card' ? event.instant_card_score_multiplier : null;
+
   const isScoreChangeEvent = event.event_type === 'score-change';
   const isMoveEvent = event.event_type === 'player-move';
   const moveEvent = isMoveEvent ? (event as MoveEvent) : null;
@@ -109,7 +112,7 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
             </TooltipTrigger>
             {cardInfo && (
               <TooltipContent className="w-fit max-w-60">
-                {getCardDescription(cardInfo)}
+                {getCardDescription(cardInfo, cardScoreMultiplier)}
               </TooltipContent>
             )}
           </Tooltip>

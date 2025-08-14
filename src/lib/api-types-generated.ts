@@ -71,6 +71,7 @@ export type InstantCardType =
 export type SectorId = number | null;
 export type StolenFromPlayer = number | null;
 export type StolenBy = number | null;
+export type InstantCardScoreMultiplier = number | null;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "NotificationType".
@@ -284,6 +285,7 @@ export type ScoreBefore = number;
 export type ScoreAfter = number;
 export type IncomeFromPlayer = number | null;
 export type BonusCardOwner = number | null;
+export type InstantCardScoreMultiplier1 = number | null;
 export type Events = (GameEvent | BonusCardEvent | ScoreChangeEvent | MoveEvent)[];
 export type Players = PlayerDetails[];
 export type PrisonCards = MainBonusCardType[];
@@ -349,6 +351,7 @@ export interface BonusCardEvent {
   sector_id?: SectorId;
   stolen_from_player?: StolenFromPlayer;
   stolen_by?: StolenBy;
+  instant_card_score_multiplier?: InstantCardScoreMultiplier;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -708,6 +711,7 @@ export interface ScoreChangeEvent {
   income_from_player?: IncomeFromPlayer;
   bonus_card?: BonusCardType | null;
   bonus_card_owner?: BonusCardOwner;
+  instant_card_score_multiplier?: InstantCardScoreMultiplier1;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

@@ -1263,7 +1263,7 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
   'receive-scores-for-active-cards': {
     name: 'Коллекционер',
     description:
-      'Получите количество очков, равное удвоенному количеству ваших карточек умнному на (1+{X}). Если карточек нет - реролл колеса.',
+      'Получите количество очков, равное удвоенному количеству ваших карточек умноженному на 1+{X}. Если карточек нет - реролл колеса.',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-scores-for-active-cards.png`,
   },
 };

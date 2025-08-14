@@ -578,7 +578,12 @@ export function create7tvEmoteUrl(emoteId: string): string {
   return `${SEVENTV_EMOTE_BASE_URL}/${emoteId}/2x.webp`;
 }
 
-export function getCardDescription(card: FrontendCardData): string {
-  const scoreMultiplier = useSystemStore.getState().instantCardScoreMultiplier;
+export function getCardDescription(
+  card: FrontendCardData,
+  scoreMultiplier?: number | null
+): string {
+  if (!scoreMultiplier) {
+    scoreMultiplier = useSystemStore.getState().instantCardScoreMultiplier;
+  }
   return card.description.replace('{X}', String(scoreMultiplier));
 }
