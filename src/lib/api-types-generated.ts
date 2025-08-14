@@ -307,7 +307,6 @@ export type Title1 = string;
 export type Review1 = string;
 export type Rating2 = number;
 export type VodLinks2 = string | null;
-export type Scores3 = number;
 export type GameId2 = number | null;
 export type NewSectorId2 = number;
 export type EventStartTime = number | null;
@@ -783,7 +782,6 @@ export interface SavePlayerGameRequest {
   rating: Rating2;
   length: GameLength;
   vod_links?: VodLinks2;
-  scores: Scores3;
   game_id?: GameId2;
 }
 /**

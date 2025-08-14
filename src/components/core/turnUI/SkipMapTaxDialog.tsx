@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { activateBonusCard } from '@/lib/api';
 import { resetNotificationsQuery } from '@/lib/queryClient';
-import { MapTaxPercent } from '@/lib/constants';
+import { MapTaxPercent, MinMapTax } from '@/lib/constants';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 
@@ -13,7 +13,9 @@ export default function SkipMapTaxDialog() {
       const myPlayer = state.myPlayer;
       let taxAmount = '0';
       if (myPlayer) {
-        taxAmount = (myPlayer.total_score * MapTaxPercent).toFixed(2);
+        const taxBase = Math.abs(myPlayer.total_score) * MapTaxPercent;
+        const amount = Math.max(taxBase, MinMapTax);
+        taxAmount = amount.toFixed(2);
       }
       return {
         taxAmount,

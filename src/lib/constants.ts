@@ -78,9 +78,10 @@ export const ScoreByGameLength: { [key in GameLength]: number } = {
 };
 
 export const IncomeScoreMultiplier = 0.5;
-export const IncomeScoreGroupOwnerMultiplier = 0.8;
+export const IncomeScoreGroupOwnerMultiplier = 1;
 export const TaxScoreMultiplier = 0.5;
 export const MapTaxPercent = 0.1; // 10%
+export const MinMapTax = 10;
 
 export const SectorScoreMultiplier: { [key in SectorData['type']]: number } = {
   'start-corner': 1.5,

@@ -23,7 +23,7 @@ const useReviewFormStore = create<{
   setGameReview: (value: string) => void;
   setVodLinks: (value: string) => void;
   setSelectedGame: (game: IgdbGameSummary | null) => void;
-  sendReview: (scores: number) => Promise<void>;
+  sendReview: () => Promise<void>;
   getReviewScores: (params: { sectorId: number; mapsCompleted: number }) => ScoreDetails;
   clearError: () => void;
   open: boolean;
@@ -49,7 +49,7 @@ const useReviewFormStore = create<{
   setVodLinks: value => set({ vodLinks: value }),
   setSelectedGame: game => set({ selectedGame: game }),
   clearError: () => set({ error: null }),
-  sendReview: async (scores: number) => {
+  sendReview: async () => {
     const { rating, gameTitle, gameTime, gameStatus, gameReview, vodLinks, selectedGame } = get();
 
     if (!gameStatus) {
@@ -67,7 +67,6 @@ const useReviewFormStore = create<{
         rating,
         review: gameReview,
         length,
-        scores,
         vod_links: vodLinks || undefined,
         game_id: selectedGame?.id || null,
       });
