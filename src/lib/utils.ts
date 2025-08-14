@@ -585,5 +585,5 @@ export function getCardDescription(
   if (!scoreMultiplier) {
     scoreMultiplier = useSystemStore.getState().instantCardScoreMultiplier;
   }
-  return card.description.replace('{X}', String(scoreMultiplier));
+  return card.description.replaceAll('{X}', String(scoreMultiplier));
 }
