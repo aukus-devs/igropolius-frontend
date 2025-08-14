@@ -4,6 +4,7 @@ import {
   GameLengthRange,
   PlayerStateAction,
   SectorData,
+  TaxData,
 } from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -586,4 +587,24 @@ export function getCardDescription(
     scoreMultiplier = useSystemStore.getState().instantCardScoreMultiplier;
   }
   return card.description.replaceAll('{X}', String(scoreMultiplier));
+}
+
+export function getTaxCalculationText(taxInfo: TaxData, myPlayerId?: number): string {
+  const otherPlayersOnSector = Object.entries(taxInfo.playerIncomes).filter(
+    ([playerId]) => Number(playerId) !== myPlayerId
+  );
+
+  const myIncome = Object.entries(taxInfo.playerIncomes).find(
+    ([playerId]) => Number(playerId) === myPlayerId
+  );
+
+  const taxSum = otherPlayersOnSector.map(([_playerId, amount]) => amount / 2).join(' + ');
+  if (myIncome) {
+    const myAmount = myIncome[1];
+    if (taxSum === '') {
+      return `-${myAmount}`;
+    }
+    return [taxSum, myAmount].join(' - ');
+  }
+  return taxSum;
 }

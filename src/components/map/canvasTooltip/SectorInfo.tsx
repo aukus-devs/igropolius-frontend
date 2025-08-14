@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { frontendCardsData } from '@/lib/mockData';
 import { SectorData } from '@/lib/types';
-import { getGameLengthFullText } from '@/lib/utils';
+import { getGameLengthFullText, getTaxCalculationText } from '@/lib/utils';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
@@ -35,18 +35,7 @@ function SectorInfo({ sector }: Props) {
   const showTax = canBuildOnSector(sector.type);
   let calculationText = '';
   if (showTax) {
-    const otherPlayersOnSector = Object.entries(taxInfo.playerIncomes).filter(
-      ([playerId]) => Number(playerId) !== myPlayer?.id
-    );
-
-    const myIncome = Object.entries(taxInfo.playerIncomes).find(
-      ([playerId]) => Number(playerId) === myPlayer?.id
-    );
-
-    calculationText = otherPlayersOnSector.map(([_playerId, amount]) => amount / 2).join(' + ');
-    if (myIncome) {
-      calculationText += ` - ${myIncome[1]}`;
-    }
+    calculationText = getTaxCalculationText(taxInfo, myPlayer?.id);
   }
 
   const showPrisonCards = sector.type === 'prison';

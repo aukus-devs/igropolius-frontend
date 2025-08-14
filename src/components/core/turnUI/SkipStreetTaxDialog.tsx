@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { activateBonusCard } from '@/lib/api';
 import { resetNotificationsQuery } from '@/lib/queryClient';
 import { TaxData } from '@/lib/types';
+import { getTaxCalculationText } from '@/lib/utils';
 import usePlayerStore from '@/stores/playerStore';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/shallow';
@@ -50,14 +51,7 @@ export default function SkipStreetTaxDialog() {
     ([playerId]) => Number(playerId) !== myPlayer?.id
   );
 
-  const myIncome = Object.entries(taxInfo.playerIncomes).find(
-    ([playerId]) => Number(playerId) === myPlayer?.id
-  );
-
-  let calculationText = otherPlayersOnSector.map(([_playerId, amount]) => amount / 2).join(' + ');
-  if (myIncome) {
-    calculationText += ` - ${myIncome[1]}`;
-  }
+  const calculationText = getTaxCalculationText(taxInfo, myPlayer?.id);
 
   return (
     <Card className="p-4">
