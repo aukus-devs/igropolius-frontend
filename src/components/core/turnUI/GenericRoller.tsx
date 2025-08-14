@@ -388,7 +388,10 @@ export default function GenericRoller<T>({
           </div>
         </div>
         {rollPhase === 'idle' && (
-          <Button className="absolute w-[300px] rounded-xl bottom-[25%]" onClick={handleRollClick}>
+          <Button
+            className="absolute w-[300px] rounded-xl bottom-[25%] text-[16px]"
+            onClick={handleRollClick}
+          >
             Заролить
           </Button>
         )}
