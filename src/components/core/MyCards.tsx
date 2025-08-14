@@ -11,6 +11,7 @@ import { activateBonusCard } from '@/lib/api';
 import { resetPlayersQuery } from '@/lib/queryClient';
 import { MainBonusCardType } from '@/lib/api-types-generated';
 import ImageLoader from './ImageLoader';
+import { getCardDescription } from '@/lib/utils';
 
 export default function MyCards() {
   const { myCards, turnState, buildingBonus } = usePlayerStore(
@@ -77,7 +78,7 @@ export default function MyCards() {
                   <div className="w-[200px]">
                     <div className="text-[20px] font-semibold mb-2 leading-6">{cardData.name}</div>
                     <div className="text-base font-semibold text-muted-foreground leading-[19px]">
-                      {cardData.description}
+                      {getCardDescription(cardData)}
                     </div>
                     {canBeUsed && (
                       <div className="mt-2 w-full">

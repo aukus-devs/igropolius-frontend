@@ -1,4 +1,10 @@
-import { EventDescription, GameLengthRange, PlayerStateAction, SectorData } from '@/lib/types';
+import {
+  EventDescription,
+  FrontendCardData,
+  GameLengthRange,
+  PlayerStateAction,
+  SectorData,
+} from '@/lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { bonusCardsData, frontendCardsData, SectorsById } from './mockData';
@@ -24,6 +30,7 @@ import {
   ScoreChangeEvent,
 } from './api-types-generated';
 import { canBuildOnSector } from '@/components/map/utils';
+import useSystemStore from '@/stores/systemStore';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -569,4 +576,9 @@ export function extract7tvEmoteId(emoteUrl: string): string | null {
 
 export function create7tvEmoteUrl(emoteId: string): string {
   return `${SEVENTV_EMOTE_BASE_URL}/${emoteId}/2x.webp`;
+}
+
+export function getCardDescription(card: FrontendCardData): string {
+  const scoreMultiplier = useSystemStore.getState().instantCardScoreMultiplier;
+  return card.description.replace('{X}', String(scoreMultiplier));
 }

@@ -11,6 +11,7 @@ import {
   UseInstantCardResponse,
 } from '@/lib/api-types-generated';
 import useSystemStore from '@/stores/systemStore';
+import { getCardDescription } from '@/lib/utils';
 
 type InstantCard = {
   instant: InstantCardType;
@@ -100,11 +101,11 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
 
   const getSecondaryText = (option: WeightedOption<OptionType>) => {
     if (isInstantCard(option.value)) {
-      const description = frontendInstantCardsData[option.value.instant].description;
+      const description = getCardDescription(frontendInstantCardsData[option.value.instant]);
       return `Активируется автоматически: ${description}`;
     }
     if (isBonusCard(option.value)) {
-      return frontendCardsData[option.value.card].description;
+      return getCardDescription(frontendCardsData[option.value.card]);
     }
     return 'Неизвестный тип карточки' as never;
   };

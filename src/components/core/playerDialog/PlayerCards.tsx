@@ -5,6 +5,7 @@ import { frontendCardsData } from '@/lib/mockData';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 import ImageLoader from '../ImageLoader';
+import { getCardDescription } from '@/lib/utils';
 
 type Props = {
   player: PlayerDetails;
@@ -70,7 +71,9 @@ function PlayerCard({
         sideOffset={8}
       >
         <div className="text-[20px] font-semibold mb-2 leading-6">{cardData.name}</div>
-        <div className="text-base font-semibold text-muted-foreground leading-[19px]">{cardData.description}</div>
+        <div className="text-base font-semibold text-muted-foreground leading-[19px]">
+          {getCardDescription(cardData)}
+        </div>
         {canBeStolen && (
           <div className="mt-2 w-full">
             <Button className="w-full" onClick={() => onSelect()}>

@@ -1200,19 +1200,19 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
     name: 'Сюрприз',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-1-percent-from-all.png`,
     description:
-      'В честь вашего дня рождения все другие игроки перечисляют вам очки (3 от каждого).',
+      'В честь вашего дня рождения все другие игроки перечисляют вам очки (3*{X} от каждого).',
   },
   'receive-scores-for-place': {
     name: 'Выбыл, говорите?',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-scores-for-place.png`,
     description:
-      'Получите очки, равные вашему месту в таблице. В перый игровой день, пока места не распределены - получите (5) очков.',
+      'Получите очки, равные вашему месту в таблице (место * {X}). В перый игровой день, пока места не распределены - получите 5 очков.',
   },
   'receive-5-percent-or-reroll': {
     name: 'Тогда бесплатный тостер',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-5-percent-or-reroll.png`,
     description:
-      'Если вы находитесь на одном из трех последних мест, получите 8 очков, в противном случае - потеряйте 4 очка. В перый игровой день, пока места не распределены - получите (5) очков.',
+      'Если вы находитесь на одном из трех последних мест, получите 8*{X} очков, в противном случае - потеряйте 4*{X} очка. В перый игровой день, пока места не распределены - получите 5 очков.',
   },
   // 'receive-3-percent': {
   //   name: 'Деньги то, видит Бог, небольшие',
@@ -1223,17 +1223,17 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
     name: 'А вот это явно не моя проблема',
     picture: `${import.meta.env.BASE_URL}assets/cards/leaders-lose-percents.png`,
     description:
-      'Первые три места в таблице лидеров теряют (5, 4, 3) очков. В перый игровой день, пока места не распределены - получите (5) очков.',
+      'Первые три места в таблице лидеров теряют 5*{X}, 4*{X}, 3*{X} очков. В перый игровой день, пока места не распределены - получите 5 очков.',
   },
   'receive-1-percent-plus-20': {
     name: 'Просто мы нашли резинку',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-1-percent-plus-20.png`,
-    description: 'Получите (20) очков.',
+    description: 'Получите 10*{X} очков.',
   },
   'lose-2-percents': {
     name: 'Плата?',
     picture: `${import.meta.env.BASE_URL}assets/cards/lose-2-percents.png`,
-    description: 'Потеряйте (4) очков.',
+    description: 'Потеряйте 4*{X} очков.',
   },
   reroll: {
     name: 'Вернуться к исходной стадии',
@@ -1248,7 +1248,7 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
   'lose-card-or-3-percent': {
     name: 'Просто не повезло',
     picture: `${import.meta.env.BASE_URL}assets/cards/lose-card-or-3-percent.png`,
-    description: 'Игрок теряет случайную карточку; если карточек нет, потеря (6) очков.',
+    description: 'Игрок теряет случайную карточку; если карточек нет, потеря 6*{X} очков.',
   },
   'upgrade-next-building': {
     name: 'Он собирает установку',
@@ -1263,7 +1263,7 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
   'receive-scores-for-active-cards': {
     name: 'Коллекционер',
     description:
-      'Получите количество очков, равное удвоенному количеству ваших карточек. Если карточек нет - реролл колеса.',
+      'Получите количество очков, равное удвоенному количеству ваших карточек умнному на (1+{X}). Если карточек нет - реролл колеса.',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-scores-for-active-cards.png`,
   },
 };

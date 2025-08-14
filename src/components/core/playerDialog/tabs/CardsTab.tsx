@@ -4,6 +4,7 @@ import { mainCardTypes, frontendCardsData } from '@/lib/mockData';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect, useRef } from 'react';
 import ImageLoader from '../../ImageLoader';
+import { getCardDescription } from '@/lib/utils';
 
 type GameCardProps = {
   type: MainBonusCardType;
@@ -64,7 +65,7 @@ function GameCard({ type, inactive }: GameCardProps) {
             <div className="bg-card/95 backdrop-blur-[1.5rem] p-4 rounded-lg border shadow-lg w-full max-w-sm">
               <div className="text-[16px] font-semibold mb-2">{cardData.name}</div>
               <div className="text-sm font-semibold text-muted-foreground">
-                {cardData.description}
+                {getCardDescription(cardData)}
               </div>
             </div>
           </div>
@@ -94,7 +95,7 @@ function GameCard({ type, inactive }: GameCardProps) {
         >
           <div className="text-[20px] font-semibold mb-2 leading-6">{cardData.name}</div>
           <div className="text-base font-semibold text-muted-foreground leading-[19px]">
-            {cardData.description}
+            {getCardDescription(cardData)}
           </div>
         </TooltipContent>
       </Tooltip>

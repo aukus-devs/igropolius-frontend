@@ -12,6 +12,8 @@ type MainNotification = {
 interface SystemStore {
   eventStartTime: number | null;
   eventEndTime: number | null;
+  instantCardScoreMultiplier: number;
+
   setEventSettings: (settings: EventSettings) => void;
   clearEventSettings: () => void;
   mainNotification: MainNotification | null;
@@ -40,6 +42,7 @@ const useSystemStore = create<SystemStore>((set, get) => ({
   actingUserId: null,
   accessToken: localStorage.getItem('access-token'),
   highlightedSectorId: null,
+  instantCardScoreMultiplier: 1,
 
   setMainNotification: (message: MainNotification | null) => {
     set({ mainNotification: message });
@@ -51,9 +54,14 @@ const useSystemStore = create<SystemStore>((set, get) => ({
       : null;
     const eventEndTime = settings.event_end_time ? parseInt(settings.event_end_time) || null : null;
 
+    const instantCardScoreMultiplier = settings.instant_card_score_multiplier
+      ? parseFloat(settings.instant_card_score_multiplier) || 1
+      : 1;
+
     set({
       eventStartTime,
       eventEndTime,
+      instantCardScoreMultiplier,
     });
   },
 
