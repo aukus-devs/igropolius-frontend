@@ -1320,11 +1320,10 @@ export const CreditsData: CreditsItem[] = [
   { name: 'olegsvs', action: 'фронтенд, бекенд, сервера' },
   { name: 'esouqu', action: 'фронтенд, 3д программирование' },
   { name: 'RomoErectus', action: 'фронтенд, ролл карточек' },
-  { name: 'mapcar', action: 'программирование, огранизация' },
+  { name: 'mapcar', action: 'программирование, организация' },
   { name: 'lepayy', action: 'дизайн интерфейсов' },
   { name: 'Рот в говне (huykakoyto)', action: 'арты карточек, логотипов' },
   { name: 'naknagetss (artnaku)', action: 'дизайн 3д карты' },
   { name: 'ksanich', action: 'дизайн 3д моделек' },
   { name: 'Шестиклассник из ФМЛ 239', action: 'аналитика, баланс' },
-  { name: 'Praden', action: 'идеи, пиар' },
 ].sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));

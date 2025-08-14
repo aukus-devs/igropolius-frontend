@@ -75,6 +75,10 @@ export default function AboutDialog({ className }: Props) {
                   {item.name} — {item.action}
                 </div>
               ))}
+
+              <div className="text-base font-wide-medium mt-5">
+                <span className="text-primary">Praden</span> — геймдизайн, идеи
+              </div>
             </div>
           </div>
 
