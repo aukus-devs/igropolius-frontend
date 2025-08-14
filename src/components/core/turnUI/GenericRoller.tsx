@@ -366,6 +366,8 @@ export default function GenericRoller<T>({
               } else if (item.variant === 'negative') {
                 borderStyle.border = '2px solid #FF453A'; // red
                 borderStyle.borderRadius = '10px';
+              } else {
+                borderStyle.borderRadius = '10px';
               }
               return (
                 <ImageLoader
