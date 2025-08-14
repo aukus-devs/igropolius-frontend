@@ -11,7 +11,12 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircleIcon } from 'lucide-react';
 import { fetchPlayerEvents } from '@/lib/api';
 import { queryKeys } from '@/lib/queryClient';
-import { getEventDescription, getBonusCardName, eventTimeFormat } from '@/lib/utils';
+import {
+  getEventDescription,
+  getBonusCardName,
+  eventTimeFormat,
+  getCardDescription,
+} from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
 import {
@@ -103,7 +108,9 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
               />
             </TooltipTrigger>
             {cardInfo && (
-              <TooltipContent className="w-fit max-w-60">{cardInfo.description}</TooltipContent>
+              <TooltipContent className="w-fit max-w-60">
+                {getCardDescription(cardInfo)}
+              </TooltipContent>
             )}
           </Tooltip>
         )}

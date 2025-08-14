@@ -8,6 +8,7 @@ import { MainBonusCardType, UseInstantCardResponse } from '@/lib/api-types-gener
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import useSystemStore from '@/stores/systemStore';
+import { getCardDescription } from '@/lib/utils';
 
 export default function LoseCardOnDropDialog({
   autoOpen,
@@ -71,7 +72,7 @@ export default function LoseCardOnDropDialog({
   };
 
   const getSecondaryText = (option: WeightedOption<MainBonusCardType>) => {
-    return frontendCardsData[option.value].description;
+    return getCardDescription(frontendCardsData[option.value]);
   };
 
   const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
