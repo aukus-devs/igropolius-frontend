@@ -10,7 +10,7 @@ export const sectorsData: SectorData[] = [
     position: { x: 0, y: 0 },
     type: 'start-corner',
     rollType: 'steam',
-    gameLengthRanges: { min: 3, max: 27 },
+    gameLengthRanges: { min: 3, max: 22 },
   },
   {
     id: 2,
