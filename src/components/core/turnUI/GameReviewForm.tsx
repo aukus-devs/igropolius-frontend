@@ -84,6 +84,8 @@ function GameTime() {
       gameStatus: state.gameStatus,
     }))
   );
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
   const options: GameTimeOption[] = [
     { title: '2-5 ч.', value: '2-5' },
     { title: '6-10 ч.', value: '5-10' },
@@ -93,15 +95,34 @@ function GameTime() {
     { title: '26+ ч.', value: '25+' },
   ];
 
+  const handleValueChange = (value: GameLength) => {
+    setGameTime(value);
+    setTooltipOpen(false);
+    setTimeout(() => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    }, 0);
+  };
+
   return (
     <Select
-      onValueChange={setGameTime}
+      onValueChange={handleValueChange}
       defaultValue={gameTime ?? undefined}
       disabled={gameStatus !== 'completed'}
     >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Время по HLTB" />
-      </SelectTrigger>
+      <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
+        <TooltipTrigger asChild>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Время по HLTB" />
+          </SelectTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          Если игра пройдена более чем в 2 раза быстрее, чем на HLTB,
+          <br />
+          пересчитайте время по формуле: (время HLTB + ваше время прохождения) / 2
+        </TooltipContent>
+      </Tooltip>
       <SelectContent>
         {options.map((option, idx) => (
           <SelectItem key={idx} value={option.value}>
