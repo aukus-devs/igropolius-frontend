@@ -342,7 +342,8 @@ export default function GenericRoller<T>({
         <Button variant="action">{openButtonText}</Button>
       </DialogTrigger>
       <DialogContent
-        className="flex flex-col items-center justify-center w-full min-w-full h-screen md:backdrop-blur-none md:rounded-none m-0 p-0 md:bg-transparent overflow-hidden"
+        disableBackdropBlur
+        className="flex flex-col items-center justify-center w-full min-w-full h-screen backdrop-blur-sm md:rounded-none m-0 p-0 md:bg-transparent overflow-hidden"
         onEscapeKeyDown={e => {
           if (rollPhase === 'rolling') {
             e.preventDefault();
