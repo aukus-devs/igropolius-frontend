@@ -34,50 +34,52 @@ function DesktopUI() {
   const mainNotification = useSystemStore(useShallow(state => state.mainNotification));
 
   return (
-    <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:block hidden">
-      <div className="absolute top-3 left-4">
-        <PlayersList />
-      </div>
-      <div className="absolute right-4 top-3 w-[15rem]">
-        <div className="mb-[50px]">
-          <QuickMenu />
+    <>
+      <div className="absolute inset-0 [&>*]:pointer-events-auto pointer-events-none z-50 overflow-hidden md:block hidden">
+        <div className="absolute top-3 left-4">
+          <PlayersList />
         </div>
-        <div className="mb-3">
-          <DiceErrorNotification />
+        <div className="absolute right-4 top-3 w-[15rem]">
+          <div className="mb-[50px]">
+            <QuickMenu />
+          </div>
+          <div className="mb-3">
+            <DiceErrorNotification />
+          </div>
+          <Notifications />
         </div>
-        <Notifications />
-      </div>
 
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
-        <PlayerTurnUI />
-      </div>
-      {showAdminPanel && (
-        <div className="absolute top-3 right-70">
-          <AdminPanel />
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+          <PlayerTurnUI />
         </div>
-      )}
-      {loggedIn && (
-        <div className="absolute left-4 bottom-5">
-          <span className="text-[#282828] font-roboto-wide-black opacity-70">Мои бонусы</span>
-          <MyCards />
-        </div>
-      )}
-      <div ref={techContainer} className="absolute bottom-0 right-0 flex">
-        {/* <Stats
-            className="!relative h-[13px] scale-150 grayscale-100 overflow-hidden"
-            parent={techContainer!}
-            /> */}
-        {position && (
-          <div className="relative text-xs text-white/80 bg-black/60 p-1">
-            #{position} ход: {turnState}
+        {showAdminPanel && (
+          <div className="absolute top-3 right-70">
+            <AdminPanel />
           </div>
         )}
-        <FrontVersionInfo />
+        {loggedIn && (
+          <div className="absolute left-4 bottom-5">
+            <span className="text-[#282828] font-roboto-wide-black opacity-70">Мои бонусы</span>
+            <MyCards />
+          </div>
+        )}
+        <div ref={techContainer} className="absolute bottom-0 right-0 flex">
+          {/* <Stats
+              className="!relative h-[13px] scale-150 grayscale-100 overflow-hidden"
+              parent={techContainer!}
+              /> */}
+          {position && (
+            <div className="relative text-xs text-white/80 bg-black/60 p-1">
+              #{position} ход: {turnState}
+            </div>
+          )}
+          <FrontVersionInfo />
+        </div>
       </div>
 
       {mainNotification && (
         <Card
-          className={`absolute top-3 left-1/2 -translate-x-1/2 max-w-2xl ${
+          className={`absolute top-3 left-1/2 -translate-x-1/2 max-w-2xl z-[9999] pointer-events-auto ${
             mainNotification.variant === 'error'
               ? 'bg-destructive/90 text-white border-destructive'
               : ''
@@ -97,7 +99,7 @@ function DesktopUI() {
           </div>
         </Card>
       )}
-    </div>
+    </>
   );
 }
 
