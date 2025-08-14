@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 export default function SkipStreetTaxDialog() {
-  const { taxInfo, players, payTaxes, setNextTurnState, dataLoaded } = usePlayerStore(
+  const { taxInfo, players, payTaxes, setNextTurnState, dataLoaded, myPlayer } = usePlayerStore(
     useShallow(state => {
       const myPlayer = state.myPlayer;
       let taxInfo: TaxData = {
@@ -25,6 +25,7 @@ export default function SkipStreetTaxDialog() {
         payTaxes: state.payTaxesAndSwitchState,
         setNextTurnState: state.setNextTurnState,
         dataLoaded: myPlayer?.sector_id && state.players.length > 0,
+        myPlayer,
       };
     })
   );
@@ -45,15 +46,30 @@ export default function SkipStreetTaxDialog() {
     await setNextTurnState({ action: 'skip-bonus' });
   };
 
+  const otherPlayersOnSector = Object.entries(taxInfo.playerIncomes).filter(
+    ([playerId]) => Number(playerId) !== myPlayer?.id
+  );
+
+  const myIncome = Object.entries(taxInfo.playerIncomes).find(
+    ([playerId]) => Number(playerId) === myPlayer?.id
+  );
+
+  let calculationText = otherPlayersOnSector.map(([playerId, amount]) => amount / 2).join(' + ');
+  if (myIncome) {
+    calculationText += ` - ${myIncome[1]}`;
+  }
+
   return (
     <Card className="p-4">
       <span className="font-wide-semibold">Уйти от налога на секторе?</span>
       <div className="flex mt-2 mb-2 items-center">
         Налог на секторе: {taxInfo.taxAmount} <Share />
+        &nbsp;&nbsp;&nbsp;
+        <span className="text-muted-foreground">({calculationText})</span>
       </div>
       <div>
         Доход получат:
-        {Object.entries(taxInfo.playerIncomes).map(([playerId, amount], index) => {
+        {otherPlayersOnSector.map(([playerId, amount], index) => {
           const playerIdNum = Number(playerId);
           const player = players.find(p => p.id === playerIdNum);
           return (

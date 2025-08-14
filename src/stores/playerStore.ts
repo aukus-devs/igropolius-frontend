@@ -246,10 +246,17 @@ const usePlayerStore = create<{
         buildings[building.sector_id].push(buildingData);
 
         if (player.id === myPlayerId) {
-          continue;
+          taxData.taxAmount -= income;
+        } else {
+          taxData.taxAmount += income * TaxScoreMultiplier;
         }
+      }
+    }
 
-        taxData.taxAmount += income * TaxScoreMultiplier;
+    for (const sector in taxPerSector) {
+      const taxData = taxPerSector[sector];
+      if (taxData.taxAmount < 0) {
+        taxData.taxAmount = 0; // Ensure tax amount is not negative
       }
     }
 
