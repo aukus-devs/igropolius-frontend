@@ -70,15 +70,14 @@ export default function AboutDialog({ className }: Props) {
           </div>
           <div className="pb-5">
             <div className="flex gap-2 flex-col">
+              <div className="text-base font-wide-medium">
+                <span className="text-primary">Praden</span> — геймдизайн, идеи
+              </div>
               {CreditsData.map(item => (
                 <div key={item.name} className="text-base font-wide-medium">
                   {item.name} — {item.action}
                 </div>
               ))}
-
-              <div className="text-base font-wide-medium mt-5">
-                <span className="text-primary">Praden</span> — геймдизайн, идеи
-              </div>
             </div>
           </div>
 
