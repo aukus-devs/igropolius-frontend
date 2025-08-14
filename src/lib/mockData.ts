@@ -709,7 +709,7 @@ export const playersData: PlayerDetails[] = [
     current_auc_total_sum: null,
     pointauc_token: 'abc',
     url_handle: 'player-3',
-    color: playerColors.lavander,
+    color: playerColors.brown,
     model_name: '/cars/race-future1.glb',
 
     main_platform: 'twitch',

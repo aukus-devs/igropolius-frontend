@@ -30,13 +30,14 @@ export const playerColors = {
   blue: '#007AFF',
   green: '#34C759',
   pink: '#ECA3D4',
-  orange: '#E58600',
+  orange: '#FF8D28',
   purple: '#AF52DE',
   darkBlue: '#5856D6',
-  red: '#FF3B30',
-  brown: '#A2845E',
+  red: '#E8142C',
+  brown: '#AC7F5E',
+  yellow: '#F2C200',
+  lightBlue: '#32ADE6',
   brightPink: '#FF2D55',
-  lavander: '#AF99DF',
 } as const;
 
 // export type PlayerColor = keyof typeof playerColors;
