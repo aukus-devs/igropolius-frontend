@@ -24,14 +24,30 @@ function SectorInfo({ sector }: Props) {
   const isMobile = useIsMobile();
   const unpin = useCanvasTooltipStore(state => state.unpin);
   const dismiss = useCanvasTooltipStore(state => state.dismiss);
-  const { taxInfo, prisonCards, canSelectBuildingSector } = usePlayerStore(
+  const { taxInfo, prisonCards, canSelectBuildingSector, myPlayer } = usePlayerStore(
     useShallow(state => ({
       taxInfo: state.taxPerSector[id],
       prisonCards: sector.type === 'prison' ? state.prisonCards : null,
       canSelectBuildingSector: state.canSelectBuildingSector,
+      myPlayer: state.myPlayer,
     }))
   );
   const showTax = canBuildOnSector(sector.type);
+  let calculationText = '';
+  if (showTax) {
+    const otherPlayersOnSector = Object.entries(taxInfo.playerIncomes).filter(
+      ([playerId]) => Number(playerId) !== myPlayer?.id
+    );
+
+    const myIncome = Object.entries(taxInfo.playerIncomes).find(
+      ([playerId]) => Number(playerId) === myPlayer?.id
+    );
+
+    calculationText = otherPlayersOnSector.map(([_playerId, amount]) => amount / 2).join(' + ');
+    if (myIncome) {
+      calculationText += ` - ${myIncome[1]}`;
+    }
+  }
 
   const showPrisonCards = sector.type === 'prison';
   const prisonCardsList = prisonCards ?? [];
@@ -78,6 +94,9 @@ function SectorInfo({ sector }: Props) {
             <div className="flex items-center">
               <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
               <Share className="w-4 h-4" />
+              {calculationText && (
+                <span className="text-muted-foreground">&nbsp;&nbsp;({calculationText})</span>
+              )}
             </div>
           )}
           {showPrisonCards && (

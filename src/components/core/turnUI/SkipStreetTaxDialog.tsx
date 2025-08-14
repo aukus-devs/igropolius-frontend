@@ -54,7 +54,7 @@ export default function SkipStreetTaxDialog() {
     ([playerId]) => Number(playerId) === myPlayer?.id
   );
 
-  let calculationText = otherPlayersOnSector.map(([playerId, amount]) => amount / 2).join(' + ');
+  let calculationText = otherPlayersOnSector.map(([_playerId, amount]) => amount / 2).join(' + ');
   if (myIncome) {
     calculationText += ` - ${myIncome[1]}`;
   }
