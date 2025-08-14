@@ -1319,7 +1319,7 @@ type CreditsItem = {
 export const CreditsData: CreditsItem[] = [
   { name: 'olegsvs', action: 'фронтенд, бекенд, сервера' },
   { name: 'esouqu', action: 'фронтенд, 3д программирование' },
-  { name: 'junkratc', action: 'фронтенд, ролл карточек' },
+  { name: 'RomoErectus', action: 'фронтенд, ролл карточек' },
   { name: 'mapcar', action: 'программирование, огранизация' },
   { name: 'lepayy', action: 'дизайн интерфейсов' },
   { name: 'Рот в говне (huykakoyto)', action: 'арты карточек, логотипов' },
