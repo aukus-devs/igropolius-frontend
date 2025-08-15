@@ -1324,6 +1324,6 @@ export const CreditsData: CreditsItem[] = [
   { name: 'lepayy', action: 'дизайн интерфейсов' },
   { name: 'Рот в говне (huykakoyto)', action: 'арты карточек, логотипов' },
   { name: 'naknagetss (artnaku)', action: 'дизайн 3д карты' },
-  { name: 'ksanich', action: 'дизайн 3д моделек' },
+  { name: 'ksanich', action: 'дизайн 3д моделек, видос' },
   { name: 'Шестиклассник из ФМЛ 239', action: 'аналитика, баланс' },
 ].sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
