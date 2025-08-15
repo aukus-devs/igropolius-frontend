@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import GamesHistory from './options/GamesHistory';
 import SvgProfile from '@/components/icons/Profile';
+import DonationGoalCalculatorDialog from './options/DonationGoalCalculatorDialog';
 
 const buttonStyle =
   'flex items-center justify-start max-h-9 bg-transparent font-semibold text-base w-full rounded-none border-none px-3 py-2';
@@ -89,6 +90,8 @@ function QuickMenu() {
           <RulesDialog className={buttonStyle} />
           <Separator />
           <GamesHistory className={buttonStyle} />
+          <Separator />
+          <DonationGoalCalculatorDialog className={buttonStyle} />
           <Separator />
           <AboutDialog className={buttonStyle} />
         </div>

@@ -3,6 +3,7 @@ export { default as ArrowLeft } from "./ArrowLeft";
 export { default as ArrowRight } from "./ArrowRight";
 export { default as ArrowUp } from "./ArrowUp";
 export { default as Box } from "./Box";
+export { default as Calculator } from "./Calculator";
 export { default as ChevronDown } from "./ChevronDown";
 export { default as ChevronRight } from "./ChevronRight";
 export { default as ChevronUp } from "./ChevronUp";
