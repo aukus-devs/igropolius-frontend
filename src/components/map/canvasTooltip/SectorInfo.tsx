@@ -88,27 +88,30 @@ function SectorInfo({ sector }: Props) {
                 <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
                 <Share className="w-4 h-4" />
               </div>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {Object.entries(otherIncomes).map(([playerId, num], idx) => {
-                  const player = usePlayerStore
-                    .getState()
-                    .players.find(p => String(p.id) === playerId);
-                  if (!player) return null;
-                  return (
-                    <div
-                      key={idx}
-                      className="w-10 flex justify-center bg-red-500/30 text-red-400 rounded-md"
-                    >
-                      {num / 2}
+              {(otherIncomes.length > 0 || myIncome) && (
+                <div className="mt-1 flex flex-wrap gap-2">
+                  {Object.entries(otherIncomes).map(([playerId, num], idx) => {
+                    const player = usePlayerStore
+                      .getState()
+                      .players.find(p => String(p.id) === playerId);
+                    if (!player) return null;
+                    return (
+                      <div
+                        key={idx}
+                        className="w-10 flex justify-center bg-red-500/30 text-red-400 rounded-md"
+                      >
+                        {num / 2}
+                      </div>
+                    );
+                  })}
+
+                  {myIncome !== undefined && (
+                    <div className="w-10 flex justify-center bg-green-500/30 text-green-400 rounded-md">
+                      {myIncome}
                     </div>
-                  );
-                })}
-                {myIncome !== undefined && (
-                  <div className="w-10 flex justify-center bg-green-500/30 text-green-400 rounded-md">
-                    {myIncome}
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
           {showPrisonCards && (
