@@ -10,7 +10,7 @@ const useCameraStore = create<{
   isOrthographic: boolean;
   setCameraControls: (controls: CameraControls) => void;
   cameraToPlayer: (sectorId: number) => Promise<void>;
-  toggleOrthographic: () => void;
+  toggleOrthographic: (enabled: boolean) => void;
   moveToPlayer: (model: Group, enableTransition?: boolean) => Promise<void>;
   rotateAroundPlayer: (model: Group, enableTransition?: boolean) => Promise<void>;
   cameraToRoll: () => Promise<void>;
@@ -18,7 +18,7 @@ const useCameraStore = create<{
   cameraControls: null,
   isOrthographic: false,
 
-  toggleOrthographic: () => set({ isOrthographic: !useCameraStore.getState().isOrthographic }),
+  toggleOrthographic: enabled => set({ isOrthographic: enabled }),
 
   setCameraControls: controls => {
     set({ cameraControls: controls });
