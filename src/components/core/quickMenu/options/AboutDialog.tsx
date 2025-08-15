@@ -24,7 +24,7 @@ type Props = {
 
 export default function AboutDialog({ className }: Props) {
   const { value: firstTimeVisit, save: saveFirstTimeVisit } = useLocalStorage({
-    key: 'first-time-visit',
+    key: 'first-time-visit1',
     defaultValue: true,
   });
 
