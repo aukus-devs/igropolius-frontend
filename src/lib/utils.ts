@@ -443,6 +443,31 @@ export function formatTsToMonthDatetime(ts: number) {
   });
 }
 
+export function formatTsToMonthDatetimeWithMSK(ts: number) {
+  const date = new Date(ts * 1000);
+
+  const localTime = date.toLocaleString('ru-RU', {
+    month: 'long',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const localOffset = -date.getTimezoneOffset() / 60;
+  const mskOffset = 3;
+
+  if (localOffset !== mskOffset) {
+    const mskTime = date.toLocaleString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Europe/Moscow',
+    });
+    return `${localTime} (по MSK ${mskTime})`;
+  }
+
+  return localTime;
+}
+
 export function formatMs(diffMs: number) {
   const diffS = Math.floor(diffMs / 1000);
   const days = Math.floor(diffS / (60 * 60 * 24));

@@ -668,7 +668,7 @@ export async function fetchEventSettings(): Promise<EventSettingsResponse> {
   if (MOCK_API) {
     return Promise.resolve({
       settings: {
-        event_start_time: '1753092244',
+        event_start_time: '1755266400',
         event_end_time: '1794013556',
       },
     });

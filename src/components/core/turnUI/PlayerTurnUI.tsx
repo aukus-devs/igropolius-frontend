@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { SectorsById } from '@/lib/mockData';
 import PointAUCButton from './PointAUCButton';
 import GameGauntletsButton from './GameGauntletsButton';
-import { formatTsToMonthDatetime } from '@/lib/utils';
+import { formatTsToMonthDatetimeWithMSK } from '@/lib/utils';
 
 export default function PlayerTurnUI() {
   const { turnState, isPlayerMoving, hasCardsToSteal, myPlayerSectorId, myPlayer } = usePlayerStore(
@@ -65,7 +65,7 @@ export default function PlayerTurnUI() {
 
       if (_eventNotStarted) {
         setMainNotification({
-          text: `Ивент начнется ${formatTsToMonthDatetime(eventStartTime)}`,
+          text: `Ивент начнется ${formatTsToMonthDatetimeWithMSK(eventStartTime)}`,
           variant: 'info',
           tag: 'event-start-timer',
         });
