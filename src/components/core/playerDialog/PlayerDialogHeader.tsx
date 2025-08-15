@@ -4,6 +4,21 @@ import { Button } from '@/components/ui/button';
 import { PlayerDetails } from '@/lib/api-types-generated';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
 
+function getMainPlatformStreamLink(player: PlayerDetails): string | null {
+  if (!player.main_platform) return null;
+
+  switch (player.main_platform) {
+    case 'twitch':
+      return player.twitch_stream_link ?? null;
+    case 'vk':
+      return player.vk_stream_link ?? null;
+    case 'kick':
+      return player.kick_stream_link ?? null;
+    default:
+      return null;
+  }
+}
+
 function PlayerSocials({ player }: { player: PlayerDetails }) {
   const socials = [
     { href: player.twitch_stream_link, title: 'Твич', Icon: <Twitch /> },
@@ -43,20 +58,38 @@ function PlayerSocials({ player }: { player: PlayerDetails }) {
 }
 
 function PlayerDialogHeader({ player }: { player: PlayerDetails }) {
+  const mainPlatformLink = getMainPlatformStreamLink(player);
+  const isStreamLinkAvailable = player.is_online && mainPlatformLink;
+
+  const avatarContent = (
+    <Avatar
+      className="w-[54px] h-[54px] overflow-auto"
+      style={{ outline: `2px solid ${player.color}` }}
+    >
+      <AvatarImage src={player.avatar_link ?? FALLBACK_AVATAR_URL} />
+      <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
+    </Avatar>
+  );
+
   return (
     <div className="relative md:pt-8 pt-[50px] mb-6">
       <div className="flex gap-2 justify-center items-center mb-5">
         <div className="relative">
-          <Avatar
-            className="w-[54px] h-[54px] overflow-auto"
-            style={{ outline: `2px solid ${player.color}` }}
-          >
-            <AvatarImage src={player.avatar_link ?? FALLBACK_AVATAR_URL} />
-            <AvatarFallback className="uppercase">{player.username.slice(0, 2)}</AvatarFallback>
-          </Avatar>
+          {isStreamLinkAvailable ? (
+            <a
+              href={mainPlatformLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cursor-pointer hover:opacity-80 transition-opacity block"
+            >
+              {avatarContent}
+            </a>
+          ) : (
+            avatarContent
+          )}
           {player.is_online && (
             <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm leading-[17px] px-2 rounded-[2px] font-bold"
+              className="absolute bottom-0 left-1/2 -translate-x-1/2 text-sm leading-[17px] px-2 rounded-[2px] font-bold pointer-events-none"
               style={{ background: player.color }}
             >
               LIVE
