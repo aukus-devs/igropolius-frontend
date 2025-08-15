@@ -25,9 +25,16 @@ function BuildingInfo({ building }: Props) {
     }
   };
 
+  let lengthBonusText = '';
+  if (gameStatus === 'completed' && building.lengthBonus > 0) {
+    lengthBonusText = `+${building.lengthBonus}`;
+  } else if (gameStatus === 'completed' && building.lengthBonus < 0) {
+    lengthBonusText = `${building.lengthBonus}`;
+  }
+
   return (
     <Card
-      className={`w-56 ${isMobile ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      className={`w-65 ${isMobile ? 'pointer-events-auto' : 'pointer-events-none'}`}
       onClick={handleCardClick}
     >
       <CardHeader>
@@ -37,9 +44,13 @@ function BuildingInfo({ building }: Props) {
       </CardHeader>
       <CardContent className="text-sm text-muted-foreground font-semibold">
         <p>Владелец: {owner.username}</p>
-        {gameStatus === 'completed' && <p>Длительность игры: {gameLength}</p>}
-        {gameStatus === 'completed' && building.lengthBonus !== 0 && (
-          <p>Бонус здания: {building.lengthBonus}</p>
+        {gameStatus === 'completed' && (
+          <p>
+            Длительность игры: {gameLength}
+            {building.lengthBonus !== 0 && (
+              <span className="text-muted-foreground">&nbsp;({lengthBonusText})</span>
+            )}
+          </p>
         )}
 
         <div className="flex items-center">
