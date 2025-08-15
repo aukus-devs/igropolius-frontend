@@ -9,7 +9,7 @@ import {
   resetPlayersQuery,
 } from '@/lib/queryClient';
 import { Button } from '../ui/button';
-import { resetDb, updatePlayerInternal } from '@/lib/api';
+import { resetDb, updatePlayerInternal, createMessageNotification } from '@/lib/api';
 import { useMutation } from '@tanstack/react-query';
 import useSystemStore from '@/stores/systemStore';
 import { useState, useEffect } from 'react';
@@ -27,7 +27,9 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { frontendCardsData } from '@/lib/mockData';
 import {
+  CreateMessageNotificationRequest,
   MainBonusCardType,
+  NotificationType,
   PlayerTurnState,
   UpdatePlayerInternalRequest,
 } from '@/lib/api-types-generated';
@@ -58,6 +60,9 @@ export default function AdminPanel() {
   const [selectedBonusCard, setSelectedBonusCard] = useState<MainBonusCardType | 'none'>('none');
   const [selectedTurnState, setSelectedTurnState] = useState<PlayerTurnState | 'none'>('none');
 
+  const [notificationMessage, setNotificationMessage] = useState<string>('');
+  const [notificationType, setNotificationType] = useState<NotificationType>('standard');
+
   const selectedPlayer = players.find(player => player.id === actingUserId);
 
   const handleSelectChange = (value: string) => {
@@ -86,6 +91,13 @@ export default function AdminPanel() {
       setNewSectorId('');
       setSelectedBonusCard('none');
       setSelectedTurnState('none');
+    },
+  });
+
+  const { mutateAsync: sendNotification, isPending: isSendingNotification } = useMutation({
+    mutationFn: createMessageNotification,
+    onSuccess: () => {
+      setNotificationMessage('');
     },
   });
 
@@ -129,6 +141,17 @@ export default function AdminPanel() {
     await updatePlayer(request);
     refetchCurrentPlayer();
     refetechPlayersQuery();
+  };
+
+  const handleSendNotification = async () => {
+    if (!notificationMessage.trim()) return;
+
+    const request: CreateMessageNotificationRequest = {
+      message_text: notificationMessage.trim(),
+      notification_type: notificationType,
+    };
+
+    await sendNotification(request);
   };
 
   useEffect(() => {
@@ -298,6 +321,48 @@ export default function AdminPanel() {
                 </div>
               </>
             )}
+
+            <div className="space-y-3 border-t pt-3">
+              <div className="text-sm font-medium">Отправить уведомление всем игрокам</div>
+
+              <div>
+                <Label htmlFor="notification-message" className="mb-2 block">
+                  Текст уведомления:
+                </Label>
+                <Input
+                  id="notification-message"
+                  value={notificationMessage}
+                  onChange={e => setNotificationMessage(e.target.value)}
+                  placeholder="Введите текст уведомления"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="notification-type" className="mb-2 block">
+                  Тип уведомления:
+                </Label>
+                <Select
+                  value={notificationType}
+                  onValueChange={value => setNotificationType(value as NotificationType)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-blue-950">
+                    <SelectItem value="standard">Обычное</SelectItem>
+                    <SelectItem value="important">Важное</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button
+                onClick={handleSendNotification}
+                disabled={isSendingNotification || !notificationMessage.trim()}
+                className="w-full"
+              >
+                {isSendingNotification ? 'Отправка...' : 'Отправить сообщение'}
+              </Button>
+            </div>
 
             <div>
               <Button

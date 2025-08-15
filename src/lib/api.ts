@@ -1,6 +1,7 @@
 import { playersData } from './mockData';
 import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS, EMOTES_SEARCH_API_URL } from './constants';
 import {
+  CreateMessageNotificationRequest,
   CurrentUserResponse,
   DropBonusCardRequest,
   EditPlayerGame,
@@ -745,4 +746,14 @@ export async function fetchGameDuration(
     body: JSON.stringify(request),
   });
   return response.json();
+}
+
+export async function createMessageNotification(request: CreateMessageNotificationRequest): Promise<void> {
+  if (MOCK_API) {
+    return Promise.resolve();
+  }
+  await apiRequest('/api/internal/notifications/message', {
+    method: 'POST',
+    body: JSON.stringify(request),
+  });
 }
