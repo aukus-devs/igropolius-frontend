@@ -123,12 +123,12 @@ function NotificationCard({
       </div>*/}
       <CardHeader className="px-0 gap-0.5">
         {isImportant ? (
-          <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
-        ) : (
           <CardDescription className="flex text-sm justify-between flex-wrap">
             <div>Важное</div>
             <div>{date}</div>
           </CardDescription>
+        ) : (
+          <CardDescription className="text-sm">{isLast ? 'Последнее' : date}</CardDescription>
         )}
         <CardTitle className="text-base">{text}</CardTitle>
       </CardHeader>
