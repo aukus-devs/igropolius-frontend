@@ -86,7 +86,9 @@ function SectorInfo({ sector }: Props) {
                 <Share className="w-4 h-4" />
               </div>
               {calculationText && (
-                <span className="text-muted-foreground text-xs">({calculationText})</span>
+                <span className="text-muted-foreground text-xs break-words">
+                  ({calculationText})
+                </span>
               )}
             </div>
           )}
