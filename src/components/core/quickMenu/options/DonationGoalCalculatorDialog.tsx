@@ -57,11 +57,13 @@ function DonationCalculatorTab({
   divideByFour,
   title,
   example,
+  disabled = false,
 }: {
   steps: number[];
   divideByFour: boolean;
   title: string;
   example: string;
+  disabled?: boolean;
 }) {
   const [amount, setAmount] = useState<string>('');
   const [result, setResult] = useState<ReturnType<typeof calculateDonationGoal> | null>(null);
@@ -97,8 +99,9 @@ function DonationCalculatorTab({
           type="text"
           value={amount ? formatNumber(parseInt(amount)) : ''}
           onChange={e => handleAmountChange(e.target.value)}
-          placeholder="Введите сумму..."
+          placeholder={disabled ? 'Выберите вкладку для начала расчета...' : 'Введите сумму...'}
           className="text-lg"
+          disabled={disabled}
         />
       </div>
 
@@ -174,8 +177,18 @@ function DonationCalculatorTab({
 }
 
 export default function DonationGoalCalculatorDialog({ className }: Props) {
+  const [activeTab, setActiveTab] = useState<string>('');
+  const [open, setOpen] = useState(false);
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    if (!newOpen) {
+      setActiveTab('');
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger className={cn(buttonVariants({ variant: 'outline' }), className)}>
         <Calculator />
         Калькулятор донат-гола
@@ -185,7 +198,7 @@ export default function DonationGoalCalculatorDialog({ className }: Props) {
           <DialogTitle className="text-2xl font-wide-black">Калькулятор донат-гола</DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="regular" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger
               value="regular"
@@ -201,12 +214,19 @@ export default function DonationGoalCalculatorDialog({ className }: Props) {
             </TabsTrigger>
           </TabsList>
 
+          {!activeTab && (
+            <div className="mt-6 p-8 text-center text-muted-foreground">
+              <p className="text-lg">Выберите тип сектора</p>
+            </div>
+          )}
+
           <TabsContent value="regular" className="mt-6">
             <DonationCalculatorTab
               steps={REGULAR_STEPS}
               divideByFour={false}
               title="Сумма донатов"
               example=""
+              disabled={activeTab !== 'regular'}
             />
           </TabsContent>
 
@@ -216,6 +236,7 @@ export default function DonationGoalCalculatorDialog({ className }: Props) {
               divideByFour={true}
               title="Сумма с аукциона"
               example="На аукционе собрано 15.000. Делим на 4 = 3.750. Заполняются шаги 500 + 1.000 + 2.000 = 3.500. Остаток 250 не учитывается. Колесо крутится 3 раза."
+              disabled={activeTab !== 'auction'}
             />
           </TabsContent>
         </Tabs>
