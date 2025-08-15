@@ -12,9 +12,9 @@ import { CreditsData } from '@/lib/mockData';
 import { Event } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import usePlayerStore from '@/stores/playerStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useUrlPath from '@/hooks/useUrlPath';
-import { Github } from 'lucide-react';
+import { Github, LoaderCircleIcon, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router';
 import Boosty from '@/components/icons/Boosty';
 
@@ -31,6 +31,9 @@ export default function AboutDialog({ className }: Props) {
   const { activate, pathActive } = useUrlPath('/about');
 
   const myPlayer = usePlayerStore(state => state.myPlayer);
+
+  const [isIframeLoading, setIsIframeLoading] = useState(true);
+  const [hasIframeError, setHasIframeError] = useState(false);
 
   useEffect(() => {
     saveFirstTimeVisit(false);
@@ -64,14 +67,42 @@ export default function AboutDialog({ className }: Props) {
           </p>
 
           <div className="mt-8">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/4ox1mlNxmzM"
-              title="История Игрополиуса"
-              allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen;"
-              allowFullScreen
-            ></iframe>
+            <div className="relative w-[560px] h-[315px] mx-auto">
+              {isIframeLoading && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center rounded-lg z-10">
+                  <LoaderCircleIcon className="animate-spin text-primary mb-4" size={40} />
+                  <div className="text-sm text-gray-300 mb-6">Загрузка видео...</div>
+                  {!hasIframeError && (
+                    <Link
+                      to="https://www.youtube.com/watch?v=4ox1mlNxmzM"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        buttonVariants({ variant: 'outline', size: 'sm' }),
+                        'text-xs cursor-pointer'
+                      )}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Смотреть на YouTube
+                    </Link>
+                  )}
+                </div>
+              )}
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/4ox1mlNxmzM"
+                title="История Игрополиуса"
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen;"
+                allowFullScreen
+                onLoad={() => setIsIframeLoading(false)}
+                onError={() => {
+                  setHasIframeError(true);
+                  setIsIframeLoading(false);
+                }}
+                className={cn('rounded-lg', isIframeLoading && 'opacity-0')}
+              />
+            </div>
           </div>
 
           <div className="mt-[50px] mb-[20px] text-3xl font-wide-black">
