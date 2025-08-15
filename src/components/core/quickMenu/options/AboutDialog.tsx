@@ -63,6 +63,17 @@ export default function AboutDialog({ className }: Props) {
             карте, строит здания, зарабатывает очки и бонусы, стремясь стать самым влиятельным!
           </p>
 
+          <div className="mt-8">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/4ox1mlNxmzM"
+              title="История Игрополиуса"
+              allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen;"
+              allowFullScreen
+            ></iframe>
+          </div>
+
           <div className="mt-[50px] mb-[20px] text-3xl font-wide-black">
             Команда разработки
             <br />
