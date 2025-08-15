@@ -11,7 +11,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import ImageLoader from '../ImageLoader';
 import { useSound } from '@/hooks/useSound';
-import { DRUM_SOUND_URL } from '@/lib/constants';
+import { DRUM_SOUND_URL, INDIAN_ROLL_URL } from '@/lib/constants';
 import { Volume, X } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import useSystemStore from '@/stores/systemStore';
@@ -119,7 +119,23 @@ export default function GenericRoller<T>({
     key: 'roller-sound-muted',
     defaultValue: false,
   });
+  const { play: playInidanSound, stop: stopInidanSound } = useSound(INDIAN_ROLL_URL, isMuted, true);
+
   const { play: playDrumSound, stop: stopDrumSound } = useSound(DRUM_SOUND_URL, isMuted, true);
+
+  const stopSound = useCallback(() => {
+    stopInidanSound();
+    stopDrumSound();
+  }, [stopInidanSound, stopDrumSound]);
+
+  const playSound = useCallback(() => {
+    const random = Math.random() < 0.5;
+    if (random) {
+      playInidanSound();
+    } else {
+      playDrumSound();
+    }
+  }, [playInidanSound, playDrumSound]);
 
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -265,12 +281,12 @@ export default function GenericRoller<T>({
       const index = Math.floor(-offsetRef.current / CARD_FULL_WIDTH);
       setWinnerIndex(index);
       setRollPhase('finished');
-      stopDrumSound();
+      stopSound();
       handleRollFinish(cardList[index]);
       animationRef.current = null;
     }
     animationRef.current = requestAnimationFrame(animate);
-  }, [handleRollFinish, cardList, fastRoll, stopDrumSound]);
+  }, [handleRollFinish, cardList, fastRoll, stopSound]);
 
   const resetState = useCallback(() => {
     const randomCards = generateList(IDLE_CARD_COUNT, rollOptions);
@@ -289,13 +305,13 @@ export default function GenericRoller<T>({
         if (animationRef.current !== null) {
           cancelAnimationFrame(animationRef.current);
         }
-        stopDrumSound();
+        stopSound();
         setWinnerIndex(null);
         animationRef.current = null;
         isIdleRunningRef.current = false;
       }
     },
-    [resetState, stopDrumSound]
+    [resetState, stopSound]
   );
 
   useEffect(() => {
@@ -319,9 +335,9 @@ export default function GenericRoller<T>({
 
   useEffect(() => {
     if (!isMuted && rollPhase === 'rolling') {
-      playDrumSound();
+      playSound();
     }
-  }, [isMuted, rollPhase]);
+  }, [isMuted, rollPhase, playSound]);
 
   const handleRollClick = () => {
     useSystemStore.getState().enableQueries(false);
@@ -411,7 +427,7 @@ export default function GenericRoller<T>({
           style={{ top: '65%', right: '20px' }}
           onClick={() => {
             if (!isMuted) {
-              stopDrumSound();
+              stopSound();
             }
             saveMutedState(!isMuted);
           }}
