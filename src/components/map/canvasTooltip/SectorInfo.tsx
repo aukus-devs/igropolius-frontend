@@ -84,12 +84,12 @@ function SectorInfo({ sector }: Props) {
               <div className="flex items-center">
                 <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
                 <Share className="w-4 h-4" />
+                {calculationText && (
+                  <span className="text-muted-foreground text-xs break-words">
+                    &nbsp;&nbsp;({calculationText})
+                  </span>
+                )}
               </div>
-              {calculationText && (
-                <span className="text-muted-foreground text-xs break-words">
-                  ({calculationText})
-                </span>
-              )}
             </div>
           )}
           {showPrisonCards && (
