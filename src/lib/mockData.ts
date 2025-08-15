@@ -614,11 +614,10 @@ export const playersData: PlayerDetails[] = [
         sector_id: 5,
         created_at: Math.ceil(Date.now() / 1000),
         length: '15-20',
-        title: 'Haste',
+        title: 'Miraculous: Paris Under Siege (2024)',
         duration: 3600,
         rating: 5,
-        review: `Отличная игра, мне понравилось!
-        Отличная игра, мне понравилось!`,
+        review: 'добротная игрушка, но есть пару недочетов: небольшое однообразие + камера из сериала школа, а так вполне неплохо!',
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,

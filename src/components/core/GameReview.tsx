@@ -1,8 +1,7 @@
 import { Badge } from '../ui/badge';
 import { formatMs } from '@/lib/utils';
 import { useState } from 'react';
-import { Toggle } from '../ui/toggle';
-import { VideoCircle, Edit } from '../icons';
+import { Edit } from '../icons';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { GameCompletionType, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
@@ -40,10 +39,9 @@ function getStatusData(status: GameCompletionType) {
 }
 
 function GameReview({ game }: Props) {
-  const { title, review, vod_links, duration, length, rating, status, created_at, cover } = game;
+  const { title, review, duration, length, rating, status, created_at, cover } = game;
   const myUser = useSystemStore(state => state.myUser);
 
-  const [isVodsOpen, setIsVodsOpen] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
 
   const formattedDate = new Intl.DateTimeFormat('ru-RU', {
@@ -56,10 +54,6 @@ function GameReview({ game }: Props) {
     myUser?.role === 'admin' ||
     myUser?.id === game.player_id ||
     (myUser?.role === 'moder' && myUser?.moder_for === game.player_id);
-
-  function toggleVods() {
-    setIsVodsOpen(!isVodsOpen);
-  }
 
   return (
     <div className="font-semibold">
@@ -79,18 +73,9 @@ function GameReview({ game }: Props) {
               Редактировать
             </Button>
           )}
-          <Toggle
-            size="sm"
-            className="bg-foreground/20 text-foreground/70"
-            disabled={!vod_links}
-            onPressedChange={toggleVods}
-          >
-            <VideoCircle />
-            Записи
-          </Toggle>
         </div>
       </div>
-      <h3 className="text-2xl mb-2.5 font-wide-semibold break-all leading-tight max-w-full overflow-hidden">
+      <h3 className="text-2xl mb-2.5 font-wide-semibold leading-tight max-w-full overflow-hidden">
         {title}
       </h3>
       <div className="flex gap-2.5">
@@ -99,7 +84,7 @@ function GameReview({ game }: Props) {
           src={cover || FALLBACK_GAME_POSTER}
           alt={title}
         />
-        <div className="text-muted-foreground break-all">
+        <div className="text-muted-foreground">
           {length && (
             <div className="flex flex-wrap gap-2 mb-2.5">
               <Badge className="bg-white/20 text-white/70 font-semibold">
@@ -110,25 +95,9 @@ function GameReview({ game }: Props) {
               </Badge>
             </div>
           )}
-          {isVodsOpen ? (
-            <div className="flex flex-col">
-              {vod_links?.split(',')?.map(vod => (
-                <a
-                  key={vod}
-                  href={vod}
-                  target="_blank"
-                  className="hover:underline underline-offset-4 break-all"
-                >
-                  {vod}
-                </a>
-              ))}
-            </div>
-          ) : (
-            <p>
-              {' '}
-              {rating} / 10 — {parseReview(review)}{' '}
-            </p>
-          )}
+          <p>
+            {rating} / 10 — {parseReview(review)}
+          </p>
         </div>
       </div>
 
