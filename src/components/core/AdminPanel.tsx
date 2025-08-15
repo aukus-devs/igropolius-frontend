@@ -77,6 +77,7 @@ export default function AdminPanel() {
       setSelectedTurnState('none');
     }
     resetCurrentPlayerQuery();
+    resetPlayersQuery();
   };
 
   const { mutateAsync: doReset, isPending } = useMutation({
