@@ -633,3 +633,24 @@ export function getTaxCalculationText(taxInfo: TaxData, myPlayerId?: number): st
   }
   return taxSum;
 }
+
+export function splitTaxInfo(
+  info: TaxData,
+  myPlayerId?: number
+): {
+  myIncome?: number;
+  otherIncomes: Record<string, number>;
+} {
+  const otherPlayersOnSector = Object.entries(info.playerIncomes).filter(
+    ([playerId]) => Number(playerId) !== myPlayerId
+  );
+
+  const myIncome = Object.entries(info.playerIncomes).find(
+    ([playerId]) => Number(playerId) === myPlayerId
+  );
+
+  return {
+    otherIncomes: Object.fromEntries(otherPlayersOnSector),
+    myIncome: myIncome ? myIncome[1] : undefined,
+  };
+}

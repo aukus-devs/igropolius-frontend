@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { frontendCardsData } from '@/lib/mockData';
 import { SectorData } from '@/lib/types';
-import { getGameLengthFullText, getTaxCalculationText } from '@/lib/utils';
+import { getGameLengthFullText, splitTaxInfo } from '@/lib/utils';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
@@ -33,9 +33,12 @@ function SectorInfo({ sector }: Props) {
     }))
   );
   const showTax = canBuildOnSector(sector.type);
-  let calculationText = '';
+  let otherIncomes: Record<string, number> = {};
+  let myIncome: number | undefined = undefined;
   if (showTax) {
-    calculationText = getTaxCalculationText(taxInfo, myPlayer?.id);
+    const split = splitTaxInfo(taxInfo, myPlayer?.id);
+    otherIncomes = split.otherIncomes;
+    myIncome = split.myIncome;
   }
 
   const showPrisonCards = sector.type === 'prison';
@@ -84,10 +87,26 @@ function SectorInfo({ sector }: Props) {
               <div className="flex items-center">
                 <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
                 <Share className="w-4 h-4" />
-                {calculationText && (
-                  <span className="text-muted-foreground text-xs break-words">
-                    &nbsp;&nbsp;({calculationText})
-                  </span>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {Object.entries(otherIncomes).map(([playerId, num], idx) => {
+                  const player = usePlayerStore
+                    .getState()
+                    .players.find(p => String(p.id) === playerId);
+                  if (!player) return null;
+                  return (
+                    <div
+                      key={idx}
+                      className="w-10 flex justify-center bg-red-500/30 text-red-400 rounded-md"
+                    >
+                      {num / 2}
+                    </div>
+                  );
+                })}
+                {myIncome !== undefined && (
+                  <div className="w-10 flex justify-center bg-green-500/30 text-green-400 rounded-md">
+                    {myIncome}
+                  </div>
                 )}
               </div>
             </div>
