@@ -299,7 +299,10 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
       }
 
       if (lastCommonLine) {
-        result.ops.push({ insert: lastCommonLine });
+        // limit last common line to 100 characters
+        const shortCommonLine =
+          lastCommonLine.length > 150 ? lastCommonLine.slice(0, 150) + '...' : lastCommonLine;
+        result.ops.push({ insert: shortCommonLine, attributes: { color: '#8E8E93' } });
         result.ops.push({ insert: '\n' });
       }
 
