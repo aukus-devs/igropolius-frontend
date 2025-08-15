@@ -27,14 +27,14 @@ function BuildingInfo({ building }: Props) {
 
   let lengthBonusText = '';
   if (gameStatus === 'completed' && building.lengthBonus > 0) {
-    lengthBonusText = `+${building.lengthBonus}`;
+    lengthBonusText = `тир +${building.lengthBonus}`;
   } else if (gameStatus === 'completed' && building.lengthBonus < 0) {
-    lengthBonusText = `${building.lengthBonus}`;
+    lengthBonusText = `тир ${building.lengthBonus}`;
   }
 
   return (
     <Card
-      className={`w-65 ${isMobile ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      className={`w-70 ${isMobile ? 'pointer-events-auto' : 'pointer-events-none'}`}
       onClick={handleCardClick}
     >
       <CardHeader>
