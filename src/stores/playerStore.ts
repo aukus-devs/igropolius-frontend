@@ -419,7 +419,7 @@ const usePlayerStore = create<{
     }
 
     const animationSteps =
-      params.sectorTo > currentSector
+      params.sectorTo >= currentSector
         ? params.sectorTo - currentSector
         : params.sectorTo + sectorsData.length - currentSector;
 
