@@ -233,6 +233,9 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
   const oldLines = deltaToLines(new Delta(JSON.parse(oldJson)));
   const newLines = deltaToLines(new Delta(JSON.parse(newJson)));
 
+  // console.log('old delta', oldLines);
+  // console.log('new delta', newLines);
+
   const result = new Delta();
   const maxLen = Math.max(oldLines.length, newLines.length);
 
@@ -255,18 +258,40 @@ function getLineDiffHighlight(oldJson: string, newJson: string): Delta {
     if (oldLine !== newLine) {
       let state: 'diff' | 'added' | 'removed' = 'diff';
 
-      if (oldLine !== '' && newLines.find(l => l.trim() === oldLine)) {
-        // line added
-        state = 'added';
-        // newLinesIndex++;
-        oldLinesIndex--;
+      if (newLine !== '' && state === 'diff') {
+        const newLineFoundLater = findStartingAt(
+          oldLines,
+          l => l.trim() === newLine,
+          oldLinesIndex
+        );
+        if (newLineFoundLater) {
+          // line removed
+          state = 'removed';
+          newLinesIndex--;
+        }
       }
 
-      if (newLine !== '' && oldLines.find(l => l.trim() === newLine)) {
-        // line removed
-        state = 'removed';
-        // oldLinesIndex++;
-        newLinesIndex--;
+      if (oldLine !== '' && state === 'diff') {
+        const oldLineFoundLater = findStartingAt(
+          newLines,
+          l => l.trim() === oldLine,
+          newLinesIndex
+        );
+        console.log('trying to add', Boolean(oldLineFoundLater), oldLine);
+        if (oldLineFoundLater) {
+          // line added
+          state = 'added';
+          oldLinesIndex--;
+        }
+      }
+
+      // console.log({ oldLinesIndex, newLinesIndex, i, oldLine, newLine, state });
+
+      if (state === 'added' && newLine === '') {
+        continue;
+      }
+      if (state === 'removed' && oldLine === '') {
+        continue;
       }
 
       if (result.ops.length > 0) {
@@ -343,3 +368,24 @@ window.getLineDiffHighlight = getLineDiffHighlight;
 window.diffToReadable = diffToReadable;
 // @ts-expect-error debugging
 window.getDeltaLines = getDeltaLines;
+
+function findStartingAt<T>(
+  array: readonly T[],
+  predicate: (value: T, index: number, array: readonly T[]) => boolean,
+  afterIndex: number
+): T | undefined {
+  const len = array.length;
+  if (len === 0) return undefined;
+
+  if (afterIndex < 0 || afterIndex >= len) {
+    return undefined;
+  }
+
+  for (let i = afterIndex; i < len; i++) {
+    const val = array[i];
+    if (predicate(val, i, array)) {
+      return val;
+    }
+  }
+  return undefined;
+}
