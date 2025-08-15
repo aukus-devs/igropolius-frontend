@@ -80,11 +80,13 @@ function SectorInfo({ sector }: Props) {
           <p>Ролл игры: {GameRollTypeNames[rollType]}</p>
           {gameLengthRanges && <p>Длительность: {getGameLengthFullText(gameLengthRanges)}</p>}
           {showTax && (
-            <div className="flex items-center">
-              <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
-              <Share className="w-4 h-4" />
+            <div>
+              <div className="flex items-center">
+                <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
+                <Share className="w-4 h-4" />
+              </div>
               {calculationText && (
-                <span className="text-muted-foreground">&nbsp;&nbsp;({calculationText})</span>
+                <span className="text-muted-foreground text-xs">({calculationText})</span>
               )}
             </div>
           )}
