@@ -558,6 +558,12 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     setOpen(false);
   };
 
+  const gameLengthMaxHours = GameLengthMax[gameLength || ''];
+  const fastCompletion =
+    gameLengthMaxHours &&
+    gameDurationData?.duration &&
+    gameDurationData.duration < (gameLengthMaxHours * 60 * 60) / 2;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {showTrigger && (
@@ -593,6 +599,13 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
 
         <div className="flex items-center gap-3">
           {error && <span className="text-sm text-destructive font-medium">{error}</span>}
+          {fastCompletion && (
+            <span className="text-destructive font-medium">
+              Если игра пройдена более чем в 2 раза быстрее, чем на HLTB,
+              <br />
+              пересчитайте время по формуле: (время HLTB + ваше время) / 2
+            </span>
+          )}
 
           <Tooltip disableHoverableContent>
             <TooltipTrigger asChild>
@@ -643,3 +656,13 @@ function ButtonText({
       return 'Заполни форму';
   }
 }
+
+const GameLengthMax: Record<GameLength, number | null> = {
+  '': null,
+  '2-5': 6,
+  '5-10': 11,
+  '10-15': 16,
+  '15-20': 21,
+  '20-25': 26,
+  '25+': 26,
+};
