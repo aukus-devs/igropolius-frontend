@@ -38,6 +38,9 @@ function BuildingInfo({ building }: Props) {
       <CardContent className="text-sm text-muted-foreground font-semibold">
         <p>Владелец: {owner.username}</p>
         {gameStatus === 'completed' && <p>Длительность игры: {gameLength}</p>}
+        {gameStatus === 'completed' && building.lengthBonus !== 0 && (
+          <p>Бонус здания: {building.lengthBonus}</p>
+        )}
 
         <div className="flex items-center">
           <p>Доход: {building.income}</p>

@@ -230,7 +230,7 @@ const usePlayerStore = create<{
 
         playerIncomes[player.id] += income;
 
-        const buildingData = {
+        const buildingData: BuildingData = {
           id: building.id,
           type: GameLengthToBuildingType[building.length],
           owner: player,
@@ -241,6 +241,7 @@ const usePlayerStore = create<{
           gameTitle: building.title,
           income,
           hasGroupBonus,
+          lengthBonus: building.length_bonus,
         };
 
         buildings[building.sector_id].push(buildingData);

@@ -98,6 +98,7 @@ export type BuildingData = {
   gameTitle: string;
   income: number;
   hasGroupBonus: boolean;
+  lengthBonus: number;
 };
 
 export type TrainData = {
