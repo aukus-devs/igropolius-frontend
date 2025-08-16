@@ -88,7 +88,7 @@ function SectorInfo({ sector }: Props) {
                 <p className="text-sm">Налог: {taxInfo.taxAmount}</p>
                 <Share className="w-4 h-4" />
               </div>
-              {(otherIncomes.length > 0 || myIncome) && (
+              {(Object.keys(otherIncomes).length > 0 || myIncome) && (
                 <div className="mt-1 flex flex-wrap gap-2">
                   {Object.entries(otherIncomes).map(([playerId, num], idx) => {
                     const player = usePlayerStore
