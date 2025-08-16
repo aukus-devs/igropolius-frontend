@@ -110,9 +110,8 @@ function CardsTab({ player }: { player: PlayerDetails }) {
   const availableCards = mainCardTypes.filter(type => cards.some(card => card.bonus_type === type));
   const unavailableCards = mainCardTypes.filter(type => !availableCards.includes(type));
 
-  const mapBonus = player.maps_completed * SCORE_BONUS_PER_MAP_COMPLETION;
-
-  const showAvailableSection = availableCards.length > 0 || Boolean(buildingBonus) || mapBonus > 0;
+  const showAvailableSection =
+    availableCards.length > 0 || Boolean(buildingBonus) || player.maps_completed > 0;
 
   return (
     <div className="flex flex-col md:my-0 my-5 md:px-5">
@@ -122,7 +121,7 @@ function CardsTab({ player }: { player: PlayerDetails }) {
             <GameCard key={type} type={type} />
           ))}
           <BuildingBonusCard buildingBonus={buildingBonus} />
-          <MapScoreBonusCard mapBonus={mapBonus} />
+          <MapScoreBonusCard mapsCompleted={player.maps_completed} />
         </div>
       )}
 
@@ -240,7 +239,7 @@ function BuildingBonusCard({ buildingBonus }: { buildingBonus?: number }) {
   );
 }
 
-function MapScoreBonusCard({ mapBonus }: { mapBonus?: number }) {
+function MapScoreBonusCard({ mapsCompleted }: { mapsCompleted?: number }) {
   const isMobile = useIsMobile();
   const [showDescription, setShowDescription] = useState(false);
 
@@ -257,7 +256,7 @@ function MapScoreBonusCard({ mapBonus }: { mapBonus?: number }) {
     }
   }, [isMobile, showDescription]);
 
-  if (!mapBonus) {
+  if (!mapsCompleted) {
     return null;
   }
 
@@ -272,6 +271,8 @@ function MapScoreBonusCard({ mapBonus }: { mapBonus?: number }) {
       setShowDescription(false);
     }
   };
+
+  const mapBonus = mapsCompleted * SCORE_BONUS_PER_MAP_COMPLETION;
 
   if (isMobile) {
     return (
@@ -329,7 +330,9 @@ function MapScoreBonusCard({ mapBonus }: { mapBonus?: number }) {
           align="start"
           sideOffset={8}
         >
-          <div className="text-[20px] font-semibold mb-2 leading-6">Бонус круга</div>
+          <div className="text-[20px] font-semibold mb-2 leading-6">
+            Бонус круга: {mapsCompleted}
+          </div>
           <div className="text-base font-semibold text-muted-foreground leading-[19px]">
             Автоматически добавляет бонус к каждой пройденной игре
           </div>
