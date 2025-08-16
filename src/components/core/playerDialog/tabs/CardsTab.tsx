@@ -208,11 +208,14 @@ function BuildingBonusCard({ buildingBonus }: { buildingBonus?: number }) {
       <Tooltip delayDuration={0} disableHoverableContent>
         <TooltipTrigger>
           <div
-            className="flex md:w-[134px] md:h-[189px] w-[122px] h-[170px] rounded-xl overflow-hidden data-[positive=true]:bg-green-500 bg-red-500 justify-center items-center text-4xl"
+            className="flex md:w-[134px] md:h-[189px] w-[122px] h-[170px] rounded-xl  data-[positive=true]:bg-green-500 bg-red-500 justify-center text-4xl"
             data-positive={buildingBonus > 0}
           >
-            {buildingBonus > 0 && '+'}
-            {buildingBonus}
+            <div>
+              <div className="text-xl mt-4 mb-4">Бонус зданий</div>
+              {buildingBonus > 0 && '+'}
+              {buildingBonus}
+            </div>
           </div>
         </TooltipTrigger>
         <TooltipContent
