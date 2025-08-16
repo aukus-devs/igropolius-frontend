@@ -1206,7 +1206,7 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
     name: 'Выбыл, говорите?',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-scores-for-place.png`,
     description:
-      'Получите очки, равные вашему месту в таблице (место * {1+X}). В перый игровой день, пока места не распределены - получите 5 очков.',
+      'Получите очки, равные вашему месту в таблице (место * (1+{X})). В перый игровой день, пока места не распределены - получите 5 очков.',
   },
   'receive-5-percent-or-reroll': {
     name: 'Тогда бесплатный тостер',
