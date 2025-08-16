@@ -156,6 +156,7 @@ function BuildingBonusCard({ buildingBonus }: { buildingBonus: number }) {
           зданий
         </span>
       }
+      tooltipHeader="Бонус зданий"
       value={
         <span className="text-4xl">{buildingBonus > 0 ? `+${buildingBonus}` : buildingBonus}</span>
       }
