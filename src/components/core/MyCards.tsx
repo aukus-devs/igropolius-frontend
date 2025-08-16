@@ -16,18 +16,18 @@ import { SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
 import BonusCardComponent from './BonusCardComponent';
 
 export default function MyCards() {
-  const { myCards, turnState, buildingBonus, mapsCompleted } = usePlayerStore(
+  const { myPlayer, turnState } = usePlayerStore(
     useShallow(state => ({
-      myCards: state.myPlayer?.bonus_cards,
+      myPlayer: state.myPlayer,
       turnState: state.turnState,
-      buildingBonus: state.myPlayer?.building_upgrade_bonus ?? 0,
-      mapsCompleted: state.myPlayer?.maps_completed ?? 0,
     }))
   );
 
-  const cards = myCards || [];
-
   const [usedCard, setUsedCard] = useState<ManualUseCard | null>(null);
+
+  if (!myPlayer) {
+    return null;
+  }
 
   const handleUseCard = async (cardType: MainBonusCardType) => {
     if (cardType === 'reroll-game' || cardType === 'game-help-allowed') {
@@ -42,7 +42,21 @@ export default function MyCards() {
     setUsedCard(null);
   };
 
-  const mapBonus = mapsCompleted * SCORE_BONUS_PER_MAP_COMPLETION;
+  const mapBonus = myPlayer.maps_completed * SCORE_BONUS_PER_MAP_COMPLETION;
+  const buildingBonus = myPlayer.building_upgrade_bonus;
+
+  let difficultyText = 'С';
+  let difficultyVariant: 'neutral' | 'positive' | 'negative' = 'neutral';
+  let tooltipText = 'Средняя';
+  if (myPlayer.game_difficulty_level === -1) {
+    difficultyText = 'Л';
+    difficultyVariant = 'positive';
+    tooltipText = 'Лёгкая';
+  } else if (myPlayer.game_difficulty_level === 1) {
+    difficultyText = 'Т';
+    difficultyVariant = 'negative';
+    tooltipText = 'Тяжёлая';
+  }
 
   return (
     <>
@@ -50,7 +64,7 @@ export default function MyCards() {
       <Card className="flex flex-row p-2 gap-2">
         {mainCardTypes.map((bonus, idx) => {
           const cardData = frontendCardsData[bonus];
-          const cardOwned = cards.find(card => card.bonus_type === bonus);
+          const cardOwned = myPlayer.bonus_cards.find(card => card.bonus_type === bonus);
           const canBeUsed =
             cardOwned &&
             turnState === 'filling-game-review' &&
@@ -102,6 +116,14 @@ export default function MyCards() {
           <div className="flex flex-col items-center justify-center">
             <div className="rounded-xl bg-gray-500 w-1 h-3.5"></div>
           </div>
+          <BonusCardComponent
+            size="small"
+            variant={difficultyVariant}
+            description="Изменяет сложность следующей подходящей игры"
+            header={<div className="text-xs">Слж</div>}
+            tooltipHeader={`Уровень сложности: ${tooltipText}`}
+            value={difficultyText}
+          />
           {buildingBonus !== 0 && (
             <BonusCardComponent
               size="small"
@@ -118,7 +140,7 @@ export default function MyCards() {
               variant={mapBonus > 0 ? 'positive' : 'neutral'}
               description="Автоматически добавляет бонус к каждой пройденной игре"
               header={<div className="text-xs">Круг</div>}
-              tooltipHeader={`Бонус круга: #${mapsCompleted}`}
+              tooltipHeader={`Бонус круга: #${myPlayer.maps_completed}`}
               value={mapBonus}
             />
           )}
