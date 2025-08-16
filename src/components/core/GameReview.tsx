@@ -1,5 +1,5 @@
 import { Badge } from '../ui/badge';
-import { formatMs } from '@/lib/utils';
+import { adjustGameLength, formatMs } from '@/lib/utils';
 import { useState } from 'react';
 import { Edit } from '../icons';
 import { FALLBACK_GAME_POSTER } from '@/lib/constants';
@@ -39,7 +39,7 @@ function getStatusData(status: GameCompletionType) {
 }
 
 function GameReview({ game }: Props) {
-  const { title, review, duration, length, rating, status, created_at, cover } = game;
+  const { title, review, duration, rating, status, created_at, cover } = game;
   const myUser = useSystemStore(state => state.myUser);
 
   const [showEditForm, setShowEditForm] = useState(false);
@@ -54,6 +54,8 @@ function GameReview({ game }: Props) {
     myUser?.role === 'admin' ||
     myUser?.id === game.player_id ||
     (myUser?.role === 'moder' && myUser?.moder_for === game.player_id);
+
+  const adjustedLength = adjustGameLength(game.length, game.length_bonus);
 
   return (
     <div className="font-semibold">
@@ -85,14 +87,24 @@ function GameReview({ game }: Props) {
           alt={title}
         />
         <div className="text-muted-foreground">
-          {length && (
+          {adjustedLength && (
             <div className="flex flex-wrap gap-2 mb-2.5">
               <Badge className="bg-white/20 text-white/70 font-semibold">
                 <p> Время — {duration && duration > 0 ? formatMs(duration * 1000) : '[Н/Д]'}</p>
               </Badge>
               <Badge className="bg-white/20 text-white/70 font-semibold">
-                <p> По HLTB — {length}ч</p>
+                <p> По HLTB — {adjustedLength}ч</p>
               </Badge>
+              {game.length_bonus > 0 && (
+                <Badge className="bg-green-500/20 text-white/70 font-semibold">
+                  <p>Тир +{game.length_bonus}</p>
+                </Badge>
+              )}
+              {game.length_bonus < 0 && (
+                <Badge className="bg-red-500/20 text-white/70 font-semibold">
+                  <p>Тир {game.length_bonus}</p>
+                </Badge>
+              )}
             </div>
           )}
           <p>

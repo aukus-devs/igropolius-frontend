@@ -675,3 +675,26 @@ export function getSectorDescription(sector: SectorData): string {
     }
   }
 }
+
+export function adjustGameLength(len: GameLength, update: number): GameLength {
+  if (len === '') {
+    return '';
+  }
+
+  if (update === 0) {
+    return len;
+  }
+
+  const gameLengths = Object.keys(ScoreByGameLength) as GameLength[];
+  const currentIndex = gameLengths.indexOf(len);
+
+  if (currentIndex === -1) {
+    throw new Error(`Game length not found: ${len}, ${update}`);
+  }
+
+  const newIndex = currentIndex + update;
+  if (newIndex < 0 || newIndex >= gameLengths.length) {
+    throw new Error(`Game length index out of bounds: ${len}, ${newIndex}`);
+  }
+  return gameLengths[newIndex];
+}

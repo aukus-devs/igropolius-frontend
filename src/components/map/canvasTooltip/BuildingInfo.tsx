@@ -39,7 +39,7 @@ function BuildingInfo({ building }: Props) {
         <p>Владелец: {owner.username}</p>
         {gameStatus === 'completed' && (
           <p>
-            Длительность игры: {gameLength}
+            Тир здания: {gameLength}
             {building.lengthBonus > 0 && (
               <span className="text-green-500">&nbsp;(тир +{building.lengthBonus})</span>
             )}
