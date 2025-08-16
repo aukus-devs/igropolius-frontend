@@ -4,7 +4,12 @@ import { ScoreDetails } from '@/lib/types';
 import { create } from 'zustand';
 import { SectorsById } from '@/lib/mockData';
 import { resetNotificationsQuery } from '@/lib/queryClient';
-import { GameCompletionType, GameLength, IgdbGameSummary } from '@/lib/api-types-generated';
+import {
+  GameCompletionType,
+  GameDifficulty,
+  GameLength,
+  IgdbGameSummary,
+} from '@/lib/api-types-generated';
 
 const useReviewFormStore = create<{
   rating: number;
@@ -12,6 +17,7 @@ const useReviewFormStore = create<{
   gameTime: GameLength | null;
   gameStatus: GameCompletionType | null;
   gameReview: string;
+  gameDifficulty: GameDifficulty;
   vodLinks: string;
   selectedGame: IgdbGameSummary | null;
   error: string | null;
@@ -28,6 +34,7 @@ const useReviewFormStore = create<{
   clearError: () => void;
   open: boolean;
   setOpen: (open: boolean) => void;
+  setGameDifficulty: (value: GameDifficulty) => void;
 }>((set, get) => ({
   rating: 0,
   gameTitle: '',
@@ -39,6 +46,7 @@ const useReviewFormStore = create<{
   error: null,
   isSubmitting: false,
   open: false,
+  gameDifficulty: 0,
 
   setOpen: open => set({ open }),
   setRating: value => set({ rating: value }),
@@ -50,7 +58,16 @@ const useReviewFormStore = create<{
   setSelectedGame: game => set({ selectedGame: game }),
   clearError: () => set({ error: null }),
   sendReview: async () => {
-    const { rating, gameTitle, gameTime, gameStatus, gameReview, vodLinks, selectedGame } = get();
+    const {
+      rating,
+      gameTitle,
+      gameTime,
+      gameStatus,
+      gameReview,
+      vodLinks,
+      selectedGame,
+      gameDifficulty,
+    } = get();
 
     if (!gameStatus) {
       throw new Error('Game status is required');
@@ -69,6 +86,7 @@ const useReviewFormStore = create<{
         length,
         vod_links: vodLinks || undefined,
         game_id: selectedGame?.id || null,
+        difficulty_level: gameDifficulty,
       });
 
       resetNotificationsQuery();
@@ -83,6 +101,7 @@ const useReviewFormStore = create<{
         selectedGame: null,
         error: null,
         open: false,
+        gameDifficulty: 0,
       });
     } catch (error) {
       console.error('Review submission failed:', error);
@@ -132,6 +151,7 @@ const useReviewFormStore = create<{
       mapCompletionBonus,
     };
   },
+  setGameDifficulty: (value: GameDifficulty) => set({ gameDifficulty: value }),
 }));
 
 export default useReviewFormStore;

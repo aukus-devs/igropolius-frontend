@@ -565,6 +565,11 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     gameDurationData?.duration &&
     gameDurationData.duration < (gameLengthMaxHours * 60 * 60) / 2;
 
+  const showGameDifficulty =
+    gameStatus === 'completed' &&
+    myPlayer?.game_difficulty_level !== undefined &&
+    myPlayer.game_difficulty_level != 0;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {showTrigger && (
@@ -591,6 +596,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
             <div className="flex gap-2 w-full">
               <GameStatus gameDuration={gameDurationData?.duration} />
               {gameStatus === 'completed' && <GameTime />}
+              {gameStatus === 'completed' && showGameDifficulty && <GameDifficulty />}
             </div>
 
             <Rating onChange={setRating} initialValue={rating} />
@@ -668,3 +674,43 @@ const GameLengthMax: Record<GameLength, number | null> = {
   '20-25': 26,
   '25+': 26,
 };
+
+function GameDifficulty() {
+  const setGameDifficulty = useReviewFormStore(state => state.setGameDifficulty);
+  const playerDifficulty = usePlayerStore(state => state.myPlayer?.game_difficulty_level) ?? 0;
+
+  const options = [
+    { title: 'Легкая', value: '-1' },
+    { title: 'Средняя', value: '0' },
+    { title: 'Сложная', value: '1' },
+  ];
+
+  const handleValueChange = (value: string) => {
+    switch (value) {
+      case '-1':
+        setGameDifficulty(-1);
+        break;
+      case '0':
+        setGameDifficulty(0);
+        break;
+      case '1':
+        setGameDifficulty(1);
+        break;
+    }
+  };
+
+  return (
+    <Select onValueChange={handleValueChange} defaultValue={String(playerDifficulty)}>
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Сложность" />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option, idx) => (
+          <SelectItem key={idx} value={option.value}>
+            {option.title}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}

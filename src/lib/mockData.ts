@@ -375,6 +375,7 @@ export const playersData: PlayerDetails[] = [
     color: playerColors.red,
     model_name: '/cars/race-future1.glb',
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
 
     games: [
       {
@@ -391,6 +392,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/123456789',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 2,
@@ -406,6 +408,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/987654321',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 3,
@@ -421,6 +424,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/1122334455',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 4,
@@ -436,6 +440,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/5566778899',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 5,
@@ -451,6 +456,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 6,
@@ -466,6 +472,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/2233445566',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 7,
@@ -481,6 +488,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/6677889900',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 8,
@@ -496,6 +504,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: null,
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
     ],
     bonus_cards: [
@@ -545,6 +554,7 @@ export const playersData: PlayerDetails[] = [
 
     maps_completed: 0,
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
 
     total_score: 5000,
     games: [
@@ -562,6 +572,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/123456789',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 10,
@@ -577,6 +588,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/987654321',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 11,
@@ -592,6 +604,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/1122334455',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 12,
@@ -607,6 +620,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/5566778899',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 13,
@@ -623,6 +637,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 14,
@@ -638,6 +653,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/2233445566',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 15,
@@ -653,6 +669,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/6677889900',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 16,
@@ -668,6 +685,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/1234567890',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 17,
@@ -683,6 +701,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: null,
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
     ],
     bonus_cards: [
@@ -722,6 +741,7 @@ export const playersData: PlayerDetails[] = [
     total_score: 200,
     maps_completed: 1,
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
 
     games: [
       {
@@ -738,6 +758,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/2233445566',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
       {
         id: 19,
@@ -753,6 +774,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/6677889900',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
     ],
     bonus_cards: [],
@@ -786,6 +808,7 @@ export const playersData: PlayerDetails[] = [
     total_score: 200,
     maps_completed: 2,
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
 
     games: [
       {
@@ -802,6 +825,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: null,
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
     ],
     bonus_cards: [],
@@ -835,6 +859,8 @@ export const playersData: PlayerDetails[] = [
     total_score: 200,
     maps_completed: 0,
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
+
     games: [
       {
         id: 21,
@@ -851,6 +877,7 @@ export const playersData: PlayerDetails[] = [
           'https://www.twitch.tv/videos/1234567890, https://www.twitch.tv/videos/1234567891, https://www.twitch.tv/videos/1234567892',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
     ],
     bonus_cards: [
@@ -890,6 +917,8 @@ export const playersData: PlayerDetails[] = [
     total_score: 200,
     maps_completed: 0,
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
+
     games: [
       {
         id: 22,
@@ -905,6 +934,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/5566778899',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
     ],
     bonus_cards: [
@@ -944,6 +974,8 @@ export const playersData: PlayerDetails[] = [
     total_score: 200,
     maps_completed: 0,
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
+
     games: [
       {
         id: 23,
@@ -959,6 +991,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
     ],
     bonus_cards: [
@@ -998,6 +1031,8 @@ export const playersData: PlayerDetails[] = [
     total_score: 200,
     maps_completed: 0,
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
+
     games: [
       {
         id: 24,
@@ -1013,6 +1048,7 @@ export const playersData: PlayerDetails[] = [
         vod_links: 'https://www.twitch.tv/videos/2233445566',
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
+        difficulty_level: 0,
       },
     ],
     bonus_cards: [
@@ -1054,6 +1090,7 @@ export const playersData: PlayerDetails[] = [
     games: [],
     bonus_cards: [],
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
   },
   {
     id: 10,
@@ -1086,6 +1123,7 @@ export const playersData: PlayerDetails[] = [
     games: [],
     bonus_cards: [],
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
   },
   {
     id: 11,
@@ -1118,6 +1156,7 @@ export const playersData: PlayerDetails[] = [
     games: [],
     bonus_cards: [],
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
   },
   {
     id: 12,
@@ -1149,6 +1188,7 @@ export const playersData: PlayerDetails[] = [
     games: [],
     bonus_cards: [],
     building_upgrade_bonus: 0,
+    game_difficulty_level: 0,
   },
 ];
 
@@ -1265,6 +1305,16 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
     description:
       'Получите количество очков, равное количеству ваших карточек умноженному на 1+{X}. Если карточек нет - реролл колеса.',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-scores-for-active-cards.png`,
+  },
+  'decrease-difficulty': {
+    name: 'Очки ИЗИ',
+    description: 'Уменьшает сложность следующей подходящей игры на 1.',
+    picture: `${import.meta.env.BASE_URL}assets/cards/decrease-difficulty.png`,
+  },
+  'increase-difficulty': {
+    name: 'Повязка Рэмбо',
+    description: 'Увеличивает сложность следующей подходящей игры на 1.',
+    picture: `${import.meta.env.BASE_URL}assets/cards/increase-difficulty.png`,
   },
 };
 

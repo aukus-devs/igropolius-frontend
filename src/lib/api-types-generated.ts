@@ -157,6 +157,11 @@ export type GameId = number | null;
  * via the `definition` "GameCompletionType".
  */
 export type GameCompletionType = "completed" | "drop" | "reroll";
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "GameDifficulty".
+ */
+export type GameDifficulty = -1 | 0 | 1;
 export type GameName = string;
 export type Duration = number | null;
 export type Timestamp1 = number;
@@ -660,6 +665,7 @@ export interface PlayerDetails {
   color: Color;
   model_name: ModelName;
   building_upgrade_bonus: BuildingUpgradeBonus;
+  game_difficulty_level: GameDifficulty;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -680,6 +686,7 @@ export interface PlayerGame {
   vod_links?: VodLinks1;
   cover?: Cover1;
   game_id?: GameId1;
+  difficulty_level: GameDifficulty;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -787,6 +794,7 @@ export interface SavePlayerGameRequest {
   length: GameLength;
   vod_links?: VodLinks2;
   game_id?: GameId2;
+  difficulty_level?: GameDifficulty | null;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
