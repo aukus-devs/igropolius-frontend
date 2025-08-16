@@ -55,7 +55,8 @@ function GameReview({ game }: Props) {
     myUser?.id === game.player_id ||
     (myUser?.role === 'moder' && myUser?.moder_for === game.player_id);
 
-  const adjustedLength = adjustGameLength(game.length, game.length_bonus);
+  // revert game length bonus to show actual hltb time
+  const adjustedLength = adjustGameLength(game.length, -game.length_bonus);
 
   return (
     <div className="font-semibold">
