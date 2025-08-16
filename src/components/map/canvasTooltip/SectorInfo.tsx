@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { frontendCardsData } from '@/lib/mockData';
 import { SectorData } from '@/lib/types';
-import { getGameLengthFullText, splitTaxInfo } from '@/lib/utils';
+import { getGameLengthFullText, getSectorDescription, splitTaxInfo } from '@/lib/utils';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
@@ -142,6 +142,8 @@ function SectorInfo({ sector }: Props) {
             Построить
           </Button>
         )}
+
+        <div className="mt-2 text-xs text-muted-foreground">{getSectorDescription(sector)}</div>
       </CardContent>
     </Card>
   );

@@ -654,3 +654,24 @@ export function splitTaxInfo(
     myIncome: myIncome ? myIncome[1] : undefined,
   };
 }
+
+export function getSectorDescription(sector: SectorData): string {
+  switch (sector.type) {
+    case 'property':
+      return `За прохождение игры на этом секторе строится здание`;
+    case 'railroad':
+      return `За прохождение игры на этом секторе строится здание и можно поехать на поезде`;
+    case 'bonus':
+      return `За прохождение игры на этом секторе ролится бонусная карточка, дается x1.5 очков и +2 к бонусу здания`;
+    case 'parking':
+      return `За прохождение игры на этом секторе можно украсть карточку у другого игрока, дается x1.5 очков и +2 к бонусу здания`;
+    case 'prison':
+      return `Попадая на этот сектор игрок может потерять карточку или получить из хранилища тюрьмы.`;
+    case 'start-corner':
+      return `За прохождение игры на этом секторе строится здание на любом выбранном секторе, дается x1.5 очков и +1 к бонусу здания.`;
+    default: {
+      const type: never = sector.type;
+      throw new Error(`Unsupported sector type: ${type}`);
+    }
+  }
+}
