@@ -17,9 +17,7 @@ function PlayerDialogTabs({ player, scrollAreaRef }: Props) {
     {
       name: 'Бонусы',
       value: 'cards',
-      content: (
-        <CardsTab cards={player.bonus_cards} buildingBonus={player.building_upgrade_bonus} />
-      ),
+      content: <CardsTab player={player} />,
     },
     { name: 'Действия', value: 'actions', content: <EventsTab player={player} /> },
   ];
