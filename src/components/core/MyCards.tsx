@@ -13,6 +13,7 @@ import { MainBonusCardType } from '@/lib/api-types-generated';
 import ImageLoader from './ImageLoader';
 import { getCardDescription } from '@/lib/utils';
 import { SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
+import BonusCardComponent from './BonusCardComponent';
 
 export default function MyCards() {
   const { myCards, turnState, buildingBonus, mapsCompleted } = usePlayerStore(
@@ -42,7 +43,6 @@ export default function MyCards() {
   };
 
   const mapBonus = mapsCompleted * SCORE_BONUS_PER_MAP_COMPLETION;
-  const hasPlayerBonuses = mapBonus > 0 || buildingBonus !== 0;
 
   return (
     <>
@@ -98,55 +98,31 @@ export default function MyCards() {
             </Tooltip>
           );
         })}
-        {hasPlayerBonuses && (
-          <>
-            <div className="flex flex-col items-center justify-center">
-              <div className="rounded-xl bg-gray-500 w-1 h-3.5"></div>
-            </div>
-            {buildingBonus !== 0 && (
-              <Tooltip>
-                <TooltipTrigger>
-                  <div
-                    className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
-                    data-positive={buildingBonus > 0}
-                  >
-                    {buildingBonus > 0 && '+'}
-                    {buildingBonus}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div className="w-[200px]">
-                    <div className="text-[20px] font-semibold mb-2 leading-6">Бонус зданий</div>
-                    <div className="text-base font-semibold text-muted-foreground leading-[19px]">
-                      Автоматически увеличивает или уменьшает размер следующего здания
-                    </div>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            )}
-            {mapBonus > 0 && (
-              <Tooltip>
-                <TooltipTrigger>
-                  <div
-                    className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
-                    data-positive={mapBonus > 0}
-                  >
-                    {mapBonus > 0 && '+'}
-                    {mapBonus}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div className="w-[200px]">
-                    <div className="text-[20px] font-semibold mb-2 leading-6">Бонус круга</div>
-                    <div className="text-base font-semibold text-muted-foreground leading-[19px]">
-                      Автоматически добавляет бонус к каждой пройденной игре
-                    </div>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            )}
-          </>
-        )}
+        <>
+          <div className="flex flex-col items-center justify-center">
+            <div className="rounded-xl bg-gray-500 w-1 h-3.5"></div>
+          </div>
+          {buildingBonus !== 0 && (
+            <BonusCardComponent
+              size="small"
+              variant={buildingBonus > 0 ? 'positive' : 'negative'}
+              description="Автоматически увеличивает или уменьшает размер следующего здания"
+              header={<div className="text-xs">Дом</div>}
+              tooltipHeader="Бонус зданий"
+              value={buildingBonus}
+            />
+          )}
+          {mapBonus > 0 && (
+            <BonusCardComponent
+              size="small"
+              variant={mapBonus > 0 ? 'positive' : 'neutral'}
+              description="Автоматически добавляет бонус к каждой пройденной игре"
+              header={<div className="text-xs">Круг</div>}
+              tooltipHeader={`Бонус круга: #${mapsCompleted}`}
+              value={mapBonus}
+            />
+          )}
+        </>
       </Card>
     </>
   );

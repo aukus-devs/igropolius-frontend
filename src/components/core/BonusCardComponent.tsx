@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function BonusCardComponent({
-  size: _size,
+  size,
   header,
   value,
   variant,
@@ -34,6 +34,18 @@ export default function BonusCardComponent({
       return () => document.removeEventListener('scroll', handleScroll);
     }
   }, [isMobile, showDescription]);
+
+  if (size === 'small') {
+    return (
+      <SmallBonusCard
+        header={header}
+        value={value}
+        variant={variant}
+        description={description}
+        tooltipHeader={tooltipHeader}
+      />
+    );
+  }
 
   const handleCardClick = () => {
     if (isMobile) {
@@ -103,5 +115,35 @@ export default function BonusCardComponent({
         </TooltipContent>
       </Tooltip>
     </div>
+  );
+}
+
+function SmallBonusCard({
+  header,
+  value,
+  variant,
+  description,
+  tooltipHeader,
+}: Omit<Props, 'size'>) {
+  return (
+    <Tooltip>
+      <TooltipTrigger>
+        <div
+          className="w-[32px] h-[45px] rounded-sm data-[variant=positive]:bg-green-500/30 data-[variant=positive]:text-green-400  data-[variant=neutral]:bg-blue-500/30 data-[variant=neutral]:text-blue-400 data-[variant=negative]:bg-red-500/30 data-[variant=negative]:text-red-400 "
+          data-variant={variant}
+        >
+          {header}
+          {value}
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <div className="w-[200px]">
+          <div className="text-[20px] font-semibold mb-2 leading-6">{tooltipHeader}</div>
+          <div className="text-base font-semibold text-muted-foreground leading-[19px]">
+            {description}
+          </div>
+        </div>
+      </TooltipContent>
+    </Tooltip>
   );
 }

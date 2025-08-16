@@ -180,7 +180,7 @@ function MapScoreBonusCard({ mapsCompleted }: { mapsCompleted: number }) {
           круга
         </span>
       }
-      tooltipHeader={`Бонус круга: ${mapsCompleted}`}
+      tooltipHeader={`Бонус круга: #${mapsCompleted}`}
       value={<span className="text-4xl">{valueText}</span>}
     />
   );
