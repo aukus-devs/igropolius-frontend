@@ -1231,7 +1231,7 @@ export const frontendCardsData: Record<MainBonusCardType, FrontendCardData> = {
     name: 'Лицензия на свинство',
     picture: `${import.meta.env.BASE_URL}assets/cards/game-help-allowed.png`,
     description:
-      'Во время прохождения игры разрешается просматривать спидраны, видеопрохождения и любые подсказки чата.',
+      'Во время прохождения игры разрешается просматривать спидраны, видеопрохождения и любые подсказки чата. В случае реролла карточка продолжает работать на секторе.',
   },
 };
 
