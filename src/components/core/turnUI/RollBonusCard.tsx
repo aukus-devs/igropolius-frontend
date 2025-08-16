@@ -9,6 +9,7 @@ import { resetNotificationsQuery } from '@/lib/queryClient';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { getCardDescription } from '@/lib/utils';
 
 export default function RollBonusCard() {
   const { myPlayer, setNextTurnState, addCardToState } = usePlayerStore(
@@ -34,11 +35,11 @@ export default function RollBonusCard() {
   };
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {
-    return `"${frontendCardsData[option.value].name}"`;
+    return frontendCardsData[option.value].name;
   };
 
-  const getSecondaryText = () => {
-    return 'Карточка получена';
+  const getSecondaryText = (option: WeightedOption<MainBonusCardType>) => {
+    return getCardDescription(frontendCardsData[option.value]);
   };
 
   const myCurrentCards = myPlayer?.bonus_cards ?? [];
@@ -64,9 +65,9 @@ export default function RollBonusCard() {
   return (
     <GenericRoller<MainBonusCardType>
       options={weightedOptions}
-      header="Ролим бонусную карточку"
+      header="Ролл бонусной карточки"
       openButtonText="Получить карточку"
-      finishButtonText="Закрыть"
+      finishButtonText="Получить"
       onRollFinish={handleFinished}
       getWinnerText={getWinnerText}
       getSecondaryText={getSecondaryText}
