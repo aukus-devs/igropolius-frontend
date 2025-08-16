@@ -12,13 +12,15 @@ import { resetPlayersQuery } from '@/lib/queryClient';
 import { MainBonusCardType } from '@/lib/api-types-generated';
 import ImageLoader from './ImageLoader';
 import { getCardDescription } from '@/lib/utils';
+import { SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
 
 export default function MyCards() {
-  const { myCards, turnState, buildingBonus } = usePlayerStore(
+  const { myCards, turnState, buildingBonus, mapsCompleted } = usePlayerStore(
     useShallow(state => ({
       myCards: state.myPlayer?.bonus_cards,
       turnState: state.turnState,
-      buildingBonus: state.myPlayer?.building_upgrade_bonus,
+      buildingBonus: state.myPlayer?.building_upgrade_bonus ?? 0,
+      mapsCompleted: state.myPlayer?.maps_completed ?? 0,
     }))
   );
 
@@ -38,6 +40,9 @@ export default function MyCards() {
   const handleDialogClose = () => {
     setUsedCard(null);
   };
+
+  const mapBonus = mapsCompleted * SCORE_BONUS_PER_MAP_COMPLETION;
+  const hasPlayerBonuses = mapBonus > 0 || buildingBonus !== 0;
 
   return (
     <>
@@ -93,30 +98,53 @@ export default function MyCards() {
             </Tooltip>
           );
         })}
-        {buildingBonus !== undefined && buildingBonus !== 0 && (
+        {hasPlayerBonuses && (
           <>
             <div className="flex flex-col items-center justify-center">
               <div className="rounded-xl bg-gray-500 w-1 h-3.5"></div>
             </div>
-            <Tooltip>
-              <TooltipTrigger>
-                <div
-                  className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
-                  data-positive={buildingBonus > 0}
-                >
-                  {buildingBonus > 0 && '+'}
-                  {buildingBonus}
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <div className="w-[200px]">
-                  <div className="text-[20px] font-semibold mb-2 leading-6">Бонус зданий</div>
-                  <div className="text-base font-semibold text-muted-foreground leading-[19px]">
-                    Автоматически увеличивает или уменьшает размер следующего здания
+            {buildingBonus !== 0 && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <div
+                    className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
+                    data-positive={buildingBonus > 0}
+                  >
+                    {buildingBonus > 0 && '+'}
+                    {buildingBonus}
                   </div>
-                </div>
-              </TooltipContent>
-            </Tooltip>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="w-[200px]">
+                    <div className="text-[20px] font-semibold mb-2 leading-6">Бонус зданий</div>
+                    <div className="text-base font-semibold text-muted-foreground leading-[19px]">
+                      Автоматически увеличивает или уменьшает размер следующего здания
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            )}
+            {mapBonus > 0 && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <div
+                    className="w-[32px] h-[45px] rounded-sm flex items-center justify-center data-[positive=true]:bg-green-500 bg-red-500"
+                    data-positive={mapBonus > 0}
+                  >
+                    {mapBonus > 0 && '+'}
+                    {mapBonus}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="w-[200px]">
+                    <div className="text-[20px] font-semibold mb-2 leading-6">Бонус круга</div>
+                    <div className="text-base font-semibold text-muted-foreground leading-[19px]">
+                      Автоматически добавляет бонус к каждой пройденной игре
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            )}
           </>
         )}
       </Card>
