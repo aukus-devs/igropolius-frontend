@@ -617,7 +617,8 @@ export const playersData: PlayerDetails[] = [
         title: 'Miraculous: Paris Under Siege (2024)',
         duration: 3600,
         rating: 5,
-        review: 'добротная игрушка, но есть пару недочетов: небольшое однообразие + камера из сериала школа, а так вполне неплохо!',
+        review:
+          'добротная игрушка, но есть пару недочетов: небольшое однообразие + камера из сериала школа, а так вполне неплохо!',
         status: 'completed',
         vod_links: 'https://www.twitch.tv/videos/9988776655',
         cover: FALLBACK_GAME_POSTER,
@@ -1199,7 +1200,7 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
     name: 'Сюрприз',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-1-percent-from-all.png`,
     description:
-      'В честь вашего дня рождения все другие игроки перечисляют вам очки (3*{X} от каждого).',
+      'В честь вашего дня рождения все другие игроки перечисляют вам очки (1*{X} от каждого).',
   },
   'receive-scores-for-place': {
     name: 'Выбыл, говорите?',
