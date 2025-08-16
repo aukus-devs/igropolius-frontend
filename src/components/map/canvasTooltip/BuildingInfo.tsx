@@ -25,13 +25,6 @@ function BuildingInfo({ building }: Props) {
     }
   };
 
-  let lengthBonusText = '';
-  if (gameStatus === 'completed' && building.lengthBonus > 0) {
-    lengthBonusText = `тир +${building.lengthBonus}`;
-  } else if (gameStatus === 'completed' && building.lengthBonus < 0) {
-    lengthBonusText = `тир ${building.lengthBonus}`;
-  }
-
   return (
     <Card
       className={`w-70 ${isMobile ? 'pointer-events-auto' : 'pointer-events-none'}`}
@@ -47,8 +40,11 @@ function BuildingInfo({ building }: Props) {
         {gameStatus === 'completed' && (
           <p>
             Длительность игры: {gameLength}
-            {building.lengthBonus !== 0 && (
-              <span className="text-muted-foreground">&nbsp;({lengthBonusText})</span>
+            {building.lengthBonus > 0 && (
+              <span className="text-green-500">&nbsp;(тир +{building.lengthBonus})</span>
+            )}
+            {building.lengthBonus < 0 && (
+              <span className="text-red-500">&nbsp;(тир {building.lengthBonus})</span>
             )}
           </p>
         )}
