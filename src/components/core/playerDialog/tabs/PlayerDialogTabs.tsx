@@ -60,7 +60,7 @@ function PlayerDialogTabs({ player, scrollAreaRef }: Props) {
         ))}
       </TabsList>
       {tabs.map(({ value, content }) => (
-        <TabsContent key={value} value={value} className="z-10">
+        <TabsContent key={value} value={value} className="z-10 mb-30">
           {content}
         </TabsContent>
       ))}

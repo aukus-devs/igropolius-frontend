@@ -87,7 +87,7 @@ function ReviewsTab({ player }: { player: PlayerDetails }) {
           </Button>
         )}
       </div>
-      <div className="flex flex-col gap-8 md:px-5 mt-2 md:mt-0 pb-30">
+      <div className="flex flex-col gap-8 md:px-5 mt-2 md:mt-0">
         {showCurrentGame && <CurrentGame player={player} />}
         {filteredGames.length === 0 ? (
           <div className="text-center text-xs font-roboto-wide-semibold text-muted-foreground">
