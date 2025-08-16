@@ -118,9 +118,9 @@ function GameTime() {
           </SelectTrigger>
         </TooltipTrigger>
         <TooltipContent>
-          Если игра пройдена более чем в 2 раза быстрее, чем на HLTB,
+          Если игра пройдена более чем в 3 раза быстрее, чем на HLTB (Main Story вверху),
           <br />
-          пересчитайте время по формуле: (время HLTB + ваше время прохождения) / 2
+          пересчитайте время по формуле: (время HLTB + ваше время) / 2
         </TooltipContent>
       </Tooltip>
       <SelectContent>
@@ -601,7 +601,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
           {error && <span className="text-sm text-destructive font-medium">{error}</span>}
           {fastCompletion && (
             <span className="text-destructive font-medium">
-              Если игра пройдена более чем в 2 раза быстрее, чем на HLTB,
+              Если игра пройдена более чем в 3 раза быстрее, чем на HLTB (Main Story вверху),
               <br />
               пересчитайте время по формуле: (время HLTB + ваше время) / 2
             </span>
