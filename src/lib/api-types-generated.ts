@@ -50,7 +50,9 @@ export type BonusCardType =
   | "reroll"
   | "reroll-and-roll"
   | "lose-card-or-3-percent"
-  | "receive-scores-for-active-cards";
+  | "receive-scores-for-active-cards"
+  | "increase-difficulty"
+  | "decrease-difficulty";
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "InstantCardType".
@@ -67,7 +69,9 @@ export type InstantCardType =
   | "reroll"
   | "reroll-and-roll"
   | "lose-card-or-3-percent"
-  | "receive-scores-for-active-cards";
+  | "receive-scores-for-active-cards"
+  | "increase-difficulty"
+  | "decrease-difficulty";
 export type SectorId = number | null;
 export type StolenFromPlayer = number | null;
 export type StolenBy = number | null;

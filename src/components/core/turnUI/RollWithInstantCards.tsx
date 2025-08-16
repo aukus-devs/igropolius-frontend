@@ -29,11 +29,12 @@ type Props = {
 };
 
 export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
-  const { playerCards, setNextTurnState, addCardToState } = usePlayerStore(
+  const { playerCards, setNextTurnState, addCardToState, difficultyLevel } = usePlayerStore(
     useShallow(state => ({
       playerCards: state.myPlayer?.bonus_cards,
       setNextTurnState: state.setNextTurnState,
       addCardToState: state.addCardToState,
+      difficultyLevel: state.myPlayer?.game_difficulty_level,
     }))
   );
 
@@ -131,8 +132,18 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
       }
     });
 
+    const removeDifficultyCards: InstantCardType[] = [];
+    if (difficultyLevel === -1) {
+      removeDifficultyCards.push('decrease-difficulty');
+    } else if (difficultyLevel === 1) {
+      removeDifficultyCards.push('increase-difficulty');
+    }
+
     Object.entries(frontendInstantCardsData).forEach(([instantType_, cardData]) => {
       const instantType = instantType_ as InstantCardType;
+      if (removeDifficultyCards.includes(instantType)) {
+        return;
+      }
       result.push({
         value: { instant: instantType },
         label: cardData.name,
@@ -140,9 +151,8 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
         imageUrl: cardData.picture,
       });
     });
-
     return result;
-  }, [playerCards]);
+  }, [playerCards, difficultyLevel]);
 
   let finishText = 'Готово';
   if (moveToCardDrop) {
@@ -162,6 +172,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     }
 
     useSystemStore.getState().enableQueries(true);
+    resetPlayersQuery();
 
     setActivationResult(null);
     setMoveToCardDrop(false);

@@ -1306,16 +1306,16 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
       'Получите количество очков, равное количеству ваших карточек умноженному на 1+{X}. Если карточек нет - реролл колеса.',
     picture: `${import.meta.env.BASE_URL}assets/cards/receive-scores-for-active-cards.png`,
   },
-  // 'decrease-difficulty': {
-  //   name: 'Очки ИЗИ',
-  //   description: 'Уменьшает сложность следующей подходящей игры на 1.',
-  //   picture: `${import.meta.env.BASE_URL}assets/cards/decrease-difficulty.png`,
-  // },
-  // 'increase-difficulty': {
-  //   name: 'Повязка Рэмбо',
-  //   description: 'Увеличивает сложность следующей подходящей игры на 1.',
-  //   picture: `${import.meta.env.BASE_URL}assets/cards/increase-difficulty.png`,
-  // },
+  'decrease-difficulty': {
+    name: 'Очки ИЗИ',
+    description: 'Уменьшает сложность следующей подходящей игры на 1.',
+    picture: `${import.meta.env.BASE_URL}assets/cards/decrease-difficulty.png`,
+  },
+  'increase-difficulty': {
+    name: 'Повязка Рэмбо',
+    description: 'Увеличивает сложность следующей подходящей игры на 1.',
+    picture: `${import.meta.env.BASE_URL}assets/cards/increase-difficulty.png`,
+  },
 };
 
 export const bonusCardsData = {
