@@ -111,12 +111,15 @@ function CardsTab({ player }: { player: PlayerDetails }) {
   const availableCards = mainCardTypes.filter(type => cards.some(card => card.bonus_type === type));
   const unavailableCards = mainCardTypes.filter(type => !availableCards.includes(type));
 
+  const showBuildingBonus = buildingBonus !== 0;
+  const showMapBonus = player.maps_completed > 0;
+
   return (
     <div className="flex flex-col md:my-0 my-5 md:px-5">
       <div className="flex flex-wrap gap-y-2.5 gap-x-2 mb-[50px]">
         <GameDifficultyBonusCard difficulty={player.game_difficulty_level} />
-        <BuildingBonusCard buildingBonus={buildingBonus} />
-        <MapScoreBonusCard mapsCompleted={player.maps_completed} />
+        {showBuildingBonus && <BuildingBonusCard buildingBonus={buildingBonus} />}
+        {showMapBonus && <MapScoreBonusCard mapsCompleted={player.maps_completed} />}
         {availableCards.map(type => (
           <GameCard key={type} type={type} />
         ))}
