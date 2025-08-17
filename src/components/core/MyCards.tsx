@@ -123,15 +123,17 @@ export default function MyCards() {
           <div className="flex flex-col items-center justify-center">
             <div className="rounded-xl bg-gray-500 w-1 h-3.5"></div>
           </div>
-          <BonusCardComponent
-            size="small"
-            variant={difficultyVariant}
-            description="Изменяет сложность следующей подходящей игры"
-            header={<div className="text-xs">Слж</div>}
-            tooltipHeader={`Уровень сложности: ${tooltipText}`}
-            value={difficultyText}
-            image={difficultyImg}
-          />
+          {myPlayer.game_difficulty_level !== 0 && (
+            <BonusCardComponent
+              size="small"
+              variant={difficultyVariant}
+              description="Изменяет сложность следующей подходящей игры"
+              header={<div className="text-xs">Слж</div>}
+              tooltipHeader={`Уровень сложности: ${tooltipText}`}
+              value={difficultyText}
+              image={difficultyImg}
+            />
+          )}
           {buildingBonus !== 0 && (
             <BonusCardComponent
               size="small"

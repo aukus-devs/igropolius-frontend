@@ -117,7 +117,9 @@ function CardsTab({ player }: { player: PlayerDetails }) {
   return (
     <div className="flex flex-col md:my-0 my-5 md:px-5">
       <div className="flex flex-wrap gap-y-2.5 gap-x-2 mb-[50px]">
-        <GameDifficultyBonusCard difficulty={player.game_difficulty_level} />
+        {player.game_difficulty_level !== 0 && (
+          <GameDifficultyBonusCard difficulty={player.game_difficulty_level} />
+        )}
         {showBuildingBonus && <BuildingBonusCard buildingBonus={buildingBonus} />}
         {showMapBonus && <MapScoreBonusCard mapsCompleted={player.maps_completed} />}
         {availableCards.map(type => (
@@ -190,6 +192,7 @@ function GameDifficultyBonusCard({ difficulty }: { difficulty: GameDifficulty })
   let difficultyText = 'Средняя';
   let variant: 'neutral' | 'positive' | 'negative' = 'neutral';
   let difficultyImg = undefined;
+
   if (difficulty === -1) {
     difficultyText = 'Легкая';
     variant = 'positive';
