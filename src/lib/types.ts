@@ -124,6 +124,7 @@ export type FrontendCardData = {
   name: string;
   picture: string;
   description: string;
+  disabled?: boolean;
 };
 
 export type ScoreDetails = {

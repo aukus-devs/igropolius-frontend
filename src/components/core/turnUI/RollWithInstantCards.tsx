@@ -144,6 +144,9 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
       if (removeDifficultyCards.includes(instantType)) {
         return;
       }
+      if (cardData.disabled) {
+        return;
+      }
       result.push({
         value: { instant: instantType },
         label: cardData.name,

@@ -1284,6 +1284,7 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
     name: 'Процесс стабилизируется',
     picture: `${import.meta.env.BASE_URL}assets/cards/reroll-and-roll.png`,
     description: 'Реролл этого колеса, плюс один дополнительный ролл.',
+    disabled: true,
   },
   'lose-card-or-3-percent': {
     name: 'Просто не повезло',
