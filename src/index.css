@@ -226,7 +226,7 @@
 
 .rich-editor .ql-container .ql-editor {
   overflow-y: auto;
-  height: 350px;
+  height: 50vh;
 }
 
 .text-box-trim-end {
