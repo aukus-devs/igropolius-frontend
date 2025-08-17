@@ -7,6 +7,7 @@ import { saveRulesVersion } from '@/lib/api';
 import RichDisplay from './RichDisplay';
 import { resetCurrentRulesQuery } from '@/lib/queryClient';
 import { RulesCategory, RulesVersion } from '@/lib/api-types-generated';
+import { esliFix } from '@/lib/utils';
 
 export default function Rules({
   category,
@@ -40,6 +41,8 @@ export default function Rules({
     created_at: Date.now() / 1000,
     category,
   };
+
+  version.content = esliFix(version.content);
 
   return (
     <div className="">

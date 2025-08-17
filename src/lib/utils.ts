@@ -611,7 +611,9 @@ export function getCardDescription(
   if (!scoreMultiplier) {
     scoreMultiplier = useSystemStore.getState().instantCardScoreMultiplier;
   }
-  return card.description.replaceAll('{X}', String(scoreMultiplier));
+
+  const withMulti = card.description.replaceAll('{X}', String(scoreMultiplier));
+  return esliFix(withMulti);
 }
 
 export function getTaxCalculationText(taxInfo: TaxData, myPlayerId?: number): string {
@@ -697,4 +699,12 @@ export function adjustGameLength(len: GameLength, update: number): GameLength {
     throw new Error(`Game length index out of bounds: ${len}, ${newIndex}`);
   }
   return gameLengths[newIndex];
+}
+
+export function esliFix(input: string): string {
+  const esliUpdate = useSystemStore.getState().myUser?.username.toLowerCase() === 'maddyson';
+  if (esliUpdate) {
+    return input.replaceAll('если', 'эсли').replaceAll('Если', 'Эсли');
+  }
+  return input;
 }
