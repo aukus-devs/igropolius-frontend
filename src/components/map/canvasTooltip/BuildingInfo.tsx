@@ -54,7 +54,7 @@ function BuildingInfo({ building }: Props) {
           <Share className="w-4 h-4" />
         </div>
         {showGroupBonus && gameStatus === 'completed' && (
-          <div>Бонус группы: {building.hasGroupBonus ? 'да' : 'нет'}</div>
+          <div>Монополия: {building.hasGroupBonus ? 'да' : 'нет'}</div>
         )}
         <p>Построено: {formatTsToMonthDatetime(building.createdAt)}</p>
       </CardContent>
