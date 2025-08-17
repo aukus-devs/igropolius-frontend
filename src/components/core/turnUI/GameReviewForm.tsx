@@ -741,9 +741,19 @@ function GameDifficulty() {
 
   return (
     <Select onValueChange={handleValueChange} defaultValue={String(playerDifficulty)}>
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Сложность" />
-      </SelectTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Сложность" />
+          </SelectTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>
+            Если была использована сложность из-за бафа
+            <br /> иначе - средняя
+          </p>
+        </TooltipContent>
+      </Tooltip>
       <SelectContent>
         {options.map((option, idx) => (
           <SelectItem key={idx} value={option.value}>
