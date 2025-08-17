@@ -268,6 +268,7 @@ export type Duration1 = number | null;
 export type VodLinks1 = string | null;
 export type Cover1 = string | null;
 export type GameId1 = number | null;
+export type ScoreChangeAmount = number | null;
 export type Games1 = PlayerGame[];
 export type BonusCards = ActiveBonusCard[];
 export type Color = string;
@@ -691,6 +692,7 @@ export interface PlayerGame {
   cover?: Cover1;
   game_id?: GameId1;
   difficulty_level: GameDifficulty;
+  score_change_amount?: ScoreChangeAmount;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

@@ -58,7 +58,7 @@ function GameReview({ game }: Props) {
   // revert game length bonus to show actual hltb time
   const adjustedLength = adjustGameLength(game.length, -game.length_bonus);
 
-  const gameScores = ScoreByGameLength[adjustedLength];
+  const scoreChange = game.score_change_amount;
 
   return (
     <div className="font-semibold">
@@ -94,9 +94,9 @@ function GameReview({ game }: Props) {
             <Badge className="bg-white/20 text-white/70 font-semibold">
               <p> Время — {duration && duration > 0 ? formatMs(duration * 1000) : '[Н/Д]'}</p>
             </Badge>
-            {game.status === 'drop' && (
+            {game.status === 'drop' && scoreChange && (
               <Badge className="bg-red-500/20 text-white/70 font-semibold">
-                -25 <Share />
+                {scoreChange} <Share />
               </Badge>
             )}
             {adjustedLength && (
@@ -114,11 +114,16 @@ function GameReview({ game }: Props) {
                     <p>Тир {game.length_bonus}</p>
                   </Badge>
                 )}
-                <Badge className="bg-green-500/20 text-white/70 font-semibold">
-                  +{gameScores} <Share />
-                </Badge>
+                {scoreChange && (
+                  <Badge className="bg-green-500/20 text-white/70 font-semibold">
+                    +{scoreChange} <Share />
+                  </Badge>
+                )}
               </>
             )}
+            <Badge className="bg-white/20 text-white/70 font-semibold">
+              <p>Сектор #{game.sector_id}</p>
+            </Badge>
           </div>
 
           <p>
