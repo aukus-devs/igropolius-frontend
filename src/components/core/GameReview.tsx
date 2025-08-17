@@ -2,7 +2,7 @@ import { Badge } from '../ui/badge';
 import { adjustGameLength, formatMs } from '@/lib/utils';
 import { useState } from 'react';
 import { Edit, Share } from '../icons';
-import { FALLBACK_GAME_POSTER, ScoreByGameLength } from '@/lib/constants';
+import { FALLBACK_GAME_POSTER } from '@/lib/constants';
 import { GameCompletionType, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
 import { Button } from '../ui/button';
