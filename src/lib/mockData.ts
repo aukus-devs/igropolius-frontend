@@ -1308,12 +1308,14 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
   },
   'decrease-difficulty': {
     name: 'Очки ИЗИ',
-    description: 'Уменьшает сложность следующей подходящей игры на 1.',
+    description:
+      'Уменьшает сложность подходящей игры на 1. Используется когда начинается новая игра.',
     picture: `${import.meta.env.BASE_URL}assets/cards/decrease-difficulty.png`,
   },
   'increase-difficulty': {
     name: 'Повязка Рэмбо',
-    description: 'Увеличивает сложность следующей подходящей игры на 1.',
+    description:
+      'Увеличивает сложность подходящей игры на 1. Используется когда начинается новая игра.',
     picture: `${import.meta.env.BASE_URL}assets/cards/increase-difficulty.png`,
   },
 };
