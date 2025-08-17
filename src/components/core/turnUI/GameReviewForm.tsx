@@ -752,6 +752,7 @@ function GameDifficulty() {
       <TooltipTrigger asChild>
         <div className="rounded-2xl">
           <Toggle
+            variant="outline"
             className="w-full p-2 rounded-lg"
             size={null}
             onPressedChange={handleValueChange}
