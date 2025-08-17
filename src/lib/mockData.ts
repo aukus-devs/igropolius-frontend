@@ -1325,6 +1325,12 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
       '50% шанс на перенос случайной карточки в хранилище тюрьмы. Если карточка не потеряна, получите 4*{X} очков',
     picture: `${import.meta.env.BASE_URL}assets/cards/police-search.png`,
   },
+  asket: {
+    name: 'Аскет',
+    description:
+      'Если у вас меньше трех карт бонусов, получите 6*{X} очков, в противном случае потеряйте 2*{X} за каждую карту, начиная с третьей (если карт всего 3, штраф за одну и тд).',
+    picture: `${import.meta.env.BASE_URL}assets/cards/asket.png`,
+  },
 };
 
 export const bonusCardsData = {
