@@ -136,7 +136,7 @@ export default function MyCards() {
               variant={buildingBonus > 0 ? 'positive' : 'negative'}
               description="Автоматически увеличивает или уменьшает размер следующего здания"
               header={<div className="text-xs">Дом</div>}
-              tooltipHeader="Бонус зданий"
+              tooltipHeader={`Бонус зданий: ${buildingBonus > 0 ? '+' : ''}${buildingBonus}`}
               value={buildingBonus}
             />
           )}
