@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { GameDifficulty, MainBonusCardType, PlayerDetails } from '@/lib/api-types-generated';
-import { mainCardTypes, frontendCardsData } from '@/lib/mockData';
+import { mainCardTypes, frontendCardsData, frontendInstantCardsData } from '@/lib/mockData';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect, useRef } from 'react';
 import ImageLoader from '../../ImageLoader';
@@ -189,12 +189,15 @@ function MapScoreBonusCard({ mapsCompleted }: { mapsCompleted: number }) {
 function GameDifficultyBonusCard({ difficulty }: { difficulty: GameDifficulty }) {
   let difficultyText = 'Средняя';
   let variant: 'neutral' | 'positive' | 'negative' = 'neutral';
+  let difficultyImg = undefined;
   if (difficulty === -1) {
     difficultyText = 'Легкая';
     variant = 'positive';
+    difficultyImg = frontendInstantCardsData['decrease-difficulty'].picture;
   } else if (difficulty === 1) {
     difficultyText = 'Сложная';
     variant = 'negative';
+    difficultyImg = frontendInstantCardsData['increase-difficulty'].picture;
   }
 
   return (
@@ -203,7 +206,9 @@ function GameDifficultyBonusCard({ difficulty }: { difficulty: GameDifficulty })
       size="large"
       variant={variant}
       header="Сложность игры"
+      tooltipHeader={`Сложность игры: ${difficultyText}`}
       value={<span className="text-2xl">{difficultyText}</span>}
+      image={difficultyImg}
     />
   );
 }

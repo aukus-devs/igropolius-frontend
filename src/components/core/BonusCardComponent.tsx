@@ -9,6 +9,7 @@ type Props = {
   description: string;
   variant: 'positive' | 'negative' | 'neutral';
   tooltipHeader?: string;
+  image?: string;
 };
 
 export default function BonusCardComponent({
@@ -18,6 +19,7 @@ export default function BonusCardComponent({
   variant,
   description,
   tooltipHeader,
+  image,
 }: Props) {
   const isMobile = useIsMobile();
   const [showDescription, setShowDescription] = useState(false);
@@ -43,6 +45,7 @@ export default function BonusCardComponent({
         variant={variant}
         description={description}
         tooltipHeader={tooltipHeader}
+        image={image}
       />
     );
   }
@@ -96,10 +99,14 @@ export default function BonusCardComponent({
             className="flex md:w-[134px] md:h-[189px] w-[122px] h-[170px] rounded-xl data-[variant=positive]:bg-green-500/30 data-[variant=positive]:text-green-400  data-[variant=neutral]:bg-blue-500/30 data-[variant=neutral]:text-blue-400 data-[variant=negative]:bg-red-500/30 data-[variant=negative]:text-red-400 justify-center text-4xl  "
             data-variant={variant}
           >
-            <div>
-              <div className="text-xl mt-4 mb-4">{header}</div>
-              <div className="text-2xl">{value}</div>
-            </div>
+            {image ? (
+              <img src={image} />
+            ) : (
+              <div>
+                <div className="text-xl mt-4 mb-4">{header}</div>
+                <div className="text-2xl">{value}</div>
+              </div>
+            )}
           </div>
         </TooltipTrigger>
         <TooltipContent
@@ -124,6 +131,7 @@ function SmallBonusCard({
   variant,
   description,
   tooltipHeader,
+  image,
 }: Omit<Props, 'size'>) {
   return (
     <Tooltip>
@@ -132,8 +140,13 @@ function SmallBonusCard({
           className="w-[32px] h-[45px] rounded-sm data-[variant=positive]:bg-green-500/30 data-[variant=positive]:text-green-400  data-[variant=neutral]:bg-blue-500/30 data-[variant=neutral]:text-blue-400 data-[variant=negative]:bg-red-500/30 data-[variant=negative]:text-red-400 "
           data-variant={variant}
         >
-          {header}
-          {value}
+          {image ? (
+            <img src={image} alt={tooltipHeader}></img>
+          ) : (
+            <>
+              {header} {value}
+            </>
+          )}
         </div>
       </TooltipTrigger>
       <TooltipContent>

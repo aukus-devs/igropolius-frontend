@@ -2,7 +2,7 @@ import usePlayerStore from '@/stores/playerStore';
 import { Card } from '../ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { Button } from '../ui/button';
-import { frontendCardsData, mainCardTypes } from '@/lib/mockData';
+import { frontendCardsData, frontendInstantCardsData, mainCardTypes } from '@/lib/mockData';
 import { useShallow } from 'zustand/shallow';
 import { ManualUseCard } from '@/lib/types';
 import { useState } from 'react';
@@ -51,17 +51,18 @@ export default function MyCards() {
   const mapBonus = myPlayer.maps_completed * SCORE_BONUS_PER_MAP_COMPLETION;
   const buildingBonus = myPlayer.building_upgrade_bonus;
 
-  let difficultyText = 'С';
+  const difficultyText = 'С';
   let difficultyVariant: 'neutral' | 'positive' | 'negative' = 'neutral';
   let tooltipText = 'Средняя';
+  let difficultyImg = undefined;
   if (myPlayer.game_difficulty_level === -1) {
-    difficultyText = 'Л';
     difficultyVariant = 'positive';
     tooltipText = 'Лёгкая';
+    difficultyImg = frontendInstantCardsData['decrease-difficulty'].picture;
   } else if (myPlayer.game_difficulty_level === 1) {
-    difficultyText = 'Т';
     difficultyVariant = 'negative';
-    tooltipText = 'Тяжёлая';
+    tooltipText = 'Сложная';
+    difficultyImg = frontendInstantCardsData['increase-difficulty'].picture;
   }
 
   return (
@@ -129,6 +130,7 @@ export default function MyCards() {
             header={<div className="text-xs">Слж</div>}
             tooltipHeader={`Уровень сложности: ${tooltipText}`}
             value={difficultyText}
+            image={difficultyImg}
           />
           {buildingBonus !== 0 && (
             <BonusCardComponent
