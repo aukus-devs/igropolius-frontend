@@ -148,9 +148,9 @@ export default function MyCards() {
             <BonusCardComponent
               size="small"
               variant={mapBonus > 0 ? 'positive' : 'neutral'}
-              description="Автоматически добавляет бонус к каждой пройденной игре"
+              description="Автоматически добавляет бонус к каждой пройденной игре: 5 * круг"
               header={<div className="text-xs">Круг</div>}
-              tooltipHeader={`Бонус круга: #${myPlayer.maps_completed}`}
+              tooltipHeader={`Пройдено кругов: ${myPlayer.maps_completed}`}
               value={mapBonus}
             />
           )}

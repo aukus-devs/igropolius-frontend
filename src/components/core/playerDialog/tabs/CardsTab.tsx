@@ -172,7 +172,7 @@ function MapScoreBonusCard({ mapsCompleted }: { mapsCompleted: number }) {
 
   return (
     <BonusCardComponent
-      description="Автоматически добавляет бонус к каждой пройденной игре"
+      description="Автоматически добавляет бонус к каждой пройденной игре: 5 * круг"
       size="large"
       variant="positive"
       header={
@@ -182,7 +182,7 @@ function MapScoreBonusCard({ mapsCompleted }: { mapsCompleted: number }) {
           круга
         </span>
       }
-      tooltipHeader={`Бонус круга: #${mapsCompleted}`}
+      tooltipHeader={`Пройдено кругов: ${mapsCompleted}`}
       value={<span className="text-4xl">{valueText}</span>}
     />
   );
