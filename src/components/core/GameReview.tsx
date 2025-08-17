@@ -1,8 +1,8 @@
 import { Badge } from '../ui/badge';
 import { adjustGameLength, formatMs } from '@/lib/utils';
 import { useState } from 'react';
-import { Edit } from '../icons';
-import { FALLBACK_GAME_POSTER } from '@/lib/constants';
+import { Edit, Share } from '../icons';
+import { FALLBACK_GAME_POSTER, ScoreByGameLength } from '@/lib/constants';
 import { GameCompletionType, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
 import { Button } from '../ui/button';
@@ -58,6 +58,8 @@ function GameReview({ game }: Props) {
   // revert game length bonus to show actual hltb time
   const adjustedLength = adjustGameLength(game.length, -game.length_bonus);
 
+  const gameScores = ScoreByGameLength[adjustedLength];
+
   return (
     <div className="font-semibold">
       <div className="w-full flex items-center justify-between mb-2.5">
@@ -88,26 +90,37 @@ function GameReview({ game }: Props) {
           alt={title}
         />
         <div className="text-muted-foreground">
-          {adjustedLength && (
-            <div className="flex flex-wrap gap-2 mb-2.5">
-              <Badge className="bg-white/20 text-white/70 font-semibold">
-                <p> Время — {duration && duration > 0 ? formatMs(duration * 1000) : '[Н/Д]'}</p>
+          <div className="flex flex-wrap gap-2 mb-2.5">
+            <Badge className="bg-white/20 text-white/70 font-semibold">
+              <p> Время — {duration && duration > 0 ? formatMs(duration * 1000) : '[Н/Д]'}</p>
+            </Badge>
+            {game.status === 'drop' && (
+              <Badge className="bg-red-500/20 text-white/70 font-semibold">
+                -25 <Share />
               </Badge>
-              <Badge className="bg-white/20 text-white/70 font-semibold">
-                <p> По HLTB — {adjustedLength}ч</p>
-              </Badge>
-              {game.length_bonus > 0 && (
+            )}
+            {adjustedLength && (
+              <>
+                <Badge className="bg-white/20 text-white/70 font-semibold">
+                  <p> По HLTB — {adjustedLength}ч</p>
+                </Badge>
+                {game.length_bonus > 0 && (
+                  <Badge className="bg-green-500/20 text-white/70 font-semibold">
+                    <p>Тир +{game.length_bonus}</p>
+                  </Badge>
+                )}
+                {game.length_bonus < 0 && (
+                  <Badge className="bg-red-500/20 text-white/70 font-semibold">
+                    <p>Тир {game.length_bonus}</p>
+                  </Badge>
+                )}
                 <Badge className="bg-green-500/20 text-white/70 font-semibold">
-                  <p>Тир +{game.length_bonus}</p>
+                  +{gameScores} <Share />
                 </Badge>
-              )}
-              {game.length_bonus < 0 && (
-                <Badge className="bg-red-500/20 text-white/70 font-semibold">
-                  <p>Тир {game.length_bonus}</p>
-                </Badge>
-              )}
-            </div>
-          )}
+              </>
+            )}
+          </div>
+
           <p>
             {rating} / 10 — {parseReview(review)}
           </p>
