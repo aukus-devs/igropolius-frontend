@@ -163,4 +163,9 @@ export const GameRollTypeNames: Record<GameRollType, string> = {
   steam: 'пресет из стима',
 };
 
+export const GameRollTypeShortName: Record<GameRollType, string> = {
+  auc: 'Аук',
+  steam: 'Стим',
+};
+
 export const SCORE_BONUS_PER_MAP_COMPLETION = 5;

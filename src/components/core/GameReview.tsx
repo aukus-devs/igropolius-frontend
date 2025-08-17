@@ -2,13 +2,14 @@ import { Badge } from '../ui/badge';
 import { adjustGameLength, formatMs } from '@/lib/utils';
 import { useState } from 'react';
 import { Edit, Share } from '../icons';
-import { FALLBACK_GAME_POSTER } from '@/lib/constants';
+import { FALLBACK_GAME_POSTER, GameRollTypeShortName } from '@/lib/constants';
 import { GameCompletionType, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
 import { Button } from '../ui/button';
 import GameReviewEditForm from './turnUI/GameReviewEditForm';
 import useSystemStore from '@/stores/systemStore';
 import ImageLoader from './ImageLoader';
+import { SectorsById } from '@/lib/mockData';
 
 type Props = {
   game: PlayerGame;
@@ -59,6 +60,7 @@ function GameReview({ game }: Props) {
   const adjustedLength = adjustGameLength(game.length, -game.length_bonus);
 
   const scoreChange = game.score_change_amount;
+  const rollType = SectorsById[game.sector_id]?.rollType;
 
   return (
     <div className="font-semibold">
@@ -121,9 +123,13 @@ function GameReview({ game }: Props) {
                 )}
               </>
             )}
-            <Badge className="bg-white/20 text-white/70 font-semibold">
-              <p>Сектор #{game.sector_id}</p>
-            </Badge>
+            {rollType && (
+              <Badge className="bg-white/20 text-white/70 font-semibold">
+                <p>
+                  {GameRollTypeShortName[rollType]} на #{game.sector_id}
+                </p>
+              </Badge>
+            )}
           </div>
 
           <p>
