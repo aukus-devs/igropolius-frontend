@@ -719,6 +719,12 @@ function GameDifficulty() {
   const setGameDifficulty = useReviewFormStore(state => state.setGameDifficulty);
   const playerDifficulty = usePlayerStore(state => state.myPlayer?.game_difficulty_level) ?? 0;
 
+  useEffect(() => {
+    if (playerDifficulty != 0) {
+      setGameDifficulty(playerDifficulty);
+    }
+  }, [playerDifficulty, setGameDifficulty]);
+
   const options = [
     { title: 'Легкая', value: '-1' },
     { title: 'Средняя', value: '0' },
