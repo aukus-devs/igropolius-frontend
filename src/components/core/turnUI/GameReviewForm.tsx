@@ -26,6 +26,7 @@ import {
 import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
 import ImageLoader from '../ImageLoader';
+import useUrlPath from '@/hooks/useUrlPath';
 
 type StatesOption = {
   title: string;
@@ -460,12 +461,13 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
   );
 
   const {
-    open,
-    setOpen,
+    // open,
+    // setOpen,
     setRating,
     rating,
     sendReview,
     gameStatus,
+    setGameStatus,
     error,
     clearError,
     isSubmitting,
@@ -473,12 +475,13 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     gameLength,
   } = useReviewFormStore(
     useShallow(state => ({
-      open: state.open,
-      setOpen: state.setOpen,
+      // open: state.open,
+      // setOpen: state.setOpen,
       setRating: state.setRating,
       rating: state.rating,
       sendReview: state.sendReview,
       gameStatus: state.gameStatus,
+      setGameStatus: state.setGameStatus,
       error: state.error,
       clearError: state.clearError,
       isSubmitting: state.isSubmitting,
@@ -486,6 +489,32 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
       gameLength: state.gameTime,
     }))
   );
+
+  const { activate, pathActive: open, location } = useUrlPath('/game-review');
+
+  const completion = new URLSearchParams(location.search).get('completion');
+  let forceCompletion: GameCompletionType | null = null;
+  switch (completion) {
+    case 'completed':
+      forceCompletion = 'completed';
+      break;
+    case 'drop':
+      forceCompletion = 'drop';
+      break;
+    case 'reroll':
+      forceCompletion = 'reroll';
+      break;
+  }
+
+  useEffect(() => {
+    if (forceCompletion && forceCompletion !== gameStatus) {
+      setGameStatus(forceCompletion);
+    }
+  }, [forceCompletion, gameStatus, setGameStatus]);
+
+  const handleOpenChange = (isOpen: boolean) => {
+    activate(isOpen);
+  };
 
   const { data: gameDurationData } = useQuery({
     queryKey: queryKeys.gameDuration(selectedGame?.name),
@@ -545,18 +574,18 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
       return;
     }
 
-    let turnParams = {};
+    const turnParams: Parameters<typeof setNextTurnState>[0] = { skipUpdate: true };
     switch (gameStatus) {
       case 'drop':
-        turnParams = { action: 'drop-game' };
+        turnParams.action = 'drop-game';
         break;
       case 'reroll':
-        turnParams = { action: 'reroll-game' };
+        turnParams.action = 'reroll-game';
         break;
     }
 
     await setNextTurnState(turnParams);
-    setOpen(false);
+    handleOpenChange(false);
   };
 
   const gameLengthMaxHours = GameLengthMax[gameLength || ''];
@@ -571,10 +600,17 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     myPlayer.game_difficulty_level != 0;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       {showTrigger && (
         <DialogTrigger asChild>
-          <Button variant="action">Оценка игры</Button>
+          <Button
+            variant="action"
+            onClick={() => {
+              activate(true);
+            }}
+          >
+            Оценка игры
+          </Button>
         </DialogTrigger>
       )}
       <DialogContent className="sm:max-w-[790px] p-2.5" aria-describedby="">

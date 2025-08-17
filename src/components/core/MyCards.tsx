@@ -14,6 +14,7 @@ import ImageLoader from './ImageLoader';
 import { getCardDescription } from '@/lib/utils';
 import { SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
 import BonusCardComponent from './BonusCardComponent';
+import { useNavigate } from 'react-router';
 
 export default function MyCards() {
   const { myPlayer, turnState } = usePlayerStore(
@@ -22,6 +23,8 @@ export default function MyCards() {
       turnState: state.turnState,
     }))
   );
+
+  const navigate = useNavigate();
 
   const [usedCard, setUsedCard] = useState<ManualUseCard | null>(null);
 
@@ -40,6 +43,9 @@ export default function MyCards() {
 
   const handleDialogClose = () => {
     setUsedCard(null);
+    if (usedCard === 'reroll-game') {
+      navigate('/game-review?completion=reroll');
+    }
   };
 
   const mapBonus = myPlayer.maps_completed * SCORE_BONUS_PER_MAP_COMPLETION;
