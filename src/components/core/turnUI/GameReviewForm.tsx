@@ -548,9 +548,10 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     if (!state.gameTitle) return true;
     if (!state.gameStatus) return true;
     if (state.gameReview.length === 0) return true;
-    if (state.rating === 0) return true;
 
     if (state.gameStatus === 'reroll') return false;
+
+    if (state.rating === 0) return true;
     if (state.gameStatus === 'drop') return false;
 
     // completed
