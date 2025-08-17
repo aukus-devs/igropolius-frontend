@@ -595,7 +595,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
   const fastCompletion =
     gameLengthMaxHours &&
     gameDurationData?.duration &&
-    gameDurationData.duration < (gameLengthMaxHours * 60 * 60) / 2;
+    gameDurationData.duration <= (gameLengthMaxHours * 60 * 60) / 3;
 
   const showGameDifficulty =
     gameStatus === 'completed' &&
