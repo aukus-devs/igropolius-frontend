@@ -208,7 +208,7 @@ export default function GamesRollerPage() {
                         <div className="flex justify-between">
                           <span className="text-white/80">All Styles:</span>
                           <span className="text-white font-mono">
-                            {selectedGame.comp_plus
+                            {selectedGame.comp_all
                               ? formatHltbLength(selectedGame.comp_all)
                               : 'Н/Д'}
                             {selectedGame.comp_all_count > 0 && (
