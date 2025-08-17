@@ -27,6 +27,7 @@ import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
 import ImageLoader from '../ImageLoader';
 import useUrlPath from '@/hooks/useUrlPath';
+import { Toggle } from '@/components/ui/toggle';
 
 type StatesOption = {
   title: string;
@@ -725,48 +726,40 @@ function GameDifficulty() {
     }
   }, [playerDifficulty, setGameDifficulty]);
 
-  const options = [
-    { title: 'Легкая', value: '-1' },
-    { title: 'Средняя', value: '0' },
-    { title: 'Сложная', value: '1' },
-  ];
-
-  const handleValueChange = (value: string) => {
-    switch (value) {
-      case '-1':
-        setGameDifficulty(-1);
-        break;
-      case '0':
-        setGameDifficulty(0);
-        break;
-      case '1':
-        setGameDifficulty(1);
-        break;
+  const handleValueChange = (pressed: boolean) => {
+    if (pressed) {
+      setGameDifficulty(playerDifficulty);
+    } else {
+      setGameDifficulty(0);
     }
   };
 
+  if (playerDifficulty === 0) {
+    return null;
+  }
+
+  let difficultyText = 'Пройдено?';
+  if (playerDifficulty === -1) {
+    difficultyText = 'Пройдено на легком?';
+  } else if (playerDifficulty === 1) {
+    difficultyText = 'Пройдено на сложном?';
+  }
+
   return (
-    <Select onValueChange={handleValueChange} defaultValue={String(playerDifficulty)}>
+    <Toggle
+      className="fit-content px-2"
+      size={null}
+      onPressedChange={handleValueChange}
+      defaultPressed={true}
+    >
       <Tooltip>
         <TooltipTrigger asChild>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Сложность" />
-          </SelectTrigger>
+          <div>{difficultyText}</div>
         </TooltipTrigger>
         <TooltipContent>
-          <p>
-            Если была использована сложность из-за бафа
-            <br /> иначе - средняя
-          </p>
+          <p>Включить если была использована сложность с бафа</p>
         </TooltipContent>
       </Tooltip>
-      <SelectContent>
-        {options.map((option, idx) => (
-          <SelectItem key={idx} value={option.value}>
-            {option.title}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    </Toggle>
   );
 }
