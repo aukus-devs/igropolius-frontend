@@ -171,6 +171,13 @@ export default function PlayerTurnUI() {
           onClose={() => setMoveToDialog(null)}
         />
       );
+    case 'dropping-card-after-police-search':
+      return (
+        <LoseCardOnDropDialog
+          autoOpen={moveToDialog === 'drop'}
+          onClose={() => setMoveToDialog(null)}
+        />
+      );
     case 'choosing-building-sector':
       return (
         <Card className="p-4">

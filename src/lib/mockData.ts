@@ -1319,6 +1319,12 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
       'Увеличивает сложность подходящей игры на 1. Используется когда начинается новая игра.',
     picture: `${import.meta.env.BASE_URL}assets/cards/increase-difficulty.png`,
   },
+  'police-search': {
+    name: 'Обыск',
+    description:
+      '50% шанс на перенос случайной карточки в хранилище тюрьмы. Если карточка не потеряна, получите 4*{X} очков',
+    picture: `${import.meta.env.BASE_URL}assets/cards/police-search.png`,
+  },
 };
 
 export const bonusCardsData = {

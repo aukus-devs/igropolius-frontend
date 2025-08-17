@@ -144,6 +144,7 @@ export type PlayerTurnState =
   | "using-street-tax-bonuses"
   | "dropping-card-after-game-drop"
   | "dropping-card-after-instant-roll"
+  | "dropping-card-after-police-search"
   | "entering-prison"
   | "stealing-bonus-card"
   | "choosing-building-sector";

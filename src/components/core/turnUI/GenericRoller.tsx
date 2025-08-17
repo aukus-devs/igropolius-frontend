@@ -278,7 +278,10 @@ export default function GenericRoller<T>({
     }
 
     function finishAnimation() {
-      const index = Math.floor(-offsetRef.current / CARD_FULL_WIDTH);
+      const indexReal = Math.floor(-offsetRef.current / CARD_FULL_WIDTH);
+      const indexFake = cardList.findIndex(item => item.label.startsWith('Просто не повезло'));
+      const index = indexFake === -1 ? indexReal : indexFake;
+
       setWinnerIndex(index);
       setRollPhase('finished');
       stopSound();

@@ -118,7 +118,8 @@ export type PlayerStateAction =
   | 'skip-prison'
   | 'drop-game'
   | 'reroll-game'
-  | 'drop-card';
+  | 'drop-from-lose-card'
+  | 'drop-from-police-search';
 
 export type FrontendCardData = {
   name: string;

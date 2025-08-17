@@ -285,6 +285,7 @@ export function getNextTurnState({
     'entering-prison',
     'dropping-card-after-game-drop',
     'dropping-card-after-instant-roll',
+    'dropping-card-after-police-search',
     'stealing-bonus-card',
     'choosing-building-sector',
   ];
@@ -380,8 +381,11 @@ function getNextState({
       if (action === 'reroll-game') {
         return 'filling-game-review';
       }
-      if (action === 'drop-card') {
+      if (action === 'drop-from-lose-card') {
         return 'dropping-card-after-instant-roll';
+      }
+      if (action === 'drop-from-police-search') {
+        return 'dropping-card-after-police-search';
       }
       switch (sectorFrom.type) {
         case 'bonus':
@@ -414,6 +418,8 @@ function getNextState({
     case 'stealing-bonus-card':
       return 'rolling-dice';
     case 'dropping-card-after-instant-roll':
+      return 'filling-game-review';
+    case 'dropping-card-after-police-search':
       return 'filling-game-review';
     case 'choosing-building-sector':
       return 'rolling-dice';

@@ -51,7 +51,16 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
             ...state,
             disableCurrentPlayerQuery: true,
           }));
-          await setNextTurnState({ action: 'drop-card', skipUpdate: true });
+          await setNextTurnState({ action: 'drop-from-lose-card', skipUpdate: true });
+          setMoveToCardDrop(true);
+          return;
+        }
+        if (option.value.instant === 'police-search') {
+          useSystemStore.setState(state => ({
+            ...state,
+            disableCurrentPlayerQuery: true,
+          }));
+          await setNextTurnState({ action: 'drop-from-police-search', skipUpdate: true });
           setMoveToCardDrop(true);
           return;
         }
