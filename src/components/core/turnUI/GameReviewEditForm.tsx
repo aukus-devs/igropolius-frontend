@@ -386,7 +386,7 @@ function GameReviewEditForm({
     }
   }, [gameToEdit, isOpen]);
 
-  const isSaveButtonDisabled = !gameTitle || gameReview.length === 0 || rating === 0;
+  const isSaveButtonDisabled = !gameTitle || gameReview.length === 0;
 
   useEffect(() => {
     if (isOpen && !selectedGame) {
