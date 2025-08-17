@@ -12,6 +12,7 @@ export const queryKeys = {
   gameDuration: (gameName: string | undefined) => ['game-duration', gameName],
   notifications: ['notifications'],
   eventSettings: ['event-settings'],
+  hltbRandomGames: ['hltb-random-games'],
 } as const;
 
 export const resetCurrentPlayerQuery = () => {

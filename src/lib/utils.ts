@@ -499,6 +499,17 @@ export function formatMs(diffMs: number) {
   return `${hours}ч ${minutes}м`;
 }
 
+export function formatHltbLength(seconds: number) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+
+  if (hours === 0) {
+    return `${minutes}м`;
+  }
+
+  return `${hours}ч ${minutes}м`;
+}
+
 type CompletionScoreParams = {
   gameStatus: GameCompletionType;
   gameLength: GameLength | null;

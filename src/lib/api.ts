@@ -1,4 +1,4 @@
-import { playersData } from './mockData';
+import { playersData, mockHltbGamesList } from './mockData';
 import { IS_DEV, MOCK_DICE_ROLL, NO_MOCKS, EMOTES_SEARCH_API_URL } from './constants';
 import {
   CreateMessageNotificationRequest,
@@ -10,6 +10,8 @@ import {
   GameDurationResponse,
   GiveBonusCardRequest,
   GiveBonusCardResponse,
+  HltbGamesListResponse,
+  HltbRandomGameRequest,
   IgdbGamesListResponse,
   IgdbGameSummary,
   LoginRequest,
@@ -756,4 +758,17 @@ export async function createMessageNotification(request: CreateMessageNotificati
     method: 'POST',
     body: JSON.stringify(request),
   });
+}
+
+export async function fetchHltbRandomGames(request: HltbRandomGameRequest): Promise<HltbGamesListResponse> {
+  if (MOCK_API) {
+    return Promise.resolve({
+      games: mockHltbGamesList.games.slice(0, request.limit),
+    });
+  }
+  const response = await apiRequest('/api/hltb/random-game', {
+    method: 'POST',
+    body: JSON.stringify(request),
+  });
+  return response.json();
 }
