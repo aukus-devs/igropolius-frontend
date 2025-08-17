@@ -93,14 +93,19 @@ function GameReview({ game }: Props) {
         />
         <div className="text-muted-foreground">
           <div className="flex flex-wrap gap-2 mb-2.5">
+            {game.difficulty_level === 1 && (
+              <Badge className="bg-red-500/20 text-white/70 font-semibold">
+                <p>На сложном</p>
+              </Badge>
+            )}
+            {game.difficulty_level === -1 && (
+              <Badge className="bg-green-500/20 text-white/70 font-semibold">
+                <p>На легком</p>
+              </Badge>
+            )}
             <Badge className="bg-white/20 text-white/70 font-semibold">
               <p> Время — {duration && duration > 0 ? formatMs(duration * 1000) : '[Н/Д]'}</p>
             </Badge>
-            {game.status === 'drop' && scoreChange && (
-              <Badge className="bg-red-500/20 text-white/70 font-semibold">
-                {scoreChange} <Share />
-              </Badge>
-            )}
             {adjustedLength && (
               <>
                 <Badge className="bg-white/20 text-white/70 font-semibold">
@@ -123,6 +128,12 @@ function GameReview({ game }: Props) {
                 )}
               </>
             )}
+            {game.status === 'drop' && scoreChange && (
+              <Badge className="bg-red-500/20 text-white/70 font-semibold">
+                {scoreChange} <Share />
+              </Badge>
+            )}
+
             {rollType && (
               <Badge className="bg-white/20 text-white/70 font-semibold">
                 <p>
