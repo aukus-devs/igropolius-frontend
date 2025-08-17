@@ -52,7 +52,9 @@ export type BonusCardType =
   | "lose-card-or-3-percent"
   | "receive-scores-for-active-cards"
   | "increase-difficulty"
-  | "decrease-difficulty";
+  | "decrease-difficulty"
+  | "asket"
+  | "police-search";
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "InstantCardType".
@@ -71,7 +73,9 @@ export type InstantCardType =
   | "lose-card-or-3-percent"
   | "receive-scores-for-active-cards"
   | "increase-difficulty"
-  | "decrease-difficulty";
+  | "decrease-difficulty"
+  | "asket"
+  | "police-search";
 export type SectorId = number | null;
 export type StolenFromPlayer = number | null;
 export type StolenBy = number | null;
@@ -180,13 +184,51 @@ export type SectorId3 = number;
 export type GameLength = "" | "2-5" | "5-10" | "10-15" | "15-20" | "20-25" | "25+";
 export type ReceivedAt1 = number;
 export type ReceivedOnSector1 = number;
+export type GameId1 = number;
+export type GameName1 = string;
+export type GameNameDate = number;
+export type GameAlias = string | null;
+export type GameType = string;
+export type GameImage = string;
+export type CompLvlCombine = number;
+export type CompLvlSp = number;
+export type CompLvlCo = number;
+export type CompLvlMp = number;
+export type CompMain = number;
+export type CompPlus = number;
+export type Comp100 = number;
+export type CompAll = number;
+export type CompMainCount = number;
+export type CompPlusCount = number;
+export type Comp100Count = number;
+export type CompAllCount = number;
+export type InvestedCo = number;
+export type InvestedMp = number;
+export type InvestedCoCount = number;
+export type InvestedMpCount = number;
+export type CountComp = number;
+export type CountSpeedrun = number;
+export type CountBacklog = number;
+export type CountReview = number;
+export type ReviewScore = number;
+export type CountPlaying = number;
+export type CountRetired = number;
+export type ProfilePlatform = string | null;
+export type ProfilePopular = number;
+export type ReleaseWorld = number | null;
+export type CreatedAt = number;
+export type UpdatedAt = number;
+export type Games = HltbGameResponse[];
+export type MinLength = number | null;
+export type MaxLength = number | null;
+export type Limit = number;
 export type Id1 = number;
 export type Name = string;
 export type Cover = string | null;
 export type ReleaseYear = number | null;
-export type Games = IgdbGameSummary[];
+export type Games1 = IgdbGameSummary[];
 export type Query = string;
-export type Limit = number;
+export type Limit1 = number;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "InstantCardResult".
@@ -218,7 +260,7 @@ export type Content = string;
 export type RulesCategory = "general" | "gameplay" | "donations";
 export type Id2 = number;
 export type NotificationType1 = string;
-export type CreatedAt = number;
+export type CreatedAt1 = number;
 export type OtherPlayerId2 = number | null;
 export type Scores2 = number | null;
 export type SectorId4 = number | null;
@@ -258,7 +300,7 @@ export type TotalScore = number;
 export type MapsCompleted = number;
 export type Id4 = number;
 export type PlayerId2 = number;
-export type CreatedAt1 = number;
+export type CreatedAt2 = number;
 export type SectorId6 = number;
 export type Title = string;
 export type Review = string;
@@ -267,9 +309,9 @@ export type LengthBonus = number;
 export type Duration1 = number | null;
 export type VodLinks1 = string | null;
 export type Cover1 = string | null;
-export type GameId1 = number | null;
+export type GameId2 = number | null;
 export type ScoreChangeAmount = number | null;
-export type Games1 = PlayerGame[];
+export type Games2 = PlayerGame[];
 export type BonusCards = ActiveBonusCard[];
 export type Color = string;
 export type ModelName = string;
@@ -313,13 +355,13 @@ export type RandomOrgCheckForm1 = string | null;
 export type Data1 = number[];
 export type RandomOrgFailReason1 = string | null;
 export type Content1 = string;
-export type CreatedAt2 = number;
+export type CreatedAt3 = number;
 export type Versions = RulesVersion[];
 export type Title1 = string;
 export type Review1 = string;
 export type Rating2 = number;
 export type VodLinks2 = string | null;
-export type GameId2 = number | null;
+export type GameId3 = number | null;
 export type NewSectorId2 = number;
 export type EventStartTime = number | null;
 export type EventEndTime4 = number | null;
@@ -529,6 +571,62 @@ export interface GiveBonusCardResponse {
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "HltbGameResponse".
+ */
+export interface HltbGameResponse {
+  game_id: GameId1;
+  game_name: GameName1;
+  game_name_date: GameNameDate;
+  game_alias?: GameAlias;
+  game_type: GameType;
+  game_image: GameImage;
+  comp_lvl_combine: CompLvlCombine;
+  comp_lvl_sp: CompLvlSp;
+  comp_lvl_co: CompLvlCo;
+  comp_lvl_mp: CompLvlMp;
+  comp_main: CompMain;
+  comp_plus: CompPlus;
+  comp_100: Comp100;
+  comp_all: CompAll;
+  comp_main_count: CompMainCount;
+  comp_plus_count: CompPlusCount;
+  comp_100_count: Comp100Count;
+  comp_all_count: CompAllCount;
+  invested_co: InvestedCo;
+  invested_mp: InvestedMp;
+  invested_co_count: InvestedCoCount;
+  invested_mp_count: InvestedMpCount;
+  count_comp: CountComp;
+  count_speedrun: CountSpeedrun;
+  count_backlog: CountBacklog;
+  count_review: CountReview;
+  review_score: ReviewScore;
+  count_playing: CountPlaying;
+  count_retired: CountRetired;
+  profile_platform?: ProfilePlatform;
+  profile_popular: ProfilePopular;
+  release_world?: ReleaseWorld;
+  created_at: CreatedAt;
+  updated_at: UpdatedAt;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "HltbGamesListResponse".
+ */
+export interface HltbGamesListResponse {
+  games: Games;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "HltbRandomGameRequest".
+ */
+export interface HltbRandomGameRequest {
+  min_length?: MinLength;
+  max_length?: MaxLength;
+  limit?: Limit;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "IgdbGameSummary".
  */
 export interface IgdbGameSummary {
@@ -542,7 +640,7 @@ export interface IgdbGameSummary {
  * via the `definition` "IgdbGamesListResponse".
  */
 export interface IgdbGamesListResponse {
-  games: Games;
+  games: Games1;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -550,7 +648,7 @@ export interface IgdbGamesListResponse {
  */
 export interface IgdbGamesSearchRequest {
   query: Query;
-  limit?: Limit;
+  limit?: Limit1;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -613,7 +711,7 @@ export interface NotificationItem {
   id: Id2;
   notification_type: NotificationType1;
   event_type: NotificationEventType;
-  created_at: CreatedAt;
+  created_at: CreatedAt1;
   other_player_id?: OtherPlayerId2;
   scores?: Scores2;
   sector_id?: SectorId4;
@@ -665,7 +763,7 @@ export interface PlayerDetails {
   sector_id: SectorId5;
   total_score: TotalScore;
   maps_completed: MapsCompleted;
-  games: Games1;
+  games: Games2;
   bonus_cards: BonusCards;
   color: Color;
   model_name: ModelName;
@@ -679,7 +777,7 @@ export interface PlayerDetails {
 export interface PlayerGame {
   id: Id4;
   player_id: PlayerId2;
-  created_at: CreatedAt1;
+  created_at: CreatedAt2;
   status: GameCompletionType;
   sector_id: SectorId6;
   title: Title;
@@ -690,7 +788,7 @@ export interface PlayerGame {
   duration?: Duration1;
   vod_links?: VodLinks1;
   cover?: Cover1;
-  game_id?: GameId1;
+  game_id?: GameId2;
   difficulty_level: GameDifficulty;
   score_change_amount?: ScoreChangeAmount;
 }
@@ -786,7 +884,7 @@ export interface RulesResponse {
 export interface RulesVersion {
   content: Content1;
   category: RulesCategory;
-  created_at: CreatedAt2;
+  created_at: CreatedAt3;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -799,7 +897,7 @@ export interface SavePlayerGameRequest {
   rating: Rating2;
   length: GameLength;
   vod_links?: VodLinks2;
-  game_id?: GameId2;
+  game_id?: GameId3;
   difficulty_level?: GameDifficulty | null;
 }
 /**
