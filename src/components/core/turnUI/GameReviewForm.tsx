@@ -637,7 +637,6 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
             <div className="flex gap-2 w-full">
               <GameStatus gameDuration={gameDurationData?.duration} />
               {gameStatus === 'completed' && <GameTime />}
-              {gameStatus === 'completed' && showGameDifficulty && <GameDifficulty />}
             </div>
 
             <Rating onChange={setRating} initialValue={rating} />
@@ -656,24 +655,27 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
             </span>
           )}
 
-          <Tooltip disableHoverableContent>
-            <TooltipTrigger asChild>
-              <Button
-                className="ml-auto w-60"
-                disabled={isSendButtonDisabled || isSubmitting}
-                onClick={onConfirm}
-                loading={isLoading || isSubmitting}
-              >
-                <ButtonText gameStatus={gameStatus} scores={scores.total} />
-              </Button>
-            </TooltipTrigger>
-            {gameStatus === 'completed' && (
-              <TooltipContent sideOffset={8}>
-                Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга (
-                {scores.mapCompletionBonus})
-              </TooltipContent>
-            )}
-          </Tooltip>
+          <div className="ml-auto flex flex-col gap-4">
+            {gameStatus === 'completed' && showGameDifficulty && <GameDifficulty />}
+            <Tooltip disableHoverableContent>
+              <TooltipTrigger asChild>
+                <Button
+                  className="w-60"
+                  disabled={isSendButtonDisabled || isSubmitting}
+                  onClick={onConfirm}
+                  loading={isLoading || isSubmitting}
+                >
+                  <ButtonText gameStatus={gameStatus} scores={scores.total} />
+                </Button>
+              </TooltipTrigger>
+              {gameStatus === 'completed' && (
+                <TooltipContent sideOffset={8}>
+                  Длина игры ({scores.base}) * тип сектора ({scores.sectorMultiplier}) + бонус круга
+                  ({scores.mapCompletionBonus})
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -746,20 +748,22 @@ function GameDifficulty() {
   }
 
   return (
-    <Toggle
-      className="fit-content px-2"
-      size={null}
-      onPressedChange={handleValueChange}
-      defaultPressed={true}
-    >
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div>{difficultyText}</div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Включить если была использована сложность с бафа</p>
-        </TooltipContent>
-      </Tooltip>
-    </Toggle>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="rounded-2xl">
+          <Toggle
+            className="w-full p-2 rounded-lg"
+            size={null}
+            onPressedChange={handleValueChange}
+            defaultPressed={true}
+          >
+            <div>{difficultyText}</div>
+          </Toggle>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Включить если была использована сложность с бафа</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }
