@@ -47,7 +47,10 @@ function GameStatus({ gameDuration }: { gameDuration?: Duration }) {
   ];
 
   return (
-    <Select onValueChange={setGameStatus} defaultValue={gameStatus ?? undefined}>
+    <Select
+      onValueChange={x => setGameStatus(x as GameCompletionType)}
+      defaultValue={gameStatus ?? undefined}
+    >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Выберите исход" />
       </SelectTrigger>
