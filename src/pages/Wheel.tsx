@@ -201,10 +201,13 @@ export default function Wheel({ onSpinEnd, entries, startOnRender }: WheelProps)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startOnRender]);
 
+  const currentLabelCut =
+    currentLabel.length > 45 ? currentLabel.slice(0, 45) + '...' : currentLabel;
+
   return (
     <div className="flex w-fit flex-col items-center gap-4">
       <div style={{ display: 'flex', justifyContent: 'center', fontWeight: 'bold' }}>
-        {currentLabel}
+        {currentLabelCut}
       </div>
       <div className="relative" style={{ width, height }}>
         <div
