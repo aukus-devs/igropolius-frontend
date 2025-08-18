@@ -5,9 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../components/ui/tooltip';
 import { fetchHltbRandomGames } from '../lib/api';
 import { queryKeys } from '../lib/queryClient';
-import { HltbRandomGameRequest, HltbGameResponse } from '../lib/api-types-generated';
+import { HltbGameResponse } from '../lib/api-types-generated';
 import { formatHltbLength } from '../lib/utils';
 import { sectorsData } from '../lib/mockData';
+import Wheel from './Wheel';
 
 const rangeSliderStyles = `
   .slider::-webkit-slider-thumb {
@@ -20,7 +21,7 @@ const rangeSliderStyles = `
     border: 2px solid #1f2937;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
-  
+
   .slider::-moz-range-thumb {
     height: 20px;
     width: 20px;
@@ -30,11 +31,11 @@ const rangeSliderStyles = `
     border: 2px solid #1f2937;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
-  
+
   .slider::-webkit-slider-track {
     background: transparent;
   }
-  
+
   .slider::-moz-range-track {
     background: transparent;
   }
@@ -58,7 +59,7 @@ export default function GamesRollerPage() {
 
   const {
     data: gamesData,
-    isLoading: gamesLoading,
+    isFetching: gamesLoading,
     refetch,
   } = useQuery<{ games: HltbGameResponse[] }>({
     queryKey: queryKeys.hltbRandomGames,
@@ -70,10 +71,17 @@ export default function GamesRollerPage() {
         limit: 12,
         min_length: isPrisonSector ? 0 : minHours,
         max_length: isPrisonSector ? 0 : maxHours,
-      } as HltbRandomGameRequest);
+      });
     },
     enabled: shouldLoadGames,
   });
+
+  const handleWheelFinish = (winnerId: string) => {
+    const game = gamesData?.games.find(g => String(g.game_id) === winnerId);
+    if (game) {
+      setSelectedGame(game);
+    }
+  };
 
   console.log('Games data:', gamesData);
   console.log('Games loading:', gamesLoading);
@@ -82,7 +90,7 @@ export default function GamesRollerPage() {
     <TooltipProvider>
       <div className="min-h-screen bg-gray-900">
         <style dangerouslySetInnerHTML={{ __html: rangeSliderStyles }} />
-        <div className="w-full">
+        <div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[calc(100vh-2rem)] p-4 lg:p-6">
             <div className="lg:col-span-1">
               {selectedGame ? (
@@ -426,9 +434,14 @@ export default function GamesRollerPage() {
                       className="w-full bg-white/20 hover:bg-white/30 text-white font-roboto-wide-semibold"
                       disabled={gamesLoading || isButtonLoading}
                     >
-                      {isButtonLoading || gamesLoading ? 'Загрузка...' : 'Ролл списка'}
+                      {isButtonLoading || gamesLoading ? 'Загрузка...' : 'Заролить'}
                     </Button>
                   </div>
+                  {!gamesLoading && (
+                    <div className="flex justify-center">
+                      <WheelWrapper games={gamesData?.games || []} onFinish={handleWheelFinish} />
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -513,4 +526,23 @@ export default function GamesRollerPage() {
       </div>
     </TooltipProvider>
   );
+}
+
+function WheelWrapper({
+  games,
+  onFinish,
+}: {
+  games: HltbGameResponse[];
+  onFinish: (id: string) => void;
+}) {
+  const options = games.map(game => ({
+    id: String(game.game_id),
+    label: game.game_name,
+  }));
+
+  if (options.length === 0) {
+    return null;
+  }
+
+  return <Wheel entries={options} onSpinEnd={onFinish} startOnRender />;
 }
