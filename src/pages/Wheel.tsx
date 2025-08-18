@@ -113,7 +113,9 @@ export default function Wheel({ onSpinEnd, entries, startOnRender }: WheelProps)
         ctx.fillStyle = 'black';
         ctx.font = '16px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(entries[i].label, 0, 0);
+        const labelCut =
+          entries[i].label.length > 15 ? entries[i].label.slice(0, 15) + '...' : entries[i].label;
+        ctx.fillText(labelCut, 0, 0);
         ctx.restore();
 
         startAngle += angle;

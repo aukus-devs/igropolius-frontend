@@ -45,7 +45,6 @@ export default function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
   const [minHours, setMinHours] = useState(1);
   const [maxHours, setMaxHours] = useState(300);
-  const [shouldLoadGames, setShouldLoadGames] = useState(false);
   const [selectedSectorId, setSelectedSectorId] = useState(0);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
 
@@ -73,7 +72,7 @@ export default function GamesRollerPage() {
         max_length: isPrisonSector ? 0 : maxHours,
       });
     },
-    enabled: shouldLoadGames,
+    enabled: false,
   });
 
   const handleWheelFinish = (winnerId: string) => {
@@ -92,176 +91,7 @@ export default function GamesRollerPage() {
         <style dangerouslySetInnerHTML={{ __html: rangeSliderStyles }} />
         <div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[calc(100vh-2rem)] p-4 lg:p-6">
-            <div className="lg:col-span-1">
-              {selectedGame ? (
-                <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
-                  <CardHeader className="p-2">
-                    <div className="flex justify-between items-center">
-                      <CardTitle className="text-white text-base font-roboto-wide-semibold">
-                        Детали игры
-                      </CardTitle>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSelectedGame(null)}
-                        className="text-white/70 hover:text-white hover:bg-white/10"
-                      >
-                        ✕
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-2 overflow-y-auto p-2">
-                    {selectedGame.game_image && (
-                      <div className="text-center">
-                        <img
-                          src={selectedGame.game_image}
-                          alt={selectedGame.game_name}
-                          className="w-full max-w-xs rounded-lg mx-auto object-contain"
-                          style={{ aspectRatio: 'auto' }}
-                        />
-                      </div>
-                    )}
-
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-roboto-wide-semibold text-white border-b border-white/20 pb-2">
-                        Основная информация
-                      </h3>
-                      <div className="space-y-2 text-sm">
-                        <div className="text-center">
-                          <a
-                            href={`https://howlongtobeat.com/game/${selectedGame.game_id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-white underline text-sm font-medium hover:text-white/80 transition-colors"
-                          >
-                            {selectedGame.game_name}
-                            {selectedGame.release_world !== null &&
-                              selectedGame.release_world !== undefined &&
-                              selectedGame.release_world > 0 && (
-                                <span className="text-white/70">
-                                  {' '}
-                                  ({selectedGame.release_world})
-                                </span>
-                              )}
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-roboto-wide-semibold text-white border-b border-white/20 pb-2">
-                        Время прохождения
-                      </h3>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-white/80">Main Story:</span>
-                          <span className="text-white font-mono">
-                            {selectedGame.comp_main
-                              ? formatHltbLength(selectedGame.comp_main)
-                              : 'Н/Д'}
-                            {selectedGame.comp_main_count > 0 && (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="text-white/60 ml-2 cursor-help">
-                                    ({selectedGame.comp_main_count})
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Количество отзывов</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/80">Main + Sides:</span>
-                          <span className="text-white font-mono">
-                            {selectedGame.comp_plus
-                              ? formatHltbLength(selectedGame.comp_plus)
-                              : 'Н/Д'}
-                            {selectedGame.comp_plus_count > 0 && (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="text-white/60 ml-2 cursor-help">
-                                    ({selectedGame.comp_plus_count})
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Количество отзывов</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/80">Completionist:</span>
-                          <span className="text-white font-mono">
-                            {selectedGame.comp_100
-                              ? formatHltbLength(selectedGame.comp_100)
-                              : 'Н/Д'}
-                            {selectedGame.comp_100_count > 0 && (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="text-white/60 ml-2 cursor-help">
-                                    ({selectedGame.comp_100_count})
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Количество отзывов</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/80">All Styles:</span>
-                          <span className="text-white font-mono">
-                            {selectedGame.comp_all
-                              ? formatHltbLength(selectedGame.comp_all)
-                              : 'Н/Д'}
-                            {selectedGame.comp_all_count > 0 && (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="text-white/60 ml-2 cursor-help">
-                                    ({selectedGame.comp_all_count})
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Количество отзывов</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-center text-sm text-white/60">
-                      Синхронизировано с HLTB:{' '}
-                      {new Date(selectedGame.updated_at * 1000).toLocaleDateString()}
-                    </div>
-
-                    <div className="text-center text-sm text-white/80 pt-2">
-                      {selectedGame.profile_platform || 'Платформа не указана'}
-                    </div>
-                  </CardContent>
-                </Card>
-              ) : (
-                <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
-                  <CardHeader className="p-2">
-                    <CardTitle className="text-white text-base font-roboto-wide-semibold">
-                      Выберите игру
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex items-center justify-center p-2">
-                    <p className="text-white/80 text-center text-sm">
-                      Кликните на игру в списке справа, чтобы увидеть детальную информацию
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
+            <SelectedGameSection selectedGame={selectedGame} setSelectedGame={setSelectedGame} />
             <div className="lg:col-span-1">
               <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
                 <CardHeader className="p-2">
@@ -426,7 +256,6 @@ export default function GamesRollerPage() {
                     <Button
                       onClick={() => {
                         setIsButtonLoading(true);
-                        setShouldLoadGames(true);
                         refetch().finally(() => {
                           setIsButtonLoading(false);
                         });
@@ -509,7 +338,7 @@ export default function GamesRollerPage() {
                         </div>
                       ))}
                     </div>
-                  ) : !shouldLoadGames ? (
+                  ) : !gamesData ? (
                     <div className="text-white/80 text-center py-4 text-sm font-roboto-wide-semibold">
                       Пусто
                     </div>
@@ -545,4 +374,173 @@ function WheelWrapper({
   }
 
   return <Wheel entries={options} onSpinEnd={onFinish} startOnRender />;
+}
+
+function SelectedGameSection({
+  selectedGame,
+  setSelectedGame,
+}: {
+  selectedGame: HltbGameResponse | null;
+  setSelectedGame: (game: HltbGameResponse | null) => void;
+}) {
+  return (
+    <div className="lg:col-span-1">
+      {selectedGame ? (
+        <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
+          <CardHeader className="p-2">
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-white text-base font-roboto-wide-semibold">
+                Детали игры
+              </CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedGame(null)}
+                className="text-white/70 hover:text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-2 overflow-y-auto p-2">
+            {selectedGame.game_image && (
+              <div className="text-center">
+                <img
+                  src={selectedGame.game_image}
+                  alt={selectedGame.game_name}
+                  className="w-full max-w-xs rounded-lg mx-auto object-contain"
+                  style={{ aspectRatio: 'auto' }}
+                />
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <h3 className="text-sm font-roboto-wide-semibold text-white border-b border-white/20 pb-2">
+                Основная информация
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="text-center">
+                  <a
+                    href={`https://howlongtobeat.com/game/${selectedGame.game_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white underline text-sm font-medium hover:text-white/80 transition-colors"
+                  >
+                    {selectedGame.game_name}
+                    {selectedGame.release_world !== null &&
+                      selectedGame.release_world !== undefined &&
+                      selectedGame.release_world > 0 && (
+                        <span className="text-white/70"> ({selectedGame.release_world})</span>
+                      )}
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-sm font-roboto-wide-semibold text-white border-b border-white/20 pb-2">
+                Время прохождения
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-white/80">Main Story:</span>
+                  <span className="text-white font-mono">
+                    {selectedGame.comp_main ? formatHltbLength(selectedGame.comp_main) : 'Н/Д'}
+                    {selectedGame.comp_main_count > 0 && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="text-white/60 ml-2 cursor-help">
+                            ({selectedGame.comp_main_count})
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Количество отзывов</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/80">Main + Sides:</span>
+                  <span className="text-white font-mono">
+                    {selectedGame.comp_plus ? formatHltbLength(selectedGame.comp_plus) : 'Н/Д'}
+                    {selectedGame.comp_plus_count > 0 && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="text-white/60 ml-2 cursor-help">
+                            ({selectedGame.comp_plus_count})
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Количество отзывов</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/80">Completionist:</span>
+                  <span className="text-white font-mono">
+                    {selectedGame.comp_100 ? formatHltbLength(selectedGame.comp_100) : 'Н/Д'}
+                    {selectedGame.comp_100_count > 0 && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="text-white/60 ml-2 cursor-help">
+                            ({selectedGame.comp_100_count})
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Количество отзывов</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white/80">All Styles:</span>
+                  <span className="text-white font-mono">
+                    {selectedGame.comp_all ? formatHltbLength(selectedGame.comp_all) : 'Н/Д'}
+                    {selectedGame.comp_all_count > 0 && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="text-white/60 ml-2 cursor-help">
+                            ({selectedGame.comp_all_count})
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Количество отзывов</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center text-sm text-white/60">
+              Синхронизировано с HLTB:{' '}
+              {new Date(selectedGame.updated_at * 1000).toLocaleDateString()}
+            </div>
+
+            <div className="text-center text-sm text-white/80 pt-2">
+              {selectedGame.profile_platform || 'Платформа не указана'}
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
+          <CardHeader className="p-2">
+            <CardTitle className="text-white text-base font-roboto-wide-semibold">
+              Выберите игру
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center p-2">
+            <p className="text-white/80 text-center text-sm">
+              Кликните на игру в списке справа, чтобы увидеть детальную информацию
+            </p>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
 }
