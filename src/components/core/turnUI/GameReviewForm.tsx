@@ -27,7 +27,6 @@ import EmotePanel from './EmotePanel';
 import { parseReview } from '@/lib/textParsing';
 import ImageLoader from '../ImageLoader';
 import useUrlPath from '@/hooks/useUrlPath';
-import { Toggle } from '@/components/ui/toggle';
 
 type StatesOption = {
   title: string;
@@ -477,6 +476,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     isSubmitting,
     selectedGame,
     gameLength,
+    gameDifficulty,
   } = useReviewFormStore(
     useShallow(state => ({
       // open: state.open,
@@ -491,6 +491,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
       isSubmitting: state.isSubmitting,
       selectedGame: state.selectedGame,
       gameLength: state.gameTime,
+      gameDifficulty: state.gameDifficulty,
     }))
   );
 
@@ -604,6 +605,8 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     myPlayer?.game_difficulty_level !== undefined &&
     myPlayer.game_difficulty_level != 0;
 
+  const difficultyNotSelected = showGameDifficulty && gameDifficulty === null;
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       {showTrigger && (
@@ -661,7 +664,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
               <TooltipTrigger asChild>
                 <Button
                   className="w-60"
-                  disabled={isSendButtonDisabled || isSubmitting}
+                  disabled={isSendButtonDisabled || isSubmitting || difficultyNotSelected}
                   onClick={onConfirm}
                   loading={isLoading || isSubmitting}
                 >
@@ -722,43 +725,51 @@ function GameDifficulty() {
   const setGameDifficulty = useReviewFormStore(state => state.setGameDifficulty);
   const playerDifficulty = usePlayerStore(state => state.myPlayer?.game_difficulty_level) ?? 0;
 
-  const handleValueChange = (pressed: boolean) => {
-    if (pressed) {
-      setGameDifficulty(playerDifficulty);
-    } else {
-      setGameDifficulty(0);
+  const options = [{ title: 'Средняя', value: '0' }];
+
+  if (playerDifficulty === -1) {
+    options.unshift({ title: 'Легкая', value: '-1' });
+  }
+  if (playerDifficulty === 1) {
+    options.push({ title: 'Сложная', value: '1' });
+  }
+
+  const handleValueChange = (value: string) => {
+    switch (value) {
+      case '-1':
+        setGameDifficulty(-1);
+        break;
+      case '0':
+        setGameDifficulty(0);
+        break;
+      case '1':
+        setGameDifficulty(1);
+        break;
     }
   };
 
-  if (playerDifficulty === 0) {
-    return null;
-  }
-
-  let difficultyText = 'Пройдено?';
-  if (playerDifficulty === -1) {
-    difficultyText = 'Пройдено на легком?';
-  } else if (playerDifficulty === 1) {
-    difficultyText = 'Пройдено на сложном?';
-  }
-
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div className="rounded-2xl">
-          <Toggle
-            variant="outline"
-            className="w-full p-2 rounded-lg"
-            size={null}
-            onPressedChange={handleValueChange}
-            defaultPressed={false}
-          >
-            <div>{difficultyText}</div>
-          </Toggle>
-        </div>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Включить если была использована сложность с бафа</p>
-      </TooltipContent>
-    </Tooltip>
+    <Select onValueChange={handleValueChange} defaultValue={undefined}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Пройдено на сложности" />
+          </SelectTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>
+            Если была использована сложность из-за бафа
+            <br /> иначе - средняя
+          </p>
+        </TooltipContent>
+      </Tooltip>
+      <SelectContent>
+        {options.map((option, idx) => (
+          <SelectItem key={idx} value={option.value}>
+            {option.title}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

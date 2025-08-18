@@ -17,7 +17,7 @@ const useReviewFormStore = create<{
   gameTime: GameLength | null;
   gameStatus: GameCompletionType | null;
   gameReview: string;
-  gameDifficulty: GameDifficulty;
+  gameDifficulty: GameDifficulty | null;
   vodLinks: string;
   selectedGame: IgdbGameSummary | null;
   error: string | null;
@@ -46,7 +46,7 @@ const useReviewFormStore = create<{
   error: null,
   isSubmitting: false,
   open: false,
-  gameDifficulty: 0,
+  gameDifficulty: null,
 
   setOpen: open => set({ open }),
   setRating: value => set({ rating: value }),
