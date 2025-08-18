@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -6,15 +6,13 @@ import { fetchHltbRandomGames } from '../lib/api';
 import { queryKeys } from '../lib/queryClient';
 import { HltbGameResponse } from '../lib/api-types-generated';
 import { formatHltbLength, getNoun } from '../lib/utils';
-import { sectorsData } from '../lib/mockData';
-import { LinkIcon, LoaderCircleIcon, TangentIcon } from 'lucide-react';
+import { LinkIcon, LoaderCircleIcon } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Toggle } from '@/components/ui/toggle';
 import ImageLoader from '@/components/core/ImageLoader';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import Wheel from './Wheel';
+import { useLocation } from 'react-router';
 
 type GameCardProps = {
   game: HltbGameResponse;
@@ -41,10 +39,7 @@ function GameCard({ game, isSelected, onClick, onHoverChange }: GameCardProps) {
         alt={game.game_name}
       />
       <div>
-        <h3
-          className="font-roboto-wide-semibold text-sm truncate"
-          title={game.game_name}
-        >
+        <h3 className="font-roboto-wide-semibold text-sm truncate" title={game.game_name}>
           {title}
         </h3>
         {game.profile_platform && (
@@ -54,7 +49,7 @@ function GameCard({ game, isSelected, onClick, onHoverChange }: GameCardProps) {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
@@ -90,14 +85,16 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
   ];
 
   function getPolledColor(num: number) {
-    if (num < 3) return {
-      bg: 'bg-red-500/30',
-      text: 'text-red-400',
-    }
-    if (num < 10) return {
-      bg: 'bg-yellow-500/30',
-      text: 'text-yellow-400',
-    }
+    if (num < 3)
+      return {
+        bg: 'bg-red-500/30',
+        text: 'text-red-400',
+      };
+    if (num < 10)
+      return {
+        bg: 'bg-yellow-500/30',
+        text: 'text-yellow-400',
+      };
     return {
       bg: 'bg-green-500/30',
       text: 'text-green-400',
@@ -132,9 +129,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
         <div className="space-y-2 w-full">
           {table.map(({ title, value, polledText, polledColor }) => (
             <div className="flex flex-col gap-1">
-              <span className="text-muted-foreground font-semibold">
-                {title}
-              </span>
+              <span className="text-muted-foreground font-semibold">{title}</span>
 
               <div className="flex flex-wrap gap-2">
                 <Badge className="tabular-nums w-[72px] bg-white/20 text-white/70 font-semibold">
@@ -148,9 +143,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
           ))}
 
           <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground font-semibold">
-              Платформы
-            </span>
+            <span className="text-muted-foreground font-semibold">Платформы</span>
             {platforms ? (
               <div className="flex gap-2 flex-wrap">
                 {platforms.map((platform, index) => (
@@ -159,28 +152,45 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
                   </Badge>
                 ))}
               </div>
-            ) : 'Платформа не указана'}
+            ) : (
+              'Платформа не указана'
+            )}
           </div>
-          <div className="text-xs text-muted-foreground">
-            Синхронизировано с HLTB: {syncDate}
-          </div>
-
+          <div className="text-xs text-muted-foreground">Синхронизировано с HLTB: {syncDate}</div>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
-  const [minHours, setMinHours] = useState(1);
+  const [minHours, setMinHours] = useState(0);
   const [maxHours, setMaxHours] = useState(300);
-  const [selectedSectorId, setSelectedSectorId] = useState(0);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
-  const [isManualRange, setIsManualRange] = useState(false);
 
-  const selectedSector = sectorsData.find(s => s.id === selectedSectorId);
-  const isPrisonSector = selectedSector?.type === 'prison';
+  const { search } = useLocation();
+  const urlParams = new URLSearchParams(search);
+  const urlParamMin = urlParams.get('min');
+  const urlParamMax = urlParams.get('max');
+
+  useEffect(() => {
+    if (urlParamMin) {
+      const parsedMin = parseInt(urlParamMin, 10);
+      if (!isNaN(parsedMin) && parsedMin >= 1 && parsedMin <= 300) {
+        setMinHours(parsedMin);
+      }
+    }
+  }, [urlParamMin]);
+
+  useEffect(() => {
+    if (urlParamMax) {
+      const parsedMax = parseInt(urlParamMax, 10);
+      if (!isNaN(parsedMax) && parsedMax >= minHours && parsedMax <= 300) {
+        setMaxHours(parsedMax);
+      }
+    }
+  }, [urlParamMax, minHours]);
 
   const {
     data: gamesData,
@@ -191,8 +201,8 @@ function GamesRollerPage() {
     queryFn: () => {
       return fetchHltbRandomGames({
         limit: 12,
-        min_length: isPrisonSector ? 0 : minHours,
-        max_length: isPrisonSector ? 0 : maxHours,
+        min_length: minHours,
+        max_length: maxHours,
       });
     },
     enabled: false,
@@ -211,19 +221,6 @@ function GamesRollerPage() {
     );
   };
 
-  const onSelectValueChange = (value: string) => {
-    const sectorId = parseInt(value);
-
-    setSelectedSectorId(sectorId);
-    if (sectorId > 0) {
-      const sector = sectorsData.find(s => s.id === sectorId);
-      if (sector?.gameLengthRanges) {
-        setMinHours(Math.max(1, sector.gameLengthRanges.min));
-        setMaxHours(sector.gameLengthRanges.max);
-      }
-    }
-  }
-
   const handleWheelFinish = (winnerId: string) => {
     const game = gamesData?.games.find(g => String(g.game_id) === winnerId);
     if (game) {
@@ -233,9 +230,7 @@ function GamesRollerPage() {
 
   return (
     <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-3 grid-flow-row gap-4 p-4 lg:p-6 w-full">
-      {selectedGame && (
-        <GameFullInfoCard game={selectedGame} />
-      )}
+      {selectedGame && <GameFullInfoCard game={selectedGame} />}
 
       <div className="col-start-2">
         <WheelWrapper games={gamesData?.games || []} onFinish={handleWheelFinish} />
@@ -243,37 +238,11 @@ function GamesRollerPage() {
 
       <Card className="col-start-3 h-[468px] lg:h-full overflow-hidden">
         <CardHeader>
-          <CardTitle className="text-xl font-roboto-wide-semibold">
-            Случайные игры
-          </CardTitle>
+          <CardTitle className="text-xl font-roboto-wide-semibold">Случайные игры</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col justify-between gap-4 h-full overflow-hidden p-0">
           <div className="flex gap-2 items-end px-4">
-            {!isManualRange && (
-              <div className="space-y-1 w-full">
-                <h2 className="text-sm font-roboto-wide-semibold">
-                  Сектор
-                </h2>
-                <Select onValueChange={onSelectValueChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Выберите сектор" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {sectorsData
-                      .filter((sector) => sector.gameLengthRanges)
-                      .map((sector) => (
-                        <SelectItem
-                          key={sector.id}
-                          value={sector.id.toString()}
-                        >
-                          #{sector.id} {sector.name} ({sector.gameLengthRanges?.min}-{sector.gameLengthRanges?.max} часов)
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-            <div className="w-full space-y-1 hidden data-[visible=true]:block" data-visible={isManualRange}>
+            <div className="w-full space-y-1">
               <div className="text-sm font-roboto-wide-semibold">
                 Диапазон времени ({minHours}-{maxHours} часов)
               </div>
@@ -282,15 +251,12 @@ function GamesRollerPage() {
                 min={0}
                 max={300}
                 value={[minHours, maxHours]}
-                onValueChange={(values) => { setMinHours(values[0]); setMaxHours(values[1]); }}
+                onValueChange={values => {
+                  setMinHours(values[0]);
+                  setMaxHours(values[1]);
+                }}
               />
             </div>
-            <Toggle
-              className="shrink-0 text-sm px-2.5 bg-white/20 text-white/70 hover:bg-white/30"
-              onPressedChange={setIsManualRange}
-            >
-              <TangentIcon className="size-4" /> Свой диапазон
-            </Toggle>
           </div>
 
           {gamesLoading ? (
@@ -299,7 +265,7 @@ function GamesRollerPage() {
             </div>
           ) : gamesData?.games && gamesData.games.length > 0 ? (
             <ScrollArea className="h-full overflow-hidden px-4">
-              {gamesData.games.map((game) => (
+              {gamesData.games.map(game => (
                 <GameCard
                   key={game.game_id}
                   game={game}
@@ -318,14 +284,14 @@ function GamesRollerPage() {
             <Button
               size="lg"
               className="w-full font-roboto-wide-semibold text-primary-foreground"
-              disabled={!selectedSector && !isManualRange}
+              // disabled={!selectedSector && !isManualRange}
               loading={gamesLoading || isButtonLoading}
               onClick={() => {
                 setIsButtonLoading(true);
                 refetch().finally(() => setIsButtonLoading(false));
               }}
             >
-              Ролл списка
+              Заролить игру
             </Button>
           </div>
         </CardContent>
