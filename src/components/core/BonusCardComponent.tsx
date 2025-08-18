@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 type Props = {
   size: 'small' | 'large';
   header: React.ReactNode;
-  value: React.ReactNode;
+  value?: React.ReactNode;
   description: string;
   variant: 'positive' | 'negative' | 'neutral';
   tooltipHeader?: string;
@@ -100,7 +100,10 @@ export default function BonusCardComponent({
             data-variant={variant}
           >
             {image ? (
-              <img src={image} />
+              <div className="relative">
+                <img src={image} />
+                <div className="z-50 absolute top-14 left-12 text-white">{value}</div>
+              </div>
             ) : (
               <div>
                 <div className="text-xl mt-4 mb-4">{header}</div>
@@ -141,7 +144,10 @@ function SmallBonusCard({
           data-variant={variant}
         >
           {image ? (
-            <img src={image} alt={tooltipHeader}></img>
+            <div className="relative">
+              <img src={image} />
+              <div className="z-50 absolute top-2 left-2 text-sm text-white/70">{value}</div>
+            </div>
           ) : (
             <>
               {header} {value}

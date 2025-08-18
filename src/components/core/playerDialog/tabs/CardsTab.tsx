@@ -5,7 +5,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useState, useEffect, useRef } from 'react';
 import ImageLoader from '../../ImageLoader';
 import { getCardDescription } from '@/lib/utils';
-import { SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
+import { BUILDING_BONUS_IMAGE, SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
 import BonusCardComponent from '../../BonusCardComponent';
 
 type GameCardProps = {
@@ -162,6 +162,7 @@ function BuildingBonusCard({ buildingBonus }: { buildingBonus: number }) {
       value={
         <span className="text-4xl">{buildingBonus > 0 ? `+${buildingBonus}` : buildingBonus}</span>
       }
+      image={BUILDING_BONUS_IMAGE}
     />
   );
 }
@@ -210,7 +211,6 @@ function GameDifficultyBonusCard({ difficulty }: { difficulty: GameDifficulty })
       variant={variant}
       header="Сложность игры"
       tooltipHeader={`Сложность игры: ${difficultyText}`}
-      value={<span className="text-2xl">{difficultyText}</span>}
       image={difficultyImg}
     />
   );

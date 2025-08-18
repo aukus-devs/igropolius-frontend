@@ -12,7 +12,7 @@ import { resetPlayersQuery } from '@/lib/queryClient';
 import { MainBonusCardType } from '@/lib/api-types-generated';
 import ImageLoader from './ImageLoader';
 import { getCardDescription } from '@/lib/utils';
-import { SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
+import { BUILDING_BONUS_IMAGE, SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
 import BonusCardComponent from './BonusCardComponent';
 import { useNavigate } from 'react-router';
 
@@ -51,7 +51,6 @@ export default function MyCards() {
   const mapBonus = myPlayer.maps_completed * SCORE_BONUS_PER_MAP_COMPLETION;
   const buildingBonus = myPlayer.building_upgrade_bonus;
 
-  const difficultyText = 'С';
   let difficultyVariant: 'neutral' | 'positive' | 'negative' = 'neutral';
   let tooltipText = 'Средняя';
   let difficultyImg = undefined;
@@ -130,7 +129,6 @@ export default function MyCards() {
               description="Изменяет сложность следующей подходящей игры"
               header={<div className="text-xs">Слж</div>}
               tooltipHeader={`Уровень сложности: ${tooltipText}`}
-              value={difficultyText}
               image={difficultyImg}
             />
           )}
@@ -141,7 +139,8 @@ export default function MyCards() {
               description="Автоматически увеличивает или уменьшает размер следующего здания"
               header={<div className="text-xs">Дом</div>}
               tooltipHeader={`Бонус зданий: ${buildingBonus > 0 ? '+' : ''}${buildingBonus}`}
-              value={buildingBonus}
+              value={buildingBonus > 0 ? `+${buildingBonus}` : buildingBonus}
+              image={BUILDING_BONUS_IMAGE}
             />
           )}
           {mapBonus > 0 && (
