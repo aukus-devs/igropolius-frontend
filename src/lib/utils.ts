@@ -725,3 +725,18 @@ export function esliFix(input: string): string {
   }
   return input;
 }
+
+export function getNoun(num: number, words: string[]) {
+  const lastTwoDigits = Math.abs(num) % 100;
+  const lastDigit = lastTwoDigits % 10;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return `${num} ${words[2]}`;
+  } else if (lastDigit === 1) {
+    return `${num} ${words[0]}`;
+  } else if (lastDigit >= 2 && lastDigit <= 4) {
+    return `${num} ${words[1]}`;
+  } else {
+    return `${num} ${words[2]}`;
+  }
+}

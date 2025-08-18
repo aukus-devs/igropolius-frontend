@@ -2,60 +2,186 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../components/ui/tooltip';
 import { fetchHltbRandomGames } from '../lib/api';
 import { queryKeys } from '../lib/queryClient';
 import { HltbGameResponse } from '../lib/api-types-generated';
-import { formatHltbLength } from '../lib/utils';
+import { formatHltbLength, getNoun } from '../lib/utils';
 import { sectorsData } from '../lib/mockData';
+import { LinkIcon, LoaderCircleIcon, TangentIcon } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Toggle } from '@/components/ui/toggle';
+import ImageLoader from '@/components/core/ImageLoader';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
 import Wheel from './Wheel';
 
-const rangeSliderStyles = `
-  .slider::-webkit-slider-thumb {
-    appearance: none;
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    border: 2px solid #1f2937;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+type GameCardProps = {
+  game: HltbGameResponse;
+  isSelected?: boolean;
+  onClick?: (game: HltbGameResponse) => void;
+  onHoverChange?: (game: HltbGameResponse | null) => void;
+};
+
+function GameCard({ game, isSelected, onClick, onHoverChange }: GameCardProps) {
+  const title = `${game.game_name}` + (game.release_world ? ` (${game.release_world})` : '');
+
+  return (
+    <div
+      key={game.game_id}
+      className="flex items-center gap-2 p-1.5 rounded-lg transition-colors cursor-pointer data-[selected=true]:bg-primary/30 data-[selected=true]:text-primary duration-300 animate-in slide-in-from-left-100 hover:bg-primary/30"
+      data-selected={isSelected}
+      onClick={() => onClick?.(game)}
+      onMouseEnter={() => onHoverChange?.(game)}
+      onMouseLeave={() => onHoverChange?.(null)}
+    >
+      <ImageLoader
+        className="flex items-center shrink-0 w-20 h-[42px] rounded-md overflow-hidden bg-center"
+        src={game.game_image}
+        alt={game.game_name}
+      />
+      <div>
+        <h3
+          className="font-roboto-wide-semibold text-sm truncate"
+          title={game.game_name}
+        >
+          {title}
+        </h3>
+        {game.profile_platform && (
+          <p className="text-muted-foreground text-xs truncate font-medium">
+            {game.profile_platform}
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
+  const title = `${game.game_name}` + (game.release_world ? ` (${game.release_world}) ` : ' ');
+  const syncDate = new Date(game.updated_at * 1000).toLocaleDateString();
+  const platforms = game.profile_platform?.split(', ');
+  const nouns = ['отзыв', 'отзыва', 'отзывов'];
+  const table = [
+    {
+      title: 'Main Story',
+      value: game.comp_main ? formatHltbLength(game.comp_main) : 'Н/Д',
+      polledText: getNoun(game.comp_main_count, nouns),
+      polledColor: getPolledColor(game.comp_main_count),
+    },
+    {
+      title: 'Main + Sides',
+      value: game.comp_plus ? formatHltbLength(game.comp_plus) : 'Н/Д',
+      polledText: getNoun(game.comp_plus_count, nouns),
+      polledColor: getPolledColor(game.comp_plus_count),
+    },
+    {
+      title: 'Completionist',
+      value: game.comp_100 ? formatHltbLength(game.comp_100) : 'Н/Д',
+      polledText: getNoun(game.comp_100_count, nouns),
+      polledColor: getPolledColor(game.comp_100_count),
+    },
+    {
+      title: 'All Styles',
+      value: game.comp_all ? formatHltbLength(game.comp_all) : 'Н/Д',
+      polledText: getNoun(game.comp_all_count, nouns),
+      polledColor: getPolledColor(game.comp_all_count),
+    },
+  ];
+
+  function getPolledColor(num: number) {
+    if (num < 3) return {
+      bg: 'bg-red-500/30',
+      text: 'text-red-400',
+    }
+    if (num < 10) return {
+      bg: 'bg-yellow-500/30',
+      text: 'text-yellow-400',
+    }
+    return {
+      bg: 'bg-green-500/30',
+      text: 'text-green-400',
+    };
   }
 
-  .slider::-moz-range-thumb {
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    border: 2px solid #1f2937;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  }
+  return (
+    <Card className="animate-in fade-in-0 duration-300 h-fit lg:max-w-[470px] justify-self-end w-full">
+      <CardHeader className="flex justify-between items-center">
+        <CardTitle className="w-full">
+          <Button
+            className="justify-start text-xl font-roboto-wide-semibold h-auto p-0 w-full overflow-hidden"
+            variant="link"
+          >
+            <a
+              href={`https://howlongtobeat.com/game/${game.game_id}`}
+              target="_blank"
+              className="whitespace-pre-wrap text-start"
+            >
+              {title}
+              <LinkIcon className="size-5 inline" />
+            </a>
+          </Button>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="flex  gap-2">
+        <ImageLoader
+          className="shrink-0 w-[192px] h-fit rounded-md overflow-hidden"
+          src={game.game_image}
+          alt={game.game_name}
+        />
+        <div className="space-y-2 w-full">
+          {table.map(({ title, value, polledText, polledColor }) => (
+            <div className="flex flex-col gap-1">
+              <span className="text-muted-foreground font-semibold">
+                {title}
+              </span>
 
-  .slider::-webkit-slider-track {
-    background: transparent;
-  }
+              <div className="flex flex-wrap gap-2">
+                <Badge className="tabular-nums w-[72px] bg-white/20 text-white/70 font-semibold">
+                  {value}
+                </Badge>
+                <Badge className={`${polledColor.bg} ${polledColor.text} transition-none`}>
+                  {polledText}
+                </Badge>
+              </div>
+            </div>
+          ))}
 
-  .slider::-moz-range-track {
-    background: transparent;
-  }
-`;
+          <div className="flex flex-col gap-1">
+            <span className="text-muted-foreground font-semibold">
+              Платформы
+            </span>
+            {platforms ? (
+              <div className="flex gap-2 flex-wrap">
+                {platforms.map((platform, index) => (
+                  <Badge key={index} className="bg-white/20 text-white/70 font-semibold">
+                    {platform}
+                  </Badge>
+                ))}
+              </div>
+            ) : 'Платформа не указана'}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Синхронизировано с HLTB: {syncDate}
+          </div>
 
-export default function GamesRollerPage() {
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
   const [minHours, setMinHours] = useState(1);
   const [maxHours, setMaxHours] = useState(300);
   const [shouldLoadGames, setShouldLoadGames] = useState(false);
   const [selectedSectorId, setSelectedSectorId] = useState(0);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const [isManualRange, setIsManualRange] = useState(false);
 
-  const handleGameClick = (game: HltbGameResponse) => {
-    setSelectedGame(game);
-    console.log(game.release_world);
-    console.log(
-      game.release_world !== null && game.release_world !== undefined && game.release_world > 0
-    );
-  };
+  const selectedSector = sectorsData.find(s => s.id === selectedSectorId);
+  const isPrisonSector = selectedSector?.type === 'prison';
 
   const {
     data: gamesData,
@@ -64,9 +190,6 @@ export default function GamesRollerPage() {
   } = useQuery<{ games: HltbGameResponse[] }>({
     queryKey: queryKeys.hltbRandomGames,
     queryFn: () => {
-      const selectedSector = sectorsData.find(s => s.id === selectedSectorId);
-      const isPrisonSector = selectedSector?.type === 'prison';
-
       return fetchHltbRandomGames({
         limit: 12,
         min_length: isPrisonSector ? 0 : minHours,
@@ -76,6 +199,32 @@ export default function GamesRollerPage() {
     enabled: shouldLoadGames,
   });
 
+  const onGameCardClick = (game: HltbGameResponse | null) => {
+    if (!game || game.game_name === selectedGame?.game_name) {
+      setSelectedGame(null);
+      return;
+    }
+
+    setSelectedGame(game);
+    console.log(game.release_world);
+    console.log(
+      game.release_world !== null && game.release_world !== undefined && game.release_world > 0
+    );
+  };
+
+  const onSelectValueChange = (value: string) => {
+    const sectorId = parseInt(value);
+
+    setSelectedSectorId(sectorId);
+    if (sectorId > 0) {
+      const sector = sectorsData.find(s => s.id === sectorId);
+      if (sector?.gameLengthRanges) {
+        setMinHours(Math.max(1, sector.gameLengthRanges.min));
+        setMaxHours(sector.gameLengthRanges.max);
+      }
+    }
+  }
+
   const handleWheelFinish = (winnerId: string) => {
     const game = gamesData?.games.find(g => String(g.game_id) === winnerId);
     if (game) {
@@ -83,448 +232,107 @@ export default function GamesRollerPage() {
     }
   };
 
-  console.log('Games data:', gamesData);
-  console.log('Games loading:', gamesLoading);
-
   return (
-    <TooltipProvider>
-      <div className="min-h-screen bg-gray-900">
-        <style dangerouslySetInnerHTML={{ __html: rangeSliderStyles }} />
-        <div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[calc(100vh-2rem)] p-4 lg:p-6">
-            <div className="lg:col-span-1">
-              {selectedGame ? (
-                <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
-                  <CardHeader className="p-2">
-                    <div className="flex justify-between items-center">
-                      <CardTitle className="text-white text-base font-roboto-wide-semibold">
-                        Детали игры
-                      </CardTitle>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSelectedGame(null)}
-                        className="text-white/70 hover:text-white hover:bg-white/10"
-                      >
-                        ✕
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-2 overflow-y-auto p-2">
-                    {selectedGame.game_image && (
-                      <div className="text-center">
-                        <img
-                          src={selectedGame.game_image}
-                          alt={selectedGame.game_name}
-                          className="w-full max-w-xs rounded-lg mx-auto object-contain"
-                          style={{ aspectRatio: 'auto' }}
-                        />
-                      </div>
-                    )}
+    <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-3 grid-flow-row gap-4 p-4 lg:p-6 w-full">
+      {selectedGame && (
+        <GameFullInfoCard game={selectedGame} />
+      )}
 
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-roboto-wide-semibold text-white border-b border-white/20 pb-2">
-                        Основная информация
-                      </h3>
-                      <div className="space-y-2 text-sm">
-                        <div className="text-center">
-                          <a
-                            href={`https://howlongtobeat.com/game/${selectedGame.game_id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-white underline text-sm font-medium hover:text-white/80 transition-colors"
-                          >
-                            {selectedGame.game_name}
-                            {selectedGame.release_world !== null &&
-                              selectedGame.release_world !== undefined &&
-                              selectedGame.release_world > 0 && (
-                                <span className="text-white/70">
-                                  {' '}
-                                  ({selectedGame.release_world})
-                                </span>
-                              )}
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-roboto-wide-semibold text-white border-b border-white/20 pb-2">
-                        Время прохождения
-                      </h3>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-white/80">Main Story:</span>
-                          <span className="text-white font-mono">
-                            {selectedGame.comp_main
-                              ? formatHltbLength(selectedGame.comp_main)
-                              : 'Н/Д'}
-                            {selectedGame.comp_main_count > 0 && (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="text-white/60 ml-2 cursor-help">
-                                    ({selectedGame.comp_main_count})
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Количество отзывов</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/80">Main + Sides:</span>
-                          <span className="text-white font-mono">
-                            {selectedGame.comp_plus
-                              ? formatHltbLength(selectedGame.comp_plus)
-                              : 'Н/Д'}
-                            {selectedGame.comp_plus_count > 0 && (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="text-white/60 ml-2 cursor-help">
-                                    ({selectedGame.comp_plus_count})
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Количество отзывов</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/80">Completionist:</span>
-                          <span className="text-white font-mono">
-                            {selectedGame.comp_100
-                              ? formatHltbLength(selectedGame.comp_100)
-                              : 'Н/Д'}
-                            {selectedGame.comp_100_count > 0 && (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="text-white/60 ml-2 cursor-help">
-                                    ({selectedGame.comp_100_count})
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Количество отзывов</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-white/80">All Styles:</span>
-                          <span className="text-white font-mono">
-                            {selectedGame.comp_all
-                              ? formatHltbLength(selectedGame.comp_all)
-                              : 'Н/Д'}
-                            {selectedGame.comp_all_count > 0 && (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="text-white/60 ml-2 cursor-help">
-                                    ({selectedGame.comp_all_count})
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Количество отзывов</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-center text-sm text-white/60">
-                      Синхронизировано с HLTB:{' '}
-                      {new Date(selectedGame.updated_at * 1000).toLocaleDateString()}
-                    </div>
-
-                    <div className="text-center text-sm text-white/80 pt-2">
-                      {selectedGame.profile_platform || 'Платформа не указана'}
-                    </div>
-                  </CardContent>
-                </Card>
-              ) : (
-                <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
-                  <CardHeader className="p-2">
-                    <CardTitle className="text-white text-base font-roboto-wide-semibold">
-                      Выберите игру
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex items-center justify-center p-2">
-                    <p className="text-white/80 text-center text-sm">
-                      Кликните на игру в списке справа, чтобы увидеть детальную информацию
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
-            <div className="lg:col-span-1">
-              <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
-                <CardHeader className="p-2">
-                  <CardTitle className="text-white text-base font-roboto-wide-semibold">
-                    Настройки фильтра
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 p-2">
-                  <div className="space-y-2">
-                    <label className="text-white text-sm font-roboto-wide-semibold">
-                      Выберите сектор
-                    </label>
-                    <select
-                      className="w-full p-2 bg-white/15 border-transparent rounded text-white text-sm font-roboto-wide-semibold"
-                      onChange={e => {
-                        const sectorId = parseInt(e.target.value);
-                        setSelectedSectorId(sectorId);
-                        if (sectorId > 0) {
-                          const sector = sectorsData.find(s => s.id === sectorId);
-                          if (sector?.gameLengthRanges) {
-                            setMinHours(Math.max(1, sector.gameLengthRanges.min));
-                            setMaxHours(sector.gameLengthRanges.max);
-                          }
-                        }
-                      }}
-                    >
-                      <option value={0} className="bg-gray-800 text-white">
-                        Выберите сектор
-                      </option>
-                      {sectorsData
-                        .filter(sector => sector.gameLengthRanges)
-                        .map(sector => (
-                          <option
-                            key={sector.id}
-                            value={sector.id}
-                            className="bg-gray-800 text-white"
-                          >
-                            {sector.id}. {sector.name}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-
-                  {(() => {
-                    const selectedSector = sectorsData.find(s => s.id === selectedSectorId);
-                    const isPrisonSector = selectedSector?.type === 'prison';
-
-                    if (isPrisonSector) {
-                      return (
-                        <div className="text-center text-white/60 text-sm font-roboto-wide-semibold py-4">
-                          Для тюремных секторов игры загружаются без ограничений по времени
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <div className="space-y-2">
-                        <label className="text-white text-sm font-roboto-wide-semibold">
-                          Диапазон времени (часы)
-                        </label>
-                        <div className="space-y-3">
-                          <label className="text-white text-sm font-roboto-wide-semibold">
-                            Диапазон времени: {minHours}ч - {maxHours}ч
-                          </label>
-
-                          <div className="relative w-full h-8 select-none">
-                            <div className="absolute w-full h-2 bg-white/20 rounded-lg top-3"></div>
-                            <div
-                              className="absolute h-2 bg-white rounded-lg top-3 transition-all duration-200"
-                              style={{
-                                left: `${(minHours / 300) * 100}%`,
-                                width: `${((maxHours - minHours) / 300) * 100}%`,
-                              }}
-                            ></div>
-
-                            <div
-                              className="absolute w-6 h-6 bg-white rounded-full shadow-lg cursor-pointer top-1 -ml-3 hover:scale-110 transition-transform select-none"
-                              style={{ left: `${(minHours / 300) * 100}%` }}
-                              onMouseDown={e => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                const startX = e.clientX;
-                                const startValue = minHours;
-                                const sliderWidth = e.currentTarget.parentElement?.offsetWidth || 0;
-
-                                const handleMouseMove = (moveEvent: MouseEvent) => {
-                                  moveEvent.preventDefault();
-                                  const deltaX = moveEvent.clientX - startX;
-                                  const deltaPercent = (deltaX / sliderWidth) * 300;
-                                  const newValue = Math.max(
-                                    1,
-                                    Math.min(maxHours - 1, startValue + deltaPercent)
-                                  );
-                                  setMinHours(Math.round(newValue));
-                                };
-
-                                const handleMouseUp = () => {
-                                  document.removeEventListener('mousemove', handleMouseMove);
-                                  document.removeEventListener('mouseup', handleMouseUp);
-                                };
-
-                                document.addEventListener('mousemove', handleMouseMove);
-                                document.addEventListener('mouseup', handleMouseUp);
-                              }}
-                            ></div>
-
-                            <div
-                              className="absolute w-6 h-6 bg-white rounded-full shadow-lg cursor-pointer top-1 -ml-3 hover:scale-110 transition-transform select-none"
-                              style={{ left: `${(maxHours / 300) * 100}%` }}
-                              onMouseDown={e => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                const startX = e.clientX;
-                                const startValue = maxHours;
-                                const sliderWidth = e.currentTarget.parentElement?.offsetWidth || 0;
-
-                                const handleMouseMove = (moveEvent: MouseEvent) => {
-                                  moveEvent.preventDefault();
-                                  const deltaX = moveEvent.clientX - startX;
-                                  const deltaPercent = (deltaX / sliderWidth) * 300;
-                                  const newValue = Math.max(
-                                    minHours + 1,
-                                    Math.min(300, startValue + deltaPercent)
-                                  );
-                                  setMaxHours(Math.round(newValue));
-                                };
-
-                                const handleMouseUp = () => {
-                                  document.removeEventListener('mousemove', handleMouseMove);
-                                  document.removeEventListener('mouseup', handleMouseUp);
-                                };
-
-                                document.addEventListener('mousemove', handleMouseMove);
-                                document.addEventListener('mouseup', handleMouseUp);
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="flex justify-between text-white text-sm font-roboto-wide-semibold mt-2">
-                          <span>{minHours}ч</span>
-                          <span>{maxHours}ч</span>
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  {(() => {
-                    const selectedSector = sectorsData.find(s => s.id === selectedSectorId);
-                    const isPrisonSector = selectedSector?.type === 'prison';
-
-                    if (!isPrisonSector) {
-                      return (
-                        <div className="text-center text-white/60 text-sm font-roboto-wide-semibold">
-                          Выбранный диапазон: {minHours}-{maxHours} часов
-                        </div>
-                      );
-                    }
-                    return null;
-                  })()}
-
-                  <div className="pt-2">
-                    <Button
-                      onClick={() => {
-                        setIsButtonLoading(true);
-                        setShouldLoadGames(true);
-                        refetch().finally(() => {
-                          setIsButtonLoading(false);
-                        });
-                      }}
-                      className="w-full bg-white/20 hover:bg-white/30 text-white font-roboto-wide-semibold"
-                      disabled={gamesLoading || isButtonLoading}
-                    >
-                      {isButtonLoading || gamesLoading ? 'Загрузка...' : 'Заролить'}
-                    </Button>
-                  </div>
-                  {!gamesLoading && (
-                    <div className="flex justify-center">
-                      <WheelWrapper games={gamesData?.games || []} onFinish={handleWheelFinish} />
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="lg:col-span-1">
-              <Card className="bg-white/15 backdrop-blur-sm border-transparent h-full overflow-hidden">
-                <CardHeader className="p-2">
-                  <CardTitle className="text-white text-base font-roboto-wide-semibold">
-                    Случайные игры
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-2 overflow-y-auto">
-                  {gamesLoading ? (
-                    <div className="text-white/80 text-center py-4 text-sm font-roboto-wide-semibold">
-                      Загрузка игр...
-                    </div>
-                  ) : gamesData?.games && gamesData.games.length > 0 ? (
-                    <div className="space-y-1">
-                      {gamesData.games.map((game: HltbGameResponse) => (
-                        <div
-                          key={game.game_id}
-                          className={`flex items-center gap-2 p-1.5 rounded-lg transition-colors cursor-pointer ${
-                            selectedGame?.game_id === game.game_id
-                              ? 'bg-white/20 border border-white/30'
-                              : 'bg-white/5 hover:bg-white/10'
-                          }`}
-                          onClick={() => handleGameClick(game)}
-                        >
-                          <div className="flex-shrink-0">
-                            {game.game_image ? (
-                              <img
-                                src={game.game_image}
-                                alt={game.game_name}
-                                className="w-20 h-[42px] rounded object-cover"
-                                onError={e => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.style.display = 'none';
-                                }}
-                              />
-                            ) : (
-                              <div className="w-20 h-[42px] rounded bg-gray-600 flex items-center justify-center">
-                                <span className="text-white text-sm">🎮</span>
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3
-                              className="text-white font-roboto-wide-semibold text-sm truncate"
-                              title={game.game_name}
-                            >
-                              {game.game_name}
-
-                              {game.release_world !== null &&
-                                game.release_world !== undefined &&
-                                game.release_world > 0 && (
-                                  <span className="text-white/70"> ({game.release_world})</span>
-                                )}
-                            </h3>
-                            {game.profile_platform && (
-                              <p className="text-white/60 text-sm truncate font-roboto-wide-semibold">
-                                {game.profile_platform}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : !shouldLoadGames ? (
-                    <div className="text-white/80 text-center py-4 text-sm font-roboto-wide-semibold">
-                      Пусто
-                    </div>
-                  ) : (
-                    <div className="text-white/80 text-center py-4 text-sm font-roboto-wide-semibold">
-                      Игры не найдены
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
+      <div className="col-start-2">
+        <WheelWrapper games={gamesData?.games || []} onFinish={handleWheelFinish} />
       </div>
-    </TooltipProvider>
+
+      <Card className="col-start-3 h-[468px] lg:h-full overflow-hidden">
+        <CardHeader>
+          <CardTitle className="text-xl font-roboto-wide-semibold">
+            Случайные игры
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col justify-between gap-4 h-full overflow-hidden p-0">
+          <div className="flex gap-2 items-end px-4">
+            {!isManualRange && (
+              <div className="space-y-1 w-full">
+                <h2 className="text-sm font-roboto-wide-semibold">
+                  Сектор
+                </h2>
+                <Select onValueChange={onSelectValueChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Выберите сектор" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sectorsData
+                      .filter((sector) => sector.gameLengthRanges)
+                      .map((sector) => (
+                        <SelectItem
+                          key={sector.id}
+                          value={sector.id.toString()}
+                        >
+                          #{sector.id} {sector.name} ({sector.gameLengthRanges?.min}-{sector.gameLengthRanges?.max} часов)
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            <div className="w-full space-y-1 hidden data-[visible=true]:block" data-visible={isManualRange}>
+              <div className="text-sm font-roboto-wide-semibold">
+                Диапазон времени ({minHours}-{maxHours} часов)
+              </div>
+              <Slider
+                className="h-[36px]"
+                min={0}
+                max={300}
+                value={[minHours, maxHours]}
+                onValueChange={(values) => { setMinHours(values[0]); setMaxHours(values[1]); }}
+              />
+            </div>
+            <Toggle
+              className="shrink-0 text-sm px-2.5 bg-white/20 text-white/70 hover:bg-white/30"
+              onPressedChange={setIsManualRange}
+            >
+              <TangentIcon className="size-4" /> Свой диапазон
+            </Toggle>
+          </div>
+
+          {gamesLoading ? (
+            <div className="flex justify-center items-center h-full">
+              <LoaderCircleIcon className="animate-spin text-primary" size={54} />
+            </div>
+          ) : gamesData?.games && gamesData.games.length > 0 ? (
+            <ScrollArea className="h-full overflow-hidden px-4">
+              {gamesData.games.map((game) => (
+                <GameCard
+                  key={game.game_id}
+                  game={game}
+                  isSelected={selectedGame?.game_id === game.game_id}
+                  onClick={onGameCardClick}
+                />
+              ))}
+            </ScrollArea>
+          ) : (
+            <div className="flex justify-center items-center h-full font-roboto-wide-semibold text-muted-foreground">
+              {!shouldLoadGames ? 'Пусто' : 'Игры не найдены'}
+            </div>
+          )}
+
+          <div className="w-full px-4">
+            <Button
+              size="lg"
+              className="w-full font-roboto-wide-semibold text-primary-foreground"
+              disabled={!selectedSector && !isManualRange}
+              loading={gamesLoading || isButtonLoading}
+              onClick={() => {
+                setIsButtonLoading(true);
+                setShouldLoadGames(true);
+                refetch().finally(() => setIsButtonLoading(false));
+              }}
+            >
+              Ролл списка
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
@@ -546,3 +354,5 @@ function WheelWrapper({
 
   return <Wheel entries={options} onSpinEnd={onFinish} startOnRender />;
 }
+
+export default GamesRollerPage;
