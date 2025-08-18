@@ -165,7 +165,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
 
 function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
-  const [minHours, setMinHours] = useState(0);
+  const [minHours, setMinHours] = useState(1);
   const [maxHours, setMaxHours] = useState(300);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
 
@@ -233,7 +233,9 @@ function GamesRollerPage() {
       {selectedGame && <GameFullInfoCard game={selectedGame} />}
 
       <div className="col-start-2">
-        <WheelWrapper games={gamesData?.games || []} onFinish={handleWheelFinish} />
+        {!gamesLoading && (
+          <WheelWrapper games={gamesData?.games || []} onFinish={handleWheelFinish} />
+        )}
       </div>
 
       <Card className="col-start-3 h-[468px] lg:h-full overflow-hidden">
@@ -248,7 +250,7 @@ function GamesRollerPage() {
               </div>
               <Slider
                 className="h-[36px]"
-                min={0}
+                min={1}
                 max={300}
                 value={[minHours, maxHours]}
                 onValueChange={values => {
