@@ -56,6 +56,14 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
           return;
         }
         if (option.value.instant === 'police-search') {
+          if (playerCards?.length === 0) {
+            const response = await activateInstantCard({
+              card_type: option.value.instant,
+            });
+            setActivationResult(response);
+            resetPlayersQuery();
+            return;
+          }
           useSystemStore.setState(state => ({
             ...state,
             disableCurrentPlayerQuery: true,
@@ -73,7 +81,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
         addCardToState(newCard);
       }
     },
-    [setActivationResult, setNextTurnState, addCardToState]
+    [setActivationResult, setNextTurnState, addCardToState, playerCards]
   );
 
   const getWinnerText = (option: WeightedOption<OptionType>) => {
