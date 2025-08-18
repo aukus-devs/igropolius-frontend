@@ -175,7 +175,6 @@ function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
   const [minHours, setMinHours] = useState(1);
   const [maxHours, setMaxHours] = useState(300);
-  const [shouldLoadGames, setShouldLoadGames] = useState(false);
   const [selectedSectorId, setSelectedSectorId] = useState(0);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [isManualRange, setIsManualRange] = useState(false);
@@ -196,7 +195,7 @@ function GamesRollerPage() {
         max_length: isPrisonSector ? 0 : maxHours,
       });
     },
-    enabled: shouldLoadGames,
+    enabled: false,
   });
 
   const onGameCardClick = (game: HltbGameResponse | null) => {
@@ -311,7 +310,7 @@ function GamesRollerPage() {
             </ScrollArea>
           ) : (
             <div className="flex justify-center items-center h-full font-roboto-wide-semibold text-muted-foreground">
-              {!shouldLoadGames ? 'Пусто' : 'Игры не найдены'}
+              {!gamesData ? 'Пусто' : 'Игры не найдены'}
             </div>
           )}
 
@@ -323,7 +322,6 @@ function GamesRollerPage() {
               loading={gamesLoading || isButtonLoading}
               onClick={() => {
                 setIsButtonLoading(true);
-                setShouldLoadGames(true);
                 refetch().finally(() => setIsButtonLoading(false));
               }}
             >
