@@ -722,12 +722,6 @@ function GameDifficulty() {
   const setGameDifficulty = useReviewFormStore(state => state.setGameDifficulty);
   const playerDifficulty = usePlayerStore(state => state.myPlayer?.game_difficulty_level) ?? 0;
 
-  useEffect(() => {
-    if (playerDifficulty != 0) {
-      setGameDifficulty(playerDifficulty);
-    }
-  }, [playerDifficulty, setGameDifficulty]);
-
   const handleValueChange = (pressed: boolean) => {
     if (pressed) {
       setGameDifficulty(playerDifficulty);
@@ -756,7 +750,7 @@ function GameDifficulty() {
             className="w-full p-2 rounded-lg"
             size={null}
             onPressedChange={handleValueChange}
-            defaultPressed={true}
+            defaultPressed={false}
           >
             <div>{difficultyText}</div>
           </Toggle>
