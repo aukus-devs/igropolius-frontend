@@ -1,6 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { LoaderCircleIcon } from 'lucide-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
+import useLocalStorage from '@/hooks/useLocalStorage';
+import { useSound } from '@/hooks/useSound';
+import { DRUM_SOUND_URL, INDIAN_ROLL_URL } from '@/lib/constants';
 
 type Entry = {
   id: number;
@@ -39,6 +42,21 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
   const [radius, setRadius] = useState(0);
   const [rotation, setRotation] = useState(() => Math.random() * 360);
   const [isSpinning, setIsSpinning] = useState(false);
+
+  const { value: isMuted } = useLocalStorage({ key: 'roller-sound-muted', defaultValue: false });
+  const { play: playIndian, stop: stopIndian } = useSound(INDIAN_ROLL_URL, isMuted, true);
+  const { play: playDrum, stop: stopDrum } = useSound(DRUM_SOUND_URL, isMuted, true);
+
+  const stopSound = useCallback(() => {
+    stopIndian();
+    stopDrum();
+  }, [stopIndian, stopDrum]);
+
+  const playSound = useCallback(() => {
+    const random = Math.random() < 0.5;
+    if (random) playIndian();
+    else playDrum();
+  }, [playIndian, playDrum]);
 
   const easeOutCirc = (t: number) => 1 - Math.pow(1 - t, 4);
 
@@ -150,6 +168,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
 
     setIsSpinning(true);
     onSpinStart?.();
+    if (!isMuted) playSound();
 
     console.log('starting with', entriesWithAnglesRef.current);
 
@@ -183,11 +202,25 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
           onSpinEnd?.(winner);
         }
         setIsSpinning(false);
+        stopSound();
       }
     }
 
     requestAnimationFrame(animate);
   };
+
+  useEffect(() => {
+    if (isSpinning) {
+      if (isMuted) stopSound();
+      else playSound();
+    }
+  }, [isMuted, isSpinning, playSound, stopSound]);
+
+  useEffect(() => {
+    return () => {
+      stopSound();
+    };
+  }, [stopSound]);
 
   useEffect(() => {
     if (!canvasRef.current) return;

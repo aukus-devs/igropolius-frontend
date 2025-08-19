@@ -13,6 +13,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import Wheel from './Wheel';
 import { useLocation } from 'react-router';
+import { Volume } from '@/components/icons';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 type GameCardProps = {
   game: HltbGameResponse;
@@ -230,6 +232,11 @@ function GamesRollerPage() {
   const urlParamMin = urlParams.get('min');
   const urlParamMax = urlParams.get('max');
 
+  const { value: isMuted, save: saveMutedState } = useLocalStorage({
+    key: 'roller-sound-muted',
+    defaultValue: false,
+  });
+
   useEffect(() => {
     if (urlParamMin) {
       const parsedMin = parseInt(urlParamMin, 10);
@@ -363,6 +370,16 @@ function GamesRollerPage() {
                   setMaxHours(values[1]);
                 }}
               />
+              <div className="flex justify-end">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-xl"
+                  onClick={() => saveMutedState(!isMuted)}
+                >
+                  <Volume muted={isMuted ?? false} className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </CardContent>
