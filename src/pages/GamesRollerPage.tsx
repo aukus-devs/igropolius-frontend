@@ -376,8 +376,10 @@ function GamesRollerPage() {
     <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-[0.3fr_0.4fr_0.3fr] grid-flow-row gap-4 p-4 lg:p-6 w-full">
       {selectedGame && <GameFullInfoCard game={selectedGame} />}
 
-      <div className="flex flex-col col-start-2">{memoizedWheel}</div>
-
+      <div className="flex flex-col col-start-2">
+        <div className="text-5xl text-center text-primary">Новое колесо</div>
+        {memoizedWheel}
+      </div>
       <Card className="col-start-3 h-[468px] lg:max-w-[552px] lg:h-full overflow-hidden">
         <CardHeader>
           <CardTitle className="text-xl font-roboto-wide-semibold">Случайные игры</CardTitle>

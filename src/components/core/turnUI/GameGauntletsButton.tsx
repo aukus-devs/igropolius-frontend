@@ -7,8 +7,17 @@ type Props = {
   className?: string;
 };
 
+const ENABLE_NEW_WHEEL = false;
+
 export default function GameGauntletsButton({ gameLengthRanges, className }: Props) {
   const handleClick = () => {
+    if (ENABLE_NEW_WHEEL) {
+      window.open(
+        `/games-roller?min=${gameLengthRanges.min}&max=${gameLengthRanges.max}`,
+        '_blank'
+      );
+      return;
+    }
     window.open(
       `https://gamegauntlets.igropolius.ru/?queryFilters=true&empty=false&length=${gameLengthRanges.min},${gameLengthRanges.max}#wheel`,
       '_blank'
