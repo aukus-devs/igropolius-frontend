@@ -31,6 +31,7 @@ type WheelProps = {
 const degreesToRadians = Math.PI / 180;
 const LINE_WIDTH = 7;
 const STROKE_COLOR = '#fff'; // '#81a971'
+const STROKE_HIGHLIGHT_COLOR = '#83ab73';
 const SIDE_OFFSET = 24;
 const SPIN_TIME_SECONDS = 10;
 
@@ -63,6 +64,8 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
 
   const entriesWithAnglesRef = useRef<EntryWithAngles[]>([]);
 
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
+
   useEffect(() => {}, [entries]);
 
   // const entriesWithAngles = useMemo(() => {
@@ -84,11 +87,19 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
   // }, [entries]);
 
   const drawEntry = useCallback(
-    (entry: EntryWithAngles, centerX: number, centerY: number, progress: number) => {
+    (
+      entry: EntryWithAngles,
+      centerX: number,
+      centerY: number,
+      progress: number,
+      isHovered: boolean
+    ) => {
       if (!ctxRef.current) return;
 
       const ctx = ctxRef.current;
       const { imageUrl, startAngle, endAngle } = entry;
+
+      const strokeColor = isHovered ? STROKE_HIGHLIGHT_COLOR : STROKE_COLOR;
 
       const img = new Image();
       img.src = imageUrl || '';
@@ -129,9 +140,15 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
           endAngle * degreesToRadians
         );
         ctx.closePath();
-        ctx.strokeStyle = STROKE_COLOR;
+        ctx.save();
+        // if (isHovered) {
+        //   ctx.shadowColor = 'yellow';
+        //   ctx.shadowBlur = 10;
+        // }
+        ctx.strokeStyle = strokeColor;
         ctx.lineWidth = LINE_WIDTH;
         ctx.stroke();
+        ctx.restore();
       };
     },
     [radius]
@@ -141,19 +158,26 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
     (progress = 1) => {
       if (!ctxRef.current || !canvasRef.current) return;
 
-      const ctx = ctxRef.current;
+      // const ctx = ctxRef.current;
       const centerX = canvasRef.current.width / 2;
       const centerY = canvasRef.current.height / 2;
 
-      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      // ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
       // console.log('drawing', entriesWithAnglesRef.current);
 
       for (const entry of entriesWithAnglesRef.current) {
-        drawEntry(entry, centerX, centerY, progress);
+        if (entry.id === hoveredId) continue; // Skip hovered entry for now
+        drawEntry(entry, centerX, centerY, progress, false);
+      }
+      if (hoveredId !== null) {
+        const hoveredEntry = entriesWithAnglesRef.current.find(item => item.id === hoveredId);
+        if (hoveredEntry) {
+          drawEntry(hoveredEntry, centerX, centerY, progress, true);
+        }
       }
     },
-    [drawEntry]
+    [drawEntry, hoveredId]
   );
 
   const getCurrentEntry = (currentRotation: number) => {
@@ -164,7 +188,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
     );
   };
 
-  const handleClick = useCallback(
+  const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!canvasRef.current || entriesWithAnglesRef.current.length === 0) return;
       const rect = canvasRef.current.getBoundingClientRect();
@@ -180,9 +204,19 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
       const found = entriesWithAnglesRef.current.find(
         item => item.startAngle <= theta && theta < item.endAngle
       );
+      if (found) {
+        setHoveredId(found.id);
+      }
+    },
+    [radius, rotation]
+  );
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const found = entriesWithAnglesRef.current.find(item => item.id === hoveredId);
       if (found) onSelect?.(found.id);
     },
-    [radius, rotation, onSelect]
+    [radius, onSelect, hoveredId]
   );
 
   const spinWheel = () => {
@@ -293,7 +327,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
             viewBox="0 0 54 28"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute top-3 left-1/2 -translate-x-1/2 z-10 text-primary"
+            className="absolute top-3 left-1/2 -translate-x-1/2 z-10 text-primary pointer-events-none"
           >
             <path
               d="M27 27 L0 0 L9 -1 L27 17 L45 -1 L54 0 Z"
@@ -318,9 +352,11 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
           </Button>
           <div
             ref={canvasContainerRef}
-            className="relative select-none"
+            className="relative select-none cursor-pointer"
             style={{ transform: `rotate(${rotation}deg)` }}
             onClick={handleClick}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setHoveredId(null)}
             draggable="false"
           >
             <canvas
