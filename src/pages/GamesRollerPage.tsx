@@ -237,6 +237,7 @@ function GamesRollerPage() {
 
   const onSpinFinish = useCallback(
     (winnerId: number) => {
+      console.log('on spin finish with data', gamesData?.games);
       const game = gamesData?.games.find(g => g.game_id === winnerId);
 
       if (game) {

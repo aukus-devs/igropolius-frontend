@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { mockHltbGamesList } from '@/lib/mockData';
 import { LoaderCircleIcon } from 'lucide-react';
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 type Entry = {
   id: number;
@@ -18,12 +17,12 @@ type WheelProps = {
   onSpinEnd: (index: number) => void;
 };
 
-const defaultGames = mockHltbGamesList.games.map(game => ({
-  id: game.game_id,
-  label: game.game_name,
-  imageUrl: game.game_image,
-  weight: 1,
-}));
+// const defaultGames = mockHltbGamesList.games.map(game => ({
+//   id: game.game_id,
+//   label: game.game_name,
+//   imageUrl: game.game_image,
+//   weight: 1,
+// }));
 
 const degreesToRadians = Math.PI / 180;
 const LINE_WIDTH = 7;
@@ -31,7 +30,7 @@ const STROKE_COLOR = '#fff'; // '#81a971'
 const SIDE_OFFSET = 24;
 const SPIN_TIME_SECONDS = 10;
 
-export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }: WheelProps) {
+export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -43,20 +42,46 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
 
   const easeOutCirc = (t: number) => 1 - Math.pow(1 - t, 4);
 
-  const entriesWithAngles = useMemo(() => {
-    if (!entries) return [];
+  const entriesWithAnglesRef = useRef<EntryWithAngles[]>([]);
+
+  useEffect(() => {
+    if (!entries) {
+      entriesWithAnglesRef.current = [];
+      return;
+    }
 
     const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
     let cumulativeAngle = 0;
 
-    return entries.map(item => {
+    console.log('updating entries angles ref: ', entries);
+
+    const entriesWithAngles = entries.map(item => {
       const angle = ((item.weight || 1) / totalValue) * 360;
       const startAngle = cumulativeAngle;
       cumulativeAngle += angle;
 
       return { ...item, startAngle, endAngle: cumulativeAngle };
     });
+    entriesWithAnglesRef.current = entriesWithAngles;
   }, [entries]);
+
+  // const entriesWithAngles = useMemo(() => {
+  //   if (!entries) return [];
+
+  //   const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
+  //   let cumulativeAngle = 0;
+
+  //   console.log('updating entries angles: ', entries);
+  //   entriesRef.current = entries;
+
+  //   return entries.map(item => {
+  //     const angle = ((item.weight || 1) / totalValue) * 360;
+  //     const startAngle = cumulativeAngle;
+  //     cumulativeAngle += angle;
+
+  //     return { ...item, startAngle, endAngle: cumulativeAngle };
+  //   });
+  // }, [entries]);
 
   const drawEntry = useCallback(
     (entry: EntryWithAngles, centerX: number, centerY: number, progress: number) => {
@@ -122,17 +147,18 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
 
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-      for (const entry of entriesWithAngles) {
+      for (const entry of entriesWithAnglesRef.current) {
         drawEntry(entry, centerX, centerY, progress);
       }
     },
-    [entriesWithAngles, drawEntry]
+    [drawEntry]
   );
 
   const getCurrentEntry = (currentRotation: number) => {
     const angle = ((-currentRotation % 360) + 360) % 360;
     return (
-      entriesWithAngles.find(item => item.startAngle <= angle && angle < item.endAngle)?.id ?? null
+      entriesWithAnglesRef.current.find(item => item.startAngle <= angle && angle < item.endAngle)
+        ?.id ?? null
     );
   };
 
@@ -142,7 +168,7 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
     setIsSpinning(true);
     onSpinStart?.();
 
-    console.log('starting with', entriesWithAngles);
+    console.log('starting with', entriesWithAnglesRef.current);
 
     const start = Math.random() * 360;
     const extraSpins = 10 * 360;
@@ -169,7 +195,7 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
         setRotation(finalRotation);
         const winner = getCurrentEntry(finalRotation);
         // console.log('ending', { finalRotation, winner });
-        console.log('ending with', entriesWithAngles);
+        console.log('ending with', entriesWithAnglesRef.current);
         if (winner !== null) {
           onSpinEnd?.(winner);
         }
