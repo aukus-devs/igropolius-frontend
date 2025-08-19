@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -6,7 +6,7 @@ import { fetchHltbRandomGames } from '../lib/api';
 import { queryKeys } from '../lib/queryClient';
 import { HltbGameResponse } from '../lib/api-types-generated';
 import { formatHltbLength, getNoun } from '../lib/utils';
-import { LinkIcon, LoaderCircleIcon } from 'lucide-react';
+import { CrownIcon, LinkIcon, LoaderCircleIcon } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import ImageLoader from '@/components/core/ImageLoader';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -16,12 +16,13 @@ import { useLocation } from 'react-router';
 
 type GameCardProps = {
   game: HltbGameResponse;
+  isWinner?: boolean;
   isSelected?: boolean;
   onClick?: (game: HltbGameResponse) => void;
   onHoverChange?: (game: HltbGameResponse | null) => void;
 };
 
-function GameCard({ game, isSelected, onClick, onHoverChange }: GameCardProps) {
+function GameCard({ game, isWinner, isSelected, onClick, onHoverChange }: GameCardProps) {
   const title = `${game.game_name}` + (game.release_world ? ` (${game.release_world})` : '');
 
   return (
@@ -38,16 +39,17 @@ function GameCard({ game, isSelected, onClick, onHoverChange }: GameCardProps) {
         src={game.game_image}
         alt={game.game_name}
       />
-      <div>
-        <h3 className="font-roboto-wide-semibold text-sm truncate" title={game.game_name}>
+      <div className="w-full overflow-hidden">
+        <h3 className="font-roboto-wide-semibold text-sm whitespace-pre-line" title={game.game_name}>
           {title}
         </h3>
         {game.profile_platform && (
-          <p className="text-muted-foreground text-xs truncate font-medium">
+          <p className="text-muted-foreground text-xs whitespace-pre-line font-medium">
             {game.profile_platform}
           </p>
         )}
       </div>
+      {isWinner && <CrownIcon className="text-primary pr-2 size-10" />}
     </div>
   );
 }
@@ -102,7 +104,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
   }
 
   return (
-    <Card className="animate-in fade-in-0 duration-300 h-fit lg:max-w-[470px] justify-self-end w-full">
+    <Card className="animate-in fade-in-0 duration-300 h-fit lg:max-w-[552px] justify-self-end w-full">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="w-full">
           <Button
@@ -127,8 +129,8 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
           alt={game.game_name}
         />
         <div className="space-y-2 w-full">
-          {table.map(({ title, value, polledText, polledColor }) => (
-            <div className="flex flex-col gap-1">
+          {table.map(({ title, value, polledText, polledColor }, idx) => (
+            <div key={idx} className="flex flex-col gap-1">
               <span className="text-muted-foreground font-semibold">{title}</span>
 
               <div className="flex flex-wrap gap-2">
@@ -165,9 +167,9 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
 
 function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
+  const [winner, setWinner] = useState<HltbGameResponse | null>(null);
   const [minHours, setMinHours] = useState(1);
   const [maxHours, setMaxHours] = useState(300);
-  const [isButtonLoading, setIsButtonLoading] = useState(false);
 
   const { search } = useLocation();
   const urlParams = new URLSearchParams(search);
@@ -205,7 +207,7 @@ function GamesRollerPage() {
         max_length: maxHours,
       });
     },
-    enabled: false,
+    enabled: true,
   });
 
   const onGameCardClick = (game: HltbGameResponse | null) => {
@@ -221,28 +223,68 @@ function GamesRollerPage() {
     );
   };
 
-  const handleWheelFinish = (winnerId: string) => {
-    const game = gamesData?.games.find(g => String(g.game_id) === winnerId);
+  const onSpinStart = useCallback(() => {
+    setSelectedGame(null);
+    refetch();
+  }, [refetch])
+
+  const onSpinFinish = useCallback((winnerId: number) => {
+    const game = gamesData?.games.find(g => g.game_id === winnerId);
+
     if (game) {
       setSelectedGame(game);
-    }
-  };
+      setWinner(game);
+    };
+  }, [gamesData]);
+
+  const memoizedWheel = useMemo(() => {
+    const entries = gamesData?.games || [];
+    const options = (entries).map(game => ({
+      id: game.game_id,
+      label: game.game_name,
+      imageUrl: game.game_image,
+      weight: 1,
+    }));
+
+    return (
+      <Wheel entries={options} onSpinEnd={onSpinFinish} onSpinStart={onSpinStart} />
+    )
+  }, [gamesData, onSpinFinish, onSpinStart]);
 
   return (
-    <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-3 grid-flow-row gap-4 p-4 lg:p-6 w-full">
+    <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-[0.3fr_0.4fr_0.3fr] grid-flow-row gap-4 p-4 lg:p-6 w-full">
       {selectedGame && <GameFullInfoCard game={selectedGame} />}
 
-      <div className="col-start-2">
-        {!gamesLoading && (
-          <WheelWrapper games={gamesData?.games || []} onFinish={handleWheelFinish} />
-        )}
+      <div className="flex flex-col col-start-2">
+        {memoizedWheel}
       </div>
 
-      <Card className="col-start-3 h-[468px] lg:h-full overflow-hidden">
+      <Card className="col-start-3 h-[468px] lg:max-w-[552px] lg:h-full overflow-hidden">
         <CardHeader>
           <CardTitle className="text-xl font-roboto-wide-semibold">Случайные игры</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col justify-between gap-4 h-full overflow-hidden p-0">
+          {gamesLoading ? (
+            <div className="flex justify-center items-center h-full">
+              <LoaderCircleIcon className="animate-spin text-primary" size={54} />
+            </div>
+          ) : gamesData?.games && gamesData.games.length > 0 ? (
+            <ScrollArea className="h-full overflow-hidden px-4">
+              {gamesData.games.map((game) => (
+                <GameCard
+                  key={game.game_id}
+                  game={game}
+                  isWinner={winner?.game_id === game.game_id}
+                  isSelected={selectedGame?.game_id === game.game_id}
+                  onClick={onGameCardClick}
+                />
+              ))}
+            </ScrollArea>
+          ) : (
+            <div className="flex justify-center items-center h-full font-roboto-wide-semibold text-muted-foreground">
+              {!gamesData ? 'Пусто' : 'Игры не найдены'}
+            </div>
+          )}
           <div className="flex gap-2 items-end px-4">
             <div className="w-full space-y-1">
               <div className="text-sm font-roboto-wide-semibold">
@@ -260,65 +302,10 @@ function GamesRollerPage() {
               />
             </div>
           </div>
-
-          {gamesLoading ? (
-            <div className="flex justify-center items-center h-full">
-              <LoaderCircleIcon className="animate-spin text-primary" size={54} />
-            </div>
-          ) : gamesData?.games && gamesData.games.length > 0 ? (
-            <ScrollArea className="h-full overflow-hidden px-4">
-              {gamesData.games.map(game => (
-                <GameCard
-                  key={game.game_id}
-                  game={game}
-                  isSelected={selectedGame?.game_id === game.game_id}
-                  onClick={onGameCardClick}
-                />
-              ))}
-            </ScrollArea>
-          ) : (
-            <div className="flex justify-center items-center h-full font-roboto-wide-semibold text-muted-foreground">
-              {!gamesData ? 'Пусто' : 'Игры не найдены'}
-            </div>
-          )}
-
-          <div className="w-full px-4">
-            <Button
-              size="lg"
-              className="w-full font-roboto-wide-semibold text-primary-foreground"
-              // disabled={!selectedSector && !isManualRange}
-              loading={gamesLoading || isButtonLoading}
-              onClick={() => {
-                setIsButtonLoading(true);
-                refetch().finally(() => setIsButtonLoading(false));
-              }}
-            >
-              Заролить игру
-            </Button>
-          </div>
         </CardContent>
       </Card>
     </div>
   );
-}
-
-function WheelWrapper({
-  games,
-  onFinish,
-}: {
-  games: HltbGameResponse[];
-  onFinish: (id: string) => void;
-}) {
-  const options = games.map(game => ({
-    id: String(game.game_id),
-    label: game.game_name,
-  }));
-
-  if (options.length === 0) {
-    return null;
-  }
-
-  return <Wheel entries={options} onSpinEnd={onFinish} startOnRender />;
 }
 
 export default GamesRollerPage;

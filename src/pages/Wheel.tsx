@@ -1,156 +1,163 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { mockHltbGamesList } from '@/lib/mockData';
+import { LoaderCircleIcon } from 'lucide-react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 
-type Entry = { label: string; weight?: number; id: string };
+type Entry = {
+  id: number,
+  label: string;
+  weight?: number;
+  imageUrl?: string;
+};
+type EntryWithAngles = Entry & { startAngle: number; endAngle: number };
 
 type WheelProps = {
-  onSpinEnd: (index: string) => void;
   entries: Entry[];
   startOnRender?: boolean;
+  onSpinStart: () => void;
+  onSpinEnd: (index: number) => void;
 };
 
-const WHEEL_RADIUS = 200;
-const CENTER = { x: 205, y: 205 };
-const SPIN_TIME_SECONDS = 6 + Math.random() * 3; // Random spin time between 6 and 9 sec
-const pieColors = [
-  '#FFCC00',
-  '#F72585',
-  '#3A86FF',
-  '#A1E44D',
-  '#FF6B6B',
-  '#4ECDC4',
-  '#FF9F1C',
-  '#9B5DE5',
-  '#FB5607',
-  '#06D6A0',
-  '#FFD166',
-  '#00F5D4',
-  '#FF6F91',
-  '#8AC926',
-  '#F4A261',
-];
+const defaultGames = mockHltbGamesList.games.map((game) => ({
+  id: game.game_id,
+  label: game.game_name,
+  imageUrl: game.game_image,
+  weight: 1,
+}))
 
-export default function Wheel({ onSpinEnd, entries, startOnRender }: WheelProps) {
+const degreesToRadians = Math.PI / 180;
+const LINE_WIDTH = 7;
+const STROKE_COLOR = "#fff"; // '#81a971'
+const SIDE_OFFSET = 24;
+const SPIN_TIME_SECONDS = 10;
+
+export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }: WheelProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const canvasContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const [rotation, setRotation] = useState(Math.random() * 360);
+  const [radius, setRadius] = useState(0);
+  const [rotation, setRotation] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
-  const [currentLabel, setCurrentLabel] = useState('');
-  const [winnerId, setWinnerId] = useState<string | null>(null);
-
-  const width = WHEEL_RADIUS * 2 + 10;
-  const height = WHEEL_RADIUS * 2 + 10;
-
-  const totalWeight = entries.reduce((sum, e) => sum + (e.weight ?? 1), 0);
-  const angles = entries.map(e => ((e.weight ?? 1) / totalWeight) * 360);
-
-  const getCurrentEntry = useCallback(
-    (angleDeg: number) => {
-      const pointerAngle = 270;
-      let accAngle = angleDeg % 360;
-
-      for (let i = 0; i < angles.length; i++) {
-        const start = accAngle;
-        const end = accAngle + angles[i];
-        if (
-          (pointerAngle >= start && pointerAngle < end) ||
-          (i === angles.length - 1 && pointerAngle >= start)
-        ) {
-          return entries[i];
-        }
-        accAngle = (accAngle + angles[i]) % 360;
-      }
-      return entries[0];
-    },
-    [angles, entries]
-  );
-
-  const drawWheel = useCallback(
-    (rotation: number) => {
-      const ctx = ctxRef.current;
-      if (!ctx) return;
-
-      ctx.clearRect(0, 0, width, height);
-      ctx.save();
-      ctx.translate(CENTER.x, CENTER.y);
-      ctx.rotate((rotation * Math.PI) / 180);
-
-      let startAngle = 0;
-      const winnerFound = winnerId !== null;
-
-      for (let i = 0; i < entries.length; i++) {
-        const angle = angles[i];
-        const isWinner = winnerId === entries[i].id;
-
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        if (!winnerFound) {
-          ctx.fillStyle = pieColors[i % pieColors.length];
-        } else {
-          ctx.fillStyle = pieColors[i % pieColors.length] + '40';
-        }
-        if (isWinner) {
-          ctx.fillStyle = pieColors[i % pieColors.length];
-        }
-
-        ctx.arc(
-          0,
-          0,
-          WHEEL_RADIUS,
-          (startAngle * Math.PI) / 180,
-          ((startAngle + angle) * Math.PI) / 180
-        );
-        ctx.closePath();
-        ctx.fill();
-
-        // Text
-        const midAngle = startAngle + angle / 2;
-        const textX = Math.cos((midAngle * Math.PI) / 180) * WHEEL_RADIUS * 0.6;
-        const textY = Math.sin((midAngle * Math.PI) / 180) * WHEEL_RADIUS * 0.6;
-        ctx.save();
-        ctx.translate(textX, textY);
-        ctx.rotate((midAngle * Math.PI) / 180);
-        ctx.fillStyle = 'black';
-        ctx.font = '16px sans-serif';
-        ctx.textAlign = 'center';
-        const labelCut =
-          entries[i].label.length > 15 ? entries[i].label.slice(0, 15) + '...' : entries[i].label;
-        ctx.fillText(labelCut, 0, 0);
-        ctx.restore();
-
-        startAngle += angle;
-      }
-
-      ctx.restore();
-
-      // Pointer
-      ctx.beginPath();
-      ctx.moveTo(CENTER.x, CENTER.y - WHEEL_RADIUS + 27);
-      ctx.lineTo(CENTER.x - 27, CENTER.y - WHEEL_RADIUS);
-      ctx.lineTo(CENTER.x - 18, CENTER.y - WHEEL_RADIUS - 1);
-      ctx.lineTo(CENTER.x, CENTER.y - WHEEL_RADIUS + 17);
-      ctx.lineTo(CENTER.x + 18, CENTER.y - WHEEL_RADIUS - 1);
-      ctx.lineTo(CENTER.x + 27, CENTER.y - WHEEL_RADIUS);
-      ctx.closePath();
-      ctx.fillStyle = 'white';
-      ctx.strokeStyle = 'black';
-      ctx.lineWidth = 2;
-      ctx.fill();
-      ctx.stroke();
-    },
-    [angles, entries, winnerId, width, height]
-  );
 
   const easeOutCirc = (t: number) => 1 - Math.pow(1 - t, 4);
 
+  const entriesWithAngles = useMemo(() => {
+    if (!entries) return [];
+
+    const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
+    let cumulativeAngle = 0;
+
+    return entries.map((item) => {
+      const angle = ((item.weight || 1) / totalValue) * 360;
+      const startAngle = cumulativeAngle;
+      cumulativeAngle += angle;
+
+      return { ...item, startAngle, endAngle: cumulativeAngle };
+    });
+  }, [entries]);
+
+  const drawEntry = useCallback((entry: EntryWithAngles, centerX: number, centerY: number, progress: number) => {
+    if (!ctxRef.current) return;
+
+    const ctx = ctxRef.current;
+    const { imageUrl, startAngle, endAngle } = entry;
+
+    const img = new Image();
+    img.src = imageUrl || '';
+    img.onload = () => {
+      // Create clipping path for this slice
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(
+        centerX,
+        centerY,
+        Math.min((radius - SIDE_OFFSET) * progress, radius - SIDE_OFFSET),
+        startAngle * degreesToRadians,
+        endAngle * degreesToRadians
+      );
+      ctx.clip();
+
+      const angle = (startAngle + endAngle) / 2;
+      const cosMidAngle = Math.cos(angle * degreesToRadians);
+      const sinMidAngle = Math.sin(angle * degreesToRadians);
+      const imgX = centerX + cosMidAngle * radius / 2 - radius / 2;
+      const imgY = centerY + sinMidAngle * radius / 2 - radius / 2;
+
+      // Rotate image to the center
+      ctx.translate(imgX + radius / 2, imgY + radius / 2);
+      ctx.rotate((angle + 90) * degreesToRadians);
+      ctx.drawImage(img, -radius / 2, -radius / 2, radius, radius);
+      ctx.restore();
+
+      // Draw slice border
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(
+        centerX,
+        centerY,
+        Math.min((radius - SIDE_OFFSET) * progress, radius - SIDE_OFFSET),
+        startAngle * degreesToRadians,
+        endAngle * degreesToRadians
+      );
+      ctx.closePath();
+      ctx.strokeStyle = STROKE_COLOR;
+      ctx.lineWidth = LINE_WIDTH;
+      ctx.stroke();
+    };
+  }, [radius]);
+
+  const drawWheel = useCallback((progress = 1) => {
+    if (!ctxRef.current || !canvasRef.current) return;
+
+    const ctx = ctxRef.current;
+    const centerX = canvasRef.current.width / 2;
+    const centerY = canvasRef.current.height / 2;
+
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+    for (const entry of entriesWithAngles) {
+      drawEntry(entry, centerX, centerY, progress);
+    }
+  }, [entriesWithAngles, drawEntry]);
+
+  const getWinnerEntry = (finalRotation: number) => {
+    const angleModulo = Math.abs(finalRotation % 360);
+    const isClockwiseRotation = finalRotation > 0;
+    const normalizedRotation = isClockwiseRotation ? 360 - angleModulo : angleModulo;
+
+    let left = 0;
+    let right = entriesWithAngles.length - 1;
+
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      const item = entriesWithAngles[mid];
+      const targetRotation = normalizedRotation;
+
+      if (item.startAngle <= targetRotation && item.endAngle >= targetRotation) {
+        onSpinEnd(item.id);
+        return item.id; // Return the item found
+      }
+
+      if (targetRotation < item.startAngle) {
+        right = mid - 1; // Search in the left half
+      } else {
+        left = mid + 1; // Search in the right half
+      }
+    }
+
+    return null; // If not found, return null or appropriate value
+  };
+
   const spinWheel = () => {
     if (isSpinning) return;
-    if (winnerId) return;
 
     setIsSpinning(true);
-    setWinnerId(null);
+    onSpinStart?.();
 
-    const start = rotation;
+    const start = Math.random() * 360;
     const extraSpins = 10 * 360;
     const landing = Math.floor(Math.random() * 360);
     const totalRotation = start + extraSpins + landing;
@@ -159,27 +166,22 @@ export default function Wheel({ onSpinEnd, entries, startOnRender }: WheelProps)
     const startTime = performance.now();
 
     function animate(time: number) {
+      if (!canvasContainerRef.current) return;
+
       const elapsed = time - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const eased = easeOutCirc(progress);
 
       const newRotation = start + (totalRotation - start) * eased;
       setRotation(newRotation);
-      drawWheel(newRotation);
-
-      const { label } = getCurrentEntry(newRotation % 360);
-      setCurrentLabel(label);
 
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
         const finalRotation = newRotation % 360;
         setRotation(finalRotation);
-        const { id } = getCurrentEntry(finalRotation);
-        setWinnerId(id);
+        getWinnerEntry(finalRotation);
         setIsSpinning(false);
-        onSpinEnd?.(id);
-        drawWheel(finalRotation);
       }
     }
 
@@ -187,56 +189,61 @@ export default function Wheel({ onSpinEnd, entries, startOnRender }: WheelProps)
   };
 
   useEffect(() => {
-    if (canvasRef.current) {
-      ctxRef.current = canvasRef.current.getContext('2d');
-      drawWheel(rotation);
-      setCurrentLabel(getCurrentEntry(rotation % 360).label);
-    }
-  }, [drawWheel, rotation, getCurrentEntry]);
+    if (!canvasRef.current) return;
+    ctxRef.current = canvasRef.current.getContext('2d');
+  }, []);
 
   useEffect(() => {
-    if (startOnRender) {
-      spinWheel();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startOnRender]);
+    if (!containerRef.current) return;
 
-  const currentLabelCut =
-    currentLabel.length > 45 ? currentLabel.slice(0, 45) + '...' : currentLabel;
+    const h = containerRef.current.clientHeight;
+    const w = containerRef.current.clientWidth;
+
+    setRadius(Math.floor(Math.min(h, w) / 2.25));
+    drawWheel();
+  }, [drawWheel]);
 
   return (
-    <div className="flex w-fit flex-col items-center gap-4">
-      <div style={{ display: 'flex', justifyContent: 'center', fontWeight: 'bold' }}>
-        {currentLabelCut}
-      </div>
-      <div className="relative" style={{ width, height }}>
-        <div
-          className="pointer-events-none absolute z-50 rounded-full border-4 border-white"
-          style={{
-            width: 410,
-            height: 410,
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-        <div
-          className="pointer-events-none absolute z-50 rounded-full border-3 border-black"
-          style={{
-            width: 403,
-            height: 403,
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-        <canvas
-          ref={canvasRef}
-          width={width}
-          height={height}
+    <div ref={containerRef} className="flex justify-center items-center gap-4 w-full h-full overflow-hidden">
+      <div className="relative flex flex-col">
+        <svg
+          width={64}
+          height={64}
+          viewBox="0 0 54 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="absolute top-3 left-1/2 -translate-x-1/2 z-10 text-primary"
+        >
+          <path
+            d="M27 27 L0 0 L9 -1 L27 17 L45 -1 L54 0 Z"
+            fill="black"
+            stroke={STROKE_COLOR}
+            strokeWidth="2"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <Button
+          variant="action"
+          className="absolute top-1/2 left-1/2 -translate-1/2 z-10 rounded-full border-[7px] whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-primary-foreground text-sm disabled:bg-muted disabled:opacity-100"
+          style={{ borderColor: STROKE_COLOR }}
+          disabled={isSpinning}
           onClick={spinWheel}
-          className={`absolute inset-0 ${isSpinning ? 'cursor-progress' : 'cursor-pointer'}`}
-        />
+        >
+          {isSpinning ? <LoaderCircleIcon className="animate-spin text-primary size-12" /> : 'Запустить'}
+        </Button>
+        <div
+          ref={canvasContainerRef}
+          className="relative select-none"
+          style={{ transform: `rotate(${rotation}deg)` }}
+          draggable="false"
+        >
+          <canvas
+            ref={canvasRef}
+            className="pointer-events-none rotate-[-90deg]"
+            width={radius * 2}
+            height={radius * 2}
+          ></canvas>
+        </div>
       </div>
     </div>
   );
