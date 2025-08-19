@@ -281,8 +281,11 @@ function GamesRollerPage() {
   useEffect(() => {
     if (urlParamMax) {
       const parsedMax = parseInt(urlParamMax, 10);
-      if (!isNaN(parsedMax) && parsedMax >= minHours && parsedMax <= maxLimit) {
+      if (!isNaN(parsedMax) && parsedMax >= minHours) {
         setMaxHours(parsedMax);
+        if (parsedMax > maxLimit) {
+          setBigRange(true);
+        }
       }
     }
   }, [urlParamMax, minHours, maxLimit]);
