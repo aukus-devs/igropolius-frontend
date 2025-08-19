@@ -19,6 +19,7 @@ type WheelProps = {
   onSpinStart: () => void;
   onSpinEnd: (index: number) => void;
   onSelect?: (id: number) => void;
+  highlightedItemId?: number | null;
 };
 
 // const defaultGames = mockHltbGamesList.games.map(game => ({
@@ -35,7 +36,13 @@ const STROKE_HIGHLIGHT_COLOR = '#83ab73';
 const SIDE_OFFSET = 24;
 const SPIN_TIME_SECONDS = 10;
 
-export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: WheelProps) {
+export default function Wheel({
+  entries,
+  onSpinStart,
+  onSpinEnd,
+  onSelect,
+  highlightedItemId,
+}: WheelProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -64,7 +71,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
 
   const entriesWithAnglesRef = useRef<EntryWithAngles[]>([]);
 
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [hoveredId, setHoveredId] = useState<number | undefined>(undefined);
 
   useEffect(() => {}, [entries]);
 
@@ -92,14 +99,14 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
       centerX: number,
       centerY: number,
       progress: number,
-      isHovered: boolean
+      isHighlighted: boolean
     ) => {
       if (!ctxRef.current) return;
 
       const ctx = ctxRef.current;
       const { imageUrl, startAngle, endAngle } = entry;
 
-      const strokeColor = isHovered ? STROKE_HIGHLIGHT_COLOR : STROKE_COLOR;
+      const strokeColor = isHighlighted ? STROKE_HIGHLIGHT_COLOR : STROKE_COLOR;
 
       const img = new Image();
       img.src = imageUrl || '';
@@ -166,18 +173,20 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
 
       // console.log('drawing', entriesWithAnglesRef.current);
 
+      const highlightId = hoveredId ?? highlightedItemId;
+
       for (const entry of entriesWithAnglesRef.current) {
-        if (entry.id === hoveredId) continue; // Skip hovered entry for now
+        if (entry.id === highlightId) continue; // Skip hovered entry for now
         drawEntry(entry, centerX, centerY, progress, false);
       }
-      if (hoveredId !== null) {
-        const hoveredEntry = entriesWithAnglesRef.current.find(item => item.id === hoveredId);
+      if (highlightId !== null) {
+        const hoveredEntry = entriesWithAnglesRef.current.find(item => item.id === highlightId);
         if (hoveredEntry) {
           drawEntry(hoveredEntry, centerX, centerY, progress, true);
         }
       }
     },
-    [drawEntry, hoveredId]
+    [drawEntry, hoveredId, highlightedItemId]
   );
 
   const getCurrentEntry = (currentRotation: number) => {
@@ -197,26 +206,32 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
-      if (dist > radius - SIDE_OFFSET || dist < 20) return;
+      if (dist > radius - SIDE_OFFSET || dist < 20) {
+        setHoveredId(undefined);
+        return;
+      }
       let theta = (Math.atan2(dy, dx) * 180) / Math.PI;
       if (theta < 0) theta += 360;
       theta = (theta - rotation + 90 + 360) % 360;
       const found = entriesWithAnglesRef.current.find(
         item => item.startAngle <= theta && theta < item.endAngle
       );
+      // console.log('found', found);
       if (found) {
         setHoveredId(found.id);
+      } else {
+        setHoveredId(undefined);
       }
     },
     [radius, rotation]
   );
 
   const handleClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+    (_e: React.MouseEvent<HTMLDivElement>) => {
       const found = entriesWithAnglesRef.current.find(item => item.id === hoveredId);
       if (found) onSelect?.(found.id);
     },
-    [radius, onSelect, hoveredId]
+    [onSelect, hoveredId]
   );
 
   const spinWheel = () => {
@@ -356,7 +371,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
             style={{ transform: `rotate(${rotation}deg)` }}
             onClick={handleClick}
             onMouseMove={handleMouseMove}
-            onMouseLeave={() => setHoveredId(null)}
+            onMouseLeave={() => setHoveredId(undefined)}
             draggable="false"
           >
             <canvas

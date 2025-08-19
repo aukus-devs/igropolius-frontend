@@ -340,9 +340,10 @@ function GamesRollerPage() {
           const game = gamesRef.current.find(g => g.game_id === id);
           setSelectedGame(game ?? null);
         }}
+        highlightedItemId={selectedGame?.game_id}
       />
     );
-  }, [gamesData, onSpinFinish, onSpinStart]);
+  }, [gamesData, onSpinFinish, onSpinStart, selectedGame?.game_id]);
 
   return (
     <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-[0.3fr_0.4fr_0.3fr] grid-flow-row gap-4 p-4 lg:p-6 w-full">
