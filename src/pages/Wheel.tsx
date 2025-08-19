@@ -33,7 +33,8 @@ const degreesToRadians = Math.PI / 180;
 const LINE_WIDTH = 7;
 const STROKE_COLOR = '#fff'; // '#81a971'
 const STROKE_HIGHLIGHT_COLOR = '#83ab73';
-const SIDE_OFFSET = 24;
+const SIDE_OFFSET = 2;
+const OUTLINE_SIZE = 2;
 const SPIN_TIME_SECONDS = 10;
 
 export default function Wheel({
@@ -199,7 +200,7 @@ export default function Wheel({
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.hypot(dx, dy);
-      if (dist > radius - SIDE_OFFSET || dist < 20) {
+      if (dist > radius + SIDE_OFFSET + OUTLINE_SIZE || dist < 20) {
         setHoveredId(undefined);
         return;
       }
@@ -356,11 +357,10 @@ export default function Wheel({
         <div className="relative flex flex-col">
           <svg
             width={64}
-            height={64}
             viewBox="0 0 54 28"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute top-1 left-1/2 -translate-x-1/2 z-10 text-primary pointer-events-none"
+            className="absolute top-[0] left-1/2 -translate-x-1/2 z-10 text-primary pointer-events-none"
           >
             <path
               d="M27 27 L0 0 L9 -1 L27 17 L45 -1 L54 0 Z"
@@ -385,8 +385,8 @@ export default function Wheel({
           </Button>
           <div
             ref={canvasContainerRef}
-            className="relative select-none cursor-pointer"
-            style={{ transform: `rotate(${rotation}deg)` }}
+            className="relative select-none cursor-pointer border-white rounded-[50%]"
+            style={{ transform: `rotate(${rotation}deg)`, borderWidth: OUTLINE_SIZE }}
             onClick={handleClick}
             onMouseMove={handleMouseMove}
             onMouseLeave={() => setHoveredId(undefined)}
