@@ -10,6 +10,7 @@ import GameReviewEditForm from './turnUI/GameReviewEditForm';
 import useSystemStore from '@/stores/systemStore';
 import ImageLoader from './ImageLoader';
 import { SectorsById } from '@/lib/mockData';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 type Props = {
   game: PlayerGame;
@@ -103,9 +104,14 @@ function GameReview({ game }: Props) {
                 <p>На легком</p>
               </Badge>
             )}
-            <Badge className="bg-white/20 text-white/70 font-semibold">
-              <p> Время — {duration && duration > 0 ? formatMs(duration * 1000) : '[Н/Д]'}</p>
-            </Badge>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge className="bg-white/20 text-white/70 font-semibold">
+                  <p> Время — {duration && duration > 0 ? formatMs(duration * 1000) : '[Н/Д]'}</p>
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>Примерное время прохождения по категории стрима</TooltipContent>
+            </Tooltip>
             {adjustedLength && (
               <>
                 <Badge className="bg-white/20 text-white/70 font-semibold">
