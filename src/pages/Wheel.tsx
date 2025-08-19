@@ -191,7 +191,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
     setIsSpinning(true);
     onSpinStart?.();
 
-    console.log('starting with', entriesWithAnglesRef.current);
+    // console.log('starting with', entriesWithAnglesRef.current);
 
     const start = Math.random() * 360;
     const extraSpins = 10 * 360;
@@ -218,7 +218,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
         setRotation(finalRotation);
         const winner = getCurrentEntry(finalRotation);
         // console.log('ending', { finalRotation, winner });
-        console.log('ending with', entriesWithAnglesRef.current);
+        // console.log('ending with', entriesWithAnglesRef.current);
         if (winner !== null) {
           onSpinEnd?.(winner);
         }
@@ -255,7 +255,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: Whe
       const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
       let cumulativeAngle = 0;
 
-      console.log('updating entries angles ref: ', entries);
+      // console.log('updating entries angles ref: ', entries);
 
       const entriesWithAngles = entries.map(item => {
         const angle = ((item.weight || 1) / totalValue) * 360;

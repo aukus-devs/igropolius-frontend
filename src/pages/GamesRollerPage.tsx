@@ -306,7 +306,7 @@ function GamesRollerPage() {
   };
 
   const onSpinStart = useCallback(() => {
-    console.log('on start refetch');
+    // console.log('on start refetch');
     setSelectedGame(null);
     refetch();
   }, [refetch]);
@@ -329,7 +329,7 @@ function GamesRollerPage() {
       weight: 1,
     }));
 
-    console.log('wheel refresh', options);
+    // console.log('wheel refresh', options);
 
     return (
       <Wheel
