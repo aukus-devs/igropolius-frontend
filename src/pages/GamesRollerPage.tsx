@@ -40,7 +40,10 @@ function GameCard({ game, isWinner, isSelected, onClick, onHoverChange }: GameCa
         alt={game.game_name}
       />
       <div className="w-full overflow-hidden">
-        <h3 className="font-roboto-wide-semibold text-sm whitespace-pre-line" title={game.game_name}>
+        <h3
+          className="font-roboto-wide-semibold text-sm whitespace-pre-line"
+          title={game.game_name}
+        >
           {title}
         </h3>
         {game.profile_platform && (
@@ -229,38 +232,40 @@ function GamesRollerPage() {
   const onSpinStart = useCallback(() => {
     setSelectedGame(null);
     refetch();
-  }, [refetch])
+  }, [refetch]);
 
-  const onSpinFinish = useCallback((winnerId: number) => {
-    const game = gamesData?.games.find(g => g.game_id === winnerId);
+  const onSpinFinish = useCallback(
+    (winnerId: number) => {
+      const game = gamesData?.games.find(g => g.game_id === winnerId);
 
-    if (game) {
-      setSelectedGame(game);
-      setWinner(game);
-    };
-  }, [gamesData]);
+      if (game) {
+        console.log('setting winner', game);
+        setSelectedGame(game);
+        setWinner(game);
+      }
+    },
+    [gamesData]
+  );
 
   const memoizedWheel = useMemo(() => {
     const entries = gamesData?.games || [];
-    const options = (entries).map(game => ({
+    const options = entries.map(game => ({
       id: game.game_id,
       label: game.game_name,
       imageUrl: game.game_image,
       weight: 1,
     }));
 
-    return (
-      <Wheel entries={options} onSpinEnd={onSpinFinish} onSpinStart={onSpinStart} />
-    )
+    return <Wheel entries={options} onSpinEnd={onSpinFinish} onSpinStart={onSpinStart} />;
   }, [gamesData, onSpinFinish, onSpinStart]);
+
+  console.log({ selectedGame, winner });
 
   return (
     <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-[0.3fr_0.4fr_0.3fr] grid-flow-row gap-4 p-4 lg:p-6 w-full">
       {selectedGame && <GameFullInfoCard game={selectedGame} />}
 
-      <div className="flex flex-col col-start-2">
-        {memoizedWheel}
-      </div>
+      <div className="flex flex-col col-start-2">{memoizedWheel}</div>
 
       <Card className="col-start-3 h-[468px] lg:max-w-[552px] lg:h-full overflow-hidden">
         <CardHeader>
@@ -273,7 +278,7 @@ function GamesRollerPage() {
             </div>
           ) : gamesData?.games && gamesData.games.length > 0 ? (
             <ScrollArea className="h-full overflow-hidden px-4">
-              {gamesData.games.map((game) => (
+              {gamesData.games.map(game => (
                 <GameCard
                   key={game.game_id}
                   game={game}
