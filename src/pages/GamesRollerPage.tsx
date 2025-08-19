@@ -15,6 +15,8 @@ import Wheel from './Wheel';
 import { useLocation } from 'react-router';
 import { Volume } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 type GameCardProps = {
   game: HltbGameResponse;
@@ -234,11 +236,26 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
   );
 }
 
+const BIG_RANGE_LIMIT = 300;
+const SMALL_RANGE_LIMIT = 50;
+
 function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
   const [winner, setWinner] = useState<HltbGameResponse | null>(null);
   const [minHours, setMinHours] = useState(0);
-  const [maxHours, setMaxHours] = useState(300);
+  const [maxHours, setMaxHours] = useState(SMALL_RANGE_LIMIT);
+  const [bigRange, setBigRange] = useState(false);
+
+  useEffect(() => {
+    if (!bigRange) {
+      if (maxHours > SMALL_RANGE_LIMIT) {
+        setMaxHours(SMALL_RANGE_LIMIT);
+      }
+      if (minHours >= SMALL_RANGE_LIMIT) {
+        setMinHours(0);
+      }
+    }
+  }, [bigRange, maxHours, minHours]);
 
   const { search } = useLocation();
   const urlParams = new URLSearchParams(search);
@@ -250,23 +267,25 @@ function GamesRollerPage() {
     defaultValue: false,
   });
 
+  const maxLimit = bigRange ? BIG_RANGE_LIMIT : SMALL_RANGE_LIMIT;
+
   useEffect(() => {
     if (urlParamMin) {
       const parsedMin = parseInt(urlParamMin, 10);
-      if (!isNaN(parsedMin) && parsedMin >= 0 && parsedMin <= 300) {
+      if (!isNaN(parsedMin) && parsedMin >= 0 && parsedMin <= maxLimit) {
         setMinHours(parsedMin);
       }
     }
-  }, [urlParamMin]);
+  }, [urlParamMin, maxLimit]);
 
   useEffect(() => {
     if (urlParamMax) {
       const parsedMax = parseInt(urlParamMax, 10);
-      if (!isNaN(parsedMax) && parsedMax >= minHours && parsedMax <= 300) {
+      if (!isNaN(parsedMax) && parsedMax >= minHours && parsedMax <= maxLimit) {
         setMaxHours(parsedMax);
       }
     }
-  }, [urlParamMax, minHours]);
+  }, [urlParamMax, minHours, maxLimit]);
 
   const {
     data: gamesData,
@@ -381,13 +400,17 @@ function GamesRollerPage() {
           )}
           <div className="flex gap-2 items-end px-4">
             <div className="w-full space-y-1">
-              <div className="text-sm font-roboto-wide-semibold">
+              <div className="text-sm font-roboto-wide-semibold flex justify-between">
                 Диапазон времени ({minHours}-{maxHours} часов)
+                <div className="flex gap-2">
+                  <Switch checked={bigRange} onCheckedChange={() => setBigRange(!bigRange)} />
+                  <Label>Большой</Label>
+                </div>
               </div>
               <Slider
                 className="h-[36px]"
                 min={0}
-                max={300}
+                max={maxLimit}
                 value={[minHours, maxHours]}
                 onValueChange={values => {
                   setMinHours(values[0]);

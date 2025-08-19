@@ -325,7 +325,13 @@ export default function Wheel({
         );
         setImagesMap(map);
       };
-      loadImages(entriesWithAngles); // pass your wheel entries here
+
+      const hasNewImages = entriesWithAngles.some(
+        entry => entry.imageUrl && !imagesMap[entry.imageUrl]
+      );
+      if (hasNewImages) {
+        loadImages(entriesWithAngles);
+      }
     }
 
     if (!containerRef.current) return;
