@@ -46,6 +46,8 @@ function GameStatus({ gameDuration }: { gameDuration?: Duration }) {
     { title: 'Реролл', value: 'reroll' },
   ];
 
+  const showTimeTooltip = gameDuration !== undefined;
+
   return (
     <Select
       onValueChange={x => setGameStatus(x as GameCompletionType)}
@@ -54,12 +56,27 @@ function GameStatus({ gameDuration }: { gameDuration?: Duration }) {
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Выберите исход" />
       </SelectTrigger>
+
       <SelectContent>
-        {options.map((option, idx) => (
-          <SelectItem key={idx} value={option.value}>
-            {option.title}
-          </SelectItem>
-        ))}
+        {options.map((option, idx) => {
+          if (idx === 0 && showTimeTooltip) {
+            return (
+              <Tooltip key={idx} disableHoverableContent>
+                <TooltipTrigger asChild>
+                  <SelectItem value={option.value}>{option.title}</SelectItem>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Примерное время прохождения по категории стрима, <b>не влияет на очки</b>
+                </TooltipContent>
+              </Tooltip>
+            );
+          }
+          return (
+            <SelectItem key={idx} value={option.value}>
+              {option.title}
+            </SelectItem>
+          );
+        })}
       </SelectContent>
     </Select>
   );
@@ -638,7 +655,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
             </div>
 
             <div className="flex gap-2 w-full">
-              <GameStatus gameDuration={gameDurationData?.duration} />
+              <GameStatus gameDuration={gameDurationData?.duration ?? 100} />
               {gameStatus === 'completed' && <GameTime />}
             </div>
 
