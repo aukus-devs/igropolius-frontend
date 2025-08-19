@@ -217,6 +217,9 @@ export type CountRetired = number;
 export type ProfilePlatform = string | null;
 export type ProfilePopular = number;
 export type ReleaseWorld = number | null;
+export type Genres = string | null;
+export type SteamId = number | null;
+export type Description = string | null;
 export type CreatedAt = number;
 export type UpdatedAt = number;
 export type Games = HltbGameResponse[];
@@ -607,6 +610,9 @@ export interface HltbGameResponse {
   profile_platform?: ProfilePlatform;
   profile_popular: ProfilePopular;
   release_world?: ReleaseWorld;
+  genres?: Genres;
+  steam_id?: SteamId;
+  description?: Description;
   created_at: CreatedAt;
   updated_at: UpdatedAt;
 }

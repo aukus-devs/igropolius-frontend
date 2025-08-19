@@ -61,6 +61,10 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
   const title = `${game.game_name}` + (game.release_world ? ` (${game.release_world}) ` : ' ');
   const syncDate = new Date(game.updated_at * 1000).toLocaleDateString();
   const platforms = game.profile_platform?.split(', ');
+  const genres = game.genres
+    ?.split(',')
+    .map(g => g.trim())
+    .filter(Boolean);
   const nouns = ['отзыв', 'отзыва', 'отзывов'];
   const table = [
     {
@@ -108,7 +112,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
 
   return (
     <Card className="animate-in fade-in-0 duration-300 h-fit lg:max-w-[552px] justify-self-end w-full">
-      <CardHeader className="flex justify-between items-center">
+      <CardHeader className="flex justify-between items-center gap-2">
         <CardTitle className="w-full">
           <Button
             className="justify-start text-xl font-roboto-wide-semibold h-auto p-0 w-full overflow-hidden"
@@ -124,13 +128,48 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
             </a>
           </Button>
         </CardTitle>
+        {Number(game.steam_id) > 0 ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              window.open(`https://store.steampowered.com/app/${game.steam_id}`, '_blank')
+            }
+          >
+            Steam
+          </Button>
+        ) : null}
       </CardHeader>
-      <CardContent className="flex  gap-2">
-        <ImageLoader
-          className="shrink-0 w-[192px] h-fit rounded-md overflow-hidden"
-          src={game.game_image}
-          alt={game.game_name}
-        />
+      <CardContent className="flex gap-2">
+        <div className="shrink-0 w-[192px]">
+          <ImageLoader
+            className="w-[192px] h-fit rounded-md overflow-hidden"
+            src={game.game_image}
+            alt={game.game_name}
+          />
+          {game.description ? (
+            <div className="mt-2">
+              <ScrollArea className="h-[140px] pr-2 text-xs text-muted-foreground">
+                <div className="whitespace-pre-wrap leading-snug">{game.description}</div>
+              </ScrollArea>
+              <div className="mt-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2"
+                  onClick={() =>
+                    window.open(
+                      `https://translate.google.com/?sl=en&tl=ru&text=${encodeURIComponent(game.description || '')}`,
+                      '_blank'
+                    )
+                  }
+                >
+                  Перевести
+                </Button>
+              </div>
+            </div>
+          ) : null}
+        </div>
         <div className="space-y-2 w-full">
           {table.map(({ title, value, polledText, polledColor }, idx) => (
             <div key={idx} className="flex flex-col gap-1">
@@ -161,6 +200,18 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
               'Платформа не указана'
             )}
           </div>
+          {genres && genres.length > 0 ? (
+            <div className="flex flex-col gap-1">
+              <span className="text-muted-foreground font-semibold">Жанры</span>
+              <div className="flex gap-2 flex-wrap">
+                {genres.map((genre, index) => (
+                  <Badge key={index} className="bg-white/10 text-white/70 font-semibold">
+                    {genre}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <div className="text-xs text-muted-foreground">Синхронизировано с HLTB: {syncDate}</div>
         </div>
       </CardContent>
