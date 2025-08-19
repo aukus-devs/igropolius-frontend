@@ -360,12 +360,12 @@ export default function Wheel({
             viewBox="0 0 54 28"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute top-3 left-1/2 -translate-x-1/2 z-10 text-primary pointer-events-none"
+            className="absolute top-1 left-1/2 -translate-x-1/2 z-10 text-primary pointer-events-none"
           >
             <path
               d="M27 27 L0 0 L9 -1 L27 17 L45 -1 L54 0 Z"
-              fill="black"
-              stroke={STROKE_COLOR}
+              fill={STROKE_HIGHLIGHT_COLOR}
+              stroke={'black'}
               strokeWidth="2"
               strokeLinejoin="round"
             />
