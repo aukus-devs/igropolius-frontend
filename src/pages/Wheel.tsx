@@ -161,6 +161,8 @@ export default function Wheel({
     [radius]
   );
 
+  const highlightId = hoveredId ?? highlightedItemId;
+
   const drawWheel = useCallback(
     (progress = 1) => {
       if (!ctxRef.current || !canvasRef.current) return;
@@ -173,10 +175,10 @@ export default function Wheel({
 
       // console.log('drawing', entriesWithAnglesRef.current);
 
-      const highlightId = hoveredId ?? highlightedItemId;
+      // const highlightId = hoveredId ?? highlightedItemId;
 
       for (const entry of entriesWithAnglesRef.current) {
-        if (entry.id === highlightId) continue; // Skip hovered entry for now
+        // if (entry.id === highlightId) continue; // Skip hovered entry for now
         drawEntry(entry, centerX, centerY, progress, false);
       }
       if (highlightId !== null) {
@@ -186,8 +188,16 @@ export default function Wheel({
         }
       }
     },
-    [drawEntry, hoveredId, highlightedItemId]
+    [drawEntry, highlightId]
   );
+
+  // useEffect(() => {
+  //   if (!canvasRef.current || !ctxRef.current) return;
+  //   // const ctx = ctxRef.current;
+  //   const entry = entriesWithAnglesRef.current.find(item => item.id === highlightId);
+  //   if (!entry) return;
+  //   drawEntry(entry, canvasRef.current.width / 2, canvasRef.current.height / 2, 1, true);
+  // }, [highlightId, drawEntry]);
 
   const getCurrentEntry = (currentRotation: number) => {
     const angle = ((-currentRotation % 360) + 360) % 360;
