@@ -203,48 +203,61 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
     drawWheel();
   }, [drawWheel]);
 
+  const currentItemId = getWinnerEntry(rotation);
+  const currentItem = entries.find(item => item.id === currentItemId);
+
   return (
-    <div ref={containerRef} className="flex justify-center items-center gap-4 w-full h-full overflow-hidden">
-      <div className="relative flex flex-col">
-        <svg
-          width={64}
-          height={64}
-          viewBox="0 0 54 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="absolute top-3 left-1/2 -translate-x-1/2 z-10 text-primary"
-        >
-          <path
-            d="M27 27 L0 0 L9 -1 L27 17 L45 -1 L54 0 Z"
-            fill="black"
-            stroke={STROKE_COLOR}
-            strokeWidth="2"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <Button
-          variant="action"
-          className="absolute top-1/2 left-1/2 -translate-1/2 z-10 rounded-full border-[7px] whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-primary-foreground text-sm disabled:bg-muted disabled:opacity-100"
-          style={{ borderColor: STROKE_COLOR }}
-          disabled={isSpinning}
-          onClick={spinWheel}
-        >
-          {isSpinning ? <LoaderCircleIcon className="animate-spin text-primary size-12" /> : 'Запустить'}
-        </Button>
-        <div
-          ref={canvasContainerRef}
-          className="relative select-none"
-          style={{ transform: `rotate(${rotation}deg)` }}
-          draggable="false"
-        >
-          <canvas
-            ref={canvasRef}
-            className="pointer-events-none rotate-[-90deg]"
-            width={radius * 2}
-            height={radius * 2}
-          ></canvas>
+    <>
+      {currentItem && <div>{currentItem.label}</div>}
+      <div
+        ref={containerRef}
+        className="flex justify-center items-center gap-4 w-full h-full overflow-hidden"
+      >
+        <div className="relative flex flex-col">
+          <svg
+            width={64}
+            height={64}
+            viewBox="0 0 54 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="absolute top-3 left-1/2 -translate-x-1/2 z-10 text-primary"
+          >
+            <path
+              d="M27 27 L0 0 L9 -1 L27 17 L45 -1 L54 0 Z"
+              fill="black"
+              stroke={STROKE_COLOR}
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <Button
+            variant="action"
+            className="absolute top-1/2 left-1/2 -translate-1/2 z-10 rounded-full border-[7px] whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-primary-foreground text-sm disabled:bg-muted disabled:opacity-100"
+            style={{ borderColor: STROKE_COLOR }}
+            disabled={isSpinning}
+            onClick={spinWheel}
+          >
+            {isSpinning ? (
+              <LoaderCircleIcon className="animate-spin text-primary size-12" />
+            ) : (
+              'Запустить'
+            )}
+          </Button>
+          <div
+            ref={canvasContainerRef}
+            className="relative select-none"
+            style={{ transform: `rotate(${rotation}deg)` }}
+            draggable="false"
+          >
+            <canvas
+              ref={canvasRef}
+              className="pointer-events-none rotate-[-90deg]"
+              width={radius * 2}
+              height={radius * 2}
+            ></canvas>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
