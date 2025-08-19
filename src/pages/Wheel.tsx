@@ -137,7 +137,9 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
       const targetRotation = normalizedRotation;
 
       if (item.startAngle <= targetRotation && item.endAngle >= targetRotation) {
-        onSpinEnd(item.id);
+        if (!isSpinning) {
+          onSpinEnd(item.id);
+        }
         return item.id; // Return the item found
       }
 
