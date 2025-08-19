@@ -4,7 +4,7 @@ import { LoaderCircleIcon } from 'lucide-react';
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 
 type Entry = {
-  id: number,
+  id: number;
   label: string;
   weight?: number;
   imageUrl?: string;
@@ -18,16 +18,16 @@ type WheelProps = {
   onSpinEnd: (index: number) => void;
 };
 
-const defaultGames = mockHltbGamesList.games.map((game) => ({
+const defaultGames = mockHltbGamesList.games.map(game => ({
   id: game.game_id,
   label: game.game_name,
   imageUrl: game.game_image,
   weight: 1,
-}))
+}));
 
 const degreesToRadians = Math.PI / 180;
 const LINE_WIDTH = 7;
-const STROKE_COLOR = "#fff"; // '#81a971'
+const STROKE_COLOR = '#fff'; // '#81a971'
 const SIDE_OFFSET = 24;
 const SPIN_TIME_SECONDS = 10;
 
@@ -49,7 +49,7 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
     const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
     let cumulativeAngle = 0;
 
-    return entries.map((item) => {
+    return entries.map(item => {
       const angle = ((item.weight || 1) / totalValue) * 360;
       const startAngle = cumulativeAngle;
       cumulativeAngle += angle;
@@ -142,6 +142,8 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
     setIsSpinning(true);
     onSpinStart?.();
 
+    console.log('starting with', entriesWithAngles);
+
     const start = Math.random() * 360;
     const extraSpins = 10 * 360;
     const landing = Math.floor(Math.random() * 360);
@@ -167,7 +169,7 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
         setRotation(finalRotation);
         const winner = getCurrentEntry(finalRotation);
         // console.log('ending', { finalRotation, winner });
-        // console.log(entriesWithAngles);
+        console.log('ending with', entriesWithAngles);
         if (winner !== null) {
           onSpinEnd?.(winner);
         }

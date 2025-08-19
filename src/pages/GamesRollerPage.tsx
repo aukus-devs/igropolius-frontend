@@ -230,6 +230,7 @@ function GamesRollerPage() {
   };
 
   const onSpinStart = useCallback(() => {
+    console.log('on start refetch');
     setSelectedGame(null);
     refetch();
   }, [refetch]);
@@ -239,7 +240,6 @@ function GamesRollerPage() {
       const game = gamesData?.games.find(g => g.game_id === winnerId);
 
       if (game) {
-        console.log('setting winner', game);
         setSelectedGame(game);
         setWinner(game);
       }
@@ -256,10 +256,12 @@ function GamesRollerPage() {
       weight: 1,
     }));
 
+    console.log('wheel refresh', options);
+
     return <Wheel entries={options} onSpinEnd={onSpinFinish} onSpinStart={onSpinStart} />;
   }, [gamesData, onSpinFinish, onSpinStart]);
 
-  console.log({ selectedGame, winner });
+  // console.log({ selectedGame, winner });
 
   return (
     <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-[0.3fr_0.4fr_0.3fr] grid-flow-row gap-4 p-4 lg:p-6 w-full">
@@ -300,7 +302,7 @@ function GamesRollerPage() {
               </div>
               <Slider
                 className="h-[36px]"
-                min={1}
+                min={0}
                 max={300}
                 value={[minHours, maxHours]}
                 onValueChange={values => {
