@@ -38,7 +38,7 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
   const canvasContainerRef = useRef<HTMLDivElement | null>(null);
 
   const [radius, setRadius] = useState(0);
-  const [rotation, setRotation] = useState(0);
+  const [rotation, setRotation] = useState(() => Math.random() * 360);
   const [isSpinning, setIsSpinning] = useState(false);
 
   const easeOutCirc = (t: number) => 1 - Math.pow(1 - t, 4);
@@ -58,99 +58,82 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
     });
   }, [entries]);
 
-  const drawEntry = useCallback((entry: EntryWithAngles, centerX: number, centerY: number, progress: number) => {
-    if (!ctxRef.current) return;
+  const drawEntry = useCallback(
+    (entry: EntryWithAngles, centerX: number, centerY: number, progress: number) => {
+      if (!ctxRef.current) return;
 
-    const ctx = ctxRef.current;
-    const { imageUrl, startAngle, endAngle } = entry;
+      const ctx = ctxRef.current;
+      const { imageUrl, startAngle, endAngle } = entry;
 
-    const img = new Image();
-    img.src = imageUrl || '';
-    img.onload = () => {
-      // Create clipping path for this slice
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.arc(
-        centerX,
-        centerY,
-        Math.min((radius - SIDE_OFFSET) * progress, radius - SIDE_OFFSET),
-        startAngle * degreesToRadians,
-        endAngle * degreesToRadians
-      );
-      ctx.clip();
+      const img = new Image();
+      img.src = imageUrl || '';
+      img.onload = () => {
+        // Create clipping path for this slice
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(
+          centerX,
+          centerY,
+          Math.min((radius - SIDE_OFFSET) * progress, radius - SIDE_OFFSET),
+          startAngle * degreesToRadians,
+          endAngle * degreesToRadians
+        );
+        ctx.clip();
 
-      const angle = (startAngle + endAngle) / 2;
-      const cosMidAngle = Math.cos(angle * degreesToRadians);
-      const sinMidAngle = Math.sin(angle * degreesToRadians);
-      const imgX = centerX + cosMidAngle * radius / 2 - radius / 2;
-      const imgY = centerY + sinMidAngle * radius / 2 - radius / 2;
+        const angle = (startAngle + endAngle) / 2;
+        const cosMidAngle = Math.cos(angle * degreesToRadians);
+        const sinMidAngle = Math.sin(angle * degreesToRadians);
+        const imgX = centerX + (cosMidAngle * radius) / 2 - radius / 2;
+        const imgY = centerY + (sinMidAngle * radius) / 2 - radius / 2;
 
-      // Rotate image to the center
-      ctx.translate(imgX + radius / 2, imgY + radius / 2);
-      ctx.rotate((angle + 90) * degreesToRadians);
-      ctx.drawImage(img, -radius / 2, -radius / 2, radius, radius);
-      ctx.restore();
+        // Rotate image to the center
+        ctx.translate(imgX + radius / 2, imgY + radius / 2);
+        ctx.rotate((angle + 90) * degreesToRadians);
+        ctx.drawImage(img, -radius / 2, -radius / 2, radius, radius);
+        ctx.restore();
 
-      // Draw slice border
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.arc(
-        centerX,
-        centerY,
-        Math.min((radius - SIDE_OFFSET) * progress, radius - SIDE_OFFSET),
-        startAngle * degreesToRadians,
-        endAngle * degreesToRadians
-      );
-      ctx.closePath();
-      ctx.strokeStyle = STROKE_COLOR;
-      ctx.lineWidth = LINE_WIDTH;
-      ctx.stroke();
-    };
-  }, [radius]);
+        // Draw slice border
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(
+          centerX,
+          centerY,
+          Math.min((radius - SIDE_OFFSET) * progress, radius - SIDE_OFFSET),
+          startAngle * degreesToRadians,
+          endAngle * degreesToRadians
+        );
+        ctx.closePath();
+        ctx.strokeStyle = STROKE_COLOR;
+        ctx.lineWidth = LINE_WIDTH;
+        ctx.stroke();
+      };
+    },
+    [radius]
+  );
 
-  const drawWheel = useCallback((progress = 1) => {
-    if (!ctxRef.current || !canvasRef.current) return;
+  const drawWheel = useCallback(
+    (progress = 1) => {
+      if (!ctxRef.current || !canvasRef.current) return;
 
-    const ctx = ctxRef.current;
-    const centerX = canvasRef.current.width / 2;
-    const centerY = canvasRef.current.height / 2;
+      const ctx = ctxRef.current;
+      const centerX = canvasRef.current.width / 2;
+      const centerY = canvasRef.current.height / 2;
 
-    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-    for (const entry of entriesWithAngles) {
-      drawEntry(entry, centerX, centerY, progress);
-    }
-  }, [entriesWithAngles, drawEntry]);
-
-  const getWinnerEntry = (finalRotation: number) => {
-    const angleModulo = Math.abs(finalRotation % 360);
-    const isClockwiseRotation = finalRotation > 0;
-    const normalizedRotation = isClockwiseRotation ? 360 - angleModulo : angleModulo;
-
-    let left = 0;
-    let right = entriesWithAngles.length - 1;
-
-    while (left <= right) {
-      const mid = Math.floor((left + right) / 2);
-      const item = entriesWithAngles[mid];
-      const targetRotation = normalizedRotation;
-
-      if (item.startAngle <= targetRotation && item.endAngle >= targetRotation) {
-        if (!isSpinning) {
-          onSpinEnd(item.id);
-        }
-        return item.id; // Return the item found
+      for (const entry of entriesWithAngles) {
+        drawEntry(entry, centerX, centerY, progress);
       }
+    },
+    [entriesWithAngles, drawEntry]
+  );
 
-      if (targetRotation < item.startAngle) {
-        right = mid - 1; // Search in the left half
-      } else {
-        left = mid + 1; // Search in the right half
-      }
-    }
-
-    return null; // If not found, return null or appropriate value
+  const getCurrentEntry = (currentRotation: number) => {
+    const angle = ((-currentRotation % 360) + 360) % 360;
+    return (
+      entriesWithAngles.find(item => item.startAngle <= angle && angle < item.endAngle)?.id ?? null
+    );
   };
 
   const spinWheel = () => {
@@ -182,7 +165,12 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
       } else {
         const finalRotation = newRotation % 360;
         setRotation(finalRotation);
-        getWinnerEntry(finalRotation);
+        const winner = getCurrentEntry(finalRotation);
+        // console.log('ending', { finalRotation, winner });
+        // console.log(entriesWithAngles);
+        if (winner !== null) {
+          onSpinEnd?.(winner);
+        }
         setIsSpinning(false);
       }
     }
@@ -205,12 +193,12 @@ export default function Wheel({ entries = defaultGames, onSpinStart, onSpinEnd }
     drawWheel();
   }, [drawWheel]);
 
-  const currentItemId = getWinnerEntry(rotation);
-  const currentItem = entries.find(item => item.id === currentItemId);
+  // const currentItemId = getCurrentEntry(rotation);
+  // const currentItem = entries.find(item => item.id === currentItemId);
 
   return (
     <>
-      {currentItem && <div>{currentItem.label}</div>}
+      {/*{currentItem && <div>{currentItem.label}</div>}*/}
       <div
         ref={containerRef}
         className="flex justify-center items-center gap-4 w-full h-full overflow-hidden"
