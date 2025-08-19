@@ -44,26 +44,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
 
   const entriesWithAnglesRef = useRef<EntryWithAngles[]>([]);
 
-  useEffect(() => {
-    if (!entries) {
-      entriesWithAnglesRef.current = [];
-      return;
-    }
-
-    const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
-    let cumulativeAngle = 0;
-
-    console.log('updating entries angles ref: ', entries);
-
-    const entriesWithAngles = entries.map(item => {
-      const angle = ((item.weight || 1) / totalValue) * 360;
-      const startAngle = cumulativeAngle;
-      cumulativeAngle += angle;
-
-      return { ...item, startAngle, endAngle: cumulativeAngle };
-    });
-    entriesWithAnglesRef.current = entriesWithAngles;
-  }, [entries]);
+  useEffect(() => {}, [entries]);
 
   // const entriesWithAngles = useMemo(() => {
   //   if (!entries) return [];
@@ -147,6 +128,8 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
 
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
+      // console.log('drawing', entriesWithAnglesRef.current);
+
       for (const entry of entriesWithAnglesRef.current) {
         drawEntry(entry, centerX, centerY, progress);
       }
@@ -212,6 +195,24 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
   }, []);
 
   useEffect(() => {
+    if (!entries) {
+      entriesWithAnglesRef.current = [];
+    } else {
+      const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
+      let cumulativeAngle = 0;
+
+      console.log('updating entries angles ref: ', entries);
+
+      const entriesWithAngles = entries.map(item => {
+        const angle = ((item.weight || 1) / totalValue) * 360;
+        const startAngle = cumulativeAngle;
+        cumulativeAngle += angle;
+
+        return { ...item, startAngle, endAngle: cumulativeAngle };
+      });
+      entriesWithAnglesRef.current = entriesWithAngles;
+    }
+
     if (!containerRef.current) return;
 
     const h = containerRef.current.clientHeight;
@@ -219,7 +220,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
 
     setRadius(Math.floor(Math.min(h, w) / 2.25));
     drawWheel();
-  }, [drawWheel]);
+  }, [entries, drawWheel]);
 
   // const currentItemId = getCurrentEntry(rotation);
   // const currentItem = entries.find(item => item.id === currentItemId);

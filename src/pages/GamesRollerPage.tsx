@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -216,6 +216,13 @@ function GamesRollerPage() {
     refetchOnWindowFocus: false,
   });
 
+  const gamesRef = useRef<HltbGameResponse[]>([]);
+  useEffect(() => {
+    if (gamesData?.games) {
+      gamesRef.current = gamesData.games;
+    }
+  }, [gamesData]);
+
   const onGameCardClick = (game: HltbGameResponse | null) => {
     if (!game || game.game_name === selectedGame?.game_name) {
       setSelectedGame(null);
@@ -235,18 +242,14 @@ function GamesRollerPage() {
     refetch();
   }, [refetch]);
 
-  const onSpinFinish = useCallback(
-    (winnerId: number) => {
-      console.log('on spin finish with data', gamesData?.games);
-      const game = gamesData?.games.find(g => g.game_id === winnerId);
+  const onSpinFinish = useCallback((winnerId: number) => {
+    const game = gamesRef.current.find(g => g.game_id === winnerId);
 
-      if (game) {
-        setSelectedGame(game);
-        setWinner(game);
-      }
-    },
-    [gamesData]
-  );
+    if (game) {
+      setSelectedGame(game);
+      setWinner(game);
+    }
+  }, []);
 
   const memoizedWheel = useMemo(() => {
     const entries = gamesData?.games || [];
@@ -261,8 +264,6 @@ function GamesRollerPage() {
 
     return <Wheel entries={options} onSpinEnd={onSpinFinish} onSpinStart={onSpinStart} />;
   }, [gamesData, onSpinFinish, onSpinStart]);
-
-  // console.log({ selectedGame, winner });
 
   return (
     <div className="bg-background h-svh grid grid-cols-1 lg:grid-cols-[0.3fr_0.4fr_0.3fr] grid-flow-row gap-4 p-4 lg:p-6 w-full">
