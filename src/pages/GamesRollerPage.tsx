@@ -171,7 +171,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
 function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
   const [winner, setWinner] = useState<HltbGameResponse | null>(null);
-  const [minHours, setMinHours] = useState(1);
+  const [minHours, setMinHours] = useState(0);
   const [maxHours, setMaxHours] = useState(300);
 
   const { search } = useLocation();
@@ -182,7 +182,7 @@ function GamesRollerPage() {
   useEffect(() => {
     if (urlParamMin) {
       const parsedMin = parseInt(urlParamMin, 10);
-      if (!isNaN(parsedMin) && parsedMin >= 1 && parsedMin <= 300) {
+      if (!isNaN(parsedMin) && parsedMin >= 0 && parsedMin <= 300) {
         setMinHours(parsedMin);
       }
     }
