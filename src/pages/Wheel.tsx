@@ -72,26 +72,7 @@ export default function Wheel({
   const entriesWithAnglesRef = useRef<EntryWithAngles[]>([]);
 
   const [hoveredId, setHoveredId] = useState<number | undefined>(undefined);
-
-  useEffect(() => {}, [entries]);
-
-  // const entriesWithAngles = useMemo(() => {
-  //   if (!entries) return [];
-
-  //   const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
-  //   let cumulativeAngle = 0;
-
-  //   console.log('updating entries angles: ', entries);
-  //   entriesRef.current = entries;
-
-  //   return entries.map(item => {
-  //     const angle = ((item.weight || 1) / totalValue) * 360;
-  //     const startAngle = cumulativeAngle;
-  //     cumulativeAngle += angle;
-
-  //     return { ...item, startAngle, endAngle: cumulativeAngle };
-  //   });
-  // }, [entries]);
+  const [imagesMap, setImagesMap] = useState<Record<string, HTMLImageElement>>({});
 
   const drawEntry = useCallback(
     (
@@ -104,14 +85,28 @@ export default function Wheel({
       if (!ctxRef.current) return;
 
       const ctx = ctxRef.current;
-      const { imageUrl, startAngle, endAngle } = entry;
+      const { startAngle, endAngle } = entry;
 
       const strokeColor = isHighlighted ? STROKE_HIGHLIGHT_COLOR : STROKE_COLOR;
 
-      const img = new Image();
-      img.src = imageUrl || '';
-      img.onload = () => {
-        // Create clipping path for this slice
+      const img = entry.imageUrl ? imagesMap[entry.imageUrl] : null;
+
+      // Draw slice border first
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(
+        centerX,
+        centerY,
+        Math.min((radius - SIDE_OFFSET) * progress, radius - SIDE_OFFSET),
+        entry.startAngle * degreesToRadians,
+        entry.endAngle * degreesToRadians
+      );
+      ctx.closePath();
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = LINE_WIDTH;
+      ctx.stroke();
+
+      if (img) {
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
@@ -148,17 +143,17 @@ export default function Wheel({
         );
         ctx.closePath();
         ctx.save();
-        // if (isHovered) {
-        //   ctx.shadowColor = 'yellow';
-        //   ctx.shadowBlur = 10;
-        // }
+        if (isHighlighted) {
+          ctx.shadowColor = 'yellow';
+          ctx.shadowBlur = 10;
+        }
         ctx.strokeStyle = strokeColor;
         ctx.lineWidth = LINE_WIDTH;
         ctx.stroke();
         ctx.restore();
-      };
+      }
     },
-    [radius]
+    [radius, imagesMap]
   );
 
   const highlightId = hoveredId ?? highlightedItemId;
@@ -167,18 +162,14 @@ export default function Wheel({
     (progress = 1) => {
       if (!ctxRef.current || !canvasRef.current) return;
 
-      // const ctx = ctxRef.current;
+      const ctx = ctxRef.current;
       const centerX = canvasRef.current.width / 2;
       const centerY = canvasRef.current.height / 2;
 
-      // ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-
-      // console.log('drawing', entriesWithAnglesRef.current);
-
-      // const highlightId = hoveredId ?? highlightedItemId;
+      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
       for (const entry of entriesWithAnglesRef.current) {
-        // if (entry.id === highlightId) continue; // Skip hovered entry for now
+        if (entry.id === highlightId) continue; // Skip hovered entry for now
         drawEntry(entry, centerX, centerY, progress, false);
       }
       if (highlightId !== null) {
@@ -190,14 +181,6 @@ export default function Wheel({
     },
     [drawEntry, highlightId]
   );
-
-  // useEffect(() => {
-  //   if (!canvasRef.current || !ctxRef.current) return;
-  //   // const ctx = ctxRef.current;
-  //   const entry = entriesWithAnglesRef.current.find(item => item.id === highlightId);
-  //   if (!entry) return;
-  //   drawEntry(entry, canvasRef.current.width / 2, canvasRef.current.height / 2, 1, true);
-  // }, [highlightId, drawEntry]);
 
   const getCurrentEntry = (currentRotation: number) => {
     const angle = ((-currentRotation % 360) + 360) % 360;
@@ -314,8 +297,6 @@ export default function Wheel({
       const totalValue = entries.reduce((acc, cur) => acc + (cur.weight || 1), 0);
       let cumulativeAngle = 0;
 
-      // console.log('updating entries angles ref: ', entries);
-
       const entriesWithAngles = entries.map(item => {
         const angle = ((item.weight || 1) / totalValue) * 360;
         const startAngle = cumulativeAngle;
@@ -324,6 +305,27 @@ export default function Wheel({
         return { ...item, startAngle, endAngle: cumulativeAngle };
       });
       entriesWithAnglesRef.current = entriesWithAngles;
+
+      const loadImages = async (entries: EntryWithAngles[]) => {
+        const map: Record<string, HTMLImageElement> = {};
+        await Promise.all(
+          entries.map(
+            entry =>
+              new Promise<void>(resolve => {
+                if (!entry.imageUrl) return resolve();
+                const img = new Image();
+                img.src = entry.imageUrl;
+                img.onload = () => {
+                  map[entry.imageUrl!] = img;
+                  resolve();
+                };
+                img.onerror = () => resolve(); // skip broken images
+              })
+          )
+        );
+        setImagesMap(map);
+      };
+      loadImages(entriesWithAngles); // pass your wheel entries here
     }
 
     if (!containerRef.current) return;
