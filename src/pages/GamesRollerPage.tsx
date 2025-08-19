@@ -208,6 +208,9 @@ function GamesRollerPage() {
       });
     },
     enabled: true,
+    refetchOnMount: true,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
   });
 
   const onGameCardClick = (game: HltbGameResponse | null) => {
