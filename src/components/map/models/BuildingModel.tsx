@@ -51,13 +51,13 @@ const buildingToScale: Record<BuildingType, Vector3Array> = {
 }
 
 const buildingToSparklesCount: Record<BuildingType, number> = {
-  "ruins": 10,
-  "small_buildingD": 20,
-  "skyscraperE": 40,
-  "skyscraperA": 50,
-  "skyscraperB": 60,
-  "skyscraperD": 70,
-  "skyscraperX": 100,
+  "ruins": 5,
+  "small_buildingD": 10,
+  "skyscraperE": 20,
+  "skyscraperA": 25,
+  "skyscraperB": 30,
+  "skyscraperD": 35,
+  "skyscraperX": 50,
 }
 
 function BuildingModel({ building, position, models }: Props) {
