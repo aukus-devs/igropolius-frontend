@@ -143,7 +143,7 @@ const usePlayerStore = create<{
     }
 
     if (
-      turnState === 'using-dice-bonuses' &&
+      (turnState === 'using-dice-bonuses' || turnState === 'using-map-tax-bonuses') &&
       nextTurnState === 'filling-game-review' &&
       params.sectorToId
     ) {

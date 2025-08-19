@@ -8,7 +8,7 @@ import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 
 export default function SkipMapTaxDialog() {
-  const { taxAmount, payTaxes, setNextTurnState } = usePlayerStore(
+  const { taxAmount, payTaxes, setNextTurnState, myPlayer } = usePlayerStore(
     useShallow(state => {
       const myPlayer = state.myPlayer;
       let taxAmount = '0';
@@ -21,6 +21,7 @@ export default function SkipMapTaxDialog() {
         taxAmount,
         payTaxes: state.payTaxesAndSwitchState,
         setNextTurnState: state.setNextTurnState,
+        myPlayer: myPlayer,
       };
     })
   );
@@ -32,7 +33,7 @@ export default function SkipMapTaxDialog() {
   const handleUseCard = async () => {
     await activateBonusCard({ bonus_type: 'evade-map-tax' });
     resetNotificationsQuery();
-    await setNextTurnState({ action: 'skip-bonus' });
+    await setNextTurnState({ action: 'skip-bonus', sectorToId: myPlayer?.sector_id });
   };
 
   return (
