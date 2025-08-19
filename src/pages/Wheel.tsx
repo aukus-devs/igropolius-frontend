@@ -18,6 +18,7 @@ type WheelProps = {
   startOnRender?: boolean;
   onSpinStart: () => void;
   onSpinEnd: (index: number) => void;
+  onSelect?: (id: number) => void;
 };
 
 // const defaultGames = mockHltbGamesList.games.map(game => ({
@@ -33,7 +34,7 @@ const STROKE_COLOR = '#fff'; // '#81a971'
 const SIDE_OFFSET = 24;
 const SPIN_TIME_SECONDS = 10;
 
-export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
+export default function Wheel({ entries, onSpinStart, onSpinEnd, onSelect }: WheelProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -163,12 +164,32 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
     );
   };
 
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!canvasRef.current || entriesWithAnglesRef.current.length === 0) return;
+      const rect = canvasRef.current.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.hypot(dx, dy);
+      if (dist > radius - SIDE_OFFSET || dist < 20) return;
+      let theta = (Math.atan2(dy, dx) * 180) / Math.PI;
+      if (theta < 0) theta += 360;
+      theta = (theta - rotation + 90 + 360) % 360;
+      const found = entriesWithAnglesRef.current.find(
+        item => item.startAngle <= theta && theta < item.endAngle
+      );
+      if (found) onSelect?.(found.id);
+    },
+    [radius, rotation, onSelect]
+  );
+
   const spinWheel = () => {
     if (isSpinning) return;
 
     setIsSpinning(true);
     onSpinStart?.();
-    if (!isMuted) playSound();
 
     console.log('starting with', entriesWithAnglesRef.current);
 
@@ -299,6 +320,7 @@ export default function Wheel({ entries, onSpinStart, onSpinEnd }: WheelProps) {
             ref={canvasContainerRef}
             className="relative select-none"
             style={{ transform: `rotate(${rotation}deg)` }}
+            onClick={handleClick}
             draggable="false"
           >
             <canvas

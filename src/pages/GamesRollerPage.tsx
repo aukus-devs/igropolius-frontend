@@ -130,17 +130,6 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
             </a>
           </Button>
         </CardTitle>
-        {Number(game.steam_id) > 0 ? (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              window.open(`https://store.steampowered.com/app/${game.steam_id}`, '_blank')
-            }
-          >
-            Steam
-          </Button>
-        ) : null}
       </CardHeader>
       <CardContent className="flex gap-2">
         <div className="shrink-0 w-[192px]">
@@ -215,6 +204,28 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
             </div>
           ) : null}
           <div className="text-xs text-muted-foreground">Синхронизировано с HLTB: {syncDate}</div>
+          <div className="flex gap-2 pt-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                window.open(`https://howlongtobeat.com/game/${game.game_id}`, '_blank')
+              }
+            >
+              HLTB
+            </Button>
+            {Number(game.steam_id) > 0 ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  window.open(`https://store.steampowered.com/app/${game.steam_id}`, '_blank')
+                }
+              >
+                Steam
+              </Button>
+            ) : null}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -320,7 +331,17 @@ function GamesRollerPage() {
 
     console.log('wheel refresh', options);
 
-    return <Wheel entries={options} onSpinEnd={onSpinFinish} onSpinStart={onSpinStart} />;
+    return (
+      <Wheel
+        entries={options}
+        onSpinEnd={onSpinFinish}
+        onSpinStart={onSpinStart}
+        onSelect={(id: number) => {
+          const game = gamesRef.current.find(g => g.game_id === id);
+          setSelectedGame(game ?? null);
+        }}
+      />
+    );
   }, [gamesData, onSpinFinish, onSpinStart]);
 
   return (
