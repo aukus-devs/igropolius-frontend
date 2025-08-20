@@ -11,7 +11,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import ImageLoader from '../ImageLoader';
 import { useSound } from '@/hooks/useSound';
-import { DRUM_SOUND_URL, INDIAN_ROLL_URL } from '@/lib/constants';
+
 import { Volume, X } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import useSystemStore from '@/stores/systemStore';
@@ -119,23 +119,7 @@ export default function GenericRoller<T>({
     key: 'roller-sound-muted',
     defaultValue: false,
   });
-  const { play: playInidanSound, stop: stopInidanSound } = useSound(INDIAN_ROLL_URL, isMuted, true);
-
-  const { play: playDrumSound, stop: stopDrumSound } = useSound(DRUM_SOUND_URL, isMuted, true);
-
-  const stopSound = useCallback(() => {
-    stopInidanSound();
-    stopDrumSound();
-  }, [stopInidanSound, stopDrumSound]);
-
-  const playSound = useCallback(() => {
-    const random = Math.random() < 0.5;
-    if (random) {
-      playInidanSound();
-    } else {
-      playDrumSound();
-    }
-  }, [playInidanSound, playDrumSound]);
+  const { playRandom: playRandomSound, stop: stopSound } = useSound(isMuted, true);
 
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -338,9 +322,9 @@ export default function GenericRoller<T>({
 
   useEffect(() => {
     if (!isMuted && rollPhase === 'rolling') {
-      playSound();
+      playRandomSound();
     }
-  }, [isMuted, rollPhase, playSound]);
+  }, [isMuted, rollPhase, playRandomSound]);
 
   const handleRollClick = () => {
     useSystemStore.getState().enableQueries(false);

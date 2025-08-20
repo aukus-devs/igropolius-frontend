@@ -159,6 +159,7 @@ export const BUILDING_BONUS_IMAGE = `${import.meta.env.BASE_URL}assets/cards/bui
 
 export const DRUM_SOUND_URL = `${import.meta.env.BASE_URL}assets/sounds/baraban.mp3`;
 export const INDIAN_ROLL_URL = `${import.meta.env.BASE_URL}assets/sounds/indian-roll.mp3`;
+export const ARMY_SOUND_URL = `${import.meta.env.BASE_URL}assets/sounds/army-roll.mp3`;
 
 export const GameRollTypeNames: Record<GameRollType, string> = {
   auc: 'аукцион',

@@ -3,7 +3,6 @@ import { LoaderCircleIcon } from 'lucide-react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { useSound } from '@/hooks/useSound';
-import { DRUM_SOUND_URL, INDIAN_ROLL_URL } from '@/lib/constants';
 
 type Entry = {
   id: number;
@@ -47,19 +46,7 @@ export default function Wheel({
   const [isSpinning, setIsSpinning] = useState(false);
 
   const { value: isMuted } = useLocalStorage({ key: 'roller-sound-muted', defaultValue: false });
-  const { play: playIndian, stop: stopIndian } = useSound(INDIAN_ROLL_URL, isMuted, true);
-  const { play: playDrum, stop: stopDrum } = useSound(DRUM_SOUND_URL, isMuted, true);
-
-  const stopSound = useCallback(() => {
-    stopIndian();
-    stopDrum();
-  }, [stopIndian, stopDrum]);
-
-  const playSound = useCallback(() => {
-    const random = Math.random() < 0.5;
-    if (random) playIndian();
-    else playDrum();
-  }, [playIndian, playDrum]);
+  const { playRandom, stop: stopSound } = useSound(isMuted, true);
 
   const easeOutCirc = (t: number) => 1 - Math.pow(1 - t, 4);
 
@@ -269,9 +256,9 @@ export default function Wheel({
   useEffect(() => {
     if (isSpinning) {
       if (isMuted) stopSound();
-      else playSound();
+      else playRandom();
     }
-  }, [isMuted, isSpinning, playSound, stopSound]);
+  }, [isMuted, isSpinning, playRandom, stopSound]);
 
   useEffect(() => {
     return () => {
@@ -287,7 +274,7 @@ export default function Wheel({
   useEffect(() => {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, [radius])
+  }, [radius]);
 
   useEffect(() => {
     if (!entries) {
