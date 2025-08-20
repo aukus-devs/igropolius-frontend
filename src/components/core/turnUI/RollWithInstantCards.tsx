@@ -29,12 +29,14 @@ type Props = {
 };
 
 export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
-  const { playerCards, setNextTurnState, addCardToState, difficultyLevel } = usePlayerStore(
+  const { hasNoCards, setNextTurnState, addCardToState, difficultyLevel } = usePlayerStore(
     useShallow(state => ({
       playerCards: state.myPlayer?.bonus_cards,
       setNextTurnState: state.setNextTurnState,
       addCardToState: state.addCardToState,
       difficultyLevel: state.myPlayer?.game_difficulty_level,
+      hasNoCards:
+        state.myPlayer?.bonus_cards === undefined || state.myPlayer?.bonus_cards.length === 0,
     }))
   );
 
@@ -56,7 +58,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
           return;
         }
         if (option.value.instant === 'police-search') {
-          if (playerCards?.length === 0) {
+          if (hasNoCards) {
             const response = await activateInstantCard({
               card_type: option.value.instant,
             });
@@ -81,7 +83,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
         addCardToState(newCard);
       }
     },
-    [setActivationResult, setNextTurnState, addCardToState, playerCards]
+    [setActivationResult, setNextTurnState, addCardToState, hasNoCards]
   );
 
   const getWinnerText = (option: WeightedOption<OptionType>) => {
