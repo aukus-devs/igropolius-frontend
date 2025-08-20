@@ -193,20 +193,23 @@ function GameDifficultyBonusCard({ difficulty }: { difficulty: GameDifficulty })
   let difficultyText = 'Средняя';
   let variant: 'neutral' | 'positive' | 'negative' = 'neutral';
   let difficultyImg = undefined;
+  let description = '';
 
   if (difficulty === -1) {
     difficultyText = 'Легкая';
     variant = 'positive';
     difficultyImg = frontendInstantCardsData['decrease-difficulty'].picture;
+    description = frontendInstantCardsData['decrease-difficulty'].description;
   } else if (difficulty === 1) {
     difficultyText = 'Сложная';
     variant = 'negative';
     difficultyImg = frontendInstantCardsData['increase-difficulty'].picture;
+    description = frontendInstantCardsData['increase-difficulty'].description;
   }
 
   return (
     <BonusCardComponent
-      description="Изменяет сложность следующей подходящей игры"
+      description={description}
       size="large"
       variant={variant}
       header="Сложность игры"

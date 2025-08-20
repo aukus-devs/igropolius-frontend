@@ -54,14 +54,17 @@ export default function MyCards() {
   let difficultyVariant: 'neutral' | 'positive' | 'negative' = 'neutral';
   let tooltipText = 'Средняя';
   let difficultyImg = undefined;
+  let difficultyDescription = '';
   if (myPlayer.game_difficulty_level === -1) {
     difficultyVariant = 'positive';
     tooltipText = 'Лёгкая';
     difficultyImg = frontendInstantCardsData['decrease-difficulty'].picture;
+    difficultyDescription = frontendInstantCardsData['decrease-difficulty'].description;
   } else if (myPlayer.game_difficulty_level === 1) {
     difficultyVariant = 'negative';
     tooltipText = 'Сложная';
     difficultyImg = frontendInstantCardsData['increase-difficulty'].picture;
+    difficultyDescription = frontendInstantCardsData['increase-difficulty'].description;
   }
 
   return (
@@ -126,7 +129,7 @@ export default function MyCards() {
             <BonusCardComponent
               size="small"
               variant={difficultyVariant}
-              description="Изменяет сложность следующей подходящей игры"
+              description={difficultyDescription}
               header={<div className="text-xs">Слж</div>}
               tooltipHeader={`Уровень сложности: ${tooltipText}`}
               image={difficultyImg}
