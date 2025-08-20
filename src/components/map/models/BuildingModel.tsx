@@ -136,7 +136,7 @@ function BuildingModel({ building, position, models }: Props) {
         onClick={onClick}
       >
         {isHovered && <Outlines thickness={5} color="white" />}
-        {isHighlighted && !isHovered && <Outlines thickness={4} color={owner.color} />}
+        {isHighlighted && !isHovered && <Outlines thickness={3} color={owner.color} />}
       </OutlinePart>
 
       {hasGroupBonus ? (
