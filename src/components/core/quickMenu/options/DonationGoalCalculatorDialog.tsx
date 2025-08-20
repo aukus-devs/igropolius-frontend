@@ -10,8 +10,10 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calculator } from '@/components/icons';
+import usePlayerStore from '@/stores/playerStore';
+import { SectorsById } from '@/lib/mockData';
 
 type Props = {
   className?: string;
@@ -179,6 +181,7 @@ function DonationCalculatorTab({
 export default function DonationGoalCalculatorDialog({ className }: Props) {
   const [activeTab, setActiveTab] = useState<string>('');
   const [open, setOpen] = useState(false);
+  const myPlayer = usePlayerStore(state => state.myPlayer);
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -186,6 +189,15 @@ export default function DonationGoalCalculatorDialog({ className }: Props) {
       setActiveTab('');
     }
   };
+
+  useEffect(() => {
+    if (open && myPlayer?.sector_id) {
+      const currentSector = SectorsById[myPlayer.sector_id];
+      if (currentSector) {
+        setActiveTab(currentSector.rollType === 'auc' ? 'auction' : 'regular');
+      }
+    }
+  }, [open, myPlayer?.sector_id]);
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -196,6 +208,11 @@ export default function DonationGoalCalculatorDialog({ className }: Props) {
       <DialogContent className="w-[600px]" aria-describedby="">
         <DialogHeader>
           <DialogTitle className="text-2xl font-wide-black">Калькулятор донат-гола</DialogTitle>
+          {myPlayer?.sector_id && (
+            <p className="text-sm text-muted-foreground">
+              Автоматически выбран тип сектора: {SectorsById[myPlayer.sector_id]?.rollType === 'auc' ? 'Аукцион' : 'Стим'}
+            </p>
+          )}
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -214,7 +231,7 @@ export default function DonationGoalCalculatorDialog({ className }: Props) {
             </TabsTrigger>
           </TabsList>
 
-          {!activeTab && (
+          {!activeTab && !myPlayer?.sector_id && (
             <div className="mt-6 p-8 text-center text-muted-foreground">
               <p className="text-lg">Выберите тип сектора</p>
             </div>
