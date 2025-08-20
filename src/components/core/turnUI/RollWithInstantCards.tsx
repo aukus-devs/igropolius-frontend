@@ -4,7 +4,11 @@ import { useShallow } from 'zustand/shallow';
 import GenericRoller, { WeightedOption } from './GenericRoller';
 import { activateInstantCard, giveBonusCard } from '@/lib/api';
 import { useCallback, useMemo, useState } from 'react';
-import { resetCurrentPlayerQuery, resetPlayersQuery } from '@/lib/queryClient';
+import {
+  refetechPlayersQuery,
+  resetCurrentPlayerQuery,
+  resetPlayersQuery,
+} from '@/lib/queryClient';
 import {
   InstantCardType,
   MainBonusCardType,
@@ -197,6 +201,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
 
     useSystemStore.getState().enableQueries(true);
     resetPlayersQuery();
+    refetechPlayersQuery();
 
     setActivationResult(null);
     setMoveToCardDrop(false);
