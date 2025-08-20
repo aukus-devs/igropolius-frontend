@@ -23,11 +23,13 @@ type WheelProps = {
 
 const degreesToRadians = Math.PI / 180;
 const LINE_WIDTH = 5;
-const STROKE_COLOR = '#fff'; // '#81a971'
-const STROKE_HIGHLIGHT_COLOR = '#83ab73';
-const SIDE_OFFSET = 2;
+const STROKE_COLOR = '#2e1801';
+const STROKE_HIGHLIGHT_COLOR = '#fe9a00';
+const SIDE_OFFSET = 26; // для картинки обводки
 const OUTLINE_SIZE = 2;
 const SPIN_TIME_SECONDS = 10;
+const wheelOutlineImage = `${import.meta.env.BASE_URL}assets/wheel/wheel_gold_small.png`;
+const wheelPointerImage = `${import.meta.env.BASE_URL}assets/wheel/pointer_gold.png`;
 
 export default function Wheel({
   entries,
@@ -125,7 +127,7 @@ export default function Wheel({
         ctx.closePath();
         ctx.save();
         if (isHighlighted) {
-          ctx.shadowColor = 'yellow';
+          ctx.shadowColor = 'gold';
           ctx.shadowBlur = 10;
         }
         ctx.strokeStyle = strokeColor;
@@ -274,7 +276,7 @@ export default function Wheel({
   useEffect(() => {
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, [radius]);
+  }, []);
 
   useEffect(() => {
     if (!entries) {
@@ -341,41 +343,36 @@ export default function Wheel({
       {/*{currentItem && <div>{currentItem.label}</div>}*/}
       <div
         ref={containerRef}
-        className="flex justify-center items-center gap-4 w-full h-[512px] lg:h-full overflow-hidden"
+        className="relative flex justify-center items-center gap-4 w-full h-[512px] lg:h-full"
       >
         <div className="relative flex flex-col">
-          <svg
-            width={64}
-            viewBox="0 0 54 28"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="absolute top-0 left-1/2 -translate-x-1/2 z-10 text-primary pointer-events-none"
-          >
-            <path
-              d="M27 27 L0 0 L9 -1 L27 17 L45 -1 L54 0 Z"
-              fill={STROKE_HIGHLIGHT_COLOR}
-              stroke="black"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
-          </svg>
+          {/* Фризит анимацию кручения, если консоль открыта */}
+          {/* Так же некорректно скейлится относительно колеса, но не критично */}
+          <div className="absolute top-1/2 left-1/2 -translate-1/2 z-10 pointer-events-none w-full h-full">
+            <img className="w-full" src={wheelOutlineImage} alt="wheel background" />
+          </div>
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+            <img className="w-full" src={wheelPointerImage} alt="wheel pointer" />
+          </div>
+          {/* */}
+
           <Button
             variant="action"
-            className="absolute top-1/2 left-1/2 -translate-1/2 z-10 rounded-full whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-primary-foreground text-sm disabled:bg-muted disabled:opacity-100"
+            className="absolute top-1/2 left-1/2 -translate-1/2 z-20 rounded-full whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-sm disabled:opacity-100 bg-amber-500 text-muted hover:bg-amber-600"
             style={{ border: `${LINE_WIDTH}px solid ${STROKE_COLOR}` }}
             disabled={isSpinning}
             onClick={spinWheel}
           >
             {isSpinning ? (
-              <LoaderCircleIcon className="animate-spin text-primary size-12" />
+              <LoaderCircleIcon className="animate-spin size-12 text-muted" />
             ) : (
               'Запустить'
             )}
           </Button>
           <div
             ref={canvasContainerRef}
-            className="relative select-none cursor-pointer border-white rounded-[50%]"
-            style={{ transform: `rotate(${rotation}deg)`, borderWidth: OUTLINE_SIZE }}
+            className="relative select-none cursor-pointer rounded-full z-10"
+            style={{ transform: `rotate(${rotation}deg) translateZ(0)` }}
             onClick={handleClick}
             onMouseMove={handleMouseMove}
             onMouseLeave={() => setHoveredId(undefined)}

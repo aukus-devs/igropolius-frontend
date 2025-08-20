@@ -37,7 +37,7 @@ function Slider({
       <SliderPrimitive.Track
         data-slot="slider-track"
         className={cn(
-          "bg-input relative grow overflow-hidden rounded-xs data-[orientation=horizontal]:h-2.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"
+          "bg-input relative grow overflow-hidden rounded-xs data-[orientation=horizontal]:h-5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"
         )}
       >
         <SliderPrimitive.Range
@@ -49,10 +49,12 @@ function Slider({
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (
         <SliderPrimitive.Thumb
-          data-slot="slider-thumb"
           key={index}
-          className="border-primary bg-foreground ring-ring/50 block h-[22px] w-[9px] hover:scale-115 shrink-0 rounded-xs border shadow-sm transition-[color,box-shadow,scale] focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
-        />
+          data-slot="slider-thumb"
+          className="group relative block h-[20px] w-[9px] shrink-0 disabled:pointer-events-none focus-visible:outline-hidden disabled:opacity-50 cursor-pointer"
+        >
+          <div className="before:w-[calc(100%_+_10px)] before:h-[calc(100%_+_10px)] before:absolute before:left-1/2 before:top-1/2 before:z-10 before:-translate-1/2 before:bg-[#202020] before:rounded-md after:absolute after:left-1/2 after:top-1/2 after:z-20 after:-translate-1/2 after:bg-foreground after:w-full after:h-full after:rounded-md group-hover:after:scale-125 after:transition-[color,box-shadow,scale]"></div>
+        </SliderPrimitive.Thumb>
       ))}
     </SliderPrimitive.Root>
   )
