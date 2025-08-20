@@ -22,15 +22,8 @@ type WheelProps = {
   highlightedItemId?: number | null;
 };
 
-// const defaultGames = mockHltbGamesList.games.map(game => ({
-//   id: game.game_id,
-//   label: game.game_name,
-//   imageUrl: game.game_image,
-//   weight: 1,
-// }));
-
 const degreesToRadians = Math.PI / 180;
-const LINE_WIDTH = 7;
+const LINE_WIDTH = 5;
 const STROKE_COLOR = '#fff'; // '#81a971'
 const STROKE_HIGHLIGHT_COLOR = '#83ab73';
 const SIDE_OFFSET = 2;
@@ -292,6 +285,11 @@ export default function Wheel({
   }, []);
 
   useEffect(() => {
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [radius])
+
+  useEffect(() => {
     if (!entries) {
       entriesWithAnglesRef.current = [];
     } else {
@@ -335,14 +333,18 @@ export default function Wheel({
       }
     }
 
+    onResize();
+    if (radius > 0) drawWheel();
+  }, [entries, radius, drawWheel]);
+
+  function onResize() {
     if (!containerRef.current) return;
 
     const h = containerRef.current.clientHeight;
     const w = containerRef.current.clientWidth;
 
     setRadius(Math.floor(Math.min(h, w) / 2.25));
-    drawWheel();
-  }, [entries, drawWheel]);
+  }
 
   // const currentItemId = getCurrentEntry(rotation);
   // const currentItem = entries.find(item => item.id === currentItemId);
@@ -352,7 +354,7 @@ export default function Wheel({
       {/*{currentItem && <div>{currentItem.label}</div>}*/}
       <div
         ref={containerRef}
-        className="flex justify-center items-center gap-4 w-full h-full overflow-hidden"
+        className="flex justify-center items-center gap-4 w-full h-[512px] lg:h-full overflow-hidden"
       >
         <div className="relative flex flex-col">
           <svg
@@ -360,20 +362,20 @@ export default function Wheel({
             viewBox="0 0 54 28"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute top-[0] left-1/2 -translate-x-1/2 z-10 text-primary pointer-events-none"
+            className="absolute top-0 left-1/2 -translate-x-1/2 z-10 text-primary pointer-events-none"
           >
             <path
               d="M27 27 L0 0 L9 -1 L27 17 L45 -1 L54 0 Z"
               fill={STROKE_HIGHLIGHT_COLOR}
-              stroke={'black'}
+              stroke="black"
               strokeWidth="2"
               strokeLinejoin="round"
             />
           </svg>
           <Button
             variant="action"
-            className="absolute top-1/2 left-1/2 -translate-1/2 z-10 rounded-full border-[7px] whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-primary-foreground text-sm disabled:bg-muted disabled:opacity-100"
-            style={{ borderColor: STROKE_COLOR }}
+            className="absolute top-1/2 left-1/2 -translate-1/2 z-10 rounded-full whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-primary-foreground text-sm disabled:bg-muted disabled:opacity-100"
+            style={{ border: `${LINE_WIDTH}px solid ${STROKE_COLOR}` }}
             disabled={isSpinning}
             onClick={spinWheel}
           >
