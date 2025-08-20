@@ -112,6 +112,7 @@ export default function GenericRoller<T>({
 }: Props<T>) {
   const rouletteRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
+  const isRollingRef = useRef(false);
   const centerIndexRef = useRef(0);
   const offsetRef = useRef(0);
   const isIdleRunningRef = useRef(false);
@@ -271,6 +272,7 @@ export default function GenericRoller<T>({
       stopSound();
       handleRollFinish(cardList[index]);
       animationRef.current = null;
+      isRollingRef.current = false;
     }
     animationRef.current = requestAnimationFrame(animate);
   }, [handleRollFinish, cardList, fastRoll, stopSound]);
@@ -315,7 +317,8 @@ export default function GenericRoller<T>({
         animationRef.current = requestAnimationFrame(idleAnimate);
       }
     }
-    if (rollPhase === 'rolling' && cardList.length > IDLE_CARD_COUNT) {
+    if (rollPhase === 'rolling' && cardList.length > IDLE_CARD_COUNT && !isRollingRef.current) {
+      isRollingRef.current = true;
       startRollingAnimation();
     }
   }, [rollPhase, cardList.length, idleAnimate, startRollingAnimation]);
