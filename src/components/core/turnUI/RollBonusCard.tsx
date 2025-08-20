@@ -20,6 +20,8 @@ export default function RollBonusCard() {
     }))
   );
 
+  const getCardWeight = useSystemStore(state => state.getCardWeight);
+
   const [cardsBeforeRoll, setCardsBeforeRoll] = useState(myPlayer?.bonus_cards ?? []);
 
   const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
@@ -49,10 +51,11 @@ export default function RollBonusCard() {
   const cardTypesForRoll = allCardTypes.filter(cardType => !myCurrentCardsTypes.includes(cardType));
 
   const weightedOptions = cardTypesForRoll.reduce((acc, cardType) => {
+    const weight = getCardWeight(cardType);
     acc.push({
       value: cardType,
       label: frontendCardsData[cardType].name,
-      weight: 1,
+      weight,
       imageUrl: frontendCardsData[cardType].picture,
     });
     return acc;

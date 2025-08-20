@@ -42,6 +42,8 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     }))
   );
 
+  const getCardWeight = useSystemStore(state => state.getCardWeight);
+
   const hasNoCards = useMemo(() => {
     return playerCards === undefined || playerCards.length === 0;
   }, [playerCards]);
@@ -148,10 +150,11 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     cardTypesForRoll.forEach(cardType => {
       const cardData = frontendCardsData[cardType];
       if (cardData) {
+        const weight = getCardWeight(cardType);
         result.push({
           value: { card: cardType },
           label: cardData.name,
-          weight: 1,
+          weight,
           imageUrl: cardData.picture,
         });
       }
@@ -172,15 +175,16 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
       if (cardData.disabled) {
         return;
       }
+      const weight = getCardWeight(instantType);
       result.push({
         value: { instant: instantType },
         label: cardData.name,
-        weight: 1,
+        weight,
         imageUrl: cardData.picture,
       });
     });
     return result;
-  }, [playerCards, difficultyLevel]);
+  }, [playerCards, difficultyLevel, getCardWeight]);
 
   let finishText = 'Готово';
   if (moveToCardDrop) {

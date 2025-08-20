@@ -1,4 +1,8 @@
-import { CurrentUserResponse, Settings as EventSettings } from '@/lib/api-types-generated';
+import {
+  BonusCardType,
+  CurrentUserResponse,
+  Settings as EventSettings,
+} from '@/lib/api-types-generated';
 import { create } from 'zustand';
 import usePlayerStore from './playerStore';
 
@@ -30,6 +34,7 @@ interface SystemStore {
   setHighlightedSectorId: (sectorId: number | null) => void;
   needsToSelectModel: () => boolean;
   enableQueries: (enable: boolean) => void;
+  getCardWeight: (cardType: BonusCardType) => number;
 }
 
 const useSystemStore = create<SystemStore>((set, get) => ({
@@ -103,6 +108,13 @@ const useSystemStore = create<SystemStore>((set, get) => ({
       disablePlayersQuery: !enable,
       disableCurrentPlayerQuery: !enable,
     });
+  },
+
+  getCardWeight: (cardType: BonusCardType) => {
+    const { myUser } = get();
+    const cards = myUser?.bonus_cards || [];
+    const card = cards.find(c => c.card_type === cardType);
+    return card?.weight || 1;
   },
 }));
 

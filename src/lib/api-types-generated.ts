@@ -80,6 +80,7 @@ export type SectorId = number | null;
 export type StolenFromPlayer = number | null;
 export type StolenBy = number | null;
 export type InstantCardScoreMultiplier = number | null;
+export type Weight = number;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "NotificationType".
@@ -149,6 +150,7 @@ export type PlayerTurnState =
   | "stealing-bonus-card"
   | "choosing-building-sector";
 export type LastRollResult = number[];
+export type BonusCards = BonusCardInfo[];
 export type IsRandomOrgResult = boolean;
 export type RandomOrgCheckForm = string | null;
 export type RandomOrgFailReason = string | null;
@@ -316,7 +318,7 @@ export type Cover1 = string | null;
 export type GameId2 = number | null;
 export type ScoreChangeAmount = number | null;
 export type Games2 = PlayerGame[];
-export type BonusCards = ActiveBonusCard[];
+export type BonusCards1 = ActiveBonusCard[];
 export type Color = string;
 export type ModelName = string;
 export type BuildingUpgradeBonus = number;
@@ -411,6 +413,14 @@ export interface BonusCardEvent {
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "BonusCardInfo".
+ */
+export interface BonusCardInfo {
+  card_type: BonusCardType;
+  weight: Weight;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "CreateAllPlayersNotificationRequest".
  */
 export interface CreateAllPlayersNotificationRequest {
@@ -483,6 +493,7 @@ export interface CurrentUserResponse {
   moder_for?: ModerFor;
   turn_state?: PlayerTurnState | null;
   last_roll_result: LastRollResult;
+  bonus_cards?: BonusCards;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -771,7 +782,7 @@ export interface PlayerDetails {
   total_score: TotalScore;
   maps_completed: MapsCompleted;
   games: Games2;
-  bonus_cards: BonusCards;
+  bonus_cards: BonusCards1;
   color: Color;
   model_name: ModelName;
   building_upgrade_bonus: BuildingUpgradeBonus;
