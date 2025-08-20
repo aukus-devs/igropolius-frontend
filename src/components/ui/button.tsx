@@ -55,11 +55,11 @@ function Button({
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
-      disabled={loading || props.disabled}
       {...props}
+      disabled={loading || props.disabled}
     >
       {props.children}
-      {loading && <LoaderCircleIcon className="animate-spin text-primary" />}
+      {loading && <LoaderCircleIcon className="animate-spin" />}
     </Comp>
   );
 }
