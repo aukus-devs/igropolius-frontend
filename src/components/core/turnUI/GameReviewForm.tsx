@@ -618,7 +618,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
     gameDurationData.duration <= (gameLengthMaxHours * 60 * 60) / 3;
 
   const showGameDifficulty =
-    gameStatus === 'completed' &&
+    (gameStatus === 'completed' || gameStatus === 'drop') &&
     myPlayer?.game_difficulty_level !== undefined &&
     myPlayer.game_difficulty_level != 0;
 
@@ -676,7 +676,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
           )}
 
           <div className="ml-auto flex flex-col gap-4">
-            {gameStatus === 'completed' && showGameDifficulty && <GameDifficulty />}
+            {showGameDifficulty && <GameDifficulty />}
             <Tooltip disableHoverableContent>
               <TooltipTrigger asChild>
                 <Button
@@ -770,7 +770,7 @@ function GameDifficulty() {
       <Tooltip>
         <TooltipTrigger asChild>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Пройдено на сложности" />
+            <SelectValue placeholder="Использована сложность" />
           </SelectTrigger>
         </TooltipTrigger>
         <TooltipContent>
