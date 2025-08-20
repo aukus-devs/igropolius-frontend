@@ -29,16 +29,18 @@ type Props = {
 };
 
 export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
-  const { hasNoCards, setNextTurnState, addCardToState, difficultyLevel } = usePlayerStore(
+  const { setNextTurnState, addCardToState, difficultyLevel, playerCards } = usePlayerStore(
     useShallow(state => ({
       playerCards: state.myPlayer?.bonus_cards,
       setNextTurnState: state.setNextTurnState,
       addCardToState: state.addCardToState,
       difficultyLevel: state.myPlayer?.game_difficulty_level,
-      hasNoCards:
-        state.myPlayer?.bonus_cards === undefined || state.myPlayer?.bonus_cards.length === 0,
     }))
   );
+
+  const hasNoCards = useMemo(() => {
+    return playerCards === undefined || playerCards.length === 0;
+  }, [playerCards]);
 
   const [activationResult, setActivationResult] = useState<UseInstantCardResponse | null>(null);
   const [moveToCardDrop, setMoveToCardDrop] = useState<boolean>(false);
