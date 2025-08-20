@@ -1475,13 +1475,13 @@ export const frontendInstantCardsData: Record<InstantCardType, FrontendCardData>
   'decrease-difficulty': {
     name: 'Очки ИЗИ',
     description:
-      'Уменьшает сложность подходящей игры на 1. Используется когда начинается новая игра.',
+      'Уменьшает сложность подходящей игры на 1. Используется когда начинается новая игра. Пропадает после прохождения или дропа этой игры.',
     picture: `${import.meta.env.BASE_URL}assets/cards/decrease-difficulty.png`,
   },
   'increase-difficulty': {
     name: 'Повязка Рэмбо',
     description:
-      'Увеличивает сложность подходящей игры на 1. Используется когда начинается новая игра.',
+      'Увеличивает сложность подходящей игры на 1. Используется когда начинается новая игра. Пропадает после прохождения или дропа этой игры.',
     picture: `${import.meta.env.BASE_URL}assets/cards/increase-difficulty.png`,
   },
   'police-search': {
@@ -1568,7 +1568,8 @@ export const mockHltbGamesList: HltbGamesListResponse = {
       game_type: 'game',
       genres: 'Strategy, Turn-Based, 4X, Space, Tactical, Early Access',
       steam_id: 765700,
-      description: 'Tactical Galactical is a turn-based 4X space strategy game. You are the leader of a space empire, and you must build your fleet, research new technologies, and conquer new planets to expand your empire. You can play alone or with friends in co-op mode.',
+      description:
+        'Tactical Galactical is a turn-based 4X space strategy game. You are the leader of a space empire, and you must build your fleet, research new technologies, and conquer new planets to expand your empire. You can play alone or with friends in co-op mode.',
       game_image: 'https://howlongtobeat.com/games/133826_Tactical_Galactical.jpg',
       comp_lvl_combine: 0,
       comp_lvl_sp: 1,
