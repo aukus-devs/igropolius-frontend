@@ -4,6 +4,7 @@ import { Vector3Array } from '@/lib/types';
 import { ThreeEvent } from '@react-three/fiber';
 import { Group, Mesh } from 'three';
 import usePlayerStore from '@/stores/playerStore';
+import useHighlightStore from '@/stores/highlightStore';
 import { Gltf } from '@react-three/drei';
 import PlayerInfo from '../PlayerInfo';
 import { PlayerDetails } from '@/lib/api-types-generated.ts';
@@ -19,6 +20,8 @@ type Props = {
 function PlayerModel({ player, position, rotation, onClick }: Props) {
   const addPlayerModel = useModelsStore(state => state.addPlayerModel);
   const isPlayerMoving = usePlayerStore(state => state.isPlayerMoving);
+  const highlightedPlayerId = useHighlightStore(state => state.highlightedPlayerId);
+  const isHighlighted = highlightedPlayerId === player.id;
   const modelUrl = getPlayerModelUrl(player.model_name);
 
   if (player.model_name === '') {
@@ -47,6 +50,12 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
 
   return (
     <group ref={onGroupRender} name={`player_${player.id}`} position={position} rotation={rotation}>
+      {isHighlighted && (
+        <mesh position={[0, 0, 0]}>
+          <cylinderGeometry args={[0.8, 0.8, 0.1, 32]} />
+          <meshBasicMaterial color={player.color} transparent opacity={0.3} />
+        </mesh>
+      )}
       <Gltf
         ref={onModelRender}
         src={modelUrl}

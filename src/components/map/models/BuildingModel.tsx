@@ -7,6 +7,7 @@ import { InstanceProps, ThreeEvent } from '@react-three/fiber';
 import useCanvasTooltipStore from '@/stores/canvasTooltipStore';
 import { Outlines, Sparkles } from '@react-three/drei';
 import usePlayerStore from '@/stores/playerStore';
+import useHighlightStore from '@/stores/highlightStore';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 type Props = {
@@ -77,6 +78,9 @@ function BuildingModel({ building, position, models }: Props) {
     return state.newBuildingsIds.includes(building.id);
   });
 
+  const highlightedPlayerId = useHighlightStore(state => state.highlightedPlayerId);
+  const isHighlighted = highlightedPlayerId === owner.id;
+
   useEffect(() => {
     if (!groupRef.current) return;
     if (!isNewBuilding) return;
@@ -132,6 +136,7 @@ function BuildingModel({ building, position, models }: Props) {
         onClick={onClick}
       >
         {isHovered && <Outlines thickness={5} color="white" />}
+        {isHighlighted && !isHovered && <Outlines thickness={4} color={owner.color} />}
       </OutlinePart>
 
       {hasGroupBonus ? (

@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Share } from '@/components/icons';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
 import { PlayerDetails } from '@/lib/api-types-generated';
+import useHighlightStore from '@/stores/highlightStore';
 
 type Props = {
   player: PlayerDetails;
@@ -12,6 +13,16 @@ type Props = {
 };
 
 function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
+  const setHighlightedPlayer = useHighlightStore(state => state.setHighlightedPlayer);
+
+  const handleMouseEnter = () => {
+    setHighlightedPlayer(player.id);
+  };
+
+  const handleMouseLeave = () => {
+    setHighlightedPlayer(null);
+  };
+
   return (
     <div
       className={cn(
@@ -19,6 +30,8 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
         `group relative z-20 flex items-start flex-row gap-2 rounded-xl md:p-2 p-2.5 w-full h-auto select-none cursor-pointer text-base text-foreground font-semibold backdrop-blur-[1.5rem] bg-card/70 border-none`
       )}
       data-highlighted={isCurrentPlayer}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="relative">
         <Avatar
