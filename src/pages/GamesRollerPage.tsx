@@ -405,7 +405,7 @@ function GamesRollerPage() {
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-xl"
+                className="rounded-xl bg-white/20 hover:bg-white/10 border-0"
                 onClick={() => saveMutedState(!isMuted)}
               >
                 <Volume muted={isMuted ?? false} className="h-4 w-4" />

@@ -426,7 +426,7 @@ export default function GenericRoller<T>({
         <Button
           variant="outline"
           size="icon"
-          className="absolute rounded-xl z-20"
+          className="absolute rounded-xl z-20 bg-white/20 hover:bg-white/10 border-0"
           style={{ top: '65%', right: '20px' }}
           onClick={() => {
             if (!isMuted) {
