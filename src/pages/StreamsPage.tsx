@@ -16,6 +16,7 @@ export default function StreamsPage() {
   const [columnsCount, setColumnsCount] = useState(4);
   const streamRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const previousStreams = useRef<Set<string>>(new Set());
 
   const { data: playersData, isLoading } = useQuery({
     queryKey: queryKeys.players,
@@ -26,6 +27,25 @@ export default function StreamsPage() {
   const onlineStreamers = useMemo(() => {
     return playersData?.players?.filter(player => player.is_online && hasStream(player)) || [];
   }, [playersData?.players]);
+
+  useEffect(() => {
+    const currentOnlineIds = new Set(onlineStreamers.map(player => player.id.toString()));
+    const previousIds = previousStreams.current;
+    
+    if (previousIds.size > 0) {
+      const newPlayers = Array.from(currentOnlineIds).filter(id => !previousIds.has(id));
+      
+      if (newPlayers.length > 0) {
+        setVisiblePlayers(prev => {
+          const newVisible = new Set(prev);
+          newPlayers.forEach(id => newVisible.add(id));
+          return newVisible;
+        });
+      }
+    }
+    
+    previousStreams.current = currentOnlineIds;
+  }, [onlineStreamers]);
 
   const handleToggleExpand = useCallback(
     (playerId: string) => {
