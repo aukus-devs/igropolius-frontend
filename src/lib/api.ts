@@ -25,6 +25,7 @@ import {
   PlayerListResponse,
   PlayerMoveRequest,
   PlayerMoveResponse,
+  PlayerStatsResponse,
   RollDiceResponse,
   RulesResponse,
   SavePlayerGameRequest,
@@ -779,3 +780,15 @@ export async function fetchHltbRandomGames(request: HltbRandomGameRequest): Prom
     throw error;
   }
 }
+
+export async function fetchStats(): Promise<PlayerStatsResponse> {
+  if (MOCK_API) {
+    return Promise.resolve({
+      stats: [],
+    });
+  }
+  const response = await apiRequest('/api/stats');
+  return response.json();
+}
+
+fetchStats();

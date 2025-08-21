@@ -352,6 +352,20 @@ export type AdjustBy1 = number | null;
 export type RideTrain = boolean;
 export type NewSectorId1 = number;
 export type MapCompleted1 = boolean;
+export type PlayerId3 = number;
+export type TotalScore1 = number;
+export type Username3 = string;
+export type GamesCompleted = number;
+export type GamesDropped = number;
+export type ScoreFromGamesCompleted = number;
+export type ScoreFromGamesDropped = number;
+export type InstantCardsUsed = number;
+export type ScoreFromCards = number;
+export type ScoreLostOnCards = number;
+export type StreetTaxPaid = number;
+export type MapTaxPaid = number;
+export type IncomeFromOthers = number;
+export type Stats = PlayerStats[];
 export type Num = number;
 export type Min = number;
 export type Max = number;
@@ -372,14 +386,14 @@ export type NewSectorId2 = number;
 export type EventStartTime = number | null;
 export type EventEndTime4 = number | null;
 export type EndpointResetDbEnabled = number | null;
-export type PlayerId3 = number;
+export type PlayerId4 = number;
 export type Success1 = boolean;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "StreamPlatform".
  */
 export type StreamPlatform1 = "twitch" | "vk" | "kick" | "none";
-export type PlayerId4 = number;
+export type PlayerId5 = number;
 export type SectorId8 = number | null;
 export type ModelName1 = string;
 export type Color1 = string;
@@ -870,6 +884,32 @@ export interface PlayerMoveResponse {
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "PlayerStats".
+ */
+export interface PlayerStats {
+  player_id: PlayerId3;
+  total_score: TotalScore1;
+  username: Username3;
+  games_completed: GamesCompleted;
+  games_dropped: GamesDropped;
+  score_from_games_completed: ScoreFromGamesCompleted;
+  score_from_games_dropped: ScoreFromGamesDropped;
+  instant_cards_used: InstantCardsUsed;
+  score_from_cards: ScoreFromCards;
+  score_lost_on_cards: ScoreLostOnCards;
+  street_tax_paid: StreetTaxPaid;
+  map_tax_paid: MapTaxPaid;
+  income_from_others: IncomeFromOthers;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "PlayerStatsResponse".
+ */
+export interface PlayerStatsResponse {
+  stats: Stats;
+}
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "RollDiceRequest".
  */
 export interface RollDiceRequest {
@@ -939,7 +979,7 @@ export interface SetEventEndTimeRequest {
  * via the `definition` "StealBonusCardRequest".
  */
 export interface StealBonusCardRequest {
-  player_id: PlayerId3;
+  player_id: PlayerId4;
   bonus_type: MainBonusCardType;
 }
 /**
@@ -948,9 +988,9 @@ export interface StealBonusCardRequest {
  */
 export interface StreamCheckResponse {
   success: Success1;
-  stats: Stats;
+  stats: Stats1;
 }
-export interface Stats {
+export interface Stats1 {
   [k: string]: unknown;
 }
 /**
@@ -958,7 +998,7 @@ export interface Stats {
  * via the `definition` "UpdatePlayerInternalRequest".
  */
 export interface UpdatePlayerInternalRequest {
-  player_id: PlayerId4;
+  player_id: PlayerId5;
   sector_id?: SectorId8;
   bonus_card?: MainBonusCardType | null;
   turn_state?: PlayerTurnState | null;

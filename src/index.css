@@ -256,3 +256,7 @@ h6 {
     'YTLC' 514,
     'YTUC' 712;
 }
+
+div.stats-table table {
+  width: 100%;
+}

@@ -17,6 +17,7 @@ import useSystemStore from '@/stores/systemStore';
 import { useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import GamesHistory from './options/GamesHistory';
+import StatisticsDialog from './options/StatisticsDialog';
 import SvgProfile from '@/components/icons/Profile';
 import DonationGoalCalculatorDialog from './options/DonationGoalCalculatorDialog';
 
@@ -90,6 +91,8 @@ function QuickMenu() {
           <RulesDialog className={buttonStyle} />
           <Separator />
           <GamesHistory className={buttonStyle} />
+          <Separator />
+          <StatisticsDialog className={buttonStyle} />
           <Separator />
           <DonationGoalCalculatorDialog className={buttonStyle} />
           <Separator />
