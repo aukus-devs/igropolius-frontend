@@ -260,3 +260,84 @@ h6 {
 div.stats-table table {
   width: 100%;
 }
+
+iframe {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+iframe::-webkit-scrollbar {
+  display: none !important;
+}
+
+.stream-player iframe,
+[class*="stream"] iframe {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+
+.stream-player iframe::-webkit-scrollbar,
+.stream-player iframe::-webkit-scrollbar-track,
+.stream-player iframe::-webkit-scrollbar-thumb {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.stream-player.expanded {
+  transition: all 0.3s ease-in-out;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.stream-player.expanded iframe {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.stream-player.expanded.full-height {
+  height: 100vh !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.stream-player.expanded.full-height iframe {
+  height: 100vh !important;
+}
+
+.stream-player.expanded.full-height {
+  height: calc(100vh) !important;
+  top: 0 !important;
+}
+
+.stream-player.expanded.full-height iframe {
+  height: calc(100vh) !important;
+}
+
+.stream-player {
+  transition: all 0.3s ease-in-out;
+}
+
+.stream-player.expanded iframe {
+  object-fit: cover;
+  min-height: 100%;
+}
+
+.stream-player.expanded {
+  aspect-ratio: auto;
+}
+
+.stream-player.expanded.full-height {
+  aspect-ratio: auto;
+}
+
+.kick-player iframe,
+.vk-video-player iframe,
+.twitch-player iframe {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}

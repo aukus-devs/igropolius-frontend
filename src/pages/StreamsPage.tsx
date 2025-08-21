@@ -6,12 +6,14 @@ import { hasStream } from '../lib/streamUtils';
 import StreamPlayer from '../components/streams/StreamPlayer';
 import StreamChat from '../components/streams/StreamChat';
 import { Button } from '../components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 
 export default function StreamsPage() {
-  const [expandedStreamIndex, setExpandedStreamIndex] = useState<number | null>(null);
+  const [expandedStreamId, setExpandedStreamId] = useState<string | null>(null);
   const [showChat, setShowChat] = useState(true);
   const [visiblePlayers, setVisiblePlayers] = useState<Set<string>>(new Set());
   const [showAllPlayers, setShowAllPlayers] = useState(true);
+  const [columnsCount, setColumnsCount] = useState(4);
   const streamRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -24,39 +26,44 @@ export default function StreamsPage() {
   const onlineStreamers = useMemo(() => {
     return playersData?.players?.filter(player => player.is_online && hasStream(player)) || [];
   }, [playersData?.players]);
+
   const handleToggleExpand = useCallback(
-    (index: number) => {
-      if (expandedStreamIndex === index) {
-        setExpandedStreamIndex(null);
+    (playerId: string) => {
+      if (expandedStreamId === playerId) {
+        setExpandedStreamId(null);
         setShowChat(true);
       } else {
-        setExpandedStreamIndex(index);
+        setExpandedStreamId(playerId);
         setShowChat(true);
       }
     },
-    [expandedStreamIndex]
+    [expandedStreamId]
   );
 
   useEffect(() => {
     if (showAllPlayers) {
       const newVisiblePlayers = new Set(onlineStreamers.map(player => player.id.toString()));
-      const currentVisiblePlayers = Array.from(visiblePlayers);
-      const newVisiblePlayersArray = Array.from(newVisiblePlayers);
-
-      if (
-        currentVisiblePlayers.length !== newVisiblePlayersArray.length ||
-        !currentVisiblePlayers.every(id => newVisiblePlayers.has(id))
-      ) {
-        setVisiblePlayers(newVisiblePlayers);
-      }
+      setVisiblePlayers(newVisiblePlayers);
     }
-  }, [onlineStreamers, showAllPlayers, visiblePlayers]);
+  }, [onlineStreamers, showAllPlayers]);
+
+  useEffect(() => {
+    if (expandedStreamId && !visiblePlayers.has(expandedStreamId)) {
+      setExpandedStreamId(null);
+      setShowChat(true);
+    }
+  }, [expandedStreamId, visiblePlayers]);
 
   const filteredStreamers = useMemo(() => {
     return onlineStreamers.filter(player => {
       return showAllPlayers || visiblePlayers.has(player.id.toString());
     });
   }, [onlineStreamers, showAllPlayers, visiblePlayers]);
+
+  const expandedStreamIndex = useMemo(() => {
+    if (!expandedStreamId) return null;
+    return filteredStreamers.findIndex(player => player.id.toString() === expandedStreamId);
+  }, [expandedStreamId, filteredStreamers]);
 
   const handleTogglePlayer = useCallback(
     (playerId: string) => {
@@ -68,13 +75,22 @@ export default function StreamsPage() {
       }
       setVisiblePlayers(newVisiblePlayers);
       setShowAllPlayers(false);
+      
+      if (expandedStreamId === playerId) {
+        setExpandedStreamId(null);
+        setShowChat(true);
+      }
     },
-    [visiblePlayers]
+    [visiblePlayers, expandedStreamId]
   );
 
   const handleShowAll = useCallback(() => {
     setShowAllPlayers(true);
-  }, []);
+    if (expandedStreamId) {
+      setExpandedStreamId(null);
+      setShowChat(true);
+    }
+  }, [expandedStreamId]);
 
   const handleToggleChat = useCallback(() => {
     setShowChat(!showChat);
@@ -85,7 +101,7 @@ export default function StreamsPage() {
   }, []);
 
   const resetElementStyles = useCallback(() => {
-    streamRefs.current.forEach((ref, index) => {
+    streamRefs.current.forEach((ref) => {
       if (ref) {
         ref.style.position = '';
         ref.style.top = '';
@@ -95,31 +111,43 @@ export default function StreamsPage() {
         ref.style.zIndex = '';
         ref.style.transition = '';
         ref.style.borderRadius = '';
-        ref.style.display = index < 12 ? 'block' : 'none';
+        ref.style.display = '';
+        ref.style.transform = '';
       }
     });
   }, []);
 
   useEffect(() => {
-    if (expandedStreamIndex !== null) {
-      const expandedElement = streamRefs.current[expandedStreamIndex];
+    if (expandedStreamIndex !== null && expandedStreamIndex !== -1) {
+      const expandedPlayer = filteredStreamers[expandedStreamIndex];
+      
+      if (!visiblePlayers.has(expandedPlayer.id.toString())) {
+        setExpandedStreamId(null);
+        setShowChat(true);
+        return;
+      }
+      
+      const expandedElementIndex = onlineStreamers.findIndex(p => p.id === expandedPlayer.id);
+      const expandedElement = streamRefs.current[expandedElementIndex];
       const container = containerRef.current;
 
       if (expandedElement && container) {
         const containerRect = container.getBoundingClientRect();
 
-        const topOffset = 8;
-        const leftOffset = 8;
-        const rightOffset = 16;
         const chatWidth = showChat ? 320 : 0;
         const elementHeight = 192;
-        const gap = 8;
-        const expandedWidth = containerRect.width - chatWidth - leftOffset - rightOffset;
+        const gap = 0;
+        const expandedWidth = containerRect.width - chatWidth;
 
         const otherElements = filteredStreamers
           .map((_, i) => i)
           .filter(i => i !== expandedStreamIndex)
-          .map(i => streamRefs.current[i])
+          .map(i => {
+            const player = filteredStreamers[i];
+            const refIndex = onlineStreamers.findIndex(p => p.id === player.id);
+            const element = streamRefs.current[refIndex];
+            return element && visiblePlayers.has(player.id.toString()) ? element : null;
+          })
           .filter(Boolean);
 
         const remainingCount = otherElements.length;
@@ -128,24 +156,26 @@ export default function StreamsPage() {
           remainingCount === 0
             ? 0
             : remainingCount <= 6
-              ? elementHeight + gap + 20
-              : rowsNeeded * elementHeight + (rowsNeeded - 1) * gap + topOffset;
-        const expandedHeight = window.innerHeight - bottomAreaHeight - 50;
+              ? elementHeight + gap
+              : rowsNeeded * elementHeight + (rowsNeeded - 1) * gap;
+        const expandedHeight = remainingCount === 0 
+          ? window.innerHeight
+          : window.innerHeight - bottomAreaHeight;
 
         expandedElement.style.position = 'fixed';
-        expandedElement.style.top = `${topOffset}px`;
-        expandedElement.style.left = `${leftOffset}px`;
+        expandedElement.style.top = '0px';
+        expandedElement.style.left = '0px';
         expandedElement.style.width = `${expandedWidth}px`;
         expandedElement.style.height = `${expandedHeight}px`;
         expandedElement.style.zIndex = '1000';
         expandedElement.style.transition = 'all 0.3s ease-in-out';
-        expandedElement.style.borderRadius = '8px';
+        expandedElement.style.borderRadius = '0px';
 
         let elementsPerRow, elementWidth;
 
         const availableWidth = showChat
-          ? containerRect.width - chatWidth - leftOffset - rightOffset
-          : containerRect.width - leftOffset - rightOffset;
+          ? containerRect.width - chatWidth
+          : containerRect.width;
 
         if (remainingCount <= 6) {
           elementsPerRow = remainingCount;
@@ -161,17 +191,19 @@ export default function StreamsPage() {
             const col = i % elementsPerRow;
 
             let topPosition;
-            if (remainingCount <= 6) {
+            if (remainingCount === 0) {
+              topPosition = window.innerHeight + 200;
+            } else if (remainingCount <= 6) {
               const totalBottomHeight = elementHeight + gap;
-              const bottomCenterY = window.innerHeight - totalBottomHeight - 10;
+              const bottomCenterY = window.innerHeight - totalBottomHeight;
               topPosition = bottomCenterY;
             } else {
-              topPosition = expandedHeight + topOffset + gap + row * (elementHeight + gap);
+              topPosition = expandedHeight + gap + row * (elementHeight + gap);
             }
 
             element.style.position = 'fixed';
             element.style.top = `${topPosition}px`;
-            element.style.left = `${leftOffset + col * (elementWidth + gap)}px`;
+            element.style.left = `${col * (elementWidth + gap)}px`;
             element.style.width = `${elementWidth}px`;
             element.style.height = `${elementHeight}px`;
             element.style.zIndex = '999';
@@ -183,7 +215,7 @@ export default function StreamsPage() {
     } else {
       resetElementStyles();
     }
-  }, [expandedStreamIndex, showChat, filteredStreamers, resetElementStyles]);
+  }, [expandedStreamIndex, showChat, filteredStreamers, resetElementStyles, columnsCount, onlineStreamers]);
 
   if (isLoading) {
     return (
@@ -211,13 +243,13 @@ export default function StreamsPage() {
 
   return (
     <div className="min-h-screen bg-[#282828]">
-      <div className="py-4 px-4">
+      <div className="py-4 px-0">
         <div className="mb-4 flex items-center gap-4">
           <Button variant="ghost" onClick={handleGoHome} className="text-white">
             Игрополиус
           </Button>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 flex-1">
             <Button
               variant={showAllPlayers ? 'default' : 'outline'}
               onClick={handleShowAll}
@@ -240,32 +272,49 @@ export default function StreamsPage() {
               </Button>
             ))}
           </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-white text-sm">Колонки:</span>
+            <Select value={columnsCount.toString()} onValueChange={(value) => setColumnsCount(parseInt(value))}>
+              <SelectTrigger className="w-20 bg-white/10 border-white/20 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="2">2</SelectItem>
+                <SelectItem value="3">3</SelectItem>
+                <SelectItem value="4">4</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
-      <div ref={containerRef} className="p-2 relative w-full">
-        <div className="grid grid-cols-4 gap-2">
+      <div ref={containerRef} className="relative w-full">
+        <div className={`grid gap-2`} style={{ gridTemplateColumns: `repeat(${columnsCount}, 1fr)` }}>
           {filteredStreamers.map((player, index) => (
             <div
               key={player.id}
               ref={el => {
-                streamRefs.current[index] = el;
+                const refIndex = onlineStreamers.findIndex(p => p.id === player.id);
+                streamRefs.current[refIndex] = el;
               }}
-              className={`aspect-video ${index >= 12 && expandedStreamIndex === null ? 'hidden' : ''}`}
+              className="aspect-video"
             >
               <StreamPlayer
                 player={player}
                 isExpanded={expandedStreamIndex === index}
-                onToggleExpand={() => handleToggleExpand(index)}
+                onToggleExpand={() => handleToggleExpand(player.id.toString())}
+                onTogglePlayer={() => handleTogglePlayer(player.id.toString())}
                 showChat={showChat}
                 onToggleChat={handleToggleChat}
                 className="h-full"
+                isFullHeight={expandedStreamIndex === index && filteredStreamers.length === 1}
               />
             </div>
           ))}
         </div>
 
-        {expandedStreamIndex !== null && (
+        {expandedStreamIndex !== null && expandedStreamIndex !== -1 && (
           <>
             {showChat && (
               <div className="fixed top-0 right-0 z-[9999] w-80 h-screen bg-white shadow-lg">
