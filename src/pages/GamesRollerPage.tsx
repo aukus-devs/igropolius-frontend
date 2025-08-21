@@ -96,9 +96,7 @@ function GameCard({ game, isWinner, isSelected, onClick, onHoverChange }: GameCa
           {title} {isSelected && ' →'}
         </h3>
         {game.profile_platform && (
-          <p className="text-muted-foreground text-xs font-semibold">
-            {game.profile_platform}
-          </p>
+          <p className="text-muted-foreground text-xs font-semibold">{game.profile_platform}</p>
         )}
       </div>
       {isWinner && <CrownIcon className="text-amber-500 shrink-0 my-auto" />}
@@ -159,9 +157,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
     <div className="flex flex-col h-full row-start-2 lg:row-start-1 lg:col-start-1 animate-in fade-in-0 duration-300 w-full space-y-[15px] overflow-hidden">
       <Card className="py-2.5 gap-2.5 h-[400px]">
         <CardHeader className="flex justify-between items-center gap-2 px-2.5">
-          <CardTitle className="font-roboto-wide-semibold text-xl">
-            {title}
-          </CardTitle>
+          <CardTitle className="font-roboto-wide-semibold text-xl">{title}</CardTitle>
         </CardHeader>
         <CardContent className="p-0 overflow-hidden h-full">
           <div
@@ -222,7 +218,9 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
                     <Badge className="tabular-nums py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]">
                       {value}
                     </Badge>
-                    <Badge className={`${polledColor} text-white/70 transition-none py-1 px-1.5 text-base rounded-xl leading-[19px]`}>
+                    <Badge
+                      className={`${polledColor} text-white/70 transition-none py-1 px-1.5 text-base rounded-xl leading-[19px]`}
+                    >
                       {polledText}
                     </Badge>
                   </div>
@@ -234,7 +232,10 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
                 {genres && genres.length > 0 ? (
                   <div className="flex gap-2 flex-wrap">
                     {genres.map((genre, index) => (
-                      <Badge key={index} className="py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]">
+                      <Badge
+                        key={index}
+                        className="py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]"
+                      >
                         {genre}
                       </Badge>
                     ))}
@@ -249,7 +250,10 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
                 {platforms ? (
                   <div className="flex gap-2 flex-wrap">
                     {platforms.map((platform, index) => (
-                      <Badge key={index} className="py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]">
+                      <Badge
+                        key={index}
+                        className="py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]"
+                      >
                         {platform}
                       </Badge>
                     ))}
@@ -258,13 +262,13 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
                   <div className="text-sm text-muted-foreground">Платформы не указана</div>
                 )}
               </div>
-
-
             </div>
           </ScrollArea>
         </CardContent>
         <CardFooter>
-          <div className="text-xs text-muted-foreground font-medium">Синхронизировано с HLTB: {syncDate}</div>
+          <div className="text-xs text-muted-foreground font-medium">
+            Синхронизировано с HLTB: {syncDate}
+          </div>
         </CardFooter>
       </Card>
     </div>
@@ -329,7 +333,7 @@ function GamesRollerPage() {
   }, [urlParamMax, minHours, maxLimit]);
 
   const {
-    data: gamesData,
+    data: gamesDataLoaded,
     isFetching: gamesLoading,
     refetch,
     isError,
@@ -348,12 +352,15 @@ function GamesRollerPage() {
     refetchOnWindowFocus: false,
   });
 
-  const gamesRef = useRef<HltbGameResponse[]>([]);
+  const gamesList = useMemo(
+    () => (isError ? [] : gamesDataLoaded?.games || []),
+    [gamesDataLoaded, isError]
+  );
+
+  const gamesRef = useRef<HltbGameResponse[]>(gamesList);
   useEffect(() => {
-    if (gamesData?.games) {
-      gamesRef.current = gamesData.games;
-    }
-  }, [gamesData]);
+    gamesRef.current = gamesList;
+  }, [gamesList]);
 
   useEffect(() => {
     if (isError) {
@@ -395,8 +402,7 @@ function GamesRollerPage() {
   }, []);
 
   const memoizedWheel = useMemo(() => {
-    const entries = gamesData?.games || [];
-    const options = entries.map(game => ({
+    const options = gamesList.map(game => ({
       id: game.game_id,
       label: game.game_name,
       imageUrl: game.game_image,
@@ -417,11 +423,11 @@ function GamesRollerPage() {
         highlightedItemId={selectedGame?.game_id}
       />
     );
-  }, [gamesData, onSpinFinish, onSpinStart, selectedGame?.game_id]);
+  }, [gamesList, onSpinFinish, onSpinStart, selectedGame?.game_id]);
 
   return (
     <>
-      <BackgroundImage game={selectedGame} games={gamesData?.games} />
+      <BackgroundImage game={selectedGame} games={gamesList} />
       <div className="flex items-center justify-center bg-background/80 lg:h-svh h-auto overflow-hidden">
         <div className="grid grid-cols-1 max-h-auto lg:w-full lg:h-full lg:max-h-[1080px] lg:max-w-[1920px] lg:grid-cols-[0.3fr_0.4fr_0.3fr] gap-4 p-2 lg:p-4 w-full">
           {selectedGame && <GameFullInfoCard game={selectedGame} />}
@@ -482,10 +488,10 @@ function GamesRollerPage() {
                 <div className="flex justify-center items-center h-full">
                   <LoaderCircleIcon className="animate-spin text-primary" size={54} />
                 </div>
-              ) : gamesData?.games && gamesData.games.length > 0 ? (
+              ) : gamesList.length > 0 ? (
                 <ScrollArea className="h-full overflow-hidden px-4">
                   <div className="py-[15px]">
-                    {gamesData.games.map(game => (
+                    {gamesList.map(game => (
                       <GameCard
                         key={game.game_id}
                         game={game}
@@ -498,7 +504,7 @@ function GamesRollerPage() {
                 </ScrollArea>
               ) : (
                 <div className="flex justify-center items-center h-full font-roboto-wide-semibold text-muted-foreground">
-                  {!gamesData ? 'Пусто' : 'Игры не найдены'}
+                  {gamesDataLoaded ? 'Игры не найдены' : 'Пусто'}
                 </div>
               )}
             </CardContent>

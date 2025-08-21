@@ -1,7 +1,7 @@
 {
   "name": "igropolius",
   "private": true,
-  "version": "1.0.149",
+  "version": "1.0.150",
   "type": "module",
   "scripts": {
     "dev": "vite",
