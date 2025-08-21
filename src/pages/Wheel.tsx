@@ -15,7 +15,7 @@ type EntryWithAngles = Entry & { startAngle: number; endAngle: number };
 type WheelProps = {
   entries: Entry[];
   startOnRender?: boolean;
-  onSpinStart: () => void;
+  onSpinStart: () => void | boolean | Promise<void | boolean>;
   onSpinEnd: (index: number) => void;
   onSelect?: (id: number) => void;
   highlightedItemId?: number | null;
@@ -46,6 +46,7 @@ export default function Wheel({
   const [radius, setRadius] = useState(0);
   const [rotation, setRotation] = useState(() => Math.random() * 360);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [isPreparing, setIsPreparing] = useState(false);
 
   const { value: isMuted } = useLocalStorage({ key: 'roller-sound-muted', defaultValue: false });
   const { playRandom, stop: stopSound } = useSound(isMuted, true);
@@ -210,11 +211,23 @@ export default function Wheel({
     [onSelect, hoveredId]
   );
 
-  const spinWheel = () => {
-    if (isSpinning) return;
+  const spinWheel = async () => {
+    if (isSpinning || isPreparing) return;
 
+    try {
+      setIsPreparing(true);
+      const canStart = await onSpinStart?.();
+      if (canStart === false) {
+        setIsPreparing(false);
+        return;
+      }
+    } catch (_e) {
+      setIsPreparing(false);
+      return;
+    }
+
+    setIsPreparing(false);
     setIsSpinning(true);
-    onSpinStart?.();
 
     // console.log('starting with', entriesWithAnglesRef.current);
 
@@ -360,10 +373,10 @@ export default function Wheel({
             variant="action"
             className="absolute top-1/2 left-1/2 -translate-1/2 z-20 rounded-full whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-sm disabled:opacity-100 bg-amber-500 text-muted hover:bg-amber-600"
             style={{ border: `${LINE_WIDTH}px solid ${STROKE_COLOR}` }}
-            disabled={isSpinning}
+            disabled={isSpinning || isPreparing}
             onClick={spinWheel}
           >
-            {isSpinning ? (
+            {isSpinning || isPreparing ? (
               <LoaderCircleIcon className="animate-spin size-12 text-muted" />
             ) : (
               'Запустить'
