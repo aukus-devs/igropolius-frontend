@@ -217,16 +217,15 @@ export default function Wheel({
     try {
       setIsPreparing(true);
       const canStart = await onSpinStart?.();
-      if (canStart === false) {
-        setIsPreparing(false);
+      if (!canStart) {
         return;
       }
-    } catch (_e) {
-      setIsPreparing(false);
+    } catch {
       return;
+    } finally {
+      setIsPreparing(false);
     }
 
-    setIsPreparing(false);
     setIsSpinning(true);
 
     // console.log('starting with', entriesWithAnglesRef.current);
