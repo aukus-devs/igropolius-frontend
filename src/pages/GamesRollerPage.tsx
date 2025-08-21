@@ -42,8 +42,7 @@ function BackgroundImage({ game, games }: BackgroundImageProps) {
     setRandomImageId(games ? Math.floor(Math.random() * games.length) : 0);
   }, [games]);
 
-  const hasValidIndex = Array.isArray(games) && games.length > 0 && randomImageId >= 0 && randomImageId < games.length;
-  const backgroundImage = game?.game_image || (hasValidIndex ? games![randomImageId].game_image : null);
+  const backgroundImage = game?.game_image || (games && games[randomImageId]?.game_image) || null;
 
   if (!backgroundImage) return null;
 
@@ -333,6 +332,7 @@ function GamesRollerPage() {
     data: gamesData,
     isFetching: gamesLoading,
     refetch,
+    isError,
   } = useQuery<{ games: HltbGameResponse[] }>({
     queryKey: queryKeys.hltbRandomGames,
     queryFn: () => {
@@ -355,6 +355,12 @@ function GamesRollerPage() {
     }
   }, [gamesData]);
 
+  useEffect(() => {
+    if (isError) {
+      gamesRef.current = [];
+    }
+  }, [isError]);
+
   const onGameCardClick = (game: HltbGameResponse | null) => {
     if (!game || game.game_name === selectedGame?.game_name) {
       setSelectedGame(null);
@@ -372,9 +378,9 @@ function GamesRollerPage() {
     setSelectedGame(null);
     try {
       const result = await refetch();
-      const hasGames = !!result.data && Array.isArray(result.data.games) && result.data.games.length > 0;
+      const hasGames = result.data && result.data.games.length > 0;
       return hasGames;
-    } catch (_e) {
+    } catch {
       return false;
     }
   }, [refetch]);
