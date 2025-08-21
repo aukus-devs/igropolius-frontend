@@ -392,8 +392,8 @@ function GamesRollerPage() {
     setSelectedGame(null);
     try {
       const result = await refetch();
-      const hasGames = result.data && result.data.games.length > 0;
-      return hasGames;
+      const hasGames = !result.isError && result.data && result.data.games.length > 0;
+      return Boolean(hasGames);
     } catch {
       return false;
     }
