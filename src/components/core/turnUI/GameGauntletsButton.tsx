@@ -26,7 +26,8 @@ export default function GameGauntletsButton({ gameLengthRanges, className }: Pro
 
   return (
     <Button variant="action" className={className} onClick={handleClick}>
-      GameGauntlets {getGameLengthShortText(gameLengthRanges)}
+      {ENABLE_NEW_WHEEL ? 'Новое колесо' : 'GameGauntlets'}{' '}
+      {getGameLengthShortText(gameLengthRanges)}
     </Button>
   );
 }
