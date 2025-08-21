@@ -22,8 +22,6 @@ function useImageAspectRatio(src: string) {
 		img.src = src;
 	}, [src]);
 
-	useEffect(() => console.log(aspectRatio), [aspectRatio]);
-
 	return { aspectRatio, error };
 }
 
