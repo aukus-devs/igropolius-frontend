@@ -49,7 +49,7 @@ function BackgroundImage({ game, games }: BackgroundImageProps) {
           transform: `translate(${moveX}px, ${moveY}px)`,
         }}
       />
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
     </div>
   );
 }
