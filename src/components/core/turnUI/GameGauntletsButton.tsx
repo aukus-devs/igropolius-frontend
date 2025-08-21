@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-const ENABLE_NEW_WHEEL = false;
+const ENABLE_NEW_WHEEL = true;
 
 export default function GameGauntletsButton({ gameLengthRanges, className }: Props) {
   const handleClick = () => {
