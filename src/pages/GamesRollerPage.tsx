@@ -149,24 +149,26 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
 
   return (
     <div className="flex flex-col h-full row-start-2 lg:row-start-1 lg:col-start-1 animate-in fade-in-0 duration-300 w-full space-y-[15px] overflow-hidden">
-      <Card className="py-2.5 gap-2.5 bg-card/50">
+      <Card className="py-2.5 gap-2.5 h-[400px]">
         <CardHeader className="flex justify-between items-center gap-2 px-2.5">
           <CardTitle className="font-roboto-wide-semibold text-xl">
             {title}
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
+        <CardContent className="p-0 overflow-hidden h-full">
           <div
-            className="group flex flex-col px-2.5 data-[vertical=true]:pr-0 data-[vertical=true]:flex-row"
+            className="group flex flex-col gap-2.5 data-[vertical=true]:pr-0 data-[vertical=true]:flex-row overflow-hidden h-full"
             data-vertical={isVerticalImage}
           >
-            <ImageLoader
-              className="shrink-0 h-fit aspect-[2.14/1] max-w-[364px] rounded-md overflow-hidden group-data-[vertical=true]:w-[198px] group-data-[vertical=true]:aspect-[2/3]"
-              src={game.game_image}
-              alt={game.game_name}
-            />
-            <ScrollArea className="group-data-[vertical=true]:h-[297px] h-[127px] px-2.5 rounded-md">
-              <div className="whitespace-pre-wrap text-sm font-semibold py-2">
+            <div className="group-data-[vertical=true]:pr-0 px-2.5">
+              <ImageLoader
+                className="shrink-0 w-fit aspect-[2.14/1] h-full rounded-md overflow-hidden group-data-[vertical=true]:aspect-[2/3]"
+                src={game.game_image}
+                alt={game.game_name}
+              />
+            </div>
+            <ScrollArea className="h-full group-data-[vertical=true]:pl-0 px-2.5 rounded-md overflow-hidden">
+              <div className="whitespace-pre-wrap text-sm font-semibold">
                 {game.description || 'Нет описания'}
               </div>
             </ScrollArea>
