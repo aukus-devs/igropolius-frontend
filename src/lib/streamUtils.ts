@@ -14,6 +14,19 @@ export const getStreamUrl = (player: any) => {
     return null;
 };
 
+export const getDirectStreamUrl = (player: any) => {
+    if (player.main_platform === 'twitch' && player.twitch_stream_link) {
+        return player.twitch_stream_link;
+    }
+    if (player.main_platform === 'vk' && player.vk_stream_link) {
+        return player.vk_stream_link;
+    }
+    if (player.main_platform === 'kick' && player.kick_stream_link) {
+        return player.kick_stream_link;
+    }
+    return null;
+};
+
 export const getStreamPlatform = (player: any) => {
     if (player.main_platform === 'twitch') return 'Twitch';
     if (player.main_platform === 'vk') return 'VK Video';

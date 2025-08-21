@@ -5,6 +5,8 @@ import { Share } from '@/components/icons';
 import { FALLBACK_AVATAR_URL } from '@/lib/constants';
 import { PlayerDetails } from '@/lib/api-types-generated';
 import useHighlightStore from '@/stores/highlightStore';
+import { getDirectStreamUrl } from '@/lib/streamUtils';
+
 
 type Props = {
   player: PlayerDetails;
@@ -23,6 +25,18 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
     setHighlightedPlayer(null);
   };
 
+  const handleMiddleClick = (e: React.MouseEvent) => {
+    if (e.button === 1) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const streamUrl = getDirectStreamUrl(player);
+      if (streamUrl) {
+        window.open(streamUrl, '_blank');
+      }
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -32,6 +46,7 @@ function PlayerDialogTrigger({ player, placement, isCurrentPlayer }: Props) {
       data-highlighted={isCurrentPlayer}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMiddleClick}
     >
       <div className="relative">
         <Avatar
