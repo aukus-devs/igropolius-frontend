@@ -7,8 +7,26 @@ const SOUNDS = {
   drum: DRUM_SOUND_URL,
 } as const;
 
+const LAST_SOUND_KEY = 'lastPlayedSound';
+
 export function useSound(muted: boolean = false, loop: boolean = false) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const getLastPlayedSound = useCallback(() => {
+    try {
+      return localStorage.getItem(LAST_SOUND_KEY);
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const setLastPlayedSound = useCallback((sound: string) => {
+    try {
+      localStorage.setItem(LAST_SOUND_KEY, sound);
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, []);
 
   const play = useCallback(
     (sound: 'army' | 'indian' | 'drum') => {
@@ -28,16 +46,24 @@ export function useSound(muted: boolean = false, loop: boolean = false) {
       audioRef.current.play().catch(error => {
         console.warn('Failed to play sound:', error);
       });
+
+      setLastPlayedSound(sound);
     },
-    [muted, loop]
+    [muted, loop, setLastPlayedSound]
   );
 
   const playRandom = useCallback(() => {
     const soundKeys = Object.keys(SOUNDS) as Array<keyof typeof SOUNDS>;
-    const randomSound = soundKeys[Math.floor(Math.random() * soundKeys.length)];
-    // console.log('random sound', randomSound);
+    const lastSound = getLastPlayedSound();
+    
+    let availableSounds = soundKeys;
+    if (lastSound && soundKeys.length > 1) {
+      availableSounds = soundKeys.filter(sound => sound !== lastSound);
+    }
+    
+    const randomSound = availableSounds[Math.floor(Math.random() * availableSounds.length)];
     play(randomSound);
-  }, [play]);
+  }, [play, getLastPlayedSound]);
 
   const stop = useCallback(() => {
     if (audioRef.current) {
