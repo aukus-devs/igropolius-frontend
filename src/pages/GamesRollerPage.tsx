@@ -368,10 +368,15 @@ function GamesRollerPage() {
     // );
   };
 
-  const onSpinStart = useCallback(() => {
-    // console.log('on start refetch');
+  const onSpinStart = useCallback(async () => {
     setSelectedGame(null);
-    refetch();
+    try {
+      const result = await refetch();
+      const hasGames = !!result.data && Array.isArray(result.data.games) && result.data.games.length > 0;
+      return hasGames;
+    } catch (_e) {
+      return false;
+    }
   }, [refetch]);
 
   const onSpinFinish = useCallback((winnerId: number) => {
