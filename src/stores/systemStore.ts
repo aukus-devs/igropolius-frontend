@@ -114,7 +114,7 @@ const useSystemStore = create<SystemStore>((set, get) => ({
     const { myUser } = get();
     const cards = myUser?.bonus_cards || [];
     const card = cards.find(c => c.card_type === cardType);
-    return card?.weight || 1;
+    return card?.weight ?? 1;
   },
 }));
 
