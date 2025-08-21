@@ -350,6 +350,13 @@ function GamesRollerPage() {
     refetchOnMount: true,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    retry: (failureCount, error) => {
+      // if error 404 don't retry
+      if ('status' in error && error?.status === 404) {
+        return false;
+      }
+      return failureCount < 3; // Retry up to 3 times
+    },
   });
 
   const gamesList = useMemo(
