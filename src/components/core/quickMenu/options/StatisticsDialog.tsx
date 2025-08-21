@@ -13,6 +13,9 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchStats } from '@/lib/api';
 import { LoaderCircle } from 'lucide-react';
 import { Table } from '@radix-ui/themes';
+import { useState } from 'react';
+import { PlayerStatsResponse } from '@/lib/api-types-generated';
+import { colors } from '@/lib/types';
 
 type Props = {
   className?: string;
@@ -29,19 +32,21 @@ type Columns =
   | 'street_tax_paid'
   | 'map_tax_paid';
 
-const columns: { key: Columns; header: string }[] = [
-  { key: 'username', header: 'Игрок' },
-  { key: 'total_score', header: 'Очки' },
-  { key: 'games', header: 'Игры' },
+type SortKey = keyof PlayerStatsResponse['stats'][0];
+
+const columns: { key: Columns; header: string; sortKey: SortKey }[] = [
+  { key: 'username', header: 'Игрок', sortKey: 'username' },
+  { key: 'total_score', header: 'Очки', sortKey: 'total_score' },
+  { key: 'games', header: 'Игры', sortKey: 'games_completed' },
   // { key: 'games_dropped', header: 'Игр дропнуто' },
-  { key: 'games_score', header: 'Очки с игр' },
+  { key: 'games_score', header: 'Очки с игр', sortKey: 'score_from_games_completed' },
   // { key: 'score_from_games_dropped', header: 'Очки с дропов' },
-  { key: 'instant_cards_used', header: 'Мгновенные карты' },
-  { key: 'instant_cards_score', header: 'Очки с карт' },
+  { key: 'instant_cards_used', header: 'Мгновенные карты', sortKey: 'instant_cards_used' },
+  { key: 'instant_cards_score', header: 'Очки с карт', sortKey: 'score_from_cards' },
   // { key: 'score_lost_on_cards', header: 'Потеряно на картах' },
-  { key: 'street_income', header: 'Доход со зданий' },
-  { key: 'street_tax_paid', header: 'Налог за улицы' },
-  { key: 'map_tax_paid', header: 'Налог за круги' },
+  { key: 'street_income', header: 'Доход со зданий', sortKey: 'income_from_others' },
+  { key: 'street_tax_paid', header: 'Налог за улицы', sortKey: 'street_tax_paid' },
+  { key: 'map_tax_paid', header: 'Налог за круги', sortKey: 'map_tax_paid' },
 ] as const;
 
 export default function StatisticsDialog({ className }: Props) {
@@ -50,13 +55,33 @@ export default function StatisticsDialog({ className }: Props) {
     queryFn: fetchStats,
   });
 
+  const [sortColumn, setSortColumn] = useState<Columns>('total_score');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  const onHeaderClick = (columnKey: Columns) => {
+    if (sortColumn === columnKey) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(columnKey);
+      setSortDirection('desc');
+    }
+  };
+
+  const sortKey = columns.find(col => col.key === sortColumn)?.sortKey ?? 'total_score';
+
   const orderedData =
     data?.stats.sort((a, b) => {
-      if (a.total_score !== b.total_score) {
-        return b.total_score - a.total_score; // Сортируем по убыванию
+      const aValue = a[sortKey];
+      const bValue = b[sortKey];
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+      } else if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortDirection === 'asc'
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
       }
-      return a.username.localeCompare(b.username); // Сортируем по имени игрока
-    }) ?? [];
+      return 0; // Fallback for unsupported types
+    }) || [];
 
   return (
     <Dialog>
@@ -85,7 +110,16 @@ export default function StatisticsDialog({ className }: Props) {
                   {columns.map(col => (
                     <Table.ColumnHeaderCell
                       key={col.key}
-                      className="max-w-15 border-separate border-spacing-5"
+                      className="max-w-15 border-separate border-spacing-5 cursor-pointer"
+                      style={{
+                        color:
+                          sortColumn === col.key
+                            ? sortDirection === 'asc'
+                              ? colors.red
+                              : colors.green
+                            : undefined,
+                      }}
+                      onClick={() => onHeaderClick(col.key)}
                     >
                       {col.header}
                     </Table.ColumnHeaderCell>
