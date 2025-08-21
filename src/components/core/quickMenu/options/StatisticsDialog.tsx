@@ -39,7 +39,7 @@ const columns: { key: Columns; header: string }[] = [
   { key: 'instant_cards_used', header: 'Мгновенные карты' },
   { key: 'instant_cards_score', header: 'Очки с карт' },
   // { key: 'score_lost_on_cards', header: 'Потеряно на картах' },
-  { key: 'street_income', header: 'Доход' },
+  { key: 'street_income', header: 'Доход со зданий' },
   { key: 'street_tax_paid', header: 'Налог за улицы' },
   { key: 'map_tax_paid', header: 'Налог за круги' },
 ] as const;
