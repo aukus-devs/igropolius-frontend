@@ -1,5 +1,5 @@
 import { getStreamUrl, getStreamPlatform } from '../../lib/streamUtils';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface StreamPlayerProps {
   player: any;
@@ -23,8 +23,40 @@ export default function StreamPlayer({
   isFullHeight = false,
 }: StreamPlayerProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isUIVisible, setIsUIVisible] = useState(false);
+  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
   const streamUrl = getStreamUrl(player);
   const platform = getStreamPlatform(player);
+
+  const startHideTimer = () => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+    }
+    hideTimerRef.current = setTimeout(() => {
+      setIsUIVisible(false);
+    }, 1000);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setIsUIVisible(true);
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    startHideTimer();
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current);
+      }
+    };
+  }, []);
 
   if (!streamUrl) {
     return null;
@@ -34,10 +66,10 @@ export default function StreamPlayer({
     <div 
       className={`relative bg-black overflow-hidden stream-player ${isExpanded ? 'expanded' : ''} ${isExpanded && isFullHeight ? 'full-height' : ''} ${className}`}
       style={{ overflow: 'hidden' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <div className={`absolute top-2 left-2 z-10 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`absolute top-2 left-2 z-10 transition-opacity duration-200 ${isUIVisible ? 'opacity-100' : 'opacity-0'}`}>
         <div className="flex flex-col gap-2 p-2 bg-black/50 rounded-lg">
           <button
             onClick={onToggleExpand}
@@ -56,7 +88,7 @@ export default function StreamPlayer({
         </div>
       </div>
 
-      <div className={`absolute top-2 right-2 z-10 flex gap-2 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`absolute top-2 right-2 z-10 flex gap-2 transition-opacity duration-200 ${isUIVisible ? 'opacity-100' : 'opacity-0'}`}>
         <div className="flex gap-2 p-2 bg-black/50 rounded-lg">
           {isExpanded && onToggleChat && (
             <button
