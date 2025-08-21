@@ -231,6 +231,21 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
               ))}
 
               <div className="flex flex-col gap-1">
+                <span className="text-muted-foreground font-semibold">Жанры</span>
+                {genres && genres.length > 0 ? (
+                  <div className="flex gap-2 flex-wrap">
+                    {genres.map((genre, index) => (
+                      <Badge key={index} className="py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]">
+                        {genre}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-muted-foreground">Жанры не указаны</div>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1">
                 <span className="text-muted-foreground font-semibold">Платформы</span>
                 {platforms ? (
                   <div className="flex gap-2 flex-wrap">
@@ -245,20 +260,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
                 )}
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="text-muted-foreground font-semibold">Жанры</span>
-                {genres && genres.length > 0 ? (
-                  <div className="flex gap-2 flex-wrap">
-                    {genres.map((genre, index) => (
-                      <Badge key={index} className="py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]">
-                        {genre}
-                      </Badge>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-sm text-muted-foreground">Жанры не указаны</div>
-                )}
-              </div>
+
             </div>
           </ScrollArea>
         </CardContent>
