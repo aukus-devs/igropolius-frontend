@@ -369,12 +369,6 @@ function GamesRollerPage() {
     gamesRef.current = gamesList;
   }, [gamesList]);
 
-  useEffect(() => {
-    if (isError) {
-      gamesRef.current = [];
-    }
-  }, [isError]);
-
   const onGameCardClick = (game: HltbGameResponse | null) => {
     if (!game || game.game_name === selectedGame?.game_name) {
       setSelectedGame(null);
