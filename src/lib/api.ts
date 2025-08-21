@@ -766,9 +766,16 @@ export async function fetchHltbRandomGames(request: HltbRandomGameRequest): Prom
       games: mockHltbGamesList.games.slice(0, request.limit),
     });
   }
-  const response = await apiRequest('/api/hltb/random-game', {
-    method: 'POST',
-    body: JSON.stringify(request),
-  });
-  return response.json();
+  try {
+    const response = await apiRequest('/api/hltb/random-game', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    });
+    return response.json();
+  } catch (error: any) {
+    if (error?.status === 404) {
+      return { games: [] };
+    }
+    throw error;
+  }
 }
