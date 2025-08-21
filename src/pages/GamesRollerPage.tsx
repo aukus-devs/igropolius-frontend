@@ -17,6 +17,43 @@ import { ArrowRight, Volume } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { Switch } from '@/components/ui/switch';
 
+type BackgroundImageProps = {
+  game: HltbGameResponse | null;
+  games: HltbGameResponse[] | undefined;
+};
+
+function BackgroundImage({ game, games }: BackgroundImageProps) {
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(prev => prev + 0.02);
+    }, 16);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const backgroundImage = game?.game_image || (games && games.length > 0 ? games[0].game_image : null);
+
+  if (!backgroundImage) return null;
+
+  const moveX = Math.sin(time) * 30;
+  const moveY = Math.cos(time * 0.7) * 20;
+
+  return (
+    <div className="fixed inset-0 -z-10 overflow-hidden">
+      <div
+        className="absolute inset-0 w-[120%] h-[120%] bg-cover bg-center bg-no-repeat transition-transform duration-1000 ease-out"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          transform: `translate(${moveX}px, ${moveY}px)`,
+        }}
+      />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+    </div>
+  );
+}
+
 type GameCardProps = {
   game: HltbGameResponse;
   isWinner?: boolean;
@@ -354,8 +391,10 @@ function GamesRollerPage() {
   }, [gamesData, onSpinFinish, onSpinStart, selectedGame?.game_id]);
 
   return (
-    <div className="flex items-center justify-center bg-background lg:h-svh h-auto overflow-hidden">
-      <div className="grid grid-cols-1 max-h-auto lg:w-full lg:h-full lg:max-h-[1080px] lg:max-w-[1920px] lg:grid-cols-[0.3fr_0.4fr_0.3fr] gap-4 p-2 lg:p-4 w-full">
+    <>
+      <BackgroundImage game={selectedGame} games={gamesData?.games} />
+      <div className="flex items-center justify-center bg-background/80 lg:h-svh h-auto overflow-hidden">
+        <div className="grid grid-cols-1 max-h-auto lg:w-full lg:h-full lg:max-h-[1080px] lg:max-w-[1920px] lg:grid-cols-[0.3fr_0.4fr_0.3fr] gap-4 p-2 lg:p-4 w-full">
         {selectedGame && <GameFullInfoCard game={selectedGame} />}
 
         <div className="flex flex-col row-start-1 lg:col-start-2">
@@ -435,6 +474,7 @@ function GamesRollerPage() {
         </Card>
       </div>
     </div>
+    </>
   );
 }
 
