@@ -414,18 +414,20 @@ function GamesRollerPage() {
           {selectedGame && <GameFullInfoCard game={selectedGame} />}
 
           <div className="flex flex-col row-start-1 lg:col-start-2">
-            <div className="flex gap-[15px] w-full justify-center">
-              <div className="text-2xl text-center font-roboto-wide-semibold">
-                Новое колесо
+            <div className="relative mb-8">
+              <div className="absolute left-1/2 -translate-x-1/2 top-0">
+                <div className="text-2xl font-roboto-wide-semibold ">Новое колесо</div>
+                <div className="absolute left-full top-0 ml-4">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-xl bg-white/20 hover:bg-white/10 border-0"
+                    onClick={() => saveMutedState(!isMuted)}
+                  >
+                    <Volume muted={isMuted ?? false} className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-xl bg-white/20 hover:bg-white/10 border-0"
-                onClick={() => saveMutedState(!isMuted)}
-              >
-                <Volume muted={isMuted ?? false} className="h-4 w-4" />
-              </Button>
             </div>
             {memoizedWheel}
 
