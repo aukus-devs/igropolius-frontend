@@ -162,7 +162,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
           >
             <div className="group-data-[vertical=true]:pr-0 px-2.5">
               <ImageLoader
-                className="shrink-0 w-fit aspect-[2.14/1] h-full rounded-md overflow-hidden group-data-[vertical=true]:aspect-[2/3]"
+                className="shrink-0 w-fit max-w-[364px] aspect-[2.14/1] h-full rounded-md overflow-hidden group-data-[vertical=true]:aspect-[2/3]"
                 src={game.game_image}
                 alt={game.game_name}
               />
