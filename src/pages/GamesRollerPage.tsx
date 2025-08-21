@@ -42,8 +42,8 @@ function BackgroundImage({ game, games }: BackgroundImageProps) {
     setRandomImageId(games ? Math.floor(Math.random() * games.length) : 0);
   }, [games]);
 
-  const backgroundImage =
-    game?.game_image || (games && games.length > 0 ? games[randomImageId].game_image : null);
+  const hasValidIndex = Array.isArray(games) && games.length > 0 && randomImageId >= 0 && randomImageId < games.length;
+  const backgroundImage = game?.game_image || (hasValidIndex ? games![randomImageId].game_image : null);
 
   if (!backgroundImage) return null;
 
