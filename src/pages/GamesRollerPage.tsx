@@ -16,6 +16,7 @@ import { useLocation } from 'react-router';
 import { ArrowRight, Volume } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { Switch } from '@/components/ui/switch';
+import useImageAspectRatio from '@/hooks/useImageAspectRatio';
 
 type BackgroundImageProps = {
   game: HltbGameResponse | null;
@@ -98,6 +99,7 @@ function GameCard({ game, isWinner, isSelected, onClick, onHoverChange }: GameCa
 }
 
 function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
+  const { aspectRatio } = useImageAspectRatio(game.game_image);
   const hltbLink = `https://howlongtobeat.com/game/${game.game_id}`;
   const steamLink = `https://store.steampowered.com/app/${game.steam_id}`;
   const translationLink = `https://translate.google.com/?sl=en&tl=ru&text=${encodeURIComponent(game.description || '')}`;
@@ -143,28 +145,31 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
     return 'bg-[#34C759]/80';
   }
 
+  const isVerticalImage = aspectRatio < 1;
+
   return (
     <div className="flex flex-col h-full row-start-2 lg:row-start-1 lg:col-start-1 animate-in fade-in-0 duration-300 w-full space-y-[15px] overflow-hidden">
-      <Card className="py-2.5 gap-2.5">
+      <Card className="py-2.5 gap-2.5 bg-card/50">
         <CardHeader className="flex justify-between items-center gap-2 px-2.5">
           <CardTitle className="font-roboto-wide-semibold text-xl">
             {title}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="flex px-2.5 pr-0">
+          <div
+            className="group flex flex-col px-2.5 data-[vertical=true]:pr-0 data-[vertical=true]:flex-row"
+            data-vertical={isVerticalImage}
+          >
             <ImageLoader
-              className="shrink-0 w-[85px] h-fit rounded-md overflow-hidden"
+              className="shrink-0 h-fit aspect-[2.14/1] max-w-[364px] rounded-md overflow-hidden group-data-[vertical=true]:w-[198px] group-data-[vertical=true]:aspect-[2/3]"
               src={game.game_image}
               alt={game.game_name}
             />
-            <div className="relative w-full">
-              <ScrollArea className="h-[127.5px] px-2.5 rounded-md">
-                <div className="whitespace-pre-wrap text-sm font-semibold py-2">
-                  {game.description || 'Нет описания'}
-                </div>
-              </ScrollArea>
-            </div>
+            <ScrollArea className="group-data-[vertical=true]:h-[297px] h-[127px] px-2.5 rounded-md">
+              <div className="whitespace-pre-wrap text-sm font-semibold py-2">
+                {game.description || 'Нет описания'}
+              </div>
+            </ScrollArea>
           </div>
         </CardContent>
         <CardFooter className="gap-2.5 px-2.5 flex-wrap">
@@ -395,85 +400,85 @@ function GamesRollerPage() {
       <BackgroundImage game={selectedGame} games={gamesData?.games} />
       <div className="flex items-center justify-center bg-background/80 lg:h-svh h-auto overflow-hidden">
         <div className="grid grid-cols-1 max-h-auto lg:w-full lg:h-full lg:max-h-[1080px] lg:max-w-[1920px] lg:grid-cols-[0.3fr_0.4fr_0.3fr] gap-4 p-2 lg:p-4 w-full">
-        {selectedGame && <GameFullInfoCard game={selectedGame} />}
+          {selectedGame && <GameFullInfoCard game={selectedGame} />}
 
-        <div className="flex flex-col row-start-1 lg:col-start-2">
-          <div className="flex gap-[15px] w-full justify-center">
-            <div className="text-2xl text-center font-roboto-wide-semibold">
-              Новое колесо
-            </div>
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-xl bg-white/20 hover:bg-white/10 border-0"
-              onClick={() => saveMutedState(!isMuted)}
-            >
-              <Volume muted={isMuted ?? false} className="h-4 w-4" />
-            </Button>
-          </div>
-          {memoizedWheel}
-
-          <Card className="py-2.5">
-            <CardContent className="px-2.5">
-              <div className="flex justify-between font-semibold tabular-nums">
-                Диапазон времени игр: {minHours} — {maxHours} часов
-                <div className="flex items-center gap-2">
-                  <span>Большой</span>
-                  <Switch
-                    className="[&_[data-slot=switch-thumb]]:data-[state=checked]:bg-[#0A84FF]"
-                    checked={bigRange}
-                    onCheckedChange={() => setBigRange(!bigRange)}
-                  />
-                </div>
+          <div className="flex flex-col row-start-1 lg:col-start-2">
+            <div className="flex gap-[15px] w-full justify-center">
+              <div className="text-2xl text-center font-roboto-wide-semibold">
+                Новое колесо
               </div>
-              <Slider
-                className="h-[36px] [&_[data-slot=slider-range]]:bg-[#0A84FF]"
-                min={0}
-                max={maxLimit}
-                value={[minHours, maxHours]}
-                onValueChange={values => {
-                  setMinHours(values[0]);
-                  setMaxHours(values[1]);
-                }}
-              />
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-xl bg-white/20 hover:bg-white/10 border-0"
+                onClick={() => saveMutedState(!isMuted)}
+              >
+                <Volume muted={isMuted ?? false} className="h-4 w-4" />
+              </Button>
+            </div>
+            {memoizedWheel}
+
+            <Card className="py-2.5">
+              <CardContent className="px-2.5">
+                <div className="flex justify-between font-semibold tabular-nums">
+                  Диапазон времени игр: {minHours} — {maxHours} часов
+                  <div className="flex items-center gap-2">
+                    <span>Большой</span>
+                    <Switch
+                      className="[&_[data-slot=switch-thumb]]:data-[state=checked]:bg-[#0A84FF]"
+                      checked={bigRange}
+                      onCheckedChange={() => setBigRange(!bigRange)}
+                    />
+                  </div>
+                </div>
+                <Slider
+                  className="h-[36px] [&_[data-slot=slider-range]]:bg-[#0A84FF]"
+                  min={0}
+                  max={maxLimit}
+                  value={[minHours, maxHours]}
+                  onValueChange={values => {
+                    setMinHours(values[0]);
+                    setMaxHours(values[1]);
+                  }}
+                />
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="row-start-3 lg:col-start-3 lg:row-start-1 h-[468px] lg:h-full overflow-hidden pb-0 gap-0">
+            <CardHeader className="grid-rows-1">
+              <CardTitle className="flex justify-between items-center text-xl font-roboto-wide-semibold">
+                Случайные игры
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col justify-between h-full overflow-hidden p-0">
+              {gamesLoading ? (
+                <div className="flex justify-center items-center h-full">
+                  <LoaderCircleIcon className="animate-spin text-primary" size={54} />
+                </div>
+              ) : gamesData?.games && gamesData.games.length > 0 ? (
+                <ScrollArea className="h-full overflow-hidden px-4">
+                  <div className="py-[15px]">
+                    {gamesData.games.map(game => (
+                      <GameCard
+                        key={game.game_id}
+                        game={game}
+                        isWinner={winner?.game_id === game.game_id}
+                        isSelected={selectedGame?.game_id === game.game_id}
+                        onClick={onGameCardClick}
+                      />
+                    ))}
+                  </div>
+                </ScrollArea>
+              ) : (
+                <div className="flex justify-center items-center h-full font-roboto-wide-semibold text-muted-foreground">
+                  {!gamesData ? 'Пусто' : 'Игры не найдены'}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
-
-        <Card className="row-start-3 lg:col-start-3 lg:row-start-1 h-[468px] lg:h-full overflow-hidden pb-0 gap-0">
-          <CardHeader className="grid-rows-1">
-            <CardTitle className="flex justify-between items-center text-xl font-roboto-wide-semibold">
-              Случайные игры
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col justify-between h-full overflow-hidden p-0">
-            {gamesLoading ? (
-              <div className="flex justify-center items-center h-full">
-                <LoaderCircleIcon className="animate-spin text-primary" size={54} />
-              </div>
-            ) : gamesData?.games && gamesData.games.length > 0 ? (
-              <ScrollArea className="h-full overflow-hidden px-4">
-                <div className="py-[15px]">
-                  {gamesData.games.map(game => (
-                    <GameCard
-                      key={game.game_id}
-                      game={game}
-                      isWinner={winner?.game_id === game.game_id}
-                      isSelected={selectedGame?.game_id === game.game_id}
-                      onClick={onGameCardClick}
-                    />
-                  ))}
-                </div>
-              </ScrollArea>
-            ) : (
-              <div className="flex justify-center items-center h-full font-roboto-wide-semibold text-muted-foreground">
-                {!gamesData ? 'Пусто' : 'Игры не найдены'}
-              </div>
-            )}
-          </CardContent>
-        </Card>
       </div>
-    </div>
     </>
   );
 }
