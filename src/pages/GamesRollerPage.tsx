@@ -26,6 +26,10 @@ type BackgroundImageProps = {
 function BackgroundImage({ game, games }: BackgroundImageProps) {
   const [time, setTime] = useState(0);
 
+  const [randomImageId, setRandomImageId] = useState(
+    games ? Math.floor(Math.random() * games.length) : 0
+  );
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(prev => prev + 0.02);
@@ -34,7 +38,12 @@ function BackgroundImage({ game, games }: BackgroundImageProps) {
     return () => clearInterval(interval);
   }, []);
 
-  const backgroundImage = game?.game_image || (games && games.length > 0 ? games[0].game_image : null);
+  useEffect(() => {
+    setRandomImageId(games ? Math.floor(Math.random() * games.length) : 0);
+  }, [games]);
+
+  const backgroundImage =
+    game?.game_image || (games && games.length > 0 ? games[randomImageId].game_image : null);
 
   if (!backgroundImage) return null;
 
