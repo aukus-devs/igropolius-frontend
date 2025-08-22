@@ -133,7 +133,7 @@ export default function DiceBonusesDialog() {
     return null;
   }
 
-  const adjustBy1Cooldown = adjustBy1Card ? adjustBy1Card.cooldown_turns_left : 1;
+  const adjustBy1Cooldown = adjustBy1Card ? adjustBy1Card.cooldown_turns_left : 0;
   const chooseDieCooldown = chooseDieCard ? chooseDieCard.cooldown_turns_left : 0;
 
   return (
