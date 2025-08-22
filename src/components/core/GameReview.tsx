@@ -61,7 +61,7 @@ function GameReview({ game }: Props) {
   const adjustedLength = adjustGameLength(game.length, -game.length_bonus);
 
   const scoreChange = game.score_change_amount;
-  const rollType = SectorsById[game.sector_id]?.rollType;
+  const rollType = SectorsById[game.player_sector_id ?? game.sector_id]?.rollType;
 
   return (
     <div className="font-semibold">
@@ -143,7 +143,7 @@ function GameReview({ game }: Props) {
             {rollType && (
               <Badge className="bg-white/20 text-white/70 font-semibold">
                 <p>
-                  {GameRollTypeShortName[rollType]} на #{game.sector_id}
+                  {GameRollTypeShortName[rollType]} на #{game.player_sector_id ?? game.sector_id}
                 </p>
               </Badge>
             )}

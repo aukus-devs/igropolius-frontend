@@ -144,6 +144,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           sector_id: 10,
           duration: 200,
           bonuses_used: ['reroll-game', 'game-help-allowed'],
+          player_sector_id: 1,
         },
         {
           event_type: 'game',
@@ -156,6 +157,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           sector_id: 10,
           duration: 200,
           bonuses_used: ['reroll-game', 'game-help-allowed'],
+          player_sector_id: 10,
         },
         {
           event_type: 'game',
@@ -167,6 +169,7 @@ export async function fetchPlayerEvents(playerId: number): Promise<PlayerEventsR
           game_score: 9.5,
           sector_id: 10,
           duration: 200,
+          player_sector_id: 10,
         },
         {
           event_type: 'player-move',

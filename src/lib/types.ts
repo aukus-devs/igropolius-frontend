@@ -142,6 +142,7 @@ export type EventDescription = {
   image?: string;
   sectorId?: number;
   bonusType?: BonusType;
+  subSectorId?: number;
 };
 
 export type MoveMyPlayerParams = {

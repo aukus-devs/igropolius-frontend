@@ -75,10 +75,11 @@ export function getShortestRotationDelta(current: number, target: number) {
 
 export function getEventGameInfo(event: GameEvent) {
   let header = '';
-
+  let subSectorId = null;
   switch (event.subtype) {
     case 'completed':
       header = 'Прошёл игру';
+      subSectorId = event.sector_id === event.player_sector_id ? null : event.player_sector_id;
       break;
     case 'drop':
       header = 'Дроп игры';
@@ -100,6 +101,7 @@ export function getEventGameInfo(event: GameEvent) {
     description: '',
     image: event.game_cover || FALLBACK_GAME_POSTER,
     sectorId: event.sector_id,
+    subSectorId: subSectorId,
   } as EventDescription;
 }
 

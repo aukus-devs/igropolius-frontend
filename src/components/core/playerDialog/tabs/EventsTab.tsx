@@ -77,7 +77,7 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
   const [showDetails, setShowDetails] = useState(false);
 
   const { hours, minutes } = eventTimeFormat(event.timestamp);
-  const { title, description, image, timeHeader, sectorId, bonusType } = getEventDescription(
+  const { title, description, image, timeHeader, sectorId, bonusType, subSectorId } = getEventDescription(
     event,
     player
   );
@@ -124,7 +124,10 @@ function Event({ event, player }: { event: Events[0]; player: PlayerDetails }) {
               {!sectorId && ': '}
               {!sectorId && description}
             </div>
-            {sectorId && (
+            {subSectorId && sectorId && (
+              <div className="text-sm text-muted-foreground font-semibold">Сектор #{subSectorId}, здание построил на #{sectorId}</div>
+            )}
+            {!subSectorId && sectorId && (
               <div className="text-sm text-muted-foreground font-semibold">Сектор #{sectorId}</div>
             )}
           </div>

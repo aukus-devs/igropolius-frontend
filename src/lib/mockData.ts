@@ -398,6 +398,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 1,
       },
       {
         id: 2,
@@ -414,6 +415,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 3,
@@ -430,6 +432,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 4,
@@ -446,6 +449,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 5,
@@ -462,6 +466,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 6,
@@ -478,6 +483,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 7,
@@ -494,6 +500,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 111,
@@ -510,6 +517,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 112,
@@ -526,6 +534,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
     ],
     bonus_cards: [
@@ -594,6 +603,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 10,
@@ -610,6 +620,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 2,
       },
       {
         id: 11,
@@ -626,6 +637,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 12,
@@ -642,6 +654,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 4,
       },
       {
         id: 13,
@@ -659,6 +672,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 2,
       },
       {
         id: 14,
@@ -675,6 +689,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 4,
       },
       {
         id: 15,
@@ -691,6 +706,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 16,
@@ -707,6 +723,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 17,
@@ -723,6 +740,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
     ],
     bonus_cards: [
@@ -780,6 +798,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 2,
       },
       {
         id: 19,
@@ -796,6 +815,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
     ],
     bonus_cards: [],
@@ -847,6 +867,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 2,
       },
       {
         id: 444,
@@ -863,6 +884,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 445,
@@ -879,6 +901,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 446,
@@ -895,6 +918,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 447,
@@ -911,6 +935,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 4,
       },
     ],
     bonus_cards: [],
@@ -963,6 +988,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 2,
       },
     ],
     bonus_cards: [
@@ -1020,6 +1046,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 4,
       },
       {
         id: 99,
@@ -1036,6 +1063,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 5,
       },
       {
         id: 999,
@@ -1052,6 +1080,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 2,
       },
     ],
     bonus_cards: [
@@ -1109,6 +1138,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 6,
       },
       {
         id: 777,
@@ -1125,6 +1155,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 16,
       },
       {
         id: 778,
@@ -1141,6 +1172,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 7,
       },
       {
         id: 779,
@@ -1157,6 +1189,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 7,
       },
     ],
     bonus_cards: [
@@ -1214,6 +1247,7 @@ export const playersData: PlayerDetails[] = [
         cover: FALLBACK_GAME_POSTER,
         length_bonus: 0,
         difficulty_level: 0,
+        player_sector_id: 8,
       },
     ],
     bonus_cards: [

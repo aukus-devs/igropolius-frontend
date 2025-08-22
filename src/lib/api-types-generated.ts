@@ -180,6 +180,7 @@ export type EventType1 = "game";
 export type GameTitle3 = string;
 export type GameCover = string | null;
 export type SectorId3 = number;
+export type PlayerSectorId = number;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "GameLength".
@@ -317,6 +318,7 @@ export type VodLinks1 = string | null;
 export type Cover1 = string | null;
 export type GameId2 = number | null;
 export type ScoreChangeAmount = number | null;
+export type PlayerSectorId1 = number;
 export type Games2 = PlayerGame[];
 export type BonusCards1 = ActiveBonusCard[];
 export type Color = string;
@@ -581,6 +583,7 @@ export interface GameEvent {
   game_title: GameTitle3;
   game_cover?: GameCover;
   sector_id: SectorId3;
+  player_sector_id: PlayerSectorId;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -823,6 +826,7 @@ export interface PlayerGame {
   game_id?: GameId2;
   difficulty_level: GameDifficulty;
   score_change_amount?: ScoreChangeAmount;
+  player_sector_id: PlayerSectorId1;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
