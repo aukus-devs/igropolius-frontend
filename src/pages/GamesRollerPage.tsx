@@ -155,7 +155,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
 
   return (
     <div className="flex flex-col h-full row-start-2 lg:row-start-1 lg:col-start-1 animate-in fade-in-0 duration-300 w-full space-y-[15px] overflow-hidden">
-      <Card className="py-2.5 gap-2.5 h-[400px]">
+      <Card className="py-2.5 gap-2.5 h-[400px] shrink-0">
         <CardHeader className="flex justify-between items-center gap-2 px-2.5">
           <CardTitle className="font-roboto-wide-semibold text-xl">{title}</CardTitle>
         </CardHeader>
