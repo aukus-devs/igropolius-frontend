@@ -24,7 +24,7 @@ type WheelProps = {
 const degreesToRadians = Math.PI / 180;
 const LINE_WIDTH = 5;
 const STROKE_COLOR = '#2e1801';
-const STROKE_HIGHLIGHT_COLOR = '#fe9a00';
+const STROKE_HIGHLIGHT_COLOR = '#fd8c2a';
 const SIDE_OFFSET = 26; // для картинки обводки
 const OUTLINE_SIZE = 2;
 const SPIN_TIME_SECONDS = 10;
@@ -369,8 +369,7 @@ export default function Wheel({
           {/* */}
 
           <Button
-            variant="action"
-            className="absolute top-1/2 left-1/2 -translate-1/2 z-20 rounded-full whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-sm disabled:opacity-100 bg-amber-500 text-muted hover:bg-amber-600"
+            className="absolute top-1/2 left-1/2 -translate-1/2 z-20 rounded-full whitespace-normal w-[120px] h-[120px] font-roboto-wide-semibold text-sm disabled:opacity-100 bg-wheel-primary text-muted hover:bg-amber-600"
             style={{ border: `${LINE_WIDTH}px solid ${STROKE_COLOR}` }}
             disabled={isSpinning || isPreparing}
             onClick={spinWheel}
@@ -378,7 +377,7 @@ export default function Wheel({
             {isSpinning || isPreparing ? (
               <LoaderCircleIcon className="animate-spin size-12 text-muted" />
             ) : (
-              'Запустить'
+              'Крутить'
             )}
           </Button>
           <div

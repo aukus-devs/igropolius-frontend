@@ -31,6 +31,7 @@ function ImageLoader({ src, alt, ...divProps }: Props) {
     <div {...divProps}>
       {loadedSrc ? (
         <img
+          data-slot="loader-image"
           src={loadedSrc}
           className="w-full object-cover animate-in fade-in-0"
           alt={alt}

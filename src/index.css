@@ -13,6 +13,7 @@
   --popover-foreground: oklch(0.96 0 0);
   --primary: oklch(0.69 0.09 137.04);
   --primary-foreground: oklch(0.96 0 0);
+  --wheel-primary: oklch(0.75 0.17 55.71);
   --secondary: oklch(0.67 0.06 73.79);
   --secondary-foreground: oklch(0.92 0.004 286.32);
   --muted: oklch(0.274 0.006 286.033);
@@ -40,6 +41,7 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-wheel-primary: var(--wheel-primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -55,6 +57,7 @@
   --animate-shake: shake 1.25s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
 
   @keyframes shake {
+
     0%,
     30% {
       transform: rotate(0deg);

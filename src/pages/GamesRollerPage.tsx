@@ -6,14 +6,14 @@ import { fetchHltbRandomGames } from '../lib/api';
 import { queryKeys } from '../lib/queryClient';
 import { HltbGameResponse } from '../lib/api-types-generated';
 import { formatHltbLength, getNoun } from '../lib/utils';
-import { CrownIcon, LoaderCircleIcon } from 'lucide-react';
+import { LoaderCircleIcon } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import ImageLoader from '@/components/core/ImageLoader';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import Wheel from './Wheel';
 import { useLocation } from 'react-router';
-import { ArrowRight, Volume } from '@/components/icons';
+import { ArrowRight, Verify, Volume } from '@/components/icons';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { Switch } from '@/components/ui/switch';
 import useImageAspectRatio from '@/hooks/useImageAspectRatio';
@@ -65,41 +65,45 @@ function BackgroundImage({ game, games }: BackgroundImageProps) {
 
 type GameCardProps = {
   game: HltbGameResponse;
-  isWinner?: boolean;
-  isSelected?: boolean;
+  isWinner: boolean;
+  isSelected: boolean;
+  isTransparent: boolean;
   onClick?: (game: HltbGameResponse) => void;
   onHoverChange?: (game: HltbGameResponse | null) => void;
 };
 
-function GameCard({ game, isWinner, isSelected, onClick, onHoverChange }: GameCardProps) {
+function GameCard({ game, isWinner, isSelected, isTransparent, onClick, onHoverChange }: GameCardProps) {
   const title = `${game.game_name}` + (game.release_world ? ` (${game.release_world})` : '');
 
   return (
     <div
       key={game.game_id}
-      className="group flex gap-2 p-1.5 rounded-lg transition-colors cursor-pointer duration-300 animate-in slide-in-from-left-100"
-      data-selected={isSelected}
+      className="group flex gap-2 rounded-xl transition-[colors,padding,opacity] cursor-pointer duration-300 animate-in slide-in-from-left-100 data-[winner=true]:bg-wheel-primary/80 data-[winner=true]:p-2.5 data-[transparent=true]:opacity-50"
+      data-winner={isWinner}
+      data-transparent={isTransparent && !isSelected}
       onClick={() => onClick?.(game)}
       onMouseEnter={() => onHoverChange?.(game)}
       onMouseLeave={() => onHoverChange?.(null)}
     >
       <ImageLoader
-        className="flex items-center shrink-0 w-[76px] h-[50px] rounded-md overflow-hidden bg-center"
+        className="flex items-center shrink-0 w-[76px] h-[50px] rounded-md overflow-hidden bg-center [&_[data-slot=loader-image]]:h-full"
         src={game.game_image}
         alt={game.game_name}
       />
       <div className="w-full overflow-hidden">
         <h3
-          className="font-roboto-wide-semibold group-hover:underline underline-offset-4 group-data-[selected=true]:underline group-data-[selected=true]:underline-offset-4"
+          className="font-roboto-wide-semibold group-data-[winner=false]:group-hover:text-wheel-primary transition-colors underline-offset-4"
           title={game.game_name}
         >
-          {title} {isSelected && ' →'}
+          {title}
         </h3>
         {game.profile_platform && (
-          <p className="text-muted-foreground text-xs font-semibold">{game.profile_platform}</p>
+          <p className="text-muted-foreground text-xs font-semibold group-data-[winner=true]:text-foreground">
+            {game.profile_platform}
+          </p>
         )}
       </div>
-      {isWinner && <CrownIcon className="text-amber-500 shrink-0 my-auto" />}
+      {isWinner && <Verify className="text-wheel-primary transition-colors shrink-0 group-data-[winner=true]:text-foreground" />}
     </div>
   );
 }
@@ -120,42 +124,42 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
   const table = [
     {
       title: 'Main Story',
-      value: game.comp_main ? formatHltbLength(game.comp_main) : 'Н/Д',
-      polledText: getNoun(game.comp_main_count, nouns),
-      polledColor: getPolledColor(game.comp_main_count),
+      time: game.comp_main ? formatHltbLength(game.comp_main) : 'Н/Д',
+      polls: getNoun(game.comp_main_count, nouns),
+      color: getPolledColor(game.comp_main_count),
     },
     {
       title: 'Main + Sides',
-      value: game.comp_plus ? formatHltbLength(game.comp_plus) : 'Н/Д',
-      polledText: getNoun(game.comp_plus_count, nouns),
-      polledColor: getPolledColor(game.comp_plus_count),
+      time: game.comp_plus ? formatHltbLength(game.comp_plus) : 'Н/Д',
+      polls: getNoun(game.comp_plus_count, nouns),
+      color: getPolledColor(game.comp_plus_count),
     },
     {
       title: 'Completionist',
-      value: game.comp_100 ? formatHltbLength(game.comp_100) : 'Н/Д',
-      polledText: getNoun(game.comp_100_count, nouns),
-      polledColor: getPolledColor(game.comp_100_count),
+      time: game.comp_100 ? formatHltbLength(game.comp_100) : 'Н/Д',
+      polls: getNoun(game.comp_100_count, nouns),
+      color: getPolledColor(game.comp_100_count),
     },
     {
       title: 'All Styles',
-      value: game.comp_all ? formatHltbLength(game.comp_all) : 'Н/Д',
-      polledText: getNoun(game.comp_all_count, nouns),
-      polledColor: getPolledColor(game.comp_all_count),
+      time: game.comp_all ? formatHltbLength(game.comp_all) : 'Н/Д',
+      polls: getNoun(game.comp_all_count, nouns),
+      color: getPolledColor(game.comp_all_count),
     },
   ];
 
   function getPolledColor(num: number) {
-    if (num < 3) return 'bg-[#FF2D55]/80';
-    if (num < 10) return 'bg-[#FF8D28]/80';
+    if (num < 3) return 'bg-[#FF2D55]/80'; // red
+    if (num < 10) return 'bg-wheel-primary/80'; // orange
 
-    return 'bg-[#34C759]/80';
+    return 'bg-[#34C759]/80'; // green
   }
 
   const isVerticalImage = aspectRatio < 1;
 
   return (
     <div className="flex flex-col h-full row-start-2 lg:row-start-1 lg:col-start-1 animate-in fade-in-0 duration-300 w-full space-y-[15px] overflow-hidden">
-      <Card className="py-2.5 gap-2.5 h-[400px] shrink-0">
+      <Card className="py-2.5 gap-2.5 h-[296px] shrink-0">
         <CardHeader className="flex justify-between items-center gap-2 px-2.5">
           <CardTitle className="font-roboto-wide-semibold text-xl">{title}</CardTitle>
         </CardHeader>
@@ -166,12 +170,12 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
           >
             <div className="group-data-[vertical=true]:pr-0 px-2.5">
               <ImageLoader
-                className="shrink-0 w-fit max-w-[364px] aspect-[2.14/1] h-full rounded-md overflow-hidden group-data-[vertical=true]:aspect-[2/3]"
+                className="shrink-0 w-[192px] aspect-[2.14/1] h-full rounded-sm overflow-hidden group-data-[vertical=true]:aspect-[2/3] group-data-[vertical=true]:w-[128px]"
                 src={game.game_image}
                 alt={game.game_name}
               />
             </div>
-            <ScrollArea className="h-full group-data-[vertical=true]:pl-0 px-2.5 rounded-md overflow-hidden">
+            <ScrollArea className="h-full group-data-[vertical=true]:pl-0 px-2.5 overflow-hidden">
               <div className="whitespace-pre-wrap text-sm font-semibold">
                 {game.description || 'Нет описания'}
               </div>
@@ -206,22 +210,22 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
           </Button>
         </CardFooter>
       </Card>
-      <Card className="grow py-2.5 overflow-hidden">
+      <Card className="grow py-2.5 overflow-hidden pt-0">
         <CardContent className="flex flex-col h-full justify-between gap-2 space-y-2.5 p-0 overflow-hidden">
           <ScrollArea className="h-full overflow-hidden px-2.5">
-            <div className="space-y-[15px] w-full">
-              {table.map(({ title, value, polledText, polledColor }, idx) => (
+            <div className="space-y-[15px] w-full pt-2.5">
+              {table.map(({ title, time, polls, color }, idx) => (
                 <div key={idx} className="flex flex-col gap-1">
                   <span className="text-muted-foreground font-semibold">{title}</span>
 
                   <div className="flex flex-wrap gap-2">
-                    <Badge className="tabular-nums py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]">
-                      {value}
+                    <Badge className="tabular-nums py-1 px-1.5 text-base rounded-xl bg-[#333333] font-semibold leading-[19px]">
+                      {time}
                     </Badge>
                     <Badge
-                      className={`${polledColor} text-white/70 transition-none py-1 px-1.5 text-base rounded-xl leading-[19px]`}
+                      className={`${color} transition-none py-1 px-1.5 text-base rounded-xl leading-[19px]`}
                     >
-                      {polledText}
+                      {polls}
                     </Badge>
                   </div>
                 </div>
@@ -234,7 +238,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
                     {genres.map((genre, index) => (
                       <Badge
                         key={index}
-                        className="py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]"
+                        className="py-1 px-1.5 text-base rounded-xl bg-[#333333] font-semibold leading-[19px]"
                       >
                         {genre}
                       </Badge>
@@ -252,7 +256,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
                     {platforms.map((platform, index) => (
                       <Badge
                         key={index}
-                        className="py-1 px-1.5 text-base rounded-xl bg-white/20 text-white/70 font-semibold leading-[19px]"
+                        className="py-1 px-1.5 text-base rounded-xl bg-[#333333] font-semibold leading-[19px]"
                       >
                         {platform}
                       </Badge>
@@ -458,14 +462,14 @@ function GamesRollerPage() {
                   <div className="flex items-center gap-2">
                     <span>Большой</span>
                     <Switch
-                      className="[&_[data-slot=switch-thumb]]:data-[state=checked]:bg-[#0A84FF]"
+                      className="[&_[data-slot=switch-thumb]]:data-[state=checked]:bg-wheel-primary"
                       checked={bigRange}
                       onCheckedChange={() => setBigRange(!bigRange)}
                     />
                   </div>
                 </div>
                 <Slider
-                  className="h-[36px] [&_[data-slot=slider-range]]:bg-[#0A84FF]"
+                  className="h-[36px] [&_[data-slot=slider-range]]:bg-wheel-primary"
                   min={0}
                   max={maxLimit}
                   value={[minHours, maxHours]}
@@ -491,13 +495,14 @@ function GamesRollerPage() {
                 </div>
               ) : gamesList.length > 0 ? (
                 <ScrollArea className="h-full overflow-hidden px-4">
-                  <div className="py-[15px]">
+                  <div className="py-[15px] space-y-[15px]">
                     {gamesList.map(game => (
                       <GameCard
                         key={game.game_id}
                         game={game}
                         isWinner={winner?.game_id === game.game_id}
                         isSelected={selectedGame?.game_id === game.game_id}
+                        isTransparent={!!selectedGame}
                         onClick={onGameCardClick}
                       />
                     ))}
