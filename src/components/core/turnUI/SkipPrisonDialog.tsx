@@ -6,10 +6,11 @@ import usePlayerStore from '@/stores/playerStore';
 import { useShallow } from 'zustand/shallow';
 
 export default function SkipPrisonDialog() {
-  const { setNextTurnState } = usePlayerStore(
+  const { setNextTurnState, myPlayer } = usePlayerStore(
     useShallow(state => {
       return {
         setNextTurnState: state.setNextTurnState,
+        myPlayer: state.myPlayer,
       };
     })
   );
@@ -23,6 +24,9 @@ export default function SkipPrisonDialog() {
     resetNotificationsQuery();
     await setNextTurnState({ action: 'skip-prison' });
   };
+
+  const card = myPlayer?.bonus_cards.find(c => c.bonus_type === 'skip-prison-day');
+  const cooldown = card ? card.cooldown_turns_left : 0;
 
   return (
     <Card className="p-4">
@@ -39,8 +43,9 @@ export default function SkipPrisonDialog() {
           variant="outline"
           className="bg-[#30D158] hover:bg-[#30D158]/70 w-full flex-1"
           onClick={handleUseCard}
+          disabled={cooldown !== 0}
         >
-          Сбежать
+          {cooldown === 0 ? 'Сбежать' : `Кулдаун: ${cooldown} ходов`}
         </Button>
       </div>
     </Card>

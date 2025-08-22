@@ -53,6 +53,9 @@ export default function SkipStreetTaxDialog() {
 
   const calculationText = getTaxCalculationText(taxInfo, myPlayer?.id);
 
+  const card = myPlayer?.bonus_cards.find(c => c.bonus_type === 'evade-street-tax');
+  const cooldown = card ? card.cooldown_turns_left : 0;
+
   return (
     <Card className="p-4">
       <span className="font-wide-semibold">Уйти от налога на секторе?</span>
@@ -89,8 +92,9 @@ export default function SkipStreetTaxDialog() {
           variant="outline"
           className="bg-[#30D158] hover:bg-[#30D158]/70 w-full flex-1"
           onClick={handleUseCard}
+          disabled={cooldown !== 0}
         >
-          Использовать карточку
+          {cooldown === 0 ? 'Использовать карточку' : `Кулдаун: ${cooldown} ходов`}
         </Button>
       </div>
     </Card>

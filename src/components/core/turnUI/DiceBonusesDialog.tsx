@@ -86,8 +86,12 @@ export default function DiceBonusesDialog() {
 
   const bonusCards = myPlayer?.bonus_cards || [];
 
-  const hasAdjustBy1 = bonusCards.some(card => card.bonus_type === 'adjust-roll-by1');
-  const hasChooseDie = bonusCards.some(card => card.bonus_type === 'choose-1-die');
+  const adjustBy1Card = bonusCards.find(card => card.bonus_type === 'adjust-roll-by1');
+  const hasAdjustBy1 = Boolean(adjustBy1Card);
+
+  const chooseDieCard = bonusCards.find(card => card.bonus_type === 'choose-1-die');
+  const hasChooseDie = Boolean(chooseDieCard);
+
   const canRideTrain = Boolean(
     myPlayer?.sector_id && SectorsById[myPlayer.sector_id].type === 'railroad'
   );
@@ -129,6 +133,9 @@ export default function DiceBonusesDialog() {
     return null;
   }
 
+  const adjustBy1Cooldown = adjustBy1Card ? adjustBy1Card.cooldown_turns_left : 1;
+  const chooseDieCooldown = chooseDieCard ? chooseDieCard.cooldown_turns_left : 0;
+
   return (
     <div className="backdrop-blur-[1.5rem] bg-card/70 border-none rounded-xl p-4 font-semibold">
       <div className="w-[400px]">
@@ -157,13 +164,17 @@ export default function DiceBonusesDialog() {
 
         {hasChooseDie && (
           <div className="mt-[20px]">
-            <div className="mb-[15px]">Выбрать только один кубик?</div>
+            <div className="mb-[15px]">
+              Выбрать только один кубик?
+              {chooseDieCooldown !== 0 && <span>&nbsp;Кулдаун: {chooseDieCooldown} ходов</span>}
+            </div>
             <NumberToggle
               options={[
                 { value: null, label: 'Нет' },
                 ...rollResult.map(num => ({
                   value: num,
                   label: num.toString(),
+                  disabled: chooseDieCooldown !== 0,
                 })),
               ]}
               value={selectedDie}
@@ -176,12 +187,15 @@ export default function DiceBonusesDialog() {
 
         {hasAdjustBy1 && (
           <div className="mt-[20px]">
-            <div className="mb-[15px]">Изменить результат на 1?</div>
+            <div className="mb-[15px]">
+              Изменить результат на 1?{' '}
+              {adjustBy1Cooldown !== 0 && <span>Кулдаун: {adjustBy1Cooldown} ходов</span>}
+            </div>
             <NumberToggle
               options={[
                 { value: null, label: 'Нет' },
-                { value: 1, label: '+1' },
-                { value: -1, label: '-1' },
+                { value: 1, label: '+1', disabled: adjustBy1Cooldown !== 0 },
+                { value: -1, label: '-1', disabled: adjustBy1Cooldown !== 0 },
               ]}
               value={adjustBy1}
               onChange={value => {
@@ -209,6 +223,7 @@ export default function DiceBonusesDialog() {
 type ToggleOption = {
   value: number | null;
   label: string;
+  disabled?: boolean;
 };
 
 type NumberToggleProps = {
@@ -221,20 +236,19 @@ export function NumberToggle({ options, value, onChange }: NumberToggleProps) {
   return (
     <div className="flex gap-4">
       {options.map((num, idx) => (
-        <button
+        <Button
           key={idx}
           type="button"
           onClick={() => onChange(num.value)}
-          className={`w-full items-center justify-center rounded-md p-[6px]
-            ${
-              value === num.value
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-muted text-muted-foreground border-muted'
-            }
-            `}
+          disabled={num.disabled}
+          className="flex-1 items-center justify-center rounded-md p-[6px]
+            data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:border-primary
+            data-[active=false]:bg-muted data-[active=false]:text-muted-foreground data-[active=false]:border-muted
+            "
+          data-active={value === num.value}
         >
-          <span className="">{num.label}</span>
-        </button>
+          {num.label}
+        </Button>
       ))}
     </div>
   );
