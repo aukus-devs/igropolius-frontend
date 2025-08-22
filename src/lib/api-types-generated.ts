@@ -19,6 +19,7 @@ export type MainBonusCardType =
   | "game-help-allowed";
 export type ReceivedAt = number;
 export type ReceivedOnSector = number;
+export type CooldownTurnsLeft = number;
 export type Timestamp = number;
 export type EventType = "bonus-card";
 /**
@@ -294,6 +295,10 @@ export type OnlineCount = number;
 export type CurrentAucTotalSum = number | null;
 export type CurrentAucStartedAt = number | null;
 export type PointaucToken = string | null;
+/**
+ * This interface was referenced by `ApiSchema`'s JSON-Schema
+ * via the `definition` "StreamPlatform".
+ */
 export type StreamPlatform = "twitch" | "vk" | "kick" | "none";
 export type TwitchStreamLink = string | null;
 export type VkStreamLink = string | null;
@@ -390,11 +395,6 @@ export type EventEndTime4 = number | null;
 export type EndpointResetDbEnabled = number | null;
 export type PlayerId4 = number;
 export type Success1 = boolean;
-/**
- * This interface was referenced by `ApiSchema`'s JSON-Schema
- * via the `definition` "StreamPlatform".
- */
-export type StreamPlatform1 = "twitch" | "vk" | "kick" | "none";
 export type PlayerId5 = number;
 export type SectorId8 = number | null;
 export type ModelName1 = string;
@@ -412,6 +412,7 @@ export interface ActiveBonusCard {
   bonus_type: MainBonusCardType;
   received_at: ReceivedAt;
   received_on_sector: ReceivedOnSector;
+  cooldown_turns_left: CooldownTurnsLeft;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
@@ -787,7 +788,7 @@ export interface PlayerDetails {
   current_auc_total_sum?: CurrentAucTotalSum;
   current_auc_started_at?: CurrentAucStartedAt;
   pointauc_token?: PointaucToken;
-  main_platform?: StreamPlatform;
+  main_platform?: StreamPlatform & string;
   twitch_stream_link?: TwitchStreamLink;
   vk_stream_link?: VkStreamLink;
   kick_stream_link?: KickStreamLink;

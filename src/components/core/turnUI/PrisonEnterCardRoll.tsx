@@ -9,6 +9,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PRISON_NOTHING_CARD_IMAGE } from '@/lib/constants';
 import useSystemStore from '@/stores/systemStore';
+import { refetechPlayersQuery } from '@/lib/queryClient';
 
 type LoseCard = {
   action: 'lose-card';
@@ -82,7 +83,7 @@ export default function PrisonEnterCardRoll() {
     }
     if (option.value.action === 'receive-card') {
       const newCard = await giveBonusCard({ bonus_type: option.value.card });
-      addCardToState(newCard);
+      addCardToState({ ...newCard, cooldown_turns_left: -1 });
       setNextTurnState({ skipUpdate: true });
       return;
     }
@@ -92,6 +93,7 @@ export default function PrisonEnterCardRoll() {
     setRollFinished(false);
     setCardsBeforeDrop([]);
     useSystemStore.getState().enableQueries(true);
+    refetechPlayersQuery();
   };
 
   const options: WeightedOption<RollOptionType>[] = useMemo(() => {

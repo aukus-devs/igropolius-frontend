@@ -88,7 +88,7 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
         resetPlayersQuery();
       } else if (isBonusCard(option.value)) {
         const newCard = await giveBonusCard({ bonus_type: option.value.card });
-        addCardToState(newCard);
+        addCardToState({ ...newCard, cooldown_turns_left: -1 });
       }
     },
     [setActivationResult, setNextTurnState, addCardToState, hasNoCards]
@@ -204,7 +204,6 @@ export default function RollWithInstantCards({ autoOpen, onClose }: Props) {
     }
 
     useSystemStore.getState().enableQueries(true);
-    resetPlayersQuery();
     refetechPlayersQuery();
 
     setActivationResult(null);

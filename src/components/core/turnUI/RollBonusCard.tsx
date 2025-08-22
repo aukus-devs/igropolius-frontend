@@ -5,7 +5,7 @@ import GenericRoller, { WeightedOption } from './GenericRoller';
 import { MainBonusCardType } from '@/lib/api-types-generated';
 import { giveBonusCard } from '@/lib/api';
 import useSystemStore from '@/stores/systemStore';
-import { resetNotificationsQuery } from '@/lib/queryClient';
+import { refetechPlayersQuery, resetNotificationsQuery } from '@/lib/queryClient';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -27,13 +27,14 @@ export default function RollBonusCard() {
   const handleFinished = async (option: WeightedOption<MainBonusCardType>) => {
     setCardsBeforeRoll(myPlayer?.bonus_cards ?? []);
     const newCard = await giveBonusCard({ bonus_type: option.value });
-    addCardToState(newCard);
+    addCardToState({ ...newCard, cooldown_turns_left: -1 });
     setNextTurnState({ skipUpdate: true });
     resetNotificationsQuery();
   };
 
   const handleClose = () => {
     useSystemStore.getState().enableQueries(true);
+    refetechPlayersQuery();
   };
 
   const getWinnerText = (option: WeightedOption<MainBonusCardType>) => {

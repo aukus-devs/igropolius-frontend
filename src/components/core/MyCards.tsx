@@ -74,10 +74,13 @@ export default function MyCards() {
         {mainCardTypes.map((bonus, idx) => {
           const cardData = frontendCardsData[bonus];
           const cardOwned = myPlayer.bonus_cards.find(card => card.bonus_type === bonus);
+          const cooldownTurns = cardOwned?.cooldown_turns_left || 0;
           const canBeUsed =
             cardOwned &&
             turnState === 'filling-game-review' &&
-            (bonus === 'reroll-game' || bonus === 'game-help-allowed');
+            (bonus === 'reroll-game' || bonus === 'game-help-allowed') &&
+            cooldownTurns === 0;
+
           return (
             <Tooltip delayDuration={0} key={idx}>
               <TooltipTrigger>
@@ -114,6 +117,9 @@ export default function MyCards() {
                           Использовать
                         </Button>
                       </div>
+                    )}
+                    {cooldownTurns !== 0 && (
+                      <div className="mt-2 text-sm font-bold">Кулдаун: {cooldownTurns} ходов</div>
                     )}
                   </div>
                 </div>
