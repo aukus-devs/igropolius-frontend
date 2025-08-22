@@ -2,7 +2,7 @@ import { Badge } from '../ui/badge';
 import { adjustGameLength, formatMs } from '@/lib/utils';
 import { useState } from 'react';
 import { Edit, Share } from '../icons';
-import { FALLBACK_GAME_POSTER, GameRollTypeShortName } from '@/lib/constants';
+import { FALLBACK_GAME_POSTER, GameLengthDisplay, GameRollTypeShortName } from '@/lib/constants';
 import { GameCompletionType, PlayerGame } from '@/lib/api-types-generated';
 import { parseReview } from '@/lib/textParsing';
 import { Button } from '../ui/button';
@@ -115,7 +115,7 @@ function GameReview({ game }: Props) {
             {adjustedLength && (
               <>
                 <Badge className="bg-white/20 text-white/70 font-semibold">
-                  <p> По HLTB — {adjustedLength}ч</p>
+                  <p> По HLTB — {GameLengthDisplay[adjustedLength]}ч</p>
                 </Badge>
                 {game.length_bonus > 0 && (
                   <Badge className="bg-green-500/20 text-white/70 font-semibold">

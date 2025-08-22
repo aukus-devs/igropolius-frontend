@@ -172,3 +172,13 @@ export const GameRollTypeShortName: Record<GameRollType, string> = {
 };
 
 export const SCORE_BONUS_PER_MAP_COMPLETION = 5;
+
+export const GameLengthDisplay: Record<GameLength, string> = {
+  '': 'дроп',
+  '2-5': '2-5',
+  '5-10': '6-10',
+  '10-15': '11-15',
+  '15-20': '16-20',
+  '20-25': '21-25',
+  '25+': '26+',
+};

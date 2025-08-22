@@ -1,6 +1,6 @@
 import { Share } from '@/components/icons';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SECTORS_COLOR_GROUPS } from '@/lib/constants';
+import { GameLengthDisplay, SECTORS_COLOR_GROUPS } from '@/lib/constants';
 import { BuildingData } from '@/lib/types';
 import { formatTsToMonthDatetime } from '@/lib/utils';
 import { useMemo } from 'react';
@@ -39,7 +39,7 @@ function BuildingInfo({ building }: Props) {
         <p>Владелец: {owner.username}</p>
         {gameStatus === 'completed' && (
           <p>
-            Тир здания: {gameLength}
+            Тир здания: {GameLengthDisplay[gameLength]}
             {building.lengthBonus > 0 && (
               <span className="text-green-500">&nbsp;(тир +{building.lengthBonus})</span>
             )}
