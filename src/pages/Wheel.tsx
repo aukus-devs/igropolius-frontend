@@ -14,11 +14,11 @@ type EntryWithAngles = Entry & { startAngle: number; endAngle: number };
 
 type WheelProps = {
   entries: Entry[];
-  startOnRender?: boolean;
+  spinTimeSeconds?: number;
+  highlightedItemId?: number | null;
   onSpinStart: () => void | boolean | Promise<void | boolean>;
   onSpinEnd: (index: number) => void;
   onSelect?: (id: number) => void;
-  highlightedItemId?: number | null;
 };
 
 const degreesToRadians = Math.PI / 180;
@@ -27,16 +27,16 @@ const STROKE_COLOR = '#2e1801';
 const STROKE_HIGHLIGHT_COLOR = '#fd8c2a';
 const SIDE_OFFSET = 26; // для картинки обводки
 const OUTLINE_SIZE = 2;
-const SPIN_TIME_SECONDS = 10;
 const wheelOutlineImage = `${import.meta.env.BASE_URL}assets/wheel/wheel_gold_small.png`;
 const wheelPointerImage = `${import.meta.env.BASE_URL}assets/wheel/pointer_gold.png`;
 
 export default function Wheel({
   entries,
+  spinTimeSeconds = 10,
+  highlightedItemId,
   onSpinStart,
   onSpinEnd,
   onSelect,
-  highlightedItemId,
 }: WheelProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -51,7 +51,8 @@ export default function Wheel({
   const { value: isMuted } = useLocalStorage({ key: 'roller-sound-muted', defaultValue: false });
   const { playRandom, stop: stopSound } = useSound(isMuted, true);
 
-  const easeOutCirc = (t: number) => 1 - Math.pow(1 - t, 4);
+  const easeOutSine = (t: number) => Math.sin((t * Math.PI) / 2);
+  // const easeOutCirc = (t: number) => 1 - Math.pow(1 - t, 4);
 
   const entriesWithAnglesRef = useRef<EntryWithAngles[]>([]);
 
@@ -231,10 +232,10 @@ export default function Wheel({
     // console.log('starting with', entriesWithAnglesRef.current);
 
     const start = Math.random() * 360;
-    const extraSpins = 10 * 360;
+    const extraSpins = spinTimeSeconds * 360;
     const landing = Math.floor(Math.random() * 360);
     const totalRotation = start + extraSpins + landing;
-    const duration = SPIN_TIME_SECONDS * 1000;
+    const duration = spinTimeSeconds * 1000;
 
     const startTime = performance.now();
 
@@ -243,7 +244,7 @@ export default function Wheel({
 
       const elapsed = time - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOutCirc(progress);
+      const eased = easeOutSine(progress);
 
       const newRotation = start + (totalRotation - start) * eased;
       setRotation(newRotation);

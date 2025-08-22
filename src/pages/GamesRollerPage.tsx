@@ -170,7 +170,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
           >
             <div className="group-data-[vertical=true]:pr-0 px-2.5">
               <ImageLoader
-                className="shrink-0 w-[192px] aspect-[2.14/1] h-full rounded-sm overflow-hidden group-data-[vertical=true]:aspect-[2/3] group-data-[vertical=true]:w-[128px]"
+                className="shrink-0 w-[192px] aspect-[2.14/1] h-full rounded-sm overflow-hidden group-data-[vertical=true]:aspect-[2/3] group-data-[vertical=true]:w-[128px] [&_[data-slot=loader-image]]:h-full"
                 src={game.game_image}
                 alt={game.game_name}
               />
@@ -281,6 +281,8 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
 
 const BIG_RANGE_LIMIT = 300;
 const SMALL_RANGE_LIMIT = 50;
+const MIN_SPIN_TIME_SECONDS = 1;
+const MAX_SPIN_TIME_SECONDS = 60;
 
 function GamesRollerPage() {
   const [selectedGame, setSelectedGame] = useState<HltbGameResponse | null>(null);
@@ -288,6 +290,7 @@ function GamesRollerPage() {
   const [minHours, setMinHours] = useState(0);
   const [maxHours, setMaxHours] = useState(SMALL_RANGE_LIMIT);
   const [bigRange, setBigRange] = useState(false);
+  const [spinTimeSeconds, setSpinTimeSeconds] = useState(10);
 
   useEffect(() => {
     if (!bigRange) {
@@ -419,16 +422,17 @@ function GamesRollerPage() {
     return (
       <Wheel
         entries={options}
+        spinTimeSeconds={spinTimeSeconds}
+        highlightedItemId={selectedGame?.game_id}
         onSpinEnd={onSpinFinish}
         onSpinStart={onSpinStart}
         onSelect={(id: number) => {
           const game = gamesRef.current.find(g => g.game_id === id);
           setSelectedGame(game ?? null);
         }}
-        highlightedItemId={selectedGame?.game_id}
       />
     );
-  }, [gamesList, onSpinFinish, onSpinStart, selectedGame?.game_id]);
+  }, [gamesList, spinTimeSeconds, selectedGame?.game_id, onSpinFinish, onSpinStart]);
 
   return (
     <>
@@ -455,31 +459,47 @@ function GamesRollerPage() {
             </div>
             {memoizedWheel}
 
-            <Card className="py-2.5">
-              <CardContent className="px-2.5">
-                <div className="flex justify-between font-semibold tabular-nums">
-                  Диапазон времени игр: {minHours} — {maxHours} часов
-                  <div className="flex items-center gap-2">
-                    <span>Большой</span>
-                    <Switch
-                      className="[&_[data-slot=switch-thumb]]:data-[state=checked]:bg-wheel-primary"
-                      checked={bigRange}
-                      onCheckedChange={() => setBigRange(!bigRange)}
-                    />
+            <div className="space-y-[15px]">
+              <Card className="py-2.5">
+                <CardContent className="px-2.5">
+                  <div className="flex justify-between font-semibold tabular-nums">
+                    Диапазон времени игр: {minHours} — {maxHours} часов
+                    <div className="flex items-center gap-2">
+                      <span>Большой</span>
+                      <Switch
+                        className="[&_[data-slot=switch-thumb]]:data-[state=checked]:bg-wheel-primary"
+                        checked={bigRange}
+                        onCheckedChange={() => setBigRange(!bigRange)}
+                      />
+                    </div>
                   </div>
-                </div>
-                <Slider
-                  className="h-[36px] [&_[data-slot=slider-range]]:bg-wheel-primary"
-                  min={0}
-                  max={maxLimit}
-                  value={[minHours, maxHours]}
-                  onValueChange={values => {
-                    setMinHours(values[0]);
-                    setMaxHours(values[1]);
-                  }}
-                />
-              </CardContent>
-            </Card>
+                  <Slider
+                    className="h-[36px] [&_[data-slot=slider-range]]:bg-wheel-primary"
+                    min={0}
+                    max={maxLimit}
+                    value={[minHours, maxHours]}
+                    onValueChange={values => {
+                      setMinHours(values[0]);
+                      setMaxHours(values[1]);
+                    }}
+                  />
+                </CardContent>
+              </Card>
+              <Card className="py-2.5">
+                <CardContent className="px-2.5">
+                  <div className="flex justify-between font-semibold tabular-nums">
+                    Время кручения колеса: {spinTimeSeconds} секунд
+                  </div>
+                  <Slider
+                    className="h-[36px] [&_[data-slot=slider-range]]:bg-wheel-primary"
+                    min={MIN_SPIN_TIME_SECONDS}
+                    max={MAX_SPIN_TIME_SECONDS}
+                    value={[spinTimeSeconds]}
+                    onValueChange={values => setSpinTimeSeconds(values[0])}
+                  />
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           <Card className="row-start-3 lg:col-start-3 lg:row-start-1 h-[468px] lg:h-full overflow-hidden pb-0 gap-0">
