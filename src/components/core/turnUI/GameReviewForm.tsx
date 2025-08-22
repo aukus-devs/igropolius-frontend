@@ -551,17 +551,17 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
   const scores =
     myPlayer && gameStatus
       ? calculateGameCompletionScore({
-          gameLength,
-          gameStatus,
-          sectorId: myPlayer.sector_id,
-          mapsCompleted: myPlayer.maps_completed,
-        })
+        gameLength,
+        gameStatus,
+        sectorId: myPlayer.sector_id,
+        mapsCompleted: myPlayer.maps_completed,
+      })
       : {
-          total: 0,
-          base: 0,
-          sectorMultiplier: 1,
-          mapCompletionBonus: 0,
-        };
+        total: 0,
+        base: 0,
+        sectorMultiplier: 1,
+        mapCompletionBonus: 0,
+      };
 
   const isSendButtonDisabled = useReviewFormStore(state => {
     if (!state.gameTitle) return true;
@@ -655,7 +655,7 @@ function GameReviewForm({ showTrigger }: { showTrigger?: boolean }) {
             </div>
 
             <div className="flex gap-2 w-full">
-              <GameStatus gameDuration={gameDurationData?.duration ?? 100} />
+              <GameStatus gameDuration={gameDurationData?.duration} />
               {gameStatus === 'completed' && <GameTime />}
             </div>
 
