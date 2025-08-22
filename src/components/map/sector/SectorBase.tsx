@@ -43,20 +43,23 @@ function SectorBase({ sector, color, isCorner }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   const highlightedPlayerId = useHighlightStore(state => state.highlightedPlayerId);
-  const sectorHasHighlightedPlayerBuildings = highlightedPlayerId && 
+  const sectorHasHighlightedPlayerBuildings =
+    highlightedPlayerId &&
     buildingsPerSector[sector.id]?.some(building => building.owner.id === highlightedPlayerId);
-  
-  const sectorOwner = usePlayerStore(state => {
-    const sectorBuildings = buildingsPerSector[sector.id];
-    if (sectorBuildings && sectorBuildings.length > 0) {
-      return sectorBuildings[0].owner;
-    }
-    return null;
-  });
-  
-  const sectorBelongsToHighlightedPlayer = highlightedPlayerId && sectorOwner?.id === highlightedPlayerId;
 
-  const isHighlighted = highlightedSectorId === sector.id || sectorHasHighlightedPlayerBuildings || sectorBelongsToHighlightedPlayer;
+  const sectorBuildings = buildingsPerSector[sector.id];
+  let sectorOwner = null;
+  if (sectorBuildings && sectorBuildings.length > 0) {
+    sectorOwner = sectorBuildings[0].owner;
+  }
+
+  const sectorBelongsToHighlightedPlayer =
+    highlightedPlayerId && sectorOwner?.id === highlightedPlayerId;
+
+  const isHighlighted =
+    highlightedSectorId === sector.id ||
+    sectorHasHighlightedPlayerBuildings ||
+    sectorBelongsToHighlightedPlayer;
 
   const model = useMemo(
     () => (
@@ -64,7 +67,7 @@ function SectorBase({ sector, color, isCorner }: Props) {
         color={color}
         isCorner={isCorner}
         isHovered={isHovered}
-        isHighlighted={isHighlighted}
+        isHighlighted={!!isHighlighted}
       />
     ),
     [isCorner, color, isHovered, isHighlighted]
