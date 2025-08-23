@@ -70,15 +70,25 @@ export default function BonusCardComponent({
           onClick={handleCardClick}
         >
           <div
-            className="flex md:w-[134px] md:h-[189px] w-[122px] h-[170px] rounded-xl overflow-hidden  justify-center items-center text-4xl"
+            className="flex md:w-[134px] md:h-[189px] w-[122px] h-[170px] rounded-xl overflow-hidden justify-center items-center text-4xl data-[variant=positive]:bg-green-500/30 data-[variant=positive]:text-green-400 data-[variant=neutral]:bg-blue-500/30 data-[variant=neutral]:text-blue-400 data-[variant=negative]:bg-red-500/30 data-[variant=negative]:text-red-400"
             data-variant={variant}
           >
-            {value}
+            {image ? (
+              <div className="relative">
+                <img src={image} />
+                <div className="z-50 absolute top-14 left-12 text-white">{value}</div>
+              </div>
+            ) : (
+              <div>
+                <div className="text-xl mt-4 mb-4">{header}</div>
+                <div className="text-2xl">{value}</div>
+              </div>
+            )}
           </div>
         </div>
         {showDescription && (
           <div
-            className="fixed top-0 left-0 right-0 bottom-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 data-[variant=positive]:bg-green-500/30 data-[variant=positive]:text-green-400  data-[variant=neutral]:bg-blue-500/30 data-[variant=neutral]:text-blue-400 data-[variant=negative]:bg-red-500/30 data-[variant=negative]:text-red-400"
+            className="fixed top-0 left-0 right-0 bottom-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
             onClick={handleOverlayClick}
           >
             <div className="bg-card/95 backdrop-blur-[1.5rem] p-4 rounded-lg border shadow-lg w-full max-w-sm">

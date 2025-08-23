@@ -1234,9 +1234,9 @@ export const playersData: PlayerDetails[] = [
     donation_link: 'https://donate.praden.com',
 
     total_score: 200,
-    maps_completed: 0,
-    building_upgrade_bonus: 0,
-    game_difficulty_level: 0,
+    maps_completed: 1,
+    building_upgrade_bonus: 1,
+    game_difficulty_level: 1,
 
     games: [
       {
