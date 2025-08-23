@@ -18,6 +18,7 @@ import PlayerCards from './PlayerCards';
 import { PlayerDetails } from '@/lib/api-types-generated';
 import useUrlPath from '@/hooks/useUrlPath';
 import { useRef } from 'react';
+import { SectorsById } from '@/lib/mockData';
 
 type Props = {
   player: PlayerDetails;
@@ -76,7 +77,7 @@ function PlayerDialog({ player, placement, isCurrentPlayer, showCards }: Props) 
               <div>
                 <div className="flex items-center gap-1 font-bold">Показать на карте</div>
                 <div className="text-muted-foreground text-sm justify-self-start font-semibold">
-                  сектор #{player.sector_id}
+                  сектор #{player.sector_id} ({SectorsById[player.sector_id]?.rollType === 'auc' ? 'Аукцион' : 'Стим'})
                 </div>
               </div>
             </Button>
