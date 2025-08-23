@@ -3,6 +3,7 @@ import {
   ARMY_SOUND_URL,
   DASBOOT_SOUND_URL,
   DRUM_SOUND_URL,
+  DVAR_SOUND_URL,
   INDIAN_ROLL_URL,
   MAX_SOUND_URL,
 } from '@/lib/constants';
@@ -13,6 +14,7 @@ const SOUNDS = {
   drum: DRUM_SOUND_URL,
   max: MAX_SOUND_URL,
   dasboot: DASBOOT_SOUND_URL,
+  dvar: DVAR_SOUND_URL,
 } as const;
 
 const LAST_SOUND_KEY = 'lastPlayedSound';

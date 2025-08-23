@@ -162,6 +162,7 @@ export const INDIAN_ROLL_URL = `${import.meta.env.BASE_URL}assets/sounds/indian-
 export const ARMY_SOUND_URL = `${import.meta.env.BASE_URL}assets/sounds/army-roll.mp3`;
 export const MAX_SOUND_URL = `${import.meta.env.BASE_URL}assets/sounds/max-roll.mp3`;
 export const DASBOOT_SOUND_URL = `${import.meta.env.BASE_URL}assets/sounds/dasboot-roll.mp3`;
+export const DVAR_SOUND_URL = `${import.meta.env.BASE_URL}assets/sounds/dvar-roll.mp3`;
 
 export const GameRollTypeNames: Record<GameRollType, string> = {
   auc: 'аукцион',
