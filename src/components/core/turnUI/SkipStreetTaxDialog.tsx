@@ -31,11 +31,11 @@ export default function SkipStreetTaxDialog() {
     })
   );
 
-  useEffect(() => {
-    if (dataLoaded && taxInfo.taxAmount === 0) {
-      setNextTurnState({ action: 'skip-bonus' });
-    }
-  }, [taxInfo.taxAmount, setNextTurnState, dataLoaded]);
+  // useEffect(() => {
+  //   if (dataLoaded) {
+  //     setNextTurnState({ action: 'skip-bonus' });
+  //   }
+  // }, [taxInfo.taxAmount, setNextTurnState, dataLoaded]);
 
   const handlePayTax = async () => {
     await payTaxes('street-tax');
