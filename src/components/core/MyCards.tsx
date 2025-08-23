@@ -125,15 +125,16 @@ export default function MyCards() {
                     {cardCooldown !== 0 && (
                       <div className="mt-2 text-sm font-bold">Кулдаун: {cardCooldown} ходов</div>
                     )}
-                    {cooldownTurns === 0 ? (
-                      <div className="mt-2 text-sm font-bold text-green-400">
-                        Готова к использованию
-                      </div>
-                    ) : (
-                      <div className="mt-2 text-sm font-bold text-red-400">
-                        Осталось: {cooldownTurns} ходов
-                      </div>
-                    )}
+                    {cardOwned &&
+                      (cooldownTurns === 0 ? (
+                        <div className="mt-2 text-sm font-bold text-green-400">
+                          Готова к использованию
+                        </div>
+                      ) : (
+                        <div className="mt-2 text-sm font-bold text-red-400">
+                          Осталось: {cooldownTurns} ходов
+                        </div>
+                      ))}
                   </div>
                 </div>
               </TooltipContent>
