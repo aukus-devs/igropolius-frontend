@@ -47,6 +47,7 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
   };
 
   const modelScale = PlayerModelsScales[modelUrl] || 1;
+  const finalScale = isHighlighted ? modelScale * 1.2 : modelScale;
 
   return (
     <group ref={onGroupRender} name={`player_${player.id}`} position={position} rotation={rotation}>
@@ -61,9 +62,9 @@ function PlayerModel({ player, position, rotation, onClick }: Props) {
         src={modelUrl}
         onClick={e => (e.stopPropagation(), onClick?.(e))}
         rotation={[0, Math.PI / 2, 0]}
-        scale={modelScale}
+        scale={finalScale}
       />
-      {!isPlayerMoving && <PlayerInfo player={player} />}
+      {!isPlayerMoving && <PlayerInfo player={player} isHighlighted={isHighlighted} />}
     </group>
   );
 }
