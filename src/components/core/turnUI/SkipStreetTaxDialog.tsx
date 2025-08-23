@@ -6,11 +6,10 @@ import { resetNotificationsQuery } from '@/lib/queryClient';
 import { TaxData } from '@/lib/types';
 import { getTaxCalculationText } from '@/lib/utils';
 import usePlayerStore from '@/stores/playerStore';
-import { useEffect } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 export default function SkipStreetTaxDialog() {
-  const { taxInfo, players, payTaxes, setNextTurnState, dataLoaded, myPlayer } = usePlayerStore(
+  const { taxInfo, players, payTaxes, setNextTurnState, myPlayer } = usePlayerStore(
     useShallow(state => {
       const myPlayer = state.myPlayer;
       let taxInfo: TaxData = {
@@ -25,7 +24,6 @@ export default function SkipStreetTaxDialog() {
         players: state.players,
         payTaxes: state.payTaxesAndSwitchState,
         setNextTurnState: state.setNextTurnState,
-        dataLoaded: myPlayer?.sector_id && state.players.length > 0,
         myPlayer,
       };
     })
