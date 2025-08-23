@@ -2,6 +2,7 @@ import {
   BonusCardType,
   CurrentUserResponse,
   Settings as EventSettings,
+  MainBonusCardType,
 } from '@/lib/api-types-generated';
 import { create } from 'zustand';
 import usePlayerStore from './playerStore';
@@ -35,6 +36,7 @@ interface SystemStore {
   needsToSelectModel: () => boolean;
   enableQueries: (enable: boolean) => void;
   getCardWeight: (cardType: BonusCardType) => number;
+  getCardCooldown: (card: MainBonusCardType) => number;
 }
 
 const useSystemStore = create<SystemStore>((set, get) => ({
@@ -115,6 +117,13 @@ const useSystemStore = create<SystemStore>((set, get) => ({
     const cards = myUser?.bonus_cards || [];
     const card = cards.find(c => c.card_type === cardType);
     return card?.weight ?? 1;
+  },
+
+  getCardCooldown: (card: MainBonusCardType) => {
+    const { myUser } = get();
+    const cards = myUser?.bonus_cards || [];
+    const cardData = cards.find(c => c.card_type === card);
+    return cardData?.cooldown_turns ?? 0;
   },
 }));
 

@@ -82,6 +82,7 @@ export type StolenFromPlayer = number | null;
 export type StolenBy = number | null;
 export type InstantCardScoreMultiplier = number | null;
 export type Weight = number;
+export type CooldownTurns = number;
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema
  * via the `definition` "NotificationType".
@@ -435,6 +436,7 @@ export interface BonusCardEvent {
 export interface BonusCardInfo {
   card_type: BonusCardType;
   weight: Weight;
+  cooldown_turns: CooldownTurns;
 }
 /**
  * This interface was referenced by `ApiSchema`'s JSON-Schema

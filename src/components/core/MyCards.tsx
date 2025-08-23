@@ -15,6 +15,7 @@ import { getCardDescription } from '@/lib/utils';
 import { BUILDING_BONUS_IMAGE, SCORE_BONUS_PER_MAP_COMPLETION } from '@/lib/constants';
 import BonusCardComponent from './BonusCardComponent';
 import { useNavigate } from 'react-router';
+import useSystemStore from '@/stores/systemStore';
 
 export default function MyCards() {
   const { myPlayer, turnState } = usePlayerStore(
@@ -23,6 +24,8 @@ export default function MyCards() {
       turnState: state.turnState,
     }))
   );
+
+  const getCardCooldown = useSystemStore(state => state.getCardCooldown);
 
   const navigate = useNavigate();
 
@@ -75,6 +78,7 @@ export default function MyCards() {
           const cardData = frontendCardsData[bonus];
           const cardOwned = myPlayer.bonus_cards.find(card => card.bonus_type === bonus);
           const cooldownTurns = cardOwned?.cooldown_turns_left || 0;
+          const cardCooldown = getCardCooldown(bonus);
           const canBeUsed =
             cardOwned &&
             turnState === 'filling-game-review' &&
@@ -118,8 +122,17 @@ export default function MyCards() {
                         </Button>
                       </div>
                     )}
-                    {cooldownTurns !== 0 && (
-                      <div className="mt-2 text-sm font-bold">Кулдаун: {cooldownTurns} ходов</div>
+                    {cardCooldown !== 0 && (
+                      <div className="mt-2 text-sm font-bold">Кулдаун: {cardCooldown} ходов</div>
+                    )}
+                    {cooldownTurns === 0 ? (
+                      <div className="mt-2 text-sm font-bold text-green-400">
+                        Готова к использованию
+                      </div>
+                    ) : (
+                      <div className="mt-2 text-sm font-bold text-red-400">
+                        Осталось: {cooldownTurns} ходов
+                      </div>
                     )}
                   </div>
                 </div>
