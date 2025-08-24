@@ -94,7 +94,7 @@ function SectorInfo({ sector }: Props) {
                     const player = usePlayerStore
                       .getState()
                       .players.find(p => String(p.id) === playerId);
-                    if (!player) return null;
+                    if (!player || num === 0) return null;
                     return (
                       <div
                         key={idx}
