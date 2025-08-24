@@ -73,7 +73,10 @@ const useReviewFormStore = create<{
       throw new Error('Game status is required');
     }
 
-    const length = gameTime ?? '';
+    let length = gameTime ?? '';
+    if (gameStatus !== 'completed') {
+      length = '';
+    }
 
     set({ isSubmitting: true, error: null });
 
