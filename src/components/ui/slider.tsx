@@ -1,7 +1,11 @@
 import * as React from "react"
 import * as SliderPrimitive from "@radix-ui/react-slider"
 
-import { cn } from "@/lib/utils"
+import { cn, createPortionsRounded } from "@/lib/utils"
+
+type Props = React.ComponentProps<typeof SliderPrimitive.Root> & {
+  portionsAmount?: number;
+}
 
 function Slider({
   className,
@@ -9,8 +13,9 @@ function Slider({
   value,
   min = 0,
   max = 100,
+  portionsAmount = 3,
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+}: Props) {
   const _values = React.useMemo(
     () =>
       Array.isArray(value)
@@ -19,7 +24,9 @@ function Slider({
           ? defaultValue
           : [min, max],
     [value, defaultValue, min, max]
-  )
+  );
+
+  const portions = React.useMemo(() => createPortionsRounded(portionsAmount, min, max), [portionsAmount, min, max]);
 
   return (
     <SliderPrimitive.Root
@@ -46,15 +53,20 @@ function Slider({
             "bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
           )}
         />
+        <div className="absolute flex justify-between items-center w-full h-full opacity-40 pointer-events-none px-2.5 text-[13px] font-semibold">
+          {portions.map((num, idx) => (
+            <div key={idx} className="first:justify-start last:justify-end w-0 flex justify-center">
+              {num}
+            </div>
+          ))}
+        </div>
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (
         <SliderPrimitive.Thumb
           key={index}
           data-slot="slider-thumb"
-          className="group relative block h-[20px] w-[9px] shrink-0 disabled:pointer-events-none focus-visible:outline-hidden disabled:opacity-50 cursor-pointer"
-        >
-          <div className="before:w-[calc(100%_+_10px)] before:h-[calc(100%_+_10px)] before:absolute before:left-1/2 before:top-1/2 before:z-10 before:-translate-1/2 before:bg-[#202020] before:rounded-md after:absolute after:left-1/2 after:top-1/2 after:z-20 after:-translate-1/2 after:bg-foreground after:w-full after:h-full after:rounded-md group-hover:after:scale-125 after:transition-[color,box-shadow,scale]"></div>
-        </SliderPrimitive.Thumb>
+          className="group relative block h-7 w-3 shrink-0 disabled:pointer-events-none focus-visible:outline-hidden disabled:opacity-50 cursor-pointer bg-foreground rounded-sm"
+        />
       ))}
     </SliderPrimitive.Root>
   )

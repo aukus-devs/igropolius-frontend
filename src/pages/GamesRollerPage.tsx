@@ -159,7 +159,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
 
   return (
     <div className="flex flex-col h-full row-start-2 lg:row-start-1 lg:col-start-1 animate-in fade-in-0 duration-300 w-full space-y-[15px] overflow-hidden">
-      <Card className="py-2.5 gap-2.5 h-[296px] shrink-0">
+      <Card className="py-2.5 gap-2.5 h-[296px] shrink-0 bg-black/40 backdrop-blur-none">
         <CardHeader className="flex justify-between items-center gap-2 px-2.5">
           <CardTitle className="font-roboto-wide-semibold text-xl">{title}</CardTitle>
         </CardHeader>
@@ -210,7 +210,7 @@ function GameFullInfoCard({ game }: { game: HltbGameResponse }) {
           </Button>
         </CardFooter>
       </Card>
-      <Card className="grow py-2.5 overflow-hidden pt-0">
+      <Card className="grow py-2.5 overflow-hidden pt-0 bg-black/40 backdrop-blur-none">
         <CardContent className="flex flex-col h-full justify-between gap-2 space-y-2.5 p-0 overflow-hidden">
           <ScrollArea className="h-full overflow-hidden px-2.5">
             <div className="space-y-[15px] w-full pt-2.5">
@@ -449,7 +449,7 @@ function GamesRollerPage() {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="rounded-xl bg-white/20 hover:bg-white/10 border-0"
+                    className="rounded-xl bg-white/20 hover:bg-wheel-primary border-0"
                     onClick={() => saveMutedState(!isMuted)}
                   >
                     <Volume muted={isMuted ?? false} className="h-4 w-4" />
@@ -460,14 +460,14 @@ function GamesRollerPage() {
             {memoizedWheel}
 
             <div className="space-y-[15px]">
-              <Card className="py-2.5">
+              <Card className="py-2.5 bg-black/40 backdrop-blur-none">
                 <CardContent className="px-2.5">
                   <div className="flex justify-between font-semibold tabular-nums">
                     Диапазон времени игр: {minHours} — {maxHours} часов
                     <div className="flex items-center gap-2">
                       <span>Большой</span>
                       <Switch
-                        className="[&_[data-slot=switch-thumb]]:data-[state=checked]:bg-wheel-primary"
+                        className="[&_[data-slot=switch-thumb]]:data-[state=checked]:bg-foreground data-[state=checked]:bg-wheel-primary"
                         checked={bigRange}
                         onCheckedChange={() => setBigRange(!bigRange)}
                       />
@@ -477,6 +477,7 @@ function GamesRollerPage() {
                     className="h-[36px] [&_[data-slot=slider-range]]:bg-wheel-primary"
                     min={0}
                     max={maxLimit}
+                    portionsAmount={maxLimit === BIG_RANGE_LIMIT ? 5 : 3}
                     value={[minHours, maxHours]}
                     onValueChange={values => {
                       setMinHours(values[0]);
@@ -485,7 +486,7 @@ function GamesRollerPage() {
                   />
                 </CardContent>
               </Card>
-              <Card className="py-2.5">
+              <Card className="py-2.5 bg-black/40 backdrop-blur-none">
                 <CardContent className="px-2.5">
                   <div className="flex justify-between font-semibold tabular-nums">
                     Время кручения колеса: {spinTimeSeconds} секунд
@@ -494,6 +495,7 @@ function GamesRollerPage() {
                     className="h-[36px] [&_[data-slot=slider-range]]:bg-wheel-primary"
                     min={MIN_SPIN_TIME_SECONDS}
                     max={MAX_SPIN_TIME_SECONDS}
+                    portionsAmount={3}
                     value={[spinTimeSeconds]}
                     onValueChange={values => setSpinTimeSeconds(values[0])}
                   />
@@ -502,7 +504,7 @@ function GamesRollerPage() {
             </div>
           </div>
 
-          <Card className="row-start-3 lg:col-start-3 lg:row-start-1 h-[468px] lg:h-full overflow-hidden pb-0 gap-0">
+          <Card className="row-start-3 lg:col-start-3 lg:row-start-1 h-[468px] lg:h-full overflow-hidden pb-0 gap-0 bg-black/40 backdrop-blur-none">
             <CardHeader className="grid-rows-1">
               <CardTitle className="flex justify-between items-center text-xl font-roboto-wide-semibold">
                 Случайные игры

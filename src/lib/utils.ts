@@ -742,3 +742,18 @@ export function getNoun(num: number, words: string[]) {
     return `${num} ${words[2]}`;
   }
 }
+
+export function createPortionsRounded(amount: number, min: number, max: number) {
+  if (amount <= 1)
+    throw new Error('Amount must be greater than 1');
+
+  const result: number[] = [];
+  const step = (max - min) / (amount - 1);
+
+  for (let i = 0; i < amount; i++) {
+    result.push(Math.floor(min + step * i));
+  }
+
+  console.log('function')
+  return result;
+}
