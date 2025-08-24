@@ -45,7 +45,9 @@ function SectorBase({ sector, color, isCorner }: Props) {
   const highlightedPlayerId = useHighlightStore(state => state.highlightedPlayerId);
   const sectorHasHighlightedPlayerBuildings =
     highlightedPlayerId &&
-    buildingsPerSector[sector.id]?.some(building => building.owner.id === highlightedPlayerId);
+    buildingsPerSector[sector.id]?.some(
+      building => building.owner.id === highlightedPlayerId && building.gameStatus !== 'drop'
+    );
 
   const sectorBuildings = buildingsPerSector[sector.id];
   let sectorOwner = null;
